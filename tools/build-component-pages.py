@@ -80,8 +80,8 @@ def render(p: dict) -> str:
         body = {
             "zhivoy-primer": f'<p>{p["live_intro"]}</p>{p["live"]}' if p.get("live_intro") else p["live"],
             "kogda-ispolzovat": (
-                '<div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list">' + li(p["when_yes"]) +
-                '</ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list">' + li(p["when_no"]) +
+                '<div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list">' + li(p["when_yes"]) +
+                '</ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list">' + li(p["when_no"]) +
                 '</ul></div></div>'),
             "anatomiya": ('<p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy">' +
                           p["anatomy_html"] + '</div><ol class="sc-anatomy__list">' + anatomy + '</ol>'),
@@ -159,8 +159,6 @@ def render(p: dict) -> str:
     <p class="sc-hero__lead">{p["purpose"]}</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>{esc(p["status"])}</span>
-      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
-      <span class="sc-meta__i">Figma: нет</span>
       <span class="sc-meta__i">код: {files}</span>
     </div>
   </header>
