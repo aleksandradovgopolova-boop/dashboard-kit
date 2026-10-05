@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Фильтр · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p2_filters.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-select.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell">
+<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Фильтры</p>
+    <h1>Фильтр</h1>
+    <p class="sc-hero__lead">Ограничить срез данных одним или несколькими значениями из известного списка. Главное правило: выбранное видно, не открывая меню, — иначе человек смотрит на срез и уверен, что видит всё.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
+      <span class="sc-meta__i">Figma: нет</span>
+      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-select.js</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Три вида на одной основе: короткий список, множественный выбор, длинный список с поиском. Выбор пишется в адрес страницы — ссылку на срез можно прислать коллеге.</p><div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group">
+      <div id="x-okrug"></div><div id="x-tier"></div><div id="x-region"></div>
+    </div><div class="dk-result" id="x-result"><b>89</b> регионов</div></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Значения известны заранее и их больше пяти: округа, регионы, бригады.</li><li>Выбор ограничивает данные на всей странице и применяется сразу.</li><li>Рядом с каждым значением можно показать, сколько записей за ним.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Два–пять значений, видимых сразу, — <a href="component-segment.html">Сегмент</a> или <a href="component-legend.html">Фильтры-легенда</a>.</li><li>Даты — <a href="component-period.html">Период</a>.</li><li>Ввод значения в форме, которое применяется по кнопке, — <a href="component-field.html">Поле</a> с <code>&lt;select&gt;</code>.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group">
+      <div class="dk-select" data-active="true"><button type="button" class="dk-select__trigger" aria-haspopup="listbox" aria-expanded="true"><b class="sc-callout">1</b><span class="dk-select__label">Округ: Сибирский</span><b class="sc-callout">2</b><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
+      <div class="dk-select"><button type="button" class="dk-select__trigger" aria-haspopup="listbox" aria-expanded="false"><span class="dk-select__label">Уровень риска</span><span class="dk-select__count"><b class="sc-callout">3</b>2</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
+    </div><div class="dk-result"><b class="sc-callout">4</b><b>10</b> из 89 регионов</div></div>
+    <div class="dk-menu" style="position:static;margin-top:var(--space-5);max-width:320px"><div class="dk-menu__search"><b class="sc-callout">5</b><input type="search" placeholder="Поиск" aria-label="Поиск по списку"></div>
+      <ul class="dk-menu__list" role="listbox"><li><button type="button" class="dk-menu__item" role="option" aria-selected="true"><b class="sc-callout">6</b><span class="dk-menu__name">Сибирский</span><span class="dk-menu__n"><b class="sc-callout">7</b>10</span><svg class="dk-i dk-i--sm dk-menu__mark"><use href="#ti-check"/></svg></button></li>
+      <li><button type="button" class="dk-menu__item" role="option" aria-selected="false"><span class="dk-menu__name">Уральский</span><span class="dk-menu__n">6</span><svg class="dk-i dk-i--sm dk-menu__mark"><use href="#ti-check"/></svg></button></li></ul></div></div><ol class="sc-anatomy__list"><li><b>Активный фильтр</b> — <code>data-active="true"</code>: серая заливка поверх поля и подпись «Округ: Сибирский» — выбранное видно, не открывая меню.</li><li><b>Стрелка</b> — поле с меню; <code>aria-expanded</code> говорит скринридеру, открыто ли.</li><li><b>Счётчик</b> — <code>dk-select__count</code>: сколько значений выбрано в множественном фильтре.</li><li><b>Последствие</b> — <code>dk-result</code>: сколько записей осталось после фильтра — то, что человек обязан видеть сразу.</li><li><b>Поиск</b> — появляется сам, когда значений больше восьми.</li><li><b>Пункт</b> — <code>role="option"</code>; выбранный отмечен галочкой, а не только цветом.</li><li><b>Число записей</b> — за каждым значением; ноль показывается приглушённым, а не прячется.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Высота как у контролов: M по умолчанию, <code>size: 'sm'</code> для шапки виджета. Ширина по подписи; длинная подпись переносится и остаётся видимой целиком.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>mode: &#x27;single&#x27;</code></td><td>Один вариант; выбор применяется и закрывает меню.</td><td>По умолчанию.</td></tr><tr><td><code>mode: &#x27;multi&#x27;</code></td><td>Несколько; меню остаётся открытым, есть «Выбрать все».</td><td>Уровни, виды работ.</td></tr><tr><td><code>search: true | false</code></td><td>Поле поиска в меню.</td><td>Само включается от 9 значений.</td></tr><tr><td><code>size: &#x27;sm&#x27;</code></td><td>Высота 28 вместо 32.</td><td>Шапка виджета.</td></tr><tr><td><code>url: &#x27;ключ&#x27;</code></td><td>Значение пишется в адрес и читается при открытии.</td><td>Всегда на дашбордах — ссылка на срез.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group">
+      <div class="dk-select"><button type="button" class="dk-select__trigger" aria-haspopup="listbox" aria-expanded="false"><span class="dk-select__label">Пусто: Округ</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
+      <div class="dk-select" data-active="true"><button type="button" class="dk-select__trigger" aria-haspopup="listbox" aria-expanded="false"><span class="dk-select__label">Выбрано: Сибирский</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
+      <div class="dk-select"><button type="button" class="dk-select__trigger" aria-haspopup="listbox" aria-expanded="true" style="background:var(--surface-3)"><span class="dk-select__label">Открыт</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
+      <div class="dk-select"><button type="button" class="dk-select__trigger" aria-haspopup="listbox" aria-expanded="false" disabled style="opacity:.45"><span class="dk-select__label">Недоступен</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
+    </div></div></div>
+    <div class="sc-note"><b>Пустой список — не пустое меню.</b> Если под текущий срез не осталось значений, меню говорит «Ничего не найдено» и предлагает снять поиск; молча пустой список читается как поломка.</div>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Подпись — название измерения: «Округ», «Уровень риска»; после выбора — «Округ: Сибирский».</li><li>Число записей рядом с каждым значением.</li><li>Строка применённых фильтров под панелью со «Сбросить всё» (<code>dk-chipbar</code>).</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>«Все округа» после выбора — самая дорогая ошибка дашборда.</li><li>«Выбрано несколько» вместо числа.</li><li>Фильтр без счётчика результата: человек выбирает вслепую и попадает в пустой экран.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li><b>Роли.</b> Кнопка с <code>aria-haspopup="listbox"</code> и <code>aria-expanded</code>; меню — <code>listbox</code> с <code>option</code> и <code>aria-selected</code>.</li><li><b>Клавиатура.</b> Стрелки, Home, End, Enter, Escape с возвратом фокуса на фильтр. Поиск получает фокус при открытии.</li><li><b>Не только цветом.</b> Выбранное отмечено галочкой; активный фильтр — ещё и текстом подписи.</li><li><b>Контраст.</b> Серая заливка активного фильтра поверх поля — 1,19–1,28:1, как у прежней синей (проверка ТИШИНА).</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-select,dk-menu,dk-toolbar,dk-result,dk-chipbar,dk-fchip"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p>Контейнер пустой, разметку строит скрипт. Значения приходят списком объектов.</p><pre class="sc-code"><code>&lt;!-- Строка фильтров — прямо на странице, над содержимым. На телефоне она
+     становится строкой пилюль, которая листается вбок. --&gt;
+&lt;div class=&quot;dk-toolbar&quot;&gt;
+  &lt;div class=&quot;dk-toolbar__group&quot;&gt;
+    &lt;div id=&quot;period&quot;&gt;&lt;/div&gt;
+    &lt;div id=&quot;okrug&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+var f = dkSelect(document.getElementById(&#x27;okrug&#x27;), {
+  label: &#x27;Округ&#x27;,
+  options: [{ value: &#x27;sfo&#x27;, name: &#x27;Сибирский&#x27;, count: 10 }, /* … */],
+  mode: &#x27;single&#x27;,        // или &#x27;multi&#x27;
+  url: &#x27;okrug&#x27;,          // ?okrug=sfo — ссылка на срез
+  onChange: function (value) { /* строка или массив (multi) */ }
+});
+f.value;                 // текущее
+f.set(&#x27;sfo&#x27;); f.clear(); f.setOptions(list);
+&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>label</code></td><td>строка</td><td>Название измерения; после выбора становится «Название: значение».</td></tr><tr><td><code>options[]</code></td><td>массив {value, name, count}</td><td>Значения; count — записей за значением, ноль не прячется.</td></tr><tr><td><code>mode</code></td><td>'single' | 'multi'</td><td>Одиночный закрывает меню, множественный — нет.</td></tr><tr><td><code>value</code></td><td>строка | массив</td><td>Начальное значение; адрес (url) главнее.</td></tr><tr><td><code>search</code></td><td>boolean</td><td>Поле поиска; по умолчанию от 9 значений.</td></tr><tr><td><code>url</code></td><td>строка</td><td>Ключ в строке запроса; пусто — не пишется.</td></tr><tr><td><code>onChange(v)</code></td><td>функция</td><td>При каждой смене выбора.</td></tr><tr><td><code>value / set(v) / clear() / setOptions(list)</code></td><td>API</td><td>Читать и менять снаружи.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-period.html">Период</a> — тот же фильтр, только значение — время</li><li><a href="component-legend.html">Фильтры-легенда</a> — фильтр в один ряд, когда значений мало</li><li><a href="component-table.html">Таблица</a> — что стоит под фильтрами</li><li><a href="showcase.html#filtry">Витрина: фильтры</a> — полный пример со строкой применённого</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
+  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
+  });
+  mark(root.getAttribute('data-theme'));
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkSelect !== 'function') return;
+    var OKRUGA = [{ value: 'cfo', name: 'Центральный', count: 18 }, { value: 'pfo', name: 'Приволжский', count: 14 }, { value: 'ufo', name: 'Южный', count: 12 }, { value: 'szfo', name: 'Северо-Западный', count: 11 }, { value: 'dfo', name: 'Дальневосточный', count: 11 }, { value: 'sfo', name: 'Сибирский', count: 10 }, { value: 'skfo', name: 'Северо-Кавказский', count: 7 }, { value: 'urfo', name: 'Уральский', count: 6 }];
+    var TIERS = [{ value: 'high', name: 'Высокий', count: 23 }, { value: 'mid', name: 'Средний', count: 27 },
+                 { value: 'low', name: 'Низкий', count: 38 }, { value: 'nd', name: 'Мало данных', count: 1 }];
+    var REGIONS = ['Донецкая Народная Республика','Крым','Саха (Якутия)','Новосибирская область','Ростовская область',
+      'Забайкальский край','Луганская Народная Республика','Красноярский край','Свердловская область','Курская область',
+      'Архангельская область','Приморский край','Краснодарский край','Московская область','Санкт-Петербург']
+      .map(function (n, i) { return { value: 'r' + i, name: n, count: Math.max(0, 40 - i * 3) }; });
+    var st = { okrug: null, tier: [], region: null }, out = document.getElementById('x-result');
+    function paint() {
+      var left = 89;
+      if (st.okrug) left = OKRUGA.filter(function (o) { return o.value === st.okrug; })[0].count;
+      if (st.tier.length) left = Math.min(left, st.tier.reduce(function (s, v) { return s + TIERS.filter(function (t) { return t.value === v; })[0].count; }, 0));
+      if (st.region) left = 1;
+      out.innerHTML = '<b>' + left + '</b>' + (left === 89 ? ' регионов' : ' из 89 регионов');
+    }
+    dkSelect(document.getElementById('x-okrug'), { label: 'Округ', options: OKRUGA, url: 'okrug', onChange: function (v) { st.okrug = v; paint(); } });
+    dkSelect(document.getElementById('x-tier'), { label: 'Уровень риска', mode: 'multi', options: TIERS, search: false, url: 'tier', onChange: function (v) { st.tier = v; paint(); } });
+    dkSelect(document.getElementById('x-region'), { label: 'Регион', options: REGIONS, url: 'region', onChange: function (v) { st.region = v; paint(); } });
+    paint();
+  });
+})();
+</script>
+</body>
+</html>

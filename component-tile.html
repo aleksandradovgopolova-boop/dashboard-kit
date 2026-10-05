@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KPI-плитка · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p3_data.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="vendor/echarts.min.js" defer></script>
+<script src="js/dk-chart-theme.js" defer></script>
+<script src="js/dk-charts.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell">
+<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Данные</p>
+    <h1>KPI-плитка</h1>
+    <p class="sc-hero__lead">Одно главное число с трендом и формой: сколько сейчас и куда идёт. Размер S — четверть колонки; здесь число и спарклайн, а не график с осями.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
+      <span class="sc-meta__i">Figma: нет</span>
+      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-charts.js</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Четыре плитки в ряд. Цвет тренда — смысл (рост аварий красный, падение времени реакции зелёный), а не направление стрелки.</p><div class="dk-grid">
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label">Аварии за сутки</span></div><div class="dk-tile__row"><span class="dk-metric-lg">23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div><div class="dk-chart dk-chart--spark" id="x-sp1"></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg></span><span class="dk-tile__label">Обращений</span></div><div class="dk-tile__row"><span class="dk-metric-lg">1 284</span><span class="dk-trend" style="--accent:var(--calm-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg> −6%</span></div><div class="dk-chart dk-chart--spark" id="x-sp2"></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--high-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span><span class="dk-tile__label">Среднее время реакции</span></div><div class="dk-tile__row"><span class="dk-metric-lg">42 мин</span></div><div class="dk-chart dk-chart--spark" id="x-sp3"></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--calm-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span><span class="dk-tile__label">Бригад в работе</span></div><div class="dk-tile__row"><span class="dk-metric-lg">17</span><span class="dk-trend">без изменений</span></div></div></div>
+    </div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Одно текущее значение, которое смотрят первым: аварий сейчас, время реакции.</li><li>Важно направление: тренд к прошлому периоду.</li><li>Плиток две–шесть в ряд; больше — уже таблица.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Сравнение многих значений — <a href="component-chart.html">График</a> в размере L.</li><li>Значение с планом и дельтой к нему — пока нет компонента; открыто в REVIEW.md («KPI с планом»).</li><li>Один показатель по многим объектам — <a href="component-rank.html">Рейтинг</a>.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-grid"><div class="dk-col--half"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
+      <div class="dk-tile__head"><span class="dk-tile__icon"><b class="sc-callout">1</b><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label"><b class="sc-callout">2</b>Аварии за сутки</span></div>
+      <div class="dk-tile__row"><span class="dk-metric-lg"><b class="sc-callout">3</b>23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><b class="sc-callout">4</b><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div>
+      <div class="dk-chart dk-chart--spark" id="x-an" style="position:relative"><b class="sc-callout" style="position:absolute;z-index:1">5</b></div></div></div></div></div><ol class="sc-anatomy__list"><li><b>Значок</b> — <code>dk-tile__icon</code>: тон плитки через <code>--accent</code> — только смысл, не украшение.</li><li><b>Подпись</b> — что за число; коротко и с периодом: «за сутки».</li><li><b>Число</b> — <code>dk-metric-lg</code>, Golos 600, пропорциональные цифры: число одно и в колонку не встаёт, а табличная единица в «17» дала бы зазор.</li><li><b>Тренд</b> — <code>dk-trend</code>: стрелка и дельта со знаком; цвет — смысл изменения.</li><li><b>Спарклайн</b> — <code>type: 'spark'</code>: форма без осей; шкала не от нуля — единственное место, где это правильно.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Плитка — это виджет размера S (<code>dk-widget--s</code>): поле в 14 вместо 18, потому что в четверти колонки поле в 18 съедает пятую часть ширины. В M и L та же разметка, но там уже график с осями. На месте шире 320 px (телефон, половина колонки) плитка перестраивается сама: число с трендом слева, спарклайн справа — иначе она растягивается в пустую полосу.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-widget dk-widget--s dk-tile</code></td><td>Плитка в четверть колонки.</td><td>Ряд KPI сверху дашборда.</td></tr><tr><td><code>--accent</code></td><td>Тон значка и тренда.</td><td>Смысл: crit-ink, high-ink, calm-ink; без него нейтральный.</td></tr><tr><td><code>dk-trend</code></td><td>Дельта к прошлому периоду.</td><td>Если сравнивать есть с чем.</td></tr><tr><td><code>dk-chart--spark</code></td><td>Спарклайн 48 px высотой (64 на широком месте), точка на последнем значении.</td><td>Если есть ряд за период.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <div class="dk-grid">
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" aria-busy="true"><div class="dk-tile__head"><span class="dk-tile__label">Загрузка</span></div><span class="dk-vh">Загружаем</span><div class="dk-skel" style="height:28px;width:50%;margin-top:var(--space-4)"></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile"><div class="dk-tile__head"><span class="dk-tile__label">Нет данных</span></div><div class="dk-tile__row"><span class="dk-metric-lg">—</span><span class="dk-trend">нет замеров за сутки</span></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile"><div class="dk-tile__head"><span class="dk-tile__label">Без тренда</span></div><div class="dk-tile__row"><span class="dk-metric-lg">17</span><span class="dk-trend">без изменений</span></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)"><div class="dk-tile__head"><span class="dk-tile__label">Тревога</span></div><div class="dk-tile__row"><span class="dk-metric-lg" style="color:var(--crit-ink)">23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div></div></div>
+    </div>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Подпись с периодом: «Аварии за сутки», «Обращений за 14 дней».</li><li>Тренд со знаком и словами, если нет числа: «без изменений».</li><li>Единица рядом с числом только когда без неё непонятно: «42 мин».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Число без периода: «Аварии: 23» — за час? за год?</li><li>Красная стрелка вниз у «времени реакции» — падение здесь хорошо.</li><li>Спарклайн с осями и подписями — в четверти колонки они мельче десяти пикселей.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li><b>Число</b> читается текстом; спарклайн — холст без подписи, и это осознанно: он повторяет тренд, который уже сказан словами.</li><li><b>Тренд</b> — стрелка со словом или числом, не только цветом.</li><li><b>Загрузка</b> — <code>aria-busy</code> на плитке и скрытый текст «Загружаем».</li><li><b>Контраст.</b> Число и подпись на поверхности виджета — проверка КОНТРАСТ.</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-tile,dk-trend,dk-metric,dk-metric-lg,dk-metric-xl,dk-widget"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p>Плитка — разметка; спарклайн рисует <code>dkChart</code> типом <code>spark</code>.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-widget dk-widget--s dk-tile&quot; style=&quot;--accent:var(--crit-ink)&quot;&gt;
+  &lt;div class=&quot;dk-tile__head&quot;&gt;
+    &lt;span class=&quot;dk-tile__icon&quot;&gt;&lt;svg class=&quot;dk-i dk-i--sm&quot;&gt;&lt;use href=&quot;#ti-alert-triangle&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class=&quot;dk-tile__label&quot;&gt;Аварии за сутки&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;dk-tile__row&quot;&gt;
+    &lt;span class=&quot;dk-metric-lg&quot;&gt;23&lt;/span&gt;
+    &lt;span class=&quot;dk-trend&quot; style=&quot;--accent:var(--crit-ink)&quot;&gt;&lt;svg class=&quot;dk-i dk-i--sm&quot;&gt;&lt;use href=&quot;#ti-arrow-up&quot;/&gt;&lt;/svg&gt; +18%&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;dk-chart dk-chart--spark&quot; id=&quot;sp&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+dkChart(document.getElementById(&#x27;sp&#x27;), {
+  type: &#x27;spark&#x27;, categories: days,
+  series: [{ name: &#x27;Аварии&#x27;, data: [12, 14, 11, 16, 15, 19, 17] }]
+});
+&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--accent</code></td><td>переменная в style</td><td>Тон значка и тренда; смысловые -ink токены.</td></tr><tr><td><code>dk-metric-lg / dk-metric-xl</code></td><td>класс</td><td>Кегль числа 28 или 40.</td></tr><tr><td><code>type: &#x27;spark&#x27;</code></td><td>dkChart</td><td>Спарклайн; <code>area: false</code> убирает заливку.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-chart.html">График</a> — когда нужны оси</li><li><a href="component-rank.html">Рейтинг и сводка</a> — главное число страны с рейтингом</li><li><a href="dashboard.html">Сводка</a> — плитки в живом дашборде</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
+  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
+  });
+  mark(root.getAttribute('data-theme'));
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkChart !== 'function') return;
+    var days = ['09.09','10.09','11.09','12.09','13.09','14.09','15.09','16.09','17.09','18.09','19.09','20.09','21.09','22.09'];
+    var spark = { 'x-sp1': [12,14,11,16,15,19,17,21,18,22,20,24,21,23], 'x-sp2': [1410,1388,1402,1350,1361,1329,1344,1312,1330,1298,1305,1288,1296,1284], 'x-sp3': [38,41,39,44,42,46,43,47,44,45,43,44,41,42] };
+    Object.keys(spark).forEach(function (id) { dkChart(document.getElementById(id), { type: 'spark', categories: days, series: [{ name: 'Значение', data: spark[id] }] }); });
+  });
+})();
+</script>
+</body>
+</html>

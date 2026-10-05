@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>dashboard-kit · календарь работ</title>
+<!-- Тема — первым и без defer: атрибут обязан стоять до первой отрисовки,
+     иначе первая отрисовка будет неправильной. Подробности в самом файле. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/chrome.css">
+
+<!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
+     и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<!-- Движка графиков здесь нет намеренно: на этой странице не рисуется ни
+     одного графика и ни одной карты, а стоил он 1148 КБ — и стоил их до
+     первой отрисовки, потому что подключался без defer. Подключать движок
+     на страницу, которая им не пользуется, — это плата, которую вносит
+     человек, а получает никто. -->
+<script src="js/dk-select.js" defer></script>
+<script src="vendor/air-datepicker.js" defer></script>
+<script src="js/dk-period.js" defer></script>
+<script src="js/dk-chrome.js" defer></script>
+<script src="js/dk-modal.js" defer></script>
+<script src="js/dk-calendar.js" defer></script>
+<script src="js/dk-form.js" defer></script>
+</head>
+
+<body class="dk-page">
+<a class="dk-skip" href="#main">К содержимому</a>
+
+<div class="dk-app" data-nav="closed">
+
+  <aside class="dk-side">
+    <div class="dk-side__head">
+      <span class="dk-side__mark"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+      <span class="dk-side__name">Мониторинг</span>
+      <button class="dk-iconbtn dk-iconbtn--sm" data-act="fold" aria-pressed="false" title="Свернуть меню" aria-label="Свернуть меню">
+        <svg class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg>
+      </button>
+    </div>
+
+    <nav class="dk-side__nav" aria-label="Разделы">
+      <div class="dk-side__group">Обзор</div>
+      <a class="dk-side__item" href="#">
+        <svg class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg>
+        <span class="dk-side__label">Сводка</span>
+      </a>
+      <a class="dk-side__item" href="#">
+        <svg class="dk-i dk-i--sm"><use href="#ti-map"/></svg>
+        <span class="dk-side__label">Регионы</span>
+      </a>
+      <a class="dk-side__item" href="accidents.html">
+        <svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg>
+        <span class="dk-side__label">Аварии</span>
+        <span class="dk-side__n">23</span>
+      </a>
+
+      <div class="dk-side__group">Работа</div>
+      <a class="dk-side__item" href="#">
+        <svg class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg>
+        <span class="dk-side__label">Заявки</span>
+        <span class="dk-side__n">7</span>
+      </a>
+      <a class="dk-side__item" href="#">
+        <svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg>
+        <span class="dk-side__label">Бригады</span>
+      </a>
+      <a class="dk-side__item" href="#" aria-current="page">
+        <svg class="dk-i dk-i--sm"><use href="#ti-calendar"/></svg>
+        <span class="dk-side__label">Календарь</span>
+      </a>
+      <a class="dk-side__item" href="#">
+        <svg class="dk-i dk-i--sm"><use href="#ti-table"/></svg>
+        <span class="dk-side__label">Отчёты</span>
+      </a>
+    </nav>
+
+    <div class="dk-side__foot">
+      <a class="dk-side__item" href="#">
+        <svg class="dk-i dk-i--sm"><use href="#ti-settings"/></svg>
+        <span class="dk-side__label">Настройки</span>
+      </a>
+      <div class="dk-side__user">
+        <span class="dk-avatar dk-avatar--sm">АС</span>
+        <span class="dk-side__who">
+          <b>Александр С.</b>
+          <span>диспетчер</span>
+        </span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="dk-main">
+    <header class="dk-top">
+      <button class="dk-iconbtn dk-top__burger" data-act="nav" title="Разделы" aria-label="Разделы">
+        <svg class="dk-i"><use href="#ti-layout-grid"/></svg>
+      </button>
+
+      <div class="dk-top__titles">
+        <div class="dk-top__path">Мониторинг · Работы</div>
+        <h1 class="dk-top__title">Календарь работ</h1>
+      </div>
+
+      <div class="dk-top__tools">
+        <button class="dk-iconbtn" id="t-theme" title="Сменить тему" aria-label="Сменить тему">
+          <svg class="dk-i"><use href="#ti-sun"/></svg>
+        </button>
+        <button class="dk-btn dk-btn--primary dk-btn--sm" data-modal="#m-add">Добавить работу</button>
+      </div>
+    </header>
+
+    <main class="dk-content" id="main">
+      <div class="dk-wrap">
+        <div class="dk-grid">
+
+          <div class="dk-col--full">
+            <div class="dk-widget">
+              <div id="cal"></div>
+            </div>
+          </div>
+
+          <div class="dk-col--half">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <div class="dk-widget__title" id="day-title">Ближайшее</div>
+              </div>
+              <div class="dk-list" id="day-list"></div>
+            </div>
+
+          </div>
+
+          <div class="dk-col--half">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h3 class="dk-widget__title">Виды работ</h3>
+              </div>
+              <div class="dk-widget__body">
+                <div class="dk-status"><span class="dk-dot" style="--accent:var(--crit)"></span> Авария — работы вне плана</div>
+                <div class="dk-status"><span class="dk-dot" style="--accent:var(--high)"></span> Работа на сети — с ограничением</div>
+                <div class="dk-status"><span class="dk-dot" style="--accent:var(--brand)"></span> Плановое отключение</div>
+                <div class="dk-status"><span class="dk-dot" style="--accent:var(--calm)"></span> Завершено</div>
+                <p class="dk-caption" style="margin:var(--space-4) 0 0">Цвет события — это его вид, а не украшение.
+                   Календарь, где цвета розданы по кругу, врёт так же, как график с произвольной палитрой.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+    <!-- Нижняя панель разделов — только на телефоне (chrome.css). Полный список остаётся в меню. -->
+    <nav class="dk-tabbar" aria-label="Главные разделы">
+      <a class="dk-tabbar__item" href="dashboard.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg><span>Сводка</span></a>
+      <a class="dk-tabbar__item" href="regions.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg><span>Регионы</span></a>
+      <a class="dk-tabbar__item" href="accidents.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-alert-triangle"/></svg><span>Аварии</span></a>
+      <a class="dk-tabbar__item" href="calendar.html" aria-current="page"><svg class="dk-i" aria-hidden="true"><use href="#ti-calendar"/></svg><span>Календарь</span></a>
+    </nav>
+  </div>
+</div>
+
+<dialog class="dk-modal dk-modal--wide" id="m-add">
+  <form class="dk-modal__form" id="add-form">
+    <div class="dk-modal__head">
+      <h2 class="dk-modal__title">Добавить работу</h2>
+      <button type="button" class="dk-iconbtn dk-iconbtn--sm" data-close title="Закрыть" aria-label="Закрыть">
+        <svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg>
+      </button>
+    </div>
+
+    <div class="dk-modal__body">
+      <div class="dk-form">
+        <div class="dk-form__alarm" hidden></div>
+
+        <div class="dk-ff dk-ff--wide">
+          <label class="dk-label" for="a-name">Что за работа</label>
+          <div class="dk-field"><input id="a-name" name="name" placeholder="Замена задвижки на вводе" required minlength="5"></div>
+          <div class="dk-hint">Так её увидят диспетчеры смены в календаре</div>
+        </div>
+
+        <div class="dk-ff">
+          <label class="dk-label" for="a-kind">Вид работы</label>
+          <div class="dk-field">
+            <select id="a-kind" name="kind" required>
+              <option value="">Выберите вид</option>
+              <option value="plan">Плановое отключение</option>
+              <option value="high">Работа на сети с ограничением</option>
+              <option value="crit">Авария</option>
+              <option value="event">Проверка</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="dk-ff">
+          <label class="dk-label" for="a-people">Затронуто жителей <span class="dk-label__opt">если известно</span></label>
+          <div class="dk-field"><input id="a-people" name="people" type="number" min="0" placeholder="1240"></div>
+        </div>
+
+        <div class="dk-ff">
+          <label class="dk-label" for="a-from">Начало</label>
+          <div class="dk-field"><input id="a-from" name="from" type="datetime-local" required></div>
+        </div>
+
+        <div class="dk-ff">
+          <label class="dk-label" for="a-till">Окончание <span class="dk-label__opt">если известно</span></label>
+          <div class="dk-field"><input id="a-till" name="till" type="datetime-local"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dk-modal__foot">
+      <button type="button" class="dk-btn" data-close autofocus>Отмена</button>
+      <button type="submit" class="dk-btn dk-btn--primary">Добавить работу</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+
+  var EVENTS = [
+    // Длиннее одного дня — одна работа, а не несколько одинаковых
+    { date: '2026-09-09', end: '2026-09-11', name: 'Опрессовка, Кировский р-н', kind: 'plan' },
+    { date: '2026-09-11', end: '2026-09-16', name: 'Ремонт теплотрассы, ул. Мира', kind: 'high' },
+    { date: '2026-09-28', end: '2026-10-02', name: 'Проверка готовности к зиме', kind: 'event' },
+    { date: '2026-09-14', end: '2026-09-17', name: 'Подвоз воды, Советский р-н', kind: 'event' },
+
+    // С часами — попадают в недельную сетку
+    { date: '2026-09-21 08:00', end: '2026-09-21 12:30', name: 'Плановое отключение ХВС', kind: 'plan' },
+    { date: '2026-09-21 10:00', end: '2026-09-21 11:00', name: 'Осмотр котельной', kind: 'event' },
+    { date: '2026-09-22 14:00', end: '2026-09-22 18:00', name: 'Замена задвижки', kind: 'high' },
+    { date: '2026-09-23 03:20', end: '2026-09-23 09:40', name: 'Прорыв теплотрассы', kind: 'crit' },
+    { date: '2026-09-23 09:40', end: '2026-09-23 17:00', name: 'Замена участка 40 м', kind: 'high' },
+    { date: '2026-09-23 12:00', end: '2026-09-23 13:00', name: 'Информирование жителей', kind: 'event' },
+    { date: '2026-09-24 09:00', end: '2026-09-24 10:30', name: 'Пуско-наладка котельной', kind: 'plan' },
+    { date: '2026-09-25 16:00', end: '2026-09-25 17:30', name: 'Подача восстановлена', kind: 'calm' },
+
+    { date: '2026-09-05', name: 'Проверка узлов учёта', kind: 'event' },
+    { date: '2026-10-01', end: '2026-10-05', name: 'Начало отопительного сезона', kind: 'plan' }
+  ];
+
+  var ICON = { crit: 'ti-alert-triangle', high: 'ti-bolt', plan: 'ti-calendar', calm: 'ti-circle-check', event: 'ti-info-circle' };
+  /* Текстовая ступень, а не заливочная: --accent здесь уходит на .dk-list__row,
+     а внутри неё и значок, и значение — текстовые роли. Тот же дефект, что был
+     на регионах; проверка РОЛЬ его не видит, потому что разметку собирает
+     скрипт. Найден глазами, второй раз подряд. */
+  var TONE = { crit: 'var(--crit-ink)', high: 'var(--high-ink)', plan: 'var(--brand)',
+               calm: 'var(--calm-ink)', event: 'var(--event)' };
+
+
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkCalendar !== 'function') return;
+
+    var fmt = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' });
+
+    // Подпись под именем: «когда», а не «какого числа» — для многодневной
+    // работы важен размах, для часовой — часы.
+    function when(e) {
+      var a = e.date.split(' '), b = (e.end || '').split(' ');
+      var day = fmt.format(new Date(a[0]));
+      if (a[1]) return day + ', ' + a[1] + (b[1] ? '—' + b[1] : '');
+      if (e.end && b[0] !== a[0]) return day + ' — ' + fmt.format(new Date(b[0]));
+      return day;
+    }
+
+    function paint(title, list) {
+      document.getElementById('day-title').textContent = title;
+      var box = document.getElementById('day-list');
+      box.innerHTML = list.length
+        ? list.map(function (e) {
+            // Название работы и время приходят из данных, то есть снаружи.
+            // TONE и ICON — свои словари, но kind тоже чужой: неизвестный вид
+            // даст undefined в разметке, поэтому подставляем запасные.
+            var tone = TONE[e.kind] || 'var(--nodata)';
+            var icon = ICON[e.kind] || 'ti-info-circle';
+            return '<button class="dk-list__row" style="--accent:' + tone + '">' +
+              '<span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#' + icon + '"/></svg></span>' +
+              '<span class="dk-list__text"><span class="dk-list__name">' + dkEsc(e.name) + '</span>' +
+              '<span class="dk-list__sub">' + dkEsc(when(e)) + '</span></span></button>';
+          }).join('')
+        : '<div class="dk-empty"><div class="dk-empty__t">Работ нет</div>' +
+          '<div>В этот день ничего не запланировано.</div></div>';
+    }
+
+    var cal = dkCalendar(document.getElementById('cal'), {
+      month: '2026-09-01',
+      events: EVENTS,
+      onSelect: function (date, list) {
+        paint(fmt.format(date), list.map(function (e) { return e.raw; }));
+      }
+    });
+
+    paint('Ближайшее', EVENTS.slice(7, 11));
+
+    // Форма в модалке. Закрытие по «Отмене» и крестику — вручную: form без
+    // method="dialog" сам окно не закроет, а method="dialog" не даст проверить
+    // поля перед отправкой. Проверка важнее экономии на двух строках.
+    var dlg = document.getElementById('m-add');
+    dlg.addEventListener('click', function (e) {
+      if (e.target.closest('[data-close]')) dlg.close('cancel');
+    });
+
+    if (typeof dkForm === 'function') {
+      dkForm(document.getElementById('add-form'), {
+        check: function (el) {
+          if (el.id !== 'a-till' || !el.value) return null;
+          var from = document.getElementById('a-from').value;
+          return (from && el.value < from) ? 'Окончание раньше начала — проверьте даты' : null;
+        },
+        onSubmit: function (data) {
+          EVENTS.push({
+            date: data.get('from').replace('T', ' ').slice(0, 16),
+            end: data.get('till') ? data.get('till').replace('T', ' ').slice(0, 16) : undefined,
+            name: data.get('name'),
+            kind: data.get('kind')
+          });
+          cal.setEvents(EVENTS);
+          document.getElementById('add-form').reset();
+          dlg.close('add');
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>

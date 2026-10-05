@@ -1,0 +1,642 @@
+/* ============================================================================
+   dashboard-kit · chrome.css
+   Каркас страницы: боковое меню и шапка.
+
+   ЭТОТ ФАЙЛ НЕОБЯЗАТЕЛЕН. Кит начинался как набор блоков, которые встраивают
+   в чужую страницу — так он и живёт в витрине мониторинга ЖКХ, где меню и
+   шапка уже свои. Не подключили chrome.css — ничего не изменилось: блоки
+   работают как раньше. Подключили — получили отдельный дашборд целиком.
+
+   Поэтому каркас не трогает ни один класс из components.css и не требует
+   себя: `.dk-wrap` и сетка ведут себя одинаково внутри `.dk-app` и снаружи.
+
+   ---------------------------------------------------------------------------
+   ПОЧЕМУ МЕНЮ СЛЕВА, А НЕ СВЕРХУ. Разделов у дашборда больше, чем помещается
+   в строку, и их число растёт: список вниз растёт бесконечно, строка — нет.
+   Верхнее меню на седьмом разделе превращается в «Ещё ▾», то есть прячет
+   половину продукта за лишним щелчком.
+
+   ПОЧЕМУ ШАПКА ЛИПКАЯ, А МЕНЮ ПРОКРУЧИВАЕТСЯ САМО. Дашборд длинный. Уехавшая
+   вверх шапка уносит с собой ответ на вопрос «где я нахожусь» — а это первое,
+   что человек теряет, вернувшись к вкладке через час.
+   ============================================================================ */
+
+.dk-app {
+  --dk-side: 248px;                 /* ширина меню; хост может переопределить */
+  position: relative;            /* якорь для разделов на узком экране */
+  display: grid;
+  grid-template-columns: var(--dk-side) minmax(0, 1fr);
+  /* dvh, а не vh: 100vh на телефоне — это высота со СВЁРНУТОЙ адресной
+     строкой, поэтому при загрузке страница выше экрана на её высоту, и
+     прижатая книзу кнопка оказывается под ней. */
+  min-height: 100dvh;
+  /* Минус нижний отступ от полосы «домой», который body кладёт снизу
+     (components.css, .dk-page): иначе пустая страница на iPhone всегда
+     прокручивалась бы на эти 21–34 px. */
+  min-height: calc(100dvh - env(safe-area-inset-bottom, 0px));
+  background: var(--bg);
+}
+
+/* Свёрнутое меню: остаются значки. Подписи не прячем «по наведению» — меню,
+   которое читается только мышью, недоступно с клавиатуры и с тачскрина. */
+.dk-app[data-nav="folded"] { --dk-side: 64px; }
+
+/* --- боковое меню --------------------------------------------------------- */
+
+.dk-side {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-group);
+  padding: var(--space-6);
+  background: var(--surface);
+  min-width: 0;
+}
+
+.dk-side__head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  height: var(--control-lg);
+  padding: 0 var(--space-3);
+  min-width: 0;
+}
+
+.dk-side__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: var(--brand);
+  color: var(--brand-ink);
+}
+
+.dk-side__name {
+  font-size: var(--text-title);
+  font-weight: var(--weight-ui-strong);
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.dk-side__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Заголовок группы разделов. Нужен с четвёртого пункта: до этого список
+   читается целиком, дальше — по частям. */
+.dk-side__group {
+  font: var(--type-overline);
+  letter-spacing: var(--type-overline-track);
+  color: var(--ink-3);
+  padding: var(--space-5) var(--space-4) var(--space-2);
+}
+
+.dk-side__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  height: var(--control-lg);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--ink-2);
+  text-decoration: none;
+  font-size: var(--text-body);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  min-width: 0;
+  transition: background var(--duration-fast), color var(--duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-side__item:hover { background: var(--surface-2); color: var(--ink); }
+}
+
+.dk-side__item:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+
+/* Текущий раздел отмечен тремя признаками сразу: заливкой, цветом текста и
+   полосой у края. Одного цвета мало — его видят не все, а «где я» в меню
+   человек проверяет чаще, чем что-либо ещё. */
+.dk-side__item[aria-current] {
+  background: var(--control-soft);
+  color: var(--ink);
+  font-weight: var(--weight-ui-strong);
+}
+
+.dk-side__item[aria-current]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--control-on);
+}
+
+.dk-side__item .dk-i { flex: none; color: currentColor; }
+
+.dk-side__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Счётчик у раздела: сколько там ждёт работы. Ноль не показываем — «0 аварий»
+   в меню занимает место и не сообщает ничего, чего не сообщает его отсутствие. */
+/* СЧЁТЧИК В МЕНЮ. Спор был про ноль: показывать «0» рядом с разделом или
+   прятать. Решение — прятать, и вот почему.
+
+   Счётчик в меню отвечает на один вопрос: «есть ли там что-то, ради чего
+   стоит туда идти». Ноль отвечает «нет» — то есть ровно то же самое, что
+   отсутствие счётчика, только занимая место и требуя прочтения. В меню из
+   восьми разделов восемь нулей — это восемь маленьких обещаний, каждое из
+   которых при проверке оказывается пустым, и после третьего раза человек
+   перестаёт читать счётчики вообще, включая непустые.
+
+   Где ноль наоборот нужен: в плитке KPI. Там число — это и есть содержимое,
+   и «0 аварий за сутки» — хорошая новость, которую надо увидеть. Разница в
+   том, что плитку человек читает, а меню просматривает.
+
+   Прячется через :empty и через data-n="0": разметка может либо не вывести
+   счётчик, либо вывести ноль — оба случая должны выглядеть одинаково, иначе
+   правило будет соблюдаться через раз. */
+.dk-side__n:empty,
+.dk-side__n[data-n="0"] { display: none; }
+
+.dk-side__n {
+  flex: none;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border-radius: var(--radius-full);
+}
+
+.dk-side__item[aria-current] .dk-side__n { color: var(--control-on-ink); background: var(--control-on); }
+
+.dk-side__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: none;
+}
+
+.dk-side__user {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  min-width: 0;
+}
+
+.dk-side__who { display: flex; flex-direction: column; min-width: 0; }
+.dk-side__who b { font-size: var(--text-body); font-weight: var(--weight-ui-strong); color: var(--ink); }
+.dk-side__who span { font-size: var(--text-caption); color: var(--ink-3); }
+
+.dk-side__who b,
+.dk-side__who span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Свёрнутое меню: подписи, счётчики и группы уходят, значки остаются по центру. */
+.dk-app[data-nav="folded"] .dk-side__label,
+.dk-app[data-nav="folded"] .dk-side__n,
+.dk-app[data-nav="folded"] .dk-side__group,
+.dk-app[data-nav="folded"] .dk-side__name,
+.dk-app[data-nav="folded"] .dk-side__who { display: none; }
+
+.dk-app[data-nav="folded"] .dk-side__item,
+/* СВЁРНУТОЕ МЕНЮ: В ШАПКЕ ОДИН КВАДРАТ, А НЕ ДВА.
+
+   Было два: знак продукта и кнопка сворачивания. В рейку шириной 64 они не
+   помещаются — два по 28 плюс зазор, — и оба вылезали за свою же шапку, стоя
+   вплотную к краю содержимого.
+
+   Убран знак, а не кнопка. В свёрнутой рейке место дорогое, и достаётся оно
+   не украшению: знак продукта не сообщает ничего, чего человек не знает, — он
+   в этом продукте и так работает. Кнопка «развернуть» — единственное, что
+   может понадобиться в этой точке экрана, и она остаётся. Развернули меню —
+   знак вернулся. */
+.dk-app[data-nav="folded"] .dk-side__mark { display: none; }
+
+.dk-app[data-nav="folded"] .dk-side__head,
+.dk-app[data-nav="folded"] .dk-side__user { justify-content: center; padding: 0; }
+
+/* Стрелка смотрит туда, куда поедет меню: влево — свернуть, вправо —
+   развернуть. Одна и та же стрелка в обе стороны заставляла бы читать
+   подпись, которой в свёрнутом виде не видно. */
+.dk-app[data-nav="folded"] [data-act="fold"] .dk-i { transform: rotate(180deg); }
+
+/* --- шапка ---------------------------------------------------------------- */
+
+/* Колонка содержимого объявлена контейнером: шапка должна переноситься по
+   своей собственной ширине, а не по ширине экрана. Разница принципиальная —
+   при раскрытом меню слева шапке достаётся на 240 пикселей меньше, и на
+   «широком» по меркам медиазапроса экране заголовок страницы уже обрезается
+   многоточием. Медиазапрос ниже остаётся как запасной: кит может стоять и
+   без каркаса, в чужой вёрстке, где этого контейнера нет. */
+.dk-main { min-width: 0; display: flex; flex-direction: column;
+           container-type: inline-size; container-name: dk-main; }
+
+.dk-top {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-chrome);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-group);
+  padding: var(--space-5) var(--page-pad);
+  /* Липкая шапка прилипает к верху окна, и при запуске с главного экрана
+     (PWA) это верх под строкой состояния — часы и заряд легли бы поверх
+     заголовка. Отступ внутри шапки, а не top: иначе в щель над ней было бы
+     видно уезжающее содержимое. */
+  padding-top: max(var(--space-5), env(safe-area-inset-top, 0px));
+  background: var(--bg);
+  min-width: 0;
+}
+
+.dk-top__burger { display: none; }
+
+.dk-top__titles { flex: 1; min-width: 0; }
+
+/* Путь над заголовком отвечает на «где я», заголовок — на «что здесь».
+   Порядок именно такой: сначала место, потом содержимое. */
+.dk-top__path {
+  font: var(--type-caption);
+  letter-spacing: var(--type-caption-track);
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Заголовок страницы — единственный h1 на экране, и он должен выглядеть как
+   h1. Раньше стоял 20: на референсах дашбордов название страницы держит
+   верхнюю строку и читается раньше шапки, а на 20 оно тонуло между надписью
+   продукта и кнопками среза. */
+.dk-top__title {
+  margin: 0;
+  font: var(--type-h1);
+  letter-spacing: var(--type-h1-track);
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* На какой момент данные. Стоит рядом с заголовком страницы, а не в виджете:
+   свежесть одна на весь экран, и повторять её у каждого блока — шум. */
+.dk-top__at {
+  flex: none;
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.dk-top__at-l { color: var(--ink-3); }
+
+.dk-top__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  flex: none;
+}
+
+.dk-content { flex: 1; min-width: 0; }
+
+/* На узком экране шапка переносится в две строки: заголовок страницы и
+   инструменты не помещаются в одну, а выдавленный заголовок — это потерянный
+   ответ на «где я». Заголовок уходит вниз, под кнопки: инструменты нужны
+   пальцу, а заголовок — глазу, и глаз найдёт его в любой строке. */
+/* «Данные на 13:01» на узком экране уходит под заголовок. В первой строке он
+   делил место с кнопкой разделов и инструментами, и на период оставалось
+   166 px из 343: чип показывал «Последни…». Период — условие, при котором
+   верны все числа на экране; обрезанный, он превращает дашборд в цифры
+   неизвестно за что. Свежесть под заголовком читается как его подпись.
+   Цена: шапка на телефоне на одну строку выше — примерно 20 px. */
+@media (max-width: 767px) {
+  .dk-top { flex-wrap: wrap; row-gap: var(--space-4); }
+  .dk-top__titles { order: 3; flex: 1 0 100%; }   /* именно основа строки: width в гибкой раскладке перебивается flex-basis */
+  .dk-top__at { order: 4; flex: 1 0 100%; margin-top: calc(-1 * var(--space-3)); }
+  .dk-top__tools { flex: 1; min-width: 0; flex-wrap: wrap; justify-content: flex-end; }
+}
+
+@container dk-main (max-width: 860px) {
+  .dk-top { flex-wrap: wrap; row-gap: var(--space-4); }
+  .dk-top__titles { order: 3; flex: 1 0 100%; }
+  .dk-top__at { order: 4; flex: 1 0 100%; margin-top: calc(-1 * var(--space-3)); }
+  .dk-top__tools { flex: 1; min-width: 0; flex-wrap: wrap; justify-content: flex-end; }
+}
+
+/* ШАПКА НА ТЕЛЕФОНЕ — ТРИ ПЛОТНЫЕ СТРОКИ. Замер 29.09 на 390×844: на сводке
+   шапка занимала 194 px, 23% экрана. Инструменты переносились в два ряда
+   над заголовком, заголовок в 28 стоял третьим, свежесть — четвёртой
+   строкой, и всё это липло. Теперь:
+   1) кнопка разделов и заголовок в 20 — строкой;
+   2) «Данные на» — подписью под заголовком, рядом с той же кнопкой;
+   3) инструменты — одной строкой, которая листается вбок, как строка
+      фильтров: период первым и целиком, остальное уходит за край.
+   Путь над заголовком («Мониторинг · ЖКХ») на телефоне не показываем: «где
+   я» уже отвечают заголовок и нижняя панель разделов, а строка пути стоила
+   16 px высоты на каждом экране.
+   Цена: инструменты правее периода видно не сразу — их надо пролистать. */
+@media (max-width: 767px) {
+  .dk-top {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "burger title" "burger at" "tools tools";
+    column-gap: var(--gap-tight);
+    row-gap: 0;
+    align-items: center;
+  }
+  .dk-top__burger { grid-area: burger; }
+  .dk-top__titles { grid-area: title; min-width: 0; }
+  .dk-top__path { display: none; }
+  .dk-top__title { font: var(--type-h2); letter-spacing: var(--type-h2-track); }
+  .dk-top__at { grid-area: at; margin-top: 0; }
+  .dk-top__tools {
+    grid-area: tools;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: var(--space-4) calc(var(--page-pad) * -1) calc(var(--space-6) * -1);
+    padding: var(--space-2) var(--page-pad) var(--space-6);
+  }
+  .dk-top__tools::-webkit-scrollbar { display: none; }
+  .dk-top__tools > * { flex: none; }
+}
+
+/* Телефон боком: шапка не липнет. Замер на 812×375 — липкая шапка 142 px,
+   то есть 38% высоты экрана постоянно, и на данные при прокрутке остаётся
+   233 px. Липкость нужна, чтобы условия среза были видны всегда, но при
+   такой высоте она съедает сами данные, ради которых срез.
+   Цена: боком период и фильтры уезжают вместе со страницей; чтобы поменять
+   срез, надо вернуться наверх. Порог по высоте, а не по ориентации: низкое
+   окно на десктопе страдает так же. */
+@media (max-height: 480px) {
+  .dk-top { position: relative; }
+}
+
+/* Внутри каркаса обёртка уже не центрируется по ширине экрана: её центрирует
+   сама колонка содержимого, а верхний отступ забирает шапка. */
+.dk-app .dk-wrap { padding-top: 0; }
+
+/* --- ссылка «к содержимому» ------------------------------------------------
+   Первая цель табуляции. Без неё человек, работающий с клавиатуры, проходит
+   всё меню заново на каждой странице.                                        */
+
+.dk-skip {
+  position: absolute;
+  left: max(var(--space-5), env(safe-area-inset-left, 0px));   /* на телефоне боком — не под вырезом */
+  top: var(--space-5);
+  z-index: var(--z-modal);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--brand);
+  color: var(--brand-ink);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.dk-skip:focus { transform: none; }
+
+/* --- меню сверху ----------------------------------------------------------
+   data-nav-place="top" — та же разметка, другая раскладка. Выбор между
+   «слева» и «сверху» решается не вкусом, а двумя числами.
+
+   СВЕРХУ ВЫГОДНО, когда разделов немного (до семи) и дашборду нужна ширина:
+   боковое меню забирает 248 пикселей, а на ноутбуке в 1280 это пятая часть
+   рабочей области — как раз те колонки, которых потом не хватает таблице.
+
+   СЛЕВА ВЫГОДНО, когда разделов больше или они растут: список вниз растёт
+   бесконечно, строка — нет. Верхнее меню на восьмом разделе превращается в
+   «Ещё ▾» и прячет часть продукта за лишним щелчком.
+
+   У верхнего варианта есть цена, и её надо знать заранее: заголовки групп
+   в строке не работают и скрываются. Плоский список из десяти пунктов
+   читается хуже, чем два списка по пять.                                     */
+
+.dk-app[data-nav-place="top"] {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.dk-app[data-nav-place="top"] .dk-side {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-chrome);
+  height: auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--gap-group);
+  padding: var(--space-4) var(--page-pad);
+}
+
+.dk-app[data-nav-place="top"] .dk-side__head { padding: 0; height: auto; flex: none; }
+.dk-app[data-nav-place="top"] .dk-side__head .dk-iconbtn { display: none; }
+
+.dk-app[data-nav-place="top"] .dk-side__nav {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* Заголовки групп в строке не работают: в столбце они разделяют, в строке
+   встают в один ряд с пунктами и читаются как ещё один пункт. */
+.dk-app[data-nav-place="top"] .dk-side__group { display: none; }
+
+.dk-app[data-nav-place="top"] .dk-side__item { flex: none; }
+
+/* Текущий раздел подчёркнут снизу, а не отмечен полосой слева: в строке
+   левый край пункта ничем не выделен, а нижняя граница — общая линия, вдоль
+   которой глаз и ищет активную вкладку. */
+.dk-app[data-nav-place="top"] .dk-side__item[aria-current]::before {
+  left: var(--space-4);
+  right: var(--space-4);
+  top: auto;
+  bottom: 0;
+  width: auto;
+  height: 2px;
+  transform: none;
+}
+
+.dk-app[data-nav-place="top"] .dk-side__foot {
+  flex-direction: row;
+  align-items: center;
+  margin-left: auto;
+  flex: none;
+}
+
+.dk-app[data-nav-place="top"] .dk-side__user { padding: 0 var(--space-4); }
+
+/* Свёрнутого состояния у верхнего меню нет: сворачивать нечего, оно и так
+   занимает одну строку. */
+.dk-app[data-nav-place="top"][data-nav="folded"] { --dk-side: auto; }
+
+/* --- планшет и мобилка -----------------------------------------------------
+   Меню НЕ выезжает сбоку. Выезжающая панель — это отдельное движение, которое
+   надо заметить, понять и потом ещё закрыть; на узком экране она к тому же
+   накрывает содержимое ровно там, куда человек смотрел. Вместо неё разделы
+   открываются обычным всплывающим слоем кита — тем же, что у фильтра: тень,
+   скругление, щелчок мимо закрывает. Одно поведение на весь интерфейс лучше
+   двух, даже если второе моднее.                                             */
+
+@media (max-width: 1023px) {
+  .dk-app { grid-template-columns: minmax(0, 1fr); }
+
+  .dk-side {
+    position: absolute;
+    left: var(--page-pad);
+    top: calc(var(--control-lg) + var(--space-8));
+    z-index: var(--z-dropdown);
+    width: 280px;
+    max-width: calc(100% - var(--page-pad) * 2);
+    height: auto;
+    max-height: 70dvh;   /* как и весь каркас: vh на телефоне меряется без адресной строки */
+    border-radius: var(--radius-xl);
+    box-shadow: var(--elev-overlay);
+    padding: var(--space-3);
+    display: none;
+  }
+
+  .dk-app[data-nav="open"] .dk-side { display: flex; }
+
+  .dk-side__head { display: none; }        /* название уже стоит в шапке */
+
+  /* Узкий экран не различает «слева» и «сверху»: в обоих случаях разделы
+     всплывают под шапкой. Раскладка меню — решение для широкого экрана. */
+  .dk-app[data-nav-place="top"] .dk-side {
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--space-3);
+  }
+  .dk-app[data-nav-place="top"] .dk-side__nav { flex-direction: column; overflow-x: visible; }
+  .dk-app[data-nav-place="top"] .dk-side__group { display: revert; }
+  .dk-app[data-nav-place="top"] .dk-side__foot { flex-direction: column; margin-left: 0; }
+  .dk-app[data-nav-place="top"] .dk-side__item[aria-current]::before {
+    left: 0; right: auto; top: 50%; bottom: auto;
+    width: 2px; height: 20px; transform: translateY(-50%);
+  }
+
+  .dk-top__burger { display: inline-flex; }
+
+  /* Свёрнутое состояние на узком экране не действует: значки без подписей
+     пальцем читаются ещё хуже, чем мышью. */
+  .dk-app[data-nav="folded"] .dk-side__label,
+  .dk-app[data-nav="folded"] .dk-side__n,
+  .dk-app[data-nav="folded"] .dk-side__group,
+  .dk-app[data-nav="folded"] .dk-side__who { display: revert; }
+
+  .dk-app[data-nav="folded"] .dk-side__item,
+  .dk-app[data-nav="folded"] .dk-side__user { justify-content: flex-start; padding: 0 var(--space-4); }
+}
+
+/* --- нижняя панель разделов на телефоне ------------------------------------
+   Три–пять главных разделов под большим пальцем, как в приложении: на
+   телефоне дашборд открывают одной рукой, и до бургера в верхнем углу
+   палец не дотягивается. Сделано по мониторингу, на который равняется
+   телефон (DECISIONS.md, п. 8).
+
+   Разделов не больше пяти: шестой уже не помещается подписью, а значок без
+   подписи — загадка. Полный список остаётся за бургером в шапке, панель его
+   не заменяет, а сокращает дорогу к главному.
+
+   Только на узком экране. На широком разделы — боковое меню, и вторая
+   навигация внизу была бы тем же списком дважды. Панель лежит поверх
+   содержимого, поэтому ей разрешены кромка, размытие фона и глубокая тень
+   (--elev-bar), а странице — нижний запас на её высоту: последний блок не
+   должен прятаться под ней. Уведомления поднимаются над панелью.
+
+   Текущий раздел отмечен весом подписи, цветом и крупным значком — не одним
+   цветом: «где я» проверяют чаще всего остального. */
+.dk-tabbar { display: none; }
+
+@media (max-width: 767px) {
+  .dk-tabbar {
+    position: fixed;
+    z-index: var(--z-chrome);
+    left: max(var(--page-pad), env(safe-area-inset-left, 0px));
+    right: max(var(--page-pad), env(safe-area-inset-right, 0px));
+    bottom: calc(var(--space-7) + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    gap: var(--space-2);
+    height: 68px;
+    padding: var(--space-3);
+    box-sizing: border-box;
+    background: var(--surface);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border: 1px solid var(--edge-float);
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+  }
+
+  .dk-tabbar__item {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-ui);
+    color: var(--ink-3);
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .dk-tabbar__item > span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dk-tabbar__item .dk-i { width: 20px; height: 20px; }
+  .dk-tabbar__item:active { background: var(--surface-2); }
+  .dk-tabbar__item:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+  .dk-tabbar__item[aria-current="page"] { color: var(--ink); font-weight: var(--weight-ui-strong); }
+  .dk-tabbar__item[aria-current="page"] .dk-i { width: 22px; height: 22px; }
+
+  /* Запас под панелью: её высота, её отступ от низа и воздух до последнего
+     блока. Без него последний блок страницы уходил под панель целиком. */
+  .dk-page:has(.dk-tabbar) {
+    padding-bottom: calc(68px + var(--space-7) * 2 + env(safe-area-inset-bottom, 0px));
+  }
+  .dk-page:has(.dk-tabbar) .dk-toasts {
+    bottom: calc(68px + var(--space-7) + var(--space-5) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Полные названия важнее декоративной компактности. Запас прокрутки
+   защищает фокус от липкой шапки и мобильной панели. */
+.dk-top__title { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.dk-page { scroll-padding-top: calc(var(--space-8) * 4); }
+.dk-content :is(a, button, input, summary, [tabindex]) { scroll-margin-top: calc(var(--space-8) * 4); scroll-margin-bottom: calc(var(--space-8) * 4); }
+.dk-task-nav { display: none; }
+@media (max-width: 767px) {
+  .dk-page { scroll-padding-bottom: calc(68px + var(--space-7) * 2 + env(safe-area-inset-bottom, 0px)); }
+}

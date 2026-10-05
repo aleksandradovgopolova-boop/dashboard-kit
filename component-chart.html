@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>График · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p4_viz.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="vendor/echarts.min.js" defer></script>
+<script src="js/dk-chart-theme.js" defer></script>
+<script src="js/dk-charts.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell">
+<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Визуализация</p>
+    <h1>График</h1>
+    <p class="sc-hero__lead">Обёртка над ECharts, которая закрывает опасное и оставляет нужное: тема из токенов, «данных нет» вместо пустого прямоугольника, легенда от двух серий, линия порога, пунктир прогноза. Двух осей Y и сглаживания не будет.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
+      <span class="sc-meta__i">Figma: нет</span>
+      <span class="sc-meta__i">код: <code>js/dk-charts.js</code> · <code>js/dk-chart-theme.js</code> · <code>vendor/echarts.min.js</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Четыре типа из одиннадцати: столбцы с линией нормы, линия с прогнозом, накопительные столбцы палитрой состояний, пончик с числом в центре. Остальные — на <a href="showcase.html#grafiki">витрине</a>.</p><div class="dk-grid--even">
+      <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">По округам · норма 4</h3></div><div id="x-bar" class="dk-chart"></div></div>
+      <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Аварии: факт и прогноз</h3></div><div id="x-forecast" class="dk-chart"></div></div>
+      <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Состав риска</h3></div><div id="x-stack" class="dk-chart"></div></div>
+      <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Доли тиров</h3></div><div id="x-donut" class="dk-chart"></div></div>
+    </div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Читатель должен увидеть динамику, сравнить величины, увидеть состав или долю — вопрос выбирает тип (таблица на витрине).</li><li>Есть ширина: график с осями живёт в M и L, в S — только спарклайн.</li><li>Значений на оси категорий до сорока; дальше это сырые данные, а не картинка.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Одно текущее значение — <a href="component-tile.html">KPI-плитка</a>, а не столбчатый график из одного столбца.</li><li>Больше семи значимых категорий — <a href="component-table.html">Таблица</a>, а не ещё больше цветов.</li><li>«Где» на территории — <a href="component-map.html">Регионы</a>.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title"><b class="sc-callout">1</b>Аварии по дням</h3><div class="dk-widget__actions"><button class="dk-iconbtn dk-iconbtn--sm" title="Обновить" aria-label="Обновить"><svg class="dk-i"><use href="#ti-refresh"/></svg></button></div></div>
+      <div class="dk-chart" id="x-an" style="position:relative"><b class="sc-callout" style="position:absolute;left:var(--space-5);top:var(--space-5);z-index:1">2</b><b class="sc-callout" style="position:absolute;right:var(--space-8);top:34%;z-index:1">3</b><b class="sc-callout" style="position:absolute;left:44%;top:16%;z-index:1">4</b><b class="sc-callout" style="position:absolute;left:46%;bottom:var(--space-3);z-index:1">5</b></div></div></div><ol class="sc-anatomy__list"><li><b>Заголовок виджета</b> — что и за какой период; единица — в подписи оси или в заголовке, не в каждой подписи.</li><li><b>Ось значений</b> — от нуля у столбцов всегда; шаг целый, если данные целые. У спарклайна оси нет.</li><li><b>Линия порога</b> — <code>target</code>: серый пунктир с подписью; ось её не обрезает.</li><li><b>Прогноз</b> — <code>forecast: n</code>: последние n точек пунктиром той же серии; в легенде отдельной строкой не стоит.</li><li><b>Легенда</b> — появляется от двух серий и стоит внизу, под тем, что объясняет.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Высота — классами контейнера: <code>dk-chart--sm</code> 180, по умолчанию 220, <code>--lg</code> 340, <code>--xl</code> 440, <code>--spark</code> 48. Ширина — от сетки; график перестраивается при изменении ширины больше чем на десятую часть.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>type</code></td><td>line · area · step · bar · bar-stacked · bar-h · pie · donut · radar · sankey · scatter · spark</td><td>По вопросу читателя — таблица на витрине.</td></tr><tr><td><code>palette: &#x27;status&#x27;</code></td><td>Цвета состояния: crit, high, calm, nodata по порядку категорий.</td><td>Категории — состояние, а не принадлежность.</td></tr><tr><td><code>highlight: &#x27;имя&#x27;</code></td><td>Одна серия цветом, остальные серым.</td><td>История «вот эта выросла».</td></tr><tr><td><code>target</code></td><td>Линия порога или цели.</td><td>Операционные экраны — всегда.</td></tr><tr><td><code>forecast: n</code></td><td>Пунктирный хвост.</td><td>Прогноз или незакрытые данные.</td></tr><tr><td><code>trend: true</code></td><td>Линия тренда у точечного.</td><td>Направление связи; ничего не доказывает.</td></tr><tr><td><code>total</code></td><td>Число в центре пончика.</td><td>Элемент разметки, не холста.</td></tr><tr><td><code>empty: {title, text, hint}</code></td><td>Тексты пустого состояния.</td><td>Всегда, если стандартные не подходят.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <div class="dk-grid--even">
+      <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Данных нет</h3></div><div id="x-empty" class="dk-chart"></div></div>
+      <div class="dk-widget" aria-busy="true"><div class="dk-widget__head"><h3 class="dk-widget__title">Загрузка</h3></div><div class="dk-chart"><span class="dk-vh">Загружаем график</span><div class="dk-skel" style="height:14px;width:60%;margin-bottom:var(--space-5)"></div><div class="dk-skel" style="height:14px;width:85%;margin-bottom:var(--space-5)"></div><div class="dk-skel" style="height:14px;width:45%"></div></div></div>
+      <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Выделен Южный округ</h3></div><div id="x-many" class="dk-chart"></div></div>
+    </div>
+    <div class="sc-note"><b>Пустое состояние с третьей строкой.</b> «Данных нет» без «что делать» — тупик; обёртка по умолчанию отвечает на три вопроса, тексты меняются через <code>empty</code>.</div>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Заголовок виджета с периодом: «Аварии по дням · 14 дней».</li><li>Единица один раз: в заголовке или в подписи оси (<code>unit</code>).</li><li>До шести серий; седьмая повторит цвет первой, и обёртка предупредит в консоли.</li><li>Ноль на столбце подписан, если категорий до восьми; в плотном ряду ноль — промежуток.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Две оси Y — обёртка не соберёт.</li><li>Сглаженная линия — показывает значения, которых не было.</li><li>Красная серия «потому что третья»: красный означает «плохо».</li><li>Пончик из девяти секторов — обёртка свернёт хвост в «Прочее».</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li><b>Холст без текста.</b> График — canvas; скринридер видит только заголовок виджета. Значения, которые важны, повторяются текстом: плитка, таблица, число в центре пончика (оно — элемент разметки).</li><li><b>Движение.</b> Системная настройка «меньше движения» выключает анимацию графика.</li><li><b>Цвет.</b> Палитра серий проверена на три вида дальтонизма (ПАЛИТРА); палитра состояний — на различимость смысла (СМЫСЛ).</li><li><b>Подсказка</b> при наведении не заменяет текст: на таче и с клавиатуры её нет.</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-chart,dk-empty"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p>Подключать после echarts и dk-chart-theme.js. Контейнер с высотой; обёртка сама следит за темой и размером.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-chart&quot; id=&quot;hours&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+var c = dkChart(document.getElementById(&#x27;hours&#x27;), {
+  type: &#x27;bar&#x27;,
+  categories: [&#x27;00&#x27;, &#x27;01&#x27;, &#x27;02&#x27;],
+  series: [{ name: &#x27;Аварий&#x27;, data: [1, 0, 2] }],
+  target: { value: 4, label: &#x27;норма&#x27; },
+  unit: &#x27;шт.&#x27;,
+  empty: { title: &#x27;За сутки аварий не было&#x27;, text: &#x27;Ни одной записи.&#x27;, hint: &#x27;Расширьте период.&#x27; }
+});
+c.update({ series: [ … ] });   // перерисовать с новыми данными
+c.instance;                    // экземпляр ECharts — в обход обёртки
+c.destroy();                   // сторож похоронит и сам, когда узел уйдёт
+&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>type</code></td><td>строка</td><td>Тип графика; неизвестный — ошибка в консоли.</td></tr><tr><td><code>categories / series / data</code></td><td>массивы</td><td>Данные; у pie/donut — data, у sankey — nodes и links.</td></tr><tr><td><code>target</code></td><td>число | {value, label}</td><td>Линия порога на графиках с осями.</td></tr><tr><td><code>palette: &#x27;status&#x27;</code></td><td>строка</td><td>Четыре цвета состояния по порядку категорий.</td></tr><tr><td><code>highlight, forecast, trend, total, unit, labels</code></td><td>см. варианты</td><td>Модификаторы типов.</td></tr><tr><td><code>label</code></td><td>строка</td><td>Заголовок для скринридера. Подпись из данных — крайние значения, доли, норма — дописывается сама.</td></tr><tr><td><code>update(spec) / instance / destroy()</code></td><td>API</td><td>Перерисовать; доступ к ECharts; убрать.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-tile.html">KPI-плитка</a> — спарклайн в четверти колонки</li><li><a href="component-legend.html">Фильтры-легенда</a> — легенда, которая ещё и фильтрует</li><li><a href="showcase.html#grafiki">Витрина: графики</a> — все одиннадцать типов и таблица выбора</li><li><a href="vendor/echarts.modules.json">Список модулей ECharts</a> — что собрано в урезанный движок</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
+  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
+  });
+  mark(root.getAttribute('data-theme'));
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkChart !== 'function') return;
+    var days = ['09.09','10.09','11.09','12.09','13.09','14.09','15.09','16.09','17.09','18.09','19.09','20.09','21.09','22.09'];
+    dkChart(document.getElementById('x-bar'), { type: 'bar', target: { value: 4, label: 'норма' },
+      categories: ['ЦФО','СЗФО','ЮФО','ПФО','УФО','СФО','ДФО','СКФО'], series: [{ name: 'Регионов в зоне риска', data: [4,3,6,5,2,4,3,1] }] });
+    dkChart(document.getElementById('x-forecast'), { type: 'line', categories: days.concat(['23.09','24.09','25.09']),
+      series: [{ name: 'Аварии', data: [12,19,7,14,22,18,11,16,9,13,21,17,10,23,25,27,24], forecast: 3 }] });
+    dkChart(document.getElementById('x-stack'), { type: 'bar-stacked', palette: 'status', categories: ['нед. 34','нед. 35','нед. 36','нед. 37','нед. 38'],
+      series: [{ name: 'Высокий', data: [18,20,21,23,23] }, { name: 'Средний', data: [31,29,28,27,27] }, { name: 'Низкий', data: [39,39,39,38,38] }, { name: 'Мало данных', data: [1,1,1,1,1] }] });
+    dkChart(document.getElementById('x-donut'), { type: 'donut', palette: 'status', total: 89,
+      data: [{ name: 'Высокий', value: 23 }, { name: 'Средний', value: 27 }, { name: 'Низкий', value: 38 }, { name: 'Мало данных', value: 1 }] });
+    dkChart(document.getElementById('x-empty'), { type: 'line', categories: [], series: [] });
+    dkChart(document.getElementById('x-an'), { type: 'bar', target: { value: 20, label: 'норма' }, categories: days, series: [{ name: 'Аварии', data: [12,19,7,14,22,18,11,16,9,13,21,17,10,23] }, { name: 'Устранено', data: [10,12,10,13,14,16,15,18,17,19,18,21,20,22] }] });
+    dkChart(document.getElementById('x-many'), { type: 'line', categories: days, series: [
+      { name: 'ЮФО', data: [41,44,43,48,52,55,58,61,59,63,68,71,69,72] }, { name: 'ЦФО', data: [33,32,34,33,35,34,33,35,34,33,35,34,36,35] },
+      { name: 'СФО', data: [28,29,27,30,28,29,31,29,28,30,29,31,30,29] }, { name: 'ПФО', data: [24,25,23,26,24,25,24,26,25,24,26,25,24,26] }], highlight: 'ЮФО' });
+  });
+})();
+</script>
+</body>
+</html>

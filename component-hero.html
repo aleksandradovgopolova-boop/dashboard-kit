@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Главная карточка · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p3_data.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell">
+<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Данные</p>
+    <h1>Главная карточка</h1>
+    <p class="sc-hero__lead">Одно главное число экрана и то, из чего оно сложено: «25 из 89», метка смысла, полоса состава и чипы с изменением. Отвечает сразу на три вопроса — сколько, много ли это и из чего состоит. На экране она одна.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
+      <span class="sc-meta__i">Figma: нет</span>
+      <span class="sc-meta__i">код: <code>css/components.css</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Нейтральная поверхность выделяет главное число типографикой и композицией. Цвет передаёт данные и исключения, а не декоративную важность карточки.</p><div class="dk-grid">
+      <div class="dk-col--half"><section class="dk-hero" style="--accent:var(--crit)">
+        <div class="dk-hero__label">Регионов с высоким риском</div>
+        <div class="dk-hero__row">
+          <div class="dk-hero__value"><span class="dk-hero__n">25</span><span class="dk-hero__of">из 89</span></div>
+          <span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up-right"/></svg>негатив растёт в 7</span>
+        </div>
+        <div class="dk-split" role="img" aria-label="Высокий риск 25, средний 35, низкий 29">
+          <span class="dk-split__seg" style="--share:25;--swatch:var(--crit)"></span><span class="dk-split__seg" style="--share:35;--swatch:var(--high)"></span><span class="dk-split__seg" style="--share:29;--swatch:var(--calm)"></span>
+        </div>
+        <div class="dk-keys">
+          <span class="dk-key" style="--swatch:var(--crit)"><i class="dk-key__dot"></i>Высокий <b>25</b><span class="dk-key__d">+1</span></span>
+          <span class="dk-key" style="--swatch:var(--high)"><i class="dk-key__dot"></i>Средний <b>35</b><span class="dk-key__d">+1</span></span>
+          <span class="dk-key" style="--swatch:var(--calm)"><i class="dk-key__dot"></i>Низкий <b>29</b><span class="dk-key__d">−2</span></span>
+        </div>
+      </section></div>
+      <div class="dk-col--half"><section class="dk-hero">
+        <div class="dk-hero__label">Публикаций по всей стране · за 14 дней</div>
+        <div class="dk-hero__row">
+          <div class="dk-hero__value"><span class="dk-hero__n">50 887</span></div>
+          <span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg>19% негатива</span>
+        </div>
+        <div class="dk-split" role="img" aria-label="Официальные 604, СМИ 14 899, соцсети 35 384">
+          <span class="dk-split__seg" style="--share:604;--swatch:var(--series-1)"></span><span class="dk-split__seg" style="--share:14899;--swatch:var(--series-2)"></span><span class="dk-split__seg" style="--share:35384;--swatch:var(--series-3)"></span>
+        </div>
+        <div class="dk-keys">
+          <span class="dk-key" style="--swatch:var(--series-1)"><i class="dk-key__dot"></i>Офиц. <b>604</b></span>
+          <span class="dk-key" style="--swatch:var(--series-2)"><i class="dk-key__dot"></i>СМИ <b>14 899</b></span>
+          <span class="dk-key" style="--swatch:var(--series-3)"><i class="dk-key__dot"></i>Соцсети <b>35 384</b></span>
+        </div>
+      </section></div>
+    </div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Одно число, ради которого открывают экран: «регионов с высоким риском», «аварий сейчас».</li><li>Число — часть целого, и важно, из чего оно сложено: 25 из 89, по уровням или по источникам.</li><li>Первый экран телефона: карточка встаёт сразу под фильтрами и отвечает раньше любого графика.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Главных чисел несколько и они равноправны — ряд <a href="component-tile.html">KPI-плиток</a>: вторая главная карточка на экране отменяет первую.</li><li>Нужен ещё и список «кто хуже всех» — <a href="component-rank.html">Рейтинг и сводка</a>.</li><li>Долей больше шести или их надо сравнивать точно — <a href="component-chart.html">График</a>: отрезки полосы глазом точно не сравнить.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><section class="dk-hero" style="--accent:var(--crit);max-width:520px">
+      <div class="dk-hero__label"><b class="sc-callout">1</b>Регионов с высоким риском</div>
+      <div class="dk-hero__row">
+        <div class="dk-hero__value"><b class="sc-callout">2</b><span class="dk-hero__n">25</span><span class="dk-hero__of">из 89</span><b class="sc-callout">3</b></div>
+        <span class="dk-trend" style="--accent:var(--crit-ink)"><b class="sc-callout">4</b>негатив растёт в 7</span>
+      </div>
+      <div class="dk-split" role="img" aria-label="Высокий 25, средний 35, низкий 29"><span class="dk-split__seg" style="--share:25;--swatch:var(--crit)"></span><span class="dk-split__seg" style="--share:35;--swatch:var(--high)"></span><span class="dk-split__seg" style="--share:29;--swatch:var(--calm)"></span></div>
+      <div class="dk-keys"><b class="sc-callout">5</b><span class="dk-key" style="--swatch:var(--crit)"><i class="dk-key__dot"></i>Высокий <b>25</b><span class="dk-key__d">+1</span></span><b class="sc-callout">6</b></div>
+    </section></div><ol class="sc-anatomy__list"><li><b>Подпись</b> — что это за число и за какой период. Без периода число ничего не значит.</li><li><b>Главное число</b> — <code>dk-hero__n</code>, Golos 56 (<code>--type-metric-hero</code>): единственный такой кегль на экране.</li><li><b>Знаменатель</b> — <code>dk-hero__of</code> — «из 89». Вдвое мельче и серее: это не второе число, а мера.</li><li><b>Метка смысла</b> — пилюля <code>dk-trend</code> с цветом смысла: почему на число стоит смотреть.</li><li><b>Полоса состава</b> — <code>dk-split</code>: отрезки в долю (<code>--share</code>), цвет — <code>--swatch</code>.</li><li><b>Чипы</b> — <code>dk-key</code>: точка, название, число, изменение. Подписывают полосу — без них полоса цвет без слов.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Размер один: половина колонки на десктопе, вся ширина на телефоне. Число 56 — меньше не делать: на телефоне это первое, что читают с расстояния руки.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>--accent</code></td><td>Оттенок верхнего угла и смысл карточки.</td><td>Только смысловой цвет: crit, high, calm. Нет смысла — не задавать, карточка без оттенка.</td></tr><tr><td><code>dk-split</code></td><td>Полоса состава.</td><td>Если число — сумма частей. Долей до шести.</td></tr><tr><td><code>--share</code></td><td>Доля отрезка — просто число.</td><td>Абсолютные значения: 25, 35, 29 — складывать заранее не нужно.</td></tr><tr><td><code>dk-keys / dk-key</code></td><td>Чипы легенды с изменением.</td><td>Всегда вместе с полосой.</td></tr><tr><td><code>dk-key__d</code></td><td>Изменение к прошлому периоду.</td><td>Если сравнивать есть с чем.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <div class="dk-grid--even">
+      <div class="dk-hero" aria-busy="true"><span class="dk-vh">Загружаем сводку</span><div class="dk-skel" style="height:14px;width:60%"></div><div class="dk-skel" style="height:56px;width:40%"></div><div class="dk-skel" style="height:10px"></div></div>
+      <div class="dk-hero"><div class="dk-hero__label">Регионов с высоким риском</div><div class="dk-hero__row"><div class="dk-hero__value"><span class="dk-hero__n">0</span><span class="dk-hero__of">из 89</span></div><span class="dk-trend" style="--accent:var(--calm-ink)">всё спокойно</span></div><div class="dk-split" role="img" aria-label="Нет данных по составу"><span class="dk-split__seg"></span></div><div class="dk-keys"><span class="dk-key"><i class="dk-key__dot"></i>нет данных</span></div></div>
+    </div>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Подпись с периодом: «Публикаций по всей стране · за 14 дней».</li><li>Число с мерой: «25 из 89», а не голое «25».</li><li>Метка отвечает «почему смотреть»: «негатив растёт в 7», «6 режимов ЧС».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Две главные карточки на одном экране.</li><li>Оттенок акцентом бренда: у бренда нет смысла «плохо».</li><li>Полоса без чипов — цвет без подписи.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li><b>Полоса — картинка</b>: <code>role="img"</code> и <code>aria-label</code> с составом словами; числа — в чипах под ней.</li><li><b>Цвет не единственный признак</b>: у каждой доли есть название и число в чипе.</li><li><b>Контраст.</b> Знаменатель и подписи на поверхности — проверка КОНТРАСТ; оттенок уходит в поверхность к середине.</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-hero,dk-split,dk-keys,dk-key"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p>Только разметка: скрипта у карточки нет. Числа — через <code>dkFmt</code>, доли — теми же числами в <code>--share</code>.</p><pre class="sc-code"><code>&lt;section class=&quot;dk-hero&quot; style=&quot;--accent:var(--crit)&quot;&gt;
+  &lt;div class=&quot;dk-hero__label&quot;&gt;Регионов с высоким риском&lt;/div&gt;
+  &lt;div class=&quot;dk-hero__row&quot;&gt;
+    &lt;div class=&quot;dk-hero__value&quot;&gt;&lt;span class=&quot;dk-hero__n&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;dk-hero__of&quot;&gt;из 89&lt;/span&gt;&lt;/div&gt;
+    &lt;span class=&quot;dk-trend&quot; style=&quot;--accent:var(--crit-ink)&quot;&gt;
+      &lt;svg class=&quot;dk-i dk-i--sm&quot;&gt;&lt;use href=&quot;#ti-arrow-up-right&quot;/&gt;&lt;/svg&gt;негатив растёт в 7&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;dk-split&quot; role=&quot;img&quot; aria-label=&quot;Высокий 25, средний 35, низкий 29&quot;&gt;
+    &lt;span class=&quot;dk-split__seg&quot; style=&quot;--share:25;--swatch:var(--crit)&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;dk-split__seg&quot; style=&quot;--share:35;--swatch:var(--high)&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;dk-split__seg&quot; style=&quot;--share:29;--swatch:var(--calm)&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;dk-keys&quot;&gt;
+    &lt;span class=&quot;dk-key&quot; style=&quot;--swatch:var(--crit)&quot;&gt;&lt;i class=&quot;dk-key__dot&quot;&gt;&lt;/i&gt;Высокий &lt;b&gt;25&lt;/b&gt;&lt;span class=&quot;dk-key__d&quot;&gt;+1&lt;/span&gt;&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--accent</code></td><td>переменная в style</td><td>Смысл карточки: оттенок угла. Только crit / high / calm или не задавать.</td></tr><tr><td><code>--share</code></td><td>число в style отрезка</td><td>Доля отрезка полосы; складывать заранее не нужно.</td></tr><tr><td><code>--swatch</code></td><td>переменная в style</td><td>Цвет отрезка и точки чипа: смысл или серия, один и тот же для пары.</td></tr><tr><td><code>dk-hero__of</code></td><td>элемент</td><td>Мера «из скольких»; не пропускать, если она есть.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-tile.html">KPI-плитка</a> — несколько равноправных чисел</li><li><a href="component-rank.html">Рейтинг и сводка</a> — главное число и список «кто хуже»</li><li><a href="component-legend.html">Фильтры-легенда</a> — та же легенда, но нажимается</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
+  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
+  });
+  mark(root.getAttribute('data-theme'));
+
+})();
+</script>
+</body>
+</html>

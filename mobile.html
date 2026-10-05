@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Экран телефона · dashboard-kit</title>
+<!-- dashboard-kit: base, layout, type, tile, chart, table, select, period, map, banner, empty, hero, chrome, search, car. Собрано: python3 tools/kit.py head layout type tile chart table select period map banner empty hero chrome search car -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/chrome.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="vendor/echarts.min.js" defer></script>
+<script src="js/dk-chart-theme.js" defer></script>
+<script src="js/dk-charts.js" defer></script>
+<script src="js/dk-select.js" defer></script>
+<script src="vendor/air-datepicker.js" defer></script>
+<script src="js/dk-period.js" defer></script>
+<script src="js/dk-chrome.js" defer></script>
+<script src="js/dk-table.js" defer></script>
+<script src="js/dk-map.js" defer></script>
+<script src="js/dk-notify.js" defer></script>
+<script src="js/dk-car.js" defer></script>
+<!-- данные рядом с китом: data/regions.topojson, data/regions-tiles.json; страница открывается по http -->
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+</head>
+<body class="dk-page">
+<div class="dk-wrap">
+  <div class="dk-search">
+    <svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg>
+    <input class="dk-search__input" type="search" placeholder="Регион или округ" aria-label="Найти регион или округ" enterkeyhint="search" autocomplete="off">
+    <button type="button" class="dk-search__clear" aria-label="Очистить поиск"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button>
+    <span class="dk-search__at" title="Данные на 29 сентября">29.09</span>
+  </div>
+  <div class="dk-toolbar"><div class="dk-toolbar__group"><div id="period"></div><div id="okrug"></div><div id="risk"></div><div id="kind"></div></div></div>
+  <div class="dk-grid">
+    <div class="dk-col--half">
+      <section class="dk-hero" style="--accent:var(--crit)">
+        <div class="dk-hero__label">Регионов с высоким риском</div>
+        <div class="dk-hero__row">
+          <div class="dk-hero__value"><span class="dk-hero__n">25</span><span class="dk-hero__of">из 89</span></div>
+          <span class="dk-trend" style="--accent:var(--crit-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up-right"/></svg>негатив растёт в 7</span>
+        </div>
+        <div class="dk-split" role="img" aria-label="Высокий 25, средний 35, низкий 29">
+          <span class="dk-split__seg" style="--share:25;--swatch:var(--crit)"></span>
+          <span class="dk-split__seg" style="--share:35;--swatch:var(--high)"></span>
+          <span class="dk-split__seg" style="--share:29;--swatch:var(--calm)"></span>
+        </div>
+        <div class="dk-keys">
+          <span class="dk-key" style="--swatch:var(--crit)"><i class="dk-key__dot"></i>Высокий <b>25</b><span class="dk-key__d">+1</span></span>
+          <span class="dk-key" style="--swatch:var(--high)"><i class="dk-key__dot"></i>Средний <b>35</b><span class="dk-key__d">+1</span></span>
+          <span class="dk-key" style="--swatch:var(--calm)"><i class="dk-key__dot"></i>Низкий <b>29</b><span class="dk-key__d">−2</span></span>
+        </div>
+      </section>
+    </div>
+    <div class="dk-col--full">
+<div class="dk-car" id="car">
+      <div class="dk-car__head"><h2 class="dk-car__title">Резко выросли за день</h2><span class="dk-push dk-car__pos">1 из 3</span>
+        <span class="dk-car__nav"><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="prev" aria-label="Предыдущая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-left"/></svg></button><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="next" aria-label="Следующая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button></span></div>
+      <ul class="dk-car__track" role="list">
+        <li class="dk-car__item" style="--accent:var(--crit)">
+          <span class="dk-car__tags"><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg>+27 за день</span><span class="dk-trend" style="--accent:var(--crit-ink)">средний → высокий</span></span>
+          <span class="dk-car__row"><span class="dk-car__who"><span class="dk-car__name">Санкт-Петербург</span><span class="dk-car__sub">СЗФО</span></span>
+            <span class="dk-car__change" aria-label="было 30, стало 57"><span class="dk-car__from" style="--from:var(--high-ink)">30</span><span class="dk-car__arrow" aria-hidden="true">→</span><span class="dk-car__to" style="--to:var(--crit-ink)">57</span></span></span>
+          <p class="dk-car__text">Авария теплосети; отключения ГВС и отопления в трёх районах.</p>
+        </li>
+        <li class="dk-car__item" style="--accent:var(--crit)">
+          <span class="dk-car__tags"><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg>+26 за день</span></span>
+          <span class="dk-car__row"><span class="dk-car__who"><span class="dk-car__name">Ярославская область</span><span class="dk-car__sub">ЦФО</span></span>
+            <span class="dk-car__change" aria-label="было 70, стало 96"><span class="dk-car__from" style="--from:var(--high-ink)">70</span><span class="dk-car__arrow" aria-hidden="true">→</span><span class="dk-car__to" style="--to:var(--crit-ink)">96</span></span></span>
+          <p class="dk-car__text">После пожара на заводе село обесточено, введён режим ЧС.</p>
+        </li>
+        <li class="dk-car__item" style="--accent:var(--high)">
+          <span class="dk-car__tags"><span class="dk-trend" style="--accent:var(--high-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg>+12 за день</span></span>
+          <span class="dk-car__row"><span class="dk-car__who"><span class="dk-car__name">Приморский край</span><span class="dk-car__sub">ДФО</span></span>
+            <span class="dk-car__change" aria-label="было 52, стало 64"><span class="dk-car__from">52</span><span class="dk-car__arrow" aria-hidden="true">→</span><span class="dk-car__to" style="--to:var(--high-ink)">64</span></span></span>
+          <p class="dk-car__text">Авария на подстанции, без света четыре посёлка.</p>
+        </li>
+      </ul>
+      <div class="dk-car__dots"></div>
+    </div>
+    </div>
+    <div class="dk-col--quarter">
+      <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
+        <div class="dk-tile__head"><span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label">Аварии за сутки</span></div>
+        <div class="dk-tile__row"><span class="dk-metric-lg">23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div>
+        <div class="dk-chart dk-chart--spark" id="sp"></div>
+      </div>
+    </div>
+    <div class="dk-col--quarter"><div class="dk-widget"><div class="dk-empty"><div class="dk-empty__t">Ничего не найдено</div><div>Под фильтры не попал ни один регион.</div><div class="dk-empty__do">Снимите фильтр по округу.</div></div></div></div>
+    <div class="dk-col--half">
+      <div class="dk-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Аварии по часам</h2></div><div class="dk-chart" id="hours"></div></div>
+    </div>
+    <div class="dk-col--half"><div class="dk-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Регионы</h2></div><div id="regions-map"></div></div></div>
+    <div class="dk-col--half"><div class="dk-widget">
+      <div class="dk-tablewrap" style="--table-min:320px"><table class="dk-table dk-table--zebra" id="regions"><thead><tr><th style="width:60%" data-sortable="Регион">Регион</th><th class="dk-td-num" data-sortable="Балл">Балл</th></tr></thead>
+      <tbody><tr data-id="RU-CR"><td>Крым</td><td class="dk-td-num" data-sort="82">82</td></tr><tr data-id="RU-NVS"><td>Новосибирская область</td><td class="dk-td-num" data-sort="73">73</td></tr><tr data-id="RU-SA"><td>Саха (Якутия)</td><td class="dk-td-num" data-sort="81">81</td></tr></tbody></table></div>
+    </div></div>
+  </div>
+</div>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  dkCar(document.getElementById('car'));
+  dkChart(document.getElementById('sp'), { type: 'spark', categories: ['1','2','3','4','5','6','7'], series: [{ name: 'Аварии', data: [12, 14, 11, 16, 15, 19, 17] }] });
+  dkChart(document.getElementById('hours'), { type: 'bar', categories: ['00','01','02','03'], series: [{ name: 'Аварий', data: [1, 0, 2, 5] }], target: { value: 4, label: 'норма' }, unit: 'шт.' });
+  dkTable(document.getElementById('regions'), {});
+  dkSelect(document.getElementById('okrug'), { label: 'Округ', options: [{ value: 'sfo', name: 'Сибирский', count: 10 }, { value: 'dfo', name: 'Дальневосточный', count: 11 }], mode: 'single' });
+  dkSelect(document.getElementById('risk'), { label: 'Риск', options: [{ value: 'h', name: 'Высокий', count: 25 }, { value: 'm', name: 'Средний', count: 35 }], mode: 'multi', value: ['h','m'] });
+  dkSelect(document.getElementById('kind'), { label: 'Вид аварии', options: [{ value: 'w', name: 'Вода', count: 7 }], mode: 'single' });
+  dkPeriod(document.getElementById('period'), { label: 'Период', value: { preset: 7 } });
+  Promise.all([fetch('data/regions.topojson').then(r => r.json()), fetch('data/regions-tiles.json').then(r => r.json())]).then(function (d) {
+    dkMap(document.getElementById('regions-map'), { topo: d[0], object: Object.keys(d[0].objects)[0], tiles: d[1], values: { 'RU-CR': 82, 'RU-NVS': 73 }, unit: 'баллов риска' });
+  });
+});
+</script>
+<nav class="dk-tabbar" aria-label="Главные разделы">
+  <a class="dk-tabbar__item" href="#" aria-current="page"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg><span>Сводка</span></a>
+  <a class="dk-tabbar__item" href="#"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg><span>Карта</span></a>
+  <a class="dk-tabbar__item" href="#"><svg class="dk-i" aria-hidden="true"><use href="#ti-alert-triangle"/></svg><span>Аварии</span></a>
+  <a class="dk-tabbar__item" href="#"><svg class="dk-i" aria-hidden="true"><use href="#ti-calendar"/></svg><span>Календарь</span></a>
+</nav>
+</body>
+</html>

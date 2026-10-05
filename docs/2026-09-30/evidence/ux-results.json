@@ -1,0 +1,62 @@
+[
+  {
+    "test": "skip-link",
+    "focus": "main",
+    "tabindex": -1
+  },
+  {
+    "test": "dialog-tab",
+    "focus": "Закрыть детали",
+    "inside": true
+  },
+  {
+    "test": "dialog-shift-tab",
+    "inside": true
+  },
+  {
+    "test": "dialog-escape-return",
+    "focus": "Ивановская область, 92 баллов риска, высокий риск. Открыть детали",
+    "open": false
+  },
+  {
+    "test": "risk-filter-keyboard",
+    "focus": "Уровень риска: Высокий риск",
+    "result": "Найдено регионов: 18 из 89. Название в рейтинге или таблице открывает детали.",
+    "scores": [
+      92,
+      92,
+      92,
+      92,
+      92,
+      88,
+      88,
+      88
+    ],
+    "url": "?theme=light&risk=crit"
+  },
+  {
+    "test": "pagination",
+    "count": "Показано 9–16 из 18 регионов1232 из 3",
+    "rows": 8
+  },
+  {
+    "test": "empty-state",
+    "result": "Найдено регионов: 0 из 89. Измените запрос или сбросьте фильтры.",
+    "role": "status",
+    "rows": 0
+  },
+  {
+    "test": "reset",
+    "focus": "r-search",
+    "query": "",
+    "result": "Найдено регионов: 89 из 89. Название в рейтинге или таблице открывает детали."
+  },
+  {
+    "test": "donut-numeric-alternative-keyboard",
+    "result": "Enter раскрывает таблицу: Вода9, Тепло7, Электро5, Прочее2; доли39/30/22/9%"
+  },
+  {
+    "test": "standard-reset-dialog-regression",
+    "result": "Shift+Tab с Отмена переходит на Закрыть; ещё Shift+Tab переходит на последнюю кнопку Сбросить срез; Escape закрывает и возвращает фокус исходной кнопке, сброс не выполнен"
+  }
+]

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Флажок, радио, тумблер · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p1_controls.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell">
+<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Управление</p>
+    <h1>Флажок, радио, тумблер</h1>
+    <p class="sc-hero__lead">Три способа сказать «да»: флажок — независимое «да / нет» по кнопке, радио — один из немногих, тумблер — режим, который срабатывает сразу. Отмеченное показано серым, не акцентом.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
+      <span class="sc-meta__i">Figma: нет</span>
+      <span class="sc-meta__i">код: <code>css/components.css</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Подпись всегда кликабельна: попасть в квадратик 18 пикселей тяжело, в строку с текстом — легко.</p><div class="dk-grid"><div class="dk-col--half"><div class="dk-panel"><div class="dk-stack">
+      <label class="dk-check"><input type="checkbox" checked><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span>Показывать события</label><label class="dk-check"><input type="checkbox"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span>Только официальные источники</label><label class="dk-check"><input type="checkbox" disabled><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span>Архив (недоступен)</label><label class="dk-check"><input type="checkbox" checked><span class="dk-check__box dk-check__box--mixed"><svg class="dk-i"><use href="#ti-minus"/></svg></span>Выбрано не всё</label>
+    </div></div></div>
+    <div class="dk-col--half"><div class="dk-panel"><div class="dk-stack">
+      <label class="dk-check dk-check--radio"><input type="radio" name="p" checked><span class="dk-check__box"></span>7 дней</label>
+      <label class="dk-check dk-check--radio"><input type="radio" name="p"><span class="dk-check__box"></span>30 дней</label>
+      <label class="dk-check dk-check--radio"><input type="radio" name="p"><span class="dk-check__box"></span>365 дней</label>
+      <label class="dk-switch"><input type="checkbox" checked><span class="dk-switch__track"><span class="dk-switch__knob"></span></span>Слой событий</label>
+      <label class="dk-switch"><input type="checkbox"><span class="dk-switch__track"><span class="dk-switch__knob"></span></span>Подписи на карте</label>
+    </div></div></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Флажок: несколько независимых «да / нет», которые применяются по кнопке — например, в форме.</li><li>Радио: один вариант из двух–пяти, все видны сразу.</li><li>Тумблер: режим, который включается сразу и сразу виден — «Слой событий» на карте.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Больше пяти вариантов — <a href="component-select.html">Фильтр</a>.</li><li>Переключение вида — <a href="component-segment.html">Сегмент</a>.</li><li>Тумблер в форме, которую надо сохранять, — обман: человек переключил, ушёл, ничего не сохранилось. Там флажок.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-stack">
+      <label class="dk-check"><input type="checkbox" checked><b class="sc-callout">1</b><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span><b class="sc-callout">2</b>Подпись флажка</label>
+      <label class="dk-check dk-check--radio"><input type="radio" name="an" checked><b class="sc-callout">3</b><span class="dk-check__box"></span>Радио</label>
+      <label class="dk-switch"><input type="checkbox" checked><b class="sc-callout">4</b><span class="dk-switch__track"><span class="dk-switch__knob"></span></span><b class="sc-callout">5</b>Тумблер</label>
+    </div></div><ol class="sc-anatomy__list"><li><b>Настоящий input</b> — скрыт, но живой: клавиатура, формы и скринридер работают через него.</li><li><b>Квадрат с галочкой</b> — <code>dk-check__box</code>: пустой — поверхность третьего уровня, отмеченный — серый <code>--control-on</code> с галочкой. Отличие ещё и формой, не только заливкой.</li><li><b>Круг радио</b> — <code>dk-check--radio</code>: форма говорит «только одно»; точка внутри цветом подписи.</li><li><b>Дорожка тумблера</b> — <code>dk-switch__track</code>: включённый — серый, выключенный — поверхность.</li><li><b>Подпись</b> — часть <code>&lt;label&gt;</code>, поэтому кликабельна целиком.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Размер один: квадрат 18, тумблер 36×18. Мельче — не попасть пальцем, крупнее — контрол спорит с текстом.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-check</code></td><td>Флажок с подписью.</td><td>Независимое да / нет.</td></tr><tr><td><code>dk-check--radio</code></td><td>Круглый переключатель.</td><td>Один из двух–пяти вариантов; input type=radio с общим name.</td></tr><tr><td><code>dk-check__box--mixed</code></td><td>Частично отмечен, черта вместо галочки.</td><td>«Выбрано не всё» в шапке списка; ставится скриптом.</td></tr><tr><td><code>dk-switch</code></td><td>Тумблер.</td><td>Режим, срабатывает сразу.</td></tr><tr><td><code>disabled</code></td><td>Атрибут input.</td><td>Причина недоступности видна рядом.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <div class="dk-panel"><div class="sc-row" style="margin:0">
+      <label class="dk-check"><input type="checkbox"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span>Пусто</label><label class="dk-check"><input type="checkbox" checked><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span>Отмечено</label><label class="dk-check"><input type="checkbox" checked><span class="dk-check__box dk-check__box--mixed"><svg class="dk-i"><use href="#ti-minus"/></svg></span>Частично</label>
+      <label class="dk-check"><input type="checkbox"><span class="dk-check__box" style="outline:var(--focus-width) solid var(--brand);outline-offset:var(--focus-offset)"><svg class="dk-i"><use href="#ti-check"/></svg></span>Фокус</label>
+      <label class="dk-check"><input type="checkbox" disabled><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span>Недоступно</label>
+    </div></div>
+    <div class="sc-note"><b>Частичное — не «ничего».</b> Черта в шапке списка значит «выбрана часть»; галочка означала бы «все», и это было бы неправдой.</div>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Подпись — утверждение, которое становится правдой при отметке: «Показывать события».</li><li>У радио первый вариант — тот, что по умолчанию.</li><li>Недоступный вариант остаётся виден с пояснением: «Архив (недоступен)».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Отрицание в подписи: «Не показывать события» — двойное отрицание при снятии.</li><li>Вопрос вместо утверждения: «Показывать события?».</li><li>Тумблер «Сохранить настройки» — тумблер ничего не сохраняет, он включает.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li><b>Настоящие input.</b> Флажок и радио — <code>&lt;input&gt;</code> внутри <code>&lt;label&gt;</code>: клавиатура, формы и скринридер бесплатно.</li><li><b>Тумблер</b> — тот же checkbox с другим видом; скринридер читает «флажок», и это честно: семантика та же.</li><li><b>Частичное состояние</b> ставится и в <code>input.indeterminate</code>, и классом — первое для скринридера, второе для глаза.</li><li><b>Контраст.</b> Отмеченный квадрат к поверхности 4,07:1 в тёмной и 5,04:1 в светлой теме; галочка на нём 4,79 / 5,04 (проверка ТИШИНА).</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-check,dk-switch"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p>Обычная разметка форм; скрипт не нужен. Для «выбрать все» в таблице — <code>dkTable</code>.</p><pre class="sc-code"><code>&lt;label class=&quot;dk-check&quot;&gt;
+  &lt;input type=&quot;checkbox&quot; name=&quot;events&quot; checked&gt;
+  &lt;span class=&quot;dk-check__box&quot;&gt;&lt;svg class=&quot;dk-i&quot;&gt;&lt;use href=&quot;#ti-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  Показывать события
+&lt;/label&gt;
+
+&lt;label class=&quot;dk-check dk-check--radio&quot;&gt;
+  &lt;input type=&quot;radio&quot; name=&quot;period&quot; value=&quot;7&quot; checked&gt;
+  &lt;span class=&quot;dk-check__box&quot;&gt;&lt;/span&gt;
+  7 дней
+&lt;/label&gt;
+
+&lt;label class=&quot;dk-switch&quot;&gt;
+  &lt;input type=&quot;checkbox&quot; name=&quot;layer&quot;&gt;
+  &lt;span class=&quot;dk-switch__track&quot;&gt;&lt;span class=&quot;dk-switch__knob&quot;&gt;&lt;/span&gt;&lt;/span&gt;
+  Слой событий
+&lt;/label&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>input[type=checkbox|radio]</code></td><td>элемент</td><td>Состояние живёт в input; классы только рисуют.</td></tr><tr><td><code>dk-check__box--mixed</code></td><td>класс</td><td>Частичное; вместе с <code>input.indeterminate = true</code>.</td></tr><tr><td><code>disabled</code></td><td>атрибут</td><td>Недоступно; подпись приглушается сама.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — флажки выбора строк и «выбрать все»</li><li><a href="component-field.html">Поле и форма</a> — флажки внутри формы</li><li><a href="component-select.html">Фильтр</a> — множественный выбор из длинного списка</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
+  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
+  });
+  mark(root.getAttribute('data-theme'));
+
+})();
+</script>
+</body>
+</html>

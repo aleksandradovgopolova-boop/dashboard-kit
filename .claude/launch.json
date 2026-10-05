@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "showcase",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-c",
+        "import os, http.server as h; C=h.SimpleHTTPRequestHandler; E=C.end_headers\ndef eh(s):\n    s.send_header('Cache-Control','no-store'); E(s)\nC.end_headers=eh; h.test(C, port=int(os.environ.get('PORT', '8766')))"
+      ],
+      "port": 8766,
+      "autoPort": true
+    }
+  ]
+}

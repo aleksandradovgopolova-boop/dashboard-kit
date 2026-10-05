@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>dashboard-kit · кит внутри чужой страницы</title>
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<!-- График внутри чужой страницы: тему и токены он обязан брать с обёртки
+     .dk-root, а не с <html> хозяина, у которого свои --ink и --surface
+     (проверочная задача скилла, 29.09). -->
+<script src="vendor/echarts.min.js" defer></script>
+<script src="js/dk-chart-theme.js" defer></script>
+<script src="js/dk-charts.js" defer></script>
+<style>
+  /* ХОЗЯИН СТРАНИЦЫ. Намеренно враждебный: те же имена переменных, свой шрифт,
+     свой фон. Раньше кит переопределял всё это на :root и получал обратно. */
+  :root {
+    --bg: #FFE9B0;
+    --ink: #8A2B00;
+    --surface: #FFD36E;
+    --brand: #C2410C;
+    --space-4: 40px;
+    --radius-md: 0;
+  }
+  body {
+    margin: 0;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .host-note { margin: 0 0 20px; }
+  .host-box { border: 4px dashed var(--brand); padding: var(--space-4); border-radius: var(--radius-md); }
+</style>
+</head>
+<body>
+  <h1>Страница хозяина</h1>
+  <p class="host-note">Этот текст и заголовок — хозяйские: Georgia, охра, свои переменные
+     <code>--bg</code>, <code>--ink</code>, <code>--surface</code>, <code>--brand</code>,
+     <code>--space-4</code>. Ниже в рамке живёт кит. Он не должен ни испортиться сам,
+     ни испортить хозяина.</p>
+
+  <div class="host-box">
+    <!-- Граница кита. Класс и тема — на одном элементе, .dk-page здесь нет:
+         кит не владеет этой страницей. -->
+    <div class="dk-root" data-theme="dark" data-accent="blue" id="kit">
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Аварии за сутки</h3>
+          <div class="dk-widget__actions">
+            <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Обновить" aria-label="Обновить">
+              <svg class="dk-i dk-i--sm"><use href="#ti-refresh"/></svg></button>
+          </div>
+        </div>
+        <div class="dk-widget__body">
+          <div class="dk-tile__row">
+            <span class="dk-metric-lg">23</span>
+            <span class="dk-trend" style="--accent:var(--crit-ink)">↑ +18%</span>
+          </div>
+          <div class="dk-chart dk-chart--spark" id="embed-spark"></div>
+          <div style="margin-top:var(--space-5)">
+            <button class="dk-btn">Кнопка кита</button>
+            <button class="dk-btn dk-btn--ghost">Вторая</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="host-note" style="margin-top:20px">И снова хозяйский текст — он обязан
+     остаться таким же, каким был до кита.</p>
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    dkChart(document.getElementById('embed-spark'), { type: 'spark', label: 'Аварии за две недели',
+      categories: ['16.09','17.09','18.09','19.09','20.09','21.09','22.09'], series: [{ name: 'Аварии', data: [14, 17, 12, 19, 16, 21, 23] }] });
+  });
+</script>
+</body>
+</html>

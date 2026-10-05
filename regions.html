@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>dashboard-kit · регионы</title>
+<!-- Тема — первым и без defer: атрибут обязан стоять до первой отрисовки,
+     иначе первая отрисовка будет неправильной. Подробности в самом файле. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/chrome.css">
+
+<!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
+     и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<!-- defer, а не блокирующая загрузка. Три файла графиков весят 1148 КБ, и
+     без defer разбор страницы вставал на них целиком: до первой отрисовки
+     человек ждал движок, который нужен ниже первого экрана. Порядок при defer
+     сохраняется, а весь код страниц уже висит на DOMContentLoaded, который
+     наступает позже отложенных скриптов. -->
+<script src="vendor/echarts.min.js" defer></script>
+<script src="js/dk-chart-theme.js" defer></script>
+<script src="js/dk-charts.js" defer></script>
+<script src="js/dk-select.js" defer></script>
+<script src="vendor/air-datepicker.js" defer></script>
+<script src="js/dk-period.js" defer></script>
+<script src="js/dk-chrome.js" defer></script>
+<script src="js/dk-modal.js" defer></script>
+<script src="js/dk-map.js" defer></script>
+<script src="js/dk-table.js" defer></script>
+<script src="js/dk-pager.js" defer></script>
+</head>
+
+<body class="dk-page">
+<a class="dk-skip" href="#main">К содержимому</a>
+
+<div class="dk-app" data-nav="closed">
+
+  <aside class="dk-side">
+    <div class="dk-side__head">
+      <span class="dk-side__mark"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+      <span class="dk-side__name">Мониторинг</span>
+      <button class="dk-iconbtn dk-iconbtn--sm" data-act="fold" aria-pressed="false" title="Свернуть меню" aria-label="Свернуть меню">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg>
+      </button>
+    </div>
+
+    <nav class="dk-side__nav" aria-label="Разделы">
+      <div class="dk-side__group">Обзор</div>
+      <a class="dk-side__item" href="dashboard.html">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg>
+        <span class="dk-side__label">Сводка</span>
+      </a>
+      <a class="dk-side__item" href="regions.html" aria-current="page">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-map"/></svg>
+        <span class="dk-side__label">Регионы</span>
+      </a>
+      <a class="dk-side__item" href="accidents.html">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg>
+        <span class="dk-side__label">Аварии</span>
+        <span class="dk-side__n">23</span>
+      </a>
+
+      <div class="dk-side__group">Работа</div>
+      <a class="dk-side__item" href="#">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg>
+        <span class="dk-side__label">Заявки</span>
+        <span class="dk-side__n">7</span>
+      </a>
+      <a class="dk-side__item" href="#">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-user"/></svg>
+        <span class="dk-side__label">Бригады</span>
+      </a>
+      <a class="dk-side__item" href="#">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-calendar"/></svg>
+        <span class="dk-side__label">Календарь</span>
+      </a>
+      <a class="dk-side__item" href="#">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-table"/></svg>
+        <span class="dk-side__label">Отчёты</span>
+      </a>
+    </nav>
+
+    <div class="dk-side__foot">
+      <a class="dk-side__item" href="#">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-settings"/></svg>
+        <span class="dk-side__label">Настройки</span>
+      </a>
+      <div class="dk-side__user">
+        <span class="dk-avatar dk-avatar--sm">АС</span>
+        <span class="dk-side__who">
+          <b>Александр С.</b>
+          <span>диспетчер</span>
+        </span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="dk-main">
+    <header class="dk-top">
+      <button class="dk-iconbtn dk-top__burger" data-act="nav" title="Разделы" aria-label="Разделы">
+        <svg aria-hidden="true" class="dk-i"><use href="#ti-layout-grid"/></svg>
+      </button>
+
+      <div class="dk-top__titles">
+        <div class="dk-top__path">Мониторинг · ЖКХ</div>
+        <h1 class="dk-top__title">Риск по регионам</h1>
+      </div>
+
+      <div class="dk-top__tools">
+        <div id="r-period"></div>
+        <button class="dk-iconbtn" id="t-theme" title="Сменить тему" aria-label="Сменить тему">
+          <svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="dk-content" id="main" tabindex="-1">
+      <div class="dk-wrap">
+
+        <div class="dk-region-tools" role="search" aria-label="Поиск и фильтр регионов">
+<div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" id="r-search" type="search" placeholder="Название региона или округа" aria-label="Название региона или округа" aria-controls="r-rank r-table" aria-describedby="r-results"></div>
+<div id="r-risk"></div><button class="dk-btn dk-btn--sm" id="r-reset" type="button">Сбросить фильтры</button></div>
+<p class="dk-region-result" id="r-results" role="status" aria-live="polite" aria-atomic="true"></p>
+<p class="dk-caption">Демонстрационные данные. Балл риска: от 0 до 100. Высокий — от 78, средний — от 60 до 77, низкий — менее 60. Синие ступени карты показывают величину, цвет статуса — уровень риска.</p>
+<!-- Сводка идёт первой не ради красоты. Карта отвечает на вопрос «где»,
+             но не отвечает на «насколько всё плохо в целом» — а именно с этого
+             вопроса человек начинает. Без верхней строки экран начинался сразу
+             с карты, и ответ на первый вопрос приходилось собирать глазами по
+             оттенкам заливки. -->
+        <div class="dk-grid">
+          <div class="dk-col--quarter">
+            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
+              <div class="dk-tile__head">
+                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
+                <span class="dk-tile__label">Высокий риск</span>
+              </div>
+              <div class="dk-tile__row"><span class="dk-metric-lg" id="r-k-crit">—</span></div>
+            </div>
+          </div>
+          <div class="dk-col--quarter">
+            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--high-ink)">
+              <div class="dk-tile__head">
+                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-circle"/></svg></span>
+                <span class="dk-tile__label">Средний риск</span>
+              </div>
+              <div class="dk-tile__row"><span class="dk-metric-lg" id="r-k-high">—</span></div>
+            </div>
+          </div>
+          <div class="dk-col--quarter">
+            <div class="dk-widget dk-widget--s dk-tile">
+              <div class="dk-tile__head">
+                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-map"/></svg></span>
+                <span class="dk-tile__label">Средний балл</span>
+              </div>
+              <div class="dk-tile__row"><span class="dk-metric-lg" id="r-k-avg">—</span></div>
+            </div>
+          </div>
+          <div class="dk-col--quarter">
+            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--nodata-ink)">
+              <div class="dk-tile__head">
+                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-minus"/></svg></span>
+                <span class="dk-tile__label">Без данных</span>
+              </div>
+              <div class="dk-tile__row"><span class="dk-metric-lg" id="r-k-nodata">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dk-grid dk-grid--stretch" style="margin-top:var(--grid-gap)">
+
+          <div class="dk-col--two-thirds">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h2 class="dk-widget__title" id="r-map-title">89 регионов · карта риска</h2>
+                <span class="dk-widget__hint" title="Карта отвечает «где», плитки — «у кого хуже»"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+                <!-- Переключатель вида карты переезжает сюда, в постоянное
+                     место действий виджета: у карты своя шапка появилась
+                     раньше, чем это место, и два ряда управления подряд
+                     читались как недоделка. -->
+                <div class="dk-widget__actions" id="r-map-controls"></div>
+              </div>
+              <div id="r-map"></div>
+            </div>
+          </div>
+
+          <div class="dk-col--third">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h2 class="dk-widget__title" id="r-title">Регионы с наибольшим риском</h2>
+              </div>
+              <div class="dk-rank" id="r-rank"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Таблица закрывает то, чего не умеют ни карта, ни рейтинг: карта
+             показывает картину, рейтинг — верхушку, а работать человеку нужно
+             со всеми восемьюдесятью девятью — сортировать, искать свой субъект,
+             сравнивать соседние строки. Без неё экран обрывался на восьмой
+             строке рейтинга и ниже была пустота. -->
+        <div class="dk-grid" style="margin-top:var(--grid-gap)">
+          <div class="dk-col--full">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h2 class="dk-widget__title">Регионы в текущем срезе</h2>
+                <div class="dk-widget__actions">
+                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Обновить" aria-label="Обновить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-refresh"/></svg></button>
+                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Выгрузить" aria-label="Выгрузить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
+                </div>
+              </div>
+              <div class="dk-tablewrap">
+                <table class="dk-table dk-table--zebra" id="r-table" aria-label="Регионы: риск и состояние">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width:40%" data-sortable="Субъект">Субъект</th>
+                      <th scope="col" style="width:20%" data-sortable="Округ">Округ</th>
+                      <th scope="col" style="width:24%" data-sortable="Состояние">Состояние</th>
+                      <th scope="col" style="width:16%" class="dk-td-num" data-sortable="Балл">Балл риска</th>
+                    </tr>
+                  </thead>
+                  <tbody id="r-tbody"></tbody>
+                </table>
+              </div>
+              <div id="r-pager"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Нижняя панель разделов — только на телефоне (chrome.css). Полный список остаётся в меню. -->
+    <nav class="dk-tabbar" aria-label="Главные разделы">
+      <a class="dk-tabbar__item" href="dashboard.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg><span>Сводка</span></a>
+      <a class="dk-tabbar__item" href="regions.html" aria-current="page"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg><span>Регионы</span></a>
+      <a class="dk-tabbar__item" href="accidents.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-alert-triangle"/></svg><span>Аварии</span></a>
+      <a class="dk-tabbar__item" href="calendar.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-calendar"/></svg><span>Календарь</span></a>
+    </nav>
+  </div>
+</div>
+
+<dialog class="dk-modal" id="r-details" aria-labelledby="r-details-title" aria-describedby="r-details-note">
+<form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="r-details-title">Регион</h2></div>
+<div class="dk-modal__body"><p id="r-details-note">Демонстрационный показатель; не использовать для оперативных решений.</p><dl class="dk-details"><dt>Округ</dt><dd id="r-details-fd"></dd><dt>Балл риска</dt><dd id="r-details-score"></dd><dt>Уровень риска</dt><dd id="r-details-state"></dd></dl><p>Высокий риск — от 78 баллов. Проверьте причины и свежесть данных перед действием.</p></div><div class="dk-modal__foot"><button class="dk-btn" value="close" autofocus>Закрыть детали</button></div></form></dialog>
+<script>
+
+
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkPeriod === 'function') {
+      dkPeriod(document.getElementById('r-period'), {
+        label: 'Период', size: 'md', value: { preset: 30 }, url: 'period', onChange: function () {}
+      });
+    }
+
+    // Данные подаются объектами, а не читаются китом самостоятельно: на file://
+    // fetch запрещён браузером, и виджет, который сам лезет за файлом, на
+    // двойной клик просто не открылся бы. Это ограничение браузера, не кита.
+    Promise.all([
+      fetch('data/regions.topojson').then(function (r) { return r.json(); }),
+      fetch('data/regions-tiles.json').then(function (r) { return r.json(); })
+    ]).then(function (res) {
+      var topo = res[0], tiles = res[1];
+
+      // Демонстрационные баллы риска: детерминированные, чтобы картинка не
+      // менялась при каждой перезагрузке.
+      var values = {}, seed = 11;
+      tiles.tiles.forEach(function (t) {
+        seed = (seed * 1103515245 + 12345) % 2147483648;
+        values[t.id] = 28 + seed % 68;
+      });
+
+      var byId = {};
+      tiles.tiles.forEach(function (t) { byId[t.id] = t.name; });
+
+      var map = dkMap(document.getElementById('r-map'), {
+        topo: topo, object: 'ru89', tiles: tiles, values: values,
+        unit: 'баллов риска',
+        controls: '#r-map-controls',
+        onSelect: function (id, v) {
+          openRegion(id);
+        }
+      });
+
+      function top() {
+        return Object.keys(values).map(function (id) { return { id: id, v: values[id] }; })
+          .sort(function (a, b) { return b.v - a.v; });
+      }
+
+      // Текстовая ступень смысла, а не заливочная: это число человек читает,
+      // а не опознаёт как пятно. Заливочный --crit даёт на тёмной теме 2.95:1
+      // при норме 4.5:1 — см. проверку РОЛЬ в tools/check.py.
+      function tone(v) { return v >= 78 ? 'var(--crit-ink)' : v >= 60 ? 'var(--high-ink)' : 'var(--calm-ink)'; }
+      // Значок у состояния свой: одинаковая галочка у «высокого» и «низкого»
+      // риска — это подпись, которая спорит с собственным цветом.
+      function state(v) {
+        return v >= 78 ? ['crit', 'высокий', 'ti-alert-triangle']
+             : v >= 60 ? ['high', 'средний', 'ti-alert-circle']
+                       : ['calm', 'низкий',  'ti-circle-check'];
+      }
+      var esc = dkEsc;   // общий помощник из js/dk-util.js
+
+      function paint(list) {
+        document.getElementById('r-rank').innerHTML =
+          '<div class="dk-rank__head"><span class="dk-overline">Регион</span>' +
+          '<svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg></div>' +
+          list.map(function (x, i) {
+            return '<button type="button" class="dk-rank__row" data-region="' + esc(x.id) + '" aria-label="' + esc((byId[x.id] || x.id) + ', ' + x.v + ' баллов риска, ' + state(x.v)[1] + ' риск. Открыть детали') + '"><span class="dk-rank__i">' +
+              String(i + 1).padStart(2, '0') + '</span><span class="dk-rank__name">' +
+              esc(byId[x.id] || x.id) + '</span><span class="dk-rank__v" style="--accent:' +
+              tone(x.v) + '">' + x.v + '</span></button>';
+          }).join('');
+      }
+
+      paint(top().slice(0, 14));
+
+      // Сводка считается из тех же данных, что и карта. Отдельных чисел для
+      // верхней строки нет намеренно: расходящиеся цифры на одном экране —
+      // худшее, что может сделать дашборд.
+      var all = top();
+      var crit = all.filter(function (x) { return x.v >= 78; }).length;
+      var high = all.filter(function (x) { return x.v >= 60 && x.v < 78; }).length;
+      var avg = Math.round(all.reduce(function (a, x) { return a + x.v; }, 0) / (all.length || 1));
+      document.getElementById('r-k-crit').textContent = crit;
+      document.getElementById('r-k-high').textContent = high;
+      document.getElementById('r-k-avg').textContent = avg;
+      document.getElementById('r-k-nodata').textContent = tiles.tiles.length - all.length;
+
+      var fd = {};
+      tiles.tiles.forEach(function (t) { fd[t.id] = t.fd || '—'; });
+
+      var PAGE = 8, page = 1;
+      function rows() {
+        var from = (page - 1) * PAGE;
+        document.getElementById('r-tbody').innerHTML =
+          all.slice(from, from + PAGE).map(function (x) {
+            var st = state(x.v);
+            return '<tr><td data-sort="' + esc(byId[x.id] || x.id) + '"><button class="dk-btn dk-btn--sm" type="button" data-region="' + esc(x.id) + '" aria-label="Открыть детали: ' + esc(byId[x.id] || x.id) + '">' + esc(byId[x.id] || x.id) + '</button></td>' +
+              '<td data-sort="' + esc(fd[x.id]) + '">' + esc(fd[x.id]) + '</td>' +
+              '<td data-sort="' + x.v + '"><span class="dk-status dk-status--' + st[0] + '">' +
+              '<svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#' + st[2] + '"/></svg>' + st[1] + '</span></td>' +
+              '<td class="dk-td-num">' + x.v + '</td></tr>';
+          }).join('');
+      }
+      rows();
+
+      /* Сортировка обязана идти по всем 89 субъектам, а не по восьми видимым.
+         Без onSort таблица сортирует то, что лежит в разметке, то есть одну
+         страницу, — а стрелка в шапке при этом обещает порядок по всему
+         набору. Это ровно та ложь, которую труднее всего заметить: список
+         выглядит отсортированным. */
+      var sortBy = null, sortDir = 1;
+      var COL = { 'Субъект': function (x) { return (byId[x.id] || x.id).toLowerCase(); },
+                  'Округ':   function (x) { return String(fd[x.id]).toLowerCase(); },
+                  'Состояние': function (x) { return x.v; },
+                  'Балл':    function (x) { return x.v; } };
+
+      if (typeof dkTable === 'function') {
+        dkTable(document.getElementById('r-table'), {
+          onSort: function (e) {
+            sortBy = COL[e.column] || null;
+            sortDir = e.dir === 'ascending' ? 1 : -1;
+            page = 1;
+            resort();
+            rows();
+            if (pager) pager.goTo(1);
+          }
+        });
+      }
+
+      function resort() {
+        if (!sortBy) return;
+        all.sort(function (a, b) {
+          var x = sortBy(a), y = sortBy(b);
+          return (x < y ? -1 : x > y ? 1 : 0) * sortDir;
+        });
+      }
+      var pager = null;
+      if (typeof dkPager === 'function') {
+        pager = dkPager(document.getElementById('r-pager'), {
+          total: all.length, size: PAGE, page: 1,
+          noun: ['региона', 'регионов', 'регионов'],
+          // Пагинатор отдаёт объект, а не номер. Я прочитал его как число —
+          // (page - 1) * PAGE давало NaN, и вторая страница выходила пустой,
+          // причём молча: пагинатор честно писал «17–24 из 89» над пустым
+          // местом. На дашборде это выглядело бы как «данные кончились».
+          onChange: function (e) { page = e.page; rows(); }
+        });
+      }
+
+      function openRegion(id) {
+        if (!(id in values)) return;
+        document.getElementById('r-details-title').textContent = byId[id] || id;
+        document.getElementById('r-details-fd').textContent = fd[id] || '—';
+        document.getElementById('r-details-score').textContent = values[id] + ' из 100';
+        document.getElementById('r-details-state').textContent = state(values[id])[1];
+        dkModal('#r-details').open();
+      }
+      document.getElementById('main').addEventListener('click', function (e) {
+        var target = e.target.closest('[data-region]');
+        if (target) openRegion(target.dataset.region);
+      });
+      var source = top();
+      var searchInput = document.getElementById('r-search');
+      var riskFilter = dkSelect(document.getElementById('r-risk'), {
+        label: 'Уровень риска', url: 'risk',
+        options: [{ value: 'crit', name: 'Высокий риск', count: crit }, { value: 'high', name: 'Средний риск', count: high }, { value: 'calm', name: 'Низкий риск', count: source.length - crit - high }],
+        onChange: applyFilters
+      });
+      function applyFilters() {
+        var query = searchInput.value.trim().toLocaleLowerCase('ru');
+        all = source.filter(function (x) {
+          return (!riskFilter.value || state(x.v)[0] === riskFilter.value) &&
+            (!query || ((byId[x.id] || x.id) + ' ' + (fd[x.id] || '')).toLocaleLowerCase('ru').includes(query));
+        });
+        document.getElementById('r-map-title').textContent = 'Карта риска · в срезе ' + all.length + ' из ' + source.length;
+        page = 1;
+        resort();
+        rows();
+        paint(all.slice().sort(function (a, b) { return b.v - a.v; }).slice(0, 14));
+        map.setScope(all.map(function (x) { return x.id; }));
+        if (pager) { pager.setTotal(all.length); pager.goTo(1); }
+        document.getElementById('r-results').textContent = 'Найдено регионов: ' + all.length + ' из ' + source.length + '. ' + (all.length ? 'Название в рейтинге или таблице открывает детали.' : 'Измените запрос или сбросьте фильтры.');
+        document.getElementById('r-k-crit').textContent = all.filter(function (x) { return x.v >= 78; }).length;
+        document.getElementById('r-k-high').textContent = all.filter(function (x) { return x.v >= 60 && x.v < 78; }).length;
+        document.getElementById('r-k-avg').textContent = all.length ? Math.round(all.reduce(function (n,x) { return n+x.v; },0)/all.length) : '—';
+      }
+      searchInput.addEventListener('input', applyFilters);
+      document.getElementById('r-reset').addEventListener('click', function () { searchInput.value = ''; riskFilter.clear(); applyFilters(); searchInput.focus(); });
+      applyFilters();
+    }).catch(function (e) {
+      document.getElementById('r-map').innerHTML =
+        '<div class="dk-error"><div class="dk-error__title">Контуры не загрузились</div>' +
+        '<div>Откройте страницу по http, а не двойным кликом: браузер запрещает ' +
+        'читать файлы с диска.</div></div>';
+      console.error(e);
+    });
+  });
+</script>
+</body>
+</html>

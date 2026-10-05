@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>dashboard-kit · витрина компонентов</title>
+<!-- Тема — первым и без defer: атрибут обязан стоять до первой отрисовки,
+     иначе первая отрисовка будет неправильной. Подробности в самом файле. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
+     и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<!-- defer, а не блокирующая загрузка. Три файла графиков весят 1148 КБ, и
+     без defer разбор страницы вставал на них целиком: до первой отрисовки
+     человек ждал движок, который нужен ниже первого экрана. Порядок при defer
+     сохраняется, а весь код страниц уже висит на DOMContentLoaded, который
+     наступает позже отложенных скриптов. -->
+<script src="vendor/echarts.min.js" defer></script>
+<script src="js/dk-chart-theme.js" defer></script>
+<script src="js/dk-charts.js" defer></script>
+<script src="js/dk-select.js" defer></script>
+<script src="vendor/air-datepicker.js" defer></script>
+<script src="js/dk-period.js" defer></script>
+<script src="js/dk-calendar.js" defer></script>
+<script src="js/dk-pager.js" defer></script>
+<script src="js/dk-table.js" defer></script>
+<script src="js/dk-form.js" defer></script>
+<script src="js/dk-map.js" defer></script>
+<script src="js/dk-notify.js" defer></script>
+<script src="js/dk-uptime.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+<link rel="stylesheet" href="css/docs.css">
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="#top">
+    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">дизайн-система мониторинга ЖКХ</span>
+  </a>
+
+  <div class="sc-ctl">
+  <span class="sc-ctl__l" aria-hidden="true">Тема</span>
+  <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+    <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+    <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+  </div>
+
+  </div>
+</header>
+
+<div class="sc-shell">
+<nav class="sc-nav" aria-label="Разделы витрины"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero">
+    <p class="sc-hero__o">Дизайн-система · мониторинг ЖКХ</p>
+    <h1>dashboard-kit</h1>
+    <p class="sc-hero__lead">Токены, компоненты и правила для мониторинговых дашбордов.
+      Ванильные CSS и JS без сборки, работает офлайн, две темы, русский интерфейс.
+      Каждое правило проверяется машиной и объяснено рядом с кодом — из-за какой
+      ошибки оно появилось.</p>
+    <!-- Числа считаются при открытии из самих файлов кита, а не пишутся руками:
+         написанное руками разошлось бы с китом при первом новом токене. -->
+    <div class="sc-facts" aria-live="off">
+      <div><b data-fact="sections">—</b><span>разделов на этой странице</span></div>
+      <div><b data-fact="tokens">—</b><span>токенов смысла</span></div>
+      <div><b data-fact="blocks">—</b><span>блоков компонентов</span></div>
+      <div><b data-fact="checks">—</b><span>машинных проверок</span></div>
+    </div>
+  </header>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec" data-group="Основы">
+    <h2>Три принципа</h2>
+    <p>Всё остальное следует из них.</p>
+
+    <div class="sc-principles">
+    <div class="sc-note">
+      <b>Первое: обводок нет.</b> Блоки отделяются поверхностью и воздухом.
+      В тёмной теме виджет поднят над фоном осветлением, в светлой — мягкой тенью;
+      поля и сегменты залиты и потому читаются как «сюда можно нажать» без рамки.
+      Исключений ровно два: кольцо фокуса с клавиатуры (без него человек без мыши
+      теряет своё место) и линейки в плотных таблицах — они включаются вручную.
+    </div>
+
+    <div class="sc-note">
+      <b>Второе: смысловые цвета акцентом не управляются.</b> Красный всегда означает
+      «высокий риск», зелёный — «низкий». Если сделать акцент красным, читатель начнёт
+      принимать кнопку за тревогу. Поэтому в наборе акцентов нет ни красного, ни жёлтого,
+      ни зелёного. Пощёлкай сверху — тема и акцент меняются независимо.
+    </div>
+
+    <div class="sc-note">
+      <b>Третье: управление тише данных.</b> Главное на дашборде — данные, а не кнопки,
+      и цветовой тон принадлежит им. Выбранный сегмент, отмеченный флажок, включённый
+      переключатель, текущая страница — серые: их видно контрастом и формой, а не цветом.
+      Акцент остался основной кнопке, кольцу фокуса и ссылкам. Проверка ТИШИНА следит,
+      чтобы выбранное было не цветнее самой тихой серии и не ярче самой контрастной.
+    </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Каркас</h2>
+    <p>Фон и три уровня поверхности вместо границ: страница → виджет → вложенное поле.</p>
+    <div class="sc-sw">
+      <div><i style="background:var(--bg)"></i><span>--bg</span></div>
+      <div><i style="background:var(--surface)"></i><span>--surface</span></div>
+      <div><i style="background:var(--surface-2)"></i><span>--surface-2</span></div>
+      <div><i style="background:var(--surface-3)"></i><span>--surface-3</span></div>
+      <div><i style="background:var(--ink)"></i><span>--ink</span></div>
+      <div><i style="background:var(--ink-2)"></i><span>--ink-2</span></div>
+      <div><i style="background:var(--ink-3)"></i><span>--ink-3</span></div>
+    </div>
+  </section>
+
+  <section class="sc-sec">
+    <h2>Акцент</h2>
+    <p>Задаётся один цвет, остальное выводится формулой — ссылка, наведение, заливки.
+      Акцентом красятся только основная кнопка, кольцо фокуса и ссылки. Выбранное
+      управление — серое, ниже.</p>
+    <div class="sc-note">
+      <b>Один акцент на продукт.</b> Акцент ставится один раз в разметке:
+      <code>&lt;html data-accent="blue"&gt;</code>, варианты — <code>blue</code>,
+      <code>violet</code>, <code>indigo</code>. Переключателя в интерфейсе нет и в
+      хранилище он не запоминается: это узнаваемость продукта, а не удобство
+      человека, как тема. Витрина показана в синем.
+    </div>
+    <div class="sc-sw">
+      <div><i style="background:var(--brand)"></i><span>--brand</span></div>
+      <div><i style="background:var(--brand-hover)"></i><span>--brand-hover</span></div>
+      <div><i style="background:var(--link)"></i><span>--link</span></div>
+      <div><i style="background:var(--brand-soft)"></i><span>--brand-soft</span></div>
+      <div><i style="background:var(--brand-wash)"></i><span>--brand-wash</span></div>
+    </div>
+    <p>Выбранное состояние управления: заливка, подпись на ней, мягкий оттенок
+      (выбранная строка, активный фильтр).</p>
+    <div class="sc-sw">
+      <div><i style="background:var(--control-on)"></i><span>--control-on</span></div>
+      <div><i style="background:var(--control-on-hover)"></i><span>--control-on-hover</span></div>
+      <div><i style="background:var(--control-on-ink)"></i><span>--control-on-ink</span></div>
+      <div><i style="background:var(--control-soft)"></i><span>--control-soft</span></div>
+    </div>
+  </section>
+
+  <section class="sc-sec">
+    <h2>Смысловые</h2>
+    <p>Светофор риска и слой событий. От акцента не зависят — только подстраиваются под тему.</p>
+    <div class="sc-sw">
+      <div><i style="background:var(--crit)"></i><span>--crit</span></div>
+      <div><i style="background:var(--high)"></i><span>--high</span></div>
+      <div><i style="background:var(--calm)"></i><span>--calm</span></div>
+      <div><i style="background:var(--nodata)"></i><span>--nodata</span></div>
+      <div><i style="background:var(--event)"></i><span>--event</span></div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Отступы</h2>
+    <p>Главный закон вёрстки дашборда: люди группируют то, что стоит ближе.
+       Рамок у нас нет — и блок делает блоком именно расстояние вокруг него.
+       Поэтому отступ это не «сколько красиво», а «насколько эти две вещи связаны».</p>
+
+    <h3 class="dk-h3" style="margin:var(--space-8) 0 var(--space-5)">Шкала</h3>
+    <p>Девять ступеней, все чётные. Шаг растёт нелинейно: мелкие значения нужны
+       часто и с мелким шагом, крупные — редко и с крупным.</p>
+    <div class="dk-panel sc-scale">
+      <div class="sc-scale__row"><code>--space-1</code><i style="width:2px"></i><span>2</span></div>
+      <div class="sc-scale__row"><code>--space-2</code><i style="width:4px"></i><span>4</span></div>
+      <div class="sc-scale__row"><code>--space-3</code><i style="width:6px"></i><span>6</span></div>
+      <div class="sc-scale__row"><code>--space-4</code><i style="width:8px"></i><span>8</span></div>
+      <div class="sc-scale__row"><code>--space-5</code><i style="width:10px"></i><span>10</span></div>
+      <div class="sc-scale__row"><code>--space-6</code><i style="width:14px"></i><span>14</span></div>
+      <div class="sc-scale__row"><code>--space-7</code><i style="width:18px"></i><span>18</span></div>
+      <div class="sc-scale__row"><code>--space-8</code><i style="width:24px"></i><span>24</span></div>
+      <div class="sc-scale__row"><code>--space-9</code><i style="width:36px"></i><span>36</span></div>
+    </div>
+
+    <h3 class="dk-h3" style="margin:var(--space-8) 0 var(--space-5)">Четыре имени вместо девяти чисел</h3>
+    <p>Чтобы не выбирать ступень каждый раз заново. Имя отвечает на вопрос
+       «насколько эти вещи связаны», а не «сколько пикселей».</p>
+    <div class="dk-panel">
+      <div class="dk-stack">
+        <div class="sc-gap"><b>--gap-tight</b><em>8</em><span class="sc-gap__demo" style="gap:var(--gap-tight)"><i></i><i></i></span><small>внутри одной вещи: значок и подпись</small></div>
+        <div class="sc-gap"><b>--gap-inline</b><em>10</em><span class="sc-gap__demo" style="gap:var(--gap-inline)"><i></i><i></i></span><small>между вещами одной группы</small></div>
+        <div class="sc-gap"><b>--gap-group</b><em>14</em><span class="sc-gap__demo" style="gap:var(--gap-group)"><i></i><i></i></span><small>между группами внутри виджета</small></div>
+        <div class="sc-gap"><b>--gap-section</b><em>18</em><span class="sc-gap__demo" style="gap:var(--gap-section)"><i></i><i></i></span><small>заголовок и содержимое, ряды виджетов</small></div>
+      </div>
+    </div>
+
+    <h3 class="dk-h3" style="margin:var(--space-8) 0 var(--space-5)">Почему это не украшательство</h3>
+    <p>Слева все расстояния одинаковые, справа — разные. Содержимое одно и то же.
+       Посмотри, сколько групп ты видишь в каждом случае.</p>
+    <div class="dk-grid--even">
+      <div class="dk-widget">
+        <div class="dk-widget__head"><h4 class="dk-widget__title">Одинаковые отступы</h4></div>
+        <div class="sc-flat">
+          <div class="dk-overline">Сводка по стране</div>
+          <div class="dk-row"><span class="dk-row__label">Регионов в зоне риска</span><span class="dk-row__value">23</span></div>
+          <div class="dk-row"><span class="dk-row__label">Средний балл</span><span class="dk-row__value">24</span></div>
+          <div class="dk-overline">События за сутки</div>
+          <div class="dk-row"><span class="dk-row__label">Регионов с событием</span><span class="dk-row__value">15</span></div>
+          <div class="dk-row"><span class="dk-row__label">Всего событий</span><span class="dk-row__value">41</span></div>
+        </div>
+        <p class="dk-caption">Шесть строк подряд. Где кончается одна тема и начинается другая — непонятно.</p>
+      </div>
+
+      <div class="dk-widget">
+        <div class="dk-widget__head"><h4 class="dk-widget__title">Разные отступы</h4></div>
+        <div class="dk-widget__body">
+          <div class="dk-stack">
+            <div class="dk-overline">Сводка по стране</div>
+            <div class="dk-row"><span class="dk-row__label">Регионов в зоне риска</span><span class="dk-row__value">23</span></div>
+            <div class="dk-row"><span class="dk-row__label">Средний балл</span><span class="dk-row__value">24</span></div>
+          </div>
+          <div class="dk-stack">
+            <div class="dk-overline">События за сутки</div>
+            <div class="dk-row"><span class="dk-row__label">Регионов с событием</span><span class="dk-row__value">15</span></div>
+            <div class="dk-row"><span class="dk-row__label">Всего событий</span><span class="dk-row__value">41</span></div>
+          </div>
+        </div>
+        <p class="dk-caption">Две группы. Расстояние сделало то, что обычно поручают линии.</p>
+      </div>
+    </div>
+
+    <h3 class="dk-h3" style="margin:var(--space-8) 0 var(--space-5)">Анатомия виджета</h3>
+    <p>Четыре расстояния, и каждое отвечает за свой уровень вложенности. Они не
+       равны намеренно: равные отступы склеивают уровни, и шапка начинает
+       читаться как часть содержимого.</p>
+
+    <div class="dk-grid">
+      <div class="dk-col--half">
+        <div class="dk-widget sc-anatomy">
+          <div class="dk-widget__head">
+            <h4 class="dk-widget__title">Заголовок виджета</h4>
+            <div class="dk-widget__actions">
+              <button class="dk-iconbtn dk-iconbtn--sm" title="Обновить" aria-label="Обновить"><svg class="dk-i"><use href="#ti-refresh"/></svg></button>
+            </div>
+          </div>
+          <div class="dk-widget__body">
+            <div class="dk-well"><div class="dk-row"><span class="dk-row__label">Показатель</span><span class="dk-row__value">23</span></div></div>
+            <div class="dk-well"><div class="dk-row"><span class="dk-row__label">Другой показатель</span><span class="dk-row__value">41</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dk-col--half">
+        <div class="dk-stack">
+          <div class="dk-row"><span class="dk-row__label">поле до края виджета</span><span class="dk-row__value dk-code">18</span></div>
+          <div class="dk-row"><span class="dk-row__label">шапка → тело</span><span class="dk-row__value dk-code">18</span></div>
+          <div class="dk-row"><span class="dk-row__label">блок → блок в теле</span><span class="dk-row__value dk-code">14</span></div>
+          <div class="dk-row"><span class="dk-row__label">внутри блока</span><span class="dk-row__value dk-code">10</span></div>
+          <p class="dk-caption" style="margin-top:var(--space-5)">Поле до края (18) больше зазора между блоками (14) намеренно: иначе содержимое липнет к краю, и виджет теряет собственные границы. Границ у нас нет — их роль играет именно это поле.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sc-note" style="margin-top:var(--space-8)">
+      <b>Отступ берётся только из шкалы.</b> <code>15px</code> «на глаз» — начало
+      конца: через месяц их будет двадцать разных, и ни один нельзя будет
+      поменять централизованно. На мобилке поле виджета ужимается на ступень
+      автоматически — экран узкий, и 18 по каждой стороне съедают заметную долю
+      ширины. Пропорция между уровнями при этом сохраняется.
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Сетка и устройства</h2>
+    <p>Три точки перелома, и у каждой свой смысл, а не просто ширина.
+       Сузь окно — раскладка перестроится сама.</p>
+
+    <div class="sc-note">
+      <b>Ширина виджета задаётся долей, а не числом колонок.</b> «Половина»
+      остаётся половиной на всех устройствах, а «четверть» на мобилке честно
+      становится целой строкой: четверть от четырёх колонок нечитаема. Если бы
+      ширина задавалась числом колонок, разметку пришлось бы переписывать на
+      каждой точке перелома.
+    </div>
+
+    <div class="dk-tablewrap" style="margin-bottom:var(--space-7)">
+    <table class="dk-table">
+      <thead><tr><th>Устройство</th><th>Ширина</th><th class="dk-td-num">Колонок</th><th>Что меняется</th></tr></thead>
+      <tbody>
+        <tr><td>Мобилка</td><td>до 768</td><td class="dk-td-num">4</td><td>одна колонка</td></tr>
+        <tr><td>Планшет</td><td>768–1199</td><td class="dk-td-num">8</td><td>две колонки, боковая уходит вниз</td></tr>
+        <tr><td>Десктоп</td><td>от 1200</td><td class="dk-td-num">12</td><td>полный дашборд с боковой колонкой</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="dk-grid">
+      <div class="dk-col--half"><div class="dk-well sc-cell">половина</div></div>
+      <div class="dk-col--quarter"><div class="dk-well sc-cell">четверть</div></div>
+      <div class="dk-col--quarter"><div class="dk-well sc-cell">четверть</div></div>
+      <div class="dk-col--third"><div class="dk-well sc-cell">треть</div></div>
+      <div class="dk-col--two-thirds"><div class="dk-well sc-cell">две трети</div></div>
+      <div class="dk-col--full"><div class="dk-well sc-cell">вся ширина</div></div>
+    </div>
+
+    <p style="margin-top:var(--space-7)">Под пальцем — на телефоне, планшете и
+       телефоне боком — кнопки и поля вырастают до 44 пикселей. Решает указатель,
+       а не ширина. Палец крупнее курсора и точнее не становится — цель обязана
+       расти, как бы мелко элемент ни выглядел на макете.</p>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Иконки</h2>
+    <p>Tabler Icons, вариант outline — единая сетка 24×24 и одна толщина штриха,
+       поэтому иконки выглядят одним набором, а не собранием из разных мест.
+       В наборе лежат только те, что нужны дашборду: тянуть все пять тысяч ради
+       двух десятков незачем. Цвет иконка берёт от текста, размер — от кегля.</p>
+    <div class="dk-panel">
+      <div class="sc-icons" id="sc-icons"></div>
+    </div>
+    <p style="margin-top:var(--space-6)">Добавить иконку: вписать имя в
+       <code>tools/build-icons.py</code> и запустить скрипт.</p>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Типографика</h2>
+    <p>Golos Text. Кегли только чётные и все межстрочные кратны четырём — интерфейс
+       стоит на сетке в 4 пикселя, и нечётное значение с неё сваливается.
+       Семь кеглей на всю систему: чем их больше, тем быстрее она расползается.</p>
+
+    <div class="sc-note">
+      <b>Имя говорит, что это за текст, а не какого он размера.</b> H1 останется H1,
+      даже если завтра поменяется кегль — поэтому вёрстку не придётся переписывать.
+      Названия английские и те же, что в фигме — с одной оговоркой:
+      <b>уровней заголовка здесь три, а в фигме четыре.</b> Было 28 / 24 / 20 / 16 —
+      шаг в 4 пикселя при одинаковом начертании, и два таких заголовка рядом
+      читались не как иерархия, а как дрожание одного размера. Растягивать
+      лестницу новыми кеглями нельзя: их в системе намеренно семь. Поэтому
+      лишний уровень убран, а не переразмечен. H4 из фигмы — это здесь
+      <code>dk-h3</code> (16), а бывший H3 (20) — <code>dk-h2</code>.
+    </div>
+
+    <div class="dk-panel sc-types">
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Display</b><span>40 / 44 · 700</span><em>одно число на весь экран</em></div>
+        <div class="dk-display">1 234</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>H1</b><span>28 / 32 · 600</span><em>заголовок страницы</em></div>
+        <div class="dk-h1">Мониторинг рисков</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>H2</b><span>20 / 24 · 600</span><em>заголовок раздела и модального окна</em></div>
+        <div class="dk-h2">Сводка по стране</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>H3</b><span>16 / 20 · 600</span><em>заголовок блока внутри виджета</em></div>
+        <div class="dk-h3">Регионы в приоритете</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Body L</b><span>16 / 24 · 400</span><em>вводный абзац</em></div>
+        <div class="dk-body-lg">Витрина показывает срез за 14 дней.</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Body</b><span>14 / 20 · 400</span><em>основной текст интерфейса</em></div>
+        <div class="dk-body">Данные обновляются суточной джобой.</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Body Bold</b><span>14 / 20 · 600</span><em>выделение внутри основного</em></div>
+        <div class="dk-strong">15 регионов с событием</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Caption</b><span>12 / 16 · 400</span><em>подписи, единицы, метки осей</em></div>
+        <div class="dk-caption">обновлено 22.09.2026</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Overline</b><span>12 / 16 · 600 · +0.12em</span><em>надзаголовок и шапка таблицы</em></div>
+        <div class="dk-overline">сводка по стране</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Code</b><span>14 / 20 · mono</span><em>имена токенов, идентификаторы</em></div>
+        <div class="dk-code">--series-1</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Metric XL</b><span>40 / 44 · 700 · табличные</span><em>главное число сводки</em></div>
+        <div class="dk-metric-xl">23</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Metric L</b><span>28 / 32 · 700 · табличные</span><em>число в крупной плитке</em></div>
+        <div class="dk-metric-lg">95</div>
+      </div>
+      <div class="sc-type">
+        <div class="sc-type__meta"><b>Metric</b><span>20 / 24 · 600 · табличные</span><em>число в KPI-плитке</em></div>
+        <div class="dk-metric">1 234 567</div>
+      </div>
+    </div>
+
+    <p style="margin-top:var(--space-6)">Числа вынесены в отдельную ветку: у них
+       табличные цифры. В дашборде колонка чисел не должна дёргаться при обновлении
+       данных, а разряды обязаны стоять друг под другом.</p>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Язык интерфейса</h2>
+    <p>Интерфейс разговаривает с человеком постоянно: подписью кнопки, заголовком
+       виджета, строкой «ничего не найдено», форматом числа. Правила здесь такие
+       же жёсткие, как у цвета и ритма.</p>
+
+    <div class="sc-note">
+      <b>Кнопка называет действие, а не согласие.</b> Человек часто читает только
+      кнопку — вопрос над ней он пропускает. Поэтому подпись обязана сама
+      отвечать на «что будет, если нажму».
+    </div>
+
+    <div class="dk-panel" style="margin-top:var(--space-6);padding:0;overflow:hidden">
+      <div class="dk-tablewrap">
+      <table class="dk-table dk-table--zebra">
+        <thead><tr><th>Так</th><th>Не так</th><th>Почему</th></tr></thead>
+        <tbody>
+          <tr><td>Построить отчёт</td><td>ОК</td><td>«ОК» не говорит, что произойдёт</td></tr>
+          <tr><td>Удалить 23 региона</td><td>Продолжить</td><td>опасное действие называется прямо и с числом</td></tr>
+          <tr><td>Отмена</td><td>Нет</td><td>пара — это действие и отказ, а не «да» и «нет»</td></tr>
+          <tr><td>Показать все 89</td><td>Ещё</td><td>человек должен знать, сколько ещё</td></tr>
+          <tr><td>Сохранить срез</td><td>Подтвердить</td><td>подтвердить — что?</td></tr>
+          <tr><td>Скачать CSV</td><td>Экспорт</td><td>называем результат, а не процесс</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="dk-grid--even" style="margin-top:var(--space-7)">
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Ноль и «нет данных» — разное</h3>
+        </div>
+        <div class="dk-widget__body">
+          <div class="dk-well">
+            <div class="dk-row"><span class="dk-row__label">Аварий за сутки</span><span class="dk-row__value dk-num">0</span></div>
+          </div>
+          <div class="dk-well">
+            <div class="dk-row"><span class="dk-row__label">Износ сетей</span><span class="dk-row__value" style="color:var(--nodata-ink)">нет данных</span></div>
+          </div>
+          <p class="dk-caption" style="margin-top:var(--space-5)">Ноль — это ответ: аварий не было.
+             Отсутствие — не ответ: мы не знаем. Показывать одинаково нельзя,
+             иначе дашборд врёт молчанием.</p>
+        </div>
+      </div>
+
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Пустое состояние без тупика</h3>
+        </div>
+        <div class="dk-empty">
+          <div class="dk-empty__t">Ничего не найдено</div>
+          <div>Под фильтры не попал ни один регион.</div>
+          <button class="dk-btn dk-btn--sm" style="margin-top:var(--space-5)">Снять фильтр по округу</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sc-note" style="margin-top:var(--space-7)">
+      <b>Система не говорит о себе.</b> «Данных нет», а не «Я не смог найти
+      данные» и не «Нам не удалось загрузить»: читателю важно состояние данных,
+      а не переживания программы. И одна вещь называется одинаково везде — если
+      это «регион», то не «субъект» на соседнем экране.
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec" data-group="Управление">
+    <h2>Управление</h2>
+    <p>Кнопки узнаются заливкой, а не рамкой. Пройди табом — кольцо фокуса появляется
+       только при работе с клавиатуры.</p>
+
+    <div class="dk-panel">
+      <div class="sc-row">
+        <span class="dk-caption" style="width:96px">S · 28</span>
+        <button class="dk-btn dk-btn--primary dk-btn--sm">Действие</button>
+        <button class="dk-btn dk-btn--sm">Обычная</button>
+        <button class="dk-iconbtn dk-iconbtn--sm" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button>
+        <div class="dk-seg dk-seg--sm" role="group" aria-label="Период"><button type="button" aria-pressed="true">7д</button><button type="button" aria-pressed="false">30д</button></div>
+      </div>
+
+      <div class="sc-row">
+        <span class="dk-caption" style="width:96px">M · 32</span>
+        <button class="dk-btn dk-btn--primary">Действие</button>
+        <button class="dk-btn">Обычная</button>
+        <button class="dk-iconbtn" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button>
+        <div class="dk-seg" role="group" aria-label="Период"><button type="button" aria-pressed="true">7 дней</button><button type="button" aria-pressed="false">30 дней</button></div>
+      </div>
+
+      <div class="sc-row">
+        <span class="dk-caption" style="width:96px">L · 40</span>
+        <button class="dk-btn dk-btn--primary dk-btn--lg">Действие</button>
+        <button class="dk-btn dk-btn--lg">Обычная</button>
+        <button class="dk-iconbtn dk-iconbtn--lg" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button>
+        <div class="dk-seg dk-seg--lg" role="group" aria-label="Период"><button type="button" aria-pressed="true">7 дней</button><button type="button" aria-pressed="false">30 дней</button></div>
+      </div>
+
+      <div class="sc-row">
+        <button class="dk-btn dk-btn--primary">Основное действие</button>
+        <button class="dk-btn">Обычная</button>
+        <button class="dk-btn dk-btn--ghost">Тихая</button>
+        <button class="dk-btn" disabled>Недоступна</button>
+        <button class="dk-iconbtn" title="Отчёт" aria-label="Отчёт"><svg class="dk-i"><use href="#ti-file-text"/></svg></button>
+        <button class="dk-iconbtn" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button>
+      </div>
+
+      <div class="sc-row" style="margin-bottom:0">
+        <div class="dk-seg" role="group" aria-label="Вид">
+          <button type="button" aria-pressed="true"><svg class="dk-i"><use href="#ti-map"/></svg>Карта</button>
+          <button type="button" aria-pressed="false"><svg class="dk-i"><use href="#ti-layout-grid"/></svg>Плитки</button>
+          <button type="button" aria-pressed="false"><svg class="dk-i"><use href="#ti-table"/></svg>Таблица</button>
+        </div>
+
+        <div class="dk-field dk-field--search">
+          <svg class="dk-i"><use href="#ti-search"/></svg>
+          <input type="search" placeholder="Выберите регион" aria-label="Поиск региона">
+        </div>
+
+        <div class="dk-field" style="width:180px">
+          <select aria-label="Округ">
+            <option>Все округа</option>
+            <option>Центральный</option>
+            <option>Северо-Западный</option>
+          </select>
+          <svg class="dk-i"><use href="#ti-chevron-down"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Фильтры-легенда</h2>
+    <p>Один ряд служит и легендой, и фильтром. Выбранное показывается заливкой своего
+       цвета. Цвет приходит снаружи через <code>--swatch</code> — компонент не знает,
+       что такое «риск».</p>
+    <div class="dk-legend">
+      <button class="dk-lg is-on" aria-pressed="true"><i class="dk-lg__sw"></i>Все<b class="dk-lg__n">89</b></button>
+      <button class="dk-lg" aria-pressed="false" style="--swatch:var(--crit)"><i class="dk-lg__sw"></i>Высокий<b class="dk-lg__n">23</b></button>
+      <button class="dk-lg" aria-pressed="false" style="--swatch:var(--high)"><i class="dk-lg__sw"></i>Средний<b class="dk-lg__n">27</b></button>
+      <button class="dk-lg" aria-pressed="false" style="--swatch:var(--calm)"><i class="dk-lg__sw"></i>Низкий<b class="dk-lg__n">38</b></button>
+      <button class="dk-lg" aria-pressed="false" style="--swatch:var(--nodata)"><i class="dk-lg__sw"></i>Мало данных<b class="dk-lg__n">1</b></button>
+      <button class="dk-lg" aria-pressed="false" style="--swatch:var(--event)"><i class="dk-lg__sw"></i>Событие<b class="dk-lg__n">15</b></button>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Фильтры</h2>
+    <p>Три вида на одной основе. Вид выбирается по длине списка, а не по вкусу:
+       до восьми значений — простой список, до двадцати — с поиском, дальше поиск
+       обязателен, иначе человек листает вслепую. Период — тот же фильтр, только
+       значение у него время; стоит первым, потому что ограничивает всё остальное.</p>
+
+    <div class="sc-note">
+      <b>Главное правило: выбранное видно, не открывая меню.</b> Фильтр, который
+      после выбора продолжает показывать «Все округа», — источник самых дорогих
+      ошибок в дашбордах: человек смотрит на срез и уверен, что видит всё.
+      Поэтому подпись меняется на значение, поле фильтра получает заливку, а под
+      панелью идёт строка применённого и счётчик того, сколько осталось.
+      Заливка серая, а не цветная: цвет на дашборде принадлежит данным.
+    </div>
+
+    <div class="dk-panel">
+      <div class="dk-toolbar" style="margin-top:0">
+        <div class="dk-toolbar__group">
+          <div id="f-period"></div>
+          <div id="f-okrug"></div>
+          <div id="f-tier"></div>
+          <div id="f-region"></div>
+        </div>
+        <div class="dk-result" id="f-result"></div>
+      </div>
+
+      <div class="dk-chipbar" id="f-chips" style="margin-top:var(--space-6)"></div>
+    </div>
+
+    <div class="sc-note" style="margin-top:var(--space-7)">
+      <b>Одиночный выбор применяется сразу и закрывает меню, множественный —
+      остаётся открытым.</b> Человек ещё не закончил выбирать. Смешивать эти два
+      поведения нельзя: пользователь перестаёт понимать, когда фильтр сработал.
+      <br><br>
+      Рядом с каждым значением стоит число записей за ним — без него выбор
+      делается вслепую и приводит в пустой результат. Значение с нулём не прячем,
+      а показываем приглушённым: «здесь пусто» — это тоже ответ.
+      <br><br>
+      Всё работает с клавиатуры: стрелки, Home, End, Enter, Escape с возвратом
+      фокуса на фильтр. Выбранное отмечено галочкой, а не только цветом.
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Атомы</h2>
+    <p>Мелкие детали, из которых собраны таблицы и карточки. Каждая отвечает
+       на свой вопрос, и подменять их друг другом нельзя.</p>
+
+    <div class="sc-note">
+      <b>Бейдж, статус и тег — разное.</b> Бейдж отвечает на вопрос «сколько»
+      или «что за штука»: число или короткая метка. Статус отвечает на «как
+      дела» и обязан иметь <b>и значок, и подпись</b> — только цветом состояние
+      не показывают никогда: цвет видят не все, а в чёрно-белой печати его нет
+      вовсе. Тег — снимаемая категория, он выше среди фильтров.
+    </div>
+
+    <div class="dk-grid" style="margin-bottom:var(--space-7)">
+      <div class="dk-col--half">
+        <div class="dk-widget">
+          <div class="dk-widget__head"><h3 class="dk-widget__title">Переключатели</h3></div>
+          <div class="dk-widget__body">
+            <div class="dk-stack">
+              <label class="dk-check"><input type="checkbox" checked><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span>Показывать события</label>
+              <label class="dk-check"><input type="checkbox"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span>Только официальные источники</label>
+              <label class="dk-check"><input type="checkbox" disabled><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span>Архив (недоступен)</label>
+              <label class="dk-check"><input type="checkbox" checked><span class="dk-check__box dk-check__box--mixed"><svg class="dk-i"><use href="#ti-minus"/></svg></span>Выбрано не всё</label>
+            </div>
+
+            <div class="dk-stack">
+              <label class="dk-check dk-check--radio"><input type="radio" name="p" checked><span class="dk-check__box"></span>7 дней</label>
+              <label class="dk-check dk-check--radio"><input type="radio" name="p"><span class="dk-check__box"></span>30 дней</label>
+              <label class="dk-check dk-check--radio"><input type="radio" name="p"><span class="dk-check__box"></span>365 дней</label>
+            </div>
+
+            <label class="dk-switch"><input type="checkbox" checked><span class="dk-switch__track"><span class="dk-switch__knob"></span></span>Слой событий</label>
+            <label class="dk-switch"><input type="checkbox"><span class="dk-switch__track"><span class="dk-switch__knob"></span></span>Подписи на карте</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="dk-col--half">
+        <div class="dk-widget">
+          <div class="dk-widget__head"><h3 class="dk-widget__title">Бейджи, статусы, прогресс, люди</h3></div>
+          <div class="dk-widget__body">
+            <div class="sc-row" style="margin:0">
+              <span class="dk-badge">12</span>
+              <span class="dk-badge dk-badge--brand">новое</span>
+              <span class="dk-badge dk-badge--crit">23</span>
+              <span class="dk-badge dk-badge--high">27</span>
+              <span class="dk-badge dk-badge--calm">38</span>
+              <span class="dk-badge dk-badge--pill">БПЛА</span>
+            </div>
+
+            <div class="sc-row" style="margin:0">
+              <span class="dk-status dk-status--crit"><svg class="dk-i"><use href="#ti-alert-circle"/></svg>Авария</span>
+              <span class="dk-status dk-status--high"><svg class="dk-i"><use href="#ti-clock"/></svg>В работе</span>
+              <span class="dk-status dk-status--calm"><svg class="dk-i"><use href="#ti-circle-check"/></svg>Устранено</span>
+              <span class="dk-status"><svg class="dk-i"><use href="#ti-circle-x"/></svg>Нет данных</span>
+            </div>
+
+            <div class="dk-stack">
+              <div class="dk-progress"><span class="dk-progress__track"><span class="dk-progress__fill" style="width:72%"></span></span><span class="dk-progress__value">72%</span></div>
+              <div class="dk-progress"><span class="dk-progress__track"><span class="dk-progress__fill" style="width:34%;--accent:var(--crit)"></span></span><span class="dk-progress__value">34%</span></div>
+              <div class="dk-progress dk-progress--indeterminate"><span class="dk-progress__track"><span class="dk-progress__fill"></span></span><span class="dk-progress__value">—</span></div>
+            </div>
+
+            <div class="dk-inline">
+              <span class="dk-avatars">
+                <span class="dk-avatar" aria-label="Анна">АК</span>
+                <span class="dk-avatar" aria-label="Борис">БМ</span>
+                <span class="dk-avatar" aria-label="Вера">ВС</span>
+                <span class="dk-avatar dk-avatar--more" aria-label="ещё 4">+4</span>
+              </span>
+              <span class="dk-caption">следят за регионом</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>Всё то же самое внутри таблицы — ради этого атомы и нужны.</p>
+
+    <div class="dk-panel" style="padding:0;overflow:hidden;margin-top:var(--space-6)">
+      <div class="dk-tablewrap">
+        <table class="dk-table dk-table--zebra">
+          <thead><tr>
+            <th style="width:32px"><label class="dk-check" aria-label="Выбрать все"><input type="checkbox"><span class="dk-check__box dk-check__box--mixed"><svg class="dk-i"><use href="#ti-minus"/></svg></span></label></th>
+            <th>Регион</th><th>Состояние</th><th>Устранение</th><th>Ответственный</th><th class="dk-td-num">Балл</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><label class="dk-check" aria-label="Выбрать строку"><input type="checkbox" checked><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>
+              <td>Донецкая Народная Республика <span class="dk-badge dk-badge--pill">БПЛА</span></td>
+              <td><span class="dk-status dk-status--crit"><svg class="dk-i"><use href="#ti-alert-circle"/></svg>Авария</span></td>
+              <td><div class="dk-progress"><span class="dk-progress__track"><span class="dk-progress__fill" style="width:18%;--accent:var(--crit)"></span></span><span class="dk-progress__value">18%</span></div></td>
+              <td><span class="dk-inline"><span class="dk-avatar dk-avatar--sm">АК</span>Анна К.</span></td>
+              <td class="dk-td-num"><span class="dk-badge dk-badge--crit">95</span></td>
+            </tr>
+            <tr>
+              <td><label class="dk-check" aria-label="Выбрать строку"><input type="checkbox"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>
+              <td>Новосибирская область</td>
+              <td><span class="dk-status dk-status--high"><svg class="dk-i"><use href="#ti-clock"/></svg>В работе</span></td>
+              <td><div class="dk-progress"><span class="dk-progress__track"><span class="dk-progress__fill" style="width:64%;--accent:var(--high)"></span></span><span class="dk-progress__value">64%</span></div></td>
+              <td><span class="dk-inline"><span class="dk-avatar dk-avatar--sm">БМ</span>Борис М.</span></td>
+              <td class="dk-td-num"><span class="dk-badge dk-badge--high">73</span></td>
+            </tr>
+            <tr>
+              <td><label class="dk-check" aria-label="Выбрать строку"><input type="checkbox"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>
+              <td>Калужская область</td>
+              <td><span class="dk-status dk-status--calm"><svg class="dk-i"><use href="#ti-circle-check"/></svg>Устранено</span></td>
+              <td><div class="dk-progress"><span class="dk-progress__track"><span class="dk-progress__fill" style="width:100%;--accent:var(--calm)"></span></span><span class="dk-progress__value">100%</span></div></td>
+              <td><span class="dk-inline"><span class="dk-avatar dk-avatar--sm">ВС</span>Вера С.</span></td>
+              <td class="dk-td-num"><span class="dk-badge dk-badge--calm">21</span></td>
+            </tr>
+            <tr>
+              <td><label class="dk-check" aria-label="Выбрать строку"><input type="checkbox"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>
+              <td>Чукотский автономный округ</td>
+              <td><span class="dk-status"><svg class="dk-i"><use href="#ti-circle-x"/></svg>Нет данных</span></td>
+              <td><div class="dk-progress dk-progress--indeterminate"><span class="dk-progress__track"><span class="dk-progress__fill"></span></span><span class="dk-progress__value">—</span></div></td>
+              <td><span class="dk-caption">не назначен</span></td>
+              <td class="dk-td-num"><span class="dk-badge">—</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sc-note" style="margin-top:var(--space-7)">
+      <b>Флажок, радио и тумблер обещают разное поведение.</b> Флажок —
+      независимое «да/нет», применяется по кнопке. Радио — взаимоисключающий
+      выбор из двух-пяти вариантов, все видны сразу; больше пяти это уже
+      выпадающий список. Тумблер срабатывает <b>сразу, без подтверждения</b>,
+      и годится только для режимов. Тумблер в форме, которую надо сохранять, —
+      обман: человек переключил, ушёл, а ничего не сохранилось.
+      <br><br>
+      Подпись всегда кликабельна: попасть в квадратик 18 пикселей тяжело,
+      а в строку с текстом — легко.
+    </div>
+
+    <div class="sc-note">
+      <b>Полосу прокрутки не прячут.</b> Спрятанная полоса скрывает сам факт,
+      что содержимое продолжается: человек видит обрезанный список и уверен,
+      что это весь список. В дашборде это прямая дезинформация. Полосу делают
+      тихой, но заметной — покрути список ниже.
+      <br><br>
+      Ширину полосы в раскладку не закладываем: на маке полосы наложенные и
+      появляются только при прокрутке — свёрстанное под их ширину оставит там
+      пустоту.
+    </div>
+
+    <div class="dk-panel dk-scroll" style="max-height:180px;margin-top:var(--space-6)">
+      <div class="dk-stack">
+        <div class="dk-row"><span class="dk-row__label">Донецкая Народная Республика</span><span class="dk-row__value" style="--accent:var(--crit-ink)">95</span></div>
+        <div class="dk-row"><span class="dk-row__label">Крым</span><span class="dk-row__value" style="--accent:var(--crit-ink)">82</span></div>
+        <div class="dk-row"><span class="dk-row__label">Саха (Якутия)</span><span class="dk-row__value" style="--accent:var(--crit-ink)">81</span></div>
+        <div class="dk-row"><span class="dk-row__label">Новосибирская область</span><span class="dk-row__value" style="--accent:var(--high-ink)">73</span></div>
+        <div class="dk-row"><span class="dk-row__label">Ростовская область</span><span class="dk-row__value" style="--accent:var(--high-ink)">73</span></div>
+        <div class="dk-row"><span class="dk-row__label">Забайкальский край</span><span class="dk-row__value" style="--accent:var(--high-ink)">72</span></div>
+        <div class="dk-row"><span class="dk-row__label">Луганская Народная Республика</span><span class="dk-row__value" style="--accent:var(--high-ink)">70</span></div>
+        <div class="dk-row"><span class="dk-row__label">Красноярский край</span><span class="dk-row__value" style="--accent:var(--high-ink)">69</span></div>
+        <div class="dk-row"><span class="dk-row__label">Свердловская область</span><span class="dk-row__value" style="--accent:var(--high-ink)">69</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec" data-group="Виджеты">
+    <h2>Сводка и рейтинг</h2>
+    <p>Правая колонка дашборда: главное число, тренд и ранжированный список.
+       Строки списка разделяются наведением и ритмом, не линейками.</p>
+
+    <div class="dk-layout">
+      <div class="dk-panel">
+        <div class="dk-panel__head">
+          <div>
+            <div class="dk-overline">Сводка по стране · 14 дней</div>
+            <h2 class="dk-h2" style="margin-top:var(--space-2)">Российская Федерация</h2>
+          </div>
+        </div>
+
+        <div class="dk-summary" style="--accent:var(--crit-ink)">
+          <div>
+            <div class="dk-trend"><svg class="dk-i"><use href="#ti-arrow-up-right"/></svg> негатив растёт в 28</div>
+            <div style="font-size:var(--text-caption);color:var(--ink-2);margin-top:var(--space-2)">
+              <b class="dk-num" style="color:var(--ink)">15</b> регионов с событием
+            </div>
+          </div>
+          <div class="dk-score">
+            <span class="dk-score__v">23</span><span class="dk-score__of">/89</span>
+          </div>
+        </div>
+
+        <div class="dk-rank" style="margin-top:var(--space-6)">
+          <div class="dk-rank__head"><span class="dk-overline">Регионы</span><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg></div>
+          <button class="dk-rank__row"><span class="dk-rank__i">01</span><span class="dk-rank__name">Донецкая Народная Республика</span><span class="dk-rank__v" style="--accent:var(--crit-ink)">95</span></button>
+          <button class="dk-rank__row"><span class="dk-rank__i">02</span><span class="dk-rank__name">Крым</span><span class="dk-rank__v" style="--accent:var(--crit-ink)">82</span></button>
+          <button class="dk-rank__row"><span class="dk-rank__i">03</span><span class="dk-rank__name">Саха (Якутия)</span><span class="dk-rank__v" style="--accent:var(--crit-ink)">81</span></button>
+          <button class="dk-rank__row"><span class="dk-rank__i">04</span><span class="dk-rank__name">Новосибирская область</span><span class="dk-rank__v" style="--accent:var(--high-ink)">73</span></button>
+          <button class="dk-rank__row"><span class="dk-rank__i">05</span><span class="dk-rank__name">Ростовская область</span><span class="dk-rank__v" style="--accent:var(--high-ink)">73</span></button>
+        </div>
+      </div>
+
+      <div class="sc-stack">
+        <div class="dk-chip"><span class="dk-chip__n" style="--accent:var(--crit-ink)">23</span><span class="dk-chip__l">высокий риск</span></div>
+        <div class="dk-chip"><span class="dk-chip__n" style="--accent:var(--high-ink)">27</span><span class="dk-chip__l">средний</span></div>
+        <div class="dk-chip"><span class="dk-chip__n" style="--accent:var(--calm-ink)">38</span><span class="dk-chip__l">низкий</span></div>
+        <div class="dk-chip"><span class="dk-chip__n">89</span><span class="dk-chip__l">всего субъектов</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Размер виджета</h2>
+    <p>S, M и L — не три вкуса, а три пролёта сетки. Размер выбирается не тем,
+       сколько хочется показать, а тем, сколько влезает, оставаясь читаемым.</p>
+
+    <div class="sc-note">
+      <b>График с осями в четверти колонки — это подписи мельче десяти пикселей.</b>
+      Такой график притворяется точным, будучи нечитаемым. Поэтому в размер S
+      идёт число и форма — спарклайн без осей, — а сравнение многих значений
+      живёт в L, где на него есть ширина.
+    </div>
+
+    <div class="dk-overline" style="margin-top:var(--space-8)">S · четверть колонки</div>
+    <div class="dk-grid" style="margin-top:var(--space-5)">
+      <div class="dk-col--quarter">
+        <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
+          <div class="dk-tile__head">
+            <span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
+            <span class="dk-tile__label">Аварии за сутки</span>
+          </div>
+          <div class="dk-tile__row">
+            <span class="dk-metric-lg">23</span>
+            <span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span>
+          </div>
+          <div class="dk-chart dk-chart--spark" id="sp-1"></div>
+        </div>
+      </div>
+      <div class="dk-col--quarter">
+        <div class="dk-widget dk-widget--s dk-tile">
+          <div class="dk-tile__head">
+            <span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg></span>
+            <span class="dk-tile__label">Обращений</span>
+          </div>
+          <div class="dk-tile__row">
+            <span class="dk-metric-lg">1 284</span>
+            <span class="dk-trend" style="--accent:var(--calm-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg> −6%</span>
+          </div>
+          <div class="dk-chart dk-chart--spark" id="sp-2"></div>
+        </div>
+      </div>
+      <div class="dk-col--quarter">
+        <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--high-ink)">
+          <div class="dk-tile__head">
+            <span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span>
+            <span class="dk-tile__label">Среднее время реакции</span>
+          </div>
+          <div class="dk-tile__row">
+            <span class="dk-metric-lg">42 мин</span>
+          </div>
+          <div class="dk-chart dk-chart--spark" id="sp-3"></div>
+        </div>
+      </div>
+      <div class="dk-col--quarter">
+        <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--calm-ink)">
+          <div class="dk-tile__head">
+            <span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span>
+            <span class="dk-tile__label">Бригад в работе</span>
+          </div>
+          <div class="dk-tile__row">
+            <span class="dk-metric-lg">17</span>
+            <span class="dk-trend">без изменений</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dk-overline" style="margin-top:var(--space-8)">M · треть или половина</div>
+    <div class="dk-grid" style="margin-top:var(--space-5)">
+      <div class="dk-col--half">
+        <div class="dk-widget">
+          <div class="dk-widget__head">
+            <h3 class="dk-widget__title">Аварии по дням</h3>
+          </div>
+          <div class="dk-chart dk-chart--sm" id="sz-line"></div>
+        </div>
+      </div>
+      <div class="dk-col--half">
+        <div class="dk-widget">
+          <div class="dk-widget__head">
+            <h3 class="dk-widget__title">Последние события</h3>
+          </div>
+          <div class="dk-list">
+            <button class="dk-list__row" style="--accent:var(--crit-ink)">
+              <span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
+              <span class="dk-list__text">
+                <span class="dk-list__name">Прорыв теплотрассы</span>
+                <span class="dk-list__sub">Новосибирск · 14:20</span>
+              </span>
+              <span class="dk-list__v" style="--accent:var(--crit-ink)">1 240 чел.</span>
+            </button>
+            <button class="dk-list__row" style="--accent:var(--high-ink)">
+              <span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+              <span class="dk-list__text">
+                <span class="dk-list__name">Отключение электроснабжения</span>
+                <span class="dk-list__sub">Ростовская область · 12:05</span>
+              </span>
+              <span class="dk-list__v" style="--accent:var(--high-ink)">380 чел.</span>
+            </button>
+            <button class="dk-list__row" style="--accent:var(--calm-ink)">
+              <span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg></span>
+              <span class="dk-list__text">
+                <span class="dk-list__name">Подача восстановлена</span>
+                <span class="dk-list__sub">Крым · 09:48</span>
+              </span>
+              <span class="dk-list__v" style="--accent:var(--calm-ink)">—</span>
+            </button>
+            <button class="dk-list__more">Показать все <svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dk-overline" style="margin-top:var(--space-8)">L · две трети или вся ширина</div>
+    <div class="dk-grid" style="margin-top:var(--space-5)">
+      <div class="dk-col--full">
+        <div class="dk-widget">
+          <div class="dk-widget__head">
+            <h3 class="dk-widget__title">Аварии: заявлено и устранено за две недели</h3>
+          </div>
+          <div class="dk-chart" id="sz-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sc-note" style="margin-top:var(--space-7)">
+      <b>Разметка у всех трёх одна и та же.</b> Отличается плотность набивки:
+      у плитки в четверть колонки поле в 18 съедает пятую часть ширины, поэтому
+      для неё есть <code class="dk-code">dk-widget--s</code>. Больше ничего
+      заводить не нужно — остальное делает сетка.
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Календарь</h2>
+    <p>Не выбор периода, а показ работы: что происходит и когда. Отдельная
+       страница-пример — <code class="dk-code">calendar.html</code>.</p>
+
+    <div class="sc-note">
+      <b>Цвет события — это его вид, а не украшение.</b> Авария красная, работа
+      с ограничением жёлтая, плановое синее, завершённое зелёное. Календарь, где
+      цвета розданы по кругу, врёт так же, как график с произвольной палитрой:
+      человек ищет закономерность там, где её нет.
+    </div>
+
+    <div class="dk-widget" style="margin-top:var(--space-6)">
+      <div id="sc-cal"></div>
+    </div>
+
+    <div class="sc-note" style="margin-top:var(--space-7)">
+      <b>Сетка всегда в шесть строк.</b> В месяце помещается от четырёх с
+      половиной до шести недель. Если рисовать столько, сколько вышло, при
+      перелистывании страница прыгает, и человек каждый раз заново ищет, где он
+      был. Больше трёх событий в дне — «ещё N»: обрезать список молча значит
+      скрыть часть работы. Стрелки, Home, End, PageUp, PageDown и Enter
+      работают как в таблице.
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Состояние страницы</h2>
+    <p>Вкладки водят по разделам, баннер отвечает за состояние всей страницы,
+       уведомление подтверждает действие человека. Три разные вещи, которые
+       часто путают.</p>
+
+    <div class="sc-note">
+      <b>Вкладка — не сегмент.</b> Сегмент переключает вид одних и тех же данных
+      («карта / плитки», «месяц / неделя») и живёт внутри виджета. Вкладка водит
+      по разным страницам раздела: у неё свой адрес и своя загрузка. Перепутать
+      значит пообещать не то — сегмент человек ждёт мгновенным, вкладку нет.
+    </div>
+
+    <div class="dk-panel" style="margin-top:var(--space-6)">
+      <nav class="dk-tabs" aria-label="Разделы мониторинга">
+        <a class="dk-tab" href="#" aria-current="page">Инфраструктура</a>
+        <a class="dk-tab" href="#">Аварии <span class="dk-tab__n">23</span></a>
+        <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
+        <a class="dk-tab" href="#">Бригады</a>
+        <a class="dk-tab" href="#">Отчёты</a>
+      </nav>
+
+      <div class="dk-banner dk-banner--crit" style="margin-top:var(--space-6)">
+        <svg class="dk-i"><use href="#ti-alert-triangle"/></svg>
+        <div class="dk-banner__text">
+          <div class="dk-banner__title">23 аварии требуют решения</div>
+          <div class="dk-banner__sub">Две службы не отвечают последние сутки</div>
+        </div>
+        <div class="dk-banner__stats">
+          <div class="dk-banner__stat"><b>9/11</b><span>служб</span></div>
+          <div class="dk-banner__stat"><b>23/23</b><span>узлов</span></div>
+        </div>
+      </div>
+
+      <div class="dk-banner dk-banner--calm" style="margin-top:var(--space-5)">
+        <svg class="dk-i"><use href="#ti-circle-check"/></svg>
+        <div class="dk-banner__text">
+          <div class="dk-banner__title">Контур работает штатно</div>
+          <div class="dk-banner__sub">Службы, инфраструктура и источники данных отвечают</div>
+        </div>
+      </div>
+
+      <!-- Баннер события — единственный вид, который можно закрыть. Почему
+           так, написано над .dk-banner в components.css. -->
+      <div class="dk-banner dk-banner--event" style="margin-top:var(--space-5)">
+        <svg class="dk-i"><use href="#ti-file-text"/></svg>
+        <div class="dk-banner__text">
+          <div class="dk-banner__title">Выгрузка за сентябрь готова</div>
+          <div class="dk-banner__sub">Файл доступен в разделе «Отчёты»</div>
+        </div>
+        <button class="dk-iconbtn dk-iconbtn--sm dk-banner__x" type="button"
+                title="Закрыть" aria-label="Закрыть"
+                onclick="this.closest('.dk-banner').remove()">
+          <svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg>
+        </button>
+      </div>
+
+      <div class="sc-row" style="margin-top:var(--space-6)">
+        <button class="dk-btn dk-btn--sm" data-toast="calm">Показать уведомление</button>
+        <button class="dk-btn dk-btn--sm" data-toast="undo">С отменой</button>
+        <button class="dk-btn dk-btn--sm" data-toast="crit">Тревожное</button>
+      </div>
+    </div>
+
+    <div class="sc-note" style="margin-top:var(--space-7)">
+      <b>Баннер о проблеме не закрывается.</b> Закрытая полоса про сбой — это
+      сбой, спрятанный руками человека, который через час о нём забудет. Полоса
+      уходит тогда, когда уходит причина; закрывать можно только сообщение об
+      успехе.
+      <br><br>
+      <b>Уведомление подтверждает действие, а не сообщает новости.</b> «Срез
+      сброшен» — да. «Авария в Новосибирске» — нет: уехавшее через пять секунд
+      сообщение о новой аварии это авария, которую никто не увидел. Время жизни
+      считается по длине текста, под курсором отсчёт стоит, с «Отменить» тост
+      живёт дольше — отмена, которую не успели нажать, не отмена.
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Доступность и списки</h2>
+
+    <div class="sc-note">
+      <b>Легенда нужна до того, как понадобится.</b> Пока сбоев нет, полоса
+      сплошь зелёная, и кажется, что объяснять нечего. В момент первого сбоя
+      человек впервые увидит другой цвет — и будет гадать, что он значит,
+      вместо того чтобы действовать. «Нет данных» при этом не «работает»:
+      закрасить непроверенное зелёным значит пообещать то, чего не знаешь.
+    </div>
+
+    <div class="dk-widget" style="margin-top:var(--space-6)">
+      <div class="dk-widget__head">
+        <h3 class="dk-widget__title">Доступность служб · сутки</h3>
+      </div>
+      <div id="sc-uptime"></div>
+    </div>
+
+    <div class="dk-grid--even" style="margin-top:var(--space-6)">
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Кто больше жжёт</h3>
+          <span class="dk-widget__hint" title="Полоса — доля от самого крупного в списке"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div class="dk-bars">
+          <div class="dk-bar" style="--accent:var(--crit-ink)">
+            <div class="dk-bar__head"><span class="dk-bar__name">Отопление</span><span class="dk-bar__v">520</span></div>
+            <div class="dk-bar__track"><div class="dk-bar__fill" style="width:100%"></div></div>
+            <div class="dk-bar__meta">41% обращений · 1 240 жителей · 18 бригад</div>
+          </div>
+          <div class="dk-bar" style="--accent:var(--high-ink)">
+            <div class="dk-bar__head"><span class="dk-bar__name">Водоснабжение</span><span class="dk-bar__v">344</span></div>
+            <div class="dk-bar__track"><div class="dk-bar__fill" style="width:66%"></div></div>
+            <div class="dk-bar__meta">27% обращений · 860 жителей · 11 бригад</div>
+          </div>
+          <div class="dk-bar">
+            <div class="dk-bar__head"><span class="dk-bar__name">Электроснабжение</span><span class="dk-bar__v">228</span></div>
+            <div class="dk-bar__track"><div class="dk-bar__fill" style="width:44%"></div></div>
+            <div class="dk-bar__meta">18% обращений · 410 жителей · 6 бригад</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Раскрывающийся блок</h3>
+        </div>
+        <div class="dk-widget__body">
+          <details class="dk-fold">
+            <summary class="dk-fold__head">
+              <span class="dk-fold__title">Вспомогательные серверы</span>
+              <span class="dk-fold__sum">серверы 4/4 · туннели 3/3</span>
+              <svg class="dk-i dk-i--sm"><use href="#ti-chevron-down"/></svg>
+            </summary>
+            <div class="dk-fold__body">
+              <div class="dk-row"><span class="dk-row__label">Королёв</span><span class="dk-row__value">работает</span></div>
+              <div class="dk-row"><span class="dk-row__label">Франкфурт</span><span class="dk-row__value">работает</span></div>
+              <div class="dk-row"><span class="dk-row__label">Амстердам</span><span class="dk-row__value">работает</span></div>
+            </div>
+          </details>
+          <p class="dk-caption" style="margin-top:var(--space-5)">Свёрнутым прячут подробности,
+             а не то, без чего не понять. Итог стоит в заголовке — иначе это не
+             сворачивание, а сокрытие.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Регионы</h2>
+    <p>Два вида на одних данных. Переключатель — часть виджета, а не настройка.</p>
+
+    <div class="sc-note">
+      <b>На карте площадь региона перебивает его значение.</b> Якутия занимает
+      пятую часть страны, Москва — точку; одинаковый цвет читается как «плохо на
+      огромной территории» и «почти ничего». Карта отвечает на вопрос «где» и
+      отвечает хорошо. На вопрос «у кого хуже» она отвечает неправильно — на него
+      отвечают плитки, где у каждого субъекта равный вес.
+    </div>
+
+    <div class="sc-note">
+      <b>Плитки — ещё и доступная версия карты.</b> Карта нарисована на canvas и
+      с клавиатуры недоступна, а плитки это обычные кнопки со стрелками.
+      Человек без мыши получает те же данные, а не их пересказ.
+    </div>
+
+    <div class="dk-widget" style="margin-top:var(--space-6)">
+      <div id="sc-map"></div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Формы</h2>
+    <p>Дашборд не только показывает, но и принимает: заявку, работу, комментарий.
+       Форма здесь почти всегда короткая, и правила у неё жёстче обычных — человек
+       заполняет её между двумя срочными делами.</p>
+
+    <div class="sc-note">
+      <b>Подпись стоит над полем, а не внутри.</b> Плейсхолдер исчезает при вводе:
+      стоит отвлечься на звонок — и человек смотрит на заполненное поле, не
+      понимая, что в нём. Внутри поля живёт пример значения, а не его название.
+    </div>
+
+    <div class="sc-note">
+      <b>Ошибка говорит, что сделать, а не что не так.</b> «Не короче 5 знаков —
+      сейчас 3» вместо «Неверное значение»: человек уже знает, что ошибся, — ему
+      нужно знать, как исправить. И проверка не бьёт по рукам на каждом нажатии:
+      первая — когда он ушёл из поля или отправил форму.
+    </div>
+
+    <div class="dk-panel" style="margin-top:var(--space-6)">
+      <form class="dk-form" id="sc-form">
+        <div class="dk-form__alarm" hidden></div>
+
+        <div class="dk-ff dk-ff--wide">
+          <label class="dk-label" for="f-name">Что за работа <span class="dk-label__req">обязательно</span></label>
+          <div class="dk-field"><input id="f-name" name="name" placeholder="Замена задвижки на вводе" required minlength="5"></div>
+          <div class="dk-hint">Так её увидят диспетчеры смены в календаре</div>
+        </div>
+
+        <div class="dk-ff">
+          <label class="dk-label" for="f-kind">Вид работы <span class="dk-label__req">обязательно</span></label>
+          <div class="dk-field">
+            <select id="f-kind" name="kind" required>
+              <option value="">Выберите вид</option>
+              <option value="plan">Плановое отключение</option>
+              <option value="high">Работа на сети с ограничением</option>
+              <option value="crit">Авария</option>
+              <option value="event">Проверка</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="dk-ff">
+          <label class="dk-label" for="f-people">Затронуто жителей <span class="dk-label__opt">если известно</span></label>
+          <div class="dk-field"><input id="f-people" name="people" type="number" min="0" max="500000" placeholder="1240"></div>
+          <div class="dk-hint">Человек, а не квартир</div>
+        </div>
+
+        <div class="dk-ff">
+          <label class="dk-label" for="f-from">Начало <span class="dk-label__req">обязательно</span></label>
+          <div class="dk-field"><input id="f-from" name="from" type="datetime-local" required></div>
+        </div>
+
+        <div class="dk-ff">
+          <label class="dk-label" for="f-till">Окончание <span class="dk-label__opt">если известно</span></label>
+          <div class="dk-field"><input id="f-till" name="till" type="datetime-local"></div>
+          <div class="dk-hint">Оставьте пустым, если срок ещё не ясен</div>
+        </div>
+
+        <div class="dk-ff dk-ff--wide">
+          <label class="dk-label" for="f-note">Что сказать жителям <span class="dk-label__opt">необязательно</span></label>
+          <textarea class="dk-area" id="f-note" name="note" maxlength="300" placeholder="Горячей воды не будет с 8:00 до 13:00, подвоз воды у дома 14"></textarea>
+          <div class="dk-hint">До 300 знаков — текст уйдёт в рассылку как есть</div>
+        </div>
+
+        <div class="dk-form__foot">
+          <button type="button" class="dk-btn" id="sc-form-reset">Очистить</button>
+          <button type="submit" class="dk-btn dk-btn--primary">Добавить работу</button>
+        </div>
+      </form>
+
+      <div class="dk-result" id="sc-form-out" style="margin-top:var(--space-6)"></div>
+    </div>
+
+    <div class="sc-note" style="margin-top:var(--space-7)">
+      <b>Отмечаем то, чего меньше.</b> Если обязательны почти все поля, пометка у
+      каждого превращается в шум — тогда помечают необязательные. Здесь показаны
+      оба способа сразу только ради витрины; в живой форме выбирают один.
+      Фокус после неудачной отправки уходит на первое неверное поле: форма,
+      которая молча не отправилась, заставляет перечитывать её сверху вниз.
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Таблица</h2>
+    <p>По умолчанию сетки нет: шапка отделена поверхностью, строки — наведением.
+       На длинной плотной таблице взгляд теряет строку — тогда включается
+       чередование или линейки. Ниже оба варианта.</p>
+    <p><a class="dk-btn dk-btn--sm" href="component-table.html">Страница компонента: Таблица →</a>
+      <span class="sc-meta__i" style="margin-left:var(--space-5)">первая страница по единому шаблону из одиннадцати блоков: анатомия, состояния, токены, код</span></p>
+
+    <div class="dk-panel" style="margin-bottom:var(--space-6)">
+      <div class="dk-overline" style="margin-bottom:var(--space-5)">По умолчанию · без разделителей</div>
+      <div class="dk-tablewrap">
+      <table class="dk-table">
+        <thead><tr><th>Регион</th><th>Округ</th><th class="dk-td-num">Балл</th><th class="dk-td-num">События</th></tr></thead>
+        <tbody>
+          <tr><td>Донецкая Народная Республика</td><td>Южный</td><td class="dk-td-num" style="color:var(--crit)">95</td><td class="dk-td-num">4</td></tr>
+          <tr><td>Крым</td><td>Южный</td><td class="dk-td-num" style="color:var(--crit)">82</td><td class="dk-td-num">1</td></tr>
+          <tr><td>Новосибирская область</td><td>Сибирский</td><td class="dk-td-num" style="color:var(--high)">73</td><td class="dk-td-num">—</td></tr>
+          <tr><td>Краснодарский край</td><td>Южный</td><td class="dk-td-num" style="color:var(--high)">61</td><td class="dk-td-num">2</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="dk-panel">
+      <div class="dk-overline" style="margin-bottom:var(--space-5)">Плотная · чередование строк</div>
+      <div class="dk-tablewrap">
+      <table class="dk-table dk-table--zebra">
+        <thead><tr><th>Регион</th><th>Округ</th><th class="dk-td-num">Балл</th><th class="dk-td-num">События</th></tr></thead>
+        <tbody>
+          <tr><td>Донецкая Народная Республика</td><td>Южный</td><td class="dk-td-num" style="color:var(--crit)">95</td><td class="dk-td-num">4</td></tr>
+          <tr><td>Крым</td><td>Южный</td><td class="dk-td-num" style="color:var(--crit)">82</td><td class="dk-td-num">1</td></tr>
+          <tr><td>Саха (Якутия)</td><td>Дальневосточный</td><td class="dk-td-num" style="color:var(--crit)">81</td><td class="dk-td-num">—</td></tr>
+          <tr><td>Новосибирская область</td><td>Сибирский</td><td class="dk-td-num" style="color:var(--high)">73</td><td class="dk-td-num">—</td></tr>
+          <tr><td>Краснодарский край</td><td>Южный</td><td class="dk-td-num" style="color:var(--high)">61</td><td class="dk-td-num">2</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  
+    
+    <div class="sc-note" style="margin-top:var(--space-7)">
+      <b>Таблица из одного текста — это список, а не таблица.</b> Рабочая строка
+      несёт пять разных вещей, и у каждой своя форма: выбор, главная ячейка с
+      подписью, состояние, доля, число и действия. Заголовки с сортировкой
+      показывают направление, а не просто «здесь можно сортировать».
+    </div>
+
+    <div class="sc-note">
+      <b>Действия не прячутся под наведение.</b> Это самый распространённый приём
+      в админках и самая дорогая ошибка: на тачскрине наведения нет вовсе, а с
+      клавиатуры спрятанное действие не найти. Кнопки стоят всегда, приглушённо,
+      и проявляются на строке под курсором.
+    </div>
+
+    <div class="dk-panel" style="margin-top:var(--space-6);padding:0;overflow:hidden">
+      <div class="dk-tablewrap">
+        <table class="dk-table" id="sc-cells">
+          <thead>
+            <tr>
+              <th class="dk-th-pick"><label class="dk-check" aria-label="Выбрать все на странице"><input type="checkbox" data-pick-all><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></th>
+              <th data-sortable="Заявка">Заявка</th>
+              <th data-sortable="Состояние">Состояние</th>
+              <th data-sortable="Готовность">Готовность</th>
+              <th class="dk-td-num" data-sortable="Людей">Людей</th>
+              <th class="dk-th-act"><span class="dk-vh">Действия</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-id="4821">
+              <td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать заявку № 4821"><input type="checkbox" data-pick value="4821"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>
+              <td data-sort="Прорыв теплотрассы">
+                <div class="dk-td-main" style="--accent:var(--crit-ink)">
+                  <span class="dk-td-main__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
+                  <span class="dk-td-main__text">
+                    <span class="dk-td-main__name">Прорыв теплотрассы</span>
+                    <span class="dk-td-main__sub">Новосибирск · ул. Мира, 14</span>
+                  </span>
+                </div>
+              </td>
+              <td data-sort="18"><span class="dk-status dk-status--crit"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg>в работе</span></td>
+              <td class="dk-td-bar" data-sort="18">
+                <div class="dk-progress"><div class="dk-progress__track"><div class="dk-progress__fill" style="width:18%"></div></div><span class="dk-progress__value">18%</span></div>
+              </td>
+              <td class="dk-td-num" data-sort="1240">1 240</td>
+              <td class="dk-td-act"><span class="dk-td-act__box">
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Открыть заявку № 4821" aria-label="Открыть заявку № 4821"><svg class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Ещё действия" aria-label="Ещё действия"><svg class="dk-i dk-i--sm"><use href="#ti-dots-vertical"/></svg></button>
+              </span></td>
+            </tr>
+            <tr data-id="4817">
+              <td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать заявку № 4817"><input type="checkbox" data-pick value="4817"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>
+              <td data-sort="Отключение электроснабжения">
+                <div class="dk-td-main" style="--accent:var(--high-ink)">
+                  <span class="dk-td-main__icon"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+                  <span class="dk-td-main__text">
+                    <span class="dk-td-main__name">Отключение электроснабжения</span>
+                    <span class="dk-td-main__sub">Ростовская область · Шахты</span>
+                  </span>
+                </div>
+              </td>
+              <td data-sort="46"><span class="dk-status dk-status--high"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg>выехала бригада</span></td>
+              <td class="dk-td-bar" data-sort="46">
+                <div class="dk-progress"><div class="dk-progress__track"><div class="dk-progress__fill" style="width:46%"></div></div><span class="dk-progress__value">46%</span></div>
+              </td>
+              <td class="dk-td-num" data-sort="380">380</td>
+              <td class="dk-td-act"><span class="dk-td-act__box">
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Открыть заявку № 4817" aria-label="Открыть заявку № 4817"><svg class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Ещё действия" aria-label="Ещё действия"><svg class="dk-i dk-i--sm"><use href="#ti-dots-vertical"/></svg></button>
+              </span></td>
+            </tr>
+            <tr data-id="4810">
+              <td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать заявку № 4810"><input type="checkbox" data-pick value="4810"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>
+              <td data-sort="Подача восстановлена">
+                <div class="dk-td-main" style="--accent:var(--calm-ink)">
+                  <span class="dk-td-main__icon"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg></span>
+                  <span class="dk-td-main__text">
+                    <span class="dk-td-main__name">Подача восстановлена</span>
+                    <span class="dk-td-main__sub">Крым · Симферополь</span>
+                  </span>
+                </div>
+              </td>
+              <td data-sort="100"><span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>устранена</span></td>
+              <td class="dk-td-bar" data-sort="100">
+                <div class="dk-progress"><div class="dk-progress__track"><div class="dk-progress__fill" style="width:100%"></div></div><span class="dk-progress__value">100%</span></div>
+              </td>
+              <td class="dk-td-num" data-sort="96">96</td>
+              <td class="dk-td-act"><span class="dk-td-act__box">
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Открыть заявку № 4810" aria-label="Открыть заявку № 4810"><svg class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Ещё действия" aria-label="Ещё действия"><svg class="dk-i dk-i--sm"><use href="#ti-dots-vertical"/></svg></button>
+              </span></td>
+            </tr>
+            <tr data-id="4806">
+              <td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать заявку № 4806"><input type="checkbox" data-pick value="4806"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>
+              <td data-sort="Замена задвижки">
+                <div class="dk-td-main" style="--accent:var(--high-ink)">
+                  <span class="dk-td-main__icon"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+                  <span class="dk-td-main__text">
+                    <span class="dk-td-main__name">Замена задвижки</span>
+                    <span class="dk-td-main__sub">Забайкальский край · Чита</span>
+                  </span>
+                </div>
+              </td>
+              <td data-sort="62"><span class="dk-status dk-status--high"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg>выехала бригада</span></td>
+              <td class="dk-td-bar" data-sort="62">
+                <div class="dk-progress"><div class="dk-progress__track"><div class="dk-progress__fill" style="width:62%"></div></div><span class="dk-progress__value">62%</span></div>
+              </td>
+              <td class="dk-td-num" data-sort="210">210</td>
+              <td class="dk-td-act"><span class="dk-td-act__box">
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Открыть заявку № 4806" aria-label="Открыть заявку № 4806"><svg class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Ещё действия" aria-label="Ещё действия"><svg class="dk-i dk-i--sm"><use href="#ti-dots-vertical"/></svg></button>
+              </span></td>
+            </tr>
+            <tr data-id="4799">
+              <td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать заявку № 4799"><input type="checkbox" data-pick value="4799"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>
+              <td data-sort="Плановое отключение ГВС">
+                <div class="dk-td-main" style="--accent:var(--event)">
+                  <span class="dk-td-main__icon"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span>
+                  <span class="dk-td-main__text">
+                    <span class="dk-td-main__name">Плановое отключение ГВС</span>
+                    <span class="dk-td-main__sub">Москва · Северное Бутово</span>
+                  </span>
+                </div>
+              </td>
+              <td data-sort="8"><span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg>по плану</span></td>
+              <td class="dk-td-bar" data-sort="8">
+                <div class="dk-progress"><div class="dk-progress__track"><div class="dk-progress__fill" style="width:8%"></div></div><span class="dk-progress__value">8%</span></div>
+              </td>
+              <td class="dk-td-num" data-sort="3400">3 400</td>
+              <td class="dk-td-act"><span class="dk-td-act__box">
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Открыть заявку № 4799" aria-label="Открыть заявку № 4799"><svg class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
+                <button class="dk-iconbtn dk-iconbtn--sm" title="Ещё действия" aria-label="Ещё действия"><svg class="dk-i dk-i--sm"><use href="#ti-dots-vertical"/></svg></button>
+              </span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dk-chipbar" id="sc-picked" style="padding:var(--space-5) var(--space-6)"></div>
+    </div>
+
+    <div class="sc-note" style="margin-top:var(--space-7)">
+      <b>Пагинация начинается с объёма, а не с кнопок.</b> «Показано 21–40 из 89»
+      отвечает сразу на три вопроса: где я, сколько вижу и сколько есть. Полоса
+      из одних стрелок оставляет человека листать вслепую — он не знает, десять
+      там записей или десять тысяч. Крайние кнопки отключаются, а не исчезают:
+      исчезнувшая сдвигает соседнюю под курсор, и щелчок попадает не туда.
+    </div>
+
+    <div class="dk-panel" style="margin-top:var(--space-6)">
+      <div id="sc-pager"></div>
+    </div>
+</section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Графики</h2>
+    <p>Собраны на Apache ECharts. Тема выведена из токенов скриптом, а не написана
+       отдельно: поменялся цвет серии — пересобрал тему, и все графики во всех
+       дашбордах поменялись вместе с ним. Разойтись они не могут.</p>
+
+    <div class="dk-panel" style="margin-bottom:var(--space-7);padding:0;overflow:hidden">
+      <div class="dk-tablewrap">
+      <table class="dk-table dk-table--zebra">
+        <thead><tr><th>Читатель должен…</th><th>Тип</th><th>Цвет кодирует</th></tr></thead>
+        <tbody>
+          <tr><td>сравнить величины</td><td>столбцы</td><td>величину, один тон</td></tr>
+          <tr><td>увидеть динамику</td><td>линия, область</td><td>величину или серию</td></tr>
+          <tr><td>различить серии между собой</td><td>группированные столбцы, линии</td><td>принадлежность</td></tr>
+          <tr><td>заметить одну серию на фоне прочих</td><td><b>выделение</b></td><td>акцент плюс серый</td></tr>
+          <tr><td>увидеть состав целого</td><td>накопительные столбцы</td><td>принадлежность</td></tr>
+          <tr><td>сравнить профиль по многим осям</td><td>лепестковая</td><td>принадлежность</td></tr>
+          <tr><td>проследить поток через этапы</td><td>санкей</td><td>принадлежность</td></tr>
+          <tr><td>увидеть долю от целого</td><td>пончик, до 6 секторов</td><td>принадлежность</td></tr>
+          <tr><td>понять, связаны ли две величины</td><td>точечный</td><td>принадлежность</td></tr>
+          <tr><td>отделить прогноз от факта</td><td>линия с пунктирным хвостом</td><td>ту же серию</td></tr>
+          <tr><td>показать величину, меняющуюся скачком</td><td>ступенчатая линия</td><td>величину или серию</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="sc-note">
+      <b>Сначала вопрос, который задают реже всего: а нужен ли график вообще.</b>
+      Одно текущее значение — это KPI-плитка, а не столбчатый график из одного
+      столбца. Несколько главных чисел — ряд плиток, а не группированные столбцы.
+      Больше семи значимых категорий — таблица, а не ещё больше цветов.
+    </div>
+
+    <div class="sc-note">
+      <b>Обёртка закрывает опасное.</b> Две вертикальных оси на одном графике не
+      соберутся — это самая частая ложь в дашбордах: две шкалы разного масштаба
+      создают любое нужное впечатление, потому что их взаимное положение выбрал
+      автор, а не данные. Линия не сглаживается: плавная кривая показывает
+      значения, которых не было. Сектора круговой сверх шести сворачиваются
+      в «Прочее» — дальше человек доли не сравнивает, а пересчитывает.
+    </div>
+
+    <div class="dk-grid--even">
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Динамика балла</h3>
+          <span class="dk-widget__hint" title="Средний балл риска по стране, 14 дней"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-line" class="dk-chart"></div>
+      </div>
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Объём материалов</h3>
+          <span class="dk-widget__hint" title="Число негативных публикаций в сутки"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-area" class="dk-chart"></div>
+      </div>
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">По округам</h3>
+          <span class="dk-widget__hint" title="Число регионов в зоне риска"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-bar" class="dk-chart"></div>
+      </div>
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Состав риска</h3>
+          <span class="dk-widget__hint" title="Распределение по тирам, по неделям"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-stack" class="dk-chart"></div>
+      </div>
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Топ регионов</h3>
+          <span class="dk-widget__hint" title="Балл риска, первые семь"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-barh" class="dk-chart"></div>
+      </div>
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Доли тиров</h3>
+          <span class="dk-widget__hint" title="Сколько регионов в каждом тире"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-donut" class="dk-chart"></div>
+      </div>
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Профиль индикаторов</h3>
+          <span class="dk-widget__hint" title="Восемь индикаторов, два округа"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-radar" class="dk-chart"></div>
+      </div>
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Потоки материалов</h3>
+          <span class="dk-widget__hint" title="Источник → тема → тир"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-sankey" class="dk-chart dk-chart--lg"></div>
+      </div>
+    </div>
+
+    <p style="margin-top:var(--space-7)"><b>Три типа отвечают на вопросы, которых
+       не задают остальные.</b> Точечный — связаны ли две величины. Пунктирный
+       хвост — где кончается факт и начинается прогноз. Ступень — величина
+       держится до следующего замера, а не перетекает плавно.</p>
+
+    <div class="dk-grid--even" style="margin-top:var(--space-6)">
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Износ сетей и аварийность</h3>
+          <span class="dk-widget__hint" title="89 регионов, линия тренда включена вручную"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-scatter" class="dk-chart"></div>
+      </div>
+
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Аварии: факт и прогноз</h3>
+          <span class="dk-widget__hint" title="Пунктир — данные ещё не закрыты"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-forecast" class="dk-chart"></div>
+      </div>
+    </div>
+
+    <div class="dk-grid--even" style="margin-top:var(--space-6)">
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Режим подачи тепла</h3>
+        </div>
+        <div id="ch-step" class="dk-chart dk-chart--sm"></div>
+      </div>
+    </div>
+
+    <p style="margin-top:var(--space-7)"><b>Выделение</b> — самая недоиспользуемая
+       форма и часто честный ответ на «сделай график понятнее». Слева все серии
+       равноправны, справа та же картинка с выделенной. Если история звучит как
+       «вот эта выросла», остальные серии — фон, а не участники.</p>
+
+    <div class="dk-grid--even" style="margin-top:var(--space-6)">
+      <div class="dk-widget">
+        <div class="dk-widget__head"><h3 class="dk-widget__title">Все серии равноправны</h3></div>
+        <div id="ch-flat" class="dk-chart dk-chart--sm"></div>
+      </div>
+      <div class="dk-widget">
+        <div class="dk-widget__head"><h3 class="dk-widget__title">Выделен Южный округ</h3></div>
+        <div id="ch-emph" class="dk-chart dk-chart--sm"></div>
+      </div>
+    </div>
+
+    <p style="margin-top:var(--space-7)">Ниже — та же круговая, которой передали
+       девять секторов. Обёртка свернула лишние сама и написала об этом в консоль.</p>
+    <div class="sc-charts" style="margin-top:var(--space-6)">
+      <div class="dk-widget">
+        <div class="dk-widget__head">
+          <h3 class="dk-widget__title">Девять секторов</h3>
+          <span class="dk-widget__hint" title="Проверка правила: свёрнуто до шести"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+        </div>
+        <div id="ch-fold" class="dk-chart"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec" data-group="Состояния">
+    <h2>Страницы ошибок</h2>
+    <p>Ошибка — это тоже экран продукта, а не заглушка. Человек попал сюда не по
+       своей воле, и текст обязан ответить на три вопроса подряд: что произошло,
+       что он сейчас не видит, и что делать.</p>
+
+    <div class="sc-note">
+      <b>Чего здесь не бывает.</b> Обвинения пользователя: «страница не найдена»,
+      а не «вы ввели неверный адрес» — в девяти случаях из десяти виноват не он.
+      Технических подробностей на видном месте: код нужен поддержке, а не
+      читателю, поэтому он внизу и мелко — но он есть, иначе человек не сможет
+      объяснить, что у него сломалось. И юмора: смешная картинка на месте
+      сломанного отчёта раздражает того, кому этот отчёт был нужен к совещанию.
+    </div>
+
+    <div class="dk-grid--even">
+      <div class="dk-panel">
+        <div class="dk-error">
+          <span class="dk-error__icon"><svg class="dk-i"><use href="#ti-search"/></svg></span>
+          <h3 class="dk-error__title">Такой страницы нет</h3>
+          <p class="dk-error__text">Возможно, её переименовали или ссылка устарела. Данные мониторинга на месте — откройте сводку по стране.</p>
+          <div class="dk-error__actions"><button class="dk-btn dk-btn--primary"><svg class="dk-i"><use href="#ti-home"/></svg>К сводке</button><button class="dk-btn"><svg class="dk-i"><use href="#ti-arrow-left"/></svg>Назад</button></div>
+          <div class="dk-error__code">404</div>
+        </div>
+      </div>
+      <div class="dk-panel">
+        <div class="dk-error dk-error--alarm">
+          <span class="dk-error__icon"><svg class="dk-i"><use href="#ti-plug-connected-x"/></svg></span>
+          <h3 class="dk-error__title">Данные не загрузились</h3>
+          <p class="dk-error__text">Сервер не ответил. Показатели на экране могли остаться со вчерашнего среза — на них сейчас нельзя опираться.</p>
+          <div class="dk-error__actions"><button class="dk-btn dk-btn--primary"><svg class="dk-i"><use href="#ti-refresh"/></svg>Попробовать снова</button></div>
+          <div class="dk-error__code">ERR_TIMEOUT · 22.09.2026 23:14</div>
+        </div>
+      </div>
+      <div class="dk-panel">
+        <div class="dk-error">
+          <span class="dk-error__icon"><svg class="dk-i"><use href="#ti-lock"/></svg></span>
+          <h3 class="dk-error__title">Нет доступа к этому разделу</h3>
+          <p class="dk-error__text">Раздел открыт не всем — запросите доступ у администратора мониторинга. Остальные разделы работают как обычно.</p>
+          <div class="dk-error__actions"><button class="dk-btn dk-btn--primary">Запросить доступ</button><button class="dk-btn">К сводке</button></div>
+          <div class="dk-error__code">403</div>
+        </div>
+      </div>
+      <div class="dk-panel">
+        <div class="dk-error dk-error--alarm">
+          <span class="dk-error__icon"><svg class="dk-i"><use href="#ti-alert-triangle"/></svg></span>
+          <h3 class="dk-error__title">Данные не приходят</h3>
+          <p class="dk-error__text">Сбой на стороне мониторинга. Показатели на экране — со среза до сбоя, опираться на них нельзя. Если через несколько минут не заработает, пришлите код ниже в поддержку.</p>
+          <div class="dk-error__actions"><button class="dk-btn dk-btn--primary"><svg class="dk-i"><use href="#ti-refresh"/></svg>Попробовать снова</button></div>
+          <div class="dk-error__code">500 · req 8f3a-21c9</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:var(--space-7)">Внутри виджета ошибка живёт компактнее:
+       незачем ронять весь дашборд из-за одного сломавшегося блока. Остальное
+       продолжает работать.</p>
+
+    <div class="dk-grid" style="margin-top:var(--space-6)">
+      <div class="dk-col--half">
+        <div class="dk-widget">
+          <div class="dk-widget__head">
+            <h3 class="dk-widget__title">Динамика балла</h3>
+            <div class="dk-widget__actions">
+              <button class="dk-iconbtn dk-iconbtn--sm" title="Обновить" aria-label="Обновить"><svg class="dk-i"><use href="#ti-refresh"/></svg></button>
+            </div>
+          </div>
+          <div class="dk-error">
+            <span class="dk-error__icon"><svg class="dk-i"><use href="#ti-plug-connected-x"/></svg></span>
+            <h4 class="dk-error__title">Виджет не загрузился</h4>
+            <p class="dk-error__text">Остальные показатели на странице актуальны.</p>
+            <div class="dk-error__actions"><button class="dk-btn dk-btn--sm">Повторить</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="dk-col--half">
+        <div class="dk-widget" aria-busy="true">
+          <div class="dk-widget__head">
+            <h3 class="dk-widget__title">Объём материалов</h3>
+          </div>
+          <div id="ch-ok" class="dk-chart dk-chart--sm"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <p>Загрузка и «данных нет» — это тоже компоненты. Без них дашборд в проде выглядит сломанным.</p>
+    <div class="dk-grid--even">
+      <div class="dk-panel">
+        <div class="dk-overline" style="margin-bottom:var(--space-6)">Загрузка</div>
+        <span class="dk-vh">Загружаем показатели</span><div class="dk-skel" style="height:14px;width:60%;margin-bottom:var(--space-5)"></div>
+        <div class="dk-skel" style="height:14px;width:85%;margin-bottom:var(--space-5)"></div>
+        <div class="dk-skel" style="height:14px;width:45%"></div>
+      </div>
+      <div class="dk-panel">
+        <div class="dk-empty">
+          <div class="dk-empty__t">Ничего не найдено</div>
+          <div>Под выбранные фильтры не попал ни один регион.</div>
+          <button class="dk-btn">Сбросить фильтры</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p style="color:var(--ink-3);font-size:var(--text-caption);padding:var(--space-9) 0">
+    Витрина открывается двойным кликом по файлу. Сборка не нужна.
+  </p>
+
+</div>
+</div>
+
+<script>
+  /* Переключатели темы и акцента. Хранение и восстановление выбора здесь
+     больше не живут: этим занимается js/dk-theme.js в <head>, до первой
+     отрисовки. Витрина раньше писала в свои ключи (dk-data-theme), из-за чего
+     тема не переносилась между ней и дашбордами вовсе. Здесь остаётся только
+     то, что относится к самой витрине, — отметить нажатую кнопку. */
+  const root = document.documentElement;
+
+  function apply(attr, value, selector) {
+    root.setAttribute(attr, value);
+    mark(attr, value, selector);
+  }
+
+  function mark(attr, value, selector) {
+    const key = attr === 'data-theme' ? 'themeSet' : 'accentSet';
+    document.querySelectorAll(selector).forEach(b => {
+      b.setAttribute('aria-pressed', String(b.dataset[key] === value));
+    });
+  }
+
+  document.querySelectorAll('[data-theme-set]').forEach(b =>
+    b.addEventListener('click', () => apply('data-theme', b.dataset.themeSet, '[data-theme-set]')));
+
+
+  // Кнопки приводятся в соответствие с тем, что уже поставил загрузчик темы.
+  mark('data-theme', root.getAttribute('data-theme'), '[data-theme-set]');
+
+  // Набор иконок рисуется из спрайта — раздел не надо править руками.
+  // Ждём DOMContentLoaded: dk-icons.js подключён с defer и до этого момента
+  // ещё не выполнился, а этот скрипт лежит в теле страницы.
+  window.addEventListener('DOMContentLoaded', function () {
+    var box = document.getElementById('sc-icons');
+    if (!box || !window.dkIconNames) return;
+    box.innerHTML = window.dkIconNames.map(function (n) {
+      return '<figure>' + dkIcon(n, 'dk-i--lg') + '<figcaption>' + n + '</figcaption></figure>';
+    }).join('');
+  });
+
+  // Сегменты «Вид» и чипы — демонстрация поведения; в дашборде логику задаёт страница.
+  document.querySelectorAll('.dk-seg:not([aria-label="Тема"]) button, .dk-lg').forEach(b =>
+    b.addEventListener('click', () => {
+      const group = b.closest('.dk-seg, .dk-legend');
+      if (!group) return;
+      if (group.classList.contains('dk-legend')) {
+        const on = b.getAttribute('aria-pressed') !== 'true';
+        b.setAttribute('aria-pressed', String(on));
+        b.classList.toggle('is-on', on);
+        return;
+      }
+      group.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    }));
+
+  // ---- Фильтры -----------------------------------------------------------
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkSelect !== 'function' || typeof dkPeriod !== 'function') return;
+
+    var TOTAL = 89;
+    var OKRUGA = [
+      { value: 'cfo', name: 'Центральный', count: 18 }, { value: 'pfo', name: 'Приволжский', count: 14 },
+      { value: 'ufo', name: 'Южный', count: 12 }, { value: 'szfo', name: 'Северо-Западный', count: 11 },
+      { value: 'dfo', name: 'Дальневосточный', count: 11 }, { value: 'sfo', name: 'Сибирский', count: 10 },
+      { value: 'skfo', name: 'Северо-Кавказский', count: 7 }, { value: 'urfo', name: 'Уральский', count: 6 }
+    ];
+    var TIERS = [
+      { value: 'high', name: 'Высокий', count: 23 }, { value: 'mid', name: 'Средний', count: 27 },
+      { value: 'low', name: 'Низкий', count: 38 }, { value: 'nd', name: 'Мало данных', count: 1 }
+    ];
+    var REGIONS = ['Донецкая Народная Республика','Крым','Саха (Якутия)','Новосибирская область',
+      'Ростовская область','Забайкальский край','Луганская Народная Республика','Красноярский край',
+      'Свердловская область','Курская область','Архангельская область','Херсонская область',
+      'Приморский край','Краснодарский край','Московская область','Санкт-Петербург']
+      .map(function (n, i) { return { value: 'r' + i, name: n, count: Math.max(0, 40 - i * 3) }; });
+
+    var state = { period: null, okrug: null, tier: [], region: null };
+    var labels = { okrug: 'Округ', tier: 'Уровень риска', region: 'Регион' };
+
+    var fp = dkPeriod(document.getElementById('f-period'), {
+      label: 'Период', value: { preset: 30 },
+      onChange: function (v) { state.period = v; paint(); }
+    });
+    var f1 = dkSelect(document.getElementById('f-okrug'), { url: 'okrug',
+      label: 'Округ', options: OKRUGA,
+      onChange: function (v) { state.okrug = v; paint(); }
+    });
+    var f2 = dkSelect(document.getElementById('f-tier'), { url: 'tier',
+      label: 'Уровень риска', mode: 'multi', options: TIERS, search: false,
+      onChange: function (v) { state.tier = v; paint(); }
+    });
+    var f3 = dkSelect(document.getElementById('f-region'), { url: 'region',
+      label: 'Регион', options: REGIONS,
+      onChange: function (v) { state.region = v; paint(); }
+    });
+    var api = { okrug: f1, tier: f2, region: f3 };
+    var opts = { okrug: OKRUGA, tier: TIERS, region: REGIONS };
+
+    function nameOf(key, value) {
+      var o = opts[key].filter(function (x) { return x.value === value; })[0];
+      return o ? o.name : value;
+    }
+
+    function paint() {
+      var chips = [];
+      if (state.okrug) chips.push(['okrug', state.okrug]);
+      state.tier.forEach(function (v) { chips.push(['tier', v]); });
+      if (state.region) chips.push(['region', state.region]);
+
+      var periodChip = state.period
+        ? '<span class="dk-fchip"><span class="dk-menu__name">Период: ' + fp.text + '</span>' +
+          '<button class="dk-fchip__x" data-k="period" data-v="" aria-label="Снять период">' +
+          '<svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></span>'
+        : '';
+
+      var box = document.getElementById('f-chips');
+      box.innerHTML = (chips.length || state.period)
+        ? '<span class="dk-chipbar__label">Применено:</span>' + periodChip + chips.map(function (c) {
+            return '<span class="dk-fchip"><span class="dk-menu__name">' + labels[c[0]] + ': ' +
+              nameOf(c[0], c[1]) + '</span>' +
+              '<button class="dk-fchip__x" data-k="' + c[0] + '" data-v="' + c[1] +
+              '" aria-label="Снять фильтр"><svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></span>';
+          }).join('') +
+          '<button class="dk-btn dk-btn--ghost dk-btn--sm" id="f-reset">Сбросить всё</button>'
+        : '<span class="dk-chipbar__label">Фильтры не применены — показаны все регионы</span>';
+
+      box.querySelectorAll('.dk-fchip__x').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var k = b.dataset.k;
+          if (k === 'period') { state.period = null; fp.clear(); }
+          else if (k === 'tier') { state.tier = state.tier.filter(function (x) { return x !== b.dataset.v; }); api.tier.set(state.tier); }
+          else { state[k] = null; api[k].clear(); }
+          paint();
+        });
+      });
+      var reset = document.getElementById('f-reset');
+      if (reset) reset.addEventListener('click', function () {
+        state = { period: null, okrug: null, tier: [], region: null };
+        fp.clear(); f1.clear(); f2.clear(); f3.clear(); paint();
+      });
+
+      // Счётчик — то самое «последствие», которое человек обязан видеть сразу.
+      var left = TOTAL;
+      if (state.okrug) left = Math.min(left, nameCount('okrug', state.okrug));
+      if (state.tier.length) left = Math.min(left, state.tier.reduce(function (s2, v) { return s2 + nameCount('tier', v); }, 0));
+      if (state.region) left = 1;
+      document.getElementById('f-result').innerHTML =
+        chips.length ? '<b>' + left + '</b> из ' + TOTAL + ' регионов' : '<b>' + TOTAL + '</b> регионов';
+    }
+
+    function nameCount(key, value) {
+      var o = opts[key].filter(function (x) { return x.value === value; })[0];
+      return o ? o.count : 0;
+    }
+
+    state.period = fp.value;
+    paint();
+  });
+
+  // ---- Графики -----------------------------------------------------------
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkChart !== 'function') return;
+
+    var days = ['09.09','10.09','11.09','12.09','13.09','14.09','15.09',
+                '16.09','17.09','18.09','19.09','20.09','21.09','22.09'];
+
+    dkChart(document.getElementById('ch-line'), {
+      type: 'line', categories: days,
+      series: [{ name: 'Средний балл', data: [21,22,20,23,25,24,26,24,23,25,27,26,24,23] }]
+    });
+
+    dkChart(document.getElementById('ch-area'), {
+      type: 'area', categories: days,
+      series: [
+        { name: 'ЖКХ', data: [120,138,96,155,171,142,180,164,150,172,190,175,160,148] },
+        { name: 'События', data: [18,24,12,31,44,28,52,39,33,41,58,47,36,29] }
+      ]
+    });
+
+    dkChart(document.getElementById('ch-bar'), {
+      type: 'bar', target: { value: 4, label: 'норма' },
+      categories: ['ЦФО','СЗФО','ЮФО','ПФО','УФО','СФО','ДФО','СКФО'],
+      series: [{ name: 'Регионов в зоне риска', data: [4,3,6,5,2,4,3,1] }]
+    });
+
+    dkChart(document.getElementById('ch-stack'), {
+      type: 'bar-stacked', palette: 'status',
+      categories: ['нед. 34','нед. 35','нед. 36','нед. 37','нед. 38'],
+      series: [
+        { name: 'Высокий', data: [18,20,21,23,23] },
+        { name: 'Средний', data: [31,29,28,27,27] },
+        { name: 'Низкий',  data: [39,39,39,38,38] },
+        { name: 'Мало данных', data: [1,1,1,1,1] }
+      ]
+    });
+
+    dkChart(document.getElementById('ch-barh'), {
+      type: 'bar-h',
+      categories: ['ДНР','Крым','Саха (Якутия)','Новосибирская','Ростовская','Забайкальский','ЛНР'],
+      series: [{ name: 'Балл', data: [95,82,81,73,73,72,70] }]
+    });
+
+    dkChart(document.getElementById('ch-donut'), {
+      type: 'donut', palette: 'status', total: 89,
+      data: [
+        { name: 'Высокий', value: 23 },
+        { name: 'Средний', value: 27 },
+        { name: 'Низкий', value: 38 },
+        { name: 'Мало данных', value: 1 }
+      ]
+    });
+
+    dkChart(document.getElementById('ch-radar'), {
+      type: 'radar',
+      indicators: [
+        { name: 'Отключения', max: 100 }, { name: 'Аварии', max: 100 },
+        { name: 'Тарифы', max: 100 }, { name: 'Жалобы', max: 100 },
+        { name: 'Сети', max: 100 }, { name: 'Котельные', max: 100 },
+        { name: 'Кадры', max: 100 }, { name: 'Финансы', max: 100 }
+      ],
+      series: [
+        { name: 'ЮФО', data: [78, 64, 41, 82, 55, 70, 38, 47] },
+        { name: 'СФО', data: [52, 71, 33, 60, 74, 49, 56, 35] }
+      ]
+    });
+
+    dkChart(document.getElementById('ch-sankey'), {
+      type: 'sankey',
+      nodes: [{name:'Все материалы'},{name:'Госканалы'},{name:'Пресса'},{name:'Соцсети'},
+              {name:'ЖКХ'},{name:'Инфраструктура'},{name:'Прочее'},
+              {name:'Высокий'},{name:'Средний'},{name:'Низкий'}],
+      links: [
+        {source:'Все материалы',target:'Госканалы',value:420},
+        {source:'Все материалы',target:'Пресса',value:610},
+        {source:'Все материалы',target:'Соцсети',value:280},
+        {source:'Госканалы',target:'ЖКХ',value:260},
+        {source:'Госканалы',target:'Инфраструктура',value:160},
+        {source:'Пресса',target:'ЖКХ',value:330},
+        {source:'Пресса',target:'Инфраструктура',value:190},
+        {source:'Пресса',target:'Прочее',value:90},
+        {source:'Соцсети',target:'ЖКХ',value:180},
+        {source:'Соцсети',target:'Прочее',value:100},
+        {source:'ЖКХ',target:'Высокий',value:290},
+        {source:'ЖКХ',target:'Средний',value:300},
+        {source:'ЖКХ',target:'Низкий',value:180},
+        {source:'Инфраструктура',target:'Высокий',value:160},
+        {source:'Инфраструктура',target:'Средний',value:190},
+        {source:'Прочее',target:'Низкий',value:190}
+      ]
+    });
+
+    // Точечный: каждая точка — регион. Тренд включён вручную — он показывает
+    // направление связи и ничего не доказывает.
+    var WEAR = [];
+    (function () {
+      var seed = 7;
+      for (var i = 0; i < 89; i++) {
+        seed = (seed * 1103515245 + 12345) % 2147483648;
+        var wear = 28 + (seed % 5200) / 100;
+        seed = (seed * 1103515245 + 12345) % 2147483648;
+        var noise = (seed % 1400) / 100 - 7;
+        WEAR.push([Math.round(wear * 10) / 10, Math.round((wear * 0.42 - 6 + noise) * 10) / 10]);
+      }
+    })();
+
+    dkChart(document.getElementById('ch-scatter'), {
+      type: 'scatter', trend: true,
+      xName: 'износ сетей, %', yName: 'аварий на 100 км',
+      series: [{ name: 'Регионы', data: WEAR }]
+    });
+
+    dkChart(document.getElementById('ch-forecast'), {
+      type: 'line',
+      categories: days.concat(['23.09', '24.09', '25.09']),
+      series: [{ name: 'Аварии', data: [12,19,7,14,22,18,11,16,9,13,21,17,10,23,25,27,24], forecast: 3 }]
+    });
+
+    dkChart(document.getElementById('ch-step'), {
+      type: 'step',
+      categories: ['00:00','04:00','08:00','12:00','16:00','20:00','24:00'],
+      unit: '°C',
+      series: [{ name: 'Уставка', data: [70, 70, 85, 85, 80, 95, 95] }]
+    });
+
+    dkChart(document.getElementById('ch-ok'), {
+      type: 'area', categories: days,
+      series: [{ name: 'Материалы', data: [120,138,96,155,171,142,180,164,150,172,190,175,160,148] }]
+    });
+
+    var OKR = [
+      { name: 'ЮФО', data: [41,44,43,48,52,55,58,61,59,63,68,71,69,72] },
+      { name: 'ЦФО', data: [33,32,34,33,35,34,33,35,34,33,35,34,36,35] },
+      { name: 'СФО', data: [28,29,27,30,28,29,31,29,28,30,29,31,30,29] },
+      { name: 'ПФО', data: [24,25,23,26,24,25,24,26,25,24,26,25,24,26] }
+    ];
+    dkChart(document.getElementById('ch-flat'), { type: 'line', categories: days, series: OKR });
+    dkChart(document.getElementById('ch-emph'), {
+      type: 'line', categories: days,
+      series: JSON.parse(JSON.stringify(OKR)),
+      highlight: 'ЮФО'
+    });
+
+    // Девять секторов — обёртка свернёт лишние сама.
+    dkChart(document.getElementById('ch-fold'), {
+      type: 'donut', total: '1 000',
+      data: [
+        { name: 'ЦФО', value: 220 }, { name: 'ПФО', value: 180 },
+        { name: 'СФО', value: 150 }, { name: 'ЮФО', value: 120 },
+        { name: 'СЗФО', value: 110 }, { name: 'УФО', value: 90 },
+        { name: 'ДФО', value: 70 }, { name: 'СКФО', value: 40 },
+        { name: 'Прочие', value: 20 }
+      ]
+    });
+  });
+
+  // ---- Размер виджета ----------------------------------------------------
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkChart !== 'function') return;
+
+    var days = ['09.09','10.09','11.09','12.09','13.09','14.09','15.09',
+                '16.09','17.09','18.09','19.09','20.09','21.09','22.09'];
+
+    var spark = {
+      'sp-1': [12, 14, 11, 16, 15, 19, 17, 21, 18, 22, 20, 24, 21, 23],
+      'sp-2': [1410, 1388, 1402, 1350, 1361, 1329, 1344, 1312, 1330, 1298, 1305, 1288, 1296, 1284],
+      'sp-3': [38, 41, 39, 44, 42, 46, 43, 47, 44, 45, 43, 44, 41, 42]
+    };
+
+    Object.keys(spark).forEach(function (id) {
+      dkChart(document.getElementById(id), {
+        type: 'spark', categories: days,
+        series: [{ name: 'Значение', data: spark[id] }]
+      });
+    });
+
+    dkChart(document.getElementById('sz-line'), {
+      type: 'line', categories: days,
+      series: [{ name: 'Аварии', data: spark['sp-1'] }]
+    });
+
+    // Две серии одного порядка — иначе меньшая ляжет в пол и график соврёт
+    // не цифрами, а тем, что в нём нечего смотреть.
+    dkChart(document.getElementById('sz-full'), {
+      type: 'line', categories: days,
+      series: [
+        { name: 'Заявлено', data: spark['sp-1'] },
+        { name: 'Устранено', data: [10, 12, 10, 13, 14, 16, 15, 18, 17, 19, 18, 21, 20, 22] }
+      ]
+    });
+  });
+
+  // ---- Календарь ---------------------------------------------------------
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkCalendar !== 'function') return;
+    dkCalendar(document.getElementById('sc-cal'), {
+      month: '2026-09-01',
+      events: [
+        { date: '2026-09-05', name: 'Замена задвижки', kind: 'high' },
+        { date: '2026-09-09', name: 'Плановое отключение ГВС', kind: 'plan' },
+        { date: '2026-09-14', name: 'Прорыв, Советский р-н', kind: 'crit' },
+        { date: '2026-09-14', name: 'Аварийная бригада', kind: 'high' },
+        { date: '2026-09-14', name: 'Подвоз воды', kind: 'event' },
+        { date: '2026-09-14', name: 'Информирование жителей', kind: 'event' },
+        { date: '2026-09-17', name: 'Подача восстановлена', kind: 'calm' },
+        { date: '2026-09-23', name: 'Прорыв теплотрассы', kind: 'crit' },
+        { date: '2026-09-28', name: 'Проверка готовности к зиме', kind: 'event' }
+      ]
+    });
+  });
+
+  // ---- Пагинация ---------------------------------------------------------
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkPager !== 'function') return;
+    dkPager(document.getElementById('sc-pager'), {
+      total: 89, size: 20, page: 3, sizes: [10, 20, 50],
+      noun: ['регион', 'региона', 'регионов'],
+      onChange: function () {}
+    });
+  });
+
+  // ---- Типы ячеек --------------------------------------------------------
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkTable !== 'function') return;
+    var box = document.getElementById('sc-picked');
+    dkTable(document.getElementById('sc-cells'), {
+      onSelect: function (ids) {
+        // Правило: выбрано видно числом, а не только заливкой строк.
+        box.innerHTML = ids.length
+          ? '<span class="dk-chipbar__label">Выбрано ' + ids.length + '</span>' +
+            '<button class="dk-btn dk-btn--sm">Назначить бригаду</button>' +
+            '<button class="dk-btn dk-btn--ghost dk-btn--sm">Снять выбор</button>'
+          : '<span class="dk-chipbar__label">Ничего не выбрано — действия появятся здесь</span>';
+      }
+    });
+  });
+
+  // ---- Формы -------------------------------------------------------------
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkForm !== 'function') return;
+    var form = document.getElementById('sc-form');
+    var out = document.getElementById('sc-form-out');
+
+    var api = dkForm(form, {
+      // Своя проверка поверх браузерной: окончание не может быть раньше начала.
+      // Браузер про связь двух полей не знает — это знает предметная область.
+      check: function (el) {
+        if (el.id !== 'f-till' || !el.value) return null;
+        var from = document.getElementById('f-from').value;
+        return (from && el.value < from) ? 'Окончание раньше начала — проверьте даты' : null;
+      },
+      onSubmit: function (data) {
+        var kind = { plan: 'плановое отключение', high: 'работа с ограничением',
+                     crit: 'авария', event: 'проверка' }[data.get('kind')];
+        // Это витрина, и её копируют как образец. Набранное в поле «Название»
+        // обязано вернуться на экран текстом, а не разметкой.
+        out.innerHTML = '<b>Добавлено:</b> ' + dkEsc(data.get('name')) + ' — ' + dkEsc(kind) +
+          (data.get('people') ? ', жителей ' + dkEsc(data.get('people')) : '');
+      }
+    });
+
+    document.getElementById('sc-form-reset').addEventListener('click', function () {
+      form.reset(); api.clear(); out.textContent = '';
+    });
+  });
+
+  // ---- Регионы -----------------------------------------------------------
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkMap !== 'function') return;
+    Promise.all([
+      fetch('data/regions.topojson').then(function (r) { return r.json(); }),
+      fetch('data/regions-tiles.json').then(function (r) { return r.json(); })
+    ]).then(function (res) {
+      var values = {}, seed = 11;
+      res[1].tiles.forEach(function (t) {
+        seed = (seed * 1103515245 + 12345) % 2147483648;
+        values[t.id] = 28 + seed % 68;
+      });
+      dkMap(document.getElementById('sc-map'), {
+        topo: res[0], object: 'ru89', tiles: res[1], values: values, unit: 'баллов риска'
+      });
+    }).catch(function () {
+      document.getElementById('sc-map').innerHTML =
+        '<div class="dk-error"><div class="dk-error__title">Контуры не загрузились</div>' +
+        '<div>Откройте витрину по http, а не двойным кликом.</div></div>';
+    });
+  });
+
+  // ---- Состояние страницы ------------------------------------------------
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof dkToast === 'function') {
+      document.querySelectorAll('[data-toast]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var k = b.dataset.toast;
+          if (k === 'undo') {
+            dkToast('Срез сброшен к настройкам по умолчанию', {
+              action: { name: 'Отменить', onClick: function () { dkToast('Срез возвращён'); } }
+            });
+          } else if (k === 'crit') {
+            dkToast('Не удалось сохранить срез — попробуйте ещё раз', { kind: 'crit' });
+          } else {
+            dkToast('Работа добавлена в календарь');
+          }
+        });
+      });
+    }
+
+    if (typeof dkUptime === 'function') {
+      // 48 делений по полчаса — сутки.
+      function strip(downAt) {
+        var out = [];
+        for (var i = 0; i < 48; i++) {
+          out.push(downAt.indexOf(i) >= 0 ? 'down' : (i > 45 ? 'none' : 'up'));
+        }
+        return out;
+      }
+      dkUptime(document.getElementById('sc-uptime'), {
+        step: '30 минут',
+        labels: ['24 ч назад', 'сейчас'],
+        rows: [
+          { name: 'Приём заявок', data: strip([]) },
+          { name: 'Телеметрия сетей', data: strip([14, 15]) },
+          { name: 'Рассылка жителям', data: strip([31, 32, 33, 34, 35, 36, 37]) }
+        ]
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

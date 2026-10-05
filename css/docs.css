@@ -1,0 +1,197 @@
+/* ============================================================================
+   dashboard-kit · docs.css
+   Стили страниц документации: витрины и страниц компонентов. В дашборды не
+   идут. Лежат в css/, а не внутри страницы, по двум причинам: страниц
+   документации стало больше одной, и слой css/ проверяется всеми двадцатью
+   проверками — стили внутри страницы проверялись только частью.
+   ============================================================================ */
+
+  /* Стили самой витрины — в дашборды не идут.
+
+     КАРКАС ВИТРИНЫ. Двадцать четыре раздела на двадцать пять тысяч пикселей
+     без оглавления: найти «Таблицу» можно было только прокруткой. Заголовок
+     раздела стоял кеглем 16 при тексте 14 — разница в 1.14 раза, иерархии
+     не видно. Все пояснения были одинаковыми синими плашками, то есть акцент
+     работал там, где кит от него отказался. Отсюда: шапка, оглавление слева,
+     номер и группа над заголовком, заголовок 28 и нейтральные пояснения. */
+  .sc-bar{ position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:var(--space-8);
+    height:56px; padding:0 var(--page-pad);
+    background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(10px); }
+  .sc-brand{ display:flex; align-items:center; gap:var(--space-5); margin-right:auto; min-width:0;
+    color:var(--ink); text-decoration:none; }
+  /* Знак продукта — одно из мест, где акцент законен: это подпись, не управление. */
+  .sc-brand__mark{ width:28px; height:28px; flex:none; border-radius:var(--radius-md);
+    display:grid; place-items:center; background:var(--brand); color:var(--brand-ink); }
+  .sc-brand__t{ font:var(--type-body-bold); letter-spacing:var(--type-h2-track); }
+  .sc-brand__s{ font:var(--type-caption); color:var(--ink-3); white-space:nowrap; }
+  .sc-ctl{ display:flex; align-items:center; gap:var(--space-4); }
+  .sc-ctl__l{ font:var(--type-caption); color:var(--ink-3); }
+  @media (max-width:640px){ .sc-brand__s, .sc-ctl__l{ display:none; } }
+
+  .sc-shell{ display:grid; grid-template-columns:232px minmax(0,1fr); gap:var(--space-9);
+    max-width:1440px; margin:0 auto; padding:0 var(--page-pad); }
+  .sc-shell > .dk-wrap{ max-width:none; margin:0; padding:0 0 calc(var(--space-9) * 2); min-width:0; }
+
+  /* Оглавление собирается скриптом из заголовков разделов: список, написанный
+     руками, разошёлся бы со страницей при первом же новом разделе. */
+  .sc-nav{ position:sticky; top:56px; align-self:start; max-height:calc(100vh - 56px);
+    overflow:auto; padding:var(--space-8) 0 var(--space-9); }
+  .sc-nav__g{ font:var(--type-overline); letter-spacing:var(--type-overline-track); text-transform:uppercase;
+    color:var(--ink-3); margin:var(--space-8) 0 var(--space-3); padding:0 var(--space-5); }
+  .sc-nav__g:first-child{ margin-top:0; }
+  .sc-nav a{ display:block; padding:var(--space-3) var(--space-5); border-radius:var(--radius-sm);
+    font:var(--type-body); color:var(--ink-2); text-decoration:none; }
+  @media (hover: hover) and (pointer: fine) {
+    .sc-nav a:hover{ color:var(--ink); background:var(--surface-2); }
+  }
+  /* Текущий раздел — серым, как любое выбранное управление (третий принцип). */
+  .sc-nav a[aria-current="true"]{ color:var(--ink); background:var(--control-soft); font-weight:var(--weight-ui-strong); }
+  .sc-nav a:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:-2px; }
+
+  /* Уже 1200 для оглавления сбоку нет места: оно становится строкой под
+     шапкой, которая листается вбок. Группы в строке не подписаны — там их
+     всё равно не прочесть. */
+  @media (max-width:1199px){
+    .sc-shell{ grid-template-columns:minmax(0,1fr); gap:0; }
+    .sc-nav{ top:56px; z-index:30; max-height:none; display:flex; gap:var(--space-2); overflow-x:auto;
+      padding:var(--space-4) 0; margin:0 calc(var(--page-pad) * -1); padding-inline:var(--page-pad);
+      background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(10px); }
+    .sc-nav__g{ display:none; }
+    .sc-nav a{ flex:none; white-space:nowrap; }
+    /* Полоса прокрутки под строкой читалась как черта-разделитель, которых
+       у кита нет. Что строка листается, и так видно по пункту, обрезанному
+       у края. */
+    .sc-nav{ scrollbar-width:none; }
+    .sc-nav::-webkit-scrollbar{ display:none; }
+  }
+
+  .sc-hero{ padding:calc(var(--space-9) * 2) 0 var(--space-9); max-width:780px; }
+  .sc-hero__o{ font:var(--type-overline); letter-spacing:var(--type-overline-track); text-transform:uppercase;
+    color:var(--ink-3); margin:0 0 var(--space-5); }
+  .sc-hero h1{ font:var(--type-display); letter-spacing:var(--type-display-track); margin:0 0 var(--space-6); }
+  .sc-hero__lead{ font:var(--type-body-lg); color:var(--ink-2); margin:0 0 var(--space-9); max-width:64ch; }
+  .sc-facts{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:var(--space-5); }
+  .sc-facts div{ background:var(--surface); box-shadow:var(--elev-widget); border-radius:var(--radius-lg);
+    padding:var(--space-7); }
+  .sc-facts b{ display:block; font:var(--type-metric-lg); letter-spacing:var(--type-metric-lg-track);
+    font-variant-numeric:tabular-nums; }
+  .sc-facts span{ font:var(--type-caption); color:var(--ink-3); }
+  @media (max-width:760px){ .sc-facts{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  .sc-sec{ padding:calc(var(--space-9) * 2) 0 0; scroll-margin-top:var(--space-9); }
+  .sc-sec:first-of-type{ padding-top:var(--space-9); }
+  .sc-eyebrow{ font:var(--type-overline); letter-spacing:var(--type-overline-track); text-transform:uppercase;
+    color:var(--ink-3); margin:0 0 var(--space-4); font-variant-numeric:tabular-nums; }
+  .sc-sec h2{ font:var(--type-h1); letter-spacing:var(--type-h1-track); margin:0 0 var(--space-5);
+    display:flex; align-items:baseline; gap:var(--space-5); }
+  /* Ссылка на раздел: видна при наведении и с клавиатуры, чтобы прислать
+     коллеге «вот тут» без пересказа, где искать. */
+  .sc-anchor{ font:var(--type-h3); color:var(--ink-3); text-decoration:none; opacity:0; }
+  .sc-anchor:focus-visible{ opacity:1; }
+  @media (hover: hover) and (pointer: fine) {
+    .sc-sec h2:hover .sc-anchor{ opacity:1; }
+  }
+  /* У пальца наведения нет, и ссылка на раздел на таче не видна бы никогда. */
+  @media (hover: none) { .sc-anchor{ opacity:1; } }
+  .sc-anchor:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset);
+    border-radius:var(--radius-xs); }
+  .sc-sec > p:first-of-type{ font:var(--type-body-lg); }
+  .sc-sec p{ color:var(--ink-2); font-size:var(--text-body); margin:0 0 var(--space-8); max-width:68ch; }
+  .sc-row{ display:flex; flex-wrap:wrap; gap:var(--space-5); align-items:center; margin-bottom:var(--space-6); }
+  .sc-sw{ display:grid; grid-template-columns:repeat(auto-fill,minmax(152px,1fr)); gap:var(--space-5);
+    margin-bottom:var(--space-8); }
+  .sc-sw div{ border-radius:var(--radius-lg); background:var(--surface); box-shadow:var(--elev-widget);
+    padding:var(--space-4); }
+  /* Контур у образца цвета — единственный контур витрины, и он оправдан:
+     образец цвета поверхности, стоящий на поверхности, без него не виден —
+     а показан он ровно для того, чтобы его увидеть. Так и было с --bg. */
+  .sc-sw i{ display:block; height:56px; border-radius:var(--radius-md);
+    box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--ink) 12%, transparent); }
+  .sc-sw span{ display:block; padding:var(--space-5) var(--space-2) 0;
+    font:var(--type-caption); color:var(--ink); font-family:var(--font-mono); }
+  .sc-sw small{ display:block; padding:var(--space-1) var(--space-2) var(--space-2);
+    font:var(--type-caption); color:var(--ink-3); font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+  /* Пояснение — нейтральная поверхность виджета, а не синяя плашка: акцент
+     кит оставил кнопке, фокусу и ссылкам. Первая фраза — заголовок. */
+  .sc-note{ background:var(--surface); box-shadow:var(--elev-widget); border-radius:var(--radius-lg);
+    padding:var(--space-7) var(--space-8); color:var(--ink-2); font-size:var(--text-body);
+    margin:var(--space-6) 0; max-width:76ch; }
+  .sc-note b{ color:var(--ink); }
+  .sc-note > b:first-child{ display:block; font:var(--type-body-bold); margin-bottom:var(--space-3); }
+  .sc-principles{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:var(--space-5);
+    counter-reset:sc-p; }
+  .sc-principles .sc-note{ margin:0; max-width:none; counter-increment:sc-p; }
+  .sc-principles .sc-note::before{ content:"0" counter(sc-p); display:block; font:var(--type-metric);
+    color:var(--ink-3); margin-bottom:var(--space-6); font-variant-numeric:tabular-nums; }
+  @media (max-width:1100px){ .sc-principles{ grid-template-columns:minmax(0,1fr); } }
+  .sc-icons{ display:grid; grid-template-columns:repeat(auto-fill,minmax(112px,1fr)); gap:var(--space-4); }
+  .sc-icons figure{ display:flex; flex-direction:column; align-items:center; gap:var(--space-3);
+    margin:0; padding:var(--space-6) var(--space-3); border-radius:var(--radius-md);
+    background:var(--surface-2); font-size:var(--text-title); color:var(--ink); }
+  .sc-icons figcaption{ font-size:var(--text-caption); font-family:var(--font-mono);
+    color:var(--ink-3); text-align:center; word-break:break-all; }
+  .sc-scale{ display:flex; flex-direction:column; gap:var(--space-4); }
+  .sc-scale__row{ display:flex; align-items:center; gap:var(--space-6); }
+  .sc-scale__row code{ font:var(--type-code); color:var(--ink-3); width:96px; flex:none; }
+  .sc-scale__row i{ display:block; height:20px; background:var(--control-on); border-radius:var(--radius-xs); flex:none; }
+  .sc-scale__row span{ font:var(--type-caption); color:var(--ink-2); font-variant-numeric:tabular-nums; }
+  .sc-gap{ display:flex; align-items:center; gap:var(--space-6); flex-wrap:wrap; }
+  .sc-gap b{ font:var(--type-code); color:var(--ink); width:128px; flex:none; }
+  .sc-gap em{ font:var(--type-caption); font-style:normal; color:var(--ink-3); width:24px; flex:none;
+    font-variant-numeric:tabular-nums; }
+  .sc-gap__demo{ display:inline-flex; flex:none; }
+  .sc-gap__demo i{ display:block; width:28px; height:28px; background:var(--surface-3); border-radius:var(--radius-xs); }
+  .sc-gap small{ font:var(--type-caption); color:var(--ink-2); }
+  .sc-flat{ display:flex; flex-direction:column; gap:var(--gap-inline); }
+  .sc-anatomy .dk-well{ padding:var(--gap-inline) var(--gap-group); }
+  .sc-cell{ text-align:center; font:var(--type-caption); color:var(--ink-2); }
+  .sc-types{ display:flex; flex-direction:column; gap:var(--space-7); }
+  .sc-type{ display:grid; grid-template-columns:190px minmax(0,1fr); gap:var(--space-7); align-items:baseline; }
+  .sc-type__meta{ display:flex; flex-direction:column; gap:var(--space-1); }
+  .sc-type__meta b{ font:var(--type-body-bold); }
+  .sc-type__meta span{ font:var(--type-code); color:var(--ink-3); }
+  .sc-type__meta em{ font:var(--type-caption); color:var(--ink-2); font-style:normal; }
+  @media (max-width:760px){ .sc-type{ grid-template-columns:minmax(0,1fr); gap:var(--space-3); } }
+  .sc-stack{ display:flex; flex-direction:column; gap:var(--space-5); }
+
+/* --- Страница компонента ------------------------------------------------- */
+.sc-hero--component{ padding-top:var(--space-9); }
+.sc-meta{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-5) var(--space-7); }
+.sc-meta__i{ font:var(--type-caption); color:var(--ink-3); }
+.sc-meta__i code, .sc-list code, .sc-api code, .sc-sec p code{ font:var(--type-code); font-size:var(--text-caption); color:var(--ink-2);
+  background:var(--surface-2); padding:0 var(--space-2); border-radius:var(--radius-xs); }
+.sc-cols{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:var(--space-5); }
+.sc-cols .sc-note{ margin:0; max-width:none; }
+@media (max-width:900px){ .sc-cols{ grid-template-columns:minmax(0,1fr); } }
+.sc-list{ margin:0; padding-left:var(--space-7); display:flex; flex-direction:column; gap:var(--space-3); }
+.sc-list--wide{ max-width:76ch; color:var(--ink-2); }
+.sc-list a{ color:var(--link); }
+/* «Так / не так» — цвет смысла на заголовке карточки, не на всей карточке:
+   заливка целиком красным читалась бы как тревога, а это пример. */
+.sc-note--ok > b:first-child{ color:var(--calm-ink); }
+.sc-note--bad > b:first-child{ color:var(--crit-ink); }
+.sc-anatomy{ position:relative; margin-bottom:var(--space-7); }
+.sc-anatomy__list{ margin:0; padding-left:var(--space-7); display:flex; flex-direction:column; gap:var(--space-3);
+  max-width:76ch; color:var(--ink-2); }
+.sc-anatomy__list b{ color:var(--ink); }
+/* Номер на схеме — серый кружок, как выбранное управление: это указатель,
+   а не данные и не тревога. */
+.sc-callout{ display:inline-grid; place-items:center; width:18px; height:18px; margin-right:var(--space-3);
+  border-radius:var(--radius-full); background:var(--control-on); color:var(--control-on-ink);
+  font:var(--type-caption); font-weight:var(--weight-ui-strong); vertical-align:middle; text-transform:none;
+  letter-spacing:normal; }
+.sc-tokens{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:var(--space-3); }
+.sc-tokens li{ display:flex; align-items:center; gap:var(--space-4); padding:var(--space-4) var(--space-5); min-width:0;
+  background:var(--surface); box-shadow:var(--elev-widget); border-radius:var(--radius-md); font:var(--type-code); font-size:var(--text-caption); }
+/* Имя не переносится, длинное значение (стек шрифтов) обрезается многоточием:
+   иначе карточка --font-num растягивалась на три строки и ломала ряд. */
+.sc-tokens b{ white-space:nowrap; flex:none; }
+.sc-tokens small{ overflow:hidden; text-overflow:ellipsis; min-width:0; }
+.sc-tokens i{ width:16px; height:16px; flex:none; border-radius:var(--radius-xs);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--ink) 12%, transparent); }
+.sc-tokens b{ color:var(--ink); font:var(--type-code); font-size:var(--text-caption); }
+.sc-tokens small{ color:var(--ink-3); margin-left:auto; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.sc-tokens__wait{ color:var(--ink-3); }
+.sc-code{ margin:0 0 var(--space-7); padding:var(--space-7) var(--space-8); background:var(--surface); box-shadow:var(--elev-widget);
+  border-radius:var(--radius-lg); font:var(--type-code); font-size:var(--text-caption); color:var(--ink-2);
+  overflow:auto; max-width:100%; }
+.sc-api td{ vertical-align:top; }

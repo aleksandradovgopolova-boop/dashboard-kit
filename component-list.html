@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Список, полосы, раскрытие · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p3_data.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell">
+<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Данные</p>
+    <h1>Список, полосы, раскрытие</h1>
+    <p class="sc-hero__lead">Три способа показать ряд объектов без таблицы: список событий со значком и значением, полосы «доля от самого крупного», раскрывающийся блок с итогом в заголовке.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
+      <span class="sc-meta__i">Figma: нет</span>
+      <span class="sc-meta__i">код: <code>css/components.css</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Список последних событий, полосы по видам обращений, свёрнутые подробности.</p><div class="dk-grid">
+      <div class="dk-col--half"><div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Последние события</h3></div><div class="dk-list">
+        <button class="dk-list__row" style="--accent:var(--crit-ink)"><span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-list__text"><span class="dk-list__name">Прорыв теплотрассы</span><span class="dk-list__sub">Новосибирск · 14:20</span></span><span class="dk-list__v" style="--accent:var(--crit-ink)">1 240 чел.</span></button>
+        <button class="dk-list__row" style="--accent:var(--high-ink)"><span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span><span class="dk-list__text"><span class="dk-list__name">Отключение электроснабжения</span><span class="dk-list__sub">Ростовская область · 12:05</span></span><span class="dk-list__v" style="--accent:var(--high-ink)">380 чел.</span></button>
+        <button class="dk-list__row" style="--accent:var(--calm-ink)"><span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg></span><span class="dk-list__text"><span class="dk-list__name">Подача восстановлена</span><span class="dk-list__sub">Крым · 09:48</span></span><span class="dk-list__v" style="--accent:var(--calm-ink)">—</span></button>
+        <button class="dk-list__more">Показать все <svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button></div></div></div>
+      <div class="dk-col--half"><div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Кто больше жжёт</h3><span class="dk-widget__hint" title="Полоса — доля от самого крупного в списке"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span></div><div class="dk-bars">
+        <div class="dk-bar" style="--accent:var(--crit-ink)"><div class="dk-bar__head"><span class="dk-bar__name">Отопление</span><span class="dk-bar__v">520</span></div><div class="dk-bar__track"><div class="dk-bar__fill" style="width:100%"></div></div><div class="dk-bar__meta">41% обращений · 1 240 жителей</div></div>
+        <div class="dk-bar" style="--accent:var(--high-ink)"><div class="dk-bar__head"><span class="dk-bar__name">Водоснабжение</span><span class="dk-bar__v">344</span></div><div class="dk-bar__track"><div class="dk-bar__fill" style="width:66%"></div></div><div class="dk-bar__meta">27% обращений · 860 жителей</div></div>
+        <div class="dk-bar"><div class="dk-bar__head"><span class="dk-bar__name">Электроснабжение</span><span class="dk-bar__v">228</span></div><div class="dk-bar__track"><div class="dk-bar__fill" style="width:44%"></div></div><div class="dk-bar__meta">18% обращений · 410 жителей</div></div></div>
+        <details class="dk-fold" style="margin-top:var(--space-6)"><summary class="dk-fold__head"><span class="dk-fold__title">Вспомогательные серверы</span><span class="dk-fold__sum">серверы 4/4 · туннели 3/3</span><svg class="dk-i dk-i--sm"><use href="#ti-chevron-down"/></svg></summary><div class="dk-fold__body"><div class="dk-row"><span class="dk-row__label">Королёв</span><span class="dk-row__value">работает</span></div><div class="dk-row"><span class="dk-row__label">Франкфурт</span><span class="dk-row__value">работает</span></div></div></details></div></div>
+    </div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Список: лента событий с одним значением на строку, где важны время и вид.</li><li>Полосы: доля от самого крупного в списке из трёх–семи категорий.</li><li>Раскрытие: подробности, без которых можно понять итог, — и итог стоит в заголовке.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Несколько показателей на строку — <a href="component-table.html">Таблица</a>.</li><li>Доля от целого — <a href="component-chart.html">пончик</a>: полосы показывают долю от максимума, а не от суммы.</li><li>Ранжирование по одному числу — <a href="component-rank.html">Рейтинг</a>.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-grid"><div class="dk-col--half"><div class="dk-list">
+      <button class="dk-list__row" style="--accent:var(--crit-ink)"><span class="dk-list__icon"><b class="sc-callout">1</b><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-list__text"><span class="dk-list__name"><b class="sc-callout">2</b>Прорыв теплотрассы</span><span class="dk-list__sub"><b class="sc-callout">3</b>Новосибирск · 14:20</span></span><span class="dk-list__v" style="--accent:var(--crit-ink)"><b class="sc-callout">4</b>1 240 чел.</span></button>
+      <button class="dk-list__more"><b class="sc-callout">5</b>Показать все <svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button></div></div>
+      <div class="dk-col--half"><div class="dk-bar" style="--accent:var(--high-ink)"><div class="dk-bar__head"><span class="dk-bar__name"><b class="sc-callout">6</b>Водоснабжение</span><span class="dk-bar__v"><b class="sc-callout">7</b>344</span></div><div class="dk-bar__track"><b class="sc-callout">8</b><div class="dk-bar__fill" style="width:66%"></div></div><div class="dk-bar__meta"><b class="sc-callout">9</b>27% обращений · 860 жителей</div></div></div></div></div><ol class="sc-anatomy__list"><li><b>Значок</b> — вид события; тон через <code>--accent</code>.</li><li><b>Название</b> — что случилось.</li><li><b>Подстрока</b> — где и когда.</li><li><b>Значение</b> — чем измеряется: жителей, минут; прочерк, если нечем.</li><li><b>«Показать все»</b> — <code>dk-list__more</code>: лента показывает верх, остальное по кнопке.</li><li><b>Название полосы</b> — категория.</li><li><b>Значение полосы</b> — число табличными цифрами — полоса «примерно», число «сколько».</li><li><b>Полоса</b> — ширина — доля от самого крупного в списке; заливка через <code>--accent</code>.</li><li><b>Пояснение</b> — <code>dk-bar__meta</code>: доля и что за ней стоит.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Размеры одни: строка списка 56 px, полоса 8 px. Список — в M-виджете, полосы — в M и L.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-list / dk-list__row</code></td><td>Лента событий; строка — кнопка.</td><td>Верх ленты с «Показать все».</td></tr><tr><td><code>dk-bars / dk-bar</code></td><td>Полосы от максимума.</td><td>Три–семь категорий.</td></tr><tr><td><code>dk-fold</code></td><td>Раскрывающийся блок на <code>&lt;details&gt;</code>.</td><td>Подробности с итогом в заголовке.</td></tr><tr><td><code>dk-row</code></td><td>Строка «подпись — значение».</td><td>Внутри раскрытия и в коротких сводках.</td></tr><tr><td><code>--accent</code></td><td>Тон значка, значения, полосы.</td><td>Смысл, не украшение.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <div class="dk-grid--even">
+      <div class="dk-panel"><div class="dk-overline" style="margin-bottom:var(--space-5)">Пустая лента</div><div class="dk-empty"><div class="dk-empty__t">Событий за сутки нет</div><div>Ни одной записи в журнале.</div></div></div>
+      <div class="dk-panel"><div class="dk-overline" style="margin-bottom:var(--space-5)">Полоса с нулём</div><div class="dk-bars"><div class="dk-bar"><div class="dk-bar__head"><span class="dk-bar__name">Газоснабжение</span><span class="dk-bar__v">0</span></div><div class="dk-bar__track"><div class="dk-bar__fill" style="width:0%"></div></div><div class="dk-bar__meta">0% обращений</div></div></div></div>
+      <div class="dk-panel"><div class="dk-overline" style="margin-bottom:var(--space-5)">Раскрыто</div><details class="dk-fold" open><summary class="dk-fold__head"><span class="dk-fold__title">Серверы</span><span class="dk-fold__sum">3/4</span><svg class="dk-i dk-i--sm"><use href="#ti-chevron-down"/></svg></summary><div class="dk-fold__body"><div class="dk-row"><span class="dk-row__label">Королёв</span><span class="dk-row__value" style="--accent:var(--crit-ink)">не отвечает</span></div></div></details></div>
+    </div>
+    <div class="sc-note"><b>Нулевая полоса остаётся с числом.</b> Пустая дорожка без «0» читалась бы как отсутствие данных.</div>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Подстрока «где · когда» через точку-разделитель.</li><li>Значение с единицей: «1 240 чел.», «—», если измерить нечем.</li><li>Итог в заголовке раскрытия: «серверы 4/4».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Лента на сорок строк без «Показать все».</li><li>Полосы без чисел.</li><li>Свёрнуто то, без чего не понять, — это сокрытие, а не сворачивание.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li><b>Строки списка — кнопки</b>: Tab, Enter; фокус виден.</li><li><b>Раскрытие</b> — настоящий <code>&lt;details&gt;</code>: клавиатура и скринридер бесплатно.</li><li><b>Полосы</b> — число рядом читается; полоса декоративна.</li><li><b>Контраст.</b> Подстрока <code>--ink-3</code> на поверхности — не ниже 4,07:1.</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-list,dk-bars,dk-bar,dk-fold,dk-row"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p>Только разметка. «Показать все» — событие страницы.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-list&quot;&gt;
+  &lt;button class=&quot;dk-list__row&quot; style=&quot;--accent:var(--crit-ink)&quot; data-id=&quot;4821&quot;&gt;
+    &lt;span class=&quot;dk-list__icon&quot;&gt;&lt;svg class=&quot;dk-i dk-i--sm&quot;&gt;&lt;use href=&quot;#ti-alert-triangle&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class=&quot;dk-list__text&quot;&gt;
+      &lt;span class=&quot;dk-list__name&quot;&gt;Прорыв теплотрассы&lt;/span&gt;
+      &lt;span class=&quot;dk-list__sub&quot;&gt;Новосибирск · 14:20&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;span class=&quot;dk-list__v&quot; style=&quot;--accent:var(--crit-ink)&quot;&gt;1 240 чел.&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;button class=&quot;dk-list__more&quot;&gt;Показать все&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;dk-bar&quot; style=&quot;--accent:var(--high-ink)&quot;&gt;
+  &lt;div class=&quot;dk-bar__head&quot;&gt;&lt;span class=&quot;dk-bar__name&quot;&gt;Водоснабжение&lt;/span&gt;&lt;span class=&quot;dk-bar__v&quot;&gt;344&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;dk-bar__track&quot;&gt;&lt;div class=&quot;dk-bar__fill&quot; style=&quot;width:66%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;dk-bar__meta&quot;&gt;27% обращений&lt;/div&gt;
+&lt;/div&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--accent</code></td><td>переменная в style</td><td>Тон строки или полосы.</td></tr><tr><td><code>dk-list__more</code></td><td>кнопка</td><td>Показать остальное; страница решает как.</td></tr><tr><td><code>dk-bar__fill style=width</code></td><td>проценты от максимума</td><td>Считает страница: max = 100%.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-rank.html">Рейтинг</a> — ранжирование по числу</li><li><a href="component-table.html">Таблица</a> — когда показателей несколько</li><li><a href="component-uptime.html">Доступность служб</a> — полоса другого рода — во времени</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
+  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
+  });
+  mark(root.getAttribute('data-theme'));
+
+})();
+</script>
+</body>
+</html>

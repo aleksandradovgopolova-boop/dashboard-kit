@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>dashboard-kit · аварии</title>
+<!-- Тема — первым и без defer: атрибут обязан стоять до первой отрисовки. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/chrome.css">
+
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="vendor/echarts.min.js" defer></script>
+<script src="js/dk-chart-theme.js" defer></script>
+<script src="js/dk-charts.js" defer></script>
+<script src="js/dk-select.js" defer></script>
+<script src="vendor/air-datepicker.js" defer></script>
+<script src="js/dk-period.js" defer></script>
+<script src="js/dk-chrome.js" defer></script>
+<script src="js/dk-modal.js" defer></script>
+<script src="js/dk-pager.js" defer></script>
+<script src="js/dk-table.js" defer></script>
+<script src="js/dk-notify.js" defer></script>
+</head>
+
+<body class="dk-page">
+<a class="dk-skip" href="#main">К содержимому</a>
+
+<div class="dk-app" data-nav="closed">
+
+  <aside class="dk-side">
+    <div class="dk-side__head">
+      <span class="dk-side__mark"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+      <span class="dk-side__name">Мониторинг</span>
+      <button class="dk-iconbtn dk-iconbtn--sm" data-act="fold" aria-pressed="false" title="Свернуть меню" aria-label="Свернуть меню">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg>
+      </button>
+    </div>
+
+    <nav class="dk-side__nav" aria-label="Разделы">
+      <div class="dk-side__group">Обзор</div>
+      <a class="dk-side__item" href="dashboard.html">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg>
+        <span class="dk-side__label">Сводка</span>
+      </a>
+      <a class="dk-side__item" href="regions.html">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-map"/></svg>
+        <span class="dk-side__label">Регионы</span>
+      </a>
+      <a class="dk-side__item" href="#" aria-current="page">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg>
+        <span class="dk-side__label">Аварии</span>
+        <span class="dk-side__n">23</span>
+      </a>
+
+      <div class="dk-side__group">Работа</div>
+      <a class="dk-side__item" href="#">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg>
+        <span class="dk-side__label">Заявки</span>
+        <span class="dk-side__n">7</span>
+      </a>
+      <a class="dk-side__item" href="#">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-user"/></svg>
+        <span class="dk-side__label">Бригады</span>
+      </a>
+      <a class="dk-side__item" href="#">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-table"/></svg>
+        <span class="dk-side__label">Отчёты</span>
+      </a>
+    </nav>
+
+    <div class="dk-side__foot">
+      <a class="dk-side__item" href="#">
+        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-settings"/></svg>
+        <span class="dk-side__label">Настройки</span>
+      </a>
+      <div class="dk-side__user">
+        <span class="dk-avatar dk-avatar--sm">АС</span>
+        <span class="dk-side__who">
+          <b>Александр С.</b>
+          <span>диспетчер</span>
+        </span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="dk-main">
+    <header class="dk-top">
+      <button class="dk-iconbtn dk-top__burger" data-act="nav" title="Разделы" aria-label="Разделы">
+        <svg aria-hidden="true" class="dk-i"><use href="#ti-layout-grid"/></svg>
+      </button>
+
+      <div class="dk-top__titles">
+        <div class="dk-top__path">Мониторинг · ЖКХ</div>
+        <h1 class="dk-top__title">Аварии</h1>
+      </div>
+
+      <div class="dk-top__at" id="a-at"></div>
+
+      <div class="dk-top__tools">
+        <div id="a-period"></div>
+        <button class="dk-iconbtn" id="t-theme" title="Сменить тему" aria-label="Сменить тему">
+          <svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="dk-content" id="main" tabindex="-1">
+      <div class="dk-wrap">
+
+        <nav class="dk-tabs dk-task-nav" aria-label="Разделы мониторинга" style="margin-bottom:var(--space-6)">
+          <a class="dk-tab" href="dashboard.html">Сводка</a>
+          <a class="dk-tab" href="regions.html">Регионы</a>
+          <a class="dk-tab" href="#" aria-current="page">Аварии <span class="dk-tab__n">23</span></a>
+          <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
+          <a class="dk-tab" href="calendar.html">Календарь</a>
+        </nav>
+
+        <!-- Единственный акцентный блок на экране. Баннер состояния: крестика
+             у него нет намеренно — состояние не закрывается, оно проходит. -->
+        <div class="dk-banner dk-banner--crit" style="margin-bottom:var(--grid-gap)">
+          <svg aria-hidden="true" class="dk-i"><use href="#ti-alert-triangle"/></svg>
+          <div class="dk-banner__text">
+            <div class="dk-banner__title">4 аварии просрочены по нормативу</div>
+            <div class="dk-banner__sub">Самая давняя открыта 6 ч 40 мин назад — Новосибирская область</div>
+          </div>
+          <div class="dk-banner__stats">
+            <div class="dk-banner__stat"><b>23</b><span>открыто</span></div>
+            <div class="dk-banner__stat"><b>17</b><span>бригад в работе</span></div>
+          </div>
+        </div>
+
+        <div class="dk-grid">
+          <div class="dk-col--quarter">
+            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
+              <div class="dk-tile__head">
+                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
+                <span class="dk-tile__label">Открыто сейчас</span>
+              </div>
+              <div class="dk-tile__row">
+                <span class="dk-metric-lg">23</span>
+                <span class="dk-trend" style="--accent:var(--crit-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +4 за сутки</span>
+              </div>
+              <div class="dk-chart dk-chart--spark" id="a-sp1"></div>
+            </div>
+          </div>
+          <div class="dk-col--quarter">
+            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--high-ink)">
+              <div class="dk-tile__head">
+                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span>
+                <span class="dk-tile__label">Просрочено по нормативу</span>
+              </div>
+              <div class="dk-tile__row">
+                <span class="dk-metric-lg">4</span>
+                <span class="dk-trend" style="--accent:var(--high-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +1</span>
+              </div>
+              <div class="dk-chart dk-chart--spark" id="a-sp2"></div>
+            </div>
+          </div>
+          <div class="dk-col--quarter">
+            <div class="dk-widget dk-widget--s dk-tile">
+              <div class="dk-tile__head">
+                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+                <span class="dk-tile__label">Среднее время реакции</span>
+              </div>
+              <div class="dk-tile__row">
+                <span class="dk-metric-lg">42 мин</span>
+                <span class="dk-trend" style="--accent:var(--calm-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg> −8 мин</span>
+              </div>
+              <div class="dk-chart dk-chart--spark" id="a-sp3"></div>
+            </div>
+          </div>
+          <div class="dk-col--quarter">
+            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--calm-ink)">
+              <div class="dk-tile__head">
+                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg></span>
+                <span class="dk-tile__label">Устранено за сутки</span>
+              </div>
+              <div class="dk-tile__row">
+                <span class="dk-metric-lg">19</span>
+                <span class="dk-trend" style="--accent:var(--calm-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +3</span>
+              </div>
+              <div class="dk-chart dk-chart--spark" id="a-sp4"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dk-grid" style="margin-top:var(--grid-gap)">
+          <div class="dk-col--two-thirds">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h2 class="dk-widget__title">Аварии по часам · сутки</h2>
+                <span class="dk-widget__hint" title="Столбец — час. Высота — сколько аварий открыто в этот час"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+                <div class="dk-widget__actions">
+                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Обновить" aria-label="Обновить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-refresh"/></svg></button>
+                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Выгрузить" aria-label="Выгрузить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
+                </div>
+              </div>
+              <div class="dk-chart" id="a-hours"></div>
+            </div>
+          </div>
+
+          <div class="dk-col--third">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h2 class="dk-widget__title">По типам</h2>
+              </div>
+              <div class="dk-chart" id="a-kinds"></div><details class="dk-data-summary"><summary>Состав в числах</summary><div class="dk-tablewrap"><table class="dk-table" aria-label="Состав в числах"><thead><tr><th scope="col">Категория</th><th scope="col">Количество</th><th scope="col">Доля</th></tr></thead><tbody><tr><th scope="row">Вода</th><td class="dk-td-num">9</td><td class="dk-td-num">39%</td></tr><tr><th scope="row">Тепло</th><td class="dk-td-num">7</td><td class="dk-td-num">30%</td></tr><tr><th scope="row">Электро</th><td class="dk-td-num">5</td><td class="dk-td-num">22%</td></tr><tr><th scope="row">Прочее</th><td class="dk-td-num">2</td><td class="dk-td-num">9%</td></tr></tbody></table></div></details>
+            </div>
+          </div>
+        </div>
+
+        <div class="dk-grid" style="margin-top:var(--grid-gap)">
+          <div class="dk-col--half">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h2 class="dk-widget__title">Просрочка по округам</h2>
+                <div class="dk-widget__actions">
+                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Выгрузить" aria-label="Выгрузить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
+                </div>
+              </div>
+              <div class="dk-chart dk-chart--sm" id="a-late"></div>
+            </div>
+          </div>
+
+          <div class="dk-col--half">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h2 class="dk-widget__title">Бригады на выезде</h2>
+              </div>
+              <div class="dk-list" id="a-crews"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dk-grid" style="margin-top:var(--grid-gap)">
+          <div class="dk-col--full">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h2 class="dk-widget__title">Открытые аварии</h2>
+                <div class="dk-widget__actions">
+                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Обновить" aria-label="Обновить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-refresh"/></svg></button>
+                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Выгрузить" aria-label="Выгрузить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
+                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Развернуть" aria-label="Развернуть"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
+                </div>
+              </div>
+              <!-- Шесть колонок: пол по умолчанию рассчитан на четыре-пять,
+                   этой таблице нужно больше, иначе название аварии сожмётся
+                   до многоточия раньше, чем включится прокрутка. -->
+              <div class="dk-tablewrap" style="--table-min:940px">
+                <table class="dk-table dk-table--zebra dk-table--cards" id="a-table" aria-label="Открытые аварии">
+                  <thead>
+                    <tr>
+                      <!-- Ширины объявлены здесь: раскладка таблицы фиксирована,
+                           иначе колонки меняются от страницы к странице. -->
+                      <th scope="col" style="width:34%" data-sortable="Авария">Авария</th>
+                      <th scope="col" style="width:10%" data-sortable="Открыта">Открыта</th>
+                      <th scope="col" style="width:22%" data-sortable="Норматив">Норматив</th>
+                      <th scope="col" style="width:18%" data-sortable="Бригада">Бригада</th>
+                      <th scope="col" style="width:12%" class="dk-td-num" data-sortable="Людей">Людей</th>
+                      <th scope="col" style="width:56px" class="dk-th-act"><span class="dk-vh">Действия</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="a-tbody"></tbody>
+                </table>
+              </div>
+              <div id="a-pager"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+    <!-- Нижняя панель разделов — только на телефоне (chrome.css). Полный список остаётся в меню. -->
+    <nav class="dk-tabbar" aria-label="Главные разделы">
+      <a class="dk-tabbar__item" href="dashboard.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg><span>Сводка</span></a>
+      <a class="dk-tabbar__item" href="regions.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg><span>Регионы</span></a>
+      <a class="dk-tabbar__item" href="accidents.html" aria-current="page"><svg class="dk-i" aria-hidden="true"><use href="#ti-alert-triangle"/></svg><span>Аварии</span></a>
+      <a class="dk-tabbar__item" href="calendar.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-calendar"/></svg><span>Календарь</span></a>
+    </nav>
+  </div>
+</div>
+
+<dialog class="dk-modal" id="m-close">
+  <form method="dialog" class="dk-modal__form">
+    <div class="dk-modal__head">
+      <h2 class="dk-modal__title" id="m-close-title">Закрыть аварию</h2>
+    </div>
+    <div class="dk-modal__body">
+      <p id="m-close-text">Авария будет отмечена как устранённая. Бригада освободится и вернётся в очередь.</p>
+    </div>
+    <div class="dk-modal__foot">
+      <button class="dk-btn dk-btn--ghost" value="cancel">Отмена</button>
+      <button class="dk-btn dk-btn--primary" value="ok">Закрыть аварию</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  /* Данные — постоянные: страница-образец не должна менять картинку при каждой
+     перезагрузке, иначе на неё нельзя ссылаться в разговоре. */
+  var АВАРИИ = [
+    { id: '4821', имя: 'Прорыв теплотрассы',        где: 'Новосибирская область', вид: 'Тепло',   открыта: '08:12', мин: 400, норматив: 240, бригада: 'ТЭЦ-4 · смена Б', людей: 1240 },
+    { id: '4822', имя: 'Отключение электроснабжения', где: 'Ростовская область',  вид: 'Электро', открыта: '12:05', мин: 205, норматив: 120, бригада: 'РЭС-2',          людей: 380 },
+    { id: '4823', имя: 'Порыв водовода',            где: 'Крым',                 вид: 'Вода',    открыта: '09:48', мин: 342, норматив: 240, бригада: 'Водоканал · 3',  людей: 96 },
+    { id: '4824', имя: 'Замена задвижки',           где: 'Забайкальский край',   вид: 'Вода',    открыта: '08:12', мин: 400, норматив: 480, бригада: 'Водоканал · 1',  людей: 210 },
+    { id: '4825', имя: 'Обрыв линии 0,4 кВ',        где: 'Псковская область',    вид: 'Электро', открыта: '14:31', мин: 59,  норматив: 120, бригада: 'РЭС-7',          людей: 54 },
+    { id: '4826', имя: 'Засор канализации',         где: 'Тверская область',     вид: 'Прочее',  открыта: '13:02', мин: 148, норматив: 360, бригада: 'Аварийная · 2',  людей: 18 },
+    { id: '4827', имя: 'Падение давления в контуре', где: 'Омская область',      вид: 'Тепло',   открыта: '15:10', мин: 20,  норматив: 240, бригада: 'ТЭЦ-1 · смена А', людей: 640 },
+    { id: '4828', имя: 'Повреждение кабеля',        где: 'Приморский край',      вид: 'Электро', открыта: '11:44', мин: 226, норматив: 120, бригада: 'РЭС-5',          людей: 155 },
+    { id: '4829', имя: 'Течь в подвале',            где: 'Московская область',   вид: 'Вода',    открыта: '16:02', мин: 8,   норматив: 240, бригада: 'Водоканал · 9',  людей: 32 },
+    { id: '4830', имя: 'Остановка насосной',        где: 'Самарская область',    вид: 'Вода',    открыта: '10:19', мин: 291, норматив: 360, бригада: 'Водоканал · 4',  людей: 470 }
+  ];
+
+  var БРИГАДЫ = [
+    { имя: 'ТЭЦ-4 · смена Б',  где: 'Новосибирск',   сост: 'crit', подпись: 'на аварии 6 ч 40 мин' },
+    { имя: 'РЭС-2',            где: 'Ростов-на-Дону', сост: 'high', подпись: 'в пути 25 мин' },
+    { имя: 'Водоканал · 3',    где: 'Симферополь',   сост: 'high', подпись: 'на аварии 5 ч 42 мин' },
+    { имя: 'РЭС-7',            где: 'Псков',         сост: 'calm', подпись: 'на месте, укладывается' },
+    { имя: 'Аварийная · 2',    где: 'Тверь',         сост: 'calm', подпись: 'на месте, укладывается' }
+  ];
+
+  /* Текстовая ступень смысла, а не заливочная: это число и подпись, которые
+     читают, а не пятно, которое опознают. Почему у смысла две ступени — в
+     комментарии к ним в tokens.semantic.css. */
+  var ТОН  = { crit: 'var(--crit-ink)', high: 'var(--high-ink)', calm: 'var(--calm-ink)' };
+  var ЗНАК = { crit: 'ti-alert-triangle', high: 'ti-alert-circle', calm: 'ti-circle-check' };
+
+  function состояние(a) {
+    if (a.мин > a.норматив) return ['crit', 'просрочена'];
+    if (a.мин > a.норматив * 0.75) return ['high', 'на пределе'];
+    return ['calm', 'в нормативе'];
+  }
+
+  // Форматирование длительности переехало в помощники кита: оно нужно всем,
+  // кто показывает нормативы, а не одной этой странице.
+  var часы = dkDur;
+
+  var СТРАНИЦА = 5, страница = 1, порядок = null, направление = 1;
+
+  function строки() {
+    var от = (страница - 1) * СТРАНИЦА;
+    document.getElementById('a-tbody').innerHTML = АВАРИИ.slice(от, от + СТРАНИЦА).map(function (a) {
+      var с = состояние(a);
+      return '<tr data-id="' + dkEsc(a.id) + '">' +
+        '<td data-sort="' + dkEsc(a.имя) + '">' +
+          '<div class="dk-td-main" style="--accent:' + ТОН[с[0]] + '">' +
+            '<span class="dk-td-main__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#' + ЗНАК[с[0]] + '"/></svg></span>' +
+            '<span class="dk-td-main__text">' +
+              '<span class="dk-td-main__name">' + dkEsc(a.имя) + '</span>' +
+              '<span class="dk-td-main__sub">' + dkEsc(a.где) + ' · № ' + dkEsc(a.id) + '</span>' +
+            '</span>' +
+          '</div>' +
+        '</td>' +
+        '<td data-sort="' + dkEsc(a.открыта.replace(':', '')) + '">' + dkEsc(a.открыта) + '</td>' +
+        '<td data-sort="' + (a.мин - a.норматив) + '">' +
+          '<span class="dk-status dk-status--' + с[0] + '">' +
+          '<svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#' + ЗНАК[с[0]] + '"/></svg>' + с[1] + '</span> ' +
+          '<span class="dk-td-main__sub">' + часы(a.мин) + ' из ' + часы(a.норматив) + '</span>' +
+        '</td>' +
+        '<td data-sort="' + dkEsc(a.бригада) + '">' + dkEsc(a.бригада) + '</td>' +
+        '<td class="dk-td-num">' + dkEsc(String(a.людей).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')) + '</td>' +
+        '<td class="dk-td-act">' +
+          '<button class="dk-iconbtn dk-iconbtn--sm" type="button" data-close="' + dkEsc(a.id) + '"' +
+          ' title="Закрыть аварию" aria-label="Закрыть аварию ' + dkEsc(a.имя) + '">' +
+          '<svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg></button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    var at = document.getElementById('a-at');
+    if (at) {
+      var t = new Date();
+      at.innerHTML = '<span class="dk-top__at-l">Данные на</span> <b>' +
+        String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0') + '</b>';
+    }
+
+    if (typeof dkPeriod === 'function') {
+      dkPeriod(document.getElementById('a-period'), {
+        label: 'Период', size: 'md', value: { preset: 1 }, url: 'period', onChange: function () {}
+      });
+    }
+
+    строки();
+
+    if (typeof dkTable === 'function') {
+      dkTable(document.getElementById('a-table'), {
+        // Сортировка идёт по всем авариям, а не по видимой странице: стрелка в
+        // шапке обещает порядок по набору, и она не должна врать.
+        onSort: function (e) {
+          var поле = { 'Авария': 'имя', 'Открыта': 'открыта', 'Бригада': 'бригада' }[e.column];
+          направление = e.dir === 'ascending' ? 1 : -1;
+          АВАРИИ.sort(function (x, y) {
+            var a = поле ? x[поле] : (x.мин - x.норматив);
+            var b = поле ? y[поле] : (y.мин - y.норматив);
+            if (e.column === 'Людей') { a = x.людей; b = y.людей; }
+            return (a < b ? -1 : a > b ? 1 : 0) * направление;
+          });
+          страница = 1;
+          строки();
+          if (пагинатор) пагинатор.goTo(1);
+        }
+      });
+    }
+
+    var пагинатор = null;
+    if (typeof dkPager === 'function') {
+      пагинатор = dkPager(document.getElementById('a-pager'), {
+        total: АВАРИИ.length, size: СТРАНИЦА, page: 1,
+        noun: ['авария', 'аварии', 'аварий'],
+        onChange: function (e) { страница = e.page; строки(); }
+      });
+    }
+
+    document.getElementById('a-tbody').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-close]');
+      if (!b) return;
+      var a = АВАРИИ.filter(function (x) { return x.id === b.dataset.close; })[0];
+      if (!a) return;
+      document.getElementById('m-close-title').textContent = 'Закрыть аварию № ' + a.id;
+      document.getElementById('m-close-text').textContent =
+        a.имя + ' — ' + a.где + '. Бригада «' + a.бригада + '» освободится и вернётся в очередь.';
+      var m = window.dkModal('#m-close');
+      if (m) m.open();
+    });
+
+    document.getElementById('m-close').addEventListener('close', function (e) {
+      if (e.target.returnValue !== 'ok') return;
+      // Тост с действием не исчезает по таймеру: до кнопки «Отменить» человек
+      // может добираться с клавиатуры, и сколько это займёт, мы не знаем.
+      if (typeof dkToast === 'function') {
+        dkToast('Авария закрыта', { kind: 'calm', action: { name: 'Отменить', run: function () {} } });
+      }
+    });
+
+    // Бригады: список, а не таблица. Тут нет колонок, которые хочется
+    // сравнивать по вертикали, — есть пять строк, каждую читают целиком.
+    document.getElementById('a-crews').innerHTML = БРИГАДЫ.map(function (б) {
+      return '<div class="dk-list__row" style="--accent:' + ТОН[б.сост] + '">' +
+        '<span class="dk-list__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#' + ЗНАК[б.сост] + '"/></svg></span>' +
+        '<span class="dk-list__text">' +
+          '<span class="dk-list__name">' + dkEsc(б.имя) + '</span>' +
+          '<span class="dk-list__sub">' + dkEsc(б.где) + ' · ' + dkEsc(б.подпись) + '</span>' +
+        '</span></div>';
+    }).join('');
+
+    if (typeof dkChart !== 'function') return;
+
+    var сутки = [], метки = [];
+    var ряд = [1,0,0,1,0,2,1,3,2,1,0,1,2,1,0,1,3,2,1,0,1,0,0,0];
+    for (var h = 0; h < 24; h++) { метки.push(String(h).padStart(2, '0')); сутки.push(ряд[h]); }
+
+    dkChart(document.getElementById('a-hours'), {
+      type: 'bar', categories: метки,
+      series: [{ name: 'Открыто аварий', data: сутки }],
+      empty: { title: 'За сутки аварий не было', text: 'Ни одной записи в журнале.', hint: 'Расширьте период.' }
+    });
+
+    dkChart(document.getElementById('a-kinds'), {
+      type: 'donut', total: 23,
+      data: [
+        { name: 'Вода',    value: 9 },
+        { name: 'Тепло',   value: 7 },
+        { name: 'Электро', value: 5 },
+        { name: 'Прочее',  value: 2 }
+      ]
+    });
+
+    dkChart(document.getElementById('a-late'), {
+      type: 'bar-h',
+      categories: ['Сибирский', 'Южный', 'Дальневосточный', 'Приволжский', 'Центральный'],
+      series: [{ name: 'Просрочено, ч', data: [6.7, 5.7, 3.8, 1.9, 0.0] }],
+      unit: 'ч'
+    });
+
+    [['a-sp1', [18,19,17,20,21,19,23]],
+     ['a-sp2', [2,3,2,4,3,3,4]],
+     ['a-sp3', [58,55,51,49,47,45,42]],
+     ['a-sp4', [12,15,14,17,16,18,19]]].forEach(function (п) {
+      dkChart(document.getElementById(п[0]), {
+        type: 'spark', categories: п[1].map(function (_, i) { return String(i); }),
+        series: [{ name: '', data: п[1] }]
+      });
+    });
+  });
+</script>
+</body>
+</html>

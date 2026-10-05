@@ -1,0 +1,3423 @@
+{
+ "about": "Опись dashboard-kit для скилла сборки дашбордов. СОБРАНО tools/build-manifest.py из tools/component_pages/, tools/manifest_parts.py и кода — руками не править; проверка МАНИФЕСТ в tools/check.py сверяет файл с кодом.",
+ "include": {
+  "css": [
+   {
+    "file": "vendor/air-datepicker.css",
+    "when": "только с выбором периода; до components.css"
+   },
+   {
+    "file": "css/tokens.primitives.css",
+    "when": "всегда"
+   },
+   {
+    "file": "css/tokens.semantic.css",
+    "when": "всегда"
+   },
+   {
+    "file": "css/components.css",
+    "when": "всегда"
+   },
+   {
+    "file": "css/chrome.css",
+    "when": "только если кит рисует всю страницу"
+   }
+  ],
+  "scripts": [
+   {
+    "file": "js/dk-theme.js",
+    "how": "без defer, первым в <head>",
+    "defer": false,
+    "requires": []
+   },
+   {
+    "file": "js/dk-util.js",
+    "how": "без defer, до всех dk-*",
+    "defer": false,
+    "requires": []
+   },
+   {
+    "file": "js/dk-icons.js",
+    "how": "defer",
+    "defer": true,
+    "requires": []
+   },
+   {
+    "file": "vendor/echarts.min.js",
+    "how": "defer",
+    "defer": true,
+    "requires": []
+   },
+   {
+    "file": "js/dk-chart-theme.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "vendor/echarts.min.js"
+    ]
+   },
+   {
+    "file": "js/dk-charts.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-chart-theme.js",
+     "js/dk-util.js",
+     "vendor/echarts.min.js"
+    ]
+   },
+   {
+    "file": "js/dk-select.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "vendor/air-datepicker.js",
+    "how": "defer",
+    "defer": true,
+    "requires": []
+   },
+   {
+    "file": "js/dk-period.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js",
+     "vendor/air-datepicker.js"
+    ]
+   },
+   {
+    "file": "js/dk-chrome.js",
+    "how": "defer",
+    "defer": true,
+    "requires": []
+   },
+   {
+    "file": "js/dk-modal.js",
+    "how": "defer",
+    "defer": true,
+    "requires": []
+   },
+   {
+    "file": "js/dk-calendar.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-pager.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-table.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-form.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-map.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-chart-theme.js",
+     "js/dk-util.js",
+     "vendor/echarts.min.js"
+    ]
+   },
+   {
+    "file": "js/dk-notify.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-uptime.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-car.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   }
+  ],
+  "rule": "Подключать только то, что есть в include частей на странице, в этом порядке. Основа (часть base) — всегда."
+ },
+ "parts": [
+  {
+   "id": "button",
+   "title": "Кнопка",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "стабильный",
+   "purpose": "Запустить действие: сохранить, назначить бригаду, открыть отчёт. На экране одна основная кнопка, остальные обычные или тихие — так видно, чего от человека ждут.",
+   "use_when": [
+    "Действие меняет данные или открывает новый экран: «Добавить работу», «Закрыть аварию».",
+    "На экране нужно показать, какое действие главное — оно одно и оно основное.",
+    "Действие повторяется в каждой строке таблицы — тогда кнопка-значок с подписью для скринридера."
+   ],
+   "instead": [
+    {
+     "when": "Переключение вида одних и тех же данных — Сегмент.",
+     "use": "segment"
+    },
+    {
+     "when": "Переход в другой раздел с адресом — Вкладки или ссылка.",
+     "use": "tabs"
+    },
+    {
+     "when": "Включить режим без подтверждения — Тумблер.",
+     "use": "check"
+    }
+   ],
+   "owns": [
+    "dk-btn",
+    "dk-iconbtn"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-button.html"
+   ],
+   "api": [
+    {
+     "name": "dk-btn--primary",
+     "type": "класс",
+     "what": "Основное действие, одно на экран."
+    },
+    {
+     "name": "dk-btn--ghost",
+     "type": "класс",
+     "what": "Тихая кнопка без заливки."
+    },
+    {
+     "name": "dk-btn--sm, dk-btn--lg",
+     "type": "класс",
+     "what": "Высота 28 или 40; по умолчанию 32."
+    },
+    {
+     "name": "dk-iconbtn",
+     "type": "класс",
+     "what": "Кнопка под значок; те же модификаторы размера."
+    },
+    {
+     "name": "aria-busy",
+     "type": "атрибут",
+     "what": "Пока идёт действие; подпись меняется на «…аем»."
+    },
+    {
+     "name": "disabled",
+     "type": "атрибут",
+     "what": "Недоступна; причина должна быть видна рядом."
+    }
+   ],
+   "example": "<button class=\"dk-btn dk-btn--primary\">Добавить работу</button>\n<button class=\"dk-btn dk-btn--ghost\">Отмена</button>\n<button class=\"dk-iconbtn\" title=\"Обновить\" aria-label=\"Обновить\">\n  <svg class=\"dk-i\"><use href=\"#ti-refresh\"/></svg>\n</button>\n<a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Страница компонента →</a>",
+   "rules": [
+    "Глагол в неопределённой форме: «Добавить работу», «Закрыть аварию».",
+    "Одна основная кнопка на форму; стоит справа, обычная «Отмена» — левее и тихая.",
+    "Подпись у кнопки-значка в `aria-label` совпадает с подсказкой.",
+    "Опасное действие называется своим именем: «Удалить срез», а не «ОК»."
+   ],
+   "avoid": [
+    "«ОК», «Да», «Продолжить» — непонятно, что произойдёт.",
+    "Две основные кнопки рядом — человек не знает, какую ждут.",
+    "Значок без подписи: «шестерёнка» для одних настройки, для других фильтр.",
+    "Кнопка, которая ведёт на другую страницу, — это ссылка, и выглядеть должна ссылкой."
+   ],
+   "a11y": [
+    "Клавиатура. Настоящий `<button>`: Tab, Enter и пробел работают сами. Кольцо фокуса — только при навигации с клавиатуры.",
+    "Подписи. Кнопка-значок обязана иметь `aria-label`; проверка на витрине это не ловит — на совести автора.",
+    "Контраст. Подпись на основной кнопке и силуэт кнопки на поверхности проверяются проверкой КНОПКА на всех акцентах в обеих темах.",
+    "Недоступная кнопка остаётся в порядке табуляции, чтобы скринридер её нашёл и прочитал состояние."
+   ],
+   "related": [
+    "modal",
+    "segment",
+    "tabs"
+   ],
+   "classes": [
+    "dk-btn",
+    "dk-btn--ghost",
+    "dk-btn--lg",
+    "dk-btn--primary",
+    "dk-btn--sm",
+    "dk-iconbtn",
+    "dk-iconbtn--lg",
+    "dk-iconbtn--sm"
+   ],
+   "include": []
+  },
+  {
+   "id": "segment",
+   "title": "Сегмент",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "стабильный",
+   "purpose": "Переключить вид одних и тех же данных: карта или плитки, 7 или 30 дней, месяц или неделя. Срабатывает сразу, живёт внутри виджета, выбранное показано серым — цвет на дашборде принадлежит данным.",
+   "use_when": [
+    "Два–пять вариантов одного и того же: вид, период, единица измерения.",
+    "Переключение мгновенное и без загрузки страницы.",
+    "Все варианты должны быть видны сразу — выбор из скрытого списка здесь хуже."
+   ],
+   "instead": [
+    {
+     "when": "Переход в другой раздел со своим адресом — Вкладки.",
+     "use": "tabs"
+    },
+    {
+     "when": "Больше пяти вариантов — Фильтр с выпадающим списком.",
+     "use": "select"
+    },
+    {
+     "when": "Независимое «да / нет» — Флажок или тумблер.",
+     "use": "check"
+    }
+   ],
+   "owns": [
+    "dk-seg"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-segment.html"
+   ],
+   "api": [
+    {
+     "name": "aria-pressed",
+     "type": "атрибут",
+     "what": "«true» у выбранной кнопки; страница переключает сама."
+    },
+    {
+     "name": "dk-seg--sm, dk-seg--lg",
+     "type": "класс",
+     "what": "Размер группы."
+    },
+    {
+     "name": "dk-seg--icons",
+     "type": "класс",
+     "what": "Квадратные кнопки под значки."
+    },
+    {
+     "name": "disabled",
+     "type": "атрибут кнопки",
+     "what": "Вариант недоступен — например, нет данных для плиток."
+    }
+   ],
+   "example": "<div class=\"dk-seg\" role=\"group\" aria-label=\"Вид данных\">\n  <button type=\"button\" data-view=\"map\" aria-pressed=\"true\">Карта</button>\n  <button type=\"button\" data-view=\"tiles\" aria-pressed=\"false\">Плитки</button>\n</div>\n\n<script>\nseg.addEventListener('click', function (e) {\n  var b = e.target.closest('button[data-view]');\n  if (!b) return;\n  seg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });\n  map.view = b.dataset.view;   // например, dkMap\n});\n</script>",
+   "rules": [
+    "Короткие подписи одной формы: «Карта / Плитки», «7 дней / 30 дней».",
+    "Первым стоит вид по умолчанию, и он же выбран при открытии.",
+    "Значок и слово вместе; только значки — когда у группы есть aria-label."
+   ],
+   "avoid": [
+    "«Показать карту / Показать плитки» — глаголы у сегмента лишние.",
+    "Пустая группа без выбранного: человек не знает, что он смотрит сейчас.",
+    "Сегмент, который ведёт на другую страницу, — это вкладки под чужим видом."
+   ],
+   "a11y": [
+    "Роль. `role=\"group\"` + `aria-label`, кнопки с `aria-pressed`. Не `tablist`: вкладки обещают отдельные панели с адресом.",
+    "Клавиатура. Tab ходит по кнопкам, Enter и пробел переключают. Стрелки внутри группы кит не перехватывает — это обычные кнопки.",
+    "Контраст. Выбранная кнопка к контейнеру не ниже 3:1 в обеих темах и не ярче самой контрастной серии — проверка ТИШИНА.",
+    "Не только цветом. Выбранное отличается ещё и жирностью подписи."
+   ],
+   "related": [
+    "button",
+    "map",
+    "tabs"
+   ],
+   "classes": [
+    "dk-seg",
+    "dk-seg--icons",
+    "dk-seg--lg",
+    "dk-seg--sm"
+   ],
+   "include": []
+  },
+  {
+   "id": "tabs",
+   "title": "Вкладки",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "стабильный",
+   "purpose": "Перевести человека в другой раздел: у вкладки свой адрес и своя загрузка. Счётчик рядом с названием говорит, сколько там ждёт внимания.",
+   "use_when": [
+    "Разделы одного уровня, у каждого свой адрес: «Аварии», «Заявки», «Бригады».",
+    "При переходе меняется вся страница или её основная часть.",
+    "Разделов от двух до шести — больше не помещается в строку на узком экране."
+   ],
+   "instead": [
+    {
+     "when": "Переключение вида одних данных внутри виджета — Сегмент.",
+     "use": "segment"
+    },
+    {
+     "when": "Больше шести разделов — боковое меню каркаса (`css/chrome.css`).",
+     "use": null
+    },
+    {
+     "when": "Действие, а не переход — Кнопка.",
+     "use": "button"
+    }
+   ],
+   "owns": [
+    "dk-tabs",
+    "dk-tab"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-tabs.html"
+   ],
+   "api": [
+    {
+     "name": "aria-current=\"page\"",
+     "type": "атрибут",
+     "what": "Текущий раздел."
+    },
+    {
+     "name": "dk-tab__n",
+     "type": "элемент",
+     "what": "Счётчик; не показывать при нуле."
+    },
+    {
+     "name": "aria-label",
+     "type": "атрибут nav",
+     "what": "Название группы разделов для скринридера."
+    }
+   ],
+   "example": "<nav class=\"dk-tabs\" aria-label=\"Разделы мониторинга\">\n  <a class=\"dk-tab\" href=\"dashboard.html\" aria-current=\"page\">Сводка</a>\n  <a class=\"dk-tab\" href=\"accidents.html\">Аварии <span class=\"dk-tab__n\">23</span></a>\n  <a class=\"dk-tab\" href=\"calendar.html\">Календарь</a>\n</nav>",
+   "rules": [
+    "Существительное во множественном числе: «Аварии», «Заявки», «Отчёты».",
+    "Счётчик — число объектов, требующих действия, а не всего объектов в разделе.",
+    "Порядок вкладок постоянный: люди запоминают положение, а не название."
+   ],
+   "avoid": [
+    "Глаголы: «Смотреть аварии».",
+    "Счётчик «1 284» — это статистика, а не сигнал; ей место в разделе.",
+    "Вкладка «Ещё…» с выпадающим списком — значит, разделов слишком много для вкладок."
+   ],
+   "a11y": [
+    "Роль. `<nav aria-label>` со ссылками, а не `tablist`: это переходы между страницами, и скринридер должен ждать загрузку.",
+    "Текущая — `aria-current=\"page\"`, скринридер объявляет «текущая страница».",
+    "Клавиатура. Обычные ссылки: Tab и Enter. Кольцо фокуса — только при навигации табом.",
+    "Контраст. Черта текущей вкладки — `--control-on`, тот же серый, что у выбранного управления: не ниже 3:1 к поверхности."
+   ],
+   "related": [
+    "badge",
+    "segment"
+   ],
+   "classes": [
+    "dk-tab",
+    "dk-tab__n",
+    "dk-tabs"
+   ],
+   "include": []
+  },
+  {
+   "id": "check",
+   "title": "Флажок, радио, тумблер",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "стабильный",
+   "purpose": "Три способа сказать «да»: флажок — независимое «да / нет» по кнопке, радио — один из немногих, тумблер — режим, который срабатывает сразу. Отмеченное показано серым, не акцентом.",
+   "use_when": [
+    "Флажок: несколько независимых «да / нет», которые применяются по кнопке — например, в форме.",
+    "Радио: один вариант из двух–пяти, все видны сразу.",
+    "Тумблер: режим, который включается сразу и сразу виден — «Слой событий» на карте."
+   ],
+   "instead": [
+    {
+     "when": "Больше пяти вариантов — Фильтр.",
+     "use": "select"
+    },
+    {
+     "when": "Переключение вида — Сегмент.",
+     "use": "segment"
+    },
+    {
+     "when": "Тумблер в форме, которую надо сохранять, — обман: человек переключил, ушёл, ничего не сохранилось. Там флажок.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-check",
+    "dk-switch"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-check.html"
+   ],
+   "api": [
+    {
+     "name": "input[type=checkbox|radio]",
+     "type": "элемент",
+     "what": "Состояние живёт в input; классы только рисуют."
+    },
+    {
+     "name": "dk-check__box--mixed",
+     "type": "класс",
+     "what": "Частичное; вместе с `input.indeterminate = true`."
+    },
+    {
+     "name": "disabled",
+     "type": "атрибут",
+     "what": "Недоступно; подпись приглушается сама."
+    }
+   ],
+   "example": "<label class=\"dk-check\">\n  <input type=\"checkbox\" name=\"events\" checked>\n  <span class=\"dk-check__box\"><svg class=\"dk-i\"><use href=\"#ti-check\"/></svg></span>\n  Показывать события\n</label>\n\n<label class=\"dk-check dk-check--radio\">\n  <input type=\"radio\" name=\"period\" value=\"7\" checked>\n  <span class=\"dk-check__box\"></span>\n  7 дней\n</label>\n\n<label class=\"dk-switch\">\n  <input type=\"checkbox\" name=\"layer\">\n  <span class=\"dk-switch__track\"><span class=\"dk-switch__knob\"></span></span>\n  Слой событий\n</label>",
+   "rules": [
+    "Подпись — утверждение, которое становится правдой при отметке: «Показывать события».",
+    "У радио первый вариант — тот, что по умолчанию.",
+    "Недоступный вариант остаётся виден с пояснением: «Архив (недоступен)»."
+   ],
+   "avoid": [
+    "Отрицание в подписи: «Не показывать события» — двойное отрицание при снятии.",
+    "Вопрос вместо утверждения: «Показывать события?».",
+    "Тумблер «Сохранить настройки» — тумблер ничего не сохраняет, он включает."
+   ],
+   "a11y": [
+    "Настоящие input. Флажок и радио — `<input>` внутри `<label>`: клавиатура, формы и скринридер бесплатно.",
+    "Тумблер — тот же checkbox с другим видом; скринридер читает «флажок», и это честно: семантика та же.",
+    "Частичное состояние ставится и в `input.indeterminate`, и классом — первое для скринридера, второе для глаза.",
+    "Контраст. Отмеченный квадрат к поверхности 4,07:1 в тёмной и 5,04:1 в светлой теме; галочка на нём 4,79 / 5,04 (проверка ТИШИНА)."
+   ],
+   "related": [
+    "field",
+    "select",
+    "table"
+   ],
+   "classes": [
+    "dk-check",
+    "dk-check--radio",
+    "dk-check__box",
+    "dk-check__box--mixed",
+    "dk-switch",
+    "dk-switch__knob",
+    "dk-switch__track"
+   ],
+   "include": []
+  },
+  {
+   "id": "field",
+   "title": "Поле и форма",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "стабильный",
+   "purpose": "Принять от человека заявку, работу, комментарий. Форма на дашборде короткая, и правила у неё жёстче обычных: её заполняют между двумя срочными делами.",
+   "use_when": [
+    "Человек вводит то, чего у системы нет: название работы, число жителей, комментарий.",
+    "Полей от одного до восьми; больше — это уже отдельная страница, а не виджет.",
+    "Данные применяются по кнопке, и до неё ничего не меняется."
+   ],
+   "instead": [
+    {
+     "when": "Выбор значения из известного списка для среза данных — Фильтр: он применяется сразу.",
+     "use": "select"
+    },
+    {
+     "when": "Выбор дат — Период.",
+     "use": "period"
+    },
+    {
+     "when": "Подтверждение действия без ввода — Модальное окно.",
+     "use": "modal"
+    }
+   ],
+   "owns": [
+    "dk-form",
+    "dk-ff",
+    "dk-field",
+    "dk-fieldset",
+    "dk-label",
+    "dk-hint",
+    "dk-err",
+    "dk-area"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-form.js"
+   ],
+   "data": [],
+   "js": [
+    "dkForm"
+   ],
+   "docs": [
+    "component-field.html"
+   ],
+   "api": [
+    {
+     "name": "onSubmit(data)",
+     "type": "функция",
+     "what": "Зовётся только после успешной проверки; `data` — FormData."
+    },
+    {
+     "name": "check(el)",
+     "type": "функция",
+     "what": "Своя проверка поля поверх браузерной: вернуть текст ошибки или null."
+    },
+    {
+     "name": "validate()",
+     "type": "метод",
+     "what": "Проверить все поля, показать ошибки; вернуть true/false."
+    },
+    {
+     "name": "clear()",
+     "type": "метод",
+     "what": "Снять ошибки и сводку."
+    },
+    {
+     "name": "required, minlength, min, max, type",
+     "type": "атрибуты input",
+     "what": "Правила задаёт браузер; кит только формулирует ошибку по-русски."
+    }
+   ],
+   "example": "<form class=\"dk-form\" id=\"work\">\n  <div class=\"dk-form__alarm\" hidden></div>\n  <div class=\"dk-ff dk-ff--wide\">\n    <label class=\"dk-label\" for=\"name\">Что за работа <span class=\"dk-label__req\">обязательно</span></label>\n    <div class=\"dk-field\"><input id=\"name\" name=\"name\" placeholder=\"Замена задвижки на вводе\" required minlength=\"5\"></div>\n    <div class=\"dk-hint\">Так её увидят диспетчеры смены</div>\n  </div>\n  <div class=\"dk-form__foot\">\n    <button type=\"submit\" class=\"dk-btn dk-btn--primary\">Добавить работу</button>\n  </div>\n</form>\n\n<script>\nvar api = dkForm(document.getElementById('work'), {\n  check: function (el) { /* своя проверка сверх браузерной; вернуть текст или null */ return null; },\n  onSubmit: function (data) { /* data — FormData; форма прошла проверку */ }\n});\napi.validate();   // true, если всё верно\napi.clear();      // снять ошибки\n</script>",
+   "rules": [
+    "Подпись — название данных: «Затронуто жителей». Внутри поля — пример: «1240».",
+    "Ошибка говорит, что сделать: «Не короче 5 знаков — сейчас 3».",
+    "Подсказка отвечает на вопрос, который возникнет: «Человек, а не квартир».",
+    "Отмечено то, чего меньше: обязательные или необязательные, но не оба сразу."
+   ],
+   "avoid": [
+    "Название данных плейсхолдером внутри поля — исчезает при вводе.",
+    "«Неверное значение», «Ошибка» — человек и так знает, что ошибся.",
+    "Звёздочка без расшифровки.",
+    "Кнопка «Отправить» — что именно произойдёт?"
+   ],
+   "a11y": [
+    "Подписи. `<label for>` у каждого поля; подсказка и ошибка связаны через текст под полем и `aria-invalid`.",
+    "Фокус после ошибки уходит на первое неверное поле — форма, которая молча не отправилась, заставляет перечитывать её сверху.",
+    "Сводка над формой объявляется скринридеру как живой регион.",
+    "Клавиатура. Enter в поле отправляет форму; Escape ничего не сбрасывает — потерять набранное дороже, чем нажать «Очистить»."
+   ],
+   "related": [
+    "check",
+    "modal",
+    "period",
+    "select"
+   ],
+   "classes": [
+    "dk-area",
+    "dk-err",
+    "dk-ff",
+    "dk-ff--wide",
+    "dk-field",
+    "dk-field--md",
+    "dk-field--search",
+    "dk-fieldset",
+    "dk-fieldset__legend",
+    "dk-form",
+    "dk-form--one",
+    "dk-form__alarm",
+    "dk-form__foot",
+    "dk-hint",
+    "dk-label",
+    "dk-label__opt",
+    "dk-label__req"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-form.js"
+   ]
+  },
+  {
+   "id": "select",
+   "title": "Фильтр",
+   "kind": "компонент",
+   "group": "Фильтры",
+   "status": "стабильный",
+   "purpose": "Ограничить срез данных одним или несколькими значениями из известного списка. Главное правило: выбранное видно, не открывая меню, — иначе человек смотрит на срез и уверен, что видит всё.",
+   "use_when": [
+    "Значения известны заранее и их больше пяти: округа, регионы, бригады.",
+    "Выбор ограничивает данные на всей странице и применяется сразу.",
+    "Рядом с каждым значением можно показать, сколько записей за ним."
+   ],
+   "instead": [
+    {
+     "when": "Два–пять значений, видимых сразу, — Сегмент или Фильтры-легенда.",
+     "use": "segment"
+    },
+    {
+     "when": "Даты — Период.",
+     "use": "period"
+    },
+    {
+     "when": "Ввод значения в форме, которое применяется по кнопке, — Поле с `<select>`.",
+     "use": "field"
+    }
+   ],
+   "owns": [
+    "dk-select",
+    "dk-menu",
+    "dk-toolbar",
+    "dk-result",
+    "dk-chipbar",
+    "dk-fchip"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-select.js"
+   ],
+   "data": [],
+   "js": [
+    "dkSelect"
+   ],
+   "docs": [
+    "component-select.html"
+   ],
+   "api": [
+    {
+     "name": "label",
+     "type": "строка",
+     "what": "Название измерения; после выбора становится «Название: значение»."
+    },
+    {
+     "name": "options[]",
+     "type": "массив {value, name, count}",
+     "what": "Значения; count — записей за значением, ноль не прячется."
+    },
+    {
+     "name": "mode",
+     "type": "'single' | 'multi'",
+     "what": "Одиночный закрывает меню, множественный — нет."
+    },
+    {
+     "name": "value",
+     "type": "строка | массив",
+     "what": "Начальное значение; адрес (url) главнее."
+    },
+    {
+     "name": "search",
+     "type": "boolean",
+     "what": "Поле поиска; по умолчанию от 9 значений."
+    },
+    {
+     "name": "url",
+     "type": "строка",
+     "what": "Ключ в строке запроса; пусто — не пишется."
+    },
+    {
+     "name": "onChange(v)",
+     "type": "функция",
+     "what": "При каждой смене выбора."
+    },
+    {
+     "name": "value / set(v) / clear() / setOptions(list)",
+     "type": "API",
+     "what": "Читать и менять снаружи."
+    }
+   ],
+   "example": "<!-- Строка фильтров — прямо на странице, над содержимым. На телефоне она\n     становится строкой пилюль, которая листается вбок. -->\n<div class=\"dk-toolbar\">\n  <div class=\"dk-toolbar__group\">\n    <div id=\"period\"></div>\n    <div id=\"okrug\"></div>\n  </div>\n</div>\n\n<script>\nvar f = dkSelect(document.getElementById('okrug'), {\n  label: 'Округ',\n  options: [{ value: 'sfo', name: 'Сибирский', count: 10 }, /* … */],\n  mode: 'single',        // или 'multi'\n  url: 'okrug',          // ?okrug=sfo — ссылка на срез\n  onChange: function (value) { /* строка или массив (multi) */ }\n});\nf.value;                 // текущее\nf.set('sfo'); f.clear(); f.setOptions(list);\n</script>",
+   "rules": [
+    "Подпись — название измерения: «Округ», «Уровень риска»; после выбора — «Округ: Сибирский».",
+    "Число записей рядом с каждым значением.",
+    "Строка применённых фильтров под панелью со «Сбросить всё» (`dk-chipbar`)."
+   ],
+   "avoid": [
+    "«Все округа» после выбора — самая дорогая ошибка дашборда.",
+    "«Выбрано несколько» вместо числа.",
+    "Фильтр без счётчика результата: человек выбирает вслепую и попадает в пустой экран."
+   ],
+   "a11y": [
+    "Роли. Кнопка с `aria-haspopup=\"listbox\"` и `aria-expanded`; меню — `listbox` с `option` и `aria-selected`.",
+    "Клавиатура. Стрелки, Home, End, Enter, Escape с возвратом фокуса на фильтр. Поиск получает фокус при открытии.",
+    "Не только цветом. Выбранное отмечено галочкой; активный фильтр — ещё и текстом подписи.",
+    "Контраст. Серая заливка активного фильтра поверх поля — 1,19–1,28:1, как у прежней синей (проверка ТИШИНА)."
+   ],
+   "related": [
+    "legend",
+    "period",
+    "table"
+   ],
+   "classes": [
+    "dk-chipbar",
+    "dk-chipbar__label",
+    "dk-fchip",
+    "dk-fchip__x",
+    "dk-menu",
+    "dk-menu--right",
+    "dk-menu__box",
+    "dk-menu__empty",
+    "dk-menu__foot",
+    "dk-menu__item",
+    "dk-menu__list",
+    "dk-menu__mark",
+    "dk-menu__n",
+    "dk-menu__name",
+    "dk-menu__search",
+    "dk-result",
+    "dk-select",
+    "dk-select--md",
+    "dk-select--sm",
+    "dk-select__caret",
+    "dk-select__clear",
+    "dk-select__count",
+    "dk-select__label",
+    "dk-select__trigger",
+    "dk-toolbar",
+    "dk-toolbar__group"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-select.js"
+   ]
+  },
+  {
+   "id": "period",
+   "title": "Период",
+   "kind": "компонент",
+   "group": "Фильтры",
+   "status": "стабильный",
+   "purpose": "Ограничить срез по времени: готовые пресеты или свой диапазон. Стоит первым среди фильтров, потому что ограничивает всё остальное.",
+   "use_when": [
+    "Данные на странице зависят от интервала времени.",
+    "Обычно хватает пресетов, но иногда нужен произвольный диапазон.",
+    "Период должен переноситься ссылкой."
+   ],
+   "instead": [
+    {
+     "when": "Одна дата в форме (начало работы) — Поле с `type=\"datetime-local\"`.",
+     "use": "field"
+    },
+    {
+     "when": "Показ работ по дням — Календарь: это не фильтр, а представление.",
+     "use": "calendar"
+    },
+    {
+     "when": "Два–три фиксированных интервала без календаря — Сегмент «7 дней / 30 дней».",
+     "use": "segment"
+    }
+   ],
+   "owns": [
+    "dk-period",
+    "dk-select",
+    "dk-menu"
+   ],
+   "css": [
+    "vendor/air-datepicker.css",
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-period.js",
+    "vendor/air-datepicker.js"
+   ],
+   "data": [],
+   "js": [
+    "dkPeriod"
+   ],
+   "docs": [
+    "component-period.html"
+   ],
+   "api": [
+    {
+     "name": "value",
+     "type": "{preset} | {from, to}",
+     "what": "Начальное значение; адрес главнее."
+    },
+    {
+     "name": "presets[]",
+     "type": "массив {name, days}",
+     "what": "Свой список пресетов."
+    },
+    {
+     "name": "minDate / maxDate",
+     "type": "дата",
+     "what": "Границы календаря; по умолчанию до сегодня."
+    },
+    {
+     "name": "url",
+     "type": "строка",
+     "what": "Ключ в адресе."
+    },
+    {
+     "name": "onChange(v)",
+     "type": "функция",
+     "what": "После применения; черновик не считается."
+    },
+    {
+     "name": "value / text / set(v) / clear()",
+     "type": "API",
+     "what": "Читать и менять снаружи."
+    }
+   ],
+   "example": "<!-- Период — первым в строке фильтров: он ограничивает всё остальное. -->\n<div class=\"dk-toolbar\">\n  <div class=\"dk-toolbar__group\">\n    <div id=\"period\"></div>\n    <div id=\"okrug\"></div>\n  </div>\n</div>\n\n<script>\nvar p = dkPeriod(document.getElementById('period'), {\n  label: 'Период',\n  value: { preset: 7 },              // или { from: '2026-09-11', to: '2026-09-24' }\n  url: 'period',                      // ?period=14d | 2026-09-11..2026-09-24\n  onChange: function (v) { /* v = { from: Date, to: Date, preset: 14|null } или null */ }\n});\np.value; p.text;                      // «Последние 14 дней»\np.set({ preset: 30 }); p.clear();\n</script>",
+   "rules": [
+    "Пресет назван словами: «Последние 14 дней», «Сегодня».",
+    "Свой диапазон — «11–24 сен», без года, если он текущий.",
+    "Строка применённых фильтров называет период так же, как поле."
+   ],
+   "avoid": [
+    "«14д» в поле — это сокращение для сегмента, не для фильтра.",
+    "«11.09.2026 – 24.09.2026» — восемь лишних знаков.",
+    "Период по умолчанию не выбран: данные «за всё время» на дашборде — почти всегда ошибка."
+   ],
+   "a11y": [
+    "Роли. Поле — кнопка с `aria-haspopup=\"dialog\"`; в `aria-label` — и название пресета, и точные даты.",
+    "Клавиатура. По пресетам — стрелки, Enter; Escape закрывает меню и возвращает фокус. Календарь — клавиатура Air Datepicker.",
+    "Не только цветом. Выбранный пресет отмечен `aria-pressed`; диапазон в календаре — заливкой и подписью в поле.",
+    "Не проверялось. Календарь — сторонняя библиотека; её доступность со скринридером не измерялась (HANDOFF.md)."
+   ],
+   "related": [
+    "calendar",
+    "select"
+   ],
+   "classes": [
+    "dk-menu",
+    "dk-menu--right",
+    "dk-menu__box",
+    "dk-menu__empty",
+    "dk-menu__foot",
+    "dk-menu__item",
+    "dk-menu__list",
+    "dk-menu__mark",
+    "dk-menu__n",
+    "dk-menu__name",
+    "dk-menu__search",
+    "dk-period",
+    "dk-period__cal",
+    "dk-period__menu",
+    "dk-period__presets",
+    "dk-select",
+    "dk-select--md",
+    "dk-select--sm",
+    "dk-select__caret",
+    "dk-select__clear",
+    "dk-select__count",
+    "dk-select__label",
+    "dk-select__trigger"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "vendor/air-datepicker.js",
+    "js/dk-period.js"
+   ]
+  },
+  {
+   "id": "search",
+   "title": "Поиск",
+   "kind": "компонент",
+   "group": "Фильтры",
+   "status": "стабильный",
+   "purpose": "Найти объект по имени: «Регион или округ». Первое, что видит человек на телефоне, поэтому крупнее поля формы и лежит на доске пилюлей. Справа — дата, на которую данные; пока ищут, её место занимает крестик.",
+   "use_when": [
+    "Объектов много, и человек знает имя нужного: регион, дом, котельная.",
+    "Верх экрана на телефоне: поиск и дата данных — одной строкой над фильтрами.",
+    "Список или таблица под поиском фильтруется по вводу."
+   ],
+   "instead": [
+    {
+     "when": "Значений до двадцати и их надо видеть списком — Фильтр, в нём поиск уже есть.",
+     "use": "select"
+    },
+    {
+     "when": "Поле в форме заявки — Поле и форма, `dk-field--search`.",
+     "use": "field"
+    },
+    {
+     "when": "Ограничить срез по времени — Период.",
+     "use": "period"
+    }
+   ],
+   "owns": [
+    "dk-search"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-util.js"
+   ],
+   "data": [],
+   "js": [
+    "dkAnchor",
+    "dkBack",
+    "dkDestroy",
+    "dkDur",
+    "dkEsc",
+    "dkFmt",
+    "dkNum",
+    "dkOwn",
+    "dkUrl"
+   ],
+   "docs": [
+    "component-search.html"
+   ],
+   "api": [
+    {
+     "name": "dk-search__input",
+     "type": "input type=search",
+     "what": "Поле; страница слушает input."
+    },
+    {
+     "name": "dk-search__clear",
+     "type": "кнопка",
+     "what": "Очистка без подключения: dk-util.js."
+    },
+    {
+     "name": "dk-search__at",
+     "type": "элемент",
+     "what": "Дата данных; необязательна."
+    },
+    {
+     "name": "aria-label",
+     "type": "атрибут поля",
+     "what": "Подпись для скринридера — обязательна."
+    }
+   ],
+   "example": "<div class=\"dk-search\">\n  <svg class=\"dk-i dk-search__icon\" aria-hidden=\"true\"><use href=\"#ti-search\"/></svg>\n  <input class=\"dk-search__input\" type=\"search\" placeholder=\"Регион или округ\"\n         aria-label=\"Найти регион или округ\" enterkeyhint=\"search\" autocomplete=\"off\">\n  <button type=\"button\" class=\"dk-search__clear\" aria-label=\"Очистить поиск\">\n    <svg class=\"dk-i\" aria-hidden=\"true\"><use href=\"#ti-x\"/></svg></button>\n  <span class=\"dk-search__at\" title=\"Данные на 29 сентября\">29.09</span>\n</div>\n\n<script>\ndocument.querySelector('.dk-search__input').addEventListener('input', function (e) {\n  /* фильтровать по e.target.value; пустая строка — показать всё */\n});\n</script>",
+   "rules": [
+    "Подсказка называет, что ищут: «Регион или округ».",
+    "Дата короткая: «29.09», полная — в `title`.",
+    "Ничего не нашлось — пустое состояние с тем, что сделать, а не пустота."
+   ],
+   "avoid": [
+    "«Поиск…» — не сказано, что искать.",
+    "Поиск без подписи для скринридера: подсказка не подпись.",
+    "Две строки поиска на экране."
+   ],
+   "a11y": [
+    "Подпись — `aria-label` на поле: подсказка исчезает при вводе и подписью не считается.",
+    "Крестик — кнопка с `aria-label=\"Очистить поиск\"`, цель 44 px; после очистки фокус в поле.",
+    "Фокус виден кромкой и кольцом акцента, а не только курсором."
+   ],
+   "related": [
+    "empty",
+    "field",
+    "select"
+   ],
+   "classes": [
+    "dk-search",
+    "dk-search__at",
+    "dk-search__clear",
+    "dk-search__icon",
+    "dk-search__input"
+   ],
+   "include": [
+    "js/dk-util.js"
+   ]
+  },
+  {
+   "id": "legend",
+   "title": "Фильтры-легенда",
+   "kind": "компонент",
+   "group": "Фильтры",
+   "status": "стабильный",
+   "purpose": "Один ряд, который и объясняет цвета, и фильтрует по ним. Цвет приходит снаружи через `--swatch`: компонент не знает, что такое «риск».",
+   "use_when": [
+    "Категорий две–шесть, и у каждой есть свой цвет на графике или карте рядом.",
+    "Нужно одновременно объяснить цвета и дать их включать / выключать.",
+    "Рядом с категорией важно число: «Высокий 23»."
+   ],
+   "instead": [
+    {
+     "when": "Категорий больше шести или у них нет цвета — Фильтр.",
+     "use": "select"
+    },
+    {
+     "when": "Категории без данных рядом — обычная легенда графика, её рисует dkChart сам.",
+     "use": "chart"
+    },
+    {
+     "when": "Один вариант из нескольких — Сегмент.",
+     "use": "segment"
+    }
+   ],
+   "owns": [
+    "dk-legend",
+    "dk-lg"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-legend.html"
+   ],
+   "api": [
+    {
+     "name": "--swatch",
+     "type": "переменная в style",
+     "what": "Цвет категории; без него серый."
+    },
+    {
+     "name": "aria-pressed + is-on",
+     "type": "атрибут и класс",
+     "what": "Включён; оба ставятся вместе."
+    },
+    {
+     "name": "dk-lg__n",
+     "type": "элемент",
+     "what": "Число записей."
+    }
+   ],
+   "example": "<div class=\"dk-legend\">\n  <button class=\"dk-lg is-on\" aria-pressed=\"true\"><i class=\"dk-lg__sw\"></i>Все<b class=\"dk-lg__n\">89</b></button>\n  <button class=\"dk-lg\" aria-pressed=\"false\" style=\"--swatch:var(--crit)\"><i class=\"dk-lg__sw\"></i>Высокий<b class=\"dk-lg__n\">23</b></button>\n</div>\n\n<script>\nlegend.addEventListener('click', function (e) {\n  var b = e.target.closest('.dk-lg');\n  if (!b) return;\n  var on = b.getAttribute('aria-pressed') !== 'true';\n  b.setAttribute('aria-pressed', String(on));\n  b.classList.toggle('is-on', on);\n  // дальше — перерисовать данные\n});\n</script>",
+   "rules": [
+    "Название категории — как в легенде графика рядом, слово в слово.",
+    "Первым — «Все» с общим числом.",
+    "Порядок — по смыслу (от худшего к лучшему), а не по алфавиту."
+   ],
+   "avoid": [
+    "Разные названия на чипе и в легенде графика: «Высокий» и «Крит.».",
+    "Чип без числа: выбор вслепую.",
+    "Цвет, розданный по кругу, а не по смыслу."
+   ],
+   "a11y": [
+    "Роль. Кнопки с `aria-pressed`; скринридер читает «нажата / не нажата».",
+    "Не только цветом. Включённый чип отличается заливкой всего чипа, не только меткой; число и подпись на месте.",
+    "Контраст. Заливка 22 % своего цвета поверх поверхности — та же ступень, что у выбранной строки таблицы.",
+    "Клавиатура. Обычные кнопки: Tab, Enter, пробел."
+   ],
+   "related": [
+    "chart",
+    "map",
+    "select"
+   ],
+   "classes": [
+    "dk-legend",
+    "dk-lg",
+    "dk-lg--lg",
+    "dk-lg--sm",
+    "dk-lg__n",
+    "dk-lg__sw"
+   ],
+   "include": []
+  },
+  {
+   "id": "pager",
+   "title": "Пагинация",
+   "kind": "компонент",
+   "group": "Фильтры",
+   "status": "стабильный",
+   "purpose": "Листать длинный список по страницам, называя, что и сколько показано: «21–40 из 89 регионов».",
+   "use_when": [
+    "Записей больше, чем помещается на экране, и они равноправны: журнал аварий, список заявок.",
+    "Человеку важно знать, сколько всего и где он сейчас.",
+    "Сортировка и фильтры должны работать по всему набору, а не по видимой странице."
+   ],
+   "instead": [
+    {
+     "when": "Записей до тридцати — просто прокрутка; полосу прокрутки не прячут.",
+     "use": null
+    },
+    {
+     "when": "Лента событий, которую читают сверху вниз, — кнопка «Показать ещё» в Списке.",
+     "use": "list"
+    },
+    {
+     "when": "Рейтинг — Рейтинг: там показывают верх, а не листают.",
+     "use": "rank"
+    }
+   ],
+   "owns": [
+    "dk-pager"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-pager.js"
+   ],
+   "data": [],
+   "js": [
+    "dkPager"
+   ],
+   "docs": [
+    "component-pager.html"
+   ],
+   "api": [
+    {
+     "name": "total",
+     "type": "число",
+     "what": "Сколько всего записей."
+    },
+    {
+     "name": "size / sizes",
+     "type": "число / массив",
+     "what": "Размер страницы и доступные размеры."
+    },
+    {
+     "name": "page",
+     "type": "число",
+     "what": "Начальная страница."
+    },
+    {
+     "name": "noun",
+     "type": "массив из трёх форм",
+     "what": "«регион, региона, регионов»."
+    },
+    {
+     "name": "onChange(e)",
+     "type": "функция",
+     "what": "e.page, e.size при смене."
+    },
+    {
+     "name": "page / size / setTotal(n)",
+     "type": "API",
+     "what": "Читать; пересчитать после фильтра."
+    }
+   ],
+   "example": "<div id=\"pager\"></div>\n\n<script>\nvar pg = dkPager(document.getElementById('pager'), {\n  total: 89, size: 20, page: 1,\n  sizes: [10, 20, 50],                         // или null\n  noun: ['регион', 'региона', 'регионов'],\n  onChange: function (e) { /* e.page, e.size — запросить и показать срез */ }\n});\npg.page; pg.size; pg.setTotal(120);\n</script>",
+   "rules": [
+    "«21–40 из 89 регионов» — диапазон, всего, существительное в падеже.",
+    "Существительное — то, что считаем: регионов, заявок, аварий.",
+    "Итог отрицательным не бывает: сдвиг ограничен нулём."
+   ],
+   "avoid": [
+    "«Страница 3 из 5» — не говорит, сколько записей.",
+    "«89 записей» для аварий — записи бывают у бухгалтера.",
+    "Пагинация, которая исчезает на одной странице: человек не знает, что видит всё."
+   ],
+   "a11y": [
+    "Роли. Текущая страница — `aria-current=\"page\"`; стрелки — кнопки с `aria-label`.",
+    "Живая область. Счётчик объявляется скринридеру при смене страницы.",
+    "Клавиатура. Обычные кнопки: Tab, Enter.",
+    "Контраст. Текущая страница залита `--control-on`, цифра на ней 4,79 / 5,04:1."
+   ],
+   "related": [
+    "list",
+    "table"
+   ],
+   "classes": [
+    "dk-pager",
+    "dk-pager__count",
+    "dk-pager__gap",
+    "dk-pager__nav",
+    "dk-pager__p",
+    "dk-pager__pages",
+    "dk-pager__short",
+    "dk-pager__size"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-pager.js"
+   ]
+  },
+  {
+   "id": "table",
+   "title": "Таблица",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Сравнить много объектов по нескольким показателям: регионы по баллу и событиям, заявки по сроку и бригаде. Читается по строкам, сортируется по колонке, выбирается для действия.",
+   "use_when": [
+    "Объектов больше семи и у каждого несколько показателей — сравнивать нужно по колонкам.",
+    "По строке нужно действие: назначить, открыть, снять с контроля.",
+    "Точное число важнее формы: «73 события», а не «примерно столько же, сколько у соседа»."
+   ],
+   "instead": [
+    {
+     "when": "Один показатель по многим объектам, вопрос «у кого хуже» — Рейтинг: полоса читается быстрее числа.",
+     "use": "rank"
+    },
+    {
+     "when": "Одно–четыре главных числа — KPI-плитки, а не таблица из одной строки.",
+     "use": "tile"
+    },
+    {
+     "when": "Динамика во времени — График: таблица покажет числа, но не форму.",
+     "use": "chart"
+    },
+    {
+     "when": "Список с одним значением на строку — Список, у него меньше шума.",
+     "use": "list"
+    }
+   ],
+   "owns": [
+    "dk-table",
+    "dk-tablewrap",
+    "dk-td-",
+    "dk-th-",
+    "dk-tr-group"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-table.js"
+   ],
+   "data": [],
+   "js": [
+    "dkTable"
+   ],
+   "docs": [
+    "component-table.html"
+   ],
+   "api": [
+    {
+     "name": "onSelect(ids)",
+     "type": "функция",
+     "what": "При каждой смене выбора с массивом `data-id`."
+    },
+    {
+     "name": "onSort(e)",
+     "type": "функция",
+     "what": "Передан — таблица не сортирует сама, а сообщает `e.column` и `e.dir`."
+    },
+    {
+     "name": "data-sortable",
+     "type": "атрибут th",
+     "what": "Имя колонки для сортировки."
+    },
+    {
+     "name": "data-sort",
+     "type": "атрибут td",
+     "what": "Значение для сортировки, когда текст ячейки — не оно."
+    },
+    {
+     "name": "--table-min, --table-max",
+     "type": "переменные на обёртке",
+     "what": "Минимальная ширина и высота прокрутки; по умолчанию 720 и 480."
+    }
+   ],
+   "example": "<div class=\"dk-tablewrap dk-tablewrap--tall\" style=\"--table-min:860px;--table-max:420px\">\n  <table class=\"dk-table dk-table--zebra dk-table--sticky-head dk-table--sticky-col\" id=\"regions\">\n    <thead><tr>\n      <th class=\"dk-th-pick\"><label class=\"dk-check\" aria-label=\"Выбрать все на странице\">\n        <input type=\"checkbox\" data-pick-all><span class=\"dk-check__box\">…</span></label></th>\n      <th style=\"width:24%\" data-sortable=\"Регион\">Регион</th>\n      <th style=\"width:12%\" class=\"dk-td-num\" data-sortable=\"Балл\">Балл</th>\n    </tr></thead>\n    <tbody>\n      <tr data-id=\"RU-CR\">\n        <td class=\"dk-td-pick\">…<input type=\"checkbox\" data-pick value=\"RU-CR\">…</td>\n        <td>Крым</td>\n        <td class=\"dk-td-num\" data-sort=\"82\">82</td>\n      </tr>\n      <tr class=\"dk-tr-group\"><td colspan=\"2\">Сибирский округ</td><td class=\"dk-td-num\">73</td></tr>\n    </tbody>\n    <tfoot><tr><td></td><td>Итого</td><td class=\"dk-td-num\">155</td></tr></tfoot>\n  </table>\n</div>\n\n<script>\nvar t = dkTable(document.getElementById('regions'), {\n  onSelect: function (ids) { /* выбрано видно числом: ids.length */ },\n  onSort:   function (e)   { /* e.column, e.dir — если сортирует сервер */ }\n});\nt.selected; t.clear();\n</script>",
+   "rules": [
+    "Единица — в заголовке колонки: «События, шт.», в ячейках только числа.",
+    "Нет значения — прочерк «—». Ноль — это ответ, отсутствие — нет.",
+    "Числа через `dkFmt`: разряды неразрывным пробелом, дробь запятой, минус настоящий.",
+    "Дельта со знаком всегда: «+4», «−8 мин».",
+    "Заголовки короткие, именительный падеж: «Регион», «Балл»."
+   ],
+   "avoid": [
+    "«73 события» в каждой ячейке — единица повторяется сорок раз.",
+    "Пустая ячейка или «0» вместо отсутствующего значения.",
+    "«1240» рядом с «1 240» — читается как два разных числа.",
+    "Цвет статуса без значка и подписи — его видят не все.",
+    "Действия, спрятанные под наведение, — на тачскрине наведения нет."
+   ],
+   "a11y": [
+    "Клавиатура. Заголовок с сортировкой — кнопка, флажки — настоящие `input`; кольцо фокуса только при навигации табом.",
+    "Роли. Настоящая `<table>`: скринридер ходит по ячейкам сам. Сортировка — `aria-sort`; выбранная строка — `aria-selected`.",
+    "Подписи. У каждого флажка свой `aria-label` с названием строки; у колонки действий — скрытый заголовок.",
+    "Контраст. Заголовок на своей поверхности и числа на строке проверяются в обеих темах (КОНТРАСТ, СТУПЕНИ).",
+    "Не проверялось. Живой скринридер и тач-устройства — как и у всего кита."
+   ],
+   "related": [
+    "badge",
+    "pager",
+    "rank",
+    "select"
+   ],
+   "classes": [
+    "dk-table",
+    "dk-table--cards",
+    "dk-table--ruled",
+    "dk-table--sticky-col",
+    "dk-table--sticky-head",
+    "dk-table--zebra",
+    "dk-tablewrap",
+    "dk-tablewrap--tall",
+    "dk-td-act",
+    "dk-td-act__box",
+    "dk-td-bar",
+    "dk-td-main",
+    "dk-td-main__icon",
+    "dk-td-main__name",
+    "dk-td-main__sub",
+    "dk-td-main__text",
+    "dk-td-num",
+    "dk-td-pick",
+    "dk-th-act",
+    "dk-th-pick",
+    "dk-th-sort",
+    "dk-tr-group"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-table.js"
+   ]
+  },
+  {
+   "id": "badge",
+   "title": "Бейдж, статус, прогресс",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Мелкие детали, из которых собраны таблицы и карточки. Бейдж отвечает «сколько» или «что за штука», статус — «как дела» и обязан иметь значок и подпись, прогресс — «сколько сделано».",
+   "use_when": [
+    "Бейдж: число или короткая метка рядом с названием — «23» у вкладки, «БПЛА» у региона.",
+    "Статус: состояние объекта в строке таблицы или карточке.",
+    "Прогресс: доля выполненного, когда есть известный конец: устранение, готовность."
+   ],
+   "instead": [
+    {
+     "when": "Категория, которую можно снять, — чип-фильтр, не бейдж.",
+     "use": "legend"
+    },
+    {
+     "when": "Главное число экрана — KPI-плитка, бейдж для этого мелок.",
+     "use": "tile"
+    },
+    {
+     "when": "Доступность во времени — Полоса доступности, не прогресс.",
+     "use": "uptime"
+    }
+   ],
+   "owns": [
+    "dk-badge",
+    "dk-status",
+    "dk-progress",
+    "dk-avatar",
+    "dk-avatars",
+    "dk-inline"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-badge.html"
+   ],
+   "api": [
+    {
+     "name": "dk-badge--crit | --high | --calm | --brand | --pill",
+     "type": "класс",
+     "what": "Вид бейджа."
+    },
+    {
+     "name": "dk-status--crit | --high | --calm",
+     "type": "класс",
+     "what": "Цвет статуса; без модификатора — «нет данных»."
+    },
+    {
+     "name": "--accent",
+     "type": "переменная в style",
+     "what": "Цвет заливки прогресса; по умолчанию акцент (открыто в REVIEW.md)."
+    },
+    {
+     "name": "dk-progress--indeterminate",
+     "type": "класс",
+     "what": "Конец неизвестен."
+    },
+    {
+     "name": "dk-avatar--sm | --more",
+     "type": "класс",
+     "what": "Маленький аватар; «ещё N»."
+    }
+   ],
+   "example": "<span class=\"dk-badge dk-badge--crit\">23</span>\n<span class=\"dk-badge dk-badge--pill\">БПЛА</span>\n\n<span class=\"dk-status dk-status--high\">\n  <svg class=\"dk-i\"><use href=\"#ti-clock\"/></svg>В работе\n</span>\n\n<div class=\"dk-progress\">\n  <span class=\"dk-progress__track\"><span class=\"dk-progress__fill\" style=\"width:64%;--accent:var(--high)\"></span></span>\n  <span class=\"dk-progress__value\">64%</span>\n</div>",
+   "rules": [
+    "Статус — одно-два слова о состоянии: «В работе», «Устранено».",
+    "Метка — существительное-категория: «БПЛА», «Плановое».",
+    "Прогресс с числом рядом и понятным концом: 64% устранения."
+   ],
+   "avoid": [
+    "Статус одним цветом или одним значком.",
+    "Бейдж «новое» на всём подряд — акцент перестаёт значить «новое».",
+    "Прогресс без числа и без известного конца — там неопределённая полоса."
+   ],
+   "a11y": [
+    "Не только цветом. Статус — значок + подпись; бейдж цвета смысла всегда с числом.",
+    "Прогресс — число рядом читается скринридером; сама полоса декоративна.",
+    "Аватары — инициалы с `aria-label` полного имени.",
+    "Контраст. Подписи статусов и бейджей на своих заливках проверяются проверкой КОНТРАСТ в обеих темах."
+   ],
+   "related": [
+    "legend",
+    "table",
+    "tabs"
+   ],
+   "classes": [
+    "dk-avatar",
+    "dk-avatar--lg",
+    "dk-avatar--more",
+    "dk-avatar--sm",
+    "dk-avatars",
+    "dk-badge",
+    "dk-badge--brand",
+    "dk-badge--calm",
+    "dk-badge--crit",
+    "dk-badge--high",
+    "dk-badge--pill",
+    "dk-inline",
+    "dk-progress",
+    "dk-progress--indeterminate",
+    "dk-progress__fill",
+    "dk-progress__track",
+    "dk-progress__value",
+    "dk-status",
+    "dk-status--calm",
+    "dk-status--crit",
+    "dk-status--high"
+   ],
+   "include": []
+  },
+  {
+   "id": "tile",
+   "title": "KPI-плитка",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Одно главное число с трендом и формой: сколько сейчас и куда идёт. Размер S — четверть колонки; здесь число и спарклайн, а не график с осями.",
+   "use_when": [
+    "Одно текущее значение, которое смотрят первым: аварий сейчас, время реакции.",
+    "Важно направление: тренд к прошлому периоду.",
+    "Плиток две–шесть в ряд; больше — уже таблица."
+   ],
+   "instead": [
+    {
+     "when": "Сравнение многих значений — График в размере L.",
+     "use": "chart"
+    },
+    {
+     "when": "Значение с планом и дельтой к нему — пока нет компонента; открыто в REVIEW.md («KPI с планом»).",
+     "use": null
+    },
+    {
+     "when": "Один показатель по многим объектам — Рейтинг.",
+     "use": "rank"
+    }
+   ],
+   "owns": [
+    "dk-tile",
+    "dk-trend",
+    "dk-metric",
+    "dk-metric-lg",
+    "dk-metric-xl",
+    "dk-widget"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-charts.js"
+   ],
+   "data": [],
+   "js": [
+    "dkChart"
+   ],
+   "docs": [
+    "component-tile.html"
+   ],
+   "api": [
+    {
+     "name": "--accent",
+     "type": "переменная в style",
+     "what": "Тон значка и тренда; смысловые -ink токены."
+    },
+    {
+     "name": "dk-metric-lg / dk-metric-xl",
+     "type": "класс",
+     "what": "Кегль числа 28 или 40."
+    },
+    {
+     "name": "type: 'spark'",
+     "type": "dkChart",
+     "what": "Спарклайн; `area: false` убирает заливку."
+    }
+   ],
+   "example": "<div class=\"dk-widget dk-widget--s dk-tile\" style=\"--accent:var(--crit-ink)\">\n  <div class=\"dk-tile__head\">\n    <span class=\"dk-tile__icon\"><svg class=\"dk-i dk-i--sm\"><use href=\"#ti-alert-triangle\"/></svg></span>\n    <span class=\"dk-tile__label\">Аварии за сутки</span>\n  </div>\n  <div class=\"dk-tile__row\">\n    <span class=\"dk-metric-lg\">23</span>\n    <span class=\"dk-trend\" style=\"--accent:var(--crit-ink)\"><svg class=\"dk-i dk-i--sm\"><use href=\"#ti-arrow-up\"/></svg> +18%</span>\n  </div>\n  <div class=\"dk-chart dk-chart--spark\" id=\"sp\"></div>\n</div>\n\n<script>\ndkChart(document.getElementById('sp'), {\n  type: 'spark', categories: days,\n  series: [{ name: 'Аварии', data: [12, 14, 11, 16, 15, 19, 17] }]\n});\n</script>",
+   "rules": [
+    "Подпись с периодом: «Аварии за сутки», «Обращений за 14 дней».",
+    "Тренд со знаком и словами, если нет числа: «без изменений».",
+    "Единица рядом с числом только когда без неё непонятно: «42 мин»."
+   ],
+   "avoid": [
+    "Число без периода: «Аварии: 23» — за час? за год?",
+    "Красная стрелка вниз у «времени реакции» — падение здесь хорошо.",
+    "Спарклайн с осями и подписями — в четверти колонки они мельче десяти пикселей."
+   ],
+   "a11y": [
+    "Число читается текстом; спарклайн — холст без подписи, и это осознанно: он повторяет тренд, который уже сказан словами.",
+    "Тренд — стрелка со словом или числом, не только цветом.",
+    "Загрузка — `aria-busy` на плитке и скрытый текст «Загружаем».",
+    "Контраст. Число и подпись на поверхности виджета — проверка КОНТРАСТ."
+   ],
+   "related": [
+    "chart",
+    "rank"
+   ],
+   "classes": [
+    "dk-metric",
+    "dk-metric-lg",
+    "dk-metric-xl",
+    "dk-tile",
+    "dk-tile--compact",
+    "dk-tile__head",
+    "dk-tile__icon",
+    "dk-tile__label",
+    "dk-tile__row",
+    "dk-trend",
+    "dk-widget",
+    "dk-widget--s",
+    "dk-widget__actions",
+    "dk-widget__body",
+    "dk-widget__head",
+    "dk-widget__hint",
+    "dk-widget__title"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "vendor/echarts.min.js",
+    "js/dk-chart-theme.js",
+    "js/dk-charts.js"
+   ]
+  },
+  {
+   "id": "hero",
+   "title": "Главная карточка",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Одно главное число экрана и то, из чего оно сложено: «25 из 89», метка смысла, полоса состава и чипы с изменением. Отвечает сразу на три вопроса — сколько, много ли это и из чего состоит. На экране она одна.",
+   "use_when": [
+    "Одно число, ради которого открывают экран: «регионов с высоким риском», «аварий сейчас».",
+    "Число — часть целого, и важно, из чего оно сложено: 25 из 89, по уровням или по источникам.",
+    "Первый экран телефона: карточка встаёт сразу под фильтрами и отвечает раньше любого графика."
+   ],
+   "instead": [
+    {
+     "when": "Главных чисел несколько и они равноправны — ряд KPI-плиток: вторая главная карточка на экране отменяет первую.",
+     "use": "tile"
+    },
+    {
+     "when": "Нужен ещё и список «кто хуже всех» — Рейтинг и сводка.",
+     "use": "rank"
+    },
+    {
+     "when": "Долей больше шести или их надо сравнивать точно — График: отрезки полосы глазом точно не сравнить.",
+     "use": "chart"
+    }
+   ],
+   "owns": [
+    "dk-hero",
+    "dk-split",
+    "dk-keys",
+    "dk-key"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-hero.html"
+   ],
+   "api": [
+    {
+     "name": "--accent",
+     "type": "переменная в style",
+     "what": "Смысл карточки: оттенок угла. Только crit / high / calm или не задавать."
+    },
+    {
+     "name": "--share",
+     "type": "число в style отрезка",
+     "what": "Доля отрезка полосы; складывать заранее не нужно."
+    },
+    {
+     "name": "--swatch",
+     "type": "переменная в style",
+     "what": "Цвет отрезка и точки чипа: смысл или серия, один и тот же для пары."
+    },
+    {
+     "name": "dk-hero__of",
+     "type": "элемент",
+     "what": "Мера «из скольких»; не пропускать, если она есть."
+    }
+   ],
+   "example": "<section class=\"dk-hero\" style=\"--accent:var(--crit)\">\n  <div class=\"dk-hero__label\">Регионов с высоким риском</div>\n  <div class=\"dk-hero__row\">\n    <div class=\"dk-hero__value\"><span class=\"dk-hero__n\">25</span><span class=\"dk-hero__of\">из 89</span></div>\n    <span class=\"dk-trend\" style=\"--accent:var(--crit-ink)\">\n      <svg class=\"dk-i dk-i--sm\"><use href=\"#ti-arrow-up-right\"/></svg>негатив растёт в 7</span>\n  </div>\n  <div class=\"dk-split\" role=\"img\" aria-label=\"Высокий 25, средний 35, низкий 29\">\n    <span class=\"dk-split__seg\" style=\"--share:25;--swatch:var(--crit)\"></span>\n    <span class=\"dk-split__seg\" style=\"--share:35;--swatch:var(--high)\"></span>\n    <span class=\"dk-split__seg\" style=\"--share:29;--swatch:var(--calm)\"></span>\n  </div>\n  <div class=\"dk-keys\">\n    <span class=\"dk-key\" style=\"--swatch:var(--crit)\"><i class=\"dk-key__dot\"></i>Высокий <b>25</b><span class=\"dk-key__d\">+1</span></span>\n  </div>\n</section>",
+   "rules": [
+    "Подпись с периодом: «Публикаций по всей стране · за 14 дней».",
+    "Число с мерой: «25 из 89», а не голое «25».",
+    "Метка отвечает «почему смотреть»: «негатив растёт в 7», «6 режимов ЧС»."
+   ],
+   "avoid": [
+    "Две главные карточки на одном экране.",
+    "Оттенок акцентом бренда: у бренда нет смысла «плохо».",
+    "Полоса без чипов — цвет без подписи."
+   ],
+   "a11y": [
+    "Полоса — картинка: `role=\"img\"` и `aria-label` с составом словами; числа — в чипах под ней.",
+    "Цвет не единственный признак: у каждой доли есть название и число в чипе.",
+    "Контраст. Знаменатель и подписи на поверхности — проверка КОНТРАСТ; оттенок уходит в поверхность к середине."
+   ],
+   "related": [
+    "legend",
+    "rank",
+    "tile"
+   ],
+   "classes": [
+    "dk-hero",
+    "dk-hero__label",
+    "dk-hero__n",
+    "dk-hero__of",
+    "dk-hero__row",
+    "dk-hero__value",
+    "dk-key",
+    "dk-key__d",
+    "dk-key__dot",
+    "dk-keys",
+    "dk-split",
+    "dk-split__seg"
+   ],
+   "include": []
+  },
+  {
+   "id": "car",
+   "title": "Лента карточек",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Несколько объектов, у каждого своя история: «Резко выросли за день», «В фокусе дня». Карточки стоят в ряд и листаются вбок; видна одна история целиком и краешек следующей — подсказка, что их несколько.",
+   "use_when": [
+    "Три–семь объектов, и у каждого есть рассказ: было → стало, причина, где.",
+    "Верх телефонного экрана под главной карточкой: «что изменилось сегодня»."
+   ],
+   "instead": [
+    {
+     "when": "Объектов больше семи или их надо сравнивать между собой — Рейтинг или Таблица: в ленте видна одна карточка за раз.",
+     "use": "rank"
+    },
+    {
+     "when": "Одно число с тем, из чего оно сложено — Главная карточка.",
+     "use": "hero"
+    },
+    {
+     "when": "Список событий по времени — Список.",
+     "use": "list"
+    }
+   ],
+   "owns": [
+    "dk-car"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-car.js"
+   ],
+   "data": [],
+   "js": [
+    "dkCar"
+   ],
+   "docs": [
+    "component-car.html"
+   ],
+   "api": [
+    {
+     "name": "dkCar(el)",
+     "type": "функция",
+     "what": "Оживляет разметку ленты; возвращает управление."
+    },
+    {
+     "name": "index",
+     "type": "число, чтение",
+     "what": "Номер текущей карточки, с нуля."
+    },
+    {
+     "name": "go(i)",
+     "type": "функция",
+     "what": "Пролистать к карточке; движение гасится системной настройкой."
+    },
+    {
+     "name": "destroy()",
+     "type": "функция",
+     "what": "Снять обработчики; сторож dk-util.js сделает это сам, когда узел уйдёт."
+    }
+   ],
+   "example": "<div class=\"dk-car\" id=\"car\">\n  <div class=\"dk-car__head\">\n    <h3 class=\"dk-car__title\">Резко выросли за день</h3>\n    <span class=\"dk-push dk-car__pos\">1 из 5</span>\n    <span class=\"dk-car__nav\">\n      <button type=\"button\" class=\"dk-iconbtn dk-iconbtn--sm\" data-car=\"prev\" aria-label=\"Предыдущая\">…</button>\n      <button type=\"button\" class=\"dk-iconbtn dk-iconbtn--sm\" data-car=\"next\" aria-label=\"Следующая\">…</button>\n    </span>\n  </div>\n  <ul class=\"dk-car__track\" role=\"list\">\n    <li class=\"dk-car__item\" style=\"--accent:var(--crit)\">\n      <span class=\"dk-car__tags\"><span class=\"dk-trend\" style=\"--accent:var(--crit-ink)\">+27 за день</span></span>\n      <span class=\"dk-car__row\">\n        <span class=\"dk-car__who\"><span class=\"dk-car__name\">Санкт-Петербург</span><span class=\"dk-car__sub\">СЗФО</span></span>\n        <span class=\"dk-car__change\" aria-label=\"было 30, стало 57\">\n          <span class=\"dk-car__from\">30</span><span class=\"dk-car__arrow\" aria-hidden=\"true\">→</span>\n          <span class=\"dk-car__to\" style=\"--to:var(--crit-ink)\">57</span></span>\n      </span>\n      <p class=\"dk-car__text\">Авария теплосети; отключения ГВС и отопления.</p>\n    </li>\n  </ul>\n  <div class=\"dk-car__dots\"></div>\n</div>\n\n<script>\nvar car = dkCar(document.getElementById('car'));\ncar.index;    // текущая карточка\ncar.go(2);    // пролистать к третьей\n</script>",
+   "rules": [
+    "Заголовок отвечает, почему эти карточки вместе: «Резко выросли за день».",
+    "Было → стало числами: «30 → 57».",
+    "Рассказ — причина: «авария теплосети», а не «рост показателя»."
+   ],
+   "avoid": [
+    "Лента из одной карточки — это главная карточка.",
+    "Двадцать карточек: до последней не долистают.",
+    "Пустая лента без слов, когда изменений нет."
+   ],
+   "a11y": [
+    "Лента — список: `ul role=\"list\"`, карточки — пункты; скринридер называет, сколько их.",
+    "Позиция словами: счётчик «1 из 3»; точки скрыты от скринридера (`aria-hidden`).",
+    "Было → стало — `aria-label` на паре чисел: «было 30, стало 57», стрелка скрыта.",
+    "Стрелки — кнопки с подписью; на краях ленты отключаются."
+   ],
+   "related": [
+    "hero",
+    "list",
+    "rank"
+   ],
+   "classes": [
+    "dk-car",
+    "dk-car--list",
+    "dk-car__arrow",
+    "dk-car__change",
+    "dk-car__dots",
+    "dk-car__from",
+    "dk-car__head",
+    "dk-car__item",
+    "dk-car__name",
+    "dk-car__nav",
+    "dk-car__pos",
+    "dk-car__row",
+    "dk-car__sub",
+    "dk-car__tags",
+    "dk-car__text",
+    "dk-car__title",
+    "dk-car__to",
+    "dk-car__track",
+    "dk-car__who"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-car.js"
+   ]
+  },
+  {
+   "id": "rank",
+   "title": "Рейтинг и сводка",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Правая колонка дашборда: главное число, тренд и ранжированный список — кто хуже всех. Строки разделяются ритмом и наведением, не линейками.",
+   "use_when": [
+    "Вопрос «у кого хуже» по одному показателю: регионы по баллу, бригады по просрочке.",
+    "Нужен верх списка, а не весь список — топ-5 или топ-10.",
+    "Строка ведёт к объекту: клик открывает регион."
+   ],
+   "instead": [
+    {
+     "when": "Несколько показателей на объект — Таблица.",
+     "use": "table"
+    },
+    {
+     "when": "Доля от самого крупного полосой — Полосы (`dk-bars`).",
+     "use": "list"
+    },
+    {
+     "when": "Все 89 регионов — Плитки регионов.",
+     "use": "map"
+    }
+   ],
+   "owns": [
+    "dk-summary",
+    "dk-score",
+    "dk-rank",
+    "dk-chip",
+    "dk-trend"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-rank.html"
+   ],
+   "api": [
+    {
+     "name": "--accent",
+     "type": "переменная в style",
+     "what": "Цвет значения или числа чипа."
+    },
+    {
+     "name": "dk-rank__row",
+     "type": "кнопка",
+     "what": "Строка; страница вешает клик."
+    },
+    {
+     "name": "dk-score__of",
+     "type": "элемент",
+     "what": "«из скольких» — не пропускать."
+    }
+   ],
+   "example": "<div class=\"dk-summary\" style=\"--accent:var(--crit-ink)\">\n  <div><div class=\"dk-trend\"><svg class=\"dk-i\"><use href=\"#ti-arrow-up-right\"/></svg> негатив растёт в 28</div></div>\n  <div class=\"dk-score\"><span class=\"dk-score__v\">23</span><span class=\"dk-score__of\">/89</span></div>\n</div>\n\n<div class=\"dk-rank\">\n  <div class=\"dk-rank__head\"><span class=\"dk-overline\">Регионы</span></div>\n  <button class=\"dk-rank__row\" data-id=\"RU-CR\">\n    <span class=\"dk-rank__i\">01</span>\n    <span class=\"dk-rank__name\">Крым</span>\n    <span class=\"dk-rank__v\" style=\"--accent:var(--crit-ink)\">82</span>\n  </button>\n</div>",
+   "rules": [
+    "Заголовок сводки с периодом: «Сводка по стране · 14 дней».",
+    "Главное число с «из скольких»: 23/89.",
+    "Название региона официальное, как в справочнике."
+   ],
+   "avoid": [
+    "Рейтинг из двадцати строк — это таблица.",
+    "Число без периода и без «из».",
+    "Цвет значения без порога — «просто красиво»."
+   ],
+   "a11y": [
+    "Строки — кнопки: Tab и Enter открывают объект; кольцо фокуса при навигации с клавиатуры.",
+    "Порядок читается числом номера, не только положением.",
+    "Значение цветом и числом; цвет — дополнение.",
+    "Контраст. Значения на поверхности панели — проверка КОНТРАСТ."
+   ],
+   "related": [
+    "map",
+    "table",
+    "tile"
+   ],
+   "classes": [
+    "dk-chip",
+    "dk-chip__l",
+    "dk-chip__n",
+    "dk-rank",
+    "dk-rank__head",
+    "dk-rank__i",
+    "dk-rank__name",
+    "dk-rank__row",
+    "dk-rank__v",
+    "dk-score",
+    "dk-score__of",
+    "dk-score__v",
+    "dk-summary",
+    "dk-summary--plain",
+    "dk-trend"
+   ],
+   "include": []
+  },
+  {
+   "id": "list",
+   "title": "Список, полосы, раскрытие",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Три способа показать ряд объектов без таблицы: список событий со значком и значением, полосы «доля от самого крупного», раскрывающийся блок с итогом в заголовке.",
+   "use_when": [
+    "Список: лента событий с одним значением на строку, где важны время и вид.",
+    "Полосы: доля от самого крупного в списке из трёх–семи категорий.",
+    "Раскрытие: подробности, без которых можно понять итог, — и итог стоит в заголовке."
+   ],
+   "instead": [
+    {
+     "when": "Несколько показателей на строку — Таблица.",
+     "use": "table"
+    },
+    {
+     "when": "Доля от целого — пончик: полосы показывают долю от максимума, а не от суммы.",
+     "use": "chart"
+    },
+    {
+     "when": "Ранжирование по одному числу — Рейтинг.",
+     "use": "rank"
+    }
+   ],
+   "owns": [
+    "dk-list",
+    "dk-bars",
+    "dk-bar",
+    "dk-fold",
+    "dk-row"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-list.html"
+   ],
+   "api": [
+    {
+     "name": "--accent",
+     "type": "переменная в style",
+     "what": "Тон строки или полосы."
+    },
+    {
+     "name": "dk-list__more",
+     "type": "кнопка",
+     "what": "Показать остальное; страница решает как."
+    },
+    {
+     "name": "dk-bar__fill style=width",
+     "type": "проценты от максимума",
+     "what": "Считает страница: max = 100%."
+    }
+   ],
+   "example": "<div class=\"dk-list\">\n  <button class=\"dk-list__row\" style=\"--accent:var(--crit-ink)\" data-id=\"4821\">\n    <span class=\"dk-list__icon\"><svg class=\"dk-i dk-i--sm\"><use href=\"#ti-alert-triangle\"/></svg></span>\n    <span class=\"dk-list__text\">\n      <span class=\"dk-list__name\">Прорыв теплотрассы</span>\n      <span class=\"dk-list__sub\">Новосибирск · 14:20</span>\n    </span>\n    <span class=\"dk-list__v\" style=\"--accent:var(--crit-ink)\">1 240 чел.</span>\n  </button>\n  <button class=\"dk-list__more\">Показать все</button>\n</div>\n\n<div class=\"dk-bar\" style=\"--accent:var(--high-ink)\">\n  <div class=\"dk-bar__head\"><span class=\"dk-bar__name\">Водоснабжение</span><span class=\"dk-bar__v\">344</span></div>\n  <div class=\"dk-bar__track\"><div class=\"dk-bar__fill\" style=\"width:66%\"></div></div>\n  <div class=\"dk-bar__meta\">27% обращений</div>\n</div>",
+   "rules": [
+    "Подстрока «где · когда» через точку-разделитель.",
+    "Значение с единицей: «1 240 чел.», «—», если измерить нечем.",
+    "Итог в заголовке раскрытия: «серверы 4/4»."
+   ],
+   "avoid": [
+    "Лента на сорок строк без «Показать все».",
+    "Полосы без чисел.",
+    "Свёрнуто то, без чего не понять, — это сокрытие, а не сворачивание."
+   ],
+   "a11y": [
+    "Строки списка — кнопки: Tab, Enter; фокус виден.",
+    "Раскрытие — настоящий `<details>`: клавиатура и скринридер бесплатно.",
+    "Полосы — число рядом читается; полоса декоративна.",
+    "Контраст. Подстрока `--ink-3` на поверхности — не ниже 4,07:1."
+   ],
+   "related": [
+    "rank",
+    "table",
+    "uptime"
+   ],
+   "classes": [
+    "dk-bar",
+    "dk-bar__fill",
+    "dk-bar__head",
+    "dk-bar__meta",
+    "dk-bar__name",
+    "dk-bar__track",
+    "dk-bar__v",
+    "dk-bars",
+    "dk-fold",
+    "dk-fold__body",
+    "dk-fold__head",
+    "dk-fold__sum",
+    "dk-fold__title",
+    "dk-list",
+    "dk-list__icon",
+    "dk-list__more",
+    "dk-list__name",
+    "dk-list__row",
+    "dk-list__sub",
+    "dk-list__text",
+    "dk-list__v",
+    "dk-row",
+    "dk-row__label",
+    "dk-row__value"
+   ],
+   "include": []
+  },
+  {
+   "id": "uptime",
+   "title": "Доступность служб",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Полоса из делений по времени: работала служба или нет. Легенда стоит всегда, а не только когда появился сбой, и «нет данных» не притворяется «работает».",
+   "use_when": [
+    "Служба либо работает, либо нет, и важно, когда именно не работала.",
+    "Несколько служб сравнивают по одной шкале времени.",
+    "Период — сутки или неделя с равными делениями."
+   ],
+   "instead": [
+    {
+     "when": "Значение, а не да/нет, во времени — График.",
+     "use": "chart"
+    },
+    {
+     "when": "Доля выполненного — Прогресс.",
+     "use": "badge"
+    },
+    {
+     "when": "Событие с длительностью и описанием — Календарь.",
+     "use": "calendar"
+    }
+   ],
+   "owns": [
+    "dk-uptime"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-uptime.js"
+   ],
+   "data": [],
+   "js": [
+    "dkUptime"
+   ],
+   "docs": [
+    "component-uptime.html"
+   ],
+   "api": [
+    {
+     "name": "rows[]",
+     "type": "массив {name, data[]}",
+     "what": "Состояния делений: 'up', 'down', 'none'."
+    },
+    {
+     "name": "step",
+     "type": "строка",
+     "what": "Подпись шага для подсказки."
+    },
+    {
+     "name": "labels",
+     "type": "массив из двух строк",
+     "what": "Края оси."
+    },
+    {
+     "name": "setRows(list)",
+     "type": "метод",
+     "what": "Обновить данные."
+    }
+   ],
+   "example": "<div id=\"uptime\"></div>\n\n<script>\nvar u = dkUptime(document.getElementById('uptime'), {\n  step: '30 минут',\n  labels: ['24 ч назад', 'сейчас'],\n  rows: [\n    { name: 'Приём заявок', data: ['up', 'up', 'down', 'up', 'none'] }\n  ]\n});\nu.setRows(newRows);\n</script>",
+   "rules": [
+    "Название службы так, как её зовут дежурные: «Приём заявок».",
+    "Подпись шага и краёв оси словами: «30 минут», «24 ч назад».",
+    "Процент — от известных делений."
+   ],
+   "avoid": [
+    "Зелёная полоса там, где замеров не было.",
+    "Легенда, которая появляется только при сбое.",
+    "100% при половине делений «нет данных»."
+   ],
+   "a11y": [
+    "Полоса фокусируема и описана целиком в `aria-label`: сколько делений с перебоями.",
+    "Не только цветом. Легенда со словами; процент числом.",
+    "Подсказка у деления — `title`: время и состояние.",
+    "Контраст. Три цвета делений различимы между собой в обеих темах — проверка СМЫСЛ."
+   ],
+   "related": [
+    "banner",
+    "list"
+   ],
+   "classes": [
+    "dk-uptime",
+    "dk-uptime__axis",
+    "dk-uptime__name",
+    "dk-uptime__now",
+    "dk-uptime__row",
+    "dk-uptime__seg",
+    "dk-uptime__strip",
+    "dk-uptime__v"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-uptime.js"
+   ]
+  },
+  {
+   "id": "chart",
+   "title": "График",
+   "kind": "компонент",
+   "group": "Визуализация",
+   "status": "стабильный",
+   "purpose": "Обёртка над ECharts, которая закрывает опасное и оставляет нужное: тема из токенов, «данных нет» вместо пустого прямоугольника, легенда от двух серий, линия порога, пунктир прогноза. Двух осей Y и сглаживания не будет.",
+   "use_when": [
+    "Читатель должен увидеть динамику, сравнить величины, увидеть состав или долю — вопрос выбирает тип (таблица на витрине).",
+    "Есть ширина: график с осями живёт в M и L, в S — только спарклайн.",
+    "Значений на оси категорий до сорока; дальше это сырые данные, а не картинка."
+   ],
+   "instead": [
+    {
+     "when": "Одно текущее значение — KPI-плитка, а не столбчатый график из одного столбца.",
+     "use": "tile"
+    },
+    {
+     "when": "Больше семи значимых категорий — Таблица, а не ещё больше цветов.",
+     "use": "table"
+    },
+    {
+     "when": "«Где» на территории — Регионы.",
+     "use": "map"
+    }
+   ],
+   "owns": [
+    "dk-chart",
+    "dk-empty"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-charts.js",
+    "js/dk-chart-theme.js",
+    "vendor/echarts.min.js"
+   ],
+   "data": [],
+   "js": [
+    "dkChart"
+   ],
+   "docs": [
+    "component-chart.html"
+   ],
+   "api": [
+    {
+     "name": "type",
+     "type": "строка",
+     "what": "Тип графика; неизвестный — ошибка в консоли."
+    },
+    {
+     "name": "categories / series / data",
+     "type": "массивы",
+     "what": "Данные; у pie/donut — data, у sankey — nodes и links."
+    },
+    {
+     "name": "target",
+     "type": "число | {value, label}",
+     "what": "Линия порога на графиках с осями."
+    },
+    {
+     "name": "palette: 'status'",
+     "type": "строка",
+     "what": "Четыре цвета состояния по порядку категорий."
+    },
+    {
+     "name": "highlight, forecast, trend, total, unit, labels",
+     "type": "см. варианты",
+     "what": "Модификаторы типов."
+    },
+    {
+     "name": "label",
+     "type": "строка",
+     "what": "Заголовок для скринридера. Подпись из данных — крайние значения, доли, норма — дописывается сама."
+    },
+    {
+     "name": "update(spec) / instance / destroy()",
+     "type": "API",
+     "what": "Перерисовать; доступ к ECharts; убрать."
+    }
+   ],
+   "example": "<div class=\"dk-chart\" id=\"hours\"></div>\n\n<script>\nvar c = dkChart(document.getElementById('hours'), {\n  type: 'bar',\n  categories: ['00', '01', '02'],\n  series: [{ name: 'Аварий', data: [1, 0, 2] }],\n  target: { value: 4, label: 'норма' },\n  unit: 'шт.',\n  empty: { title: 'За сутки аварий не было', text: 'Ни одной записи.', hint: 'Расширьте период.' }\n});\nc.update({ series: [ … ] });   // перерисовать с новыми данными\nc.instance;                    // экземпляр ECharts — в обход обёртки\nc.destroy();                   // сторож похоронит и сам, когда узел уйдёт\n</script>",
+   "rules": [
+    "Заголовок виджета с периодом: «Аварии по дням · 14 дней».",
+    "Единица один раз: в заголовке или в подписи оси (`unit`).",
+    "До шести серий; седьмая повторит цвет первой, и обёртка предупредит в консоли.",
+    "Ноль на столбце подписан, если категорий до восьми; в плотном ряду ноль — промежуток."
+   ],
+   "avoid": [
+    "Две оси Y — обёртка не соберёт.",
+    "Сглаженная линия — показывает значения, которых не было.",
+    "Красная серия «потому что третья»: красный означает «плохо».",
+    "Пончик из девяти секторов — обёртка свернёт хвост в «Прочее»."
+   ],
+   "a11y": [
+    "Холст без текста. График — canvas; скринридер видит только заголовок виджета. Значения, которые важны, повторяются текстом: плитка, таблица, число в центре пончика (оно — элемент разметки).",
+    "Движение. Системная настройка «меньше движения» выключает анимацию графика.",
+    "Цвет. Палитра серий проверена на три вида дальтонизма (ПАЛИТРА); палитра состояний — на различимость смысла (СМЫСЛ).",
+    "Подсказка при наведении не заменяет текст: на таче и с клавиатуры её нет."
+   ],
+   "related": [
+    "legend",
+    "tile"
+   ],
+   "classes": [
+    "dk-chart",
+    "dk-chart--lg",
+    "dk-chart--sm",
+    "dk-chart--spark",
+    "dk-chart--xl",
+    "dk-chart__center",
+    "dk-empty",
+    "dk-empty__do",
+    "dk-empty__t"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "vendor/echarts.min.js",
+    "js/dk-chart-theme.js",
+    "js/dk-charts.js"
+   ]
+  },
+  {
+   "id": "map",
+   "title": "Регионы: карта и плитки",
+   "kind": "компонент",
+   "group": "Визуализация",
+   "status": "стабильный",
+   "purpose": "Два вида на одних данных. Карта отвечает «где», плитки — «у кого хуже»: на карте площадь региона перебивает его значение. Переключатель — часть виджета, а не настройка.",
+   "use_when": [
+    "Показатель задан по регионам, и важно «где» — карта.",
+    "Важно сравнить регионы между собой равным весом — плитки.",
+    "Нужен доступ с клавиатуры — плитки: карта нарисована на canvas."
+   ],
+   "instead": [
+    {
+     "when": "Топ-5 регионов — Рейтинг.",
+     "use": "rank"
+    },
+    {
+     "when": "Несколько показателей на регион — Таблица.",
+     "use": "table"
+    },
+    {
+     "when": "Динамика одного региона — График.",
+     "use": "chart"
+    }
+   ],
+   "owns": [
+    "dk-map"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-map.js"
+   ],
+   "data": [
+    "data/regions.topojson",
+    "data/regions-tiles.json"
+   ],
+   "js": [
+    "dkMap"
+   ],
+   "docs": [
+    "component-map.html"
+   ],
+   "api": [
+    {
+     "name": "topo, object / geo",
+     "type": "объект",
+     "what": "Контуры регионов."
+    },
+    {
+     "name": "tiles",
+     "type": "объект",
+     "what": "Раскладка плиток."
+    },
+    {
+     "name": "values",
+     "type": "{id: число}",
+     "what": "Значения; отсутствие — «нет данных»."
+    },
+    {
+     "name": "unit, steps, min, max",
+     "type": "строка, массив, числа",
+     "what": "Легенда и шкала."
+    },
+    {
+     "name": "controls",
+     "type": "селектор | элемент | false",
+     "what": "Куда поставить сегмент. По умолчанию — в шапку своего виджета."
+    },
+    {
+     "name": "onSelect(id, value)",
+     "type": "функция",
+     "what": "Клик по региону или плитке."
+    },
+    {
+     "name": "scope / setScope(ids)",
+     "type": "массив id | null",
+     "what": "Регионы в срезе фильтра; остальные приглушены, «вне среза» — в легенде и подписи. Шкала — общая по стране."
+    },
+    {
+     "name": "view / setValues(v) / destroy()",
+     "type": "API",
+     "what": "Вид, данные, уборка."
+    }
+   ],
+   "example": "<div class=\"dk-widget\">\n  <div class=\"dk-widget__head\"><h3 class=\"dk-widget__title\">Регионы</h3></div>\n  <div id=\"regions\"></div>\n</div>\n\n<script>\nvar m = dkMap(document.getElementById('regions'), {\n  topo: topojson, object: 'ru89',      // контуры\n  tiles: tilesJson,                    // раскладка плиток\n  values: { 'RU-CR': 82, 'RU-NVS': 73 },\n  unit: 'баллов риска',\n  // controls не нужен: в виджете с шапкой переключатель встанет туда сам\n  onSelect: function (id, value) { }\n});\nm.view = 'tiles';\nm.setValues(next);                     // шкала пересчитается\n</script>",
+   "rules": [
+    "Пороги в легенде числами: «55–68», не «средне».",
+    "Единица измерения один раз, справа от легенды.",
+    "Сокращения регионов из файла раскладки — постоянные."
+   ],
+   "avoid": [
+    "Радуга вместо лестницы одного тона.",
+    "Ноль вместо «нет данных».",
+    "Карта без переключателя на плитки — без мыши данных не получить."
+   ],
+   "a11y": [
+    "Плитки — кнопки с `aria-label` «регион · значение»; по сетке ходят стрелками, tabindex один на всю сетку.",
+    "Карта недоступна с клавиатуры (canvas) — поэтому плитки обязательны, а не опция.",
+    "Шкала — пять ступеней, все видны на своей доске в обеих темах (проверка ШКАЛА).",
+    "«Нет данных» в тёмной теме 1,69:1 к поверхности — ниже нормы; открыто в HANDOFF.md (штриховка вместо цвета)."
+   ],
+   "related": [
+    "rank",
+    "segment"
+   ],
+   "classes": [
+    "dk-map",
+    "dk-map__abbr",
+    "dk-map__body",
+    "dk-map__canvas",
+    "dk-map__head",
+    "dk-map__key",
+    "dk-map__key--out",
+    "dk-map__legend",
+    "dk-map__pan",
+    "dk-map__tile",
+    "dk-map__tile--out",
+    "dk-map__tiles",
+    "dk-map__unit",
+    "dk-map__val",
+    "dk-map__zoom"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "vendor/echarts.min.js",
+    "js/dk-chart-theme.js",
+    "js/dk-map.js"
+   ]
+  },
+  {
+   "id": "calendar",
+   "title": "Календарь работ",
+   "kind": "компонент",
+   "group": "Визуализация",
+   "status": "стабильный",
+   "purpose": "Показ работы: что происходит и когда. Не выбор периода. Цвет события — его вид, а не украшение: авария красная, плановое синее, завершённое зелёное.",
+   "use_when": [
+    "События привязаны к датам, и важно видеть их вместе: работы, отключения, проверки.",
+    "Нужен и обзор месяца, и подробности недели по часам.",
+    "События бывают нескольких видов с разным смыслом."
+   ],
+   "instead": [
+    {
+     "when": "Выбор интервала дат для среза — Период.",
+     "use": "period"
+    },
+    {
+     "when": "Лента последних событий без дат — Список.",
+     "use": "list"
+    },
+    {
+     "when": "Работала служба или нет по времени — Доступность служб.",
+     "use": "uptime"
+    }
+   ],
+   "owns": [
+    "dk-cal"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-calendar.js"
+   ],
+   "data": [],
+   "js": [
+    "dkCalendar"
+   ],
+   "docs": [
+    "component-calendar.html"
+   ],
+   "api": [
+    {
+     "name": "events[]",
+     "type": "массив",
+     "what": "date, name, kind; from/to для недели."
+    },
+    {
+     "name": "view, month, week, value, today",
+     "type": "строки / даты",
+     "what": "Что показать и что выбрано."
+    },
+    {
+     "name": "max, hourHeight",
+     "type": "числа",
+     "what": "Событий в дне до «ещё N»; высота часа."
+    },
+    {
+     "name": "onSelect(day) / onEvent(e)",
+     "type": "функции",
+     "what": "Клик по дню и по событию."
+    },
+    {
+     "name": "view / value / goTo(d) / setEvents(list)",
+     "type": "API",
+     "what": "Управление снаружи."
+    }
+   ],
+   "example": "<div id=\"cal\"></div>\n\n<script>\nvar cal = dkCalendar(document.getElementById('cal'), {\n  view: 'month', month: '2026-09-01',\n  events: [\n    { date: '2026-09-14', name: 'Прорыв, Советский р-н', kind: 'crit' },\n    { date: '2026-09-14', from: '08:00', to: '13:00', name: 'Плановое отключение ГВС', kind: 'plan' }\n  ],\n  onSelect: function (day) { },\n  onEvent: function (e) { }\n});\ncal.view = 'week'; cal.goTo('2026-09-14'); cal.setEvents(list);\n</script>",
+   "rules": [
+    "Название события — что делают: «Замена задвижки», «Подвоз воды».",
+    "Вид события по смыслу: авария crit, ограничение high, плановое plan, завершено calm, прочее event.",
+    "Дни соседних месяцев показаны приглушённо."
+   ],
+   "avoid": [
+    "Цвета розданы по кругу — человек ищет закономерность там, где её нет.",
+    "Сетка в пять строк в короткий месяц — страница прыгает.",
+    "Событие без времени в недельном виде."
+   ],
+   "a11y": [
+    "Клавиатура. Дни — кнопки; стрелки, Home, End, PageUp, PageDown, Enter — как в таблице.",
+    "Не только цветом. У события есть название; вид дублируется значком в подсказке.",
+    "Сегодня помечено атрибутом и цветом.",
+    "Не проверялось со скринридером в недельном виде по часам."
+   ],
+   "related": [
+    "list",
+    "period"
+   ],
+   "classes": [
+    "dk-cal",
+    "dk-cal__allday",
+    "dk-cal__body",
+    "dk-cal__col",
+    "dk-cal__day",
+    "dk-cal__e",
+    "dk-cal__grid",
+    "dk-cal__gutter",
+    "dk-cal__head",
+    "dk-cal__hour",
+    "dk-cal__hours",
+    "dk-cal__month",
+    "dk-cal__more",
+    "dk-cal__n",
+    "dk-cal__row",
+    "dk-cal__t",
+    "dk-cal__tt",
+    "dk-cal__wd",
+    "dk-cal__wd--day",
+    "dk-cal__week",
+    "dk-cal__wgrid"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-calendar.js"
+   ]
+  },
+  {
+   "id": "banner",
+   "title": "Баннер и уведомление",
+   "kind": "компонент",
+   "group": "Обратная связь",
+   "status": "стабильный",
+   "purpose": "Баннер отвечает за состояние всей страницы и не закрывается, пока не ушла причина. Уведомление подтверждает действие человека и уходит само. Две разные вещи, которые часто путают.",
+   "use_when": [
+    "Баннер: состояние, которое касается всей страницы, — сбой служб, устаревшие данные, готовый отчёт.",
+    "Уведомление: подтвердить, что действие человека выполнено: «Срез сброшен», «Работа добавлена».",
+    "Уведомление с «Отменить»: действие обратимо, и отмена дешевле подтверждения заранее."
+   ],
+   "instead": [
+    {
+     "when": "Новость о данных («Авария в Новосибирске») — не уведомление: уехавшее через пять секунд сообщение о новой аварии — это авария, которую никто не увидел. Это баннер или строка в ленте.",
+     "use": null
+    },
+    {
+     "when": "Проблема одного виджета — ошибка внутри виджета, не баннер страницы.",
+     "use": "empty"
+    },
+    {
+     "when": "Подтверждение опасного действия — Модальное окно.",
+     "use": "modal"
+    }
+   ],
+   "owns": [
+    "dk-banner",
+    "dk-toast",
+    "dk-toasts"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-notify.js"
+   ],
+   "data": [],
+   "js": [
+    "dkToast"
+   ],
+   "docs": [
+    "component-banner.html"
+   ],
+   "api": [
+    {
+     "name": "dkToast(text, opts)",
+     "type": "функция",
+     "what": "Показать уведомление; возвращает {close, el}."
+    },
+    {
+     "name": "opts.kind",
+     "type": "'calm' | 'high' | 'crit'",
+     "what": "Вид; по умолчанию calm."
+    },
+    {
+     "name": "opts.action",
+     "type": "{name, onClick}",
+     "what": "Кнопка; отключает таймер."
+    },
+    {
+     "name": "opts.life",
+     "type": "число мс",
+     "what": "Явное время жизни."
+    },
+    {
+     "name": "dk-banner--crit | --high | --calm | --event",
+     "type": "класс",
+     "what": "Вид баннера; закрывается только event."
+    }
+   ],
+   "example": "<div class=\"dk-banner dk-banner--crit\">\n  <svg class=\"dk-i\"><use href=\"#ti-alert-triangle\"/></svg>\n  <div class=\"dk-banner__text\">\n    <div class=\"dk-banner__title\">23 аварии требуют решения</div>\n    <div class=\"dk-banner__sub\">Две службы не отвечают последние сутки</div>\n  </div>\n</div>\n\n<script>\ndkToast('Работа добавлена в календарь');\ndkToast('Срез сброшен', { action: { name: 'Отменить', onClick: restore } });\nvar t = dkToast('Не удалось сохранить', { kind: 'crit' });\nt.close();\n</script>",
+   "rules": [
+    "Заголовок баннера с числом и глаголом: «23 аварии требуют решения».",
+    "Уведомление в прошедшем времени: «Работа добавлена в календарь».",
+    "Тревожное уведомление говорит, что делать: «попробуйте ещё раз»."
+   ],
+   "avoid": [
+    "Баннер «Внимание!» без того, на что.",
+    "Уведомление «Успешно» — что именно?",
+    "Крестик на баннере о сбое — сбой, спрятанный руками человека, который через час о нём забудет."
+   ],
+   "a11y": [
+    "Уведомления объявляются скринридеру: полка — живой регион.",
+    "Крестик с `aria-label`; кнопка действия — обычная кнопка, Tab до неё возможен, поэтому таймера с действием нет.",
+    "Не только цветом. Значок и текст у обоих; цвет — дополнение.",
+    "Контраст. Заголовок и подстрока на заливке баннера — проверка КОНТРАСТ в обеих темах."
+   ],
+   "related": [
+    "empty",
+    "modal",
+    "uptime"
+   ],
+   "classes": [
+    "dk-banner",
+    "dk-banner--calm",
+    "dk-banner--crit",
+    "dk-banner--event",
+    "dk-banner--high",
+    "dk-banner__stat",
+    "dk-banner__stats",
+    "dk-banner__sub",
+    "dk-banner__text",
+    "dk-banner__title",
+    "dk-banner__x",
+    "dk-toast",
+    "dk-toast--calm",
+    "dk-toast--crit",
+    "dk-toast--high",
+    "dk-toast__text",
+    "dk-toasts"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-notify.js"
+   ]
+  },
+  {
+   "id": "modal",
+   "title": "Модальное окно",
+   "kind": "компонент",
+   "group": "Обратная связь",
+   "status": "стабильный",
+   "purpose": "Подтвердить опасное действие или заполнить короткую форму, не уходя со страницы. Одновременно открыто не больше одного окна: окно поверх окна загоняет человека в угол.",
+   "use_when": [
+    "Действие необратимо или дорого: закрыть аварию, удалить срез — нужно подтверждение своими словами.",
+    "Короткая форма из одного–трёх полей, после которой человек возвращается туда же.",
+    "Нужно остановить всё остальное, пока не решено."
+   ],
+   "instead": [
+    {
+     "when": "Подробности объекта — их лучше показывать на месте или боковой панелью (нет в ките, открыто в REVIEW.md).",
+     "use": null
+    },
+    {
+     "when": "Длинная форма — отдельная страница или форма в панели.",
+     "use": "field"
+    },
+    {
+     "when": "Уведомление о результате — Уведомление.",
+     "use": "banner"
+    }
+   ],
+   "owns": [
+    "dk-modal"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-modal.js"
+   ],
+   "data": [],
+   "js": [
+    "dkModal"
+   ],
+   "docs": [
+    "component-modal.html"
+   ],
+   "api": [
+    {
+     "name": "dkModal(el | селектор)",
+     "type": "функция",
+     "what": "Обёртка над dialog; null, если окна нет."
+    },
+    {
+     "name": "open()",
+     "type": "метод",
+     "what": "Открыть; предыдущее окно закроется с предупреждением."
+    },
+    {
+     "name": "close(value)",
+     "type": "метод",
+     "what": "Закрыть с результатом."
+    },
+    {
+     "name": "returnValue",
+     "type": "свойство",
+     "what": "value нажатой кнопки; пусто при Escape."
+    },
+    {
+     "name": "el",
+     "type": "свойство",
+     "what": "Сам `<dialog>` — на него вешают `close`."
+    }
+   ],
+   "example": "<button class=\"dk-btn dk-btn--primary\" data-modal=\"#confirm\">Закрыть аварию</button>\n\n<dialog class=\"dk-modal\" id=\"confirm\" aria-labelledby=\"confirm-t\">\n  <form method=\"dialog\" class=\"dk-modal__form\">\n    <div class=\"dk-modal__head\"><h2 class=\"dk-modal__title\" id=\"confirm-t\">Закрыть аварию</h2></div>\n    <div class=\"dk-modal__body\"><p>Авария будет отмечена как устранённая.</p></div>\n    <div class=\"dk-modal__foot\">\n      <button class=\"dk-btn dk-btn--ghost\" value=\"cancel\">Отмена</button>\n      <button class=\"dk-btn dk-btn--primary\" value=\"ok\">Закрыть аварию</button>\n    </div>\n  </form>\n</dialog>\n\n<script>\nvar m = dkModal('#confirm');\nbutton.addEventListener('click', m.open);\nm.el.addEventListener('close', function () { if (m.returnValue === 'ok') closeAccident(); });\n</script>",
+   "rules": [
+    "Заголовок и кнопка подтверждения — одно и то же действие: «Закрыть аварию».",
+    "Текст — последствие: «Бригада освободится и вернётся в очередь».",
+    "«Отмена» — всегда так, слева, тихая."
+   ],
+   "avoid": [
+    "«Вы уверены?» — не говорит, в чём.",
+    "«ОК / Отмена» — что сделает «ОК»?",
+    "Крестик как единственный способ закрыть без решения."
+   ],
+   "a11y": [
+    "Ловушка фокуса, фон недоступен, возврат фокуса на кнопку-открыватель — делает `<dialog>`.",
+    "Escape закрывает ровно один слой: открытый внутри окна список закрывается первым, окно с заполненной формой остаётся.",
+    "Заголовок связан через `aria-labelledby`.",
+    "Не проверялось со скринридером; в старых браузерах без `showModal` окно не откроется и напишет ошибку."
+   ],
+   "related": [
+    "button",
+    "field"
+   ],
+   "classes": [
+    "dk-modal",
+    "dk-modal--wide",
+    "dk-modal__body",
+    "dk-modal__foot",
+    "dk-modal__form",
+    "dk-modal__head",
+    "dk-modal__title"
+   ],
+   "include": [
+    "js/dk-modal.js"
+   ]
+  },
+  {
+   "id": "empty",
+   "title": "Состояния: загрузка, пусто, ошибка",
+   "kind": "компонент",
+   "group": "Обратная связь",
+   "status": "стабильный",
+   "purpose": "Загрузка, «данных нет» и ошибка — это тоже компоненты. Без них дашборд в проде выглядит сломанным. Каждое отвечает на три вопроса: что произошло, почему и что делать.",
+   "use_when": [
+    "Загрузка: данные ещё едут, и место под них известно — скелетон повторяет форму будущего содержимого.",
+    "Пусто: запрос выполнился, а ответ пуст — фильтры, период, новый объект.",
+    "Ошибка: запрос не выполнился; внутри виджета — компактно, на всю страницу — с кодом для поддержки."
+   ],
+   "instead": [
+    {
+     "when": "Служба не отвечает сутки — это Баннер страницы, не ошибка виджета.",
+     "use": "banner"
+    },
+    {
+     "when": "Ноль значений — не «пусто»: ноль — это ответ, и его показывает сам компонент (график, таблица).",
+     "use": null
+    },
+    {
+     "when": "Нет доступа — страница ошибки 403 (на витрине), а не пустое состояние.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-skel",
+    "dk-empty",
+    "dk-error"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-empty.html"
+   ],
+   "api": [
+    {
+     "name": "dk-empty__t / __do",
+     "type": "элементы",
+     "what": "Заголовок и «что делать»; средняя строка — без класса."
+    },
+    {
+     "name": "dk-error--alarm",
+     "type": "класс",
+     "what": "Данные ненадёжны."
+    },
+    {
+     "name": "dk-error__code",
+     "type": "элемент",
+     "what": "Код и время для поддержки."
+    },
+    {
+     "name": "aria-busy",
+     "type": "атрибут",
+     "what": "На контейнере во время загрузки."
+    }
+   ],
+   "example": "<!-- загрузка -->\n<div class=\"dk-widget\" aria-busy=\"true\">\n  <span class=\"dk-vh\">Загружаем показатели</span>\n  <div class=\"dk-skel\" style=\"height:14px;width:60%\"></div>\n</div>\n\n<!-- пусто -->\n<div class=\"dk-empty\">\n  <div class=\"dk-empty__t\">Ничего не найдено</div>\n  <div>Под фильтры не попал ни один регион.</div>\n  <div class=\"dk-empty__do\">Снимите фильтр по округу.</div>\n</div>\n\n<!-- ошибка виджета -->\n<div class=\"dk-error\">\n  <span class=\"dk-error__icon\"><svg class=\"dk-i\"><use href=\"#ti-plug-connected-x\"/></svg></span>\n  <h4 class=\"dk-error__title\">Виджет не загрузился</h4>\n  <p class=\"dk-error__text\">Остальные показатели актуальны.</p>\n  <div class=\"dk-error__actions\"><button class=\"dk-btn dk-btn--sm\">Повторить</button></div>\n</div>",
+   "rules": [
+    "Три строки: что, почему, что делать.",
+    "Действие — глаголом и выполнимое: «Снимите фильтр по округу».",
+    "Ошибка честно говорит, чему нельзя верить: «показатели — со вчерашнего среза»."
+   ],
+   "avoid": [
+    "«Нет данных» одной строкой — тупик.",
+    "«Что-то пошло не так» — это не ответ на вопрос «что».",
+    "Скелетон, который не похож на то, что загрузится."
+   ],
+   "a11y": [
+    "Скелетон сопровождается скрытым текстом «Загружаем…» и `aria-busy` на виджете.",
+    "Действие — настоящая кнопка или ссылка; фокус после ошибки уходит на неё, если страница целиком.",
+    "Не только цветом. Тревога — значком и словами; красный лишь дополняет.",
+    "Контраст. Тексты на поверхности панели — проверка КОНТРАСТ."
+   ],
+   "related": [
+    "banner",
+    "chart"
+   ],
+   "classes": [
+    "dk-empty",
+    "dk-empty__do",
+    "dk-empty__t",
+    "dk-error",
+    "dk-error--alarm",
+    "dk-error__actions",
+    "dk-error__code",
+    "dk-error__icon",
+    "dk-error__text",
+    "dk-error__title",
+    "dk-skel"
+   ],
+   "include": []
+  },
+  {
+   "id": "base",
+   "title": "Основа страницы",
+   "kind": "основа",
+   "group": "Основа",
+   "status": "стабильный",
+   "purpose": "Токены, тема, экранирование, числа и иконки. Стоит на каждой странице с китом, и своей, и встроенной в чужую.",
+   "use_when": [
+    "Всегда: без основы ни один блок кита не рисуется и не экранирует данные."
+   ],
+   "instead": [],
+   "owns": [
+    "dk-root",
+    "dk-page"
+   ],
+   "css": [
+    "css/tokens.primitives.css",
+    "css/tokens.semantic.css",
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-theme.js",
+    "js/dk-util.js",
+    "js/dk-icons.js"
+   ],
+   "js": [
+    "dkTheme",
+    "dkUrl",
+    "dkFmt",
+    "dkBack",
+    "dkAnchor",
+    "dkEsc",
+    "dkNum",
+    "dkDur",
+    "dkOwn",
+    "dkDestroy",
+    "dkIcon",
+    "dkIconNames"
+   ],
+   "docs": [
+    "README.md#Подключить",
+    "README.md#Границы кита: .dk-root и .dk-page",
+    "README.md#Числа",
+    "README.md#Внутри приложения (WebView)"
+   ],
+   "rules": [
+    "Класс dk-root и атрибуты data-theme и data-accent стоят на одном элементе.",
+    "dk-page — только если кит владеет всей страницей: он красит фон и обнуляет поля документа.",
+    "Числа в разметку — через dkFmt, строки из данных — через dkEsc, а не руками.",
+    "Иконка из скрипта — dkIcon.el(имя, класс) — узел; dkIcon(имя) отдаёт СТРОКУ разметки."
+   ],
+   "data": [],
+   "api": [],
+   "example": "",
+   "avoid": [],
+   "a11y": [],
+   "related": [],
+   "classes": [
+    "dk-page",
+    "dk-root"
+   ],
+   "include": [
+    "js/dk-theme.js",
+    "js/dk-util.js",
+    "js/dk-icons.js"
+   ]
+  },
+  {
+   "id": "layout",
+   "title": "Раскладка",
+   "kind": "раскладка",
+   "group": "Основа",
+   "status": "стабильный",
+   "purpose": "Сетка на 12 колонок с долями, раскладка «основное плюс боковая колонка», виджет — общая коробка для любого блока, шапка страницы, вложенная зона.",
+   "use_when": [
+    "Любой дашборд: блоки ставятся в dk-grid долями dk-col--*, каждый блок — dk-widget."
+   ],
+   "instead": [],
+   "owns": [
+    "dk-region-tools",
+    "dk-region-result",
+    "dk-details",
+    "dk-data-summary",
+    "dk-wrap",
+    "dk-grid",
+    "dk-col",
+    "dk-layout",
+    "dk-stack",
+    "dk-push",
+    "dk-head",
+    "dk-panel",
+    "dk-well",
+    "dk-widget",
+    "dk-scroll"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "js": [],
+   "docs": [
+    "README.md#Правила раскладки дашборда",
+    "README.md#Сетка и устройства",
+    "README.md#Размер виджета",
+    "README.md#Раскладка дашборда на телефоне"
+   ],
+   "rules": [
+    "Ширина — долей (--quarter, --third, --half, --two-thirds, --full), а не числом колонок.",
+    "Не больше трёх-четырёх виджетов в ряду; сверху вниз — от общего к частному.",
+    "Размер S — четверть: число, подпись, тренд, спарклайн. График с осями в четверть не ставится.",
+    "Фильтры — одной строкой над содержимым, а не внутри виджетов."
+   ],
+   "data": [],
+   "api": [],
+   "example": "",
+   "avoid": [],
+   "a11y": [],
+   "related": [],
+   "classes": [
+    "dk-col--full",
+    "dk-col--half",
+    "dk-col--quarter",
+    "dk-col--third",
+    "dk-col--two-thirds",
+    "dk-data-summary",
+    "dk-details",
+    "dk-grid",
+    "dk-grid--even",
+    "dk-grid--metrics",
+    "dk-grid--stretch",
+    "dk-head",
+    "dk-layout",
+    "dk-layout--wide-side",
+    "dk-panel",
+    "dk-panel__head",
+    "dk-push",
+    "dk-region-result",
+    "dk-region-tools",
+    "dk-scroll",
+    "dk-stack",
+    "dk-well",
+    "dk-widget",
+    "dk-widget--s",
+    "dk-widget__actions",
+    "dk-widget__body",
+    "dk-widget__head",
+    "dk-widget__hint",
+    "dk-widget__title",
+    "dk-wrap"
+   ],
+   "include": []
+  },
+  {
+   "id": "type",
+   "title": "Типографика",
+   "kind": "основа",
+   "group": "Основа",
+   "status": "стабильный",
+   "purpose": "Четырнадцать именованных стилей текста и чисел: заголовки, основной текст, подписи, метрики табличными цифрами.",
+   "use_when": [
+    "Любой текст на дашборде: стиль выбирается по роли текста, а не по размеру."
+   ],
+   "instead": [],
+   "owns": [
+    "dk-display",
+    "dk-h1",
+    "dk-h2",
+    "dk-h3",
+    "dk-body",
+    "dk-body-lg",
+    "dk-caption",
+    "dk-overline",
+    "dk-code",
+    "dk-strong",
+    "dk-num",
+    "dk-sub",
+    "dk-link",
+    "dk-vh"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "js": [],
+   "docs": [
+    "README.md#Типографика",
+    "README.md#Шрифт и числа",
+    "README.md#Язык интерфейса"
+   ],
+   "rules": [
+    "Кегль в разметке не задаётся: класс стиля или токен --type-*.",
+    "dk-vh прячет от глаз, но оставляет скринридеру — для подписей, которые видно из контекста."
+   ],
+   "data": [],
+   "api": [],
+   "example": "",
+   "avoid": [],
+   "a11y": [],
+   "related": [],
+   "classes": [
+    "dk-body",
+    "dk-body-lg",
+    "dk-caption",
+    "dk-code",
+    "dk-display",
+    "dk-h1",
+    "dk-h2",
+    "dk-h3",
+    "dk-link",
+    "dk-num",
+    "dk-overline",
+    "dk-strong",
+    "dk-sub",
+    "dk-vh"
+   ],
+   "include": []
+  },
+  {
+   "id": "icons",
+   "title": "Иконки и точка состояния",
+   "kind": "основа",
+   "group": "Основа",
+   "status": "стабильный",
+   "purpose": "Иконки Tabler из спрайта и точка состояния рядом со словом.",
+   "use_when": [
+    "Значок рядом с подписью, статусом или в кнопке.",
+    "Точка состояния — только рядом со словом: цвет здесь второй признак."
+   ],
+   "instead": [
+    {
+     "when": "иконка вместо подписи у кнопки без aria-label",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-i",
+    "dk-dot"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-icons.js"
+   ],
+   "js": [
+    "dkIcon",
+    "dkIconNames"
+   ],
+   "docs": [
+    "README.md#Атомы"
+   ],
+   "rules": [
+    "Имя иконки — из dkIconNames; спрайт собирается tools/build-icons.py, руками не правится.",
+    "Из скрипта — dkIcon.el(имя, класс): узел. dkIcon(имя) — строка разметки, не узел."
+   ],
+   "data": [],
+   "api": [],
+   "example": "",
+   "avoid": [],
+   "a11y": [],
+   "related": [],
+   "classes": [
+    "dk-dot",
+    "dk-i",
+    "dk-i--after",
+    "dk-i--lg",
+    "dk-i--sm"
+   ],
+   "include": [
+    "js/dk-icons.js"
+   ]
+  },
+  {
+   "id": "chrome",
+   "title": "Каркас страницы",
+   "kind": "каркас",
+   "group": "Каркас",
+   "status": "стабильный, необязательный",
+   "purpose": "Боковое меню, липкая шапка и ссылка «К содержимому» — когда кит рисует всю страницу, а не встроен в чужую.",
+   "use_when": [
+    "Отдельный дашборд, у которого нет своей оболочки."
+   ],
+   "instead": [
+    {
+     "when": "дашборд встраивается в чужую страницу или приложение со своим меню — каркас не подключать, блоки работают без него",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-task-nav",
+    "dk-app",
+    "dk-side",
+    "dk-top",
+    "dk-main",
+    "dk-content",
+    "dk-skip",
+    "dk-tabbar"
+   ],
+   "css": [
+    "css/components.css",
+    "css/chrome.css"
+   ],
+   "scripts": [
+    "js/dk-chrome.js"
+   ],
+   "js": [
+    "dkChrome"
+   ],
+   "docs": [
+    "README.md#Каркас страницы",
+    "dashboard.html"
+   ],
+   "rules": [
+    "Блоки не должны зависеть от каркаса: всё, что есть в components.css, работает и без chrome.css.",
+    "На телефоне — нижняя панель dk-tabbar: 3–5 главных разделов ссылками a.dk-tabbar__item со значком и подписью, текущий — aria-current=\"page\". Полный список разделов остаётся в меню.",
+    "Нижняя панель видна только уже 768 px; запас снизу под неё страница получает сама."
+   ],
+   "data": [],
+   "api": [],
+   "example": "",
+   "avoid": [],
+   "a11y": [],
+   "related": [],
+   "classes": [
+    "dk-app",
+    "dk-content",
+    "dk-main",
+    "dk-side",
+    "dk-side__foot",
+    "dk-side__group",
+    "dk-side__head",
+    "dk-side__item",
+    "dk-side__label",
+    "dk-side__mark",
+    "dk-side__n",
+    "dk-side__name",
+    "dk-side__nav",
+    "dk-side__user",
+    "dk-side__who",
+    "dk-skip",
+    "dk-tabbar",
+    "dk-tabbar__item",
+    "dk-task-nav",
+    "dk-top",
+    "dk-top__at",
+    "dk-top__at-l",
+    "dk-top__burger",
+    "dk-top__path",
+    "dk-top__title",
+    "dk-top__titles",
+    "dk-top__tools"
+   ],
+   "include": [
+    "js/dk-chrome.js"
+   ]
+  },
+  {
+   "id": "popover",
+   "title": "Всплывающий слой",
+   "kind": "компонент",
+   "group": "Обратная связь",
+   "status": "только стиль: скрипта и страницы нет",
+   "purpose": "Подсказка рядом с тем, что она объясняет: онбординг, пояснение к числу.",
+   "use_when": [
+    "Объяснение, которое сопровождает работу, а не останавливает её."
+   ],
+   "instead": [
+    {
+     "when": "нужно решение человека до продолжения работы",
+     "use": "modal"
+    }
+   ],
+   "owns": [
+    "dk-pop"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "js": [],
+   "docs": [
+    "README.md#Онбординг"
+   ],
+   "rules": [
+    "Открывать, ставить рядом и закрывать — забота страницы: у слоя нет своего скрипта."
+   ],
+   "data": [],
+   "api": [],
+   "example": "",
+   "avoid": [],
+   "a11y": [],
+   "related": [],
+   "classes": [
+    "dk-pop",
+    "dk-pop--tip",
+    "dk-pop__title"
+   ],
+   "include": []
+  },
+  {
+   "id": "app-icons",
+   "title": "Иконки приложения, фавикон и логотип",
+   "kind": "инструмент",
+   "group": "Основа",
+   "status": "стабильный",
+   "purpose": "Фавикон, иконка iPhone и иконки Android из одного знака скриптом, а не руками; правила знака и логотипа.",
+   "use_when": [
+    "Новый продукт или дашборд, который ставят на главный экран или открывают во вкладке.",
+    "Сменился акцент или знак продукта — иконки пересобираются."
+   ],
+   "instead": [],
+   "owns": [],
+   "css": [],
+   "scripts": [],
+   "js": [],
+   "docs": [
+    "README.md#Иконки приложения, фавикон и логотип",
+    "README.md#С главного экрана (PWA)"
+   ],
+   "rules": [
+    "Собирать: node tools/build-app-icons.mjs --glyph <имя из набора> --accent <blue|violet|indigo> --out <папка>; --manifest --name --short — если продукт ставится на главный экран.",
+    "Знак — одна простая фигура без текста, цвет — акцент продукта; смысловые цвета (красный, зелёный) в знаке запрещены.",
+    "Иконка iPhone — 180×180 без прозрачности и без скругления; маскируемая — фон до краёв, знак в безопасном круге 80%.",
+    "Теги в <head>: favicon.svg, icon-32.png с sizes=\"32x32\", apple-touch-icon.png.",
+    "Логотип — знак и название Golos 600, как .dk-side__mark и .dk-side__name в каркасе."
+   ],
+   "data": [],
+   "api": [],
+   "example": "",
+   "avoid": [],
+   "a11y": [],
+   "related": [],
+   "classes": [],
+   "include": []
+  }
+ ],
+ "charts": {
+  "types": {
+   "line": {
+    "for": "динамика; несколько линий — несколько серий",
+    "not_for": "меньше четырёх точек — плитка с числом; больше шести серий — выделение или малые графики",
+    "a11y": "подпись из данных; точные значения — таблица по датам рядом"
+   },
+   "area": {
+    "for": "динамика одной серии с заливкой",
+    "not_for": "несколько серий — заливки перекрывают друг друга, бери line",
+    "a11y": "подпись из данных; таблица по датам, если значения важны"
+   },
+   "step": {
+    "for": "величина, меняющаяся скачком: тариф, режим, уставка",
+    "not_for": "величина меняется плавно — line",
+    "a11y": "подпись из данных; список изменений с датами"
+   },
+   "bar": {
+    "for": "сравнить величины; несколько серий — группированные столбцы",
+    "not_for": "больше пятнадцати категорий — таблица; длинные названия или телефон — bar-h",
+    "a11y": "подпись с наибольшим и наименьшим; таблица категорий рядом"
+   },
+   "bar-stacked": {
+    "for": "состав целого по категориям",
+    "not_for": "надо сравнить части между категориями точно — группированные bar",
+    "a11y": "подпись из данных; таблица частей по категориям"
+   },
+   "bar-h": {
+    "for": "сравнить величины при длинных названиях и на телефоне",
+    "not_for": "время по оси — line",
+    "a11y": "подпись с наибольшим и наименьшим; рейтинг или таблица рядом"
+   },
+   "donut": {
+    "for": "доля от целого, до шести секторов",
+    "not_for": "больше шести долей или близкие доли — bar-h; важна динамика долей — bar-stacked",
+    "a11y": "подпись с долями в процентах и итогом"
+   },
+   "pie": {
+    "for": "доля от целого; пончик предпочтительнее — в центре встаёт итог",
+    "not_for": "то же, что у donut",
+    "a11y": "подпись с долями в процентах"
+   },
+   "radar": {
+    "for": "профиль по многим осям, до трёх серий",
+    "not_for": "больше трёх серий или осей меньше пяти — bar",
+    "a11y": "подпись по сериям; таблица осей обязательна — форму на слух не передать"
+   },
+   "sankey": {
+    "for": "поток через этапы",
+    "not_for": "этапов меньше трёх — bar-stacked",
+    "a11y": "подпись с числом этапов; таблица «откуда — куда — сколько» обязательна"
+   },
+   "scatter": {
+    "for": "связь двух величин; trend: true — линия наименьших квадратов",
+    "not_for": "точек меньше десяти — таблица; нет второй числовой величины — bar",
+    "a11y": "подпись с разбросом по обеим осям; таблица точек рядом"
+   },
+   "spark": {
+    "for": "направление в плитке размера S, без осей и легенды",
+    "not_for": "нужны значения — график с осями размера M или L",
+    "a11y": "подпись с диапазоном и последним значением; число плитки читается рядом"
+   }
+  },
+  "choose": [
+   {
+    "task": "сравнить величины",
+    "use": [
+     "bar",
+     "bar-h"
+    ]
+   },
+   {
+    "task": "увидеть динамику",
+    "use": [
+     "line",
+     "area"
+    ]
+   },
+   {
+    "task": "увидеть направление в плитке размера S",
+    "use": [
+     "spark"
+    ]
+   },
+   {
+    "task": "различить серии между собой",
+    "use": [
+     "bar",
+     "bar-stacked",
+     "line"
+    ]
+   },
+   {
+    "task": "заметить одну серию на фоне прочих",
+    "use": [
+     "line",
+     "bar"
+    ],
+    "option": "highlight"
+   },
+   {
+    "task": "понять, выше или ниже нормы",
+    "use": [
+     "bar",
+     "line"
+    ],
+    "option": "target",
+    "missing": "только раскраска столбцов по знаку от нулевой линии (выше нуля одним цветом, ниже другим)",
+    "instead": "столбцы или линия с линией нормы — target; это в ките есть. Время по оси — line, категории — bar"
+   },
+   {
+    "task": "увидеть состав целого",
+    "use": [
+     "bar-stacked"
+    ]
+   },
+   {
+    "task": "сравнить «было — стало» по каждому",
+    "use": [],
+    "missing": "парные точки с перемычкой",
+    "instead": "две серии столбцов «было» и «стало» (type 'bar') или таблица с колонкой изменения (dkFmt.delta)"
+   },
+   {
+    "task": "сравнить профиль по многим осям",
+    "use": [
+     "radar"
+    ]
+   },
+   {
+    "task": "проследить поток через этапы",
+    "use": [
+     "sankey"
+    ]
+   },
+   {
+    "task": "увидеть долю от целого",
+    "use": [
+     "donut"
+    ]
+   },
+   {
+    "task": "понять, связаны ли две величины",
+    "use": [
+     "scatter"
+    ]
+   },
+   {
+    "task": "отделить прогноз от факта",
+    "use": [
+     "line"
+    ],
+    "option": "forecast"
+   },
+   {
+    "task": "показать величину, меняющуюся скачком",
+    "use": [
+     "step"
+    ]
+   }
+  ],
+  "doc": "README.md#Какой график выбрать"
+ },
+ "hooks": {},
+ "counts": {
+  "parts": 31,
+  "classes": 376,
+  "functions": 25,
+  "chart_types": 12
+ }
+}

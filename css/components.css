@@ -1,0 +1,4446 @@
+/* ============================================================================
+   dashboard-kit · components.css
+   Блоки дашборда. Требует tokens.css — подключать после него.
+
+   Префикс dk- намеренный: библиотеку можно завести в уже существующий дашборд
+   по кусочкам, ничего в нём не сломав, и переносить блоки по одному.
+
+   Два правила, которые здесь не нарушаются:
+
+   1. ГДЕ У КИТА ЕСТЬ ШКАЛА, ЗНАЧЕНИЕ БЕРЁТСЯ ИЗ ШКАЛЫ.
+      Цвет — всегда токеном, без исключений: это проверяет СЫРЫЕ. Расстояние,
+      скругление и кегль — токеном, если токен с таким значением существует:
+      это проверяет РАЗМЕРЫ, в том числе внутри calc() и у отрицательных
+      значений.
+
+      Раньше здесь было написано «ни одного цвета, размера или радиуса
+      числом». Это было неправдой — в файле больше двухсот значений в
+      пикселях, — и правдой стать не могло. Границу медиазапроса нельзя задать
+      переменной: CSS этого не умеет. Высота графика, ширина полосы прокрутки,
+      размер плитки карты принадлежат одному месту и ступенью шкалы не
+      являются; назвать их все — значит получить сотню имён, каждое из которых
+      используется однажды, то есть не систему, а словарь. Кит намеренно
+      держит семь кеглей и девять шагов отступа, и сотня имён рядом с ними
+      обесценила бы и те и другие.
+
+      Поэтому обещание сужено до проверяемого. Что остаётся числом честно:
+      границы медиазапросов, размеры, принадлежащие одному компоненту, и
+      значения, для которых токена нет. Что числом быть не может: цвет, а
+      также расстояние, скругление и кегль, у которых имя уже заведено.
+
+   2. Границ нет. Блок отделяется от соседа поверхностью и воздухом.
+      Исключений ровно два, и оба функциональные:
+        · кольцо фокуса с клавиатуры — без него человек без мыши теряется;
+        · модификаторы --ruled / --zebra для плотных таблиц, где взгляду
+          нужна опора на длинной строке. Включаются вручную.
+
+      УТОЧНЕНИЕ, КОТОРОЕ ПРИШЛОСЬ СДЕЛАТЬ. «Поверхности» хватает в светлой
+      теме: ступень фон → карточка там 1.47. В тёмной та же разница в светлоте
+      даёт 1.18, потому что контраст у тёмного края сжимается, и подбором фона
+      это не лечится — перебрали до почти чёрного, предел 1.30. Поэтому в
+      тёмной теме к поверхности добавлен волосяной светлый контур и мягкая
+      тень (--elev-widget). Контур нарисован тенью, а не border: раскладку он
+      не занимает, размеров не меняет, рамки у блока по-прежнему нет.
+   ============================================================================ */
+
+/* --- две области: кита и страницы ----------------------------------------
+
+   .dk-root — ГРАНИЦА КИТА. Всё, что кит о себе объявляет, объявлено здесь:
+   и токены (см. оба файла токенов), и гарнитура, и цвет текста. Больше нигде.
+
+   Почему не :root, как было. Классы кит префиксовал аккуратно, а переменные
+   нет: --bg, --ink, --brand, --surface, --space-4 — 166 имён из 258 без
+   приставки, объявленных на корне документа. Встроенный в чужое приложение
+   кит переопределял хозяину его собственные переменные с такими же именами,
+   и наоборот. Молча: цвета просто становились чужими, и никто не понимал
+   почему.
+
+   Вторая половина той же беды — гарнитура. Шестнадцать компонентов стоят на
+   font: inherit, а задавала шрифт только .dk-page на <body>. Без каркаса кит
+   наследовал шрифт хозяина, то есть обещание «работает встроенным» давало
+   чужую гарнитуру во всех кнопках и полях. Повесить .dk-page на обёртку было
+   нельзя: он ставит margin: 0 и фон всей страницы.
+
+   КОНТРАКТ: класс .dk-root и атрибуты data-theme / data-accent стоят на одном
+   и том же элементе. Своя страница кита — это <html class="dk-root">; внутри
+   чужого приложения — <div class="dk-root" data-theme="dark">. Один и тот же
+   селектор работает в обоих случаях, поэтому вариантов правил не два, а один.
+
+   .dk-page — ОТДЕЛЬНО, и это не то же самое. Он заявляет «кит владеет всей
+   страницей»: обнуляет поля документа и красит фон. Ставится только на своей
+   странице и только вместе с .dk-root. Встроенному киту он не нужен и вреден:
+   фон хозяина закрашивать не наше дело. */
+
+.dk-root {
+  color: var(--ink);
+  font: var(--type-body);
+  /* Подсветка касания снимается здесь, а не на html: браузер рисует её на
+     элементе, который нажали, и наследование до него доходит. Раньше правило
+     стояло на корне чужого документа — кит выключал подсветку во всём
+     приложении хозяина, включая те места, о которых ничего не знает. */
+  -webkit-tap-highlight-color: transparent;
+  /* Safari на телефоне боком и Android с «ускорением шрифта» сами
+     увеличивают текст, который сочли мелким, — каждый блок по-своему. Плитка
+     с числом 28 и подписью 12 превращается в плитку, где подпись крупнее
+     задуманного, а числа разъезжаются по разрядам. 100%, а не none: none в
+     части браузеров отключает и масштабирование текста самим человеком.
+     Чего замер не видит: системный крупный шрифт Android на живом телефоне —
+     он в списке ручной проверки README. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* РАЗМЕР — ВМЕСТЕ С ПОЛЯМИ И РАМКОЙ, во всём ките (решение владельца 29.09,
+   DECISIONS.md, п. 11). Без этого width: 100% и height: 100% считались без
+   полей, и поля прибавлялись сверху: за один день так нашлись два дефекта —
+   меню фильтра на 16 px шире кнопки и виджет, вылезавший из колонки на
+   48 px. Каждый чинили по месту; правило здесь закрывает весь класс ошибок.
+   Только внутри .dk-root: размеры хозяина кит не трогает — встроенный кит
+   не должен менять чужую раскладку.
+   Что изменилось в размерах кита при включении — снято замером всех
+   элементов dk-* на всех страницах до и после (п. 11). */
+.dk-root *, .dk-root *::before, .dk-root *::after { box-sizing: border-box; }
+/* Кроме ячеек таблицы. Их ширину считает раскладка таблицы, а не width:
+   100%, и проценты колонок в разметке (style="width:24%") написаны под
+   прежний счёт — без полей. С border-box сумма процентов стала меньше
+   ширины, остаток таблица раздала всем колонкам, и колонка выбора выросла с
+   48 до 55 px — закреплённая вторая колонка, стоящая ровно на 48 px от края,
+   поехала бы под неё (замер п. 11). У колонки выбора border-box объявлен
+   явно, ниже. */
+.dk-root :is(th, td) { box-sizing: content-box; }
+
+.dk-page {
+  margin: 0;
+  background: var(--bg);
+  /* Вырез и полоса «домой». Страница кита объявляет viewport-fit=cover —
+     иначе iPhone рисует по бокам чёрные поля, — и с этого момента обязана
+     сама отступить от выреза: телефон боком прячет под ним 47 px слева или
+     справа. Отступ на body, а не у каждого блока: так под него попадает всё
+     сразу — обёртка, шапка каркаса, документация, — а фон страницы всё равно
+     доходит до края, потому что фон body красит весь холст.
+     Верх здесь не отступается: у липкой шапки своё правило (chrome.css), а
+     отступ на body от прилипшей шапки не спасает.
+     Цена: отступ складывается с --page-pad, а не заменяет его, — боком на
+     телефоне с вырезом содержимое уже на 2 × 18 px, чем могло бы быть.
+     Замер: tools/check-mobile.mjs, «телефон боком» с вырезом 47 px. */
+  padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+
+/* Страница без каркаса: сверху отступает сама обёртка. Нужно для запуска с
+   главного экрана (PWA), где строка состояния лежит поверх страницы; в
+   обычном браузере отступ сверху равен нулю, и остаётся прежний. */
+.dk-page > .dk-wrap { padding-top: max(var(--space-6), env(safe-area-inset-top, 0px)); }
+
+.dk-wrap {
+  position: relative;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: var(--space-6) var(--page-pad) var(--space-9);
+}
+
+/* --- сетка ----------------------------------------------------------------
+   Колоночная сетка дашборда: 12 колонок на десктопе, 8 на планшете, 4 на
+   мобилке. Ширина виджета задаётся ДОЛЕЙ, а не числом колонок — «половина»
+   остаётся половиной на всех трёх устройствах, а «четверть» на мобилке честно
+   становится целой строкой, потому что четверть от четырёх колонок нечитаема.
+
+       <div class="dk-grid">
+         <div class="dk-col--half">…</div>
+         <div class="dk-col--quarter">…</div>
+       </div>
+
+   Почему доли, а не span-3 / span-6: числом колонок пришлось бы переписывать
+   разметку на каждой точке перелома. Доля переживает смену сетки сама.        */
+
+.dk-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
+  gap: var(--grid-gap);
+  align-items: start;
+}
+
+/* Колонка — контейнер для запросов по ширине: блок внутри решает, как себя
+   разложить, по месту, которое ему дали, а не по ширине экрана (плитка на
+   широком месте, ниже). Ширину колонке задаёт сетка, так что ограничение
+   «ширина не от содержимого» здесь ничего не меняет. */
+.dk-col--full,
+.dk-col--two-thirds,
+.dk-col--half,
+.dk-col--third,
+.dk-col--quarter { grid-column: span var(--grid-cols); min-width: 0; container: dk-col / inline-size; }
+
+@media (min-width: 768px) {
+  .dk-col--quarter    { grid-column: span 4; }   /* 4 из 8 — половина планшета */
+  .dk-col--third      { grid-column: span 4; }
+  .dk-col--half       { grid-column: span 4; }
+  .dk-col--two-thirds { grid-column: span 8; }
+}
+
+@media (min-width: 1200px) {
+  .dk-col--quarter    { grid-column: span 3; }
+  .dk-col--third      { grid-column: span 4; }
+  .dk-col--half       { grid-column: span 6; }
+  .dk-col--two-thirds { grid-column: span 8; }
+}
+
+/* Раскладка «основное + боковая колонка»: карта слева, сводка и лента справа.
+   Ровно то, как устроена витрина мониторинга. На планшете и мобилке боковая
+   колонка уходит вниз — рядом ей места нет.                                   */
+.dk-layout {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 1200px) {
+  .dk-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 320px); }
+  .dk-layout--wide-side { grid-template-columns: minmax(0, 1fr) minmax(0, 400px); }
+}
+
+/* Ряд одинаковых плиток, которые сами решают, сколько их влезет в строку.
+   Для KPI и мелких виджетов, где точная доля не важна.                        */
+/* Ряд, в котором виджеты обязаны быть одной высоты. Обычный ряд намеренно
+   выравнивает виджеты по верхнему краю и даёт каждому свою высоту: так короткий
+   виджет не растягивается пустотой ради соседа. Но там, где рядом стоят карта и
+   список к ней, разная высота читается как обрыв — список заканчивается, а под
+   ним остаётся дыра во весь экран. В таком ряду список тянется до высоты карты
+   и прокручивается внутри себя. */
+.dk-grid--stretch { align-items: stretch; }
+/* border-box: без него 100% высоты колонки считались без полей виджета, и
+   поля прибавлялись сверху — виджет вылезал за колонку на 48 px и наезжал на
+   ряд ниже (замер 29.09 на regions.html; нашёл исполнитель проверочной
+   задачи скилла). У кита нет общего box-sizing, поэтому здесь явно. */
+.dk-grid--stretch .dk-widget { height: 100%; box-sizing: border-box; }
+
+/* Высоту ряда задаёт ПЕРВАЯ колонка — карта, — а соседние тянутся до неё и
+   листаются внутри себя, как и обещано выше. Раньше высоту задавал самый
+   высокий, то есть список из четырнадцати строк, и после того как рамка
+   карты стала по пропорциям страны (п. 11), под легендой карты открылась
+   пустота в 300 px (regions.html, 29.09). contain: size обнуляет
+   собственную высоту соседей, и ряд меряется по первой; растяжение отдаёт им
+   высоту ряда обратно. Только на десктопе, где колонки стоят рядом: на
+   телефоне колонка в одну строку с нулевой высотой просто исчезла бы. */
+@media (min-width: 1200px) {
+  .dk-grid--stretch > [class*="dk-col--"]:not(:first-child) { contain: size; }
+  .dk-grid--stretch > [class*="dk-col--"]:not(:first-child) .dk-widget > :last-child { flex: 1 1 0; min-height: 0; overflow: auto; }
+}
+
+.dk-grid--even {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--grid-gap);
+  align-items: start;
+}
+
+/* --- типографика ----------------------------------------------------------
+   Готовые классы под именованные стили. Имена совпадают с названиями стилей
+   в фигме: H1 там — dk-h1 здесь, спорить не о чем.                           */
+
+.dk-display  { font: var(--type-display);   letter-spacing: var(--type-display-track); margin: 0; text-wrap: balance; }
+.dk-h1       { font: var(--type-h1);        letter-spacing: var(--type-h1-track);      margin: 0; text-wrap: balance; }
+.dk-h2       { font: var(--type-h2);        letter-spacing: var(--type-h2-track);      margin: 0; text-wrap: balance; }
+.dk-h3       { font: var(--type-h3);        letter-spacing: var(--type-h3-track);      margin: 0; }
+
+.dk-body-lg  { font: var(--type-body-lg);   letter-spacing: var(--type-body-lg-track); }
+.dk-body     { font: var(--type-body);      letter-spacing: var(--type-body-track); }
+.dk-strong   { font: var(--type-body-bold); letter-spacing: var(--type-body-bold-track); }
+.dk-caption  { font: var(--type-caption);   letter-spacing: var(--type-caption-track); color: var(--ink-2); }
+.dk-code     { font: var(--type-code);      letter-spacing: var(--type-code-track); }
+
+/* Надзаголовок: прописными и вразрядку. Без разрядки прописные слипаются. */
+.dk-overline {
+  font: var(--type-overline);
+  letter-spacing: var(--type-overline-track);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Числа. Табличные цифры обязательны: разряды должны стоять друг под другом,
+   а колонка не должна дёргаться при обновлении данных. */
+.dk-metric-xl { font: var(--type-metric-xl); letter-spacing: var(--type-metric-xl-track); font-variant-numeric: tabular-nums; }
+.dk-metric-lg { font: var(--type-metric-lg); letter-spacing: var(--type-metric-lg-track); font-variant-numeric: tabular-nums; }
+.dk-metric    { font: var(--type-metric);    letter-spacing: var(--type-metric-track);    font-variant-numeric: tabular-nums; }
+
+/* Табличные цифры для любого текста, где есть числа. */
+/* ЦИФРЫ В КОЛОНКАХ — ГАРНИТУРОЙ С НАСТОЯЩИМИ ТАБЛИЧНЫМИ ЦИФРАМИ.
+
+   У Golos Text табличных цифр нет. Замерено в браузере на кегле 100 с
+   включённым tabular-nums: 1, 4 и 7 выравниваются до 62, а 2, 3, 5, 6, 8, 9
+   остаются 58…61.5. То есть tabular-nums здесь ставил галочку, а колонка
+   всё равно дрожала при обновлении — раньше это называлось «ценой одной
+   гарнитуры» и принималось осознанно; внешний разбор поставил это первым
+   пунктом, и замер с ним согласен.
+
+   Поэтому число в колонке набирается --font-num (моноширинная из системы:
+   все десять цифр по 60.2 на том же замере). Крупные числа KPI это не
+   касается: число там одно и не в колонке, набирается оно пропорциональными
+   цифрами (ниже). tabular-nums остаётся — для запасных гарнитур, где он
+   работает. */
+.dk-num,
+.dk-td-num, .dk-table .dk-td-num,
+.dk-rank__v, .dk-bar__v,
+.dk-uptime__v, .dk-map__val, .dk-map__key,
+.dk-select__count, .dk-side__n, .dk-tab__n,
+.dk-banner__stat b, .dk-progress__value,
+.dk-cal__n, .dk-cal__tt, .dk-top__at,
+.dk-pager__count b, .dk-pager__p { font-variant-numeric: tabular-nums; }
+
+/* Колонки чисел: таблица, рейтинг, полосы. Не всё из списка выше — счётчик в
+   вкладке или бейдж стоят по одному, там дрожать нечему, а моноширинная
+   гарнитура рядом с текстом кнопки выглядела бы чужой. */
+.dk-td-num, .dk-table .dk-td-num,
+.dk-rank__v, .dk-bar__v, .dk-uptime__v, .dk-map__val { font-family: var(--font-num); }
+
+/* Крупное одиночное число — пропорциональными цифрами: у табличной единицы
+   широкие боковые поля, чтобы встать в колонку, и в числе «17» появляется
+   зазор, из-за которого оно читается как два числа. */
+.dk-metric, .dk-metric-lg, .dk-metric-xl, .dk-hero__n { font-variant-numeric: proportional-nums; }
+
+
+/* Вводный абзац. Ширина ограничена: строка длиннее 62 знаков теряет читателя
+   на обратном пути к началу следующей. */
+.dk-sub {
+  font: var(--type-body);
+  color: var(--ink-2);
+  max-width: 62ch;
+  margin-top: var(--space-3);
+}
+
+.dk-link { color: var(--link); text-underline-offset: 2px; }
+
+/* --- иконки ---------------------------------------------------------------
+   Tabler Icons, outline. Размер наследуется от текста, цвет — от currentColor,
+   поэтому иконка внутри кнопки автоматически меняется вместе с ней.
+   Толщина штриха фиксирована: 24-я сетка Tabler рассчитана на 2, и при других
+   значениях иконки перестают выглядеть одним набором.
+   Разметка: <svg class="dk-i"><use href="#ti-search"/></svg>                  */
+
+.dk-i {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -0.2em;
+}
+
+.dk-i--sm { width: 1em; height: 1em; }
+.dk-i--lg { width: 1.4em; height: 1.4em; }
+
+/* --- шапка ---------------------------------------------------------------- */
+
+.dk-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-7);
+  flex-wrap: wrap;
+}
+
+/* Статус в шапке чуть опущен: он стоит рядом с заголовком, у которого своя
+   высота строки, и по базовой линии без этого не сходится. Правило узкое
+   намеренно — раньше оно было записано на весь .dk-status и добавляло отступ
+   каждому статусу в таблице, ломая выравнивание ячеек. */
+.dk-head .dk-status { padding-top: var(--space-3); }
+
+/* Точка состояния. Цвет приходит снаружи параметром --accent: точка, умеющая
+   быть только зелёной, — это не состояние, а украшение. По умолчанию «всё в
+   порядке», потому что чаще всего так и есть.
+
+   Точка сама по себе состояние не называет — рядом обязательно слово. Цвет
+   здесь второй признак, а не единственный. */
+.dk-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--accent, var(--calm));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent, var(--calm)) 18%, transparent);
+  flex: none;
+}
+
+/* --- поверхности ----------------------------------------------------------
+   Ни обводок, ни теней. Виджет отделяется от фона только собственной
+   поверхностью: в тёмной теме она светлее фона, в светлой — светлее
+   углублённого фона. Ступень между ними около 1.17:1 в обеих темах — этого
+   достаточно, чтобы край читался, и мало, чтобы он лез в глаза.              */
+
+.dk-panel {
+  position: relative;
+  background: var(--surface);
+  border: 0;
+  border-radius: var(--radius-xl);
+  padding: var(--pad-widget);
+}
+
+/* Разделитель шапки виджета — воздухом, не линией. */
+.dk-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-inline);
+  margin-bottom: var(--gap-section);
+}
+
+/* Вложенная зона внутри виджета: ещё один шаг поверхности вверх. */
+/* Вложенная зона внутри виджета. Её поле меньше поля виджета на одну ступень:
+   вложенное всегда плотнее внешнего, иначе уровни перестают различаться. */
+.dk-well {
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  padding: var(--gap-group);
+}
+
+/* --- выравнивание внутри виджета ------------------------------------------
+   Правила, а не помощники «на всякий случай». Их три, и все три про одно:
+   глаз ищет вертикали, и любая лишняя вертикаль читается как ошибка.
+
+   1. ОДИН ЛЕВЫЙ КРАЙ НА ВЕСЬ ВИДЖЕТ.
+      Заголовок, подписи и содержимое начинаются с одной линии. Поле виджета
+      задаёт её один раз — внутренние блоки своих полей по горизонтали не
+      добавляют.
+
+   2. ПОДПИСЬ СЛЕВА, ЗНАЧЕНИЕ СПРАВА, ОБА ПО БАЗОВОЙ ЛИНИИ.
+      Не по центру блока: крупное число рядом с мелкой подписью, выровненное
+      по центру, всегда выглядит съехавшим вниз. Выравнивать надо по той
+      линии, на которой стоят буквы.
+
+   3. ЧИСЛА ВЫРАВНИВАЮТСЯ ПО ПРАВОМУ КРАЮ И ТОЛЬКО ТАБЛИЧНЫМИ ЦИФРАМИ.
+      Разряды обязаны стоять друг под другом — иначе колонку нельзя сравнить
+      взглядом, а при обновлении данных она начинает дёргаться.              */
+
+.dk-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-inline);
+  min-width: 0;
+}
+
+/* Строка «подпись — значение». Основной способ показать число в виджете. */
+.dk-row {
+  display: flex;
+  align-items: baseline;        /* правило 2: по базовой линии, не по центру */
+  justify-content: space-between;
+  gap: var(--gap-inline);
+  min-width: 0;
+}
+
+.dk-row__label {
+  color: var(--ink-2);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dk-row__value {
+  flex: none;
+  text-align: right;                       /* правило 3 */
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-ui-strong);
+  color: var(--accent, var(--ink));
+}
+
+/* Ряд значка и текста: по оптическому центру строки, а не по коробке.
+   Значку задаётся flex:none — иначе он сжимается, когда текст длинный. */
+.dk-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  min-width: 0;
+}
+
+.dk-inline .dk-i { flex: none; }
+
+/* Прижать к правому краю всё, что идёт после: действия в шапке, значение
+   в конце строки. Одно правило вместо десяти margin-left в разметке. */
+.dk-push { margin-left: auto; }
+
+/* --- панель управления ---------------------------------------------------- */
+
+.dk-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.dk-toolbar__group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+/* Строка фильтров на доске, а не в панели, стояла вплотную к первому блоку:
+   сверху отступ у неё был, снизу — ноль, и пилюля периода касалась плитки
+   (замер 29.09: 0 px). В панели строка — последний ребёнок, и лишнего поля
+   там не появится. */
+.dk-toolbar:not(:last-child) { margin-bottom: var(--gap-section); }
+
+/* --- кнопки --------------------------------------------------------------
+   Кнопка узнаётся заливкой, а не рамкой: своя поверхность на фоне виджета.  */
+
+.dk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Кнопкой бывает и ссылка (<a class="dk-btn">) — на витрине так оформлен
+     переход на страницу компонента, и он рисовался подчёркнутым текстом. */
+  text-decoration: none;
+  gap: var(--space-3);
+  height: var(--control-md);
+  padding: 0 var(--control-pad-md);
+  font: inherit;
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui);
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: color var(--duration-fast), background var(--duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-btn:hover { color: var(--ink); background: var(--surface-3); }
+}
+
+
+/* ЗНАЧОК В КНОПКЕ.
+
+   Размер значка растёт вместе с кеглем, а не живёт своей жизнью: значок
+   крупнее текста выглядит как ошибка, мельче — как грязь на кнопке.
+
+   Значок стоит ПЕРЕД текстом — он называет действие вместе с ним.
+   ПОСЛЕ текста значок ставится только когда он говорит о последствии,
+   а не о действии:
+       ⌄  откроется список          → dk-i--after
+       ↗  уйдём с этой страницы     → dk-i--after
+       →  это шаг, будет следующий  → dk-i--after
+   Двух значков на одной кнопке не бывает: тогда непонятно, какой из них
+   описывает действие.
+
+   Кнопка без подписи обязана иметь aria-label — иначе для скринридера она
+   просто «кнопка». */
+
+.dk-btn .dk-i { width: 16px; height: 16px; vertical-align: 0; }
+.dk-btn--sm .dk-i { width: 14px; height: 14px; }
+.dk-btn--lg .dk-i { width: 20px; height: 20px; }
+
+/* Оптическая компенсация: значок легче буквы, и при равных полях кнопка со
+   значком слева выглядит разъехавшейся. Убираем два пикселя с той стороны,
+   где стоит значок. */
+.dk-btn:has(> .dk-i:first-child) { padding-left: calc(var(--control-pad-md) - var(--space-1)); }
+.dk-btn--sm:has(> .dk-i:first-child) { padding-left: calc(var(--control-pad-sm) - var(--space-1)); }
+.dk-btn--lg:has(> .dk-i:first-child) { padding-left: calc(var(--control-pad-lg) - var(--space-1)); }
+.dk-btn:has(> .dk-i:last-child) { padding-right: calc(var(--control-pad-md) - var(--space-1)); }
+
+/* Ведомый значок — всегда последним и чуть отодвинут: он не часть подписи. */
+.dk-i--after { margin-left: var(--space-1); }
+
+/* Размеры. По умолчанию M — он стоит в девяти случаях из десяти.
+   S для плотных мест: панель фильтров, действие внутри строки таблицы.
+   L для одиночного главного действия на странице. */
+.dk-btn--sm { height: var(--control-sm); padding: 0 var(--control-pad-sm); font-size: var(--text-caption); }
+.dk-btn--lg { height: var(--control-lg); padding: 0 var(--control-pad-lg); font-size: var(--text-body); }
+
+.dk-btn--primary {
+  color: var(--brand-ink);
+  background: var(--brand);
+  font-weight: var(--weight-ui-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-btn--primary:hover { background: var(--brand-hover); color: var(--brand-ink); }
+}
+
+
+/* Тихая кнопка: без собственной поверхности, проявляется при наведении. */
+.dk-btn--ghost { background: transparent; }
+@media (hover: hover) and (pointer: fine) {
+  .dk-btn--ghost:hover { background: var(--surface-2); }
+}
+
+
+.dk-btn:disabled,
+.dk-btn[aria-disabled="true"] {
+  color: var(--ink-3);
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+.dk-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-md);
+  height: var(--control-md);
+  padding: 0;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  flex: none;
+  transition: color var(--duration-fast), background var(--duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-iconbtn:hover { color: var(--ink); background: var(--surface-3); }
+}
+
+.dk-iconbtn .dk-i { width: 18px; height: 18px; vertical-align: 0; }
+
+.dk-iconbtn--sm { width: var(--control-sm); height: var(--control-sm); }
+.dk-iconbtn--sm .dk-i { width: 16px; height: 16px; }
+.dk-iconbtn--lg { width: var(--control-lg); height: var(--control-lg); }
+.dk-iconbtn--lg .dk-i { width: 20px; height: 20px; }
+
+/* ИСКЛЮЧЕНИЕ 1. Кольцо фокуса с клавиатуры.
+   Единственная обводка, которая рисуется всегда. Она появляется только при
+   навигации с клавиатуры и исчезает при работе мышью, так что визуального
+   шума не создаёт — но без неё интерфейс недоступен. Не удалять. */
+.dk-btn:focus-visible,
+.dk-iconbtn:focus-visible,
+.dk-seg button:focus-visible,
+.dk-lg:focus-visible,
+.dk-field:focus-within,
+.dk-rank__row:focus-visible,
+.dk-table tbody tr:focus-visible {
+  outline: var(--focus-width) solid var(--brand);
+  outline-offset: var(--focus-offset);
+}
+
+/* --- сегментированный переключатель --------------------------------------
+   Дорожка — вложенная поверхность, активный сегмент — акцентная заливка.    */
+
+.dk-seg {
+  display: inline-flex;
+  gap: var(--space-1);
+  background: var(--surface-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  /* Отступ дорожки и радиус сегмента связаны: 10 − 4 = 6. См. правило 2. */
+  padding: var(--track-pad);
+  width: max-content;
+  max-width: 100%;
+  flex: none;
+}
+
+.dk-seg button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--control-sm);
+  padding: 0 var(--space-6);
+  font: inherit;
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color var(--duration-fast), background var(--duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-seg button:hover { color: var(--ink); }
+}
+
+
+.dk-seg button[aria-pressed="true"],
+.dk-seg button.is-on {
+  /* Серое, не акцент: выбранное управление не спорит с данными за цвет.
+     Видно контрастом (3.44:1 к контейнеру сегмента) и жирностью подписи;
+     акцентом было 2.66:1 — ярче цветом и хуже видно. См. токены, 2а. */
+  background: var(--control-on);
+  color: var(--control-on-ink);
+  font-weight: var(--weight-ui-strong);
+}
+
+.dk-seg button .dk-i { width: 16px; height: 16px; vertical-align: 0; }
+
+/* Сегмент, который не помещается на телефоне, листается вбок — так же, как
+   вкладки: одно поведение на весь интерфейс. Замер на 360: сегмент из четырёх
+   вариантов выходил на 304 px при месте в 296 и делал страницу шире экрана.
+   Переносить варианты на вторую строку нельзя — сегмент перестаёт читаться
+   одним выбором; обрезать подписи многоточием тоже — «Недосту…» не вариант.
+   Кольцо фокуса при этом рисуется внутрь кнопки: прокрутка обрезала бы
+   внешнее, а фокус без кольца — это потерянное место на странице.
+   Цена: крайний вариант может оказаться за краем, и о нём говорит только
+   обрезанная кнопка. Больше трёх вариантов на телефоне — повод взять
+   выпадающий список, а не надеяться на прокрутку. */
+@media (max-width: 767px) {
+  .dk-seg { overflow-x: auto; scrollbar-width: none; }
+  .dk-seg::-webkit-scrollbar { display: none; }
+  .dk-seg button { flex: none; }
+  .dk-seg button:focus-visible { outline-offset: calc(-1 * var(--focus-width)); }
+}
+
+.dk-seg--sm button { height: calc(var(--control-sm) - 4px); padding: 0 var(--control-pad-sm); }
+.dk-seg--lg button { height: calc(var(--control-lg) - 6px); padding: 0 var(--control-pad-lg); font-size: var(--text-body); }
+
+/* Сегмент значками. Стоит ПОСЛЕ модификаторов размера намеренно: у них та же
+   специфичность, и правило, написанное выше, проигрывало им поля — кнопка
+   выходила 28 на 24 вместо квадрата. Заметно это только линейкой, а не
+   глазом, поэтому и держалось.
+
+   Квадрат делает aspect-ratio, а не вторая цифра ширины. Написать
+   width: var(--control-sm) рядом с height: calc(var(--control-sm) - 4px)
+   значит завести два числа, которые обязаны совпадать, — и однажды они
+   разойдутся при смене размера. Здесь ширина следует за высотой сама, каким
+   бы модификатором размера ни пользовались.
+
+   Вариант один. Был второй, --icon, с шириной 34 px цифрой — под высотой 28
+   он выходил 34 × 28, и владелец кита увидел это глазом на переключателе
+   темы (29.09). Убран: два имени одного варианта — и одно из них врёт.
+
+   Подпись в таком сегменте не исчезает, а переезжает в title и aria-label:
+   кнопка без доступного имени для скринридера — просто «кнопка», и человек
+   не узнает, между чем переключается. Значками сегмент делают там, где выбор
+   очевиден из самого содержимого: карта против плиток видна сразу, как только
+   переключишь. Там, где выбор не очевиден, подписи остаются. */
+.dk-seg--icons button {
+  aspect-ratio: 1;
+  width: auto;
+  padding: 0;
+}
+
+
+/* --- поля ввода ----------------------------------------------------------
+   Залитое поле читается как «сюда можно писать» без всякой рамки.           */
+
+.dk-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--control-lg);
+  background: var(--surface-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: 0 var(--control-pad-md);
+  gap: var(--space-4);
+  min-width: 0;
+  transition: background var(--duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-field:hover { background: var(--surface-3); }
+}
+
+
+/* Поле по умолчанию L: в него пишут и в него целятся, мелкое неудобно.
+   M — для плотной панели фильтров, где полей несколько в ряд. */
+.dk-field--md { height: var(--control-md); padding: 0 var(--control-pad-sm); }
+
+.dk-field .dk-i { width: 16px; height: 16px; color: var(--ink-3); vertical-align: 0; }
+
+/* align-self: stretch — чтобы поле ловило касание по всей высоте. Раньше
+   текст ввода был высотой в строку (22 px) посреди поля в 40–48: палец выше
+   или ниже строки попадал в обёртку-div, и поле не получало фокус. Мышью
+   этого не видно — ею целятся в текст. */
+.dk-field input,
+.dk-field select {
+  flex: 1;
+  align-self: stretch;
+  min-width: 0;
+  font: inherit;
+  font-size: var(--text-body);
+  color: var(--ink);
+  background: none;
+  border: 0;
+  outline: none;
+  appearance: none;
+}
+
+.dk-field input::placeholder { color: var(--ink-3); }
+
+.dk-field--search { width: 320px; max-width: 100%; }
+
+/* На мобилке поле поиска занимает строку целиком: рядом с ним всё равно
+   ничего не помещается, а обрезанное поле хуже широкого.
+
+   ФИЛЬТРЫ НА ТЕЛЕФОНЕ — СТРОКА ПИЛЮЛЬ, КОТОРАЯ ЛИСТАЕТСЯ ВБОК. Раньше каждый
+   фильтр растягивался на всю ширину и вставал в стопку: «Округ ⌄» слева в
+   полосе на 433 px читался пустой полосой, три фильтра съедали пол-экрана до
+   первого числа. Теперь пилюля по своему содержимому, как на мониторинге-
+   образце (DECISIONS.md, п. 8), а не поместившиеся уходят за край и видны
+   краешком — это и есть подсказка «листай».
+
+   Строка выходит к краям экрана (отрицательное поле на ширину отступа
+   страницы), иначе крайняя пилюля обрезалась бы посреди отступа. Снизу у
+   прокрутки запас на тень: overflow-x обрезает и по вертикали, и без запаса
+   тень пилюли срезалась бы ровно по её низу. Меню из такой строки
+   открывается поверх страницы (dkAnchor в dk-util.js): внутри прокрутки
+   оно было бы обрезано так же, как тень. */
+@media (max-width: 767px) {
+  .dk-field--search { width: 100%; }
+  .dk-toolbar { align-items: stretch; }
+  .dk-toolbar__group { width: 100%; }
+  .dk-toolbar__group:has(> .dk-select) {
+    flex-wrap: nowrap;
+    width: auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: calc(var(--space-3) * -1) calc(var(--page-pad) * -1) calc(var(--space-8) * -1);
+    padding: var(--space-3) var(--page-pad) var(--space-8);
+    gap: var(--space-4);
+  }
+  .dk-toolbar__group:has(> .dk-select)::-webkit-scrollbar { display: none; }
+}
+
+/* --- строка поиска ------------------------------------------------------
+   Главный поиск экрана: «Регион или округ» и дата, на которую данные. Не
+   поле формы (dk-field--search), а первое, что видит человек на телефоне,
+   поэтому крупнее и лежит на доске пилюлей с кромкой и тенью (DECISIONS.md,
+   п. 8). Внутри панели или виджета — плоская, как пилюля фильтра.
+
+   Дата справа — ответ на «за какой день эти числа», тот же, что «Данные на»
+   в шапке каркаса. Пока человек ищет, дата уступает место крестику: искомое
+   важнее, а дата вернётся, когда поле опустеет.
+
+   Кегль поля 16, а не 14: меньше 16 iOS увеличивает страницу при фокусе, и
+   поиск открывается с прыжком (README, «Телефон и приложения»). */
+.dk-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  height: 56px;
+  min-width: 0;
+  padding: 0 var(--space-3) 0 var(--space-7);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--edge-float);
+  border-radius: var(--radius-full);
+  box-shadow: none;
+  transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
+}
+:where(.dk-panel, .dk-widget, .dk-modal) .dk-search {
+  background: var(--surface-2);
+  border-color: transparent;
+  box-shadow: none;
+}
+/* Фокус — общим кольцом кита на всей пилюле: фокус получает поле внутри, а
+   кольцо рисует обёртка, как у составного поля (.dk-field). Кольцо идёт по
+   скруглению пилюли. Своя кромка акцентом была бы вторым языком фокуса. */
+.dk-search:focus-within { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+.dk-search__icon { width: 22px; height: 22px; flex: none; color: var(--ink-2); }
+.dk-search__input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0;
+  font: inherit;
+  font-size: var(--text-title);
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  appearance: none;
+}
+.dk-search__input::placeholder { color: var(--ink-2); }
+.dk-search__input::-webkit-search-cancel-button { appearance: none; display: none; }
+.dk-search__at {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 32px;
+  padding: 0 var(--space-5);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+/* Крестик — цель 44 px под палец, значок внутри обычный. Очищает поле
+   dk-util.js без подключения: щелчок по .dk-search__clear. */
+.dk-search__clear {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--ink-2);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+.dk-search__clear:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+.dk-search:has(.dk-search__input:not(:placeholder-shown)) .dk-search__clear { display: inline-flex; }
+.dk-search:has(.dk-search__input:not(:placeholder-shown)) .dk-search__at { display: none; }
+
+/* --- выпадающий фильтр ----------------------------------------------------
+   Три вида на одной основе: одиночный выбор, множественный и с поиском.
+   Вид выбирается по длине списка, а не по вкусу:
+
+       до  8 значений   одиночный список без поиска
+       до 20 значений   список с поиском
+       больше           поиск обязателен, иначе человек листает вслепую
+
+   ГЛАВНОЕ ПРАВИЛО: выбранное значение видно, НЕ ОТКРЫВАЯ меню. Фильтр,
+   который после выбора продолжает показывать «Все округа», — источник самых
+   дорогих ошибок в дашбордах: человек смотрит на отфильтрованные данные и
+   думает, что видит все.                                                     */
+
+.dk-select {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  flex: none;
+}
+
+/* ПИЛЮЛЯ. Фильтр — кнопка-пилюля по своему содержимому. Где она стоит,
+   решает её вид:
+   - на доске страницы — поверхность виджета, тонкая кромка и тень
+     (--edge-float, --elev-float). Это единственная рамка в ките, и она
+     разрешена только здесь (DECISIONS.md, п. 8): без неё пилюля на тёмной
+     доске читалась дыркой, а не кнопкой;
+   - внутри панели, виджета, окна — вложенная заливка без кромки и тени, как
+     всё внутри блока.
+   Кромка прозрачная и во втором случае: высота пилюли не должна прыгать при
+   переносе фильтра из шапки страницы в панель. */
+.dk-select__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--control-lg);
+  max-width: 100%;
+  padding: 0 var(--space-6);
+  font: inherit;
+  font-size: var(--text-body);
+  font-weight: var(--weight-ui-strong);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--edge-float);
+  border-radius: var(--radius-full);
+  box-shadow: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--duration-fast), color var(--duration-fast);
+}
+:where(.dk-panel, .dk-widget, .dk-modal, .dk-menu) .dk-select__trigger {
+  background: var(--surface-2);
+  border-color: transparent;
+  box-shadow: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-select__trigger:hover { background: var(--surface-2); }
+  :where(.dk-panel, .dk-widget, .dk-modal, .dk-menu) .dk-select__trigger:hover { background: var(--surface-3); }
+}
+
+
+/* Фильтр, в котором что-то выбрано, отличается заливкой. Это и есть ответ
+   на вопрос «а данные точно все?» — видно через всю страницу.
+   Оттенок серый и лежит ПОВЕРХ обычной заливки поля: на голом виджете он
+   сравнивался бы не с тем, от чего должен отличаться. Заметность та же, что
+   была у синего (1.19–1.28:1 к неактивному полю, проверка ТИШИНА). */
+.dk-select[data-active="true"] .dk-select__trigger {
+  background: linear-gradient(var(--control-soft), var(--control-soft)), var(--surface);
+  color: var(--ink);
+}
+:where(.dk-panel, .dk-widget, .dk-modal, .dk-menu) .dk-select[data-active="true"] .dk-select__trigger {
+  background: linear-gradient(var(--control-soft), var(--control-soft)), var(--surface-2);
+}
+
+.dk-select__trigger[aria-expanded="true"] { background: var(--surface-3); }
+.dk-select__trigger:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+
+.dk-select__label {
+  overflow-wrap: anywhere;
+  
+  white-space: normal;
+  min-width: 0;
+}
+
+/* Сколько значений выбрано — числом, а не «выбрано несколько». */
+.dk-select__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui-strong);
+  font-variant-numeric: tabular-nums;
+  color: var(--control-on-ink);
+  background: var(--control-on);
+  border-radius: var(--radius-full);
+  flex: none;
+}
+
+.dk-select__caret { transition: transform var(--duration-fast) var(--ease-out); flex: none; color: var(--ink-3); }
+.dk-select__trigger[aria-expanded="true"] .dk-select__caret { transform: rotate(180deg); }
+
+/* Сброс живёт на самом фильтре, а не внутри меню: убрать фильтр должно быть
+   так же легко, как поставить. */
+.dk-select__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  color: var(--ink-3);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  flex: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-select__clear:hover { color: var(--ink); background: var(--surface-3); }
+}
+
+.dk-select__clear:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset-tight); }
+
+.dk-select--sm .dk-select__trigger { height: var(--control-sm); padding: 0 var(--control-pad-sm); font-size: var(--text-caption); }
+.dk-select--md .dk-select__trigger { height: var(--control-md); }
+
+/* --- меню ---------------------------------------------------------------- */
+
+.dk-menu {
+  position: absolute;
+  top: calc(100% + var(--space-3));
+  left: 0;
+  z-index: var(--z-dropdown);
+  min-width: 100%;
+  width: max-content;
+  max-width: 320px;
+  background: var(--surface);
+  border: 0;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-overlay);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.dk-menu[hidden] { display: none; }
+
+/* Меню, открытое у правого края, разворачивается влево — иначе уедет за экран. */
+.dk-menu--right { left: auto; right: 0; }
+
+.dk-menu__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--control-md);
+  padding: 0 var(--space-5);
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  flex: none;
+}
+
+.dk-menu__search input {
+  flex: 1;
+  align-self: stretch;   /* касание по всей высоте строки поиска — см. .dk-field input */
+  min-width: 0;
+  font: inherit;
+  font-size: var(--text-body);
+  color: var(--ink);
+  background: none;
+  border: 0;
+  outline: none;
+}
+
+.dk-menu__search .dk-i { color: var(--ink-3); }
+
+.dk-menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 264px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dk-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--control-md);
+  padding: 0 var(--space-5);
+  font: inherit;
+  font-size: var(--text-body);
+  color: var(--ink-2);
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  width: 100%;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-menu__item:hover,
+  .dk-menu__item[data-cursor="true"] { background: var(--surface-2); color: var(--ink); }
+}
+
+.dk-menu__item[aria-selected="true"] { color: var(--ink); }
+.dk-menu__item:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+
+.dk-menu__name { flex: 1; min-width: 0; overflow-wrap: anywhere;  white-space: normal; }
+
+/* Число рядом со значением: сколько записей за ним стоит. Без него человек
+   выбирает вслепую и попадает в пустой результат. */
+.dk-menu__n { font-size: var(--text-caption); color: var(--ink-3); font-variant-numeric: tabular-nums; flex: none; }
+
+/* Отметка выбранного — галочка, а не только цвет: цветом одним обходиться
+   нельзя, его видят не все. */
+.dk-menu__mark { width: 16px; height: 16px; flex: none; color: var(--ink); opacity: 0; }
+.dk-menu__item[aria-selected="true"] .dk-menu__mark { opacity: 1; }
+
+/* Квадратик множественного выбора. */
+.dk-menu__box {
+  width: 16px; height: 16px; flex: none;
+  border-radius: var(--radius-xs);
+  background: var(--surface-3);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--control-on-ink);
+}
+.dk-menu__item[aria-selected="true"] .dk-menu__box { background: var(--control-on); }
+.dk-menu__box .dk-i { opacity: 0; width: 12px; height: 12px; }
+.dk-menu__item[aria-selected="true"] .dk-menu__box .dk-i { opacity: 1; }
+
+.dk-menu__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-5) var(--space-1);
+  font-size: var(--text-caption);
+  color: var(--ink-3);
+}
+
+.dk-empty__do { color: var(--ink-3); margin-top: var(--space-3); }
+
+.dk-menu__empty { padding: var(--space-7) var(--space-5); text-align: center; font-size: var(--text-body); color: var(--ink-2); }
+
+/* На мобилке меню занимает всю ширину, а строки становятся крупнее: в узком
+   всплывающем окне пальцем не попасть. */
+/* Меню на телефоне не шире экрана без отступов и крупнее строками: в узком
+   всплывающем окне пальцем не попасть. Раньше здесь стояло width: 100% — и
+   меню выходило на 16 px шире своего поля: ширина считалась без полей меню,
+   поля прибавлялись сверху (у кита нет общего box-sizing), и меню
+   выпирало за кнопку к самому краю экрана. Где меню стоит, на телефоне
+   решает dkAnchor: он держит его под кнопкой и внутри экрана. */
+@media (max-width: 767px) {
+  .dk-menu { max-width: calc(100vw - var(--page-pad) * 2); }
+  .dk-menu__item { height: var(--control-md); }
+}
+
+/* --- строка применённых фильтров -----------------------------------------
+   Что именно сейчас применено — одной строкой, с возможностью снять по одному.
+   Это второй рубеж защиты от «смотрю на часть данных и думаю, что на все».   */
+
+.dk-chipbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* Подпись сжимается и переносится, а не держит ширину: «Ничего не выбрано —
+   действия появятся здесь» в шапке виджета на 360 выходила на 277 px при
+   месте в 183 и делала страницу шире экрана (tools/check-mobile.mjs). */
+.dk-chipbar__label { font-size: var(--text-caption); color: var(--ink-3); flex: 0 1 auto; min-width: 0; }
+
+.dk-fchip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--control-sm);
+  padding: 0 var(--space-3) 0 var(--control-pad-sm);
+  font-size: var(--text-caption);
+  color: var(--ink);
+  background: var(--control-soft);
+  border: 0;
+  border-radius: var(--radius-md);
+  max-width: 240px;
+}
+
+.dk-fchip__x {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; padding: 0;
+  color: var(--ink-2); background: none; border: 0;
+  border-radius: var(--radius-full); cursor: pointer; flex: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-fchip__x:hover { color: var(--ink); background: var(--surface-3); }
+}
+
+.dk-fchip__x:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset-tight); }
+
+/* Сколько осталось после фильтрации. Человек обязан видеть последствие своего
+   действия сразу, а не пересчитывать строки глазами. */
+.dk-result {
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.dk-result b { color: var(--ink); font-weight: var(--weight-ui-strong); }
+
+/* --- фильтр-чип со свотчем и счётчиком ------------------------------------
+   Ряд «Все 89 · Высокий 23 · Средний 27 …» служит и легендой, и фильтром.
+   Выбранное состояние показывается заливкой своего цвета, а не рамкой.
+   Цвет приходит снаружи через --swatch: компонент не знает, что такое «риск». */
+
+.dk-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.dk-lg {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--control-md);
+  padding: 0 var(--control-pad-md);
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--duration-fast), color var(--duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-lg:hover { color: var(--ink); background: var(--surface-3); }
+}
+
+
+/* Размеры — те же, что у кнопки: фильтр стоит с кнопками в одном ряду, и
+   разнобой по высоте виден сразу. По умолчанию M. */
+.dk-lg--sm { height: var(--control-sm); padding: 0 var(--control-pad-sm); }
+.dk-lg--sm .dk-lg__sw { width: 6px; height: 6px; }
+.dk-lg--lg { height: var(--control-lg); padding: 0 var(--control-pad-lg); font-size: var(--text-body); }
+.dk-lg--lg .dk-lg__sw { width: 10px; height: 10px; }
+
+.dk-lg[aria-pressed="true"],
+.dk-lg.is-on {
+  color: var(--ink);
+  /* Чип без своего цвета («Все») — это не категория данных, а чистое
+     управление, и выбранным он становится серым, как любое управление.
+     Раньше запасным цветом стоял акцент: «Все» горел синим рядом с
+     категориями, у которых цвет настоящий. Проверка ТИШИНА такое пропускала —
+     она разрешает акцент как цвет данных по умолчанию, а здесь данных нет. */
+  background: color-mix(in srgb, var(--swatch, var(--control-on)) 22%, transparent);
+}
+
+.dk-lg__sw {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--swatch, var(--ink-3));
+  flex: none;
+}
+
+.dk-lg__n {
+  font-weight: var(--weight-ui-strong);
+  font-variant-numeric: tabular-nums;
+  color: var(--swatch, var(--ink));
+}
+
+/* --- KPI-плитка ----------------------------------------------------------- */
+
+.dk-chip {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  background: var(--surface);
+  border: 0;
+  border-radius: var(--radius-lg);   /* блок внутри виджета, не кнопка */
+  padding: var(--space-5) var(--space-6);
+}
+
+.dk-chip__n {
+  font: var(--type-metric);
+  letter-spacing: var(--type-metric-track);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent, var(--ink));
+}
+
+.dk-chip__l { font-size: var(--text-caption); color: var(--ink-2); }
+
+/* --- главное число сводки -------------------------------------------------
+   Выделяется мягкой заливкой своего смыслового цвета, без рамки.            */
+
+/* Акцентный блок — залитая плашка внутри виджета. Правило его применения:
+   НА ЭКРАНЕ ОН ОДИН. Не «не больше трёх» и не «по вкусу» — один.
+
+   Смысл акцента в том, что он отвечает на вопрос «куда смотреть первым».
+   Два таких ответа на одном экране — это отсутствие ответа: глаз мечется между
+   пятнами и в итоге не верит ни одному. На дашборде аварийной службы цена
+   ошибки конкретная: диспетчер видит два красных пятна и тратит секунды на
+   выбор, вместо того чтобы открыть то, что горит.
+
+   Кто главнее, если претендентов несколько: баннер состояния забирает акцент
+   всегда, потому что он говорит о происходящем прямо сейчас. Всё остальное на
+   этом экране обходится цветом числа без заливки — смысл читается, а пятна не
+   возникает.
+
+   В витрине акцентных блоков намеренно несколько: это каталог, а не экран. */
+/* flex-wrap — чтобы на узком виджете счёт уходил на вторую строку, а не за
+   край: на 360 «23/89» стоял правее экрана на 17 px (tools/check-mobile.mjs).
+   Цена: в узком виджете сводка в две строки, и тренд с числом больше не
+   читаются одной фразой. */
+.dk-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-7);
+  background: color-mix(in srgb, var(--accent, var(--brand)) 12%, transparent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-7);
+}
+
+/* Тот же блок без заливки — для экранов, где акцент уже занят. Поля и радиус
+   сохраняются: иначе при смене варианта поедет вся раскладка виджета. */
+.dk-summary--plain { background: var(--surface-2); }
+
+.dk-score {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.dk-score__v {
+  font: var(--type-metric-xl);
+  letter-spacing: var(--type-metric-xl-track);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent, var(--ink));
+}
+
+.dk-score__of { font-size: var(--text-body); color: var(--ink-3); }
+
+/* Тренд — пилюля, а не просто цветная строчка. Причина не в моде: рядом с
+   числом KPI цветной текст без формы читается как часть этого числа, и глаз
+   пытается прочесть «23 ↑ +18%» одной величиной. Залитая пилюля отделяет
+   изменение от значения — это разные вещи, и выглядеть они должны по-разному.
+
+   Заливка собирается из того же --accent, что и текст: отдельного токена под
+   каждый оттенок заводить незачем, а 12% дают подложку, которая видна и не
+   спорит с самим числом. */
+.dk-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui-strong);
+  color: var(--accent, var(--ink-2));
+  background: color-mix(in srgb, var(--accent, var(--ink-2)) 12%, transparent);
+  white-space: nowrap;
+}
+
+/* --- главная карточка экрана ---------------------------------------------
+   Одно главное число экрана с тем, из чего оно сложено: «25 из 89», метка
+   смысла, полоса состава и чипы с изменением. Сделано по мониторингу, на
+   который владелец кита равняет телефон (DECISIONS.md, п. 8): там это
+   первое, что человек видит, и отвечает оно сразу на три вопроса — сколько,
+   много ли это и из чего состоит.
+
+   НА ЭКРАНЕ ОНА ОДНА — по той же причине, что и акцентный блок сводки:
+   она отвечает на «куда смотреть первым», а два ответа — это отсутствие
+   ответа. Поэтому ей, и только ей, разрешены глубокая тень (--elev-hero) и
+   оттенок по смыслу: --accent красит верхний левый угол в 18% смыслового
+   цвета и уходит в поверхность к середине. Оттенок — это смысл, а не
+   украшение: без --accent карточки нет цвета вовсе, акцентом бренда она не
+   красится никогда (у бренда нет смысла «плохо»). */
+.dk-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-group);
+  padding: var(--space-7);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: none;
+  border: var(--hairline) solid var(--rule);
+  color: var(--ink);
+  min-width: 0;
+}
+
+.dk-hero__label { font-size: var(--text-body); color: var(--ink-2); }
+
+/* Число и метка на одной строке: метка прижата вправо и стоит по низу числа,
+   а не по центру — рядом с числом в 56 центр метки висел бы в воздухе. На
+   узкой карточке метка уходит под число, а не за край. */
+.dk-hero__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--gap-tight);
+}
+
+.dk-hero__value { display: flex; align-items: baseline; gap: var(--space-3); min-width: 0; }
+.dk-hero__n {
+  font: var(--type-metric-hero);
+  letter-spacing: var(--type-metric-hero-track);
+}
+/* «из 89» — знаменатель, а не второе число: вдвое мельче и серее. */
+.dk-hero__of { font: var(--type-h2); letter-spacing: var(--type-h2-track); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+/* Метка в карточке крупнее обычной пилюли тренда: рядом с числом в 56
+   пилюля в 20 px терялась. Отступ снизу поднимает её над базовой линией
+   числа к середине его высоты. */
+.dk-hero .dk-trend { min-height: 26px; padding: 0 var(--space-5); margin-bottom: var(--space-4); }
+
+/* --- полоса состава -------------------------------------------------------
+   Из чего сложено целое: отрезки в долю от целого, между ними зазор.
+   Доля — входной параметр --share (просто число, как 25), цвет — --swatch.
+   Самый мелкий отрезок не тоньше 6 px: иначе единица из восьмидесяти девяти
+   исчезает, а исчезнувшая доля читается как отсутствующая.
+
+   Полоса — картинка, а не текст: скринридеру состав говорит aria-label на
+   самой полосе, а числа видны в чипах под ней. Одна полоса без чипов — это
+   цвет без подписи, так её не ставят. */
+.dk-split {
+  display: flex;
+  gap: var(--space-2);
+  height: 10px;
+  min-width: 0;
+}
+.dk-split__seg {
+  flex: var(--share, 1) 1 0;
+  min-width: 6px;
+  border-radius: var(--radius-sm);
+  background: var(--swatch, var(--nodata));
+}
+
+/* --- чипы легенды с изменением --------------------------------------------
+   «Высокий 25 +1»: точка цвета, название, число, изменение. Не кнопка — это
+   подпись, поэтому высота числом и под пальцем не растёт (--control-sm на
+   таче становится 44, а подпись нажимать незачем). */
+.dk-keys { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.dk-key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--space-7);
+  padding: 0;
+  background: transparent;
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.dk-key__dot { width: 8px; height: 8px; flex: none; border-radius: var(--radius-full); background: var(--swatch, var(--ink-3)); }
+.dk-key b { color: var(--ink); font-weight: var(--weight-ui-strong); font-variant-numeric: tabular-nums; }
+.dk-key__d { color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+/* --- лента карточек ------------------------------------------------------
+   «Резко выросли за день», «В фокусе дня»: несколько объектов, каждый со
+   своей историей, листаются вбок. Сделано по мониторингу-образцу
+   (DECISIONS.md, п. 8).
+
+   Зачем лента, а не список: у каждой карточки есть рассказ — было 30,
+   стало 57, «авария теплосети» — и он не помещается в строку таблицы. Лента
+   показывает одну историю целиком и краешек следующей: это подсказка, что
+   их несколько.
+
+   Карточка — 300 px, но не шире 82% экрана: на телефоне от следующей
+   остаётся видимая полоса. Прилипает левым краем. Оттенок — по смыслу
+   (--accent), как у главной карточки: у каждой карточки свой, потому что
+   это разные объекты с разным риском. Карточки лежат на доске, поэтому у
+   них кромка и тень (--edge-float, --elev-bar).
+
+   Лента выходит к краям экрана, как строка фильтров: иначе карточка
+   обрезалась бы посреди отступа страницы. Снизу запас на тень. */
+.dk-car { min-width: 0; }
+.dk-car__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-tight);
+  padding: 0 var(--space-2) var(--space-6);
+}
+.dk-car__title { margin: 0; font: var(--type-h3); letter-spacing: var(--type-h3-track); color: var(--ink); }
+.dk-car__pos { font-size: var(--text-body); color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dk-car__nav { display: inline-flex; gap: var(--space-2); margin-left: var(--space-4); }
+@media (hover: hover) and (pointer: fine) {
+  .dk-car__nav { display: inline-flex; }
+}
+.dk-car__track {
+  display: flex;
+  gap: var(--space-5);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  margin: calc(var(--space-3) * -1) 0 calc(var(--space-8) * -1);
+  padding: var(--space-3) 0 var(--space-8);
+  list-style: none;
+}
+.dk-car__track::-webkit-scrollbar { display: none; }
+/* К краям экрана лента выходит только на телефоне, где она во всю ширину.
+   В колонке десктопа выход за край колонки уносил карточки к краю экрана
+   мимо полей страницы (дашборд, 29.09) — там лента обрывается по колонке. */
+@media (max-width: 767px) {
+  .dk-car__track {
+    scroll-padding-inline: var(--page-pad);
+    margin-inline: calc(var(--page-pad) * -1);
+    padding-inline: var(--page-pad);
+  }
+}
+.dk-car__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  flex: none;
+  width: 300px;
+  max-width: 82vw;
+  box-sizing: border-box;
+  scroll-snap-align: start;
+  padding: var(--space-7);
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--edge-float);
+  border-radius: var(--radius-xl);
+  box-shadow: none;
+}
+button.dk-car__item, a.dk-car__item { cursor: pointer; }
+.dk-car__item:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+.dk-car__tags { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.dk-car__row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-5); }
+.dk-car__who { display: flex; flex-direction: column; gap: var(--space-1); flex: 1 1 100%; min-width: 0; }
+.dk-car__name { font: var(--type-h3); letter-spacing: var(--type-h3-track); overflow-wrap: anywhere;  white-space: normal; }
+.dk-car__sub { font-size: var(--text-caption); color: var(--ink-2); }
+/* «Было → стало»: прежнее мельче и приглушено, нынешнее — крупным числом
+   своего смысла. Стрелка — между ними, не цветом: переход читается и без
+   цвета. */
+.dk-car__change { display: flex; align-items: baseline; gap: var(--space-3); flex: none; font-variant-numeric: proportional-nums; }
+.dk-car__from { font: var(--type-metric); color: var(--from, var(--ink-2)); }
+.dk-car__arrow { color: var(--ink-3); }
+.dk-car__to { font: var(--type-metric-lg); letter-spacing: var(--type-metric-lg-track); color: var(--to, var(--ink)); }
+.dk-car__text {
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--ink-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Точки — где ты в ряду. Украшение при счётчике «1 из 5»: скринридеру
+   скрыты, текущая — шире, а не только темнее. */
+.dk-car__dots { display: flex; justify-content: center; gap: var(--space-2); padding-top: var(--space-6); }
+.dk-car__dots > span {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--ink) 25%, transparent);
+  transition: width var(--duration-fast) var(--ease-out);
+}
+.dk-car__dots > span.is-on { width: 18px; background: var(--ink); }
+.dk-car[data-fits="true"] :is(.dk-car__pos, .dk-car__nav, .dk-car__dots) { display: none; }
+
+/* --- ранжированный список -------------------------------------------------
+   Строки разделяются наведением и ритмом, не линейками.                     */
+
+.dk-rank { display: flex; flex-direction: column; min-height: 0; overflow: auto; }
+
+.dk-rank__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+}
+
+.dk-rank__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: none;
+  width: 100%;
+  transition: background var(--duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-rank__row:hover { background: var(--surface-2); }
+}
+
+
+.dk-rank__i {
+  font-size: var(--text-caption);
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+  min-width: 2ch;
+}
+
+.dk-rank__name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-body);
+  overflow-wrap: anywhere;
+  
+  white-space: normal;
+}
+
+.dk-rank__v {
+  font-size: var(--text-body);
+  font-weight: var(--weight-ui-strong);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent, var(--ink));
+  flex: none;
+}
+
+/* --- таблица --------------------------------------------------------------
+   По умолчанию сетки нет: шапка отделена своей поверхностью, строки —
+   наведением. На длинных плотных таблицах взгляд теряет строку — тогда
+   включается --zebra (мягче) или --ruled (жёстче). Это ИСКЛЮЧЕНИЕ 2.        */
+
+/* ШИРИНЫ КОЛОНОК ЗАДАЁТ РАЗМЕТКА, А НЕ СОДЕРЖИМОЕ.
+
+   table-layout: fixed — не оптимизация, а исправление настоящего дефекта.
+   При автоматической раскладке браузер считает ширины по тем строкам, которые
+   сейчас в таблице. В постраничной таблице это значит, что на каждой странице
+   ширины СВОИ: измерено на странице аварий — первая колонка меняется на 20
+   пикселей между первой и второй страницей, и все следующие колонки уезжают
+   вместе с ней. Человек листает журнал, и сетка под ним каждый раз дёргается,
+   причём чем длиннее самое длинное название на странице, тем сильнее.
+
+   Плюс к этому длинное число в последней колонке при автораскладке вылезало
+   за край: браузер отдавал место тексту слева, а не числу справа.
+
+   Цена решения названа честно: ширины теперь обязана объявить разметка.
+   Таблица без объявленных ширин разложит колонки поровну, и это будет видно
+   сразу — лучше, чем тихо дёргающаяся сетка. Ширину колонки задаёт первый
+   <th>: процентами для текстовых, пикселями для служебных. */
+/* Ячейки раздельные, без зазора (separate + spacing 0), а не слитые: у
+   слитых ячеек не бывает скруглений. Шапка и подсвеченная строка были
+   квадратными полосами внутри круглой карточки — полоса обрывалась углом
+   в 14 px от скруглённого края виджета и читалась обрезанной (разбор 29.09).
+   Теперь у каждой строки скруглены концы, и заливка — шапки, наведения,
+   зебры, выбора, итога — кладётся на ячейки, а не на строку: фон строки
+   скругления не знает. */
+.dk-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--text-body);
+}
+.dk-table tr > :first-child { border-top-left-radius: var(--radius-md); border-bottom-left-radius: var(--radius-md); }
+.dk-table tr > :last-child { border-top-right-radius: var(--radius-md); border-bottom-right-radius: var(--radius-md); }
+/* Линейки и скругления не дружат: линия под строкой загибалась бы на концах. */
+.dk-table--ruled tr > * { border-radius: 0; }
+/* Шапка и итог — прямыми полосами, без скругления: решение владельца кита
+   29.09 («не делай у шапки таблиц скругления»). Скругляются только строки
+   тела — наведение, зебра, выбор. Итог — заодно с шапкой: это две опоры
+   таблицы одним цветом (ниже, «Итоги и группы»), и форма у них одна. */
+.dk-table :is(thead, tfoot) tr > :nth-child(n) { border-radius: 0; }   /* :nth-child(n) — чтобы перебить :first-child и :last-child выше */
+
+.dk-table th {
+  text-align: left;
+  font: var(--type-overline);
+  letter-spacing: var(--type-overline-track);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: var(--surface-2);
+  padding: var(--space-5) var(--space-6);
+  white-space: nowrap;
+}
+
+.dk-table td {
+  padding: var(--space-5) var(--space-6);
+  border: 0;
+}
+
+.dk-table tbody td { transition: background var(--duration-fast); }
+@media (hover: hover) and (pointer: fine) {
+  .dk-table tbody tr:hover > td { background: var(--surface-2); }
+}
+
+
+.dk-table .dk-td-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.dk-table--zebra tbody tr:nth-child(even) > td {
+  background: color-mix(in srgb, var(--ink-3) 7%, transparent);
+}
+
+.dk-table--ruled tbody td { border-bottom: var(--hairline) solid var(--rule); }
+
+/* ЗАКРЕПЛЁННАЯ ШАПКА И ПЕРВАЯ КОЛОНКА. Включаются вручную, как зебра:
+   в короткой таблице им нечего закреплять, а лишний слой поверх строк — это
+   ещё одна поверхность, которую кит обязан проверять.
+
+   Шапке нужен контейнер с ограниченной высотой — .dk-tablewrap--tall: иначе
+   листается страница, а не таблица, и sticky не к чему прилипать. Первой
+   колонке нужна непрозрачная заливка: под ней проезжают остальные ячейки.
+   Заливка — поверхность виджета, а зебра, наведение и выбор кладутся поверх
+   неё вторым слоем, потому что сами они полупрозрачные (см. .dk-table--zebra):
+   на прозрачной ячейке они верны, на закреплённой показали бы проезжающий
+   текст сквозь строку. */
+.dk-tablewrap--tall { max-height: var(--table-max, 480px); overflow-y: auto; }
+.dk-table--sticky-head thead th { position: sticky; top: 0; z-index: 2; }
+.dk-table--sticky-col th:first-child,
+.dk-table--sticky-col td:first-child { position: sticky; left: 0; z-index: 1; background: var(--surface); }
+.dk-table--sticky-col thead th:first-child { background: var(--surface-2); z-index: 3; }
+/* Есть колонка выбора: закрепляются она и следующая. Вторая встаёт на
+   48 px — ровно ширину колонки выбора (см. «Колонка выбора» ниже: там она
+   объявлена числом и с полями, чтобы это число было правдой). */
+.dk-table--sticky-col .dk-th-pick + th,
+.dk-table--sticky-col .dk-td-pick + td { position: sticky; left: 48px; z-index: 1; background: var(--surface); }
+.dk-table--sticky-col thead .dk-th-pick + th { background: var(--surface-2); z-index: 3; }
+.dk-table--zebra.dk-table--sticky-col tbody tr:nth-child(even) > td:first-child,
+.dk-table--zebra.dk-table--sticky-col tbody tr:nth-child(even) > .dk-td-pick + td {
+  background: linear-gradient(color-mix(in srgb, var(--ink-3) 7%, transparent),
+                              color-mix(in srgb, var(--ink-3) 7%, transparent)), var(--surface);
+}
+.dk-table--sticky-col tbody tr[aria-selected="true"] > td:first-child,
+.dk-table--sticky-col tbody tr[aria-selected="true"] > .dk-td-pick + td {
+  background: linear-gradient(var(--control-soft), var(--control-soft)), var(--surface);
+}
+/* На телефоне закреплённая колонка не шире трети экрана. Замер на 360:
+   «Регион» занимал 234 px, вместе с колонкой выбора 282 из 311 — на
+   прокрутку оставалось 29 px, и таблица с закреплением показывала одни
+   названия. Ширину здесь задаёт первая строка (раскладка фиксированная),
+   поэтому правило стоит на шапке. Цена: длинное название переносится на две-
+   три строки, и строка таблицы на телефоне выше.
+
+   !important — единственный в ките, и намеренно: ширины колонок кит задаёт
+   в разметке, style="width:30%", а атрибут style без !important не
+   перебить. Первая версия правила без него не сработала ни на одной
+   странице — замер показал те же 234 px. */
+@media (max-width: 767px) {
+  .dk-table--sticky-col th:first-child:not(.dk-th-pick),
+  .dk-table--sticky-col .dk-th-pick + th { width: 33vw !important; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-table--sticky-col tbody tr:hover > td:first-child,
+  .dk-table--sticky-col tbody tr:hover > .dk-td-pick + td { background: var(--surface-2); }
+}
+
+/* ТАБЛИЦА КАРТОЧКАМИ НА ТЕЛЕФОНЕ — dk-table--cards (решение владельца
+   29.09, DECISIONS.md, п. 11). Большая таблица на телефоне показывала сразу
+   одну колонку: на 900 px из 390 остальное пряталось за прокруткой вбок, и
+   «состояние» и «людей без услуги» — ради чего таблицу открывают — были не
+   видны (проверочная задача скилла). Теперь строка — карточка:
+   - первая колонка — заголовок карточки, крупнее и без подписи;
+   - остальные — пары «подпись — значение», подписи ставит dkTable
+     (data-label);
+   - шапка — строка пилюль сортировки, листается вбок: сортировать можно и на
+     телефоне; колонки без сортировки в ней не нужны;
+   - флажок выбора — в правом верхнем углу карточки.
+   На широком экране это обычная таблица, модификатор ничего не меняет.
+
+   Селекторы усилены повтором класса, а не !important: под карточкой лежат
+   все украшения таблицы — зебра, наведение, закрепление, выбор, — и каждое
+   красит ячейку своим правилом. Сильнее всех из них закреплённая зебра
+   (четыре класса), поэтому здесь их тоже четыре. Ширины колонок из разметки
+   (style="width:24%") без !important не перебить — это та же причина, что у
+   закреплённой колонки выше, и тот же единственный способ. */
+@media (max-width: 767px) {
+  .dk-tablewrap:has(> .dk-table--cards) { overflow: visible; max-height: none; }
+  .dk-tablewrap > .dk-table.dk-table--cards { min-width: 0; }
+  .dk-table.dk-table--cards,
+  .dk-table--cards > tbody,
+  .dk-table--cards > tfoot,
+  .dk-table--cards > thead { display: block; width: 100%; }
+  .dk-table--cards > thead > tr {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: 0 calc(var(--space-6) * -1);
+    padding: 0 var(--space-6) var(--space-5);
+  }
+  .dk-table--cards > thead > tr::-webkit-scrollbar { display: none; }
+  .dk-table--cards.dk-table--cards.dk-table--cards > thead > tr > th:nth-child(n) { display: none; }
+  .dk-table--cards.dk-table--cards.dk-table--cards > thead > tr > th:is([aria-sort], .dk-th-pick) {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    width: auto !important;
+    height: var(--control-sm);
+    padding: 0 var(--space-5);
+    position: static;
+    font: var(--type-caption);
+    font-weight: var(--weight-ui-strong);
+    letter-spacing: normal;
+    text-transform: none;
+    color: var(--ink-2);
+    background: var(--surface-2);
+    border-radius: var(--radius-full);
+  }
+  .dk-table--cards > tbody > tr,
+  .dk-table--cards > tfoot > tr {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    position: relative;
+    margin-bottom: var(--space-4);
+    padding: var(--space-6);
+    background: var(--surface-2);
+    border-radius: var(--radius-lg);
+  }
+  .dk-table--cards > tbody > tr[aria-selected="true"] { background: var(--control-soft); }
+  .dk-table--cards.dk-table--cards.dk-table--cards tr > td:nth-child(n) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: baseline;
+    gap: var(--space-2) var(--gap-tight);
+    width: auto !important;
+    min-width: 0;
+    padding: 0;
+    position: static;
+    text-align: right;
+    background: transparent;
+    border-radius: 0;
+  }
+  /* Подпись слева, всё содержимое ячейки — вместе справа: margin-right: auto
+     у подписи, а не space-between, иначе статус и пояснение к нему
+     разъезжались по ширине карточки. */
+  .dk-table--cards td[data-label]::before {
+    content: attr(data-label);
+    flex: none;
+    margin-right: auto;
+    /* Подпись — текст, а не число: у числовой колонки ячейка набрана
+       моноширинной гарнитурой цифр, и подпись её наследовала. */
+    font-family: var(--font-sans);
+    font-variant-numeric: normal;
+    text-align: left;
+    font-size: var(--text-caption);
+    color: var(--ink-3);
+  }
+  /* Заголовок карточки — первая ячейка данных. */
+  .dk-table--cards.dk-table--cards.dk-table--cards tbody tr > :is(td:first-child:not(.dk-td-pick), .dk-td-pick + td) {
+    display: block;
+    padding-right: 44px;
+    text-align: left;
+    font-weight: var(--weight-ui-strong);
+    color: var(--ink);
+  }
+  .dk-table--cards tbody tr > :is(td:first-child:not(.dk-td-pick), .dk-td-pick + td)::before { content: none; }
+  .dk-table--cards .dk-td-main__sub { font: var(--type-caption); }
+  .dk-table--cards.dk-table--cards.dk-table--cards tr > td.dk-td-pick {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+  }
+  .dk-table--cards td.dk-td-pick::before { content: none; }
+  .dk-table--cards > tbody > tr.dk-tr-group { background: none; padding: var(--space-5) 0 var(--space-3); margin: 0; }
+  .dk-table--cards tr.dk-tr-group > td::before { content: none; }
+}
+
+/* ИТОГИ И ГРУППЫ.
+   Строка итога — в <tfoot>: это не «ещё одна строка», а ответ на вопрос
+   «сколько всего», и в закреплённой таблице она прилипает к низу, как шапка
+   к верху. Заливка та же, что у шапки: две опоры таблицы одним цветом.
+   Группа с подытогом — строка с классом dk-tr-group: название группы
+   надписью, как заголовок колонки, подытог — числом обычного веса. Границ
+   нет и здесь: группу отделяет заливка и воздух, а не линейка. */
+.dk-table tfoot td, .dk-table tfoot th {
+  font-weight: var(--weight-ui-strong);
+  color: var(--ink);
+  background: var(--surface-2);
+  padding: var(--space-5) var(--space-6);
+  text-align: left;
+}
+.dk-table tfoot .dk-td-num { text-align: right; }
+.dk-table--sticky-head tfoot td, .dk-table--sticky-head tfoot th { position: sticky; bottom: 0; z-index: 2; }
+.dk-table .dk-tr-group td, .dk-table .dk-tr-group th {
+  font: var(--type-overline);
+  letter-spacing: var(--type-overline-track);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: color-mix(in srgb, var(--ink-3) 7%, transparent);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+  text-align: left;
+}
+.dk-table .dk-tr-group .dk-td-num { text-align: right; text-transform: none; letter-spacing: normal; font: var(--type-body-bold); color: var(--ink-2); }
+
+/* Таблицу на узком экране не ломаем и не прячем колонки — оборачиваем в
+   прокрутку. Спрятанная колонка выглядит как отсутствующие данные. */
+.dk-tablewrap { position: relative; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* position: relative здесь не ради раскладки. Подпись для скринридера (.dk-vh)
+   в шапке колонки действий стоит position: absolute, а абсолютный элемент
+   подчиняется обрезке прокручиваемого контейнера, только если тот его
+   позиционирует. Без этого подпись вылезала из-под прокрутки на своё
+   «естественное» место справа от таблицы, и страница на телефоне становилась
+   шире экрана: 739 px на дашборде, 959 на авариях при экране 360
+   (tools/check-mobile.mjs). Цена: любой абсолютный слой внутри таблицы теперь
+   обрезается её прокруткой — выпадающее меню в строке придётся выносить в
+   верхний слой, а не класть внутрь ячейки. Сейчас таких меню нет. */
+
+/* Минимальная ширина таблицы — входной параметр, а не константа. Стояло 560:
+   для таблицы из четырёх колонок это разумный пол, для шести — уже нет.
+   Раскладка теперь фиксированная (см. .dk-table), и при нехватке места
+   колонки не «сжимаются как получится», а честно упираются в пол и включают
+   прокрутку. Значит, пол обязан знать про число колонок — а знает про него
+   только разметка. Умолчание рассчитано на четыре-пять колонок. */
+.dk-tablewrap > .dk-table { min-width: var(--table-min, 720px); }
+
+/* --- виджет с графиком ----------------------------------------------------
+   Структура повторяет кит: widget_header (заголовок, подсказка, кнопки) и тело.
+   Любая диаграмма вставляется в тело и занимает его целиком — поэтому виджеты
+   одного ряда выглядят одинаково, чем бы они внутри ни были заполнены.        */
+
+/* АНАТОМИЯ ВИДЖЕТА. Четыре расстояния, и каждое отвечает за свой уровень
+   вложенности. Они не равны намеренно: равные отступы склеивают уровни, и
+   шапка начинает читаться как часть содержимого.
+
+       ┌─────────────────────────────────────┐
+       │        ↕ pad-widget  18             │   поле до края
+       │  Заголовок виджета        [⟳] [⋮]   │   шапка
+       │        ↕ gap-section 18             │   шапка → тело
+       │  ┌───────────────────────────────┐  │
+       │  │ блок                          │  │
+       │  └───────────────────────────────┘  │
+       │        ↕ gap-group   14             │   блок → блок
+       │  ┌───────────────────────────────┐  │
+       │  │ подпись ↔ gap-inline 10 ↔ знач│  │   внутри блока
+       │  └───────────────────────────────┘  │
+       │        ↕ pad-widget  18             │
+       └─────────────────────────────────────┘
+
+   Поле до края (18) больше зазора между блоками (14) — иначе содержимое
+   липнет к краю, и виджет теряет собственные границы. Границ у нас нет,
+   их роль играет именно это поле.                                            */
+
+.dk-widget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);          /* шапка → тело */
+  background: var(--surface);
+  border: var(--hairline) solid var(--rule);
+  border-radius: var(--radius-xl);
+  box-shadow: none;   /* см. --lift-* в примитивах */
+  padding: var(--pad-widget);
+  min-width: 0;
+}
+
+/* Тело виджета: блоки внутри стоят плотнее, чем шапка от тела. */
+.dk-widget__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-group);
+  min-width: 0;
+}
+
+/* ВЫРАВНИВАНИЕ ШАПКИ ПО ВЕРХНЕЙ ЛИНИИ.
+
+   Заголовок и кнопка выше не центруются друг относительно друга, а оба
+   начинаются на линии отступа. Кнопка просто уходит ниже — она выше букв,
+   и это нормально.
+
+   Почему не «по центру»: тогда высоту строки задаёт кнопка, буквы
+   центруются в чужой высоте, и отступ сверху оказывается заметно больше
+   отступа слева.
+
+   Почему не «оптически, по значку внутри кнопки»: это правило для ГОЛОЙ
+   иконки. У нашей кнопки есть заливка, то есть видимый прямоугольник —
+   глаз равняется по нему, а не по значку внутри. Кнопка, поднятая выше
+   линии отступа, выглядит сбежавшей вверх. */
+/* Шапка виджета одной высоты всегда — есть в ней кнопки или нет.
+
+   Без этого ряд разъезжается: у виджета с кнопками шапка ровно на высоту
+   кнопки выше, чем у соседа без кнопок, и тело виджета съезжает вниз. На
+   дашборде виджеты стоят рядами по три-четыре, и такой сдвиг читается как
+   кривая вёрстка, хотя каждый виджет по отдельности собран правильно.
+
+   Цена — высота кнопки вместо высоты строки в шапках без действий. Это
+   осознанная плата за то, что место под действия у виджета постоянное: кнопка,
+   которая появляется и исчезает вместе с высотой блока, заставляет человека
+   перечитывать раскладку каждый раз. */
+.dk-widget__head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-inline);
+  min-height: var(--control-sm);
+  min-width: 0;
+}
+
+/* Заголовок виджета — тихий. Его читают один раз, когда ищут нужный блок
+   глазами; данные внутри читают каждый раз заново. Крупный светлый заголовок
+   перетягивает на себя первый взгляд и отбирает его у числа, ради которого
+   виджет и стоит на странице.
+
+   Отсюда же требование к самому заголовку: он должен быть коротким. Длинная
+   фраза в верхнем регистре читается заметно хуже обычной строки — и это
+   правильное давление, потому что «Аварии по дням» лучше, чем «Динамика
+   количества аварийных ситуаций за выбранный период». */
+/* 30.09: заголовок помогает найти данные, поэтому не обрезаем его и
+   не превращаем в мелкую разреженную надпись. */
+.dk-widget__title {
+  font: var(--type-h3);
+  letter-spacing: var(--type-h3-track);
+  color: var(--ink);
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Подсказка «как это посчитано». В дашборде почти каждое число требует
+   объяснения — место под него закладывается сразу, а не дописывается потом. */
+.dk-widget__hint {
+  display: inline-flex;
+  color: var(--ink-3);
+  cursor: help;
+  flex: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-widget__hint:hover { color: var(--ink-2); }
+}
+
+
+/* ДЕЙСТВИЯ ВИДЖЕТА.
+
+   Словарь закрытый, и порядок в нём не переставляется: обновить → выгрузить →
+   развернуть → ещё. Человек, который каждый день смотрит на двадцать виджетов,
+   находит кнопку по месту, а не по значку; переставленный порядок стоит ему
+   лишнего взгляда на каждом виджете.
+
+   Больше трёх значков в ряд не ставить: дальше шапка начинает спорить с
+   заголовком за ширину, а на узком экране заголовок первым уходит в многоточие.
+   Четвёртое и последующие действия сворачиваются в «ещё» (.dk-menu).
+
+   ВИДНЫ ВСЕГДА, не по наведению. Действие, которое проявляется под курсором,
+   не существует для пальца и для человека, который ведёт по интерфейсу
+   клавиатурой: он находит фокусом кнопку, которой не видит. На дашборде
+   аварийной службы это не мелочь — «обновить» там нажимают в тот момент,
+   когда некогда искать. */
+.dk-widget__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  margin-left: auto;
+  flex: none;
+}
+
+/* ЗДЕСЬ БЫЛА ОБРЕЗКА ПУСТОТЫ СТРОКИ (text-box: trim-both) и она сломала текст.
+   Не возвращать.
+
+   Кегль 16 в строке 20 оставляет пару пикселей пустоты над буквами, и её
+   заманчиво срезать, чтобы заголовок сел ровно на линию отступа. Но заголовку
+   нужен overflow: hidden ради многоточия на длинных названиях — а обрезанная
+   строка становится ниже самих букв, и overflow срезает всё, что торчит:
+   выносные «б», «д», «у» и краткую над «й». В кириллице это половина
+   заголовков.
+
+   Два пикселя воздуха не стоят порезанных букв. Заголовок стоит на пару
+   пикселей ниже кнопки — этого глаз не ловит, в отличие от обрубленных букв. */
+
+/* Тело. Высота задаётся здесь, а не графиком: иначе виджеты в ряду разъедутся
+   по высоте, и ряд развалится. */
+.dk-chart {
+  width: 100%;
+  height: 260px;
+  min-width: 0;
+}
+
+/* На мобилке поле ужимается на ступень: экран узкий, и 18 по каждой стороне
+   съедают заметную долю ширины. Пропорция между уровнями при этом сохраняется. */
+@media (max-width: 767px) {
+  .dk-chart { height: 220px; }
+}
+
+/* Число в центре бублика. Стоит поверх холста, а не на нём: см. длинный
+   рассказ в dk-charts.js о трёх попытках поставить его средствами ECharts.
+
+   Позиция кольца приходит параметром --at (по умолчанию 44%, как у самого
+   кольца): одно значение на диаграмму и подпись к ней, а не два числа,
+   которые однажды разойдутся. Смещение на половину своей высоты и ширины
+   делает transform — ровно то, чего не хватало на холсте.
+
+   pointer-events снят: число не должно перехватывать наведение у сектора,
+   иначе подсказка о доле пропадает в середине кольца. */
+.dk-chart__center {
+  position: absolute;
+  left: 50%;
+  top: var(--at, 44%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  font: var(--type-metric-lg);
+  letter-spacing: var(--type-metric-lg-track);
+  font-variant-numeric: proportional-nums;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* Холст лежит в потоке, подпись — поверх него, значит контейнеру нужна
+   система координат. */
+.dk-chart { position: relative; }
+
+.dk-chart--sm { height: 180px; }
+.dk-chart--lg { height: 340px; }
+.dk-chart--xl { height: 440px; }
+
+/* --- состояния ------------------------------------------------------------ */
+
+/* ПЕРЕНОС ДЛИННЫХ СЛОВ. Там, где текст многострочный, слово без пробелов
+   обязано разрываться. В дашборде ЖКХ это не редкость: идентификатор узла,
+   адрес с дефисами, имя файла выгрузки, адрес страницы в тексте ошибки.
+
+   Раньше такого правила в ките не было вовсе. В однострочных местах спасало
+   многоточие (оно стоит в сорока четырёх местах), а в многострочных не
+   спасало ничего: строка вылезала за пустое состояние, за текст ошибки и за
+   тост, у которого ширина ограничена, — и растягивала таблицу целиком.
+
+   anywhere, а не break-word: break-word разрывает слово только когда строка
+   уже переполнена, то есть после того, как раскладка успела разъехаться.
+   anywhere учитывается при расчёте минимальной ширины, и блок не растягивается
+   вообще. */
+.dk-empty__t, .dk-empty__do, .dk-empty,
+.dk-error__title, .dk-error__text,
+.dk-toast__text,
+.dk-banner__title, .dk-banner__sub,
+.dk-list__sub, .dk-td-main__sub,
+.dk-modal__title, .dk-modal__body {
+  overflow-wrap: anywhere;
+}
+
+.dk-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-9) var(--space-7);
+  text-align: center;
+  color: var(--ink-2);
+  font-size: var(--text-body);
+}
+
+.dk-empty__t { color: var(--ink); font-weight: var(--weight-ui); }
+
+/* Скелет загрузки. Пульсация отключается системной настройкой движения. */
+/* Скелет объявляет себя. Раньше он был только фоном с пульсацией: человек со
+   скринридером не отличал «данные едут» от «данных нет» — в обоих случаях
+   блок молчал. А это ровно то различие, которое кит защищает везде: ноль и
+   отсутствие — разное.
+
+   На виджет с загрузкой ставится aria-busy="true", внутрь — одна невидимая
+   строка с текстом: <span class="dk-vh">Загружаем заявки</span>. */
+.dk-skel {
+  background: color-mix(in srgb, var(--ink-3) 20%, transparent);
+  border-radius: var(--radius-xs);
+  animation: dk-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes dk-pulse { 50% { opacity: .45; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-skel { animation: none; }
+}
+
+/* --- страница ошибки ------------------------------------------------------
+   Ошибка — это тоже экран продукта, а не заглушка. Человек попал сюда не по
+   своей воле, и ему нужно три вещи, ровно в таком порядке:
+
+       1. что произошло      человеческим языком, без кода и стектрейса
+       2. почему это важно   что он сейчас НЕ видит и чем это грозит
+       3. что делать         одно понятное действие, а не список вариантов
+
+   Чего здесь не бывает:
+     · обвинения пользователя — «вы ввели неверный адрес» вместо «страница
+       не найдена». В девяти случаях из десяти виноват не он;
+     · технических подробностей на видном месте. Код ошибки нужен поддержке,
+       а не читателю — поэтому он внизу и мелко, но он ЕСТЬ: без него человек
+       не сможет объяснить, что случилось;
+     · юмора. Смешная картинка на месте сломанного отчёта раздражает того,
+       кому этот отчёт был нужен к совещанию.                                  */
+
+.dk-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  text-align: center;
+  padding: var(--space-9) var(--space-7);
+  min-height: 320px;
+}
+
+/* Значок — приглушённый. Он помогает опознать род беды с одного взгляда,
+   но не должен кричать: человеку и так не весело. */
+.dk-error__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  font-size: var(--text-title);
+  flex: none;
+}
+
+.dk-error__icon .dk-i { width: 26px; height: 26px; }
+
+/* Род беды задаётся снаружи: --accent красит значок в смысловой цвет.
+   По умолчанию нейтральный — не всякая ошибка является тревогой. */
+.dk-error--alarm .dk-error__icon {
+  background: color-mix(in srgb, var(--crit) 16%, transparent);
+  color: var(--crit-ink);
+}
+
+.dk-error__title {
+  font: var(--type-h2);
+  letter-spacing: var(--type-h2-track);
+  margin: 0;
+  color: var(--ink);
+  max-width: 24ch;
+  text-wrap: balance;
+}
+
+.dk-error__text {
+  font: var(--type-body);
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 52ch;
+}
+
+.dk-error__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--space-2);
+}
+
+/* Код для поддержки. Мелко и внизу, но обязательно есть: без него человек
+   не сможет сказать, что именно у него сломалось. */
+.dk-error__code {
+  font: var(--type-code);
+  color: var(--ink-3);
+  margin-top: var(--space-5);
+  user-select: all;
+}
+
+/* Внутри виджета ошибка живёт компактнее: остальной дашборд продолжает
+   работать, и незачем ронять всю страницу из-за одного сломавшегося блока. */
+.dk-widget .dk-error,
+.dk-panel .dk-error { min-height: 180px; padding: var(--space-7) var(--space-5); gap: var(--space-5); }
+.dk-widget .dk-error__title,
+.dk-panel .dk-error__title { font: var(--type-h3); letter-spacing: var(--type-h3-track); }
+.dk-widget .dk-error__icon,
+.dk-panel .dk-error__icon { width: 40px; height: 40px; }
+.dk-widget .dk-error__icon .dk-i,
+.dk-panel .dk-error__icon .dk-i { width: 20px; height: 20px; }
+
+/* --- всплывающие слои -----------------------------------------------------
+   Меню, подсказка, модальное окно. Отделяются от страницы тенью, а не
+   контуром: слой, лежащий поверх содержимого, обязан отделяться от того, что
+   под ним, иначе он сливается с текстом страницы. Это единственное место, где
+   тень в ките разрешена, и разрешена она как разделение слоёв.
+
+   ВОЗДУХА ВСПЛЫВАЮЩЕМУ СЛОЮ НУЖНО БОЛЬШЕ, ЧЕМ БЛОКУ НА СТРАНИЦЕ. Блок стоит
+   в ряду таких же и опирается на соседей: его поля продолжает сетка. Слой
+   висит сам по себе, и его края — это всё, что у него есть. Тесные поля
+   превращают подсказку в наклейку, приклеенную к тексту.                     */
+
+.dk-pop {
+  position: absolute;
+  z-index: var(--z-dropdown);
+  max-width: 320px;
+  padding: var(--space-6) var(--space-7);
+  background: var(--surface);
+  border: 0;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-overlay);
+  font-size: var(--text-body);
+  color: var(--ink-2);
+}
+
+.dk-pop__title {
+  display: block;
+  margin-bottom: var(--space-3);
+  font-size: var(--text-body);
+  font-weight: var(--weight-ui-strong);
+  color: var(--ink);
+}
+
+/* Короткая подсказка: она живёт долю секунды и читается одним взглядом, ей
+   хватает меньшего — но не шести пикселей. */
+.dk-pop--tip {
+  max-width: 260px;
+  padding: var(--space-5) var(--space-6);
+  font-size: var(--text-caption);
+}
+
+/* --- полосы прокрутки -----------------------------------------------------
+   Полосу прокрутки НЕ прячут. Спрятанная полоса скрывает сам факт, что
+   содержимое продолжается: человек видит обрезанный список и уверен, что
+   это весь список. В дашборде это прямая дезинформация.
+
+   Полосу делают тихой, но заметной: тонкой, без дорожки, полупрозрачной —
+   и заметно темнее при наведении, чтобы её можно было поймать курсором.
+
+   Два синтаксиса намеренно. Стандартный (scrollbar-width / scrollbar-color)
+   понимают все современные браузеры; ::-webkit-scrollbar даёт более тонкую
+   настройку там, где он есть. Ширину полосы в раскладке не закладываем: на
+   маке полосы наложенные и появляются только при прокрутке — если верстать
+   под их ширину, на маке останется пустая полоса.                            */
+
+.dk-page,
+.dk-scroll,
+.dk-menu__list,
+.dk-tablewrap {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ink-3) 50%, transparent) transparent;
+}
+
+.dk-page::-webkit-scrollbar,
+.dk-scroll::-webkit-scrollbar,
+.dk-menu__list::-webkit-scrollbar,
+.dk-tablewrap::-webkit-scrollbar { width: 10px; height: 10px; }
+
+.dk-page::-webkit-scrollbar-track,
+.dk-scroll::-webkit-scrollbar-track,
+.dk-menu__list::-webkit-scrollbar-track,
+.dk-tablewrap::-webkit-scrollbar-track { background: transparent; }
+
+.dk-page::-webkit-scrollbar-thumb,
+.dk-scroll::-webkit-scrollbar-thumb,
+.dk-menu__list::-webkit-scrollbar-thumb,
+.dk-tablewrap::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ink-3) 45%, transparent);
+  border-radius: var(--radius-full);
+  /* Прозрачная рамка цветом фона: большой палец визуально тоньше своей
+     области нажатия — попасть легко, а выглядит аккуратно. */
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-page::-webkit-scrollbar-thumb:hover,
+  .dk-scroll::-webkit-scrollbar-thumb:hover,
+  .dk-menu__list::-webkit-scrollbar-thumb:hover,
+  .dk-tablewrap::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--ink-3) 80%, transparent);
+    background-clip: content-box;
+  }
+}
+
+
+.dk-page::-webkit-scrollbar-corner,
+.dk-scroll::-webkit-scrollbar-corner { background: transparent; }
+
+/* Область с собственной прокруткой: лента, длинный список, тело виджета. */
+.dk-scroll { overflow-y: auto; overscroll-behavior: contain; }
+
+/* --- переключатели: флажок, радио, тумблер --------------------------------
+   Три разных элемента, и путать их нельзя — они обещают разное поведение:
+
+     ФЛАЖОК   независимое «да/нет», можно отметить несколько.
+              Применяется по кнопке: человек отмечает несколько и подтверждает.
+
+     РАДИО    взаимоисключающий выбор из 2–5 вариантов, все видны сразу.
+              Больше пяти — это выпадающий список, а не радио.
+              Снять выбор нельзя: если «ничего» допустимо, нужен такой вариант.
+
+     ТУМБЛЕР  срабатывает СРАЗУ, без подтверждения. Только для режимов:
+              «показывать события», «тёмная тема».
+              Тумблер в форме, которую надо сохранять, — обман: человек
+              переключил и ушёл, а ничего не сохранилось.
+
+   Подпись всегда кликабельна: попасть в квадратик 16 пикселей тяжело,
+   а в строку с текстом — легко.                                              */
+
+.dk-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  min-height: var(--control-md);
+  cursor: pointer;
+  color: var(--ink);
+  font: var(--type-body);
+  user-select: none;
+}
+
+.dk-check input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.dk-check__box {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: var(--radius-xs);
+  background: var(--surface-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--control-on-ink);
+  transition: background var(--duration-fast);
+}
+
+.dk-check__box .dk-i { width: 14px; height: 14px; opacity: 0; }
+
+.dk-check input:checked + .dk-check__box { background: var(--control-on); }
+.dk-check input:checked + .dk-check__box .dk-i { opacity: 1; }
+@media (hover: hover) and (pointer: fine) {
+  .dk-check:hover .dk-check__box { background: color-mix(in srgb, var(--control-on) 30%, var(--surface-3)); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dk-check input:checked:hover + .dk-check__box { background: var(--control-on-hover); }
+}
+
+.dk-check input:focus-visible + .dk-check__box { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+.dk-check input:disabled + .dk-check__box { opacity: .45; }
+.dk-check:has(input:disabled) { cursor: not-allowed; color: var(--ink-3); }
+
+/* Частично отмеченное: «выбрано не всё» в шапке списка. Черта, а не галочка —
+   галочка означала бы «все», и это было бы неправдой. */
+.dk-check__box--mixed { background: var(--control-on); }
+.dk-check__box--mixed .dk-i { opacity: 1; }
+
+/* Радио — круглое. Форма отличается от флажка не ради красоты: она и говорит
+   человеку, что выбрать можно только одно. */
+.dk-check--radio .dk-check__box { border-radius: var(--radius-full); }
+.dk-check--radio .dk-check__box .dk-i { display: none; }
+.dk-check--radio .dk-check__box::after {
+  content: "";
+  width: 8px; height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--control-on-ink);
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+.dk-check--radio input:checked + .dk-check__box::after { opacity: 1; }
+
+/* Тумблер */
+.dk-switch { display: inline-flex; align-items: center; gap: var(--gap-inline); cursor: pointer; min-height: var(--control-md); }
+.dk-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.dk-switch__track {
+  width: 40px;
+  height: 22px;
+  flex: none;
+  border-radius: var(--radius-full);
+  background: var(--surface-3);
+  padding: var(--space-1);
+  display: inline-flex;
+  align-items: center;
+  transition: background var(--duration-fast);
+}
+
+.dk-switch__knob {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  background: var(--ink-2);
+  transition: transform var(--duration-fast), background var(--duration-fast);
+}
+
+.dk-switch input:checked + .dk-switch__track { background: var(--control-on); }
+.dk-switch input:checked + .dk-switch__track .dk-switch__knob { transform: translateX(18px); background: var(--control-on-ink); }
+.dk-switch input:focus-visible + .dk-switch__track { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+.dk-switch input:disabled + .dk-switch__track { opacity: .45; }
+
+/* --- бейдж, статус, тег ---------------------------------------------------
+   Три похожих на вид элемента с разной работой. Их путают чаще всего:
+
+     БЕЙДЖ   число или очень короткая метка при чём-то: «12», «новое».
+             Отвечает на вопрос «сколько» или «что за штука».
+
+     СТАТУС  состояние с обязательными значком И подписью: «Авария»,
+             «В работе». Отвечает на вопрос «как дела».
+             Только цветом состояние не показывают никогда — цвет видят не все,
+             а в чёрно-белой печати его нет вовсе.
+
+     ТЕГ     категория, часто снимаемая. Это уже dk-fchip выше.               */
+
+.dk-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--surface-3);
+  border-radius: var(--radius-xs);
+  flex: none;
+}
+
+/* Цветной бейдж берёт смысловой цвет мягкой заливкой, а текст — читаемым
+   вариантом того же тона. Насыщенная заливка на таком мелком элементе даёт
+   слишком сильное пятно и перетягивает внимание со строки. */
+.dk-badge--crit { background: color-mix(in srgb, var(--crit) 18%, transparent); color: var(--crit-ink); }
+.dk-badge--high { background: color-mix(in srgb, var(--high) 18%, transparent); color: var(--high-ink); }
+.dk-badge--calm { background: color-mix(in srgb, var(--calm) 18%, transparent); color: var(--calm-ink); }
+.dk-badge--brand { background: var(--brand); color: var(--brand-ink); }
+.dk-badge--pill { border-radius: var(--radius-full); }
+
+.dk-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+/* Значок обязателен: он и есть тот второй признак, по которому состояние
+   читается без цвета. */
+.dk-status .dk-i { width: 14px; height: 14px; flex: none; color: var(--accent, var(--ink-3)); }
+.dk-status--crit { --accent: var(--crit-ink); }
+.dk-status--high { --accent: var(--high-ink); }
+.dk-status--calm { --accent: var(--calm-ink); }
+
+/* --- прогресс -------------------------------------------------------------
+   Полоса без числа — украшение: «примерно две трети» нельзя ни записать,
+   ни обсудить. Поэтому число рядом обязательно.
+   Неопределённый прогресс (не знаем, сколько осталось) числа не имеет
+   и показывается бегущей полосой — врать процентом нельзя.                   */
+
+.dk-progress { display: flex; align-items: center; gap: var(--gap-tight); min-width: 0; }
+
+.dk-progress__track {
+  display: block;
+  flex: 1;
+  min-width: 48px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.dk-progress__fill {
+  display: block;        /* строчному элементу ширина и высота не применяются */
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--accent, var(--brand));
+  transition: width var(--duration-base);
+}
+
+.dk-progress__value {
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+  flex: none;
+  min-width: 4ch;
+  text-align: right;
+}
+
+.dk-progress--indeterminate .dk-progress__fill {
+  width: 35%;
+  animation: dk-run 1.4s ease-in-out infinite;
+}
+
+@keyframes dk-run {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-progress--indeterminate .dk-progress__fill { animation: none; width: 100%; opacity: .4; }
+}
+
+/* --- аватарки -------------------------------------------------------------
+   Картинка может не загрузиться — всегда есть запасной вариант из инициалов.
+   Аватарка без подписи ничего не сообщает скринридеру, поэтому имя идёт
+   в aria-label или рядом текстом.                                            */
+
+.dk-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--surface-3);
+  color: var(--ink-2);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui-strong);
+  overflow: hidden;
+  flex: none;
+  user-select: none;
+}
+
+.dk-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.dk-avatar--sm { width: 24px; height: 24px; font-size: var(--text-caption); }
+.dk-avatar--lg { width: 40px; height: 40px; font-size: var(--text-body); }
+
+/* Группа: перекрытие плюс «ещё N». Кольцо цветом поверхности отделяет
+   соседей друг от друга — обводки у нас нет, но здесь фигуры накладываются,
+   и без разделителя они сливаются в пятно. */
+.dk-avatars { display: inline-flex; align-items: center; }
+.dk-avatars .dk-avatar { margin-left: calc(var(--space-4) * -1); box-shadow: 0 0 0 2px var(--surface); }
+.dk-avatars .dk-avatar:first-child { margin-left: 0; }
+.dk-avatars .dk-avatar--more { background: var(--surface-2); color: var(--ink-3); }
+
+/* --- выбор периода --------------------------------------------------------
+   Внутри лежит Air Datepicker (vendor/), и вся его внешность собрана здесь,
+   из наших токенов. Библиотека отдаёт наружу семьдесят CSS-переменных —
+   ровно ради этого она и выбрана: цвет остаётся в одном месте, а не
+   расползается в чужой файл, который мы не правим.
+
+   Переменные объявлены НА САМОМ .air-datepicker, поэтому перекрыть их
+   наследованием от родителя нельзя — собственное объявление элемента всегда
+   сильнее. Отсюда селектор .dk-period .air-datepicker: он специфичнее
+   библиотечного и потому выигрывает.                                        */
+
+.dk-period__menu {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-6);
+  max-width: none;
+  padding: var(--space-4);
+}
+
+.dk-period__presets {
+  width: 188px;
+  flex: none;
+  max-height: none;
+}
+
+/* Пресет выбран — галочка и акцент. Галочка обязательна: цвет видят не все. */
+.dk-period__presets .dk-menu__item[aria-pressed="true"] { color: var(--ink); }
+.dk-period__presets .dk-menu__item[aria-pressed="true"] .dk-menu__mark { opacity: 1; }
+
+.dk-period .dk-select__trigger > .dk-i:first-child { color: var(--ink-3); flex: none; }
+
+/* Календарь отделён от пресетов воздухом, а не линией: «границ нет» — общее
+   правило кита, и всплывашка ему не исключение. Расстояние взято на ступень
+   больше, чем между самими пресетами: внутри списка шаг мелкий, между разными
+   способами выбрать период — крупный, и уровни перестают слипаться.
+
+   (Первую версию этого правила я написал с border-top, а в комментарии над
+   ним — «а не линией». Комментарий был прав, код нет.) */
+.dk-period__cal {
+  flex: none;
+  margin-top: var(--space-6);
+}
+
+.dk-period .air-datepicker {
+  /* каркас */
+  --adp-font-family: var(--font-sans);
+  --adp-font-size: var(--text-body);
+  --adp-width: 280px;
+  --adp-padding: 0;
+  --adp-background-color: var(--surface);
+  --adp-color: var(--ink);
+  --adp-color-secondary: var(--ink-3);
+  --adp-border-radius: var(--radius-md);
+  --adp-cell-border-radius: var(--radius-sm);
+
+  /* обводок нет: календарь уже лежит внутри всплывающего слоя, и вторая
+     рамка внутри первой — это шум, а не разделение */
+  --adp-border-color: transparent;
+  --adp-border-color-inner: transparent;
+  --adp-border-color-inline: transparent;
+
+  /* Выбранные даты — тем же серым, что всё выбранное управление, а не
+     акцентом: календарь периода — это фильтр, а не данные (токены, 2а).
+     Сегодняшняя дата отмечена цветом текста --ink, а не акцентом. */
+  --adp-accent-color: var(--control-on);
+  --adp-color-current-date: var(--ink);
+  --adp-cell-background-color-selected: var(--control-on);
+  --adp-cell-background-color-selected-hover: var(--control-on-hover);
+  --adp-background-color-selected-other-month: var(--control-on);
+  --adp-background-color-selected-other-month-focused: var(--control-on-hover);
+  /* Дни внутри диапазона. Ступень взята не на глаз: кит требует разницы не
+     меньше 1.12:1 между соседними поверхностями (проверка СТУПЕНИ).
+     --control-soft даёт 1.27 в тёмной и 1.19 в светлой (проверка ТИШИНА).
+     Наведение внутри диапазона заливаем целиком: щелчок здесь начнёт новый
+     отсчёт, и заливка заранее показывает, чем это кончится. */
+  --adp-cell-background-color-in-range: var(--control-soft);
+  --adp-cell-background-color-in-range-hover: var(--control-on);
+  --adp-background-color-in-range: var(--control-soft);
+  --adp-background-color-in-range-focused: var(--control-on);
+  --adp-cell-border-color-in-range: transparent;
+
+  /* наведение и нажатие — ступени поверхности, как у всего остального */
+  --adp-background-color-hover: var(--surface-2);
+  --adp-background-color-active: var(--surface-3);
+
+  /* приглушённое: чужой месяц, закрытые дни, шапка недели. Выходные в
+     оригинале оранжевые — это смысловой цвет, а смысловыми цветами у нас
+     распоряжается только риск, не день недели */
+  --adp-color-disabled: var(--ink-3);
+  --adp-color-disabled-in-range: var(--ink-3);
+  --adp-color-other-month: var(--ink-3);
+  --adp-color-other-month-hover: var(--ink-2);
+  --adp-day-name-color: var(--ink-3);
+  --adp-day-name-color-hover: var(--ink-2);
+  --adp-nav-arrow-color: var(--ink-2);
+  --adp-nav-color-secondary: var(--ink-3);
+
+  /* размеры чётные, как у всех элементов управления */
+  --adp-day-cell-height: 32px;
+  --adp-month-cell-height: 40px;
+  --adp-year-cell-height: 56px;
+  --adp-nav-height: var(--control-md);
+  --adp-nav-action-size: var(--control-md);
+  --adp-btn-height: var(--control-md);
+  --adp-transition-duration: var(--duration-fast);
+}
+
+/* Текст на залитой выбранной дате. В библиотеке он задан белым значением —
+   единственное место, куда переменные не дотянулись. */
+.dk-period .air-datepicker-cell.-selected-,
+.dk-period .-selected-.air-datepicker-cell.-day-.-other-month-,
+.dk-period .air-datepicker-cell.-in-range-.-focus- { color: var(--control-on-ink); }
+
+/* Заголовок месяца — как надпись над группой, а не как ссылка. */
+.dk-period .air-datepicker-nav--title { color: var(--ink); border-radius: var(--radius-sm); }
+@media (hover: hover) and (pointer: fine) {
+  .dk-period .air-datepicker-nav--title:hover { background: var(--surface-2); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dk-period .air-datepicker-nav--action:hover { background: var(--surface-2); border-radius: var(--radius-sm); }
+}
+
+.dk-period .air-datepicker-nav { padding-bottom: var(--space-2); }
+
+/* Кольцо фокуса — общее для всего кита: без него человек без мыши теряет
+   своё место в сетке дней. */
+.dk-period .air-datepicker-cell:focus-visible,
+.dk-period .air-datepicker-nav--action:focus-visible,
+.dk-period .air-datepicker-nav--title:focus-visible {
+  outline: var(--focus-width) solid var(--brand);
+  outline-offset: -2px;
+}
+
+/* ДИАПАЗОН — СПЛОШНАЯ ПОЛОСА СО СКРУГЛЁННЫМИ КОНЦАМИ. Раньше каждый день
+   внутри диапазона был отдельной серой клеткой со своим скруглением, а начало
+   и конец — тёмными квадратами: неделя с диапазоном выглядела рублеными
+   кусками (разбор 29.09). Теперь дни внутри стоят встык без скругления, а
+   скругляются только края: начало и конец диапазона снаружи и края недели,
+   где полоса переходит на следующую строку. Полоса читается одним отрезком
+   времени — тем, чем диапазон и является. */
+.dk-period .air-datepicker-cell.-day-.-in-range- { border-radius: 0; }
+.dk-period .air-datepicker-cell.-day-.-range-from- { border-radius: var(--radius-full) 0 0 var(--radius-full); }
+.dk-period .air-datepicker-cell.-day-.-range-to- { border-radius: 0 var(--radius-full) var(--radius-full) 0; }
+.dk-period .air-datepicker-cell.-day-.-range-from-.-range-to- { border-radius: var(--radius-full); }
+.dk-period .air-datepicker-body--cells.-days- > .air-datepicker-cell:nth-child(7n+1):is(.-in-range-, .-range-to-) {
+  border-top-left-radius: var(--radius-full); border-bottom-left-radius: var(--radius-full);
+}
+.dk-period .air-datepicker-body--cells.-days- > .air-datepicker-cell:nth-child(7n):is(.-in-range-, .-range-from-) {
+  border-top-right-radius: var(--radius-full); border-bottom-right-radius: var(--radius-full);
+}
+
+/* На узком экране пресеты встают над календарём: рядом они не помещаются.
+
+   ЧЕГО ЗДЕСЬ БОЛЬШЕ НЕТ: растягивания календаря на всю ширину. Стояло
+   --adp-width: 100%, и всплывашка вместе с календарём разъезжалась во всю
+   доступную ширину — 423 пикселя вместо 280. У календаря семь колонок и
+   естественная ширина; растянутый, он даёт ячейки 55 на 32, то есть плоские
+   прямоугольники вместо квадратов, а стрелки «назад» и «вперёд» оказываются
+   на противоположных краях в двадцати сантиметрах друг от друга. Календарь
+   не резиновый — он сетка, и сетке положено держать пропорции.
+
+   Пресеты в узкой раскладке равняются по календарю, а не по всплывашке: два
+   блока одной ширины читаются как один список, разной — как случайно
+   слипшиеся. */
+@media (max-width: 767px) {
+  .dk-period__menu {
+    flex-direction: column;
+    width: max-content;
+    max-width: 100%;
+    /* .dk-menu тянется до ширины своего поля (min-width: 100%) — так и надо
+       выпадающему списку: его пункты продолжают строку поля. Но у календаря
+       ширина своя, содержательная, и растянутая до поля всплывашка оставляла
+       полторы сотни пикселей пустоты справа от сетки дат. */
+    min-width: 0;
+  }
+  .dk-period__cal { width: var(--adp-width, 280px); margin-top: 0; }
+
+  /* Пресеты на телефоне — строка пилюль, которая листается вбок, как строка
+     фильтров, а не столбец. Столбцом четыре пресета занимали 190 px над
+     календарём, и всплывашка вырастала до 466 — выше половины экрана (разбор
+     29.09). В два ряда не выходит: «Последние 365 дней» с «Последние 7 дней»
+     в 280 px не встают, и пилюли снова вставали столбцом. Выбранный — залит,
+     как всё выбранное управление, и с галочкой: цвет видят не все. У
+     невыбранных галочки нет совсем, а не прозрачная: прозрачная держала место
+     и раздувала пилюлю. */
+  .dk-period__presets {
+    width: var(--adp-width, 280px);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: var(--space-3);
+  }
+  .dk-period__presets::-webkit-scrollbar { display: none; }
+  .dk-period__presets > li { flex: none; }
+  .dk-period__presets .dk-menu__item {
+    width: auto;
+    height: var(--control-sm);
+    padding: 0 var(--space-5);
+    gap: var(--space-2);
+    border-radius: var(--radius-full);
+    background: var(--surface-2);
+  }
+  .dk-period__presets .dk-menu__item .dk-menu__mark { display: none; }
+  .dk-period__presets .dk-menu__item[aria-pressed="true"] {
+    background: var(--control-on);
+    color: var(--control-on-ink);
+  }
+  .dk-period__presets .dk-menu__item[aria-pressed="true"] .dk-menu__mark { display: inline-block; }
+}
+
+/* --- размер виджета -------------------------------------------------------
+   S, M и L — не три вкуса, а три пролёта сетки. Размер виджета выбирается не
+   тем, сколько хочется показать, а тем, сколько влезает, оставаясь читаемым:
+   график с осями в четверти колонки даёт подписи мельче десяти пикселей,
+   то есть притворяется точным, будучи нечитаемым.
+
+   S — четверть колонки: одно число, его подпись и, если нужно, форма —
+       спарклайн. Ни осей, ни легенды, ни таблицы.
+   M — треть или половина: число с графиком, список до семи строк, рейтинг.
+   L — две трети или вся ширина: график с легендой, таблица, карта — всё,
+       где сравнивают много значений сразу.
+
+   Разметка у всех трёх одна и та же — .dk-widget. Отличается только плотность
+   набивки: на плитке в четверть колонки поле в 18 съедает пятую часть ширины. */
+
+.dk-widget--s { padding: var(--space-6); gap: var(--gap-tight); }
+
+/* --- KPI-плитка -----------------------------------------------------------
+   Размер S целиком. Число крупное, подпись над ним мелкая: человек находит
+   плитку по подписи один раз, а число читает каждый раз заново.             */
+
+.dk-tile { display: flex; flex-direction: column; gap: var(--gap-tight); }
+
+.dk-tile__head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  min-width: 0;
+}
+
+/* Значок в заливке, а не в рамке — как и всё остальное в ките. Заливка
+   приглушённая: значок помогает найти плитку взглядом, но спорить с числом
+   за внимание не должен. */
+.dk-tile__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink-2);
+}
+
+/* Подпись в две строки, а не обрезка многоточием: в плитке на половину
+   телефона «Аварии за сутки» становилось «Аварии за сут…» — пропадал как раз
+   период, то есть половина смысла числа (проверочная задача скилла, 29.09).
+   Третья строка уже не нужна: подпись длиннее двух строк — это описание, а
+   не подпись. */
+.dk-tile__label {
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Строка переносится: в плитке на половину телефона (две в ряд) «17» и
+   «без изменений» рядом не встают, и пилюля тренда распирала страницу на
+   13 px при экране 360 (проверка ТЕЛЕФОН, 29.09). Теперь тренд уходит под
+   число. */
+.dk-tile__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-tight);
+  min-width: 0;
+}
+
+/* Спарклайн под числом, во всю ширину плитки и низкий: он показывает
+   направление, а значение читают с числа над ним. */
+.dk-chart--spark { height: 48px; }
+
+/* ПЛИТКА НА ШИРОКОМ МЕСТЕ. Плитку рисовали под четверть колонки, а на
+   телефоне четверть становится целой строкой: число стояло слева, тренд — в
+   трёхстах пикселях справа, под ними тянулась линия во всю ширину, и плитка
+   читалась пустой кишкой (разбор 29.09). Шире 320 px плитка перестраивается:
+   число с трендом слева столбиком, спарклайн справа и выше. Решает ширина
+   колонки, а не экрана: та же плитка в половине десктопа — такое же широкое
+   место. Контейнер — колонка сетки (dk-col, ниже). */
+/* Плитка без спарклайна на телефоне — по две в ряд. Во всю ширину от неё
+   оставались подпись, число в углу и пустая полоса на 350 px (разбор 29.09,
+   «Риск по регионам»): четыре такие плитки занимали экран целиком. Половина
+   от четырёх колонок — 170 px: число и подпись в них встают. Плитка со
+   спарклайном остаётся во всю ширину — там её место занимает линия. */
+@media (max-width: 767px) {
+  /* :has() в :has() браузер не принимает и выбрасывает правило целиком,
+     молча — первая версия не сработала ни на одной плитке. */
+  .dk-col--quarter:has(> .dk-tile):not(:has(.dk-chart)) { grid-column: span 2; }   /* 2 из 4 колонок телефона */
+}
+
+@container dk-col (min-width: 320px) {
+  .dk-tile {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    column-gap: var(--gap-section);
+    row-gap: var(--gap-tight);
+  }
+  .dk-tile > .dk-tile__head { grid-column: 1 / -1; }
+  .dk-tile > .dk-tile__row { flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: var(--space-3); }
+  .dk-tile > .dk-chart--spark { height: 64px; }
+}
+
+/* --- виджет-список --------------------------------------------------------
+   Последние события, ближайшие работы, верх списка чего угодно. От рейтинга
+   отличается тем, что у строки есть вторая, поясняющая строка: «где и когда».
+   Без неё список событий приходится дополнять всплывающей подсказкой, а
+   подсказку не видно на планшете.
+
+   Длина ограничена сознательно: список длиннее семи строк — это таблица,
+   и её надо показывать таблицей, с сортировкой и прокруткой.              */
+
+.dk-list { display: flex; flex-direction: column; }
+
+.dk-list__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-inline);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  min-width: 0;
+  text-align: left;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  width: 100%;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-list__row:hover { background: var(--surface-2); }
+}
+
+.dk-list__row:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+
+.dk-list__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--accent, var(--brand)) 16%, transparent);
+  color: var(--accent, var(--brand));
+}
+
+.dk-list__text { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; flex: 1; }
+
+.dk-list__name {
+  font-size: var(--text-body);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  
+  white-space: normal;
+}
+
+.dk-list__sub { font-size: var(--text-caption); color: var(--ink-3); }
+
+.dk-list__v {
+  font-size: var(--text-body);
+  font-weight: var(--weight-ui-strong);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent, var(--ink));
+  flex: none;
+}
+
+/* «Показать все» стоит под списком, а не в шапке: человек доходит до конца
+   списка и там понимает, что список неполон. */
+.dk-list__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  font: inherit;
+  font-size: var(--text-caption);
+  color: var(--link);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-list__more:hover { background: var(--surface-2); }
+}
+
+.dk-list__more:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+
+/* --- модальное окно -------------------------------------------------------
+   Собрано на нативном <dialog>. Это осознанный выбор, обратный тому, что мы
+   сделали с фильтром: там нативный <select> не умел ничего из нужного и его
+   пришлось писать самим. Здесь наоборот — платформа даёт бесплатно ровно то,
+   что своими руками делается неделю и всё равно с ошибками: ловушку фокуса,
+   Escape, недоступность содержимого под окном для скринридера и возврат
+   фокуса на кнопку, которая окно открыла.
+
+   Кнопки внутри стоят в <form method="dialog">: тогда закрытие тоже работает
+   без нашего кода, а нажатая кнопка приходит в returnValue.
+
+   ---------------------------------------------------------------------------
+   КОГДА МОДАЛКА. Только для решения, которое нельзя отложить: подтвердить
+   необратимое, ответить на вопрос, без ответа на который дальше нельзя.
+   Модалка останавливает работу целиком — это её смысл и её цена. Всё, что
+   можно сделать не останавливая, делается панелью, страницей или всплывающим
+   слоем.
+
+   ЩЕЛЧОК ПО ПОДЛОЖКЕ НЕ ЗАКРЫВАЕТ. Промах мимо окна — обычное дело, а потеря
+   введённого из-за промаха — нет. Закрывают Escape и крестик.                */
+
+.dk-modal {
+  width: min(560px, calc(100vw - var(--space-8) * 2));
+  max-height: calc(100dvh - var(--space-9) * 2);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--elev-overlay);
+  font: var(--type-body);
+  overflow: hidden;
+}
+
+.dk-modal--wide { width: min(880px, calc(100vw - var(--space-8) * 2)); }
+
+.dk-modal::backdrop { background: var(--scrim); }
+
+/* Страница под открытым окном не прокручивается: иначе человек уводит фон
+   из-под модалки и теряет то, к чему она относилась. */
+/* Прокрутка под открытым окном. Правило трогает корень документа — то есть
+   вещь, которая киту не принадлежит, — поэтому оно ограничено случаем, когда
+   кит владеет страницей целиком (.dk-page). Встроенному киту блокировать
+   прокрутку чужого приложения нельзя: хозяин может прокручивать не документ,
+   а свой контейнер, и наше overflow: hidden просто ничего не даст, зато
+   сломает то, что хозяин делает сам. */
+html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
+
+.dk-modal__form { display: flex; flex-direction: column; max-height: inherit; }
+
+.dk-modal__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-group);
+  padding: var(--pad-widget) var(--pad-widget) var(--space-5);
+}
+
+/* Заголовок модалки — единственное место в интерфейсе, где вопрос уместен:
+   решение принимает человек, и вопрос задан ему. Заголовок виджета вопросом
+   быть не может — виджет ничего не спрашивает. */
+.dk-modal__title {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font: var(--type-h2);
+  letter-spacing: var(--type-h2-track);
+  color: var(--ink);
+}
+
+.dk-modal__body {
+  padding: 0 var(--pad-widget);
+  overflow-y: auto;
+  color: var(--ink-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-group);
+}
+
+.dk-modal__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-tight);
+  padding: var(--pad-widget);
+}
+
+/* На узком экране кнопки встают в столбик и растягиваются: две кнопки в ряд
+   на 360 пикселях промахиваются пальцем. Основное действие сверху. */
+@media (max-width: 767px) {
+  .dk-modal { width: calc(100vw - var(--space-6) * 2); }
+  .dk-modal__foot { flex-direction: column-reverse; }
+  .dk-modal__foot .dk-btn { width: 100%; justify-content: center; }
+}
+
+/* --- календарь ------------------------------------------------------------
+   Два вида на одних данных: месяц и неделя с часами.
+
+   Событие длиннее дня рисуется ОДНОЙ полосой поперёк недели, а не повторяется
+   в каждом дне. Повторённое имя читается как несколько разных работ: «Ремонт
+   теплотрассы» четыре дня подряд выглядит как четыре ремонта. Поэтому день —
+   это фон на всю высоту строки, а события лежат поверх него дорожками.       */
+
+.dk-cal { display: flex; flex-direction: column; gap: var(--gap-tight); min-width: 0; }
+
+.dk-cal__head { display: flex; align-items: center; gap: var(--gap-tight); flex-wrap: wrap; }
+
+.dk-cal__month {
+  flex: 1;
+  min-width: 0;
+  font: var(--type-h3);
+  letter-spacing: var(--type-h3-track);
+  color: var(--ink);
+  text-transform: capitalize;
+}
+
+.dk-cal__week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.dk-cal__wd {
+  font: var(--type-overline);
+  letter-spacing: var(--type-overline-track);
+  color: var(--ink-3);
+  text-align: center;
+  padding: var(--space-2) 0;
+}
+
+.dk-cal__grid { display: flex; flex-direction: column; gap: var(--space-2); }
+
+/* Строка недели. Первая строка сетки — числа, дальше по строке на дорожку,
+   последняя забирает остаток высоты. */
+.dk-cal__row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: 24px repeat(var(--lanes, 1), 20px) 1fr;
+  gap: var(--space-2);
+  min-height: 96px;
+}
+
+.dk-cal__day {
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-cal__day:hover { background: var(--surface-3); }
+}
+
+.dk-cal__day:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+.dk-cal__day[aria-selected="true"] { background: var(--control-soft); }
+
+/* Дни соседних месяцев показываем, но приглушаем: без них неделя рвётся, а с
+   ними видно, что месяц начался не в понедельник. */
+.dk-cal__day[data-other="true"] { background: none; }
+.dk-cal__day[data-other="true"] .dk-cal__n { color: var(--ink-3); }
+
+.dk-cal__n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex: none;
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+  border-radius: var(--radius-full);
+}
+
+/* Сегодня отмечено заливкой, а не только цветом цифры. */
+.dk-cal__day[data-today="true"] .dk-cal__n,
+.dk-cal__wd--day[data-today="true"] .dk-cal__n {
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: var(--weight-ui-strong);
+}
+
+/* Полоса события. Цвет приходит из --accent и означает вид работы. */
+.dk-cal__e {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  min-width: 0;
+  margin: 0 var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  font: inherit;
+  font-size: var(--text-caption);
+  line-height: 18px;
+  text-align: left;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--accent, var(--brand)) 22%, transparent);
+  border: 0;
+  border-left: 2px solid var(--accent, var(--brand));
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-cal__e:hover { background: color-mix(in srgb, var(--accent, var(--brand)) 34%, transparent); }
+}
+
+.dk-cal__e:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset-tight); }
+
+/* Работа, начавшаяся до этой недели или кончающаяся после неё: срезанный край
+   говорит, что полоса продолжается, а не что работа началась в понедельник. */
+.dk-cal__e[data-headless="true"] {
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: 0;
+}
+
+.dk-cal__e[data-tailless="true"] {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: 0;
+}
+
+/* Остаток называем числом, а не прячем. */
+.dk-cal__more {
+  margin-top: auto;
+  font-size: var(--text-caption);
+  color: var(--ink-3);
+}
+
+/* --- неделя с часами ------------------------------------------------------ */
+
+.dk-cal__wgrid {
+  display: grid;
+  grid-template-columns: 56px repeat(7, minmax(0, 1fr));
+  gap: var(--space-2);
+  min-width: 560px;
+}
+
+.dk-cal[data-view="week"] .dk-cal__body { overflow-x: auto; }
+
+.dk-cal__gutter { grid-column: 1; }
+
+.dk-cal__wd--day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  font: var(--type-overline);
+  letter-spacing: var(--type-overline-track);
+  color: var(--ink-3);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-cal__wd--day:hover { background: var(--surface-2); }
+}
+
+.dk-cal__wd--day:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+
+/* Полоса «весь день» над часами: событиям без времени и длиннее суток места
+   в сетке часов нет, а прятать их нельзя. */
+.dk-cal__allday {
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: 20px;
+  gap: var(--space-2);
+  min-height: 20px;
+}
+
+.dk-cal__hours {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 56px repeat(7, minmax(0, 1fr));
+  gap: 0 var(--space-2);
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.dk-cal__hour {
+  grid-column: 1;
+  height: var(--hour, 48px);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
+  text-align: right;
+  padding-right: var(--space-3);
+}
+
+.dk-cal__hour span { position: relative; top: -6px; }
+
+/* Часовые линии рисуются фоном, а не рядами пустых элементов: двадцать четыре
+   лишних узла на каждый день — это сто шестьдесят восемь узлов ни за чем. */
+.dk-cal__col {
+  grid-row: 1 / span 24;
+  position: relative;
+  border-radius: var(--radius-sm);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--rule) 0, var(--rule) 1px,
+      transparent 1px, transparent var(--hour, 48px)
+    );
+}
+
+.dk-cal__col[data-today="true"] { background-color: var(--brand-wash); }
+
+/* Событие с часами. Высота — это длительность: работа на два часа обязана
+   выглядеть вдвое длиннее часовой, иначе календарь врёт о нагрузке. */
+.dk-cal__t {
+  position: absolute;
+  min-height: 18px;
+  padding: var(--space-1) var(--space-3);
+  font: inherit;
+  font-size: var(--text-caption);
+  line-height: 16px;
+  text-align: left;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--accent, var(--brand)) 26%, transparent);
+  border: 0;
+  border-left: 2px solid var(--accent, var(--brand));
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  overflow: hidden;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-cal__t:hover { background: color-mix(in srgb, var(--accent, var(--brand)) 38%, transparent); }
+}
+
+.dk-cal__t:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset-tight); }
+.dk-cal__tt { font-variant-numeric: tabular-nums; color: var(--ink-2); }
+
+/* На узком экране месяц не вмещает названий: события становятся полосками,
+   подробности открываются щелчком по дню. Прятать их за наведением нельзя —
+   на тачскрине наведения нет. Неделя вместо этого прокручивается вбок:
+   часы ужать некуда, а врать о длительности нельзя. */
+@media (max-width: 767px) {
+  .dk-cal__row { min-height: 56px; }
+  .dk-cal[data-view="month"] .dk-cal__e {
+    height: 6px;
+    padding: 0;
+    border-left: 0;
+    border-radius: var(--radius-full);
+    background: var(--accent, var(--brand));
+    color: transparent;
+    /* Полоска в 6 px — не цель, а отметка: касание проходит сквозь неё в
+       день, и день открывает список. Без этого палец, попавший в полоску,
+       открывал одно событие, а промахнувшийся на пиксель — день, и одно и
+       то же касание делало две разные вещи. */
+    pointer-events: none;
+  }
+  .dk-cal[data-view="month"] .dk-cal__more { display: none; }
+}
+
+/* --- вкладки раздела -------------------------------------------------------
+   Не путать с сегментами. Сегмент переключает ВИД одних и тех же данных
+   («карта / плитки», «месяц / неделя») и живёт внутри виджета. Вкладка водит
+   по РАЗНЫМ страницам раздела — у неё свой адрес, своя загрузка и своё место:
+   под шапкой, во всю ширину. Перепутать их значит обещать человеку не то:
+   сегмент он ждёт мгновенным, вкладку — новой страницей.                    */
+
+.dk-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.dk-tabs::-webkit-scrollbar { display: none; }
+
+.dk-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--control-lg);
+  padding: 0 var(--control-pad-md);
+  flex: none;
+  font: inherit;
+  font-size: var(--text-body);
+  color: var(--ink-2);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  cursor: pointer;
+  transition: color var(--duration-fast), background var(--duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-tab:hover { color: var(--ink); background: var(--surface-2); }
+}
+
+.dk-tab:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+
+/* Текущая вкладка отмечена подчёркиванием и цветом: одного цвета мало. */
+.dk-tab[aria-selected="true"],
+.dk-tab[aria-current] {
+  color: var(--ink);
+  font-weight: var(--weight-ui-strong);
+}
+
+.dk-tab[aria-selected="true"]::after,
+.dk-tab[aria-current]::after {
+  content: "";
+  position: absolute;
+  left: var(--space-4);
+  right: var(--space-4);
+  bottom: 0;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--control-on);
+}
+
+.dk-tab__n {
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
+}
+
+/* --- баннер состояния страницы --------------------------------------------
+   Отвечает за состояние ВСЕЙ страницы: «16 задач требуют решения», «контур
+   работает штатно». Ошибка внутри виджета остаётся внутри виджета — она
+   говорит про свой блок, а не про страницу.
+
+   БАННЕР О ПРОБЛЕМЕ НЕ ЗАКРЫВАЕТСЯ. Закрытая полоса про сбой — это сбой,
+   спрятанный руками человека, который через час о нём забудет. Полоса уходит
+   тогда, когда уходит причина. Закрывать можно только то, что сообщает об
+   успехе.                                                                    */
+
+/* БАННЕР. Спор с ревьюером был про одно: можно ли его закрыть. Ревьюер
+   требовал крестик везде, я возражал, что баннер аварии закрывать нельзя.
+   Правы оба — потому что баннеров два вида, и до сих пор кит их не различал.
+
+   БАННЕР СОСТОЯНИЯ закрыть нельзя. Он отвечает на вопрос «что происходит
+   сейчас»: двадцать три аварии требуют решения. Крестик на нём означал бы
+   «сделать вид, что аварий нет» — состояние от этого не меняется, а диспетчер
+   закроет его в спешке и забудет. Такой баннер уходит сам, когда уходит
+   состояние, и никак иначе.
+
+   БАННЕР СОБЫТИЯ закрыть можно и нужно. Он отвечает на вопрос «что случилось»:
+   выгрузка готова, изменения сохранены, версия обновилась. Событие человек
+   прочитал — и оно кончилось; оставлять его на экране навсегда значит копить
+   мусор, который со временем перестают читать вовсе, включая тот единственный
+   раз, когда это важно.
+
+   Различает их модификатор --event, и он же включает крестик. Умолчание —
+   состояние: если автор не подумал, баннер не закроется, и это безопаснее
+   обратного. */
+.dk-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-inline);
+  padding: var(--space-5) var(--space-7);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--accent, var(--event)) 16%, transparent);
+  color: var(--ink);
+  font-size: var(--text-body);
+  min-width: 0;
+}
+
+.dk-banner .dk-i { flex: none; color: var(--accent, var(--event)); }
+.dk-banner__text { flex: 1; min-width: 0; }
+.dk-banner__title { font-weight: var(--weight-ui-strong); }
+.dk-banner__sub { font-size: var(--text-caption); color: var(--ink-2); }
+
+/* Счётчики справа: состояние называется не только словом, но и числом. */
+.dk-banner__stats { display: flex; align-items: center; gap: var(--gap-group); flex: none; }
+.dk-banner__stat { display: flex; flex-direction: column; text-align: right; }
+.dk-banner__stat b { font-variant-numeric: tabular-nums; }
+.dk-banner__stat span { font-size: var(--text-caption); color: var(--ink-3); }
+
+/* Крестик есть только у баннера события — см. рассуждение выше. Кнопка
+   ставится в разметке, стиль ей даёт .dk-banner__x; на баннере состояния
+   кнопка не появляется, даже если её туда написали. */
+.dk-banner__x { flex: none; margin-left: var(--space-2); display: none; }
+.dk-banner--event .dk-banner__x { display: inline-flex; }
+
+.dk-banner--crit { --accent: var(--crit); }
+.dk-banner--high { --accent: var(--high); }
+.dk-banner--calm { --accent: var(--calm); }
+
+@media (max-width: 767px) {
+  .dk-banner { flex-wrap: wrap; }
+  .dk-banner__stats { width: 100%; justify-content: flex-start; }
+  .dk-banner__stat { text-align: left; }
+}
+
+/* --- уведомление -----------------------------------------------------------
+   Тост подтверждает ДЕЙСТВИЕ ЧЕЛОВЕКА: «срез сброшен», «работа добавлена».
+   Он не годится для новостей системы и тем более для ошибок, которые надо
+   решать: то, что требует решения, обязано остаться на экране, а тост уезжает
+   сам через несколько секунд.                                                */
+
+.dk-toasts {
+  position: fixed;
+  right: max(var(--page-pad), env(safe-area-inset-right));
+  bottom: max(var(--page-pad), env(safe-area-inset-bottom));
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-4);
+  max-width: 380px;
+  pointer-events: none;
+}
+
+.dk-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--surface-3);
+  color: var(--ink);
+  box-shadow: var(--elev-overlay);
+  font-size: var(--text-body);
+  pointer-events: auto;
+}
+
+.dk-toast .dk-i { flex: none; color: var(--accent, var(--calm)); }
+.dk-toast__text { flex: 1; min-width: 0; }
+/* calm — вид по умолчанию, и он же значится классом: dk-notify.js ставит
+   dk-toast--calm, пример на странице его пишет, а правила не было — класс
+   висел пустышкой, и проверка КЛАССЫ не могла отличить его от опечатки. */
+.dk-toast--calm { --accent: var(--calm); }
+.dk-toast--crit { --accent: var(--crit); }
+.dk-toast--high { --accent: var(--high); }
+
+@media (max-width: 767px) {
+  .dk-toasts { left: var(--page-pad); right: var(--page-pad); max-width: none; }
+}
+
+/* --- строка с полосой ------------------------------------------------------
+   Имя, значение, полоса и мелкая строка подробностей. Полоса показывает долю
+   от максимума в этом же списке — и это надо назвать в заголовке блока,
+   иначе читатель примет её за долю от целого.                                */
+
+.dk-bars { display: flex; flex-direction: column; gap: var(--gap-group); }
+
+.dk-bar { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+
+.dk-bar__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-tight);
+  min-width: 0;
+}
+
+.dk-bar__name { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.dk-bar__v {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent, var(--ink));
+}
+
+.dk-bar__track {
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.dk-bar__fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--accent, var(--brand));
+}
+
+/* Подробности мелким: сколько запросов, сколько токенов, почём. Их читают
+   вторым взглядом, и они не должны спорить с именем. */
+.dk-bar__meta {
+  font-size: var(--text-caption);
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- раскрывающийся блок ---------------------------------------------------
+   Нативный <details>: состояние, клавиатура и семантика достаются даром.
+
+   СВЁРНУТЫМ ПРЯЧУТ ПОДРОБНОСТИ, А НЕ ТО, БЕЗ ЧЕГО НЕ ПОНЯТЬ. Если человек
+   обязан развернуть блок, чтобы понять состояние, — это не сворачивание, а
+   сокрытие. Поэтому в заголовке стоит итог: «серверы 4/4 · туннели 3/3».     */
+
+.dk-fold { border-radius: var(--radius-lg); background: var(--surface-2); }
+
+.dk-fold__head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  padding: var(--space-5) var(--space-6);
+  cursor: pointer;
+  list-style: none;
+  border-radius: var(--radius-lg);
+}
+
+.dk-fold__head::-webkit-details-marker { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .dk-fold__head:hover { background: var(--surface-3); }
+}
+
+.dk-fold__head:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+
+.dk-fold__title { flex: 1; min-width: 0; color: var(--ink); }
+.dk-fold__sum { font-size: var(--text-caption); color: var(--ink-2); flex: none; }
+.dk-fold__head .dk-i { flex: none; color: var(--ink-3); transition: transform var(--duration-fast) var(--ease-out); }
+.dk-fold[open] .dk-fold__head .dk-i { transform: rotate(180deg); }
+.dk-fold__body { padding: 0 var(--space-6) var(--space-6); }
+
+/* --- полоса доступности ----------------------------------------------------
+   Сутки делениями. Каждое деление — равный отрезок времени, и его длину надо
+   назвать: полоса без цены деления не читается.
+
+   ЛЕГЕНДА НУЖНА ДО ТОГО, КАК ПОНАДОБИТСЯ. Пока сбоев нет, полоса сплошь
+   зелёная, и кажется, что объяснять нечего. В момент первого сбоя человек
+   впервые увидит другой цвет — и будет гадать, что он значит, вместо того
+   чтобы действовать. Поэтому «нет данных» и «сбой» названы сразу.           */
+
+.dk-uptime { display: flex; flex-direction: column; gap: var(--gap-tight); min-width: 0; }
+
+.dk-uptime__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-inline);
+  min-width: 0;
+}
+
+.dk-uptime__name {
+  width: 140px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-body);
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dk-uptime__strip {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: var(--space-1);
+  height: 20px;
+}
+
+.dk-uptime__strip:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); border-radius: var(--radius-xs); }
+
+.dk-uptime__seg {
+  flex: 1;
+  min-width: 0;
+  /* Прямой угол, а не скругление: деление шириной в одиннадцать пикселей со
+     скруглением превращается в лозенг, и ряд из сорока восьми читается как
+     пунктир вместо полосы. */
+  background: var(--nodata);
+}
+
+/* Выбранное деление — то, о котором сейчас говорит строка под полосой. */
+.dk-uptime__seg[data-at] { outline: var(--focus-width) solid var(--ink); outline-offset: var(--focus-offset-tight); }
+
+/* Ось времени: подписи стоят по краям самой полосы, а не в колонках имени и
+   значения — иначе «сейчас» оказывается в столбце процентов и читается как
+   значение. Отступы повторяют ширину колонок, чтобы подписи сели точно под
+   концами полосы. */
+.dk-uptime__axis {
+  display: flex;
+  justify-content: space-between;
+  margin: var(--space-2) 56px 0 152px;
+  font-size: var(--text-caption);
+  color: var(--ink-3);
+}
+
+@media (max-width: 767px) {
+  .dk-uptime__axis { margin-left: 100px; margin-right: 44px; }
+}
+
+.dk-uptime__now {
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+  min-height: 16px;
+  padding-left: 152px;
+}
+
+@media (max-width: 767px) {
+  .dk-uptime__now { padding-left: 0; }
+}
+
+.dk-uptime__seg[data-state="up"]   { background: var(--calm); }
+.dk-uptime__seg[data-state="warn"] { background: var(--high); }
+.dk-uptime__seg[data-state="down"] { background: var(--crit); }
+
+.dk-uptime__v {
+  width: 56px;
+  flex: none;
+  text-align: right;
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+}
+
+@media (max-width: 767px) {
+  .dk-uptime__name { width: 88px; font-size: var(--text-caption); }
+  .dk-uptime__v { width: 44px; }
+}
+
+/* --- регионы: карта и плитки ----------------------------------------------
+   Два вида на одних данных. На карте площадь региона перебивает его значение:
+   Якутия занимает пятую часть страны, Москва — точку. Карта отвечает на вопрос
+   «где» и отвечает хорошо; на вопрос «у кого хуже» она отвечает неправильно.
+   Плитки дают каждому субъекту равный вес — одна клетка на один регион.
+
+   Переключатель поэтому не настройка, а часть виджета. Заодно он решает вторую
+   задачу: карта нарисована на canvas и с клавиатуры недоступна, а плитки —
+   обычные кнопки. Человек без мыши получает те же данные, а не их пересказ.  */
+
+.dk-map { display: flex; flex-direction: column; gap: var(--gap-group); min-width: 0; }
+
+/* Шапка карты: в ней остался только переключатель вида, поэтому он
+   прижимается вправо — туда же, где стоят действия у обычного виджета. */
+.dk-map__head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-group);
+  flex-wrap: wrap;
+}
+
+/* Легенда стоит под картой — см. пояснение в dk-map.js. По центру, а не по
+   левому краю: под симметричной картой прижатая влево строка читается как
+   забытая. */
+.dk-map__legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-inline);
+  flex-wrap: wrap;
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+}
+
+/* Порог назван числом: «мало / средне / много» — это не легенда, а обещание,
+   что читатель сам угадает, сколько это. */
+.dk-map__key { display: inline-flex; align-items: center; gap: var(--space-3); font-variant-numeric: tabular-nums; }
+
+.dk-map__key i {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-xs);
+  flex: none;
+}
+
+.dk-map__unit { color: var(--ink-3); }
+
+/* Рамка — по пропорциям самой карты, а не фиксированной высоты. Было 420 px
+   на десктопе и 280 на телефоне, и страна (1.87 : 1) занимала в рамке 80%
+   ширины: сверху и снизу стояли пустые полосы по 70–90 px (замер 29.09 на
+   regions.html и mobile.html). Теперь рамка 1.9 : 1, не выше 420, а карта
+   заполняет её почти целиком (layoutSize в dk-map.js). */
+.dk-map__canvas { width: 100%; height: auto; aspect-ratio: 1.9; max-height: 420px; min-width: 0; }
+
+/* Плитки. Раскладка задана в данных (19×11) и подобрана руками: алгоритм её
+   не воспроизведёт, поэтому строки и колонки приходят из файла, а не считаются
+   здесь. Клетка квадратная — иначе север выглядит вытянутым без причины. */
+.dk-map__tiles {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 19), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows, 11), auto);
+  gap: var(--space-1);
+}
+
+.dk-map__tile {
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  font: inherit;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--fill, var(--nodata));
+  border: 0;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+/* Сокращение и значение внутри плитки. Значение — то, ради чего плитки и
+   рисуют: они отвечают на вопрос «у кого хуже», и держать ответ в подсказке
+   по наведению значит не отвечать ни пальцу, ни клавиатуре.
+
+   Эти два правила долго стояли ВНУТРИ блока «только для мыши» — скобка
+   открывалась над ними, а не над наведением. На телефоне число в плитке
+   поэтому не выделялось весом: ровно там, где плитки нужнее всего (разбор
+   29.09). */
+.dk-map__abbr { font-weight: var(--weight-ui); opacity: .75; }
+.dk-map__val { font-weight: var(--weight-ui-strong); font-variant-numeric: tabular-nums; }
+
+@media (hover: hover) and (pointer: fine) {
+  .dk-map__tile:hover { transform: scale(1.12); }
+}
+
+/* УВЕЛИЧЕНИЕ. Сетка шире рамки в --zoom раз и листается внутри неё (обе
+   оси), кнопки + и − стоят в правом нижнем углу поверх плиток — как на
+   мониторинге-образце. Рамка держит высоту сетки при первой ступени, чтобы
+   виджет не рос вместе с увеличением: растёт то, что внутри, а не страница. */
+.dk-map__body { position: relative; }
+.dk-map__pan {
+  overflow: auto;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+  max-height: min(60dvh, 520px);
+}
+.dk-map__pan::-webkit-scrollbar { display: none; }
+.dk-map__pan > .dk-map__tiles { width: calc(100% * var(--zoom, 1)); }
+.dk-map__zoom {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 48px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  border: 1px solid var(--edge-float);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+}
+.dk-map__zoom button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.dk-map__zoom button + button { border-top: 1px solid var(--rule); }
+.dk-map__zoom button:disabled { color: var(--ink-3); cursor: default; }
+.dk-map__zoom button:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+@media (hover: hover) and (pointer: fine) {
+  .dk-map__zoom button:not(:disabled):hover { background: var(--surface-2); }
+}
+
+.dk-map__tile:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+
+/* Вне среза: регион не в фильтре — приглушён, а не перекрашен. Цвет значения
+   остаётся, чтобы с фильтром и без один цвет значил одно и то же; легенда и
+   подпись говорят «вне среза» словами. Нажимается по-прежнему: регион вне
+   фильтра можно открыть. */
+.dk-map__tile--out { opacity: .25; }
+.dk-map__key--out i { opacity: .35; }   /* светлый оттенок шкалы приглушён — не спутать с серым «нет данных» */
+
+/* На узком экране подписи в клетку не влезают — остаётся цвет и подсказка по
+   касанию. Прятать сами клетки нельзя: это и есть данные. */
+/* На узком экране в клетку не влезает и сокращение, и число. Прячем
+   сокращение, значение оставляем: оно и есть ответ. */
+@media (max-width: 767px) {
+  /* Кегль растёт с увеличением: 8 при первой ступени, 10 — при полуторной,
+     12 — при двойной, 16 — при тройной. Шаги чётные, как вся шкала. */
+  .dk-map__tile { font-size: calc(4px + 4px * var(--zoom, 1)); }
+  .dk-map__tiles[data-zoom="1"] .dk-map__abbr { display: none; }
+}
+
+/* --- форма ----------------------------------------------------------------
+   Дашборд не только показывает, но и принимает: заявку, работу, комментарий.
+   Форма в дашборде почти всегда короткая, и правила у неё жёстче обычных —
+   человек заполняет её между двумя срочными делами.
+
+   ПОДПИСЬ СТОИТ НАД ПОЛЕМ, А НЕ ВНУТРИ. Плейсхолдер исчезает при вводе: стоит
+   отвлечься на звонок — и человек смотрит на заполненное поле, не понимая, что
+   в нём. Внутри поля живёт ПРИМЕР значения, а не его название.                */
+
+.dk-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-section) var(--gap-group);
+}
+
+.dk-form--one { grid-template-columns: minmax(0, 1fr); }
+.dk-ff--wide { grid-column: 1 / -1; }
+
+@media (max-width: 767px) {
+  .dk-form { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Поле целиком: подпись, управление, подсказка или ошибка. */
+.dk-ff { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+
+.dk-label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+}
+
+/* Отмечаем то, чего меньше. Если обязательны почти все поля, звёздочка у
+   каждого превращается в шум; тогда помечают необязательные. Поэтому здесь
+   два класса, а не один обязательный порядок. */
+.dk-label__req { color: var(--crit-ink); }
+.dk-label__opt { color: var(--ink-3); }
+
+/* Подсказка объясняет требование ЗАРАНЕЕ. Требование, о котором человек узнаёт
+   из ошибки, — это требование, о котором ему не сказали вовремя. */
+.dk-hint { font-size: var(--text-caption); color: var(--ink-3); }
+
+/* Ошибка живёт под полем, а не в углу экрана: сообщение вдали от поля
+   заставляет искать, к чему оно относится. Со значком — потому что одним
+   цветом состояние не передают. */
+.dk-err {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-size: var(--text-caption);
+  color: var(--crit-ink);
+}
+
+.dk-err .dk-i { flex: none; margin-top: var(--space-1); }
+
+.dk-ff[data-invalid] .dk-field { background: color-mix(in srgb, var(--crit) 14%, var(--surface-2)); }
+.dk-ff[data-invalid] .dk-field:focus-within { outline-color: var(--crit); }
+
+/* Многострочное поле. Высота по содержимому, но не меньше трёх строк: поле в
+   одну строку обещает короткий ответ, и человек его и напишет. */
+.dk-area {
+  width: 100%;
+  min-height: 84px;
+  padding: var(--control-pad-sm);
+  font: inherit;
+  font-size: var(--text-body);
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  resize: vertical;
+}
+
+.dk-area::placeholder { color: var(--ink-3); }
+@media (hover: hover) and (pointer: fine) {
+  .dk-area:hover { background: var(--surface-3); }
+}
+
+.dk-area:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+
+/* Группа полей со своим заголовком: длинную форму читают по частям. */
+.dk-fieldset { border: 0; margin: 0; padding: 0; display: contents; }
+
+.dk-fieldset__legend {
+  grid-column: 1 / -1;
+  padding: 0;
+  font: var(--type-overline);
+  letter-spacing: var(--type-overline-track);
+  color: var(--ink-3);
+}
+
+/* Ряд кнопок формы. Основное действие справа: слева от него — отказ, и
+   порядок этот не меняется от формы к форме, иначе человек промахивается. */
+.dk-form__foot {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-tight);
+}
+
+/* Сводка ошибок над формой — для длинной формы и для скринридера: без неё
+   человек, отправивший форму, не понимает, почему ничего не произошло. */
+.dk-form__alarm {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-tight);
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--crit) 16%, transparent);
+  color: var(--crit-ink);
+  font-size: var(--text-body);
+}
+
+.dk-form__alarm[hidden] { display: none; }
+
+/* --- типы ячеек таблицы ----------------------------------------------------
+   Таблица из одного текста — это список, а не таблица. Рабочая строка несёт
+   пять разных вещей, и у каждой своя форма.
+
+   ДЕЙСТВИЯ НЕ ПРЯЧУТСЯ ПОД НАВЕДЕНИЕ. Это самый распространённый приём в
+   админках и самая дорогая ошибка: на тачскрине наведения нет вовсе, а с
+   клавиатуры спрятанное действие не найти. Кнопки стоят всегда — приглушённо,
+   пока строка не под курсором.                                               */
+
+/* Колонка выбора — 48 px числом, вместе с полями (border-box).
+   Было «width: 1%, по содержимому», но раскладка таблицы фиксированная, и
+   содержимое она не читает: 1% от 860 давал колонку в 19–24 px при флажке в
+   18. Флажок упирался в соседнюю колонку, на таче его зона накрывала кнопку
+   сортировки соседа, а в закреплённой таблице вторая колонка вставала на
+   48 px от края — и в щель между ними было видно уезжающие ячейки.
+   Цена: проценты у остальных колонок теперь делят не всю ширину, а всю без
+   48 px; в сумме 100% они снова сожмут эту колонку — пиши не больше 94. */
+.dk-table .dk-td-pick,
+.dk-table .dk-th-pick {
+  box-sizing: border-box;
+  width: 48px;
+  padding-right: 0;
+  white-space: nowrap;
+}
+
+/* Выбранная строка отмечена серым оттенком, а флажок — галочкой: одного
+   цвета мало, его видят не все. Оттенок не акцентом: в строке таблицы стоят
+   данные, в том числе цветные статусы, и заливка не должна спорить с ними.
+   При наведении оттенок кладётся вторым слоем — строка темнеет ступенью. */
+.dk-table tbody tr[aria-selected="true"] > td { background: var(--control-soft); }
+@media (hover: hover) and (pointer: fine) {
+  .dk-table tbody tr[aria-selected="true"]:hover > td {
+    background: linear-gradient(var(--control-soft), var(--control-soft)), var(--control-soft);
+  }
+}
+
+
+/* Главная ячейка: значок или аватар, название и подпись под ним. Подпись —
+   это «где и когда»; без неё в строку лезет ещё одна колонка, а их и так
+   больше, чем помещается. */
+.dk-td-main { display: flex; align-items: center; gap: var(--gap-tight); min-width: 0; }
+
+.dk-td-main__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--accent, var(--brand)) 16%, transparent);
+  color: var(--accent, var(--brand));
+}
+
+.dk-td-main__text { display: flex; flex-direction: column; min-width: 0; }
+.dk-td-main__name { color: var(--ink); overflow-wrap: anywhere;  white-space: normal; }
+.dk-td-main__sub { font-size: var(--text-caption); color: var(--ink-3); }
+
+/* Полоса в ячейке. Число рядом обязательно: полоса без числа читается как
+   «примерно половина» и не годится там, где решают по цифре. */
+.dk-td-bar { min-width: 140px; }
+.dk-td-bar .dk-progress__track { height: 6px; }
+
+/* Действия строки. Приглушены, пока строка не под курсором и не в фокусе, —
+   но занимают своё место всегда, поэтому строка не дёргается. */
+.dk-table .dk-td-act,
+.dk-table .dk-th-act { width: 1%; white-space: nowrap; text-align: right; }
+
+.dk-td-act__box { display: inline-flex; gap: var(--space-2); opacity: .55; transition: opacity var(--duration-fast); }
+@media (hover: hover) and (pointer: fine) {
+  .dk-table tbody tr:hover .dk-td-act__box,
+  .dk-td-act__box:focus-within { opacity: 1; }
+}
+
+
+/* Сортируемая шапка. Стрелка показывает направление, а не просто «здесь можно
+   сортировать»: направление — это половина ответа на вопрос, что перед тобой. */
+.dk-th-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-th-sort:hover { color: var(--ink); }
+}
+
+.dk-th-sort:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); border-radius: var(--radius-xs); }
+
+.dk-th-sort .dk-i { opacity: 0; transition: opacity var(--duration-fast), transform var(--duration-fast); }
+@media (hover: hover) and (pointer: fine) {
+  .dk-th-sort:hover .dk-i { opacity: .5; }
+}
+
+
+[aria-sort="ascending"] .dk-th-sort,
+[aria-sort="descending"] .dk-th-sort { color: var(--ink); }
+
+[aria-sort="ascending"] .dk-th-sort .dk-i,
+[aria-sort="descending"] .dk-th-sort .dk-i { opacity: 1; }
+
+[aria-sort="descending"] .dk-th-sort .dk-i { transform: rotate(180deg); }
+
+/* --- постраничная навигация ------------------------------------------------
+   Сначала объём, потом кнопки: «Показано 21–40 из 89» отвечает на три вопроса
+   сразу — где я, сколько вижу, сколько есть. Пагинация из одних стрелок
+   оставляет человека листать вслепую: он не знает, десять там записей или
+   десять тысяч.                                                              */
+
+.dk-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-group);
+  flex-wrap: wrap;
+  padding: var(--space-5) 0 0;
+}
+
+.dk-pager__count { font-size: var(--text-caption); color: var(--ink-2); }
+.dk-pager__count b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.dk-pager__nav { display: flex; align-items: center; gap: var(--space-2); }
+
+.dk-pager__pages { display: flex; align-items: center; gap: var(--space-2); }
+
+.dk-pager__p {
+  min-width: var(--control-sm);
+  height: var(--control-sm);
+  padding: 0 var(--space-3);
+  font: inherit;
+  font-size: var(--text-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-pager__p:hover { background: var(--surface-2); color: var(--ink); }
+}
+
+.dk-pager__p:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+
+/* Текущая страница — заливкой, а не только цветом цифры. */
+.dk-pager__p[aria-current] {
+  background: var(--control-on);
+  color: var(--control-on-ink);
+  font-weight: var(--weight-ui-strong);
+}
+
+.dk-pager__gap { color: var(--ink-3); padding: 0 var(--space-2); }
+
+/* Отключённая кнопка остаётся на месте: исчезнувшая сдвигает соседнюю под
+   курсор, и следующий щелчок попадает не туда, куда целились. */
+.dk-pager .dk-iconbtn[disabled] { opacity: .4; cursor: default; }
+@media (hover: hover) and (pointer: fine) {
+  .dk-pager .dk-iconbtn[disabled]:hover { background: none; }
+}
+
+
+.dk-pager__short { display: none; font-size: var(--text-caption); color: var(--ink-2); }
+
+.dk-pager__size {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  font-size: var(--text-caption);
+  color: var(--ink-2);
+}
+
+.dk-pager__size select { height: var(--control-sm); padding: 0 var(--space-4); }
+
+/* На узком экране номера страниц не помещаются и всё равно бесполезны: пальцем
+   в цифру шириной 28 пикселей не попасть. Остаются стрелки и «3 из 12». */
+@media (max-width: 767px) {
+  .dk-pager { justify-content: center; }
+  .dk-pager__pages { display: none; }
+  .dk-pager__short { display: inline; order: 0; }
+}
+
+/* --- появление всплывающего слоя -------------------------------------------
+   Сто двадцать миллисекунд, ease-out, лёгкий сдвиг сверху. Это не украшение, а
+   ответ на вопрос «откуда это взялось»: слой, возникающий мгновенно из ничего,
+   читается как подмена страницы, и человек теряет место, на которое смотрел.
+
+   Сделано на @starting-style и transition-behavior: allow-discrete — то есть
+   без единой строки JS. Под системной настройкой «меньше движения» токен
+   длительности обнуляется, и слой просто появляется.
+
+   Масштаб начинается с 0.97, а не с нуля: из ничего в природе ничего не
+   появляется, и scale(0) выглядит как фокус, а не как открытие.              */
+
+.dk-menu,
+.dk-pop {
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    display var(--duration-fast) allow-discrete;
+}
+
+.dk-menu:not([hidden]),
+.dk-pop:not([hidden]) { opacity: 1; transform: none; }
+
+.dk-menu[hidden],
+.dk-pop[hidden] { opacity: 0; transform: translateY(-4px); }
+
+@starting-style {
+  .dk-menu:not([hidden]),
+  .dk-pop:not([hidden]) { opacity: 0; transform: translateY(-4px); }
+}
+
+.dk-modal {
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out),
+    overlay var(--duration-base) allow-discrete,
+    display var(--duration-base) allow-discrete;
+}
+
+.dk-modal:not([open]) { opacity: 0; transform: scale(.97); }
+
+@starting-style {
+  .dk-modal[open] { opacity: 0; transform: scale(.97); }
+}
+
+.dk-modal::backdrop {
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    overlay var(--duration-base) allow-discrete,
+    display var(--duration-base) allow-discrete;
+}
+
+.dk-modal:not([open])::backdrop { opacity: 0; }
+
+@starting-style {
+  .dk-modal[open]::backdrop { opacity: 0; }
+}
+
+/* --- платформа: телефон ----------------------------------------------------
+   Правки, которые отделяют «сайт в браузере» от приложения. Ни одна из них не
+   воспроизводится в эмуляторе десктопного браузера — их видно только на живом
+   телефоне, и именно поэтому их обычно не чинят.
+
+   Список сверен по skills/mobile-native Эмиля Ковальского (MIT).             */
+
+/* Серая вспышка по касанию. iOS и Android рисуют её поверх всего, у чего есть
+   обработчик щелчка, и она спорит с любой нашей обратной связью. */
+/* Подсветка касания переехала на .dk-root — см. комментарий там. */
+
+/* Наведения у нас теперь закрыты от тача — значит, пальцу нужна своя обратная
+   связь. :active работает на любом устройстве. */
+.dk-btn:active,
+.dk-iconbtn:active,
+.dk-tab:active,
+.dk-seg button:active,
+.dk-side__item:active,
+.dk-list__row:active,
+.dk-rank__row:active,
+.dk-menu__item:active,
+.dk-cal__day:active,
+.dk-map__tile:active { opacity: .7; }
+
+/* Задержка в 300 мс, которую браузер держит на случай двойного касания.
+   manipulation говорит «двойного не будет» — и касание срабатывает сразу. */
+.dk-btn, .dk-iconbtn, .dk-tab, .dk-seg button, .dk-side__item, .dk-list__row,
+.dk-rank__row, .dk-menu__item, .dk-cal__day, .dk-cal__e, .dk-map__tile,
+.dk-pager__p, .dk-th-sort, .dk-fold__head { touch-action: manipulation; }
+
+/* Долгое нажатие выделяет текст кнопки вместо того, чтобы её нажать. */
+.dk-btn, .dk-iconbtn, .dk-tab, .dk-seg button, .dk-pager__p, .dk-map__tile,
+.dk-fold__head { user-select: none; }
+
+/* iOS увеличивает страницу, когда фокус попадает в поле с размером шрифта
+   меньше 16 px, и обратно не уменьшает — человек остаётся с обрезанной,
+   уехавшей вёрсткой. Лечится размером шрифта, а не запретом масштабирования:
+   запрет масштабирования — это отказ в доступности. */
+@media (pointer: coarse) {
+  .dk-field input,
+  .dk-field select,
+  .dk-area,
+  .dk-menu__search input,
+  .dk-pager__size select { font-size: var(--text-title); }
+}
+
+/* Область нажатия на пальце. Растёт НЕ видимый размер, а зона: крестик
+   сброса периода в 20 пикселей стоит вплотную к триггеру фильтра, и промах по
+   нему снимает период — то есть молча меняет срез всего дашборда. Это та самая
+   ошибка, которую раздел «Фильтры» называет самой дорогой.
+
+   Псевдоэлемент, а не padding: padding сдвинул бы соседей и сломал ряд. */
+@media (pointer: coarse) {
+  .dk-select__clear,
+  .dk-iconbtn--sm,
+  .dk-th-sort,
+  .dk-pager__p,
+  .dk-fchip__x,
+  .dk-check { position: relative; }
+
+  .dk-select__clear::after,
+  .dk-iconbtn--sm::after,
+  .dk-th-sort::after,
+  .dk-pager__p::after,
+  .dk-fchip__x::after,
+  .dk-check::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Всё, что ниже, найдено замером tools/check-mobile.mjs: касание в 21 px от
+   центра не попадало в сам элемент. Руками такое не находится — мышью в эти
+   места целятся точно, а на пальце промах выглядит как «не сработало».
+
+   Строки, которые нажимают целиком (рейтинг, «показать все», раскрывающийся
+   блок, день в списке календаря), растут до 44 видимо: зона-псевдоэлемент у
+   строки перекрыла бы соседнюю строку, и касание между ними уходило бы не
+   туда. Цена — список на таче длиннее: строка рейтинга 44 px вместо 36.
+
+   Шапка таблицы — тоже высотой, а не зоной: зона сортировки в 44 px у первой
+   строки выходила за верх таблицы и обрезалась её прокруткой.
+
+   Кнопки сегмента стоят внутри дорожки с отступом --track-pad, и касание в
+   этот отступ попадало в дорожку, а не в кнопку. Зона дотягивает кнопку до
+   края дорожки по вертикали; по горизонтали соседи и так встык. Сегмент
+   значками на таче шириной не меньше своей высоты: 34 px на палец мало.
+
+   Полоса доступности на таче получает строку в 44: полоса в 20 px, стоящая
+   через 8 от соседней, — это касание наугад между двумя службами. Цена —
+   виджет доступности вдвое выше. */
+@media (pointer: coarse) {
+  .dk-rank__row,
+  .dk-list__more,
+  .dk-fold__head,
+  button.dk-cal__day { min-height: var(--control-md); }
+
+  .dk-table th { height: var(--control-md); }
+
+  /* Зона сортировки — во всю ширину подписи и не уже 44. Квадрат 44×44 от
+     центра был бы у́же длинной подписи и шире короткой; у кнопки-значка без
+     подписи (12 px) — единственным способом в неё попасть. */
+  .dk-th-sort::after { width: max(100%, 44px); }
+
+  .dk-seg button { position: relative; }
+  .dk-seg button::after {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--track-pad)) 0;
+  }
+  .dk-seg button { min-width: var(--control-sm); }   /* «7д» — 34 px */
+  /* Сегмент значками — квадрат 44 при любом размере: у --sm высота 40, и
+     ширина 44 от min-width делала кнопку 44 × 40 (замер 29.09, карта). */
+  .dk-seg--icons button { width: auto; height: var(--control-sm); }
+
+  .dk-pager__size select { min-width: var(--control-sm); }
+
+  .dk-uptime__row { min-height: var(--control-md); }
+  .dk-uptime__strip { position: relative; }
+  .dk-uptime__strip::after {
+    content: "";
+    position: absolute;
+    inset: calc((var(--control-md) - 20px) / -2) 0;
+  }
+}
+
+/* Прокрутка внутри блока не должна утягивать за собой страницу: дочитал
+   список до конца — и вместо остановки уехал весь дашборд. */
+.dk-menu__list,
+.dk-tablewrap,
+.dk-cal__hours,
+.dk-side__nav,
+.dk-modal__body { overscroll-behavior: contain; }
+
+/* --- служебное ------------------------------------------------------------ */
+
+.dk-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 30.09 · спокойный точный рабочий инструмент. Плотность — явный выбор
+   шаблона, а не случайная высота карточек. */
+.dk-tile--compact { height: 100%; box-sizing: border-box; }
+.dk-tile--compact .dk-tile__head { align-items: flex-start; }
+.dk-tile--compact .dk-tile__label { display: block; overflow: visible; }
+.dk-tile--compact .dk-tile__icon { display: none; }
+.dk-tile--compact .dk-tile__row { align-items: flex-start; flex-direction: column; }
+.dk-car--list .dk-car__track { flex-wrap: wrap; overflow: visible; margin: 0; padding: 0; }
+.dk-car--list .dk-car__item { flex: 1 1 40%; width: auto; max-width: none; }
+.dk-car--list :is(.dk-car__pos, .dk-car__nav, .dk-car__dots) { display: none; }
+.dk-region-tools { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gap-tight); margin-bottom: var(--grid-gap); }
+.dk-region-tools .dk-search { flex: 1 1 50%; min-width: 0; border-radius: var(--radius-lg); }
+.dk-region-tools .dk-search__input { width: 100%; }
+.dk-region-result { margin: 0 0 var(--space-6); color: var(--ink-2); font: var(--type-body); }
+.dk-details { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-group); }
+.dk-details dt { color: var(--ink-2); }
+.dk-details dd { margin: 0; font-weight: var(--weight-ui-strong); }
+.dk-data-summary { margin-top: var(--space-5); }
+.dk-data-summary summary { box-sizing: border-box; min-height: var(--control-md); cursor: pointer; color: var(--link); padding: var(--space-5) 0; }
+.dk-data-summary summary:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+.dk-widget:has(> .dk-tile__head) { height: 100%; box-sizing: border-box; }
+@media (max-width: 767px) {
+  .dk-car--list .dk-car__item { flex-basis: 100%; }
+  .dk-hero { padding: var(--space-6); gap: var(--gap-tight); }
+  .dk-hero__n { font: var(--type-metric-xl); }
+  .dk-hero .dk-trend { margin-bottom: 0; }
+  .dk-region-tools .dk-search { flex-basis: 100%; }
+}
+
+@media (max-width: 767px) {
+  .dk-grid--metrics > .dk-col--half { grid-column: span 2; }
+}
+
+/* Обзорная сводка: одинаковая высота KPI и главной карточки в ряду. */
+.dk-grid--metrics { grid-auto-rows: 1fr; height: 100%; align-items: stretch; }
+.dk-grid:has(> .dk-col--half > .dk-grid--metrics) { align-items: stretch; }
+.dk-grid:has(> .dk-col--half > .dk-grid--metrics) > .dk-col--half > .dk-hero { height: 100%; box-sizing: border-box; }
+.dk-banner--crit { background: var(--surface); border-left: var(--focus-width) solid var(--crit); }
+.dk-table td .dk-btn { white-space: normal; text-align: left; height: auto; min-height: var(--control-sm); }
+
+@media (max-width: 767px) {
+  .dk-banner:has(> .dk-btn) .dk-banner__text { flex-basis: calc(100% - var(--space-9)); }
+  .dk-banner > .dk-btn { margin-left: var(--space-9); }
+}

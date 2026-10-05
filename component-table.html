@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Таблица · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p3_data.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-table.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell">
+<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Данные</p>
+    <h1>Таблица</h1>
+    <p class="sc-hero__lead">Сравнить много объектов по нескольким показателям: регионы по баллу и событиям, заявки по сроку и бригаде. Читается по строкам, сортируется по колонке, выбирается для действия.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
+      <span class="sc-meta__i">Figma: нет</span>
+      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-table.js</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Всё, что умеет таблица, в одном месте: закреплённая шапка и первая колонка, сортировка, выбор строк со счётчиком, группы с подытогом, строка итога, числа табличными цифрами. В разметке ни одного числа руками — все через <code>dkFmt</code>.</p><div class="dk-widget">
+      <div class="dk-widget__head"><h3 class="dk-widget__title">Регионы · балл риска</h3>
+        <div class="dk-chipbar" id="ex-actions"><span class="dk-chipbar__label">Ничего не выбрано — действия появятся здесь</span></div></div>
+      <div class="dk-tablewrap dk-tablewrap--tall" style="--table-min:860px;--table-max:420px">
+        <table class="dk-table dk-table--zebra dk-table--sticky-head dk-table--sticky-col" id="ex-table">
+          <thead><tr>
+            <th class="dk-th-pick"><label class="dk-check" aria-label="Выбрать все на странице"><input type="checkbox" data-pick-all><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></th>
+            <th style="width:24%" data-sortable="Регион">Регион</th>
+            <th style="width:18%" data-sortable="Состояние">Состояние</th>
+            <th style="width:12%" class="dk-td-num" data-sortable="Балл">Балл</th>
+            <th style="width:12%" class="dk-td-num" data-sortable="События">События, шт.</th>
+            <th style="width:14%" class="dk-td-num" data-sortable="Жителей">Жителей</th>
+            <th style="width:14%" class="dk-td-num" data-sortable="Изменение">Изменение за 14 д</th>
+          </tr></thead>
+          <tbody id="ex-body"></tbody>
+          <tfoot><tr><td></td><td>Итого по выбранным округам</td><td></td>
+            <td class="dk-td-num" id="ex-t-score">—</td><td class="dk-td-num" id="ex-t-events">—</td>
+            <td class="dk-td-num" id="ex-t-people">—</td><td class="dk-td-num" id="ex-t-delta">—</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Объектов больше семи и у каждого несколько показателей — сравнивать нужно по колонкам.</li><li>По строке нужно действие: назначить, открыть, снять с контроля.</li><li>Точное число важнее формы: «73 события», а не «примерно столько же, сколько у соседа».</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Один показатель по многим объектам, вопрос «у кого хуже» — <a href="component-rank.html">Рейтинг</a>: полоса читается быстрее числа.</li><li>Одно–четыре главных числа — <a href="component-tile.html">KPI-плитки</a>, а не таблица из одной строки.</li><li>Динамика во времени — <a href="component-chart.html">График</a>: таблица покажет числа, но не форму.</li><li>Список с одним значением на строку — <a href="component-list.html">Список</a>, у него меньше шума.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-tablewrap" style="--table-min:640px"><table class="dk-table dk-table--zebra">
+      <thead><tr><th class="dk-th-pick"><b class="sc-callout">1</b><label class="dk-check" aria-label="Выбрать все"><input type="checkbox" ><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></th>
+        <th style="width:40%"><b class="sc-callout">2</b>Регион <button type="button" class="dk-th-sort" aria-label="Сортировать"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg></button><b class="sc-callout">3</b></th>
+        <th style="width:30%">Состояние</th><th class="dk-td-num"><b class="sc-callout">4</b>Балл</th></tr></thead>
+      <tbody>
+        <tr><td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать"><input type="checkbox" ><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td><td><b class="sc-callout">5</b>Крым</td><td><b class="sc-callout">6</b><span class="dk-status dk-status--crit"><svg class="dk-i dk-i--sm"><use href="#ti-alert-circle"/></svg>Авария</span></td><td class="dk-td-num"><b class="sc-callout">7</b>82</td></tr>
+        <tr class="dk-tr-group"><td colspan="3"><b class="sc-callout">8</b>Сибирский округ</td><td class="dk-td-num">73</td></tr>
+        <tr><td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать"><input type="checkbox" ><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td><td>Новосибирская область</td><td><span class="dk-status dk-status--high"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg>В работе</span></td><td class="dk-td-num">73</td></tr>
+      </tbody>
+      <tfoot><tr><td></td><td><b class="sc-callout">9</b>Итого</td><td></td><td class="dk-td-num">155</td></tr></tfoot>
+    </table></div></div><ol class="sc-anatomy__list"><li><b>Колонка выбора</b> — флажок «все на странице» и по флажку на строку. Выбрано — не только заливкой, но и числом в строке действий.</li><li><b>Заголовок колонки</b> — надписью, поверхностью отделён от тела. Границ нет.</li><li><b>Сортировка</b> — стрелка показывает, куда отсортировано, а не «здесь можно». Скринридеру то же говорит <code>aria-sort</code>.</li><li><b>Числовая колонка</b> — <code>dk-td-num</code>: вправо, табличными цифрами (<code>--font-num</code>), единица в заголовке.</li><li><b>Главная ячейка</b> — название; при нужде с подстрокой и значком (<code>dk-td-main</code>).</li><li><b>Статус</b> — всегда со значком и подписью, никогда одним цветом.</li><li><b>Значение</b> — цвет смысла только у чисел, которые сравнивают с порогом.</li><li><b>Группа</b> — строка <code>dk-tr-group</code>: название надписью, подытог числом.</li><li><b>Итог</b> — <code>&lt;tfoot&gt;</code>, в закреплённой таблице прилипает к низу.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Варианты включаются классами и складываются друг с другом. Размеров у таблицы нет: плотность как настройка (<code>data-density</code>) — открытый вопрос в DECISIONS.md, п. 5.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-table</code></td><td>Без разделителей: шапка поверхностью, строки наведением.</td><td>По умолчанию.</td></tr><tr><td><code>dk-table--zebra</code></td><td>Чередование строк полупрозрачной заливкой.</td><td>Длинная плотная таблица.</td></tr><tr><td><code>dk-table--cards</code></td><td>На телефоне строка — карточка «подпись — значение», шапка — пилюли сортировки. Нужен dkTable: он ставит подписи.</td><td>Таблица шире экрана телефона: больше трёх колонок.</td></tr><tr><td><code>dk-table--ruled</code></td><td>Волосяные линейки между строками.</td><td>Печать и очень плотные данные; включается вручную.</td></tr><tr><td><code>dk-table--sticky-head</code></td><td>Шапка и итог закреплены при прокрутке.</td><td>Обёртка dk-tablewrap--tall с --table-max.</td></tr><tr><td><code>dk-table--sticky-col</code></td><td>Первая колонка (и колонка выбора) закреплены.</td><td>Колонок больше, чем помещается.</td></tr><tr><td><code>dk-tablewrap</code></td><td>Горизонтальная прокрутка; --table-min — минимальная ширина.</td><td>Всегда, если колонок больше четырёх.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <div class="dk-grid--even">
+      <div class="dk-panel"><div class="dk-overline" style="margin-bottom:var(--space-5)">Загрузка</div><span class="dk-vh">Загружаем регионы</span>
+        <div class="dk-skel" style="height:14px;width:60%;margin-bottom:var(--space-5)"></div><div class="dk-skel" style="height:14px;width:85%;margin-bottom:var(--space-5)"></div><div class="dk-skel" style="height:14px;width:45%"></div></div>
+      <div class="dk-panel"><div class="dk-overline" style="margin-bottom:var(--space-5)">Пусто</div><div class="dk-empty"><div class="dk-empty__t">Ничего не найдено</div><div>Под фильтры не попал ни один регион.</div><button class="dk-btn dk-btn--sm" style="margin-top:var(--space-5)">Снять фильтр по округу</button></div></div>
+      <div class="dk-panel"><div class="dk-overline" style="margin-bottom:var(--space-5)">Ошибка</div><div class="dk-empty"><div class="dk-empty__t">Данные не загрузились</div><div>Сервер регионов не ответил за 10 с.</div><button class="dk-btn dk-btn--sm" style="margin-top:var(--space-5)">Повторить</button></div></div>
+    </div>
+    <div class="sc-note"><b>Наведение, выбор и сортировка</b> — в живом примере выше. Пустое состояние отвечает на три вопроса: что случилось, почему и что делать.</div>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Единица — в заголовке колонки: «События, шт.», в ячейках только числа.</li><li>Нет значения — прочерк «—». Ноль — это ответ, отсутствие — нет.</li><li>Числа через <code>dkFmt</code>: разряды неразрывным пробелом, дробь запятой, минус настоящий.</li><li>Дельта со знаком всегда: «+4», «−8 мин».</li><li>Заголовки короткие, именительный падеж: «Регион», «Балл».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>«73 события» в каждой ячейке — единица повторяется сорок раз.</li><li>Пустая ячейка или «0» вместо отсутствующего значения.</li><li>«1240» рядом с «1 240» — читается как два разных числа.</li><li>Цвет статуса без значка и подписи — его видят не все.</li><li>Действия, спрятанные под наведение, — на тачскрине наведения нет.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li><b>Клавиатура.</b> Заголовок с сортировкой — кнопка, флажки — настоящие <code>input</code>; кольцо фокуса только при навигации табом.</li><li><b>Роли.</b> Настоящая <code>&lt;table&gt;</code>: скринридер ходит по ячейкам сам. Сортировка — <code>aria-sort</code>; выбранная строка — <code>aria-selected</code>.</li><li><b>Подписи.</b> У каждого флажка свой <code>aria-label</code> с названием строки; у колонки действий — скрытый заголовок.</li><li><b>Контраст.</b> Заголовок на своей поверхности и числа на строке проверяются в обеих темах (КОНТРАСТ, СТУПЕНИ).</li><li><b>Не проверялось.</b> Живой скринридер и тач-устройства — как и у всего кита.</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-table,dk-tablewrap,dk-td-,dk-th-,dk-tr-group"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p>Разметка остаётся разметкой: без скрипта таблица показывает данные, просто не сортируется. Ширины колонок объявляет первый ряд <code>&lt;th&gt;</code>.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-tablewrap dk-tablewrap--tall&quot; style=&quot;--table-min:860px;--table-max:420px&quot;&gt;
+  &lt;table class=&quot;dk-table dk-table--zebra dk-table--sticky-head dk-table--sticky-col&quot; id=&quot;regions&quot;&gt;
+    &lt;thead&gt;&lt;tr&gt;
+      &lt;th class=&quot;dk-th-pick&quot;&gt;&lt;label class=&quot;dk-check&quot; aria-label=&quot;Выбрать все на странице&quot;&gt;
+        &lt;input type=&quot;checkbox&quot; data-pick-all&gt;&lt;span class=&quot;dk-check__box&quot;&gt;…&lt;/span&gt;&lt;/label&gt;&lt;/th&gt;
+      &lt;th style=&quot;width:24%&quot; data-sortable=&quot;Регион&quot;&gt;Регион&lt;/th&gt;
+      &lt;th style=&quot;width:12%&quot; class=&quot;dk-td-num&quot; data-sortable=&quot;Балл&quot;&gt;Балл&lt;/th&gt;
+    &lt;/tr&gt;&lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr data-id=&quot;RU-CR&quot;&gt;
+        &lt;td class=&quot;dk-td-pick&quot;&gt;…&lt;input type=&quot;checkbox&quot; data-pick value=&quot;RU-CR&quot;&gt;…&lt;/td&gt;
+        &lt;td&gt;Крым&lt;/td&gt;
+        &lt;td class=&quot;dk-td-num&quot; data-sort=&quot;82&quot;&gt;82&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr class=&quot;dk-tr-group&quot;&gt;&lt;td colspan=&quot;2&quot;&gt;Сибирский округ&lt;/td&gt;&lt;td class=&quot;dk-td-num&quot;&gt;73&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+    &lt;tfoot&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;Итого&lt;/td&gt;&lt;td class=&quot;dk-td-num&quot;&gt;155&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;
+  &lt;/table&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+var t = dkTable(document.getElementById(&#x27;regions&#x27;), {
+  onSelect: function (ids) { /* выбрано видно числом: ids.length */ },
+  onSort:   function (e)   { /* e.column, e.dir — если сортирует сервер */ }
+});
+t.selected; t.clear();
+&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>onSelect(ids)</code></td><td>функция</td><td>При каждой смене выбора с массивом <code>data-id</code>.</td></tr><tr><td><code>onSort(e)</code></td><td>функция</td><td>Передан — таблица не сортирует сама, а сообщает <code>e.column</code> и <code>e.dir</code>.</td></tr><tr><td><code>data-sortable</code></td><td>атрибут th</td><td>Имя колонки для сортировки.</td></tr><tr><td><code>data-sort</code></td><td>атрибут td</td><td>Значение для сортировки, когда текст ячейки — не оно.</td></tr><tr><td><code>--table-min, --table-max</code></td><td>переменные на обёртке</td><td>Минимальная ширина и высота прокрутки; по умолчанию 720 и 480.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-rank.html">Рейтинг</a> — один показатель по многим объектам</li><li><a href="component-badge.html">Бейдж и статус</a> — что стоит в ячейках</li><li><a href="component-select.html">Фильтр</a> — что стоит над таблицей</li><li><a href="component-pager.html">Пагинация</a> — как листать длинную таблицу</li><li><a href="accidents.html">Страница «Аварии»</a> — таблица в живом дашборде</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
+  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
+  });
+  mark(root.getAttribute('data-theme'));
+  var данные = [
+    ['Южный', 'RU-CR', 'Крым', 'crit', 82, 1, 1912000, 4],
+    ['Южный', 'RU-DON', 'Донецкая Народная Республика', 'crit', 95, 4, 4100000, 12],
+    ['Южный', 'RU-ROS', 'Ростовская область', 'high', 73, null, 4200000, 2],
+    ['Южный', 'RU-KDA', 'Краснодарский край', 'calm', 41, 0, 5840000, -2],
+    ['Сибирский', 'RU-NVS', 'Новосибирская область', 'high', 73, 2, 2780000, -3],
+    ['Сибирский', 'RU-KYA', 'Красноярский край', 'high', 61, 2, 2850000, 0],
+    ['Сибирский', 'RU-OMS', 'Омская область', 'calm', 58, 1, 1830000, -1],
+    ['Сибирский', 'RU-TOM', 'Томская область', 'calm', 44, 0, 1050000, 1],
+    ['Дальневосточный', 'RU-SA', 'Саха (Якутия)', 'crit', 81, 3, 1000000, 7],
+    ['Дальневосточный', 'RU-PRI', 'Приморский край', 'high', 66, 1, 1820000, 2],
+    ['Дальневосточный', 'RU-KHA', 'Хабаровский край', 'calm', 52, null, 1280000, -4],
+    ['Дальневосточный', 'RU-SAK', 'Сахалинская область', 'calm', 39, 0, 460000, 0],
+    ['Уральский', 'RU-SVE', 'Свердловская область', 'high', 64, 2, 4240000, 3],
+    ['Уральский', 'RU-CHE', 'Челябинская область', 'calm', 47, 1, 3400000, -2]
+  ];
+  var СТАТУС = { crit: ['crit', 'ti-alert-circle', 'Авария'], high: ['high', 'ti-clock', 'В работе'], calm: ['calm', 'ti-circle-check', 'Норма'] };
+  var esc = window.dkEsc, fmt = window.dkFmt, строки = [], группа = null, сумма = null;
+  var итог = { n: 0, score: 0, events: 0, people: 0, delta: 0 };
+  function подытог(g, s) {
+    return '<tr class="dk-tr-group"><td></td><td colspan="2">' + esc(g) + ' · ' + s.n + ' регионов</td>' +
+      '<td class="dk-td-num">' + fmt.num(Math.round(s.score / s.n)) + '</td><td class="dk-td-num">' + fmt.num(s.events) + '</td>' +
+      '<td class="dk-td-num">' + fmt.compact(s.people) + '</td><td class="dk-td-num">' + fmt.delta(s.delta) + '</td></tr>';
+  }
+  данные.forEach(function (r) {
+    if (r[0] !== группа) { if (сумма) строки.push(подытог(группа, сумма)); группа = r[0]; сумма = { n: 0, score: 0, events: 0, people: 0, delta: 0 }; }
+    var st = СТАТУС[r[3]];
+    строки.push('<tr data-id="' + esc(r[1]) + '">' +
+      '<td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать ' + esc(r[2]) + '"><input type="checkbox" data-pick value="' + esc(r[1]) + '"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>' +
+      '<td>' + esc(r[2]) + '</td>' +
+      '<td data-sort="' + ({ crit: 3, high: 2, calm: 1 })[r[3]] + '"><span class="dk-status dk-status--' + st[0] + '"><svg class="dk-i dk-i--sm"><use href="#' + st[1] + '"/></svg>' + st[2] + '</span></td>' +
+      '<td class="dk-td-num" data-sort="' + r[4] + '"' + (r[4] >= 80 ? ' style="color:var(--crit)"' : r[4] >= 60 ? ' style="color:var(--high)"' : '') + '>' + fmt.num(r[4]) + '</td>' +
+      '<td class="dk-td-num" data-sort="' + (r[5] == null ? '' : r[5]) + '">' + fmt.num(r[5]) + '</td>' +
+      '<td class="dk-td-num" data-sort="' + r[6] + '">' + fmt.num(r[6]) + '</td>' +
+      '<td class="dk-td-num" data-sort="' + r[7] + '">' + fmt.delta(r[7]) + '</td></tr>');
+    сумма.n++; сумма.score += r[4]; сумма.events += r[5] || 0; сумма.people += r[6]; сумма.delta += r[7];
+    итог.n++; итог.score += r[4]; итог.events += r[5] || 0; итог.people += r[6]; итог.delta += r[7];
+  });
+  строки.push(подытог(группа, сумма));
+  document.getElementById('ex-body').innerHTML = строки.join('');
+  document.getElementById('ex-t-score').textContent = fmt.num(Math.round(итог.score / итог.n));
+  document.getElementById('ex-t-events').textContent = fmt.num(итог.events);
+  document.getElementById('ex-t-people').textContent = fmt.compact(итог.people);
+  document.getElementById('ex-t-delta').textContent = fmt.delta(итог.delta);
+  window.addEventListener('DOMContentLoaded', function () {
+    var box = document.getElementById('ex-actions');
+    if (typeof dkTable !== 'function') return;
+    dkTable(document.getElementById('ex-table'), {
+      onSelect: function (ids) {
+        box.innerHTML = ids.length
+          ? '<span class="dk-chipbar__label">Выбрано ' + ids.length + '</span><button class="dk-btn dk-btn--sm">Взять на контроль</button>'
+          : '<span class="dk-chipbar__label">Ничего не выбрано — действия появятся здесь</span>';
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

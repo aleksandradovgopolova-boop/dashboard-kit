@@ -1,0 +1,8 @@
+{
+  "_why": "Список того, что кит просит у ECharts. По нему собирается урезанный vendor/echarts.min.js, и по нему же tools/check.py (проверка ДВИЖОК) сверяет код и собранный файл. Править список руками можно, но только вместе с пересборкой; проверка скажет, если код попросил то, чего здесь нет, или здесь лежит то, чего код не просит.",
+  "echarts": "6.1.0",
+  "series": ["line", "bar", "pie", "radar", "sankey", "scatter", "map"],
+  "components": ["grid", "xAxis", "yAxis", "legend", "tooltip", "axisPointer", "radar", "markLine"],
+  "features": ["legacyGridContainLabel"],
+  "renderer": "canvas"
+}

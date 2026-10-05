@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Поиск · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p2_filters.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell">
+<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Фильтры</p>
+    <h1>Поиск</h1>
+    <p class="sc-hero__lead">Найти объект по имени: «Регион или округ». Первое, что видит человек на телефоне, поэтому крупнее поля формы и лежит на доске пилюлей. Справа — дата, на которую данные; пока ищут, её место занимает крестик.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
+      <span class="sc-meta__i">Figma: нет</span>
+      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-util.js</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Наберите что-нибудь: дата уступит место крестику, крестик очистит поле и вернёт фокус. Скрипта у поиска нет — очистку делает <code>dk-util.js</code>, который стоит на каждой странице.</p><div class="dk-grid">
+      <div class="dk-col--half"><div class="dk-search">
+        <svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg>
+        <input class="dk-search__input" type="search" placeholder="Регион или округ" aria-label="Найти регион или округ" enterkeyhint="search" autocomplete="off">
+        <button type="button" class="dk-search__clear" aria-label="Очистить поиск"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button>
+        <span class="dk-search__at" title="Данные на 29 сентября">29.09</span>
+      </div></div>
+      <div class="dk-col--half"><div class="dk-widget"><div class="dk-search">
+        <svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg>
+        <input class="dk-search__input" type="search" placeholder="Внутри виджета — плоский" aria-label="Поиск внутри виджета" autocomplete="off">
+        <button type="button" class="dk-search__clear" aria-label="Очистить поиск"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button>
+      </div></div></div>
+    </div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Объектов много, и человек знает имя нужного: регион, дом, котельная.</li><li>Верх экрана на телефоне: поиск и дата данных — одной строкой над фильтрами.</li><li>Список или таблица под поиском фильтруется по вводу.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Значений до двадцати и их надо видеть списком — <a href="component-select.html">Фильтр</a>, в нём поиск уже есть.</li><li>Поле в форме заявки — <a href="component-field.html">Поле и форма</a>, <code>dk-field--search</code>.</li><li>Ограничить срез по времени — <a href="component-period.html">Период</a>.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-search" style="max-width:520px">
+      <b class="sc-callout">1</b><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg>
+      <input class="dk-search__input" type="search" placeholder="Регион или округ" aria-label="Пример поиска" autocomplete="off"><b class="sc-callout">2</b>
+      <span class="dk-search__at">29.09</span><b class="sc-callout">3</b>
+    </div></div><ol class="sc-anatomy__list"><li><b>Значок</b> — <code>dk-search__icon</code>: говорит «поиск» до того, как прочитана подсказка.</li><li><b>Поле</b> — <code>dk-search__input</code>, <code>type="search"</code>, кегль 16: меньше iOS увеличивает страницу при фокусе.</li><li><b>Дата данных</b> — <code>dk-search__at</code>: за какой день числа на экране. Пока ищут — прячется, на её месте крестик <code>dk-search__clear</code>.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Размер один: 56 px высотой — крупнее поля формы, потому что это главный вход в экран, и под пальцем. Ширина — вся строка.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-search</code></td><td>Строка поиска на доске: нейтральная поверхность и тонкая кромка.</td><td>Верх экрана, над фильтрами.</td></tr><tr><td><code>внутри dk-panel / dk-widget</code></td><td>Та же строка, плоская.</td><td>Поиск по списку внутри блока.</td></tr><tr><td><code>dk-search__at</code></td><td>Дата, на которую данные.</td><td>Если данные не «сейчас», а на день.</td></tr><tr><td><code>dk-search__clear</code></td><td>Крестик очистки.</td><td>Всегда: появляется сам, когда в поле есть текст.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <div class="dk-grid--even">
+      <div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" type="search" placeholder="Пусто: видна дата" aria-label="Пустой поиск" autocomplete="off"><button type="button" class="dk-search__clear" aria-label="Очистить поиск"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><span class="dk-search__at">29.09</span></div>
+      <div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" type="search" value="Новосибирская" aria-label="Поиск с запросом" autocomplete="off"><button type="button" class="dk-search__clear" aria-label="Очистить поиск"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><span class="dk-search__at">29.09</span></div>
+    </div>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Подсказка называет, что ищут: «Регион или округ».</li><li>Дата короткая: «29.09», полная — в <code>title</code>.</li><li>Ничего не нашлось — пустое состояние с тем, что сделать, а не пустота.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>«Поиск…» — не сказано, что искать.</li><li>Поиск без подписи для скринридера: подсказка не подпись.</li><li>Две строки поиска на экране.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li><b>Подпись</b> — <code>aria-label</code> на поле: подсказка исчезает при вводе и подписью не считается.</li><li><b>Крестик</b> — кнопка с <code>aria-label="Очистить поиск"</code>, цель 44 px; после очистки фокус в поле.</li><li><b>Фокус</b> виден кромкой и кольцом акцента, а не только курсором.</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-search"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p>Только разметка. Страница слушает <code>input</code> на поле — и ввод, и очистку крестиком.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-search&quot;&gt;
+  &lt;svg class=&quot;dk-i dk-search__icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ti-search&quot;/&gt;&lt;/svg&gt;
+  &lt;input class=&quot;dk-search__input&quot; type=&quot;search&quot; placeholder=&quot;Регион или округ&quot;
+         aria-label=&quot;Найти регион или округ&quot; enterkeyhint=&quot;search&quot; autocomplete=&quot;off&quot;&gt;
+  &lt;button type=&quot;button&quot; class=&quot;dk-search__clear&quot; aria-label=&quot;Очистить поиск&quot;&gt;
+    &lt;svg class=&quot;dk-i&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ti-x&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;span class=&quot;dk-search__at&quot; title=&quot;Данные на 29 сентября&quot;&gt;29.09&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+document.querySelector(&#x27;.dk-search__input&#x27;).addEventListener(&#x27;input&#x27;, function (e) {
+  /* фильтровать по e.target.value; пустая строка — показать всё */
+});
+&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-search__input</code></td><td>input type=search</td><td>Поле; страница слушает input.</td></tr><tr><td><code>dk-search__clear</code></td><td>кнопка</td><td>Очистка без подключения: dk-util.js.</td></tr><tr><td><code>dk-search__at</code></td><td>элемент</td><td>Дата данных; необязательна.</td></tr><tr><td><code>aria-label</code></td><td>атрибут поля</td><td>Подпись для скринридера — обязательна.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-select.html">Фильтр</a> — выбор из известного списка</li><li><a href="component-empty.html">Состояния</a> — что показать, если не нашлось</li><li><a href="component-field.html">Поле и форма</a> — поиск внутри формы</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
+  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
+  });
+  mark(root.getAttribute('data-theme'));
+
+})();
+</script>
+</body>
+</html>
