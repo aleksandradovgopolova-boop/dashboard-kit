@@ -20,4 +20,5 @@ jobs:
       - name: Проверка дизайн-системы (без браузерной части)
         run: python3 tools/check.py --fast
       - name: Регрессия поиска в Chrome
+        timeout-minutes: 5
         run: node tools/check-select.mjs
