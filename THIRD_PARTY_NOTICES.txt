@@ -1,0 +1,33 @@
+dashboard-kit — сторонние материалы
+
+MIT в корне применяется к собственному коду и документации dashboard-kit.
+Сторонние материалы сохраняют свои лицензии и уведомления правообладателей.
+
+Apache ECharts 6.1.0
+Файл: vendor/echarts.min.js (сокращённая сборка; tools/build-echarts.py).
+Источник: https://github.com/apache/echarts/tree/6.1.0
+Лицензия и уведомление: vendor/licenses/ECharts-LICENSE.txt и ECharts-NOTICE.txt.
+Полный upstream LICENSE содержит также условия включённых сторонних материалов.
+
+Air Datepicker 3.6.0
+Файлы: vendor/air-datepicker.js и vendor/air-datepicker.css.
+Источник: https://github.com/t1m0n/air-datepicker
+Лицензия MIT: vendor/licenses/Air-Datepicker-MIT.txt.
+Версия подтверждена в локальном JavaScript; сохранён текущий upstream-текст лицензии.
+
+Golos Text
+Файлы: vendor/fonts/golos-*.woff2.
+Источник лицензии: https://github.com/google/fonts/tree/main/ofl/golostext
+Лицензия SIL Open Font License 1.1: vendor/licenses/Golos-Text-OFL.txt.
+Точное происхождение и версия локальных файлов шрифта требуют сверки.
+
+Tabler Icons, outline
+Файл: js/dk-icons.js (выборка SVG; tools/build-icons.py).
+Источник: https://github.com/tabler/tabler-icons
+Лицензия MIT: vendor/licenses/Tabler-Icons-MIT.txt.
+Скрипт использует @latest; точная версия выборки не зафиксирована.
+
+Этот список — первичная инвентаризация перечисленных runtime-материалов,
+а не заключение о правах на все файлы репозитория. Управляемый слой AI Ops,
+данные примеров и иные материалы требуют отдельной сверки перед распространением.
+При распространении сохраняйте соответствующие тексты лицензий и уведомлений.
