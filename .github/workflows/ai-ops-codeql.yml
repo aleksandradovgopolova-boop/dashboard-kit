@@ -26,7 +26,10 @@ on:
 permissions:
   contents: read
 jobs:
+  # В текущем приватном repo Code Scanning не включён (run 37298495711).
+  # После подключения Code Scanning задать AI_OPS_CODEQL_ENABLED=true.
   analyze:
+    if: ${{ !github.event.repository.private || vars.AI_OPS_CODEQL_ENABLED == 'true' }}
     name: CodeQL (${{ matrix.language }})
     # Раннер — переменной, а не зашит: в организации со своими раннерами `ubuntu-latest` висит в
     # очереди. Задайте vars.CI_RUNNER_LINUX — и проверка поедет на вашей машине.
@@ -38,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["python"]   # ← ПОДСТАВЬТЕ свои языки
+        language: ["python", "javascript-typescript"]
     steps:
       - uses: actions/checkout@v4
       - uses: github/codeql-action/init@v3
