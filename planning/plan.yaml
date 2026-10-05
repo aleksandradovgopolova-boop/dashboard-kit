@@ -24,6 +24,8 @@ work:
   affects:
     delivery_operations: true
     engineering_quality_security: false
+  pr: https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/8
+  branch: fix/select-search-and-ci
 - id: select-search-stability
   title: Сохранять поле поиска при обновлении выпадающего списка
   type: engineering
@@ -40,6 +42,8 @@ work:
   affects:
     delivery_operations: false
     engineering_quality_security: true
+  pr: https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/8
+  branch: fix/select-search-and-ci
 - id: dynamic-color-checks
   title: Спроектировать проверку смысловых цветов в динамической разметке
   type: quality
