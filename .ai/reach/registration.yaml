@@ -1,0 +1,10 @@
+schema_version: 1
+kind: ChildRegistration
+id: proj-4e69de891d6f730c
+project: dashboard-kit
+kit_version: 4.3.2
+registered_at: '2026-10-05'
+state: collected
+collected_from:
+  project: dashboard-kit
+  at: '2026-10-05T10:54:21+00:00'

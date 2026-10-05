@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "installation-session-report",
+  "project": "dashboard-kit",
+  "repository": "https://github.com/aleksandradovgopolova-boop/dashboard-kit",
+  "kit_version": "4.3.2",
+  "kit_source_tag": "v4.3.2",
+  "date": "2026-10-05",
+  "timezone": "Europe/Moscow",
+  "installation": {
+    "baseline_at": "2026-10-05T13:37:19+03:00",
+    "integration_commit_at": "2026-10-05T13:39:49+03:00",
+    "merged_at": "2026-10-05T13:44:25+03:00",
+    "elapsed_baseline_to_merge_seconds": 426,
+    "pr": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/1",
+    "state": "merged"
+  },
+  "followup": {
+    "plan_pr": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/7",
+    "implementation_pr": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/8",
+    "implementation_pr_at": "2026-10-05T13:52:08+03:00",
+    "elapsed_since_install_merge_seconds": 463,
+    "state": "implemented_and_verified_pending_merge",
+    "tasks": [
+      "паспорт и план по существующим документам",
+      "устойчивый поиск dk-select",
+      "проверка доступов CI и явные ограничения приватного repo"
+    ]
+  },
+  "checks": {
+    "doctor": "pass",
+    "managed_integrity": "pass",
+    "delivery_plan": "pass",
+    "full_dashboard_check": "pass: 31 страниц × 3 размера Chrome",
+    "select_regression": "pass; прежний код падает",
+    "pr8_ci": "6 checks passed; CodeQL skipped pending Code Scanning",
+    "scorecard": "исходный run упал; запуск приватного repo требует токена/opt-in"
+  },
+  "time_note": "Время — календарные интервалы по Git/GitHub, включая ожидание CI и действия владельца. Активное время агента, токены и стоимость недоступны; не подменены нулём."
+}
