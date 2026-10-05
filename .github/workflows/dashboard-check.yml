@@ -19,3 +19,5 @@ jobs:
           node-version: '22'
       - name: Проверка дизайн-системы (без браузерной части)
         run: python3 tools/check.py --fast
+      - name: Регрессия поиска в Chrome
+        run: node tools/check-select.mjs

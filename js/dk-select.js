@@ -166,7 +166,25 @@
           '</div>'
         : '';
 
-      menu.innerHTML = head + body + foot;
+      // Поле поиска сохраняется: пересоздание на каждый ввод теряет фокус,
+      // выделение и составной ввод (IME). Обновляем только пункты и подвал.
+      var input = menu.querySelector('input');
+      if (!input) {
+        menu.innerHTML = head;
+        input = menu.querySelector('input');
+        if (input) {
+          input.addEventListener('input', function () {
+            query = input.value; cursor = -1; renderMenu();
+          });
+          input.addEventListener('keydown', onKey);
+        }
+      }
+      var searchHead = input && input.parentNode;
+      Array.from(menu.children).forEach(function (child) {
+        if (child !== searchHead) child.remove();
+      });
+      if (input && input.value !== query) input.value = query;
+      menu.insertAdjacentHTML('beforeend', body + foot);
 
       /* Скринридеру нужно сказать, ГДЕ стоит курсор. Раньше курсор жил только
          в data-cursor и в подсветке: стрелки двигали видимую рамку, а
@@ -175,23 +193,6 @@
          фокус: фокус остаётся в поле поиска, чтобы можно было продолжать
          набирать. */
       syncActive();
-
-      if (search) {
-        var input = menu.querySelector('input');
-        input.addEventListener('input', function () {
-          // Каретку приходится возвращать руками: renderMenu переписывает
-          // меню целиком вместе с полем, и без этого каждая буква отправляла
-          // каретку в конец — править запрос в середине было невозможно.
-          // Честное решение — перерисовывать только список, но это заметно
-          // большая перестройка компонента; пока восстанавливаем положение.
-          var at = input.selectionStart;
-          query = input.value; cursor = -1; renderMenu();
-          var again = menu.querySelector('input');
-          again.focus();
-          try { again.setSelectionRange(at, at); } catch (e) { /* type=search не везде умеет */ }
-        });
-        input.addEventListener('keydown', onKey);
-      }
 
       menu.querySelectorAll('.dk-menu__item').forEach(function (b) {
         b.addEventListener('click', function () { pick(b.dataset.value); });
@@ -284,6 +285,7 @@
       });
       var ul = menu.querySelector('.dk-menu__list');
       if (ul && holder) holder.setAttribute('aria-controls', ul.id);
+      else if (holder) holder.removeAttribute('aria-controls');
     }
 
     /* Уход фокуса за пределы поля закрывает список. Раньше закрывал только

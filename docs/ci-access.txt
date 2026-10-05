@@ -1,0 +1,9 @@
+CI приватного dashboard-kit
+
+Основная проверка: dashboard-check (статические правила + браузерная регрессия поиска). Дополнительно: ai-ops-validate, secret-scan, feature-catalog/coverage и record.
+
+Scorecard: исходный run 37298495738 упал с Resource not accessible by integration. В приватном repo job пропускается явно; для включения нужен доступный SCORECARD_TOKEN и переменная AI_OPS_SCORECARD_PRIVATE=enabled. Публикация баллов остаётся выключена. Пропуск не доказывает безопасность.
+
+CodeQL: run 37298495711 дошёл до анализа, но публикация упала: Code scanning is not enabled for this repository. В приватном repo job пропускается до настройки Code Scanning и переменной AI_OPS_CODEQL_ENABLED=true. После включения анализируются Python и JavaScript/TypeScript. Пропуск не считается успешным SAST.
+
+Токены и платные возможности автоматически не создавались/не подключались. Управляемый .ai/managed не изменён; поправлены только проектные workflows.
