@@ -23,6 +23,47 @@
   }
 
   var nav = document.querySelector('.sc-nav');
+  nav.id = 'sc-navigation';
+  var shell = nav.parentElement;
+  var bar = document.querySelector('.sc-bar');
+  var main = shell.querySelector('.dk-wrap');
+  var narrow = window.matchMedia('(max-width:1199px)');
+  var toggle = document.createElement('button');
+  toggle.type = 'button'; toggle.className = 'dk-btn dk-btn--sm';
+  toggle.textContent = 'Меню'; toggle.setAttribute('aria-controls', nav.id);
+  bar.insertBefore(toggle, bar.firstChild);
+  var shade = document.createElement('div');
+  shade.className = 'sc-shade'; shade.hidden = true;
+  shell.insertBefore(shade, nav);
+  function setMenu(open, focus) {
+    nav.hidden = !open;
+    shell.classList.toggle('sc-shell--closed', !open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Скрыть меню' : 'Открыть меню');
+    shade.hidden = !open || !narrow.matches;
+    main.inert = open && narrow.matches;
+    bar.querySelector('.sc-brand').inert = open && narrow.matches;
+    bar.querySelector('.sc-ctl').inert = open && narrow.matches;
+    document.body.classList.toggle('sc-menu-open', open && narrow.matches);
+    if (focus) toggle.focus();
+  }
+  setMenu(!narrow.matches);
+  toggle.addEventListener('click', function () { setMenu(nav.hidden); });
+  shade.addEventListener('click', function () { setMenu(false, true); });
+  narrow.addEventListener('change', function () { setMenu(!narrow.matches, true); });
+  document.addEventListener('keydown', function (e) {
+    if (nav.hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); setMenu(false, true); }
+    if (e.key === 'Tab' && narrow.matches) {
+      var targets = [toggle].concat(Array.from(nav.querySelectorAll('summary, a')).filter(function (el) { return el.getClientRects().length; }));
+      var first = targets[0], last = targets[targets.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  nav.addEventListener('click', function (e) {
+    if (narrow.matches && e.target.closest('a')) setMenu(false, true);
+  });
   var sections = Array.prototype.slice.call(document.querySelectorAll('section.sc-sec'));
   var group = '';
   var links = [];
@@ -32,13 +73,7 @@
     if (!h) return;
     var title = h.textContent.trim();
     if (!sec.id) sec.id = slug(title);
-    if (sec.dataset.group) {
-      group = sec.dataset.group;
-      var g = document.createElement('div');
-      g.className = 'sc-nav__g';
-      g.textContent = group;
-      nav.appendChild(g);
-    }
+    if (sec.dataset.group) group = sec.dataset.group;
     var eb = document.createElement('p');
     eb.className = 'sc-eyebrow';
     eb.textContent = group + ' · ' + String(i + 1).padStart(2, '0');
@@ -58,20 +93,47 @@
     links.push({ sec: sec, link: l });
   });
 
-  /* Страницы компонентов — группой в конце оглавления, из указателя
-     js/docs-index.js, который собирает tools/build-component-pages.py.
-     Список руками разошёлся бы с набором страниц при первом новом компоненте. */
-  if (window.dkDocsIndex && window.dkDocsIndex.length) {
-    var here = location.pathname.split('/').pop();
-    var g = document.createElement('div');
-    g.className = 'sc-nav__g'; g.textContent = 'Страницы компонентов'; nav.appendChild(g);
-    window.dkDocsIndex.forEach(function (c) {
-      var a = document.createElement('a');
-      a.href = 'component-' + c.slug + '.html'; a.textContent = c.title;
-      if (here === 'component-' + c.slug + '.html') a.setAttribute('aria-current', 'true');
-      nav.appendChild(a);
-    });
+  /* Навигация по задачам: обзор и компоненты рядом, без дублирующего
+     плоского списка. Названия компонентов приходят из общего указателя. */
+  var groups = ['Основы', 'Каркас страницы', 'Управление и фильтры', 'Данные', 'Графики и регионы', 'Обратная связь'];
+  var sectionGroups = {
+    'Каркас':'Каркас страницы', 'Сетка и устройства':'Каркас страницы', 'Размер виджета':'Каркас страницы',
+    'Управление':'Управление и фильтры', 'Фильтры-легенда':'Управление и фильтры', 'Фильтры':'Управление и фильтры', 'Формы':'Управление и фильтры',
+    'Атомы':'Данные', 'Сводка и рейтинг':'Данные', 'Доступность и списки':'Данные', 'Таблица':'Данные',
+    'Календарь':'Графики и регионы', 'Регионы':'Графики и регионы', 'Графики':'Графики и регионы',
+    'Состояние страницы':'Обратная связь', 'Страницы ошибок':'Обратная связь', 'Состояния':'Обратная связь'
+  };
+  var componentGroups = { 'Управление':'Управление и фильтры', 'Фильтры':'Управление и фильтры', 'Данные':'Данные', 'Визуализация':'Графики и регионы', 'Обратная связь':'Обратная связь' };
+  var here = location.pathname.split('/').pop();
+  var showcase = here === 'showcase.html';
+  var sectionLinks = links.slice();
+  nav.replaceChildren();
+  var home = document.createElement('a'); home.href = 'showcase.html'; home.textContent = 'Обзор кита'; nav.appendChild(home);
+  if (!showcase) {
+    var pageGroup = document.createElement('details');
+    var pageTitle = document.createElement('summary'); pageTitle.textContent = 'На этой странице'; pageGroup.appendChild(pageTitle);
+    sectionLinks.forEach(function (x) { pageGroup.appendChild(x.link); }); nav.appendChild(pageGroup);
   }
+  groups.forEach(function (name) {
+    var box = document.createElement('details');
+    var title = document.createElement('summary'); title.textContent = name; box.appendChild(title);
+    if (showcase) {
+      var overview = sectionLinks.filter(function (x) { return (sectionGroups[x.link.textContent] || 'Основы') === name; });
+      overview.forEach(function (x) { box.appendChild(x.link); });
+      box.open = name === 'Основы';
+    }
+    if (!showcase && (name === 'Основы' || name === 'Каркас страницы')) {
+      var basics = name === 'Основы' ? ['Три принципа', 'Акцент', 'Смысловые', 'Отступы', 'Иконки', 'Типографика', 'Язык интерфейса'] : ['Каркас', 'Сетка и устройства', 'Размер виджета'];
+      basics.forEach(function (text) { var a = document.createElement('a'); a.href = 'showcase.html#' + slug(text); a.textContent = text; box.appendChild(a); });
+    }
+    (window.dkDocsIndex || []).filter(function (c) { return componentGroups[c.group] === name; }).forEach(function (c, i) {
+      if (showcase && i === 0) { var label = document.createElement('div'); label.className = 'sc-nav__label'; label.textContent = 'Подробно о компонентах'; box.appendChild(label); }
+      var a = document.createElement('a'); a.href = 'component-' + c.slug + '.html'; a.textContent = c.title;
+      if (here === 'component-' + c.slug + '.html') { a.setAttribute('aria-current', 'page'); box.open = true; }
+      box.appendChild(a);
+    });
+    if (box.children.length > 1) nav.appendChild(box);
+  });
 
   /* Текущий раздел — тот, чей заголовок последним прошёл под шапку. Считается
      по положению, а не по «виден ли раздел»: длинный раздел виден долго, и
@@ -85,13 +147,7 @@
       else x.link.removeAttribute('aria-current');
     });
     // Ссылки на другие страницы компонентов подсветка разделов не трогает.
-    // В узком виде оглавление — строка вбок: текущий пункт держим в поле зрения.
-    // Положение считается относительно самой строки: offsetLeft отсчитывался
-    // от другого предка, и первый пункт уезжал за левый край.
-    if (cur && nav.scrollWidth > nav.clientWidth) {
-      var nr = nav.getBoundingClientRect(), lr = cur.link.getBoundingClientRect();
-      nav.scrollLeft += (lr.left + lr.width / 2) - (nr.left + nr.width / 2);
-    }
+
   }
   var ticking = false;
   window.addEventListener('scroll', function () {

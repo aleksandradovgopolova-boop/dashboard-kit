@@ -48,21 +48,24 @@
   .sc-nav a[aria-current="true"]{ color:var(--ink); background:var(--control-soft); font-weight:var(--weight-ui-strong); }
   .sc-nav a:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:-2px; }
 
-  /* Уже 1200 для оглавления сбоку нет места: оно становится строкой под
-     шапкой, которая листается вбок. Группы в строке не подписаны — там их
-     всё равно не прочесть. */
+  /* Оглавление остаётся слева и на узком экране, вместо длинной строки. */
+  .sc-bar > .dk-btn{ min-height:44px; min-width:44px; }
+  .sc-shell--closed{ grid-template-columns:minmax(0,1fr); }
+  .sc-nav[hidden], .sc-shade[hidden]{ display:none; }
+  .sc-nav details{ margin-bottom:var(--space-3); }
+  .sc-nav summary{ cursor:pointer; font:var(--type-body-bold); padding:var(--space-5);
+    min-height:44px; color:var(--ink); }
+  .sc-nav details a{ margin-left:var(--space-3); min-height:44px; }
+  .sc-nav__label{ font:var(--type-caption); color:var(--ink-3); padding:var(--space-4) var(--space-5); }
+  .sc-shade{ display:none; }
   @media (max-width:1199px){
     .sc-shell{ grid-template-columns:minmax(0,1fr); gap:0; }
-    .sc-nav{ top:56px; z-index:30; max-height:none; display:flex; gap:var(--space-2); overflow-x:auto;
-      padding:var(--space-4) 0; margin:0 calc(var(--page-pad) * -1); padding-inline:var(--page-pad);
-      background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(10px); }
-    .sc-nav__g{ display:none; }
-    .sc-nav a{ flex:none; white-space:nowrap; }
-    /* Полоса прокрутки под строкой читалась как черта-разделитель, которых
-       у кита нет. Что строка листается, и так видно по пункту, обрезанному
-       у края. */
-    .sc-nav{ scrollbar-width:none; }
-    .sc-nav::-webkit-scrollbar{ display:none; }
+    .sc-nav{ position:fixed; left:0; top:56px; bottom:0; width:min(320px, 85vw);
+      z-index:35; max-height:calc(100dvh - 56px); padding:var(--space-6);
+      background:var(--surface); box-shadow:var(--elev-widget); }
+    .sc-shade{ display:block; position:fixed; inset:56px 0 0; z-index:34;
+      background:color-mix(in srgb, var(--ink) 30%, transparent); }
+    .sc-menu-open{ overflow:hidden; }
   }
 
   .sc-hero{ padding:calc(var(--space-9) * 2) 0 var(--space-9); max-width:780px; }
