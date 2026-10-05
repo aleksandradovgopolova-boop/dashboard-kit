@@ -40,4 +40,3 @@
 - `tools/check.py:865:check_hover`
 - `tools/check.py:1818:check_manifest`
 - `tools/check.py:2107:_png_info`
-
