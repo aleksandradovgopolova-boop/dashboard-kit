@@ -38,7 +38,7 @@ jobs:
       id-token: write     # keyless-подпись Sigstore (OIDC)
       attestations: write # запись аттестаций provenance/SBOM
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # SBOM всего дерева в формате SPDX-JSON.
       - name: Сгенерировать SBOM
