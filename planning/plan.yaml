@@ -15,7 +15,7 @@ work:
   title: Согласовать supply-chain CI с доступами приватного репозитория
   type: delivery
   goal: reliable-dashboard-work
-  status: todo
+  status: in_progress
   owner_role: delivery
   depends_on: []
   write_scope:
@@ -28,7 +28,7 @@ work:
   title: Сохранять поле поиска при обновлении выпадающего списка
   type: engineering
   goal: reliable-dashboard-work
-  status: todo
+  status: in_progress
   owner_role: frontend
   depends_on: []
   write_scope:
