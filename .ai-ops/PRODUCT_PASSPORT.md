@@ -16,7 +16,7 @@
 Работающая библиотека: 24 страницы компонентов, демо-экраны, история решений и ревью в документах. Короткая Git-история началась с импорта 5 октября и не измеряет зрелость продукта. Источники: HANDOFF.md, DECISIONS.md, REVIEW.md.
 
 ## Здоровье (продукт / технологии / delivery)
-Продуктовые метрики неизвестны. Технологии: локальная полная проверка прошла — 31 страница в трёх размерах Chrome. dashboard-check, validate, secret-scan, feature-catalog, feature-coverage и record прошли на c12e79e в GitHub. Supply-chain проверка Scorecard упала с Resource not accessible by integration; CodeQL проверяется отдельно. Источники: GitHub Actions на c12e79e и docs/ai-ops-integration.txt.
+Продуктовые метрики неизвестны. Технологии: локальная полная проверка прошла — 31 страница в трёх размерах Chrome. dashboard-check, validate, secret-scan, feature-catalog, feature-coverage и record прошли на c12e79e в GitHub. Supply-chain проверка Scorecard упала с Resource not accessible by integration; CodeQL дошёл до анализа, но публикация упала: Code Scanning не включён (run 37298495711). В PR #8 недоступные проверки явно ограничены, основная регрессия прошла. Источники: GitHub Actions на c12e79e и docs/ai-ops-integration.txt.
 
 ## Версия и последний релиз
 Версия продукта и релизные теги не заданы. **4.3.2 — версия AI Ops, а не dashboard-kit.**
