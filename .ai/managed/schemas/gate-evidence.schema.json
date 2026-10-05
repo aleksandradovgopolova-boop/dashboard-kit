@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-ops-kit.dev/schemas/gate-evidence.schema.json",
+  "title": "GateEvidence",
+  "description": "Вход gate_executor: gate_id -> доказательство исхода гейта. Заполняется прогонами валидаторов или вердиктами reviewer-стадий (--collect-evidence). Executor запрещает pass, чей required_evidence не подтверждён (provided/passing-checks).",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "status": { "type": "string", "enum": ["pass", "warn", "fail"] },
+      "source": { "type": "string", "enum": ["deterministic", "ai_judgment", "human"], "description": "Веха 4.2 (#588): честный источник этого доказательства — deterministic (тест/lint/CI/schema, воспроизводимо), ai_judgment (заключение AI-судьи или самозаявление писателя — advisory-мнение) или human. Авторитетный источник gate_executor выводит из вида гейта (evidence_source); это поле — самодекларация producer'а (напр. deterministic-коллектор помечает свой прогон deterministic), необязательное и не переопределяет вывод из структуры гейта." },
+      "provided": { "type": "array", "items": { "type": "string" }, "description": "ключи required_evidence, подтверждённые для этого гейта" },
+      "checks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "status": { "type": "string", "enum": ["pass", "warn", "fail"] },
+            "detail": { "type": "string" }
+          },
+          "required": ["id", "status"],
+          "additionalProperties": false
+        }
+      },
+      "evidence": { "type": "array", "items": { "type": "string" } },
+      "warnings": { "type": "array", "items": { "type": "string" } },
+      "blockers": { "type": "array", "items": { "type": "string" } },
+      "override": {
+        "type": "object",
+        "properties": {
+          "by": { "type": "string" },
+          "reason": { "type": "string" },
+          "at": { "type": "string" }
+        },
+        "required": ["by", "reason"],
+        "additionalProperties": false
+      },
+      "pending_human": { "type": "boolean", "description": "Гейт ждёт решения человека (отказ провайдера, требующий человеческого вмешательства)" },
+      "human_handoff": { "type": "boolean", "description": "Гейт передан человеку для принятия решения" }
+    },
+    "required": ["status"],
+    "additionalProperties": false
+  }
+}
