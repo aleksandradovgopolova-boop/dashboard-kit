@@ -29,7 +29,7 @@ jobs:
     # Обкатано на живом self-hosted стенде ии-среды, а не придумано.
     runs-on: ${{ vars.CI_RUNNER_LINUX || 'ubuntu-latest' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: {fetch-depth: 0}   # нужна история для git diff PR (проверка параллельной безопасности)
       # Python ставим ТОЛЬКО на раннерах GitHub. На своей машине `setup-python` уходит в
       # tool cache по пути раннеров GitHub (`/Users/runner`), которого там нет, а `pip install`
