@@ -33,7 +33,7 @@ jobs:
     # `vars.CI_RUNNER_LINUX` — и кит поедет на вашей машине (обкатано на self-hosted стенде).
     runs-on: ${{ vars.CI_RUNNER_LINUX || 'ubuntu-latest' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: {fetch-depth: 0}
       # Python ставим ТОЛЬКО на раннерах GitHub. На своей машине `setup-python` уходит в tool cache
       # по пути раннеров GitHub, которого там нет, а `pip install` в системный python Ubuntu 24.04

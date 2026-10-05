@@ -39,7 +39,7 @@ jobs:
     # Обкатано на живом self-hosted стенде ии-среды, а не придумано.
     runs-on: ${{ vars.CI_RUNNER_LINUX || 'ubuntu-latest' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         # Токен для пуша ветки и создания PR. Если задан secret AI_OPS_PAT (fine-grained PAT или
         # токен GitHub App с правами contents+pull-requests) — берём его: тогда update-PR авторства
         # этого токена, и обычный CI дочки (`on: pull_request`) на нём ЗАПУСКАЕТСЯ. Без секрета —
