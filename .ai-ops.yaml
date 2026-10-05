@@ -1,0 +1,82 @@
+# .ai-ops.yaml — заготовка child-конфига (создаётся ai-ops init, отредактируйте под проект)
+schema_version: 1
+kind: ai-ops-child-config
+parent:
+  source: git+https://github.com/aleksandradovgopolova-boop/ai-ops-kit.git
+  installed_version: 4.3.2
+  allowed_version_range: ">=4.0.0 <5.0.0"
+  # КАНАЛ — ФАКТ, А НЕ ПОЖЕЛАНИЕ (19.08.2026). Здесь стоял `stable`, и он попадал в каждую
+  # установку, тогда как сам пакет заработал `qualification`. Значение сверяется тестом
+  # `test_the_shipped_example_declares_a_channel_the_package_can_give`: заготовка не вправе
+  # обещать канал сильнее того, что пакет отдаёт. Поднимете свой — `./ai-ops doctor` скажет,
+  # выполнимо ли это сегодня. Словарь: edge | qualification | stable.
+  update_channel: stable
+  update_policy: pr
+  auto_update: true   # по умолчанию ВКЛ: ежедневный workflow сам открывает update-PR (не авто-мерж;
+                      #   мажорный bump всё равно блокируется). Поставьте false, чтобы отключить (опт-аут).
+standard:             # SR-4: версия стандарта репозитория, ОТДЕЛЬНАЯ от версии пакета
+  version: 3          # какой версии стандарта соответствует репозиторий (init ставит текущую пакета)
+  profile: ai-product # профиль требований: выбирает применимые ярусы Tier 1/2/3 (#609)
+  invariants: []      # включённые инварианты сверх профиля (пусто = профиль по умолчанию)
+  # OVERRIDE требований стандарта (SR-21..23). Отключить требование можно ТОЛЬКО с причиной (пустая
+  # не проходит, SR-21) и со сроком/условием снятия (SR-22): просроченный override становится
+  # находкой, а не тишиной. Каждый override виден в governance-отчёте, и число not_applicable в
+  # отчёте равно числу активных override (SR-23). Раскомментируйте по необходимости:
+  # overrides:
+  #   - requirement: "ARCHITECTURE.md::Наблюдаемость"   # путь артефакта или 'путь::Секция'
+  #     reason: "сервис без телеметрии — раздел неприменим на этом стеке"
+  #     review_by: "2027-01-01"                          # дата пересмотра (или remove_when: "когда появится APM")
+project:
+  name: dashboard-kit
+  documentation_language: ru
+  confidentiality_policy: internal
+presets: {enabled: []}
+adapters: {enabled: [claude-code, codex, generic]}
+providers:
+  default: openai
+  configured:
+    - {id: anthropic, credentials_ref: "env:ANTHROPIC_API_KEY"}
+    - {id: openai, credentials_ref: "env:OPENAI_API_KEY"}
+  fallback_chain: [openai, anthropic]
+runtimes: {default: codex, configured: [claude-code, codex, generic-orchestrator]}
+openspec: {enabled: true, profile: core, schema: spec-driven}
+agents: {source: parent-package, disabled: [], custom: []}
+workflows:
+  mappings: {bug: QUICK, feature: ENGINEERING, discovery: PRODUCT, research: RESEARCH}
+quality_gates:
+  blocking: [intake_completeness, requirements, specification, plan_readiness, implementation_verification, code_review]
+  overrides: []
+routing_policy: default
+approval_policy: {human_approval_required_for: [protected_paths, destructive]}
+overlays: {project: .ai/project/, custom: .ai/custom/}
+protected_paths: [.github/workflows/]
+confidentiality_policy: {send_code_to_external_provider: allowed}
+
+# v3.35 Human Communication Layer: как кит разговаривает с ЧЕЛОВЕКОМ в этом репозитории.
+# `product` (по умолчанию) — сначала смысл и результат, техника по запросу. Меняется и обычной
+# фразой: «рассказывай подробнее техническую часть» -> technical, «полный контекст» -> debug.
+communication: {audience: product, detail_level: concise, explain_jargon: true, technical_details: on_request}
+
+# v3.35 Модель продуктового репозитория: доопределение сигнальных путей под ЭТОТ стек.
+# Кит знает типовые пути; какие пути в этом продукте относятся к контуру, знает владелец.
+# Доопределение превращает `unknown` («не умею видеть здесь») в проверяемое состояние — кит
+# ничего не выдумывает вместо вас. Раскомментируйте и укажите свои.
+# product_operating_model:
+#   # Подтверждённое владельцем сильнее любого вывода кита: эти факты кит перестаёт угадывать и
+#   # перестаёт переспрашивать (состояние user_confirmed).
+#   confirmed:
+#     primary_user: внутренние аналитики
+#     production_env: prod
+#   contours:
+#     analytics_learning: {change_signals: ["src/telemetry/**", "src/**/events.ts"]}
+#     data_contracts:     {change_signals: ["src/domain/**"]}
+#     # Где у ЭТОГО продукта лежит правда контура. Объявление владельца сильнее догадки кита:
+#     # пути кита остаются, но перестают быть обязательными. Без этого находка «источник истины
+#     # не обновлён» срабатывает на каждом коммите в контур, который поддерживается как надо.
+#     # ВАЖНО: не называйте истиной то, что меняется вместе с кодом. Описание контракта — истина,
+#     # схемы и миграции — сигнал. Иначе сигнал и истина совпадут, контур станет
+#     # самоудовлетворяющимся, и гейт не сможет сработать никогда (проверено замером на 186
+#     # коммитах: с миграциями в истине 0 находок, без них — 1 настоящая).
+#     research_decisions:
+#       source_of_truth: [docs/architecture/decisions/]
+#       change_signals: ["docs/architecture/decisions/**", "**/ADR-*.md"]

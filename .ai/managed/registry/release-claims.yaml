@@ -1,0 +1,303 @@
+# release-claims.yaml — machine-readable claims о ТЕКУЩЕМ релизе + runtime-статусах (v3.8.1 Release Truth
+# Alignment). ЕДИНСТВЕННЫЙ источник публичных чисел/статусов; validate_release_claims.py (в CI) ловит дрейф
+# между этим файлом и фактическим состоянием (VERSION, python3-проверки в AGENTS.md, registry/agents.yaml,
+# registry/runtimes.yaml) И требует, чтобы README/ROADMAP ссылались на текущую версию. ОБНОВЛЯТЬ при релизе.
+schema_version: 1
+registry_type: release-claims
+
+version: 4.3.2
+# Поле `phase` УБРАНО (04.09.2026, лента release-metadata). Это была свободная проза релиза, которая
+# дублировала заголовок раздела CHANGELOG. `release_bump` бампает ЧИСЛО версии по всем поверхностям и
+# пишет заголовок CHANGELOG из `--title`, но `phase` не трогал, а `validate_release_claims` проверяет
+# числа/ссылки, не прозу — поэтому `phase` молча застрял на «v3.39.2» при version 4.0.0. Заявление о
+# том, ЧТО в релизе, живёт в одном месте — заголовке CHANGELOG (и `patch_note` в release-notes.yaml);
+# второй незапроверяемой копии здесь быть не должно. Ни код, ни валидатор, ни схема поле не читали.
+# КАНАЛ ЗАРАБАТЫВАЕТСЯ, А НЕ ОБЪЯВЛЯЕТСЯ (F-030, по внешнему ревью 12.08.2026).
+#
+# До этой правки здесь стояло `channel: stable`, и не проверял его НИКТО. Слово было
+# самообъявлением — тот же класс, против которого стоит весь кит. Цена замерена в тот же день: тег
+# v3.36.9 был выпущен как `stable` и содержал P1 (F-022 — политика обновлений не исполнялась),
+# исправленный через час после релиза. Дочки при этом получили именно тег.
+#
+# Теперь `stable` требует ПОЛЕВЫХ доказательств на этой самой версии, и это проверяет
+# `validate_release_claims`. Критерии ниже машиночитаемы; менять их — осознанное решение владельца,
+# а не правка строки.
+channel: stable
+channels:
+  edge:
+    what: "то, что влито в main; лучший известный код, но без гарантий"
+    requires: []
+  qualification:
+    what: "выпущен тег, собственный контур зелёный; в дочки ещё не обкатан"
+    requires: [own_ci_green]
+  stable:
+    what: "обкатан в поле: обновление доехало до живых дочек и там ничего не сломало; продуктовый слой реализован"
+    requires: [own_ci_green, field_evidence, product_layer_ready]
+    field_evidence_min_repos: 2
+    # ep-2026-08-20-stable-includes-product-operating-layer: stable не объявить, пока пять целей
+    # Product OS (product-operating-layer, backlog-intelligence, roadmap-and-delivery,
+    # ai-product-operations, autonomous-product-loop) не достигнуты. «Канал заработан» и
+    # «продукт-как-ОС готов» — один рубеж.
+    product_layer_goals:
+      - product-operating-layer
+      - backlog-intelligence
+      - roadmap-and-delivery
+      - ai-product-operations
+      - autonomous-product-loop
+
+# НАЗВАННОЕ МЕНЮ стратегий доставки обновления в дочку. Дочка выбирает ОДНУ в .ai-ops.yaml ->
+# parent.update_strategy; резолвер `resolve_update_strategy` (installer/ai_ops.py) читает выбор и
+# СВОЙСТВА стратегии отсюда. Это ДЕКЛАРАЦИЯ, а не поведение: кит лишь НАЗЫВАЕТ доступные стратегии
+# и сообщает, какую выбрал владелец. Актуатор, который сам применяет обновление к чужому
+# репозиторию, здесь НЕ объявляется и не строится — `pr`/`manual` исполняет установщик по решению
+# владельца, `scheduled-batch`/`auto-stable` пока только названы.
+update_strategies:
+  pr:                    # ДЕФОЛТ: отсутствие выбора читается как pr.
+    what: "обновление готовится как PR на ревью владельца"
+    default: true
+  manual:
+    what: "владелец применяет обновление сам"
+  scheduled-batch:
+    what: "обновления группируются и открываются одним PR по расписанию — тоже под ревью владельца"
+  auto-stable:
+    # ДЕКЛАРАЦИЯ свойства, не автоприменение. Доступна ТОЛЬКО когда пакет заработал канал stable
+    # И владелец включил её явно (parent.update_strategy_opt_in: true). По умолчанию выключена.
+    what: "автоприменение из канала stable; требует stable-канал и явного включения владельцем"
+    requires_channel: stable
+    enabled: false
+
+# ПОЛЕ, а не намерение. Запись сюда означает: эта версия реально доехала до этого репозитория и
+# результат известен. Пустой список — нормальное состояние свежего патча, и оно ЧЕСТНЕЕ, чем
+# `stable` без основания.
+field_evidence:
+  # 20.08.2026. Первая запись за всё время: до сегодня список был пуст, и это значило, что ни одна
+  # версия не была обкатана в поле ВООБЩЕ — `stable` не мог наступить не из-за строгости критерия,
+  # а из-за отсутствия хоть одного доказательства.
+  - repo: ai-ops-cockpit
+    version: 3.36.12
+    date: '2026-08-20'
+    outcome: ok
+    how: >-
+      Обновление 3.36.10 -> 3.36.12 приехало ПО ПОЛИТИКЕ дочки (`update_policy: pr`): подготовлено в
+      ветке `ai-ops/update-v3.36.12`, рабочее дерево владельца не тронуто, PR #48 зелёный и слит.
+      После обновления managed-слой целостен (561 файл сверен с .checksums.json), `validate_ai_ops_child`
+      OK, движок отвечает (`next` даёт следующую работу с названной причиной).
+    caveat: >-
+      Два замечания `doctor` РАЗОБРАНЫ и находками НЕ являются: оба — расхождение версий между
+      локальным клоном кита (main) и установленной дочкой (3.36.12), а не дефект. Замечания на
+      «конфиг дочки не проверен» и «шаблоны CI старее кита» проверялись отдельно: валидатор
+      появился ПОСЛЕ тега, шаблоны в теге свои. Проверено до того, как названо находкой — тот же
+      разбор, что и весь день.
+  # 01.09.2026. Раскатка v3.39.0 на две оставшиеся дочки — второе доказательство поля.
+  - repo: ai-ops-cockpit
+    version: 3.39.0
+    date: '2026-09-01'
+    outcome: ok
+    how: >-
+      Обновление 3.38.0 -> 3.39.0 приехало ПО ПОЛИТИКЕ дочки (`update_policy: pr`, канал
+      `qualification`): установщик подготовил ветку `ai-ops/update-v3.39.0`, рабочее дерево владельца
+      и чужие worktree фич не тронуты, PR #55 зелёный (validate+record) и слит. На origin/main
+      VERSION = 3.39.0, managed целостен, кодовый фикс приёмки (Fix C) на месте.
+  - repo: wow-repo
+    version: 3.39.0
+    date: '2026-09-01'
+    outcome: ok
+    how: >-
+      ПЕРВЫЙ заезд кита на `main`, где кита не было вовсе (origin/main — предок ветки, слияние
+      чистое). Обновление 3.36.8 -> 3.39.0 применено на ветку PR #11; wow-repo осознанно переведён
+      stable -> qualification как второй ранний получатель. PR #11 зелёный по обязательным проверкам
+      и слит; VERSION на origin/main = 3.39.0, продуктовый слой `.ai-ops/` создан.
+    caveat: >-
+      Всплыл дефект #384: гейт parallel-safety валит апдейт-PR за смешение кода с координационными
+      planning/plan.yaml + history/ (их вносит миграция плана внутри update). Обошли вручную —
+      координационные вынесены из код-PR, план-стор заведён отдельным координаторским PR #12. Заезд
+      СОСТОЯЛСЯ, но не полностью автоматически: ручной шаг на каждую голую дочку до починки #384.
+  # 14.09.2026. Раскатка v4.3.0 на две живые дочки — доказательство поля для мажора 4.x.
+  - repo: ai-ops-cockpit
+    version: 4.3.0
+    date: '2026-09-14'
+    outcome: ok
+    how: >-
+      Обновление 4.0.0 -> 4.3.0 приехало ПО ПОЛИТИКЕ дочки (`update_policy: pr`, канал
+      `qualification`): установщик подготовил ветку `ai-ops/update-v4.3.0`, PR #58 слит. Диапазон
+      совместимости попутно исправлен на `>=4.0.0 <5.0.0` (был устаревший `<4.0.0`). Содержательные
+      проверки зелёные: validate, feature-coverage, feature-catalog, gitleaks (secret scan), record.
+      На origin/main VERSION = 4.3.0.
+    caveat: >-
+      Проверка CodeQL (python) красная НЕ из-за дефекта: сам скан отработал чисто (304/304 файла,
+      ноль находок), упала только выгрузка SARIF — в настройках репозитория не включён GitHub code
+      scanning, которого требует только что установленный `ai-ops-codeql.yml`. Это включаемая
+      настройка репозитория владельцем, к обновлению отношения не имеет; защиты веток нет, слияние
+      красный CodeQL не блокировал.
+  - repo: ai-ops-live-587
+    version: 4.3.0
+    date: '2026-09-14'
+    outcome: ok
+    how: >-
+      Обновление 4.0.0 -> 4.3.0 приехало ПО ПОЛИТИКЕ дочки (`update_policy: pr`, канал
+      `qualification`): PR #7, чистое внутри мажора (без `--force`), слит. Содержательные проверки
+      зелёные: validate, feature-coverage, feature-catalog, gitleaks (secret scan), record. На
+      origin/main VERSION = 4.3.0.
+    caveat: >-
+      Проверка CodeQL (python) красная НЕ из-за дефекта: сам скан отработал чисто, ноль находок,
+      упала только выгрузка SARIF — в настройках репозитория не включён GitHub code scanning,
+      которого требует только что установленный `ai-ops-codeql.yml`. Это включаемая настройка
+      репозитория владельцем, к обновлению отношения не имеет; защиты веток нет, красный CodeQL
+      слияние не блокировал.
+# patch_note ПЕРЕЕХАЛ в `registry/release-notes.yaml` (20.08.2026, работа
+# `release-claims-stays-in-the-kit`): 61 336 Б релизной прозы — 75% этого файла — ехали в
+# каждую дочку, где их не читает ни одна строка кода. Здесь остался тот, кого дочка
+# ЧИТАЕТ: `channel` (его смотрит `installer.package_channel` из `init`/`update`/`doctor`).
+checks_count: 0
+agents_count: 42
+# Числа гейтов — DERIVED и ЗДЕСЬ БОЛЬШЕ НЕ ХРАНЯТСЯ (как validators_count, см. ниже). Раньше
+# gates_count/mvp_blocking_count лежали литералами тут и в knowledge/claims.yaml — общая точка, которую
+# каждая лента двигала руками, а добавление гейта смешивало код (quality/gates.yaml) с правкой этого
+# КООРДИНАЦИОННОГО файла и упиралось в parallel-safety. Теперь число ВЫВОДИТСЯ ИЗ ФАКТА при проверке:
+# `validate_release_claims.derived_gate_counts` считает гейты в `quality/gates.yaml`. Двигать нечего —
+# расхождение невозможно by construction, PR с новым гейтом не обязан править это число.
+# Требование «каждый гейт из mvp_blocking_gates обязан быть blocking: true» никуда не делось — его
+# держит `validate_release_claims.mvp_gates_are_blocking` независимо от счётчика.
+# Верификация самих валидаторов (рекомендация №6 внешнего ревью).
+# validators_count / validators_externally_tested ЗДЕСЬ БОЛЬШЕ НЕ ХРАНЯТСЯ. Это были derived-числа —
+# общая точка, которую каждая лента двигала руками, а вливавшийся вторым пересчитывал
+# (docs/parallel-execution-retro.md, работа `derived-counts-are-computed-not-declared`). Теперь число
+# ВЫВОДИТСЯ ИЗ ФАКТА при проверке: `validate_release_claims.derived_verification_counts` считает файлы
+# `validation/validate_*.py` и те из них, чьё имя упомянуто в `tests/`. Двигать нечего — расхождение
+# невозможно by construction, PR не обязан править это число. Публичный текст (ProductStatus и др.)
+# по-прежнему сверяется с ЭТИМ фактом через `derived_numbers_in_docs`, а не с хранимым литералом.
+# История подъёмов 74→80 (в т.ч. урок «валидатор есть, но нигде не запускался», закрытый лентой 2) —
+# в git и в docs/parallel-execution-retro.md.
+# Связность ядра: ДЕРИВИРУЕТСЯ из packages/layering.yaml (см. derived_layering_counts).
+# Появились 2026-08-13: числа жили в прозе и не сверялись ничем, поэтому документы кита
+# говорили 12/210 при фактическом ратчете 7/52 — и CI был зелёным.
+layering_mutual_pairs: 0
+layering_cycles_longer_than_two: 0
+
+qualified_on: >
+  provider-neutral портфель по РОЛЯМ: дешёвый API-writer (money-mode) + СИЛЬНЫЙ writer (локальный
+  claude -p, без ключа) на сложном full-stack + независимый дешёвый ревьюер (deepseek, writer≠judge)
+  + ЧЕЛОВЕК на strict security #5. Sonnet НЕ требуется. Доказано live end-to-end (draft PR на ИИ-Среде).
+
+# Публичная поверхность обязана ссылаться на текущую версию (иначе рассказывает о прошлом продукте).
+docs_must_reference_version: [README.md, ROADMAP.md]
+
+# v3.36.1: «версия встречается где-то в файле» — НЕ проверка. ROADMAP говорил в шапке «текущий
+# канал — v3.34.0 stable» и одновременно содержал ниже раздел про 3.36: подстрока находилась,
+# заявление врало, и релиз 3.36.0 прошёл валидатор с обоими утверждениями сразу. Читаем ИМЕННО ту
+# строку, которая объявляет текущий канал. Пропажа образца — тоже ошибка: ослепшая проверка хуже
+# отсутствующей.
+# КАНАЛ В ШАБЛОНЕ НЕ ЗАШИТ (F-030). Здесь стояло слово `stable` внутри регулярки, и первое же
+# честное понижение канала до `qualification` сделало обе проверки слепыми — валидатор сам это и
+# сказал («проверка ослепла»). Канал подставляется из поля `channel` этого же файла: объявление в
+# документе обязано совпадать И по версии, И по каналу, а шаблон не имеет права молча разойтись с
+# реестром.
+authoritative_version:
+  - {file: README.md,  pattern: '\*\*v(\d+\.\d+\.\d+) {channel}\*\*'}
+  - {file: ROADMAP.md, pattern: 'текущий канал — \*\*v(\d+\.\d+\.\d+) {channel}\*\*'}
+
+# Числа в прозе обязаны совпадать с machine-readable claim: README писал «33 гейта», когда claim
+# уже говорил 34. Руками набранное число живёт своей жизнью до первого изменения.
+# ПОКРЫТИЕ БЫЛО НЕПОЛНЫМ, и это дало дрейф (внешнее ревью 12.08.2026). Правило существовало и
+# работало — но перечисляло ОДИН файл, README. Поэтому `docs/index.md`,
+# `docs/architecture/execution-engine.md` и `docs/architecture/quality-gates.md` говорили «32 гейта»
+# при фактических 34, и `CLAIMS-OK` печатался на каждом прогоне. Проверка без охвата — половина
+# проверки, а половина создаёт видимость полной.
+#
+# Числа помечены МАРКЕРОМ `<!-- claim:gates-total -->` (невидим при рендере). Причина: шаблон по
+# прозе ломается от переформулировки, и первая попытка «искать число рядом со словом гейт» сразу дала
+# ложный красный — в ROADMAP рядом стоят «21 гейт» (блокирующие) и «34» (всего). Маркер однозначен, а
+# его исчезновение даёт ОШИБКУ «проверка ослепла», не тишину.
+derived_numbers_in_docs:
+  - {file: README.md, pattern: '(\d+)\s*<!-- claim:gates-total -->', claim: gates_count}
+  # F-04 (аудит 2026-09-09): README писал «51 роль» при agents_count=42 — число было в реестре, но
+  # ни к одному доку не привязано (built≠wired). Теперь заверяется, как и gates_count.
+  - {file: README.md, pattern: '(\d+)\s*<!-- claim:agents-total -->', claim: agents_count}
+  - {file: ROADMAP.md, pattern: '(\d+)\s*<!-- claim:gates-total -->', claim: gates_count}
+  - {file: docs/index.md, pattern: '(\d+)\s*<!-- claim:gates-total -->', claim: gates_count}
+  - {file: docs/architecture/execution-engine.md, pattern: '(\d+)\s*<!-- claim:gates-total -->', claim: gates_count}
+  - {file: docs/architecture/quality-gates.md, pattern: '(\d+)\s*<!-- claim:gates-total -->', claim: gates_count}
+  # Собственный продуктовый контекст кита: до 2026-08-13 он в охват НЕ входил, и именно он разъехался
+  # (34/13 гейтов при 35/14, 12/210 связности при 7/52). Дочки этих файлов не получают — это статус
+  # САМОГО кита, и врать в нём хуже, чем в README: с него начинается каждая сессия.
+  - {file: .ai/project/context/product/ProductStatus.md, pattern: '(\d+)\s*<!-- claim:gates-total -->', claim: gates_count}
+  - {file: .ai/project/context/product/ProductStatus.md, pattern: '(\d+)\s*<!-- claim:validators-total -->', claim: validators_count}
+  - {file: .ai/project/context/product/ProductStatus.md, pattern: '(\d+)\s*<!-- claim:layering-pairs -->', claim: layering_mutual_pairs}
+  - {file: .ai/project/context/product/ProductStatus.md, pattern: '(\d+)\s*<!-- claim:layering-cycles -->', claim: layering_cycles_longer_than_two}
+  - {file: .ai/project/context/now.md, pattern: '(\d+)\s*<!-- claim:layering-pairs -->', claim: layering_mutual_pairs}
+  - {file: .ai/project/context/now.md, pattern: '(\d+)\s*<!-- claim:layering-cycles -->', claim: layering_cycles_longer_than_two}
+
+# Каждый claim == фактический status в registry/runtimes.yaml (CI ловит расхождение заявленных
+# возможностей адаптеров/оркестратора). Обновлено под 3.8: concurrent + fan-in + resume доказаны live.
+runtime_capabilities:
+  - {runtime: generic-orchestrator, capability: parallel_execution, status: verified}
+  - {runtime: generic-orchestrator, capability: resumability,      status: verified}
+  # claude-code — first-class executing adapter (v3.9.0): кит оркестрирует локальный claude -p read-only
+  # как сильного writer'а; Claude предлагает, кит владеет worktree/diff/evidence/gates/delivery.
+  - {runtime: claude-code, capability: parallel_execution, status: documented}
+
+# ЦЕЛЕВЫЕ границы (не дефекты, объявлены явно): human на strict security #5; сильный writer на сложном
+# full-stack. Автономный дешёвый auto-close security-судья недостижим -> future_opportunities (см. BQP).
+standing_boundaries:
+  - human_strict_security_5
+  - strong_writer_for_complex_fullstack
+  # v3.34: `validation` из колеса УШЁЛ — переехал в ai_ops_kit/validation/. Остался ОДИН родовой
+  # top-level: `tools`. В любом окружении, куда поставлен кит, чужой `import tools` резолвится в
+  # него — это конфликт имён, и он объявлен границей ОСОЗНАННО. Убирать его тем же способом рано:
+  # сначала надо решить, должен ли `tools` вообще быть Python-пакетом или остаться набором точек
+  # входа для скриптов и документации child. Ратчет на состав top-level имён —
+  # tests/unit/test_distribution_surface.py: новое родовое имя молча не появится, а это — сократится
+  # только осознанно, вместе с тестом.
+  - generic_toplevel_name_tools
+  # v3.33.3: остаточный `.pth`-пояс, который `setup.py` писал в site-packages до v3.33.1, НЕ
+  # снимается ни `pip uninstall`, ни установкой/обновлением кита — и это решение, а не недоделка.
+  #   pip не может: файла нет в RECORD установки (он писался side effect'ом сборки, а не как её
+  #     результат), а хука uninstall в pip/PEP 517 не существует вовсе.
+  #   installer не должен: молча удалять файлы за пределами своего окружения — тот же дефект, что
+  #     и молча их писать, только с обратным знаком. Именно эта вольность и создала пояс.
+  # Поэтому лечение — ЯВНОЕ: `ai-ops doctor` находит пояс, называет файл и команду, блокирует
+  # вердикт (пояс делает зелёными fail-closed-проверки), а `doctor --remove-path-belt` удаляет по
+  # просьбе. Проверка — tests/unit/test_path_hygiene.py, tests/unit/test_installer.py.
+  - residual_pth_belt_removed_only_on_explicit_request
+
+# v3.34: ОХВАТ ДОКАЗАТЕЛЬСТВА. «Полный контур зелёный» — заявление без величины: PR #38 сделал его
+# на основании ./scripts/check-full.sh, и джоба python39-compat опровергла его в том же релизе.
+# Полнота бывает двух разных родов, и путать их значит выдавать частное за общее. Имена ниже —
+# словарь, которым обязано пользоваться доказательство релиза; validate_release_claims требует,
+# чтобы оба охвата были объявлены, а заявление о полноте называло, какой из них получен.
+evidence_scopes:
+  full-current-python:
+    obtained_by: "./scripts/check-full.sh"
+    covers: >
+      весь pytest на ОДНОМ интерпретаторе — том, что стоит у запускающего. Это охват разработчика:
+      быстрый, локальный, и он ничего не знает о версиях, кроме своей.
+    does_not_cover: >
+      объявленный пол requires-python, установку в чистое окружение, другие ОС. Ни один дефект
+      совместимости здесь не виден в принципе — не потому что их нет, а потому что не с чем сравнить.
+  compatibility-matrix:
+    obtained_by: "CI: джобы python39-compat, pipeline-e2e (3.9/3.12), clean-install"
+    covers: >
+      объявленный пол requires-python и установку туда, где нет ни кита, ни pytest, ни PYTHONPATH.
+    does_not_cover: >
+      полный набор тестов на каждой версии матрицы: на полу гоняются контрактные тесты и e2e,
+      а не всё подряд. Охват честнее назвать «пол проверен», чем «матрица покрыта целиком».
+
+# v3.9.1: устаревшие маркеры «текущего статуса», которых НЕ должно быть в README/ROADMAP (ловит повторный
+# дрейф в CI). Добавлять сюда стейл-фразы при их удалении из публичной поверхности.
+forbidden_stale_markers:
+  - "Current Forward Roadmap (актуально с v3.0.14)"
+  - "ЗАКРЫТА (v3.0.0 stable, 2026-07-21, claude-sonnet-5)"
+  - "sequential-only"                        # кит умеет concurrent parallel-2 (parallel_live.py) с 3.8
+  - "не запускает параллельных агентов"
+
+# v3.9.2: файлы, сканируемые на forbidden_stale_markers (шире docs_must_reference_version — вся публичная
+# поверхность, включая docs/ и NOTICE). Добавлять сюда доки при выявлении в них дрейфа.
+stale_marker_files:
+  - README.md
+  - ROADMAP.md
+  - NOTICE.md
+  - docs/parallel-sessions.md
+  - docs/QUICKSTART.md
+  - docs/adoption-guide.md
+  - VISION.md
+  - AGENTS.md
