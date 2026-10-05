@@ -144,11 +144,10 @@
     });
   });
   addGroup('Редполитика', [
-    ['О редполитике','redpolitika'], ['Пишем чисто','pishem-chisto'], ['Пишем просто','pishem-prosto'],
-    ['Пишем компетентно','pishem-kompetentno'], ['Пишем для человека','pishem-dlya-cheloveka'],
+    ['О редполитике','redpolitika'], ['Принципы текста','principy-teksta'],
     ['Интерфейсные тексты','yazyk-interfeysa'], ['Глоссарий','glossariy']
   ], false);
-  var used = visual.map(function (x) { return x[1]; }).concat(['komponenty','redpolitika','pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka','yazyk-interfeysa','glossariy','usability','dostupnost']);
+  var used = visual.map(function (x) { return x[1]; }).concat(['komponenty','redpolitika','principy-teksta','pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka','yazyk-interfeysa','glossariy','usability','dostupnost']);
   var examples = showcase ? sectionLinks.filter(function (x) { return !used.includes(x.sec.id); }).map(function (x) { return [x.link.textContent,x.sec.id]; }) : [
     ['Каркас страницы','karkas'], ['Акцент продукта','akcent'], ['Отступы','otstupy'], ['Управление','upravlenie'],
     ['Фильтры-легенда','filtry-legenda'], ['Фильтры','filtry'], ['Атомы','atomy'], ['Сводка и рейтинг','svodka-i-reyting'],
@@ -192,6 +191,7 @@
   function showArticle() {
     if (!showcase) return;
     var id = location.hash.slice(1);
+    if (['pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka'].includes(id)) id = 'principy-teksta';
     var selected = sections.find(function (sec) { return sec.id === id; });
     main.querySelector('.sc-hero').hidden = !!selected;
     sections.forEach(function (sec) {
