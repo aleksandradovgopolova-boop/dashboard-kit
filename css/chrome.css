@@ -112,7 +112,7 @@
   align-items: center;
   gap: var(--gap-tight);
   height: var(--control-lg);
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-6);
   border-radius: var(--radius-md);
   color: var(--ink-2);
   text-decoration: none;
@@ -138,17 +138,7 @@
   font-weight: var(--weight-ui-strong);
 }
 
-.dk-side__item[aria-current]::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2px;
-  height: 20px;
-  border-radius: var(--radius-full);
-  background: var(--control-on);
-}
+.dk-side__item[aria-current]::before { content:none; }
 
 .dk-side__item .dk-i { flex: none; color: currentColor; }
 
@@ -380,9 +370,9 @@
   .dk-top__at { grid-area: at; margin-top: 0; }
   .dk-top__tools {
     grid-area: tools;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: flex-start;
-    overflow-x: auto;
+    overflow: visible;
     scrollbar-width: none;
     margin: var(--space-4) calc(var(--page-pad) * -1) calc(var(--space-6) * -1);
     padding: var(--space-2) var(--page-pad) var(--space-6);
@@ -522,7 +512,7 @@
     max-height: 70dvh;   /* как и весь каркас: vh на телефоне меряется без адресной строки */
     border-radius: var(--radius-xl);
     box-shadow: var(--elev-overlay);
-    padding: var(--space-3);
+    padding: var(--space-6);
     display: none;
   }
 
@@ -639,4 +629,13 @@
 .dk-task-nav { display: none; }
 @media (max-width: 767px) {
   .dk-page { scroll-padding-bottom: calc(68px + var(--space-7) * 2 + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* На узком экране тема остаётся рядом с заголовком, фильтры — ниже. */
+@media (max-width:767px){
+  .dk-top{ grid-template-columns:auto minmax(0,1fr) auto; grid-template-areas:"burger title theme" "burger at theme"; }
+  .dk-top__tools{ display:contents; }
+  .dk-top__tools > .dk-seg{ grid-area:theme; }
+  .dk-top__tools > :not(.dk-seg){ grid-column:1 / -1; margin-top:var(--space-6); min-width:0; }
+  .dk-top__tools > :empty{ display:none; }
 }

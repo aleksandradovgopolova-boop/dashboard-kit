@@ -27,7 +27,7 @@
   var shell = nav.parentElement;
   var bar = document.querySelector('.sc-bar');
   var main = shell.querySelector('.dk-wrap');
-  var narrow = window.matchMedia('(max-width:1199px)');
+  var narrow = window.matchMedia('(max-width:1023px)');
   var toggle = document.createElement('button');
   toggle.type = 'button'; toggle.className = 'dk-btn dk-btn--sm';
   toggle.appendChild(dkIcon.el('layout-grid')); toggle.title = 'Навигация по киту'; toggle.setAttribute('aria-controls', nav.id);
@@ -73,6 +73,7 @@
     if (!h) return;
     var title = h.textContent.trim();
     if (!sec.id) sec.id = slug(title);
+    sec.querySelectorAll('h3').forEach(function (heading) { if (!heading.id) heading.id = sec.id + '--' + slug(heading.textContent); });
     if (sec.dataset.group) group = sec.dataset.group;
     var eb = document.createElement('p');
     eb.className = 'sc-eyebrow';
@@ -99,6 +100,8 @@
   var showcase = here === 'showcase.html';
   var sectionLinks = links.slice();
   nav.replaceChildren();
+  var skip = document.createElement('a'); skip.className = 'sc-skip'; skip.href = '#top'; skip.textContent = 'Перейти к содержимому'; document.body.insertBefore(skip, document.body.firstChild);
+  skip.addEventListener('click', function (e) { e.preventDefault(); var destination = main.querySelector('.sc-sec:not([hidden]) h1') || main.querySelector('h1'); destination.setAttribute('tabindex','-1'); destination.focus(); });
   var navHead = document.createElement('div'); navHead.className = 'sc-nav__head';
   var navTitle = document.createElement('span'); navTitle.textContent = 'Библиотека'; navHead.appendChild(navTitle);
   nav.appendChild(navHead);
@@ -130,37 +133,55 @@
     catalog.appendChild(box); return body;
   }
   var home = document.createElement('a'); home.className = 'sc-nav__home'; home.href = 'showcase.html';
-  home.appendChild(dkIcon.el('home')); home.appendChild(document.createTextNode('Обзор кита')); catalog.appendChild(home);
+  home.appendChild(document.createTextNode('Обзор')); catalog.appendChild(home);
   var visual = [
     ['Основы визуального языка','tri-principa'], ['Палитра','smyslovye'], ['Типографика','tipografika'],
-    ['Иконографика','ikonki'], ['Структура и сетка','setka-i-ustroystva'], ['Эффекты','effekty'], ['Анимации','animacii']
+    ['Иконографика','ikonki'], ['Структура и сетка','setka-i-ustroystva'],
+    ['Эффекты','effekty'], ['Анимации','animacii']
   ];
-  addGroup('Визуальный язык', visual, showcase);
+  addGroup('Визуальный язык', visual, false);
   var componentBox = addGroup('Компоненты', [['Все компоненты','komponenty']], !showcase);
   ['Управление','Фильтры','Данные','Визуализация','Обратная связь'].forEach(function (name) {
-    var label = document.createElement('div'); label.className = 'sc-nav__label'; label.textContent = name; componentBox.appendChild(label);
+    var subgroup = document.createElement('details'); subgroup.className = 'sc-nav__component-group'; subgroup.appendChild(heading(name));
+    var body = document.createElement('div'); body.className = 'sc-nav__items'; subgroup.appendChild(body); componentBox.appendChild(subgroup);
     (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
-      addLink(componentBox,c.title,'component-' + c.slug + '.html','Компонент',name);
+      var href = 'component-' + c.slug + '.html'; addLink(body,c.title,href,'Компонент',name);
+      if (here === href) subgroup.open = true;
     });
   });
   addGroup('Редполитика', [
-    ['О редполитике','redpolitika'], ['Принципы текста','principy-teksta'],
+    ['Принципы текста','principy-teksta'],
     ['Интерфейсные тексты','yazyk-interfeysa'], ['Глоссарий','glossariy']
   ], false);
-  var used = visual.map(function (x) { return x[1]; }).concat(['komponenty','redpolitika','principy-teksta','pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka','yazyk-interfeysa','glossariy','usability','dostupnost']);
-  var examples = showcase ? sectionLinks.filter(function (x) { return !used.includes(x.sec.id); }).map(function (x) { return [x.link.textContent,x.sec.id]; }) : [
-    ['Каркас страницы','karkas'], ['Акцент продукта','akcent'], ['Отступы','otstupy'], ['Управление','upravlenie'],
-    ['Фильтры-легенда','filtry-legenda'], ['Фильтры','filtry'], ['Атомы','atomy'], ['Сводка и рейтинг','svodka-i-reyting'],
-    ['Размер виджета','razmer-vidzheta'], ['Календарь','kalendar'], ['Состояние страницы','sostoyanie-stranicy'],
-    ['Доступность и списки','dostupnost-i-spiski'], ['Регионы','regiony'], ['Формы','formy'], ['Таблица','tablica'], ['Графики','grafiki'], ['Страницы ошибок','stranicy-oshibok'], ['Состояния','sostoyaniya']
-  ];
-  addGroup('Документация', [['Usability','usability'], ['Доступность','dostupnost']], false);
-  addGroup('Примеры и сборка',examples,false);
-  if (!showcase) {
-    var local = document.createElement('details'); local.className = 'sc-nav__local'; local.appendChild(heading('На этой странице'));
-    var localItems = document.createElement('div'); localItems.className = 'sc-nav__items';
-    sectionLinks.forEach(function (x) { localItems.appendChild(x.link); }); local.appendChild(localItems); nav.appendChild(local);
+  addGroup('Качество интерфейса', [['Удобство использования','usability'], ['Доступность','dostupnost']], false);
+  var exampleBox = addGroup('Примеры дашбордов', [], false);
+  [['Мониторинг показателей','dashboard.html'], ['Аварии и события','accidents.html'], ['Планирование работ','calendar.html']].forEach(function (item) {
+    addLink(exampleBox,item[0],item[1],'Рабочий экран','Примеры дашбордов');
+  });
+  var local = null;
+  var toc = document.createElement('details'); toc.className = 'sc-toc'; toc.open = true;
+  var tocTitle = document.createElement('summary'); tocTitle.textContent = 'На этой странице'; toc.appendChild(tocTitle);
+  var tocLinks = document.createElement('nav'); tocLinks.setAttribute('aria-label','Содержание страницы'); toc.appendChild(tocLinks);
+  function buildToc(selected) {
+    tocLinks.replaceChildren();
+    var headings = showcase ? (selected && selected.id !== 'komponenty' ? Array.from(selected.querySelectorAll(':scope > h3')) : []) : sections.map(function (sec) { return sec.querySelector('h2'); }).filter(Boolean);
+    headings.forEach(function (h, i) {
+      if (!h.id) h.id = 'topic-' + (selected ? selected.id : here.replace('.html','')) + '-' + i;
+      var a = document.createElement('a'); a.href = '#' + h.id;
+      a.textContent = h.textContent.replace(/#$/, '').trim(); tocLinks.appendChild(a);
+      h.style.scrollMarginTop = '72px';
+    });
+    toc.hidden = !headings.length;
+    shell.classList.toggle('sc-shell--toc', !!headings.length);
+    if (selected) selected.insertBefore(toc, selected.querySelector(':scope > h3'));
+    else if (!showcase) main.insertBefore(toc, main.querySelector('.sc-sec'));
   }
+  tocLinks.addEventListener('click', function (e) {
+    var a = e.target.closest('a'); if (!a) return;
+    var target = document.getElementById(a.hash.slice(1));
+    if (target) { target.setAttribute('tabindex','-1'); target.focus({preventScroll:true}); }
+  });
+  if (!showcase) buildToc(null);
   search.addEventListener('input', function () {
     var query = search.value.trim().toLocaleLowerCase('ru');
     catalog.hidden = !!query; results.hidden = !query; if (local) local.hidden = !!query;
@@ -181,7 +202,9 @@
     ['Управление','Фильтры','Данные','Визуализация','Обратная связь'].forEach(function (name) {
       var block = document.createElement('div'); var h = document.createElement('h3'); h.textContent = name; block.appendChild(h);
       (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
-        var a = document.createElement('a'); a.href = 'component-' + c.slug + '.html'; a.textContent = c.title;
+        var a = document.createElement('a'); a.href = 'component-' + c.slug + '.html'; var text = document.createElement('span'); text.className = 'sc-component-index__text';
+        var title = document.createElement('strong'); title.textContent = c.title; text.appendChild(title);
+        var description = document.createElement('small'); description.textContent = c.description || ''; text.appendChild(description); a.appendChild(text);
         a.appendChild(dkIcon.el('chevron-right')); block.appendChild(a);
       }); componentIndex.appendChild(block);
     });
@@ -191,8 +214,10 @@
   function showArticle() {
     if (!showcase) return;
     var id = location.hash.slice(1);
-    if (['pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka'].includes(id)) id = 'principy-teksta';
-    var selected = sections.find(function (sec) { return sec.id === id; });
+    if (['redpolitika','pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka'].includes(id)) id = 'principy-teksta';
+    var target = document.getElementById(id);
+    var selected = sections.find(function (sec) { return sec.id === id; }) || (target && target.closest('section.sc-sec'));
+    buildToc(selected);
     main.querySelector('.sc-hero').hidden = !!selected;
     sections.forEach(function (sec) {
       sec.hidden = sec !== selected;
@@ -205,7 +230,8 @@
     });
     nav.querySelectorAll('.sc-nav__home').forEach(function (a) { if (selected) a.removeAttribute('aria-current'); else a.setAttribute('aria-current','page'); });
     main.classList.toggle('sc-article', !!selected);
-    if (selected) selected.scrollIntoView({block:'start'});
+    document.title = (selected ? selected.querySelector('h1').textContent.replace(/#$/, '').trim() + ' · ' : '') + 'dashboard-kit';
+    if (selected) { var destination = target && target !== selected ? target : selected.querySelector('h1'); destination.scrollIntoView({block:'start'}); destination.setAttribute('tabindex','-1'); destination.focus({preventScroll:true}); }
   }
   if (showcase) { window.addEventListener('hashchange', showArticle); showArticle(); }
 
@@ -213,6 +239,10 @@
      по положению, а не по «виден ли раздел»: длинный раздел виден долго, и
      подсветка прыгала бы между ним и соседом. */
   function current() {
+    var tocEntries = Array.from(tocLinks.querySelectorAll('a'));
+    var active = tocEntries[0];
+    tocEntries.forEach(function (a) { var h = document.getElementById(a.hash.slice(1)); if (h && h.getBoundingClientRect().top <= 112) active = a; });
+    tocEntries.forEach(function (a) { if (a === active) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current'); });
     if (showcase) return;
     var line = 56 + 40;
     var cur = links[0];

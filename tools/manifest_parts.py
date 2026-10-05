@@ -25,6 +25,7 @@ ORDER = [
     ("js/dk-chart-theme.js", "defer"),
     ("js/dk-charts.js", "defer"),
     ("js/dk-select.js", "defer"),
+    ("js/dk-chips.js", "defer"),
     ("vendor/air-datepicker.js", "defer"),
     ("js/dk-period.js", "defer"),
     ("js/dk-chrome.js", "defer"),

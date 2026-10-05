@@ -625,7 +625,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  height: var(--control-sm);
+  height: calc(var(--control-md) - 2 * var(--track-pad));
   padding: 0 var(--space-6);
   font: inherit;
   font-size: var(--text-caption);
@@ -670,8 +670,8 @@
   .dk-seg button:focus-visible { outline-offset: calc(-1 * var(--focus-width)); }
 }
 
-.dk-seg--sm button { height: calc(var(--control-sm) - 4px); padding: 0 var(--control-pad-sm); }
-.dk-seg--lg button { height: calc(var(--control-lg) - 6px); padding: 0 var(--control-pad-lg); font-size: var(--text-body); }
+.dk-seg--sm button { height: calc(var(--control-sm) - 2 * var(--track-pad)); padding: 0 var(--control-pad-sm); }
+.dk-seg--lg button { height: calc(var(--control-lg) - 2 * var(--track-pad)); padding: 0 var(--control-pad-lg); font-size: var(--text-body); }
 
 /* Сегмент значками. Стоит ПОСЛЕ модификаторов размера намеренно: у них та же
    специфичность, и правило, написанное выше, проигрывало им поля — кнопка
@@ -679,7 +679,7 @@
    глазом, поэтому и держалось.
 
    Квадрат делает aspect-ratio, а не вторая цифра ширины. Написать
-   width: var(--control-sm) рядом с height: calc(var(--control-sm) - 4px)
+   width: var(--control-sm) рядом с height: calc(var(--control-sm) - 2 * var(--track-pad))
    значит завести два числа, которые обязаны совпадать, — и однажды они
    разойдутся при смене размера. Здесь ширина следует за высотой сама, каким
    бы модификатором размера ни пользовались.
@@ -899,16 +899,16 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-4);
-  height: var(--control-lg);
+  height: var(--control-md);
   max-width: 100%;
   padding: 0 var(--space-6);
   font: inherit;
   font-size: var(--text-body);
-  font-weight: var(--weight-ui-strong);
+  font-weight: inherit;
   color: var(--ink);
-  background: var(--surface);
-  border: 1px solid var(--edge-float);
-  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  border: 0;
+  border-radius: var(--radius-md);
   box-shadow: none;
   white-space: nowrap;
   cursor: pointer;
@@ -1621,13 +1621,7 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
    Таблица без объявленных ширин разложит колонки поровну, и это будет видно
    сразу — лучше, чем тихо дёргающаяся сетка. Ширину колонки задаёт первый
    <th>: процентами для текстовых, пикселями для служебных. */
-/* Ячейки раздельные, без зазора (separate + spacing 0), а не слитые: у
-   слитых ячеек не бывает скруглений. Шапка и подсвеченная строка были
-   квадратными полосами внутри круглой карточки — полоса обрывалась углом
-   в 14 px от скруглённого края виджета и читалась обрезанной (разбор 29.09).
-   Теперь у каждой строки скруглены концы, и заливка — шапки, наведения,
-   зебры, выбора, итога — кладётся на ячейки, а не на строку: фон строки
-   скругления не знает. */
+/* Единая форма таблиц: прямые края шапки, строк и итогов во всех вариантах. */
 .dk-table {
   width: 100%;
   table-layout: fixed;
@@ -1635,15 +1629,7 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
   border-spacing: 0;
   font-size: var(--text-body);
 }
-.dk-table tr > :first-child { border-top-left-radius: var(--radius-md); border-bottom-left-radius: var(--radius-md); }
-.dk-table tr > :last-child { border-top-right-radius: var(--radius-md); border-bottom-right-radius: var(--radius-md); }
-/* Линейки и скругления не дружат: линия под строкой загибалась бы на концах. */
-.dk-table--ruled tr > * { border-radius: 0; }
-/* Шапка и итог — прямыми полосами, без скругления: решение владельца кита
-   29.09 («не делай у шапки таблиц скругления»). Скругляются только строки
-   тела — наведение, зебра, выбор. Итог — заодно с шапкой: это две опоры
-   таблицы одним цветом (ниже, «Итоги и группы»), и форма у них одна. */
-.dk-table :is(thead, tfoot) tr > :nth-child(n) { border-radius: 0; }   /* :nth-child(n) — чтобы перебить :first-child и :last-child выше */
+.dk-table tr > * { border-radius: 0; }
 
 .dk-table th {
   text-align: left;
@@ -1787,7 +1773,7 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
     margin-bottom: var(--space-4);
     padding: var(--space-6);
     background: var(--surface-2);
-    border-radius: var(--radius-lg);
+    border-radius: 0;
   }
   .dk-table--cards > tbody > tr[aria-selected="true"] { background: var(--control-soft); }
   .dk-table--cards.dk-table--cards.dk-table--cards tr > td:nth-child(n) {
@@ -2495,6 +2481,8 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
   white-space: nowrap;
 }
 
+.dk-status:has(> .dk-dot) { gap: var(--space-6); }
+
 /* Значок обязателен: он и есть тот второй признак, по которому состояние
    читается без цвета. */
 .dk-status .dk-i { width: 14px; height: 14px; flex: none; color: var(--accent, var(--ink-3)); }
@@ -3125,13 +3113,15 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-cal__row {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  grid-template-rows: 24px repeat(var(--lanes, 1), 20px) 1fr;
+  grid-template-rows: minmax(0, 24px) repeat(var(--lanes, 1), minmax(0, 1fr)) minmax(0, 1fr);
   gap: var(--space-2);
-  min-height: 96px;
+  min-height: 0;
 }
 
 .dk-cal__day {
   grid-row: 1 / -1;
+  aspect-ratio: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -3334,7 +3324,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
    на тачскрине наведения нет. Неделя вместо этого прокручивается вбок:
    часы ужать некуда, а врать о длительности нельзя. */
 @media (max-width: 767px) {
-  .dk-cal__row { min-height: 56px; }
+  .dk-cal__row { min-height: 0; }
   .dk-cal[data-view="month"] .dk-cal__e {
     height: 6px;
     padding: 0;
@@ -4357,7 +4347,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   .dk-seg button { min-width: var(--control-sm); }   /* «7д» — 34 px */
   /* Сегмент значками — квадрат 44 при любом размере: у --sm высота 40, и
      ширина 44 от min-width делала кнопку 44 × 40 (замер 29.09, карта). */
-  .dk-seg--icons button { width: auto; height: var(--control-sm); }
+  .dk-seg--icons button { width: auto; height: calc(var(--control-md) - 2 * var(--track-pad)); }
 
   .dk-pager__size select { min-width: var(--control-sm); }
 
@@ -4400,15 +4390,16 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-car--list .dk-car__item { flex: 1 1 40%; width: auto; max-width: none; }
 .dk-car--list :is(.dk-car__pos, .dk-car__nav, .dk-car__dots) { display: none; }
 .dk-region-tools { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gap-tight); margin-bottom: var(--grid-gap); }
-.dk-region-tools .dk-search { flex: 1 1 50%; min-width: 0; border-radius: var(--radius-lg); }
-.dk-region-tools .dk-search__input { width: 100%; }
+.dk-region-tools .dk-search { flex: 1 1 50%; min-width: 0; height:var(--control-md); padding:0 var(--control-pad-md); border:0; background:var(--surface-2); border-radius:var(--radius-md); }
+.dk-region-tools .dk-search__input { width:100%; height:100%; font:var(--type-body); }
+.dk-region-tools .dk-search__icon{ width:16px; height:16px; }
 .dk-region-result { margin: 0 0 var(--space-6); color: var(--ink-2); font: var(--type-body); }
 .dk-details { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-group); }
 .dk-details dt { color: var(--ink-2); }
 .dk-details dd { margin: 0; font-weight: var(--weight-ui-strong); }
 .dk-data-summary { margin-top: var(--space-5); }
-.dk-data-summary summary { box-sizing: border-box; min-height: var(--control-md); cursor: pointer; color: var(--link); padding: var(--space-5) 0; }
-.dk-data-summary summary:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+.dk-data-summary summary { box-sizing: border-box; min-height: var(--control-md); cursor: pointer; color: var(--ink-2); padding: var(--space-5) var(--space-4); border-radius:var(--radius-md); }
+.dk-data-summary summary:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset-tight); }
 .dk-widget:has(> .dk-tile__head) { height: 100%; box-sizing: border-box; }
 @media (max-width: 767px) {
   .dk-car--list .dk-car__item { flex-basis: 100%; }
@@ -4426,10 +4417,44 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-grid--metrics { grid-auto-rows: 1fr; height: 100%; align-items: stretch; }
 .dk-grid:has(> .dk-col--half > .dk-grid--metrics) { align-items: stretch; }
 .dk-grid:has(> .dk-col--half > .dk-grid--metrics) > .dk-col--half > .dk-hero { height: 100%; box-sizing: border-box; }
-.dk-banner--crit { background: var(--surface); border-left: var(--focus-width) solid var(--crit); }
+.dk-banner--crit { background: var(--surface); }
 .dk-table td .dk-btn { white-space: normal; text-align: left; height: auto; min-height: var(--control-sm); }
 
 @media (max-width: 767px) {
   .dk-banner:has(> .dk-btn) .dk-banner__text { flex-basis: calc(100% - var(--space-9)); }
   .dk-banner > .dk-btn { margin-left: var(--space-9); }
 }
+
+/* Название службы читается целиком; временная полоса занимает свою строку. */
+.dk-uptime__row:has(.dk-uptime__strip){ display:grid; grid-template-columns:minmax(0,1fr) auto; }
+.dk-uptime__row:has(.dk-uptime__strip) .dk-uptime__name{ width:auto; white-space:normal; overflow:visible; }
+.dk-uptime__row:has(.dk-uptime__strip) .dk-uptime__v{ grid-column:2; grid-row:1; }
+.dk-uptime__strip{ grid-column:1 / -1; width:100%; }
+.dk-uptime__axis{ margin-left:0; margin-right:0; }
+.dk-uptime__now{ padding-left:0; }
+
+.dk-uptime__row:has(.dk-map__legend){ display:block; }
+.dk-uptime__row:has(.dk-map__legend) > .dk-uptime__name,
+.dk-uptime__row:has(.dk-map__legend) > .dk-uptime__v{ display:none; }
+
+@media (pointer: coarse){
+  .dk-seg{ padding:0; }
+  .dk-seg button, .dk-seg--sm button, .dk-seg--lg button, .dk-seg--icons button{ height:var(--control-md); border-radius:var(--radius-md); }
+  .dk-seg button::after{ inset:0; }
+}
+
+@media (max-width:767px){
+  .dk-banner{ display:grid; grid-template-columns:auto minmax(0,1fr); align-items:start; }
+  .dk-banner > .dk-btn{ grid-column:2; justify-self:start; }
+  .dk-banner__stats{ grid-column:2; width:auto; min-width:0; flex-wrap:wrap; }
+}
+
+/* Текстовое действие в ячейке не создаёт дополнительную плашку. */
+.dk-table td > .dk-btn--ghost{ padding-inline:0; background:transparent; text-align:left; justify-content:flex-start; white-space:normal; height:auto; min-height:var(--control-md); }
+
+@media (pointer:coarse){ .dk-region-tools .dk-search__input{ font:var(--type-body-lg); } }
+
+/* Поля множественных значений: выбранное видно до открытия списка. */
+.dk-chips{ display:grid; gap:var(--space-4); min-width:0; }
+.dk-chips__item{ display:inline-flex; align-items:center; gap:var(--space-3); max-width:100%; background:var(--control-soft); border-radius:var(--radius-md); padding-left:var(--control-pad-sm); }
+.dk-chips__text{ min-width:0; overflow-wrap:anywhere; font:var(--type-body); }

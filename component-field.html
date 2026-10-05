@@ -26,21 +26,19 @@
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
-    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
     <span class="sc-brand__t">dashboard-kit</span>
     <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
-    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
     </div>
   </div>
 </header>
 
-<div class="sc-shell">
-<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
 <div class="dk-wrap" id="top">
 
@@ -159,11 +157,6 @@ api.clear();      // снять ошибки
 (function () {
   'use strict';
   var root = document.documentElement;
-  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
-  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
-    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
-  });
-  mark(root.getAttribute('data-theme'));
   window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkForm !== 'function') return;
     var form = document.getElementById('ex-form'), out = document.getElementById('ex-form-out');
