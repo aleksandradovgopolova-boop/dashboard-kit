@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 
 GROUPS = ["Управление", "Фильтры", "Данные", "Визуализация", "Обратная связь", "Утилиты"]
-MODULES = ["p1_controls", "p2_filters", "p3_data", "p4_viz", "p5_feedback", "p6_utilities"]
+MODULES = ["p1_controls", "p2_filters", "p3_data", "p4_viz", "p5_feedback", "p6_utilities", "p6_advanced"]
 
 CATALOG_DESCRIPTIONS = {'flex': 'Раскладка элементов в строку или колонку с общими отступами и выравниванием.', 'card-grid': 'Адаптивная сетка карточек с равной высотой соседей.', 'card-scroll': 'Горизонтальный список карточек с нативной прокруткой и кнопками навигации.', 'scroll-arrow': 'Доступная кнопка перемещения по прокручиваемому содержимому.', 'popout': 'Оболочка модального слоя: размещение, подложка и недоступный фон.', 'focus-trap': 'Tab и Shift+Tab циклически обходят интерактивные элементы открытого слоя.', 'touch': 'Начало, движение, завершение и отмена pointer-жеста для мыши, пера и тача.'} | {'onboarding':'Знакомство с действием рядом с целевым элементом.', 'adaptive-icons':'Размер иконок по контексту и способу управления.', 'scrollview':'Нативная прокрутка ограниченной области.', 'accordion': 'Раскрываемые определения, настройки и ответы на вопросы.', 'avatar': 'Человек: фото, инициалы и группа участников.', 'counter': 'Количество объектов в кнопке, вкладке или меню.', 'chip': 'Отдельное выбранное значение с удалением.', 'chips-input': 'Ввод набора произвольных значений с отдельным удалением.', 'chips-select': 'Выбор нескольких значений из справочника с видимым набором.', 'button': 'Выполнение основного или дополнительного действия.', 'segment': 'Переключение вида одних и тех же данных.', 'tabs': 'Переход между разделами продукта.', 'check': 'Независимый выбор, выбор одного варианта и переключение режима.', 'field': 'Ввод данных с подписью, подсказкой и проверкой.', 'select': 'Выбор одного или нескольких значений из списка.', 'period': 'Выбор периода для просмотра и сравнения данных.', 'search': 'Поиск объекта по названию.', 'legend': 'Обозначение категорий данных и фильтрация по ним.', 'pager': 'Переход между страницами набора данных.', 'table': 'Сравнение объектов по общим признакам.', 'badge': 'Краткие метки, статусы и показатели внутри других компонентов.', 'tile': 'Отображение отдельного показателя и его изменения.', 'hero': 'Общее состояние и ключевой показатель экрана.', 'car': 'Группа связанных карточек с навигацией.', 'rank': 'Ранжирование объектов по выбранному показателю.', 'list': 'Список объектов с дополнительными данными и действиями.', 'uptime': 'История доступности служб за выбранный период.', 'chart': 'Сравнение величин, динамики и состава данных.', 'map': 'Географическое распределение показателей и альтернативный вид плитками.', 'calendar': 'Распределение работ и событий по датам.', 'banner': 'Состояние страницы и подтверждение выполненного действия.', 'modal': 'Подтверждение действия или выполнение отдельной задачи.', 'empty': 'Сообщения о загрузке, отсутствии данных и ошибке.'}
 
@@ -76,8 +76,10 @@ def render(p: dict) -> str:
     api = "".join(f"<tr><td><code>{esc(n)}</code></td><td>{t}</td><td>{d}</td></tr>" for n, t, d in p["api"])
     anatomy = "".join(f"<li><b>{b}</b> — {t}</li>" for b, t in p["anatomy"])
     related = "".join(f'<li><a href="{esc(h)}">{t}</a>{(" — " + d) if d else ""}</li>' for h, t, d in p["related"])
-    files = " · ".join(f"<code>{esc(f)}</code>" for f in p["files"])
+    files = " · ".join(f'<a href="{esc(f)}"><code>{esc(f)}</code></a>' for f in p["files"])
     live_script = p.get("live_script", "")
+    policy = json.loads((ROOT/".ai/project/uiux-policy.json").read_text())
+    guidance = ''.join('<div class="sc-note"><h3>'+html.escape(row['title'])+'</h3><ul class="sc-list">'+li([html.escape(x) for x in row['rules']])+'</ul><p>Пример: '+html.escape(row['example_good'])+'</p><p>Проверка: '+html.escape(row['review'])+'</p><p><a href="'+html.escape(row['source'])+'">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>' for row in policy['patterns'] if p['slug'] in row['components'])
     sec = []
     for i, (sid, title, group) in enumerate(BLOCKS):
         body = {
@@ -85,7 +87,7 @@ def render(p: dict) -> str:
             "kogda-ispolzovat": (
                 '<div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list">' + li(p["when_yes"]) +
                 '</ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list">' + li(p["when_no"]) +
-                '</ul></div></div>'),
+                '</ul></div></div>' + guidance),
             "anatomiya": ('<p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy">' +
                           p["anatomy_html"] + '</div><ol class="sc-anatomy__list">' + anatomy + '</ol>'),
             "varianty-i-razmery": (
@@ -103,7 +105,7 @@ def render(p: dict) -> str:
                        f'<ul class="sc-tokens" data-tokens="{esc(",".join(p["tokens"]))}">'
                        '<li class="sc-tokens__wait">Читаем css/components.css…</li></ul>'),
             "kod": (f'<p>{p.get("code_intro", "")}</p><pre class="sc-code"><code>{esc(p["code"])}</code></pre>'
-                    '<div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr>'
+                    '<h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr>'
                     '<th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th>'
                     f'</tr></thead><tbody>{api}</tbody></table></div>'),
             "svyazannoe": '<ul class="sc-list sc-list--wide">' + related + '</ul>',
@@ -197,6 +199,16 @@ def load_pages() -> list[dict]:
         for p in mod.PAGES:
             p = dict(p)
             p["module"] = m
+            additions = {
+                "select": [("update({value,options}) / destroy()", "API", "Тихое обновление; cleanup меню, focusout, anchor и подписок. Старые set/clear/setOptions сохранены.")],
+                "period": [("update({value}) / destroy()", "API", "Тихое восстановление периода. Старые set/clear сохранены; destroy освобождает календарь и подписки.")],
+                "pager": [("update({total,page,size}) / destroy()", "API", "Тихое восстановление, page ограничивается количеством страниц. Старые goTo/setTotal сохранены.")],
+                "table": [("update({selected}) / destroy()", "API", "Восстановление выбора по data-id; cleanup обработчиков/observer без удаления таблицы. Sort host связывает через onSort.")],
+                "map": [("update({values,scope,view}) / destroy()", "API", "Обновление одним проходом; старые setValues/setScope/view сохранены.")],
+                "calendar": [("update({events,view}) / destroy()", "API", "Совместим со старым setEvents/view/goTo. На narrow/coarse неделя — agenda со временем словами и кнопками 44px, на desktop/fine — часовая сетка.")],
+                "chart": [("exportImage()", "Promise<Blob>", "PNG текущей отрисовки, отклоняет Promise без готового экземпляра.")],
+            }
+            p["api"] = list(p["api"]) + additions.get(p["slug"], [])
             pages.append(p)
     return pages
 
@@ -212,7 +224,9 @@ def build() -> dict[str, str]:
         text += '## Размеры\n\n' + re.sub('<[^>]+>', '', html.unescape(p['sizes'])) + '\n\n## Код\n\n```html\n' + p['code'] + '\n```\n\n## Параметры\n\n'
         text += '\n'.join('- `' + name + '` (' + typ + '): ' + re.sub('<[^>]+>', '', html.unescape(desc)) for name, typ, desc in p['api']) + '\n'
         out[f"component-{p['slug']}.md"] = text
-    index = [{"slug": p["slug"], "title": p["title"], "group": p["group"], "description": CATALOG_DESCRIPTIONS[p["slug"]]} for p in pages]
+    from docs_guide import render as render_guide
+    out["index.html"] = render_guide(pages, render)
+    index = [{"slug": p["slug"], "title": p["title"], "group": p["group"], "description": CATALOG_DESCRIPTIONS.get(p["slug"], p["purpose"])} for p in pages]
     out["js/docs-index.js"] = (
         "/* СОБРАНО tools/build-component-pages.py — указатель страниц компонентов для\n"
         "   оглавления документации (js/docs.js). Руками не править. */\n"

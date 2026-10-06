@@ -42,6 +42,11 @@ ORDER = [
     ("js/dk-notify.js", "defer"),
     ("js/dk-uptime.js", "defer"),
     ("js/dk-car.js", "defer"),
+    ("js/dk-analysis.js", "defer"),
+    ("js/dk-context.js", "defer"),
+    ("js/dk-workspace.js", "defer"),
+    ("js/dk-tree.js", "defer"),
+    ("js/dk-layout-editor.js", "defer"),
 ]
 
 # Стили в порядке подключения. Календарь — до components.css: наши правила
@@ -52,6 +57,7 @@ CSS_ORDER = [
     ("css/tokens.semantic.css", "всегда"),
     ("css/components.css", "всегда"),
     ("css/chrome.css", "только если кит рисует всю страницу"),
+    ("css/page.dashboard.css", "только пример dashboard.html; после chrome.css"),
 ]
 
 # Чужой скрипт со своим стилем: подключил скрипт — подключи и стиль. Из кода
@@ -72,10 +78,10 @@ PARTS = [
                    "и своей, и встроенной в чужую.",
         "use_when": ["Всегда: без основы ни один блок кита не рисуется и не экранирует данные."],
         "instead": [],
-        "owns": ["dk-root", "dk-page"],
+        "owns": ["dk-nodata", "dk-root", "dk-page"],
         "css": ["css/tokens.primitives.css", "css/tokens.semantic.css", "css/components.css"],
         "scripts": ["js/dk-theme.js", "js/dk-util.js", "js/dk-icons.js"],
-        "js": ["dkTheme", "dkUrl", "dkFmt", "dkBack", "dkAnchor", "dkEsc", "dkNum", "dkDur", "dkOwn", "dkDestroy",
+        "js": ["dkMeaning", "dkTheme", "dkUrl", "dkFmt", "dkBack", "dkAnchor", "dkEsc", "dkNum", "dkDur", "dkOwn", "dkDestroy",
                "dkIcon", "dkIconNames"],
         "docs": ["README.md#Подключить", "README.md#Границы кита: .dk-root и .dk-page",
                  "README.md#Числа", "README.md#Внутри приложения (WebView)"],

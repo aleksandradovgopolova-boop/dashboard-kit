@@ -1,0 +1,51 @@
+/* Private page composition; component sizes and touch targets retain Kit tokens. */
+#d-dashboard [role="tabpanel"][hidden] { display: none; }
+#d-dashboard #d-views { margin-bottom: var(--grid-gap); max-width: 100%; flex-wrap: wrap; }
+#d-dashboard #d-views [aria-selected="true"] { background: var(--surface-3); color: var(--ink); }
+#d-dashboard #d-country-charts { margin-top: var(--grid-gap); }
+#d-dashboard #d-view-work .dk-tablewrap { max-height: 55svh; overflow: auto; }
+#d-dashboard #d-view-causes .dk-col--third { grid-column: span 6; }
+#d-dashboard #d-view-causes .dk-col--full:has(#d-uptime) { grid-column: span 6; }
+@media (min-width: 1200px) {
+  #d-dashboard #d-country-charts .dk-widget { min-height: 300px; }
+  #d-dashboard #d-country-charts .dk-chart:not(.dk-chart--spark) { height: 200px; min-height: 200px; }
+  #d-dashboard #d-country-charts .dk-list { max-height: 240px; overflow: auto; }
+}
+@media (max-width: 767px) {
+  #d-dashboard #d-country-charts > .dk-col--third,
+  #d-dashboard #d-view-causes > .dk-grid > [class*="dk-col--"] { grid-column: 1 / -1; }
+  #d-dashboard #d-view-work .dk-tablewrap { max-height: none; }
+}
+
+@media (min-width: 1200px) {
+  #d-dashboard #d-view-causes .dk-car__track { max-height: 8lh; overflow: auto; overscroll-behavior: contain; align-items: stretch; scrollbar-width: thin; }
+  #d-dashboard #d-view-causes .dk-car__item { padding: var(--pad-widget); gap: var(--gap-tight); }
+  #d-dashboard #d-view-causes .dk-car__row { flex-wrap: nowrap; align-items: center; }
+  #d-dashboard #d-view-causes .dk-car__who { flex: 1; }
+  #d-dashboard #d-view-causes .dk-car__track::-webkit-scrollbar { display: block; width: var(--space-4); }
+}
+
+/* Approved responsive composition: preserve content, padding and type sizes. */
+@media (max-width: 1199px) {
+  #d-dashboard #d-country-charts > .dk-col--third { grid-column: 1 / -1; }
+  #d-dashboard #d-country-charts .dk-chart:not(.dk-chart--spark) { height: 240px; min-height: 240px; }
+}
+@media (max-width: 767px) {
+  #d-dashboard #d-views { display: flex; flex-wrap: nowrap; width: 100%; }
+  #d-dashboard #d-views button { flex: 1; min-width: 0; white-space: nowrap; }
+  #d-dashboard .dk-banner { display: flex; flex-wrap: nowrap; align-items: center; }
+  #d-dashboard .dk-banner > .dk-btn { flex: none; }
+  #d-dashboard .dk-banner__title { font: var(--type-body); }
+  #d-dashboard .dk-banner > .dk-btn { width: var(--control-md); min-width: var(--control-md); padding: 0; margin-left: 0; }
+  #d-dashboard .dk-banner > .dk-btn > span { display: none; }
+
+  #d-dashboard #d-risk-summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--gap-tight); align-items: center; }
+  #d-dashboard #d-risk-summary .dk-hero__label { grid-column: 1; grid-row: 1; }
+  #d-dashboard #d-risk-summary .dk-hero__row { grid-column: 2; grid-row: 1; margin: 0; }
+  #d-dashboard #d-risk-summary .dk-split,
+  #d-dashboard #d-risk-summary .dk-keys { grid-column: 1 / -1; }
+  #d-dashboard .dk-grid--metrics > .dk-col--quarter { grid-column: span 2; }
+}
+#d-dashboard #d-view-causes .dk-uptime > .dk-caption { margin: 0; }
+
+#d-dashboard #d-view-causes .dk-car__text { display: block; overflow: visible; }

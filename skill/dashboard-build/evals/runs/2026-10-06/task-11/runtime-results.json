@@ -1,0 +1,482 @@
+[
+  {
+    "name": "initial mixed parent + selected leaf",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "ArrowDown moves to parent",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "ArrowRight moves into expanded children",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "Space adds second service and retains mixed",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "ArrowLeft returns to parent",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "Enter selects all enabled descendants",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "ArrowLeft collapses parent",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "ArrowRight expands parent",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "Home first",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "End observed focus",
+    "detail": "dispatch"
+  },
+  {
+    "name": "root selects all enabled leaves, disabled excluded",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "search persists focus/value/node identity + ancestor context",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "no search results keeps input and zero treeitems",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "no-results text observed",
+    "detail": "СлужбыНичего не найдено"
+  },
+  {
+    "name": "clear search restores full context",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "reset detail",
+    "detail": {
+      "value": [],
+      "status": "Службы не выбраны. Выберите группу или отдельные службы.",
+      "checked": "false"
+    }
+  },
+  {
+    "name": "reset by keyboard clears leaves and status",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "Tab enters tree",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "Shift+Tab returns to search",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "update restores state silently",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "repeat init only one input and no duplicate callback",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "empty nodes behavior",
+    "detail": {
+      "text": "Пустой справочникНичего не найдено",
+      "items": 0,
+      "value": []
+    }
+  },
+  {
+    "name": "1000 and 1500 nodes objective bound",
+    "detail": [
+      {
+        "n": 1000,
+        "rendered": 1000
+      },
+      {
+        "n": 1500,
+        "error": "RangeError: tree supports up to 1000 nodes; narrow the taxonomy"
+      }
+    ]
+  },
+  {
+    "name": "mobile touch row chooses enabled descendants",
+    "pass": true,
+    "detail": true
+  },
+  {
+    "name": "mobile objective measurements",
+    "detail": {
+      "width": 390,
+      "scrollWidth": 390,
+      "coarse": true,
+      "inputFont": "16px",
+      "rowHeights": [
+        52,
+        52,
+        44,
+        44,
+        44,
+        52,
+        44,
+        48
+      ]
+    }
+  },
+  {
+    "name": "AX named search/tree and checked attributes",
+    "detail": [
+      {
+        "role": "searchbox",
+        "name": "Службы",
+        "properties": [
+          {
+            "name": "invalid",
+            "value": {
+              "type": "token",
+              "value": "false"
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "editable",
+            "value": {
+              "type": "token",
+              "value": "plaintext"
+            }
+          },
+          {
+            "name": "settable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "labelledby",
+            "value": {
+              "type": "nodeList",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 211,
+                  "text": "Службы"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "role": "tree",
+        "name": "Службы",
+        "properties": [
+          {
+            "name": "multiselectable",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "orientation",
+            "value": {
+              "type": "token",
+              "value": "vertical"
+            }
+          },
+          {
+            "name": "required",
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          }
+        ]
+      },
+      {
+        "role": "treeitem",
+        "name": "☑ Все коммунальные службы",
+        "properties": [
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "level",
+            "value": {
+              "type": "integer",
+              "value": 1
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "treeitem",
+        "name": "☑ Инженерные сети",
+        "properties": [
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "focused",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "level",
+            "value": {
+              "type": "integer",
+              "value": 2
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "treeitem",
+        "name": "☑ Служба теплоснабжения",
+        "properties": [
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "level",
+            "value": {
+              "type": "integer",
+              "value": 3
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          }
+        ]
+      },
+      {
+        "role": "treeitem",
+        "name": "☑ Служба водоснабжения",
+        "properties": [
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "level",
+            "value": {
+              "type": "integer",
+              "value": 3
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          }
+        ]
+      },
+      {
+        "role": "treeitem",
+        "name": "☑ Служба водоотведения",
+        "properties": [
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "level",
+            "value": {
+              "type": "integer",
+              "value": 3
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          }
+        ]
+      },
+      {
+        "role": "treeitem",
+        "name": "☑ Городское хозяйство",
+        "properties": [
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "level",
+            "value": {
+              "type": "integer",
+              "value": 2
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          },
+          {
+            "name": "expanded",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "role": "treeitem",
+        "name": "☑ Служба благоустройства",
+        "properties": [
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "level",
+            "value": {
+              "type": "integer",
+              "value": 3
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "true"
+            }
+          }
+        ]
+      },
+      {
+        "role": "treeitem",
+        "name": "☐ Аварийно-диспетчерская служба",
+        "properties": [
+          {
+            "name": "disabled",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          },
+          {
+            "name": "focusable",
+            "value": {
+              "type": "booleanOrUndefined",
+              "value": true
+            }
+          },
+          {
+            "name": "level",
+            "value": {
+              "type": "integer",
+              "value": 3
+            }
+          },
+          {
+            "name": "checked",
+            "value": {
+              "type": "tristate",
+              "value": "false"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,38 @@
+schema_version: 1
+kind: repository-profile
+status: draft
+monorepo: false
+monorepo_reason: null
+stacks:
+- language: node
+  package_manager: none
+  frameworks: []
+  commands:
+    build: null
+    lint: python3 tools/check.py --fast
+    typecheck: null
+    test: python3 tools/test.py
+  command_evidence:
+    lint: tools/check.py
+    test: tools/test.py
+  evidence_source:
+  - README.md
+  - tools/check.py
+  - tools/uiux_policy.py
+  - .ai/project/uiux-policy.json
+  - tools/check-mobile.mjs
+  - tools/test.py
+  - tools/check-advanced.mjs
+  - tools/check-runtime.mjs
+  - tools/check-filter-context.mjs
+  - tools/check-dashboard-overview.mjs
+  - data/monitor-demo.json
+  - tools/check-sdk-snippets.mjs
+  install_command: null
+ci:
+- github-actions
+undetermined:
+- Статический HTML/CSS/JavaScript; сборка и TypeScript неприменимы. Профиль задан
+  при интеграции по существующим файлам; автоматический детектор Kit не распознаёт
+  этот стек без манифеста. Браузерные проверки требуют Node.js 22+ и Chrome.
+manifest_hash: 5f06d2dd9dc3c5a443f085e71053fe0c50053170abbf7668b25bb0c3464bcc6a

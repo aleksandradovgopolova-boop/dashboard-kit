@@ -203,6 +203,7 @@
   --calm:   var(--c-status-green-dark);   /* см. примитивы: пара с красным текстом */
   --nodata: var(--c-gray-600);
   --nodata-ink: var(--c-text-extra-dark);
+  --nodata-pattern: var(--ink);
 
   --event:     var(--c-event);
   --event-dim: var(--c-event-dim);
@@ -222,6 +223,7 @@
   --calm:   var(--c-status-green);
   --nodata: var(--c-gray-300);
   --nodata-ink: var(--c-gray-700);
+  --nodata-pattern: var(--ink);
 
   --event:     var(--c-event-dim);
   --event-dim: var(--c-event-deep);

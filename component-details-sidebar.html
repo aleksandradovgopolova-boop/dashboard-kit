@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Боковые детали · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p6_advanced.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/dk-modal.js" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__t">dashboard-kit</span>
+  </a>
+  <div class="sc-ctl">
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Обратная связь</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-details-sidebar.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
+    <h1>Боковые детали</h1>
+    <p class="sc-hero__lead">Детали выбранного объекта без перехода с текущего среза.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-modal.js"><code>js/dk-modal.js</code></a></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <div class="sc-playground"><div class="sc-playground__canvas"><button type="button" class="dk-btn" data-modal="#advanced-details">Детали региона</button><dialog class="dk-modal dk-sidebar" id="advanced-details" aria-labelledby="advanced-details-title"><div class="dk-modal__body"><h2 id="advanced-details-title">Ивановская область</h2><p>Риск: 92 из 100. Порог высокого риска: 78.</p><form method="dialog"><button class="dk-btn" type="submit">Закрыть</button></form></div></dialog></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+  </section>
+  <section class="sc-sec" id="kogda-ispolzovat">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно сверить сведения об одном объекте с контекстом дашборда.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Подтверждение разрушительного действия: используйте обычный modal.</li></ul></div></div><div class="sc-note"><h3>Окна и детали</h3><ul class="sc-list"><li>Модалка открывается для локальной задачи, требующей внимания; обычное сообщение не блокирует экран.</li><li>Заголовок, понятное закрытие, Escape и возврат фокуса обязательны. На узком окне содержимое и действия достижимы.</li><li>Не открывать окно автоматически по таймеру и не строить цепочки окон ради одного ответа.</li><li>Боковые детали кита тоже модальные: фон недоступен. Для постоянной сверки нужен видимый блок либо отдельно согласованный немодальный вариант.</li></ul><p>Пример: Итог обновления — статус; подробности выбранной заявки — одна модалка.</p><p>Проверка: Пройти открытие, закрытие, отмену, ошибку и возврат к прежнему срезу.</p><p><a href="https://www.uprock.ru/education/rekomendacii-po-sozdaniyu-vsplyvayushchih-okon-pop-up">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Таблицы для чтения и сравнения</h3><ul class="sc-list"><li>Оставлять столбцы, необходимые для задачи; ключевой объект расположен первым. Текст выравнивается по началу строки, сопоставимые числа — по правому краю; единицы указаны в заголовке или у значения.</li><li>Пустое значение, отсутствие данных и ноль различаются. Статусы объясняются текстом; оформление строк помогает читать, без интенсивной заливки и лишней сетки.</li><li>При прокрутке сохранять связь ячейки с заголовком и объектом. На узком окне сравнение допускает прокрутку внутри таблицы, отдельные объекты могут стать карточками; не уменьшать шрифт и не превращать данные в изображение.</li><li>Пагинация, поиск и сортировка сохраняют допустимую позицию и контекст возврата. Выбранная модель длинной таблицы согласуется с задачей; статья не задаёт всем таблицам один режим.</li></ul><p>Пример: Ключевой объект и заголовки доступны при чтении; числа сравниваются по колонке; возврат сохраняет фильтр и страницу.</p><p>Проверка: Сравнить две строки, найти запись, открыть детали и вернуться; проверить длинные заголовки, отсутствие значения, сортировку и управление клавиатурой при внутренней прокрутке.</p><p><a href="https://www.uprock.ru/education/kak-rabotat-s-tablicami-v-vebe">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
+  </section>
+  <section class="sc-sec" id="anatomiya">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div inert aria-hidden="true"><button type="button" class="dk-btn" data-modal="#anatomy-details">Детали региона</button><dialog class="dk-modal dk-sidebar" id="anatomy-details" aria-labelledby="anatomy-details-title"><div class="dk-modal__body"><h2 id="anatomy-details-title">Ивановская область</h2><p>Риск: 92 из 100. Порог высокого риска: 78.</p><form method="dialog"><button class="dk-btn" type="submit">Закрыть</button></form></div></dialog></div></div><ol class="sc-anatomy__list"><li><b>Контекст</b> — Детали выбранного объекта без перехода с текущего среза.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
+  </section>
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Компонент следует ширине контейнера и системным токенам. Именованный dialog, Tab/Shift+Tab удерживаются, Escape закрывает, фокус возвращается. На телефоне занимает всю ширину. Содержимое прокручивается, фон недоступен.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkModal(el)</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec" id="sostoyaniya">
+    <h2>Состояния</h2>
+    <p>Закрыто/открыто. Браузер должен поддерживать dialog.showModal; отсутствие поддержки не выдаётся за открытие. Общий API modal сохранён.</p>
+  </section>
+  <section class="sc-sec" id="kontent">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Нужно сверить сведения об одном объекте с контекстом дашборда.</li><li>Показывайте полные названия, единицы и источник данных.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Подтверждение разрушительного действия: используйте обычный modal.</li><li>Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение.</li></ul></div></div>
+  </section>
+  <section class="sc-sec" id="dostupnost">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li>Именованный dialog, Tab/Shift+Tab удерживаются, Escape закрывает, фокус возвращается. На телефоне занимает всю ширину. Содержимое прокручивается, фон недоступен.</li><li>Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.</li></ul>
+  </section>
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-sidebar"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec" id="kod">
+    <h2>Код</h2>
+    <p></p><pre class="sc-code"><code>&lt;button type=&quot;button&quot; class=&quot;dk-btn&quot; data-modal=&quot;#advanced-details&quot;&gt;Детали региона&lt;/button&gt;&lt;dialog class=&quot;dk-modal dk-sidebar&quot; id=&quot;advanced-details&quot; aria-labelledby=&quot;advanced-details-title&quot;&gt;&lt;div class=&quot;dk-modal__body&quot;&gt;&lt;h2 id=&quot;advanced-details-title&quot;&gt;Ивановская область&lt;/h2&gt;&lt;p&gt;Риск: 92 из 100. Порог высокого риска: 78.&lt;/p&gt;&lt;form method=&quot;dialog&quot;&gt;&lt;button class=&quot;dk-btn&quot; type=&quot;submit&quot;&gt;Закрыть&lt;/button&gt;&lt;/form&gt;&lt;/div&gt;&lt;/dialog&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkModal(el)</code></td><td>существующий API</td><td>open(), close(value), returnValue; sidebar — вариант modal, отдельного контроллера нет.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — точные числа</li><li><a href="README.md">Подключение</a> — dk-theme первым, dk-util до компонента</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+
+})();
+</script>
+</body>
+</html>

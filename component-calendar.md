@@ -63,3 +63,4 @@ cal.view = 'week'; cal.goTo('2026-09-14'); cal.setEvents(list);
 - `max, hourHeight` (числа): Событий в дне до «ещё N»; высота часа.
 - `onSelect(day) / onEvent(e)` (функции): Клик по дню и по событию.
 - `view / value / goTo(d) / setEvents(list)` (API): Управление снаружи.
+- `update({events,view}) / destroy()` (API): Совместим со старым setEvents/view/goTo. На narrow/coarse неделя — agenda со временем словами и кнопками 44px, на desktop/fine — часовая сетка.

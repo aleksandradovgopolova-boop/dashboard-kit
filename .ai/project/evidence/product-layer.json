@@ -1,0 +1,27 @@
+{
+  "artifacts": {
+    "product_passport": {
+      "state": "valid",
+      "reason": "структура полна, содержимое есть, версия актуальна"
+    },
+    "delivery": {
+      "state": "valid",
+      "reason": "структура полна, содержимое есть, версия актуальна"
+    },
+    "policy": {
+      "state": "valid",
+      "reason": "поля на месте, версия актуальна"
+    },
+    "templates_dir": {
+      "state": "valid",
+      "reason": "каталог на месте"
+    }
+  },
+  "counts": {
+    "missing": 0,
+    "invalid": 0,
+    "outdated": 0,
+    "valid": 4
+  },
+  "valid": true
+}

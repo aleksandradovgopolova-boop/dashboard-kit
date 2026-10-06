@@ -61,3 +61,4 @@ pg.page; pg.size; pg.setTotal(120);
 - `noun` (массив из трёх форм): «регион, региона, регионов».
 - `onChange(e)` (функция): e.page, e.size при смене.
 - `page / size / setTotal(n)` (API): Читать; пересчитать после фильтра.
+- `update({total,page,size}) / destroy()` (API): Тихое восстановление, page ограничивается количеством страниц. Старые goTo/setTotal сохранены.

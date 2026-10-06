@@ -59,7 +59,7 @@
     <p class="sc-hero__lead">Короткое знакомство с новым действием: одна подсказка рядом с нужным элементом за раз.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-onboarding.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-onboarding.js"><code>js/dk-onboarding.js</code></a></span>
     </div>
   </header>
 
@@ -106,7 +106,7 @@ window.addEventListener(&#x27;DOMContentLoaded&#x27;, function () {
   ], onClose:function(reason){document.getElementById(&#x27;onboard-status&#x27;).textContent = reason === &#x27;complete&#x27; ? &#x27;Знакомство завершено&#x27; : &#x27;Подсказки закрыты&#x27;;}});
   document.getElementById(&#x27;onboard-start&#x27;).addEventListener(&#x27;click&#x27;, function(){tour.start();});
 });
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkOnboarding(options)</code></td><td>функция</td><td>Создаёт контроллер; steps — target (селектор или элемент), title, text.</td></tr><tr><td><code>start(force)</code></td><td>метод</td><td>Показывает первый шаг. force=true позволяет повторить завершённый сценарий.</td></tr><tr><td><code>close() / destroy()</code></td><td>методы</td><td>Закрывает / закрывает и освобождает контроллер.</td></tr><tr><td><code>storageKey</code></td><td>строка</td><td>Необязательный ключ localStorage; завершение и пропуск отмечаются done.</td></tr><tr><td><code>onClose(reason)</code></td><td>функция</td><td>complete, skip, escape, outside, close, destroy или missing-target.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkOnboarding(options)</code></td><td>функция</td><td>Создаёт контроллер; steps — target (селектор или элемент), title, text.</td></tr><tr><td><code>start(force)</code></td><td>метод</td><td>Показывает первый шаг. force=true позволяет повторить завершённый сценарий.</td></tr><tr><td><code>close() / destroy()</code></td><td>методы</td><td>Закрывает / закрывает и освобождает контроллер.</td></tr><tr><td><code>storageKey</code></td><td>строка</td><td>Необязательный ключ localStorage; завершение и пропуск отмечаются done.</td></tr><tr><td><code>onClose(reason)</code></td><td>функция</td><td>complete, skip, escape, outside, close, destroy или missing-target.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>

@@ -439,3 +439,15 @@
 @media(max-width:1023px){ .sc-docs .sc-toc{ display:none; } }
 
 .sc-docs .sc-nav.dk-scrollview{ max-height:none; }
+/* Large text reflows headings; code keeps a local scroll container. */
+.sc-hero h1, .sc-sec :is(h1,h2,h3,h4), .sc-eyebrow { overflow-wrap: anywhere; min-width: 0; }
+.sc-sec :is(h1,h2) { flex-wrap: wrap; }
+.sc-sec :is(h1,h2) > span { min-width: 0; max-width: 100%; }
+.sc-code { position: relative; min-width: 0; }
+.sc-sec, .sc-list li { overflow-wrap: anywhere; }
+.sc-hero__lead { overflow-wrap: anywhere; }
+
+/* Ссылки справочника — самостоятельные цели выбора на таче. */
+@media (pointer: coarse) {
+  .sc-guide .sc-sec a, .sc-meta__i a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; padding: var(--space-3) var(--space-2); box-sizing: border-box; }
+}

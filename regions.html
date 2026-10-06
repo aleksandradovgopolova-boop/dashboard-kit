@@ -42,19 +42,18 @@
 <body class="dk-page">
 <a class="dk-skip" href="#main">К содержимому</a>
 
-<div class="dk-app" data-nav="closed">
+<div class="dk-app dk-app--rail" data-nav="folded">
 
   <aside class="dk-side">
     <div class="dk-side__head">
       <span class="dk-side__mark"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
       <span class="dk-side__name">Мониторинг</span>
-      <button class="dk-iconbtn dk-iconbtn--sm" data-act="fold" aria-pressed="false" title="Свернуть меню" aria-label="Свернуть меню">
+      <button class="dk-iconbtn dk-iconbtn--sm" data-act="fold" aria-pressed="true" title="Развернуть меню" aria-label="Развернуть меню">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg>
       </button>
     </div>
 
     <nav class="dk-side__nav" aria-label="Разделы">
-      <div class="dk-side__group">Обзор</div>
       <a class="dk-side__item" href="dashboard.html">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg>
         <span class="dk-side__label">Сводка</span>
@@ -69,38 +68,37 @@
         <span class="dk-side__n">23</span>
       </a>
 
-      <div class="dk-side__group">Работа</div>
-      <a class="dk-side__item" href="#">
+      <a class="dk-side__item" role="link" tabindex="0" aria-disabled="true" aria-label="Заявки — недоступно в демонстрации" title="Недоступно в демонстрации">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg>
         <span class="dk-side__label">Заявки</span>
         <span class="dk-side__n">7</span>
       </a>
-      <a class="dk-side__item" href="#">
+      <a class="dk-side__item" role="link" tabindex="0" aria-disabled="true" aria-label="Бригады — недоступно в демонстрации" title="Недоступно в демонстрации">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-user"/></svg>
         <span class="dk-side__label">Бригады</span>
       </a>
-      <a class="dk-side__item" href="#">
+      <a class="dk-side__item" href="calendar.html">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-calendar"/></svg>
         <span class="dk-side__label">Календарь</span>
       </a>
-      <a class="dk-side__item" href="#">
+      <a class="dk-side__item" role="link" tabindex="0" aria-disabled="true" aria-label="Отчёты — недоступно в демонстрации" title="Недоступно в демонстрации">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-table"/></svg>
         <span class="dk-side__label">Отчёты</span>
       </a>
     </nav>
 
     <div class="dk-side__foot">
-      <a class="dk-side__item" href="#">
-        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-settings"/></svg>
-        <span class="dk-side__label">Настройки</span>
-      </a>
-      <div class="dk-side__user">
-        <span class="dk-avatar dk-avatar--sm">АС</span>
-        <span class="dk-side__who">
-          <b>Александр С.</b>
-          <span>диспетчер</span>
-        </span>
-      </div>
+      <details class="dk-side__profile">
+        <summary aria-label="Меню профиля" title="Меню профиля"><span class="dk-avatar">АС</span></summary>
+        <div class="dk-side__profile-menu">
+          <a class="dk-menu__item" href="index.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg>Помощь</a>
+          <details><summary class="dk-menu__item"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg>Настройки</summary>
+            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button class="dk-btn dk-btn--sm" type="button" data-theme-set="light">Светлая</button><button class="dk-btn dk-btn--sm" type="button" data-theme-set="dark">Тёмная</button></div>
+          </details>
+          <div class="dk-side__profile-rule"></div>
+          <button class="dk-menu__item" type="button" disabled title="Гостевой просмотр"><svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg>Выйти</button>
+        </div>
+      </details>
     </div>
   </aside>
 
@@ -124,11 +122,11 @@
     </header>
 
     <main class="dk-content" id="main" tabindex="-1">
-      <div class="dk-wrap">
+      <div class="dk-wrap dk-wrap--monitor">
 
         <div class="dk-region-tools" role="search" aria-label="Поиск и фильтр регионов">
 <div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" id="r-search" type="search" placeholder="Название региона или округа" aria-label="Название региона или округа" aria-controls="r-rank r-table" aria-describedby="r-results"></div>
-<div id="r-period"></div><div id="r-risk"></div><button class="dk-btn dk-btn--ghost" id="r-reset" type="button">Сбросить фильтры</button><button type="button" class="dk-iconbtn" data-modal="#risk-info" aria-label="О показателе риска" title="О показателе риска"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></button></div>
+<span class="dk-caption" id="r-period">Демонстрационные данные за 30 дней</span><div id="r-risk"></div><button class="dk-iconbtn" id="r-reset" type="button" aria-label="Сбросить фильтры" title="Сбросить фильтры"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><button type="button" class="dk-iconbtn" data-modal="#risk-info" aria-label="О показателе риска" title="О показателе риска"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></button></div>
 <p class="dk-region-result" id="r-results" role="status" aria-live="polite" aria-atomic="true"></p>
 <!-- Сводка идёт первой не ради красоты. Карта отвечает на вопрос «где»,
              но не отвечает на «насколько всё плохо в целом» — а именно с этого
@@ -137,7 +135,7 @@
              оттенкам заливки. -->
         <div class="dk-grid">
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--crit-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
                 <span class="dk-tile__label">Высокий риск</span>
@@ -146,7 +144,7 @@
             </div>
           </div>
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--high-ink)">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--high-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-circle"/></svg></span>
                 <span class="dk-tile__label">Средний риск</span>
@@ -155,7 +153,7 @@
             </div>
           </div>
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-map"/></svg></span>
                 <span class="dk-tile__label">Средний балл</span>
@@ -164,7 +162,7 @@
             </div>
           </div>
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--nodata-ink)">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--nodata-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-minus"/></svg></span>
                 <span class="dk-tile__label">Без данных</span>
@@ -179,7 +177,7 @@
           <div class="dk-col--two-thirds">
             <div class="dk-widget">
               <div class="dk-widget__head">
-                <h2 class="dk-widget__title" id="r-map-title">89 регионов · карта риска</h2>
+              <h2 class="dk-widget__title" id="r-map-title">Карта риска</h2>
                 <span class="dk-widget__hint" title="Карта отвечает «где», плитки — «у кого хуже»"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
                 <!-- Переключатель вида карты переезжает сюда, в постоянное
                      место действий виджета: у карты своя шапка появилась
@@ -211,7 +209,7 @@
           <div class="dk-col--full">
             <div class="dk-widget">
               <div class="dk-widget__head">
-                <h2 class="dk-widget__title">Регионы в текущем срезе</h2>
+                <h2 class="dk-widget__title">Регионы</h2>
                 <div class="dk-widget__actions">
                   <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Обновить" aria-label="Обновить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-refresh"/></svg></button>
                   <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Выгрузить" aria-label="Выгрузить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
@@ -253,28 +251,19 @@
 
 
   window.addEventListener('DOMContentLoaded', function () {
-    if (typeof dkPeriod === 'function') {
-      dkPeriod(document.getElementById('r-period'), {
-        label: 'Период', size: 'md', value: { preset: 30 }, url: 'period', onChange: function () {}
-      });
-    }
 
     // Данные подаются объектами, а не читаются китом самостоятельно: на file://
     // fetch запрещён браузером, и виджет, который сам лезет за файлом, на
     // двойной клик просто не открылся бы. Это ограничение браузера, не кита.
     Promise.all([
       fetch('data/regions.topojson').then(function (r) { return r.json(); }),
-      fetch('data/regions-tiles.json').then(function (r) { return r.json(); })
+      fetch('data/regions-tiles.json').then(function (r) { return r.json(); }),
+      fetch('data/monitor-demo.json').then(function (r) { return r.json(); })
     ]).then(function (res) {
       var topo = res[0], tiles = res[1];
 
-      // Демонстрационные баллы риска: детерминированные, чтобы картинка не
-      // менялась при каждой перезагрузке.
-      var values = {}, seed = 11;
-      tiles.tiles.forEach(function (t) {
-        seed = (seed * 1103515245 + 12345) % 2147483648;
-        values[t.id] = 28 + seed % 68;
-      });
+      // Один демонстрационный источник для сводки и регионального среза.
+      var values = res[2].risk.values;
 
       var byId = {};
       tiles.tiles.forEach(function (t) { byId[t.id] = t.name; });
@@ -296,7 +285,7 @@
       // Текстовая ступень смысла, а не заливочная: это число человек читает,
       // а не опознаёт как пятно. Заливочный --crit даёт на тёмной теме 2.95:1
       // при норме 4.5:1 — см. проверку РОЛЬ в tools/check.py.
-      function tone(v) { return v >= 78 ? 'var(--crit-ink)' : v >= 60 ? 'var(--high-ink)' : 'var(--calm-ink)'; }
+      function tone(v) { return v >= 78 ? window.dkMeaning('crit', 'text') : v >= 60 ? window.dkMeaning('high', 'text') : window.dkMeaning('calm', 'text'); }
       // Значок у состояния свой: одинаковая галочка у «высокого» и «низкого»
       // риска — это подпись, которая спорит с собственным цветом.
       function state(v) {
@@ -419,14 +408,14 @@
           return (!riskFilter.value || state(x.v)[0] === riskFilter.value) &&
             (!query || ((byId[x.id] || x.id) + ' ' + (fd[x.id] || '')).toLocaleLowerCase('ru').includes(query));
         });
-        document.getElementById('r-map-title').textContent = 'Карта риска · в срезе ' + all.length + ' из ' + source.length;
+        document.getElementById('r-map-title').textContent = 'Карта риска';
         page = 1;
         resort();
         rows();
         paint(all.slice().sort(function (a, b) { return b.v - a.v; }).slice(0, 14));
         map.setScope(all.map(function (x) { return x.id; }));
         if (pager) { pager.setTotal(all.length); pager.goTo(1); }
-        document.getElementById('r-results').textContent = 'Найдено регионов: ' + all.length + ' из ' + source.length + '. ' + (all.length ? 'Название в рейтинге или таблице открывает детали.' : 'Измените запрос или сбросьте фильтры.');
+        document.getElementById('r-results').textContent = (query || riskFilter.value) ? (all.length ? 'Найдено: ' + all.length : 'Ничего не найдено') : '';
         document.getElementById('r-k-crit').textContent = all.filter(function (x) { return x.v >= 78; }).length;
         document.getElementById('r-k-high').textContent = all.filter(function (x) { return x.v >= 60 && x.v < 78; }).length;
         document.getElementById('r-k-avg').textContent = all.length ? Math.round(all.reduce(function (n,x) { return n+x.v; },0)/all.length) : '—';
@@ -437,8 +426,7 @@
     }).catch(function (e) {
       document.getElementById('r-map').innerHTML =
         '<div class="dk-error"><div class="dk-error__title">Контуры не загрузились</div>' +
-        '<div>Откройте страницу по http, а не двойным кликом: браузер запрещает ' +
-        'читать файлы с диска.</div></div>';
+        '<div>Не удалось загрузить карту. Обновите страницу.</div></div>';
       console.error(e);
     });
   });

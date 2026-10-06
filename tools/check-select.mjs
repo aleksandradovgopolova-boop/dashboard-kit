@@ -1,61 +1,7 @@
-// Регрессия поиска dk-select в настоящем Chrome, без зависимостей.
-import { spawn } from 'node:child_process';
-import { createServer } from 'node:http';
-import { readFile, readdir, mkdtemp, rm } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join, extname, resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-function findChrome() {
-  const c = [
-    process.env.DK_CHROME,
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-    '/Applications/Chromium.app/Contents/MacOS/Chromium',
-    '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable',
-    '/usr/bin/chromium', '/usr/bin/chromium-browser',
-  ];
-  return c.find(p => p && existsSync(p)) || null;
-}
-
-async function launch(chrome) {
-  const profile = await mkdtemp(join(tmpdir(), 'dk-mobile-'));
-  const proc = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`,
-    '--no-first-run', '--no-default-browser-check', '--disable-gpu', '--hide-scrollbars', 'about:blank'],
-    { stdio: ['ignore', 'ignore', 'pipe'] });
-  const url = await new Promise((ok, no) => {
-    let buf = '';
-    const t = setTimeout(() => no(new Error('Chrome не ответил за 15 с')), 15000);
-    proc.stderr.on('data', d => {
-      buf += d;
-      const m = buf.match(/DevTools listening on (ws:\/\/\S+)/);
-      if (m) { clearTimeout(t); ok(m[1]); }
-    });
-    proc.on('exit', c => no(new Error('Chrome вышел с кодом ' + c)));
-  });
-  const ws = new WebSocket(url);
-  await new Promise((ok, no) => { ws.onopen = ok; ws.onerror = no; });
-  let id = 0;
-  const wait = new Map();
-  const listeners = [];
-  ws.onmessage = e => {
-    const m = JSON.parse(e.data);
-    if (m.id && wait.has(m.id)) {
-      const [ok, no] = wait.get(m.id); wait.delete(m.id);
-      m.error ? no(new Error(m.error.message)) : ok(m.result);
-    } else if (m.method) listeners.forEach(f => f(m));
-  };
-  const send = (method, params = {}, sessionId) => new Promise((ok, no) => {
-    const n = ++id; wait.set(n, [ok, no]);
-    ws.send(JSON.stringify({ id: n, method, params, sessionId }));
-  });
-  const close = async () => {
-    try { await send('Browser.close'); } catch { /* уже закрыт */ }
-    proc.kill();
-    await rm(profile, { recursive: true, force: true }).catch(() => {});
-  };
-  return { send, on: f => listeners.push(f), off: f => listeners.splice(listeners.indexOf(f), 1), close };
-}
+import {readFile} from 'node:fs/promises';
+import {resolve,dirname,join} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {findChrome,launch} from './browser-harness.mjs';
 
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');

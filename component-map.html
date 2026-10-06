@@ -60,7 +60,7 @@
     <p class="sc-hero__lead">Два вида на одних данных. Карта отвечает «где», плитки — «у кого хуже»: на карте площадь региона перебивает его значение. Переключатель — часть виджета, а не настройка.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>js/dk-map.js</code> · <code>data/regions.topojson</code> · <code>data/regions-tiles.json</code></span>
+      <span class="sc-meta__i">код: <a href="js/dk-map.js"><code>js/dk-map.js</code></a> · <a href="data/regions.topojson"><code>data/regions.topojson</code></a> · <a href="data/regions-tiles.json"><code>data/regions-tiles.json</code></a></span>
     </div>
   </header>
 
@@ -96,7 +96,7 @@
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
-    <ul class="sc-list sc-list--wide"><li><b>Плитки — кнопки</b> с <code>aria-label</code> «регион · значение»; по сетке ходят стрелками, tabindex один на всю сетку.</li><li><b>Карта</b> недоступна с клавиатуры (canvas) — поэтому плитки обязательны, а не опция.</li><li><b>Шкала</b> — пять ступеней, все видны на своей доске в обеих темах (проверка ШКАЛА).</li><li><b>«Нет данных»</b> в тёмной теме 1,69:1 к поверхности — ниже нормы; открыто в HANDOFF.md (штриховка вместо цвета).</li></ul>
+    <ul class="sc-list sc-list--wide"><li><b>Плитки — кнопки</b> с <code>aria-label</code> «регион · значение»; по сетке ходят стрелками, tabindex один на всю сетку.</li><li><b>Карта</b> недоступна с клавиатуры (canvas) — поэтому плитки обязательны, а не опция.</li><li><b>Шкала</b> — пять ступеней, все видны на своей доске в обеих темах (проверка ШКАЛА).</li><li><b>«Нет данных»</b> в тёмной теме 1,69:1 к поверхности — ниже нормы; открыто в HANDOFF.md (ровная заливка и подпись «Нет данных»).</li></ul>
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
@@ -120,7 +120,7 @@ var m = dkMap(document.getElementById(&#x27;regions&#x27;), {
 });
 m.view = &#x27;tiles&#x27;;
 m.setValues(next);                     // шкала пересчитается
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>topo, object / geo</code></td><td>объект</td><td>Контуры регионов.</td></tr><tr><td><code>tiles</code></td><td>объект</td><td>Раскладка плиток.</td></tr><tr><td><code>values</code></td><td>{id: число}</td><td>Значения; отсутствие — «нет данных».</td></tr><tr><td><code>unit, steps, min, max</code></td><td>строка, массив, числа</td><td>Легенда и шкала.</td></tr><tr><td><code>controls</code></td><td>селектор | элемент | false</td><td>Куда поставить сегмент. По умолчанию — в шапку своего виджета.</td></tr><tr><td><code>onSelect(id, value)</code></td><td>функция</td><td>Клик по региону или плитке.</td></tr><tr><td><code>scope / setScope(ids)</code></td><td>массив id | null</td><td>Регионы в срезе фильтра; остальные приглушены, «вне среза» — в легенде и подписи. Шкала — общая по стране.</td></tr><tr><td><code>view / setValues(v) / destroy()</code></td><td>API</td><td>Вид, данные, уборка.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>topo, object / geo</code></td><td>объект</td><td>Контуры регионов.</td></tr><tr><td><code>tiles</code></td><td>объект</td><td>Раскладка плиток.</td></tr><tr><td><code>values</code></td><td>{id: число}</td><td>Значения; отсутствие — «нет данных».</td></tr><tr><td><code>unit, steps, min, max</code></td><td>строка, массив, числа</td><td>Легенда и шкала.</td></tr><tr><td><code>controls</code></td><td>селектор | элемент | false</td><td>Куда поставить сегмент. По умолчанию — в шапку своего виджета.</td></tr><tr><td><code>onSelect(id, value)</code></td><td>функция</td><td>Клик по региону или плитке.</td></tr><tr><td><code>scope / setScope(ids)</code></td><td>массив id | null</td><td>Регионы в срезе фильтра; остальные приглушены, «вне среза» — в легенде и подписи. Шкала — общая по стране.</td></tr><tr><td><code>view / setValues(v) / destroy()</code></td><td>API</td><td>Вид, данные, уборка.</td></tr><tr><td><code>update({values,scope,view}) / destroy()</code></td><td>API</td><td>Обновление одним проходом; старые setValues/setScope/view сохранены.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>

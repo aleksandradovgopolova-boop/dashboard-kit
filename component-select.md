@@ -72,3 +72,4 @@ f.set('sfo'); f.clear(); f.setOptions(list);
 - `url` (строка): Ключ в строке запроса; пусто — не пишется.
 - `onChange(v)` (функция): При каждой смене выбора.
 - `value / set(v) / clear() / setOptions(list)` (API): Читать и менять снаружи.
+- `update({value,options}) / destroy()` (API): Тихое обновление; cleanup меню, focusout, anchor и подписок. Старые set/clear/setOptions сохранены.

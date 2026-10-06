@@ -58,7 +58,7 @@
     <p class="sc-hero__lead">Tab и Shift+Tab циклически обходят интерактивные элементы открытого слоя.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-focus-trap.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-focus-trap.js"><code>js/dk-focus-trap.js</code></a></span>
     </div>
   </header>
 
@@ -103,7 +103,7 @@ window.addEventListener(&#x27;DOMContentLoaded&#x27;,function(){
  button.addEventListener(&#x27;click&#x27;,function(){dialog.showModal();trap=dkFocusTrap(dialog,{onEscape:function(){dialog.close();}});});
  dialog.addEventListener(&#x27;close&#x27;,function(){if(trap){trap.destroy();trap=null;}button.focus();});
 });
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkFocusTrap(root, options)</code></td><td>функция</td><td>Устанавливает цикл фокуса.</td></tr><tr><td><code>destroy()</code></td><td>метод</td><td>Снимает обработчики и возвращает предыдущий фокус.</td></tr><tr><td><code>onEscape</code></td><td>функция</td><td>Обязательный путь закрытия для собственного слоя.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkFocusTrap(root, options)</code></td><td>функция</td><td>Устанавливает цикл фокуса.</td></tr><tr><td><code>destroy()</code></td><td>метод</td><td>Снимает обработчики и возвращает предыдущий фокус.</td></tr><tr><td><code>onEscape</code></td><td>функция</td><td>Обязательный путь закрытия для собственного слоя.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>

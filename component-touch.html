@@ -58,7 +58,7 @@
     <p class="sc-hero__lead">Начало, движение, завершение и отмена pointer-жеста для мыши, пера и тача.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-touch.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-touch.js"><code>js/dk-touch.js</code></a></span>
     </div>
   </header>
 
@@ -101,7 +101,7 @@
 window.addEventListener(&#x27;DOMContentLoaded&#x27;,function(){
  dkTouch(&#x27;#demo-touch&#x27;,{onEnd:function(data){document.getElementById(&#x27;demo-touch-status&#x27;).textContent=data.isSlide?&#x27;Сдвиг: &#x27;+Math.round(data.shiftX)+&#x27; × &#x27;+Math.round(data.shiftY)+&#x27; px&#x27;:&#x27;Нажатие без перемещения&#x27;;},onCancel:function(){document.getElementById(&#x27;demo-touch-status&#x27;).textContent=&#x27;Жест отменён браузером&#x27;;}});
 });
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkTouch(root, options)</code></td><td>функция</td><td>onStart, onMove, onEnd, onCancel; threshold по умолчанию 8 px.</td></tr><tr><td><code>payload</code></td><td>объект</td><td>event, pointerType, startX/Y, shiftX/Y, duration, isSlide, isX/Y.</td></tr><tr><td><code>destroy()</code></td><td>метод</td><td>Удаляет обработчики и освобождает pointer capture.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkTouch(root, options)</code></td><td>функция</td><td>onStart, onMove, onEnd, onCancel; threshold по умолчанию 8 px.</td></tr><tr><td><code>payload</code></td><td>объект</td><td>event, pointerType, startX/Y, shiftX/Y, duration, isSlide, isX/Y.</td></tr><tr><td><code>destroy()</code></td><td>метод</td><td>Удаляет обработчики и освобождает pointer capture.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>

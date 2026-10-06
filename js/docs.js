@@ -147,6 +147,7 @@
     items.forEach(function (item) { addLink(body, item[0], sectionHref(item[1]), 'Руководство', name); });
     catalog.appendChild(box); return body;
   }
+  addLink(catalog, 'Правила и компоненты', 'index.html', 'Руководство', 'Начало работы');
   var home = document.createElement('a'); home.className = 'sc-nav__home'; home.href = 'showcase.html';
   home.appendChild(document.createTextNode('Обзор')); catalog.appendChild(home);
   var visual = [

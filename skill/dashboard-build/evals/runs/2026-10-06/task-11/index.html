@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="">
+<title>Выбор служб</title>
+<!-- dashboard-kit: base, tree-select, layout, type, button, empty. Собрано: python3 tools/kit.py head tree-select layout type button empty -->
+<script src="../../../../../../js/dk-theme.js"></script>
+<link rel="stylesheet" href="../../../../../../css/tokens.primitives.css">
+<link rel="stylesheet" href="../../../../../../css/tokens.semantic.css">
+<link rel="stylesheet" href="../../../../../../css/components.css">
+<script src="../../../../../../js/dk-util.js"></script>
+<script src="../../../../../../js/dk-icons.js" defer></script>
+<script src="../../../../../../js/dk-tree.js" defer></script>
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+
+</head>
+<body class="dk-page">
+<main class="dk-wrap">
+<div class="dk-head"><h1 class="dk-h1">Выбор служб</h1></div>
+<div class="dk-grid">
+<section class="dk-widget dk-col--full" aria-labelledby="service-heading">
+<div class="dk-widget__head"><h2 class="dk-widget__title" id="service-heading">Службы в рабочем срезе</h2></div>
+<div class="dk-widget__body dk-stack">
+<p class="dk-body">Выберите несколько служб или целую группу. Частичный выбор группы обозначен mixed: часть дочерних служб выбрана.</p>
+<div id="services"></div>
+<p id="selection" class="dk-body" role="status" aria-live="polite"></p>
+<div><button id="clear" type="button" class="dk-btn">Снять выбор</button></div>
+<p class="dk-caption">Если поиск ничего не нашёл, очистите поле или измените запрос. Стрелки ↑/↓ перемещают фокус; →/← раскрывают и сворачивают группу. Home/End — к началу/концу. Пробел или Enter — выбрать.</p>
+<p class="dk-caption">Источник: демонстрационный справочник, 8 узлов. Аварийно-диспетчерская служба временно недоступна для выбора.</p>
+<p class="dk-body"><strong>Если в справочнике 1500 узлов:</strong> TreeSelect поддерживает до 1000 узлов без виртуализации. Сначала сузьте справочник по территории или направлению работ до 1000 узлов, затем выбирайте службы. Поиск внутри дерева не заменяет предварительное сужение: исходные 1500 узлов передавать компоненту нельзя.</p>
+</div>
+</section>
+</div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+const nodes=[{id:'all',label:'Все коммунальные службы',children:[
+{id:'engineering',label:'Инженерные сети',children:[
+{id:'heat',label:'Служба теплоснабжения'},
+{id:'water',label:'Служба водоснабжения'},
+{id:'drainage',label:'Служба водоотведения'}]},
+{id:'city',label:'Городское хозяйство',children:[
+{id:'clean',label:'Служба благоустройства'},
+{id:'dispatch',label:'Аварийно-диспетчерская служба',disabled:true}]}]}];
+const names=new Map();
+function collect(list){ list.forEach(node=>{names.set(node.id,node.label);if(node.children)collect(node.children);}); }
+collect(nodes);
+const status=document.getElementById('selection');
+function show(ids){status.textContent=ids.length ? 'В рабочем срезе: '+ids.map(id=>names.get(id)||id).join('; ')+'.' : 'Службы не выбраны. Выберите группу или отдельные службы.';}
+const options={label:'Службы',nodes,value:['heat'],onChange:show};
+const tree=dkTreeSelect(document.getElementById('services'), options);
+tree.expand('all'); tree.expand('engineering'); tree.expand('city');
+show(tree.value());
+document.getElementById('clear').addEventListener('click',function(){tree.update({value:[]});show(tree.value());});
+window.demo={tree,nodes,options,show};
+window.addEventListener('pagehide',function(event){if(!event.persisted)tree.destroy();});
+});
+</script>
+</body>
+</html>

@@ -69,6 +69,8 @@
   var SEQ = 0;
 
   window.dkSelect = function (host, opts) {
+    window.dkDestroy(host);
+    var stopped = false;
     opts = opts || {};
     var mode = opts.mode === 'multi' ? 'multi' : 'single';
     var options = opts.options || [];
@@ -225,6 +227,7 @@
     }
 
     function clear() {
+      if (stopped) return;
       if (!selected.size) return;
       selected.clear();
       renderTrigger();
@@ -291,12 +294,13 @@
     /* Уход фокуса за пределы поля закрывает список. Раньше закрывал только
        щелчок мимо: человек уходил табом, меню оставалось висеть поверх
        страницы и перехватывало следующий Escape. */
-    host.addEventListener('focusout', function (e) {
+    function onFocusout(e) {
       if (!open) return;
       if (e.relatedTarget && host.contains(e.relatedTarget)) return;
       if (!e.relatedTarget) return;      // уход фокуса в никуда — не повод
       close(false);
-    });
+    }
+    host.addEventListener('focusout', onFocusout);
 
     function onKey(e) {
       var list = visible();
@@ -336,7 +340,10 @@
     function onPopup(e) { if (e.detail !== close) close(false); }
     document.addEventListener('dk-popup', onPopup);
 
-    own(host, function () {
+    var destroy = own(host, function () {
+      stopped = true;
+      close(false);
+      host.removeEventListener('focusout', onFocusout);
       document.removeEventListener('dk-popup', onPopup);
       document.removeEventListener('mousedown', onOutside, true);
       host.innerHTML = '';
@@ -357,9 +364,17 @@
 
     return {
       get value() { return mode === 'multi' ? Array.from(selected) : (Array.from(selected)[0] || null); },
-      set: function (v) { selected = new Set(v ? [].concat(v) : []); renderTrigger(); if (open) renderMenu(); },
+      set: function (v) { if (stopped) return; selected = new Set(v ? [].concat(v) : []); renderTrigger(); if (open) renderMenu(); },
+      destroy: destroy,
+      update: function (next) {
+        if (stopped) return;
+        next = next || {};
+        if (next.options) options = next.options;
+        if (Object.prototype.hasOwnProperty.call(next, 'value')) selected = new Set(next.value ? [].concat(next.value) : []);
+        renderTrigger(); if (open) renderMenu();
+      },
       clear: clear,
-      setOptions: function (next) { options = next || []; renderTrigger(); if (open) renderMenu(); }
+      setOptions: function (next) { if (stopped) return; options = next || []; renderTrigger(); if (open) renderMenu(); }
     };
   };
 })();

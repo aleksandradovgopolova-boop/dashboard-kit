@@ -38,19 +38,18 @@
 <body class="dk-page">
 <a class="dk-skip" href="#main">К содержимому</a>
 
-<div class="dk-app" data-nav="closed">
+<div class="dk-app dk-app--rail" data-nav="folded">
 
   <aside class="dk-side">
     <div class="dk-side__head">
       <span class="dk-side__mark"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
       <span class="dk-side__name">Мониторинг</span>
-      <button class="dk-iconbtn dk-iconbtn--sm" data-act="fold" aria-pressed="false" title="Свернуть меню" aria-label="Свернуть меню">
+      <button class="dk-iconbtn dk-iconbtn--sm" data-act="fold" aria-pressed="true" title="Развернуть меню" aria-label="Развернуть меню">
         <svg class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg>
       </button>
     </div>
 
     <nav class="dk-side__nav" aria-label="Разделы">
-      <div class="dk-side__group">Обзор</div>
       <a class="dk-side__item" href="#">
         <svg class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg>
         <span class="dk-side__label">Сводка</span>
@@ -65,7 +64,6 @@
         <span class="dk-side__n">23</span>
       </a>
 
-      <div class="dk-side__group">Работа</div>
       <a class="dk-side__item" href="#">
         <svg class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg>
         <span class="dk-side__label">Заявки</span>
@@ -86,17 +84,17 @@
     </nav>
 
     <div class="dk-side__foot">
-      <a class="dk-side__item" href="#">
-        <svg class="dk-i dk-i--sm"><use href="#ti-settings"/></svg>
-        <span class="dk-side__label">Настройки</span>
-      </a>
-      <div class="dk-side__user">
-        <span class="dk-avatar dk-avatar--sm">АС</span>
-        <span class="dk-side__who">
-          <b>Александр С.</b>
-          <span>диспетчер</span>
-        </span>
-      </div>
+      <details class="dk-side__profile">
+        <summary aria-label="Меню профиля" title="Меню профиля"><span class="dk-avatar">АС</span></summary>
+        <div class="dk-side__profile-menu">
+          <a class="dk-menu__item" href="index.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg>Помощь</a>
+          <details><summary class="dk-menu__item"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg>Настройки</summary>
+            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button class="dk-btn dk-btn--sm" type="button" data-theme-set="light">Светлая</button><button class="dk-btn dk-btn--sm" type="button" data-theme-set="dark">Тёмная</button></div>
+          </details>
+          <div class="dk-side__profile-rule"></div>
+          <button class="dk-menu__item" type="button" disabled title="Гостевой просмотр"><svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg>Выйти</button>
+        </div>
+      </details>
     </div>
   </aside>
 
@@ -253,8 +251,8 @@
      а внутри неё и значок, и значение — текстовые роли. Тот же дефект, что был
      на регионах; проверка РОЛЬ его не видит, потому что разметку собирает
      скрипт. Найден глазами, второй раз подряд. */
-  var TONE = { crit: 'var(--crit-ink)', high: 'var(--high-ink)', plan: 'var(--brand)',
-               calm: 'var(--calm-ink)', event: 'var(--event)' };
+  var TONE = { crit: window.dkMeaning('crit', 'text'), high: window.dkMeaning('high', 'text'), plan: 'var(--brand)',
+               calm: window.dkMeaning('calm', 'text'), event: window.dkMeaning('event', 'text') };
 
 
   window.addEventListener('DOMContentLoaded', function () {
@@ -280,7 +278,7 @@
             // Название работы и время приходят из данных, то есть снаружи.
             // TONE и ICON — свои словари, но kind тоже чужой: неизвестный вид
             // даст undefined в разметке, поэтому подставляем запасные.
-            var tone = TONE[e.kind] || 'var(--nodata)';
+            var tone = TONE[e.kind] || window.dkMeaning('nodata', 'text');
             var icon = ICON[e.kind] || 'ti-info-circle';
             return '<button class="dk-list__row" style="--accent:' + tone + '">' +
               '<span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#' + icon + '"/></svg></span>' +

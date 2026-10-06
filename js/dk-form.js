@@ -60,7 +60,12 @@
     ff.removeAttribute('data-invalid');
     el.removeAttribute('aria-invalid');
     var err = ff.querySelector('.dk-err');
-    if (err) err.remove();
+    if (err) {
+      var ids = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(function (id) { return id && id !== err.id; });
+      if (ids.length) el.setAttribute('aria-describedby', ids.join(' '));
+      else el.removeAttribute('aria-describedby');
+      err.remove();
+    }
   }
 
   function show(el, text) {
@@ -153,7 +158,7 @@
     });
 
     return {
-      validate: function () { return controls().every(validate); },
+      validate: function () { var valid = true; controls().forEach(function (el) { if (!validate(el)) valid = false; }); return valid; },
       clear: function () { controls().forEach(clear); if (alarm) alarm.hidden = true; }
     };
   };

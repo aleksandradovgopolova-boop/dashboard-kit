@@ -577,6 +577,21 @@ def check_accent_role(primitives: str, semantic: str,
         notes.append("РОЛЬ · смысл, поставленный в текст, читается как текст")
 
 
+def check_dynamic_meaning(scripts, pages):
+    """Lexical guard, not a JavaScript parser; computed token construction is banned too."""
+    bodies = [(n, t) for n, t in scripts if n not in ("dk-util.js", "dk-chart-theme.js")]
+    for n, t in pages:
+        bodies.extend((n, x) for x in re.findall(r"<script\b[^>]*>(.*?)</script>", t, re.S))
+    bad = False
+    for n, t in bodies:
+        t = re.sub(r"//[^\n]*", "", strip_comments(t))
+        if re.search(r"--(?:crit|high|calm|event|nodata)(?:-ink|-dim|-d)?\b", t) or re.search(r"var\(\s*--['\"]\s*\+", t):
+            fail("DYNAMIC MEANING", f"{n}: semantic token in JavaScript; use dkMeaning(name, text/fill)")
+            bad = True
+    if not bad:
+        notes.append("DYNAMIC MEANING · динамический смысл только через dkMeaning с явной ролью")
+
+
 def script_files() -> list[Path]:
     return sorted((ROOT / "js").glob("*.js"))
 
@@ -1107,9 +1122,8 @@ def check_spot(primitives: str, semantic: str) -> None:
 
     --nodata из проверки исключён, и это осознанное исключение с ценой:
     поднять серый «нет данных» до 3:1 значит сделать отсутствие данных таким
-    же громким, как сами данные. Правильный ответ для него — не цвет, а
-    штриховка: отсутствие должно читаться как «не значение», а не как тихое
-    значение. Пока этого нет, пункт открыт и записан в REVIEW.md.
+    же громким, как сами данные. Отсутствие обозначается ровной нейтральной
+    заливкой и явным текстом «Нет данных».
     """
     need = 3.0
     ok = True
@@ -1791,7 +1805,7 @@ def check_pages() -> None:
             fail("СТРАНИЦЫ", f"{name} разошёлся с генератором — правь tools/component_pages/ "
                              f"и пересобери: python3 tools/build-component-pages.py")
             bad = True
-        if name.endswith(".html"):
+        if name.startswith("component-") and name.endswith(".html"):
             found = re.findall(r"<h2>(.*?)</h2>", text)
             if found != titles:
                 fail("СТРАНИЦЫ", f"{name}: блоки {found} вместо {titles}")
@@ -2538,6 +2552,7 @@ def main() -> int:
     check_raw_values(semantic, layers)
     check_unknown(primitives, semantic, layers, pages, scripts)
     check_inputs(layers)
+    check_dynamic_meaning(scripts, pages)
     check_accent_role(primitives, semantic, layers, pages)
     check_escaping(pages)
     styled = layers + [(n, page_css(t)) for n, t in pages]
@@ -2555,6 +2570,10 @@ def main() -> int:
     check_engine()
     check_zero_size()
     check_quiet(primitives, semantic, layers)
+    from uiux_policy import validate as validate_uiux
+    for error in validate_uiux(ROOT):
+        fail("UIUX", error)
+    notes.append("UI/UX: реестр и десять эвристик согласованы; ручное ревью отдельно")
     check_pages()
     check_manifest()
     check_classes()

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Тепловая карта · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p6_advanced.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/dk-analysis.js" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__t">dashboard-kit</span>
+  </a>
+  <div class="sc-ctl">
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Визуализация</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-heatmap.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
+    <h1>Тепловая карта</h1>
+    <p class="sc-hero__lead">Сравнение интенсивности по объектам и интервалам с доступными числами.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>экспериментальный</span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-analysis.js"><code>js/dk-analysis.js</code></a></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <div class="sc-playground"><div class="sc-playground__canvas"><div id="advanced-heatmap"></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+  </section>
+  <section class="sc-sec" id="kogda-ispolzovat">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно найти сочетания объект × время, требующие внимания.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Есть только один ряд: используйте bar-h или uptime для доступности.</li></ul></div></div>
+  </section>
+  <section class="sc-sec" id="anatomiya">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div inert aria-hidden="true"><div id="anatomy-heatmap"></div></div></div><ol class="sc-anatomy__list"><li><b>Контекст</b> — Сравнение интенсивности по объектам и интервалам с доступными числами.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
+  </section>
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Компонент следует ширине контейнера и системным токенам. Настоящая таблица с заголовками scope и числовыми значениями. Четыре уровня отмечены I–IV, а отсутствие — текстом и нейтральной заливкой. На телефоне таблица прокручивается внутри; цвета смысловые, не accent.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkHeatmap(el, opts)</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec" id="sostoyaniya">
+    <h2>Состояния</h2>
+    <p>Ноль — измерение. null/нечисловые значения — Нет данных. Пороговая оценка объясняется легендой; большая матрица требует предварительной агрегации, виртуализации нет.</p>
+  </section>
+  <section class="sc-sec" id="kontent">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Нужно найти сочетания объект × время, требующие внимания.</li><li>Показывайте полные названия, единицы и источник данных.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Есть только один ряд: используйте bar-h или uptime для доступности.</li><li>Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение.</li></ul></div></div>
+  </section>
+  <section class="sc-sec" id="dostupnost">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li>Настоящая таблица с заголовками scope и числовыми значениями. Четыре уровня отмечены I–IV, а отсутствие — текстом и нейтральной заливкой. На телефоне таблица прокручивается внутри; цвета смысловые, не accent.</li><li>Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.</li></ul>
+  </section>
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-heatmap"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec" id="kod">
+    <h2>Код</h2>
+    <p></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-heatmap&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
+dkHeatmap(document.getElementById(&#x27;advanced-heatmap&#x27;), {label:&#x27;Риск по службам&#x27;, columns:[&#x27;Пн&#x27;,&#x27;Вт&#x27;,&#x27;Ср&#x27;], thresholds:[25,50,75], rows:[{label:&#x27;Тепло&#x27;,values:[12,58,null]},{label:&#x27;Вода&#x27;,values:[0,77,35]}]});
+});
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkHeatmap(el, opts)</code></td><td>API</td><td>columns: string[], rows: {label,values}[], thresholds: три возрастающих числа. update(opts), destroy().</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — точные числа</li><li><a href="README.md">Подключение</a> — dk-theme первым, dk-util до компонента</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+document.addEventListener("DOMContentLoaded", function(){dkHeatmap(document.getElementById('advanced-heatmap'), {label:'Риск по службам', columns:['Пн','Вт','Ср'], thresholds:[25,50,75], rows:[{label:'Тепло',values:[12,58,null]},{label:'Вода',values:[0,77,35]}]});});
+})();
+</script>
+</body>
+</html>

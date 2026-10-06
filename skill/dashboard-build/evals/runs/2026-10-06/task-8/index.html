@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#13151a">
+<title>Риск по службам и дням</title>
+<!-- dashboard-kit: base, heatmap, layout, type. Собрано: python3 tools/kit.py head heatmap layout type -->
+<script src="../../../../../../js/dk-theme.js"></script>
+<link rel="stylesheet" href="../../../../../../css/tokens.primitives.css">
+<link rel="stylesheet" href="../../../../../../css/tokens.semantic.css">
+<link rel="stylesheet" href="../../../../../../css/components.css">
+<script src="../../../../../../js/dk-util.js"></script>
+<script src="../../../../../../js/dk-icons.js" defer></script>
+<script src="../../../../../../js/dk-analysis.js" defer></script>
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+</head>
+<body class="dk-page">
+<main class="dk-wrap">
+<div class="dk-grid">
+<section class="dk-widget dk-col--full" aria-labelledby="risk-title">
+<header class="dk-widget__head"><h1 id="risk-title" class="dk-widget__title">Риск по службам и дням</h1></header>
+<div class="dk-widget__body dk-stack">
+<p class="dk-sub">Баллы риска. Чем выше значение, тем больше риск. Источник: демонстрационные данные из задания; четыре последовательных дня.</p>
+<div id="risk-heatmap"></div>
+<p id="risk-legend" class="dk-caption"></p>
+<p class="dk-caption">Римская цифра обозначает уровень независимо от цвета. «Нет данных» и штриховка означают отсутствие наблюдения; ноль — измеренный риск.</p>
+<p class="dk-caption">На узком экране прокручивайте таблицу по горизонтали. С клавиатуры: Tab до таблицы, затем стрелки влево и вправо.</p>
+</div>
+</section>
+</div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  window.riskOptions = {
+    label: 'Риск по службам и дням, баллы из 100',
+    columns: ['Понедельник', 'Вторник', 'Среда', 'Четверг'],
+    thresholds: [25, 50, 75],
+    rows: [
+      {label: 'Служба теплоснабжения', values: [0, 35, 80, null]},
+      {label: 'Служба водоснабжения', values: [null, 80, 35, 0]}
+    ]
+  };
+  window.riskHeatmap = dkHeatmap(document.getElementById('risk-heatmap'), window.riskOptions);
+  document.getElementById('risk-legend').textContent = 'Шкала ' + dkFmt.num(0) + '–' + dkFmt.num(100) + '. Уровни: I — ниже ' + dkFmt.num(25) + '; II — от ' + dkFmt.num(25) + ' до ' + dkFmt.num(50) + ' (не включая); III — от ' + dkFmt.num(50) + ' до ' + dkFmt.num(75) + ' (не включая); IV — от ' + dkFmt.num(75) + ' и выше.';
+  const scroll = document.querySelector('#risk-heatmap .dk-tablewrap');
+  if (scroll) {
+    scroll.tabIndex = 0;
+    scroll.setAttribute('role', 'region');
+    scroll.setAttribute('aria-label', 'Таблица риска, горизонтальная прокрутка');
+  }
+});
+</script>
+</body>
+</html>
