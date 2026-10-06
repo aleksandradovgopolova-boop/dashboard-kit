@@ -123,3 +123,5 @@ AI_SECURITY/EVALS/prompt-model registry/runbooks AI-native условны: пр�
 Источники: [README.md](../../README.md); [DECISIONS.md](../../DECISIONS.md); [DESIGN-UX-ACCESSIBILITY.md](../../DESIGN-UX-ACCESSIBILITY.md); [REVIEW.md](../../REVIEW.md); [HANDOFF.md](../../HANDOFF.md).
 
 Все восстановленные сведения — черновик. verified означает факт источника, inferred — вывод, unknown — неизвестно. Владелец документа не назначен; исходные решения имеют приоритет.
+
+Подтверждение Саши 06.10.2026: единица количества — целостный дашборд, его части/версии не отдельные результаты; [monitor.testdash.site](https://monitor.testdash.site/) — reference, не подтверждённый результат kit. Типовой сценарий времени и готовность/момент учёта пока unknown.
