@@ -22,3 +22,6 @@ jobs:
       - name: Регрессия поиска в Chrome
         timeout-minutes: 5
         run: node tools/check-select.mjs
+      - name: Регрессия ChipsInput и ChipsSelect
+        timeout-minutes: 5
+        run: node tools/check-chips.mjs
