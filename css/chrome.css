@@ -97,8 +97,8 @@
   overflow-y: auto;
 }
 
-/* Заголовок группы разделов. Нужен с четвёртого пункта: до этого список
-   читается целиком, дальше — по частям. */
+/* Необязательный заголовок группы для сложной навигации.
+   Мониторинг использует плоский список без групп. */
 .dk-side__group {
   font: var(--type-overline);
   letter-spacing: var(--type-overline-track);
@@ -663,10 +663,12 @@
 .dk-side__profile-rule { height: var(--hairline); background: var(--rule); margin: var(--space-4) 0; }
 .dk-side__profile-themes { display: flex; flex-wrap: wrap; gap: var(--space-3); padding: var(--space-4) 0; }
 @media (min-width: 1024px) {
-  .dk-app--rail[data-nav="folded"] { --dk-side: 112px; }
-  .dk-app--rail .dk-side { top: var(--space-6); height: calc(100dvh - var(--space-6) * 2); margin: var(--space-6); padding: var(--space-5); border-radius: var(--space-9); box-sizing: border-box; }
-  .dk-app--rail[data-nav="folded"] .dk-side { width: 80px; }
-  .dk-app--rail[data-nav="folded"] .dk-side__item { justify-content: center; padding: 0; height: var(--control-lg); min-height: var(--control-lg); flex-shrink: 0; border-radius: var(--radius-xl); }
+  .dk-app--rail[data-nav="folded"] { --dk-side: calc(var(--control-lg) + var(--space-5) * 2 + var(--space-6) * 2); }
+  .dk-app--rail .dk-side { top: var(--space-6); height: calc(100dvh - var(--space-6) * 2); margin: var(--space-6); padding: var(--space-5); border-radius: var(--radius-lg); box-sizing: border-box; }
+  .dk-app--rail[data-nav="folded"] .dk-side { width: calc(var(--control-lg) + var(--space-5) * 2); }
+  .dk-app--rail[data-nav="folded"] .dk-side__item { justify-content: center; align-self: center; padding: 0; width: var(--control-lg); height: var(--control-lg); min-height: var(--control-lg); flex-shrink: 0; box-sizing: border-box; border-radius: var(--radius-md); }
+  .dk-app--rail[data-nav="folded"] .dk-side__head .dk-iconbtn,
+  .dk-app--rail[data-nav="folded"] .dk-side__profile > summary { width: var(--control-lg); height: var(--control-lg); min-height: var(--control-lg); padding: 0; box-sizing: border-box; }
   .dk-app--rail .dk-side__foot { border-top: var(--hairline) solid var(--rule); padding-top: var(--space-4); }
 }
 @media (max-width: 1023px) {
