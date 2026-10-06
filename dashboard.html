@@ -29,6 +29,7 @@
 <script src="vendor/echarts.min.js" defer></script>
 <script src="js/dk-chart-theme.js" defer></script>
 <script src="js/dk-charts.js" defer></script>
+<script src="js/dk-workspace.js" defer></script>
 <script src="js/dk-select.js" defer></script>
 <script src="vendor/air-datepicker.js" defer></script>
 <script src="js/dk-period.js" defer></script>
@@ -151,7 +152,8 @@
              Главная карточка заменила виджет «Уровень риска»: те же 23 / 27 /
              38 / 1, но с долей от 89 и полосой состава. Два блока с одним
              ответом на экране — это лишний блок (скилл, «убрать лишнее»). -->
-        <div class="dk-grid"><div class="dk-col--half">
+        <div class="dk-grid">
+<div class="dk-col--half">
             <section class="dk-hero" style="--accent:var(--crit)">
               <div class="dk-hero__label">Регионов с высоким риском</div>
               <div class="dk-hero__row">
@@ -171,7 +173,29 @@
                 <span class="dk-key" style="--swatch:var(--nodata)"><i class="dk-key__dot"></i>Мало данных <b>1</b></span>
               </div>
             </section>
-          </div><div class="dk-col--half"><div class="dk-grid dk-grid--metrics">
+          </div>
+<div class="dk-col--half">
+            <div class="dk-widget">
+              <div class="dk-widget__head">
+                <h2 class="dk-widget__title">Аварии: факт и прогноз</h2>
+                <div class="dk-widget__actions">
+                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" disabled title="Демонстрационные данные" aria-label="Обновление недоступно для демонстрационных данных"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-refresh"/></svg></button>
+                  <button class="dk-iconbtn dk-iconbtn--sm" id="d-export" type="button" title="Экспорт PNG" aria-label="Экспорт графика в PNG"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
+                  <button class="dk-iconbtn dk-iconbtn--sm" id="d-fullscreen" type="button" title="Полный экран или выход" aria-label="Переключить полный экран графика"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
+                </div>
+              </div>
+              <!-- Раньше это объяснение жило в подсказке по наведению — то
+                   есть на планшете, с клавиатуры и со скринридером его не
+                   получить, и прогноз читался как факт. Ровно та ложь, ради
+                   предотвращения которой пунктир и введён. -->
+              <p class="dk-caption" style="margin:calc(var(--gap-section) * -1 + var(--space-3)) 0 0">
+                Пунктир — последние трое суток: данные ещё не закрыты</p>
+              <div class="dk-chart" id="d-line"></div>
+              <p class="dk-caption" role="status" id="d-export-status"></p>
+            </div>
+          </div>
+
+<div class="dk-col--half"><div class="dk-grid dk-grid--metrics">
           <div class="dk-col--half">
             <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--crit-ink)">
               <div class="dk-tile__head">
@@ -217,29 +241,8 @@
               </div>
             </div>
           </div>
-        </div></div></div>
-
-        <div class="dk-grid" style="margin-top:var(--grid-gap)">
-          <div class="dk-col--two-thirds">
-            <div class="dk-widget">
-              <div class="dk-widget__head">
-                <h2 class="dk-widget__title">Аварии: факт и прогноз</h2>
-                <div class="dk-widget__actions">
-                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Обновить" aria-label="Обновить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-refresh"/></svg></button>
-                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Выгрузить" aria-label="Выгрузить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
-                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Развернуть" aria-label="Развернуть"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
-                </div>
-              </div>
-              <!-- Раньше это объяснение жило в подсказке по наведению — то
-                   есть на планшете, с клавиатуры и со скринридером его не
-                   получить, и прогноз читался как факт. Ровно та ложь, ради
-                   предотвращения которой пунктир и введён. -->
-              <p class="dk-caption" style="margin:calc(var(--gap-section) * -1 + var(--space-3)) 0 0">
-                Пунктир — последние трое суток: данные ещё не закрыты</p>
-              <div class="dk-chart" id="d-line"></div>
-            </div>
-          </div>
-          <div class="dk-col--third">
+        </div></div>
+<div class="dk-col--half">
             <div class="dk-widget">
               <div class="dk-widget__head">
                 <h2 class="dk-widget__title">Последние события</h2>
@@ -273,6 +276,7 @@
               </div>
             </div>
           </div>
+
         </div>
 
         <div class="dk-grid" style="margin-top:var(--grid-gap)"><div class="dk-col--full">
@@ -541,10 +545,18 @@
       ]
     });
 
-    dkChart(document.getElementById('d-line'), {
+    var lineChart = dkChart(document.getElementById('d-line'), {
       type: 'area',
       categories: days.concat(['23.09', '24.09', '25.09']),
       series: [{ name: 'Аварии', data: [12,19,7,14,22,18,11,16,9,13,21,17,10,23,25,27,24], forecast: 3 }]
+    });
+    var chartWidget = document.getElementById('d-line').closest('.dk-widget');
+    dkFullscreen(chartWidget, document.getElementById('d-fullscreen'));
+    document.getElementById('d-export').addEventListener('click', function () {
+      var status = document.getElementById('d-export-status');
+      dkExport.chart(lineChart, 'dashboard-accidents').then(function () {
+        status.textContent = 'PNG подготовлен браузером';
+      }).catch(function (error) { status.textContent = 'Экспорт недоступен: ' + error.message; });
     });
   });
 </script>

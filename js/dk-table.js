@@ -74,6 +74,12 @@
   }
 
   window.dkTable = function (table, opts) {
+    window.dkDestroy(table);
+    var releases = [], watch = null, stopped = false;
+    function listen(node, type, callback) {
+      node.addEventListener(type, callback);
+      releases.push(function () { node.removeEventListener(type, callback); });
+    }
     opts = opts || {};
     var onSelect = opts.onSelect || function () {};
     var onSort = opts.onSort || null;          // передан — сортируем не мы
@@ -122,14 +128,14 @@
       return out;
     }
 
-    tbody.addEventListener('change', function (e) {
+    listen(tbody, 'change', function (e) {
       var b = e.target.closest('[data-pick]');
       if (!b) return;
       b.closest('tr').setAttribute('aria-selected', b.checked ? 'true' : 'false');
       syncAll();
     });
 
-    if (all) all.addEventListener('change', function () {
+    if (all) listen(all, 'change', function () {
       boxes().forEach(function (b) {
         b.checked = all.checked;
         b.closest('tr').setAttribute('aria-selected', all.checked ? 'true' : 'false');
@@ -157,7 +163,7 @@
       th.innerHTML = '<button type="button" class="dk-th-sort">' + esc(label) + ICON_SORT + '</button>';
       th.setAttribute('aria-sort', 'none');
 
-      th.querySelector('.dk-th-sort').addEventListener('click', function () {
+      listen(th.querySelector('.dk-th-sort'), 'click', function () {
         var dir = th.getAttribute('aria-sort') === 'ascending' ? 'descending' : 'ascending';
         heads.forEach(function (o) { o.setAttribute('aria-sort', 'none'); });
         th.setAttribute('aria-sort', dir);
@@ -205,12 +211,29 @@
       watch = new MutationObserver(labelRows);
       Array.prototype.forEach.call(table.tBodies, function (tb) { watch.observe(tb, { childList: true, subtree: true }); });
       if (table.tFoot) watch.observe(table.tFoot, { childList: true, subtree: true });
-      if (window.dkOwn) window.dkOwn(table, function () { watch.disconnect(); });
+
     }
 
+    var destroy = window.dkOwn(table, function () {
+      stopped = true;
+      releases.forEach(function (off) { off(); });
+      if (watch) watch.disconnect();
+    });
     return {
+      destroy: destroy,
+      update: function (next) {
+        if (stopped) return;
+        next = next || {};
+        if (next.selected) boxes().forEach(function (b) {
+          var id = b.closest('tr').dataset.id || b.value;
+          b.checked = next.selected.indexOf(id) >= 0;
+          b.closest('tr').setAttribute('aria-selected', String(b.checked));
+        });
+        syncAll();
+      },
       get selected() { return selected(); },
       clear: function () {
+        if (stopped) return;
         boxes().forEach(function (b) { b.checked = false; b.closest('tr').setAttribute('aria-selected', 'false'); });
         syncAll();
       }

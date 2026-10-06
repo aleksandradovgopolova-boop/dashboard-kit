@@ -639,3 +639,15 @@
   .dk-top__tools > :not(.dk-seg){ grid-column:1 / -1; margin-top:var(--space-6); min-width:0; }
   .dk-top__tools > :empty{ display:none; }
 }
+
+/* Mobile keeps the title, timestamp and controls in normal flow so a tall
+   filter row cannot permanently consume the data viewport. */
+@media (max-width: 767px) {
+  .dk-top { position: static; padding-top: var(--space-4); padding-bottom: var(--space-4); }
+  .dk-top__tools > :not(.dk-seg) { margin-top: var(--space-3); }
+}
+@media (max-width: 767px) {
+  .dk-tabbar { height: auto; min-height: 68px; }
+  .dk-tabbar__item { height: auto; min-height: 56px; }
+  .dk-tabbar__item > span { overflow: visible; white-space: normal; text-overflow: clip; text-align: center; overflow-wrap: anywhere; }
+}

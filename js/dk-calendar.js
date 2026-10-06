@@ -43,10 +43,10 @@
 
   // Виды событий. Ключ — смысл, значение — семантический токен кита.
   var KINDS = {
-    crit:  '--crit',                 // авария, отключение без предупреждения
-    high:  '--high',                 // работа на сети, ограничение
-    calm:  '--calm',                 // завершено
-    event: '--event',                // событие без оценки риска
+    crit:  'crit',                 // авария, отключение без предупреждения
+    high:  'high',                 // работа на сети, ограничение
+    calm:  'calm',                 // завершено
+    event: 'event',                // событие без оценки риска
     plan:  '--brand'                 // плановое, наше собственное
   };
 
@@ -224,7 +224,7 @@
       return events.filter(function (e) { return d >= e.day && d <= e.endDay; });
     }
 
-    function tone(e) { return 'var(' + (KINDS[e.kind] || KINDS.event) + ')'; }
+    function tone(e) { return e.kind === 'plan' ? 'var(--brand)' : window.dkMeaning(KINDS[e.kind] || 'event', 'fill'); }
 
     function label(e) {
       return (e.timed ? hhmm(e.from) + ' ' : '') + e.name;

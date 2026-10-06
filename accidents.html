@@ -332,7 +332,7 @@
   /* Текстовая ступень смысла, а не заливочная: это число и подпись, которые
      читают, а не пятно, которое опознают. Почему у смысла две ступени — в
      комментарии к ним в tokens.semantic.css. */
-  var ТОН  = { crit: 'var(--crit-ink)', high: 'var(--high-ink)', calm: 'var(--calm-ink)' };
+  var ТОН  = { crit: window.dkMeaning('crit', 'text'), high: window.dkMeaning('high', 'text'), calm: window.dkMeaning('calm', 'text') };
   var ЗНАК = { crit: 'ti-alert-triangle', high: 'ti-alert-circle', calm: 'ti-circle-check' };
 
   function состояние(a) {
