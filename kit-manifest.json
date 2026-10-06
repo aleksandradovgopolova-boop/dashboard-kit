@@ -3241,7 +3241,7 @@
     "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
    ],
    "a11y": [
-    "Фокус/мышь показывают, Escape закрывает. Касание кнопки переключает. aria-describedby сохраняет прежние ссылки. Подсказка не содержит фокусируемых элементов.",
+    "Фокус/мышь показывают, Escape закрывает только подсказку; вложенный dialog остаётся открытым. Касание кнопки переключает. aria-describedby сохраняет прежние ссылки. Подсказка не содержит фокусируемых элементов.",
     "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
    ],
    "related": [
@@ -3570,7 +3570,7 @@
     {
      "name": "dkTimelineAnnotations(el, opts)",
      "type": "API",
-     "what": "start/end задают шкалу, events:{label,start,end?}[]; update(opts), destroy()."
+     "what": "start/end задают шкалу, events:{label,start,end?}[]; update(opts) заменяет весь набор, включая start/end; destroy()."
     }
    ],
    "example": "<div id=\"advanced-annotations\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkTimelineAnnotations(document.getElementById('advanced-annotations'), {label:'События за смену',start:'2026-10-06T08:00:00+03:00',end:'2026-10-06T20:00:00+03:00',events:[{label:'Начало работ',start:'2026-10-06T10:00:00+03:00'},{label:'Ограничение',start:'2026-10-06T12:00:00+03:00',end:'2026-10-06T16:00:00+03:00'}]});\n});\n</script>",

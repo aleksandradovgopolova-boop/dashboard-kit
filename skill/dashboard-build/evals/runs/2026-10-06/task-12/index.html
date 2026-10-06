@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Локальный рабочий обзор</title><!-- dashboard-kit: base, layout, saved-views, layout-editor, density-controls, select, period, pager, table, segment, map, empty, button. Собрано: python3 tools/kit.py head layout saved-views layout-editor density-controls select period pager table segment map empty button -->
+<script src="../../../../../../js/dk-theme.js"></script>
+<link rel="stylesheet" href="../../../../../../vendor/air-datepicker.css">
+<link rel="stylesheet" href="../../../../../../css/tokens.primitives.css">
+<link rel="stylesheet" href="../../../../../../css/tokens.semantic.css">
+<link rel="stylesheet" href="../../../../../../css/components.css">
+<script src="../../../../../../js/dk-util.js"></script>
+<script src="../../../../../../js/dk-icons.js" defer></script>
+<script src="../../../../../../vendor/echarts.min.js" defer></script>
+<script src="../../../../../../js/dk-chart-theme.js" defer></script>
+<script src="../../../../../../js/dk-select.js" defer></script>
+<script src="../../../../../../vendor/air-datepicker.js" defer></script>
+<script src="../../../../../../js/dk-period.js" defer></script>
+<script src="../../../../../../js/dk-pager.js" defer></script>
+<script src="../../../../../../js/dk-table.js" defer></script>
+<script src="../../../../../../js/dk-map.js" defer></script>
+<script src="../../../../../../js/dk-workspace.js" defer></script>
+<script src="../../../../../../js/dk-layout-editor.js" defer></script>
+<!-- данные рядом с китом: data/regions.topojson, data/regions-tiles.json; страница открывается по http -->
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+
+</head><body class="dk-page"><main class="dk-wrap dk-stack">
+<header class="dk-head"><div><h1>Рабочий обзор регионов</h1><p>Демонстрационные наблюдения · офлайн, без синхронизации</p></div><button class="dk-btn" id="theme">Сменить тему</button></header>
+<div class="dk-toolbar"><div class="dk-toolbar__group"><div id="period"></div><div id="filter"></div><div id="density"></div><div class="dk-seg" role="group" aria-label="Представление"><button type="button" data-mode="map" aria-pressed="false">Карта</button><button type="button" data-mode="list" aria-pressed="true">Список</button></div><button class="dk-btn" id="reset">Сбросить срез</button></div></div>
+<p id="status" role="status"></p><div id="state-host"></div>
+<button class="dk-btn" id="preferences" aria-expanded="false" aria-controls="preferences-body">Сохранённые виды и раскладка</button><div id="preferences-body" hidden><p>Назовите вид, чтобы возвращаться к срезу. Порядок, ширина и видимость виджетов сохраняются отдельно. На телефоне — одна колонка.</p><div id="views"></div><div id="editor"></div></div>
+<div class="dk-grid" id="widgets">
+<section class="dk-widget dk-col--full" data-widget-id="table" data-widget-label="Наблюдения по регионам"><div class="dk-widget__head"><h2 class="dk-widget__title">Наблюдения по регионам</h2></div><div class="dk-widget__body"><p id="summary"></p><div id="empty" class="dk-empty" hidden><div class="dk-empty__t">Наблюдений нет</div><p>В выбранном округе за этот период нет наблюдений.</p><button class="dk-btn" id="empty-reset">Снять фильтры</button></div><div class="dk-tablewrap" style="--table-min:480px"><table id="table" class="dk-table dk-table--zebra"><caption>Риск, баллы · отсутствие значения обозначено словами</caption><thead><tr><th scope="col" data-sortable="name">Регион</th><th scope="col" data-sortable="risk" class="dk-td-num">Риск, баллы</th><th scope="col">Округ</th></tr></thead><tbody></tbody></table></div><div id="pager"></div></div></section>
+<section class="dk-widget dk-col--full" data-widget-id="map" data-widget-label="География наблюдений"><div class="dk-widget__head"><h2 class="dk-widget__title">География наблюдений</h2><div class="dk-widget__actions"><button class="dk-btn" id="tiles">Вернуться к списку</button></div></div><div id="map" class="dk-widget__body"></div></section>
+<section class="dk-widget dk-col--full" data-widget-id="help" data-widget-label="Как хранится обзор"><div class="dk-widget__head"><h2 class="dk-widget__title">Как хранится обзор</h2></div><div class="dk-widget__body"><p>Последний срез возвращается при открытии. Именованные виды и раскладка хранятся в этом браузере. При отказе хранилища работа продолжается в памяти; изменения исчезнут после закрытия. Нет данных — отсутствие наблюдения, а не нулевой риск.</p><p>Перестановка: Выше / Ниже. Ширина — список. Скрытый виджет можно вернуть через редактор; Сбросить возвращает исходную раскладку.</p></div></section>
+</div></main><script src="app.js" defer></script></body></html>

@@ -1,0 +1,53 @@
+{
+  "initial": {
+    "html": "<div class=\"dk-heatmap\" tabindex=\"0\" role=\"region\" aria-label=\"Таблица риска, горизонтальная прокрутка\"><p>Риск по службам и дням, баллы из 100</p><p class=\"dk-caption\">Низкий: &lt; 25; средний: 25–75; высокий: ≥ 75; штрихи: нет данных.</p><div class=\"dk-tablewrap\"><table class=\"dk-table dk-heatmap__table\"><caption class=\"dk-vh\">Риск по службам и дням, баллы из 100</caption><thead><tr><th scope=\"col\">Объект</th><th scope=\"col\">Понедельник</th><th scope=\"col\">Вторник</th><th scope=\"col\">Среда</th><th scope=\"col\">Четверг</th></tr></thead><tbody><tr><th scope=\"row\">Служба теплоснабжения</th><td style=\"color: var(--calm-ink);\">0<span class=\"dk-heatmap__mark\" aria-label=\" уровень 1\">Ⅰ</span></td><td style=\"color: var(--high-ink);\">35<span class=\"dk-heatmap__mark\" aria-label=\" уровень 2\">Ⅱ</span></td><td style=\"color: var(--crit-ink);\">80<span class=\"dk-heatmap__mark\" aria-label=\" уровень 4\">Ⅳ</span></td><td class=\"dk-nodata\">Нет данных</td></tr><tr><th scope=\"row\">Служба водоснабжения</th><td class=\"dk-nodata\">Нет данных</td><td style=\"color: var(--crit-ink);\">80<span class=\"dk-heatmap__mark\" aria-label=\" уровень 4\">Ⅳ</span></td><td style=\"color: var(--high-ink);\">35<span class=\"dk-heatmap__mark\" aria-label=\" уровень 2\">Ⅱ</span></td><td style=\"color: var(--calm-ink);\">0<span class=\"dk-heatmap__mark\" aria-label=\" уровень 1\">Ⅰ</span></td></tr></tbody></table></div></div>",
+    "width": 390,
+    "scrollWidth": 390,
+    "cells": [
+      {
+        "text": "0Ⅰ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "35Ⅱ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "80Ⅳ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "Нет данных",
+        "background": "rgb(37, 39, 47)",
+        "pattern": "none"
+      },
+      {
+        "text": "Нет данных",
+        "background": "rgb(37, 39, 47)",
+        "pattern": "none"
+      },
+      {
+        "text": "80Ⅳ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "35Ⅱ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "0Ⅰ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      }
+    ],
+    "api": [
+      "update",
+      "destroy"
+    ]
+  }
+}

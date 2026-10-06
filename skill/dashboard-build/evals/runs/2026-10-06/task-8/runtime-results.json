@@ -1,0 +1,149 @@
+{
+  "initial": {
+    "html": "<div class=\"dk-heatmap\"><p>Риск по службам и дням, баллы из 100</p><p class=\"dk-caption\">Ⅰ: &lt; 25; Ⅱ: ≥ 25 и &lt; 50; Ⅲ: ≥ 50 и &lt; 75; Ⅳ: ≥ 75; штрихи: нет данных.</p><div class=\"dk-tablewrap\" tabindex=\"0\" role=\"region\" aria-label=\"Таблица риска, горизонтальная прокрутка\"><table class=\"dk-table dk-heatmap__table\"><caption class=\"dk-vh\">Риск по службам и дням, баллы из 100</caption><thead><tr><th scope=\"col\">Объект</th><th scope=\"col\">Понедельник</th><th scope=\"col\">Вторник</th><th scope=\"col\">Среда</th><th scope=\"col\">Четверг</th></tr></thead><tbody><tr><th scope=\"row\">Служба теплоснабжения</th><td style=\"color: var(--calm-ink);\">0<span class=\"dk-heatmap__mark\" aria-label=\" уровень 1\">Ⅰ</span></td><td style=\"color: var(--high-ink);\">35<span class=\"dk-heatmap__mark\" aria-label=\" уровень 2\">Ⅱ</span></td><td style=\"color: var(--crit-ink);\">80<span class=\"dk-heatmap__mark\" aria-label=\" уровень 4\">Ⅳ</span></td><td class=\"dk-nodata\">Нет данных</td></tr><tr><th scope=\"row\">Служба водоснабжения</th><td class=\"dk-nodata\">Нет данных</td><td style=\"color: var(--crit-ink);\">80<span class=\"dk-heatmap__mark\" aria-label=\" уровень 4\">Ⅳ</span></td><td style=\"color: var(--high-ink);\">35<span class=\"dk-heatmap__mark\" aria-label=\" уровень 2\">Ⅱ</span></td><td style=\"color: var(--calm-ink);\">0<span class=\"dk-heatmap__mark\" aria-label=\" уровень 1\">Ⅰ</span></td></tr></tbody></table></div></div>",
+    "width": 390,
+    "scrollWidth": 390,
+    "cells": [
+      {
+        "text": "0Ⅰ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "35Ⅱ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "80Ⅳ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "Нет данных",
+        "background": "rgb(37, 39, 47)",
+        "pattern": "none"
+      },
+      {
+        "text": "Нет данных",
+        "background": "rgb(37, 39, 47)",
+        "pattern": "none"
+      },
+      {
+        "text": "80Ⅳ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "35Ⅱ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      },
+      {
+        "text": "0Ⅰ",
+        "background": "rgba(0, 0, 0, 0)",
+        "pattern": "none"
+      }
+    ],
+    "api": [
+      "update",
+      "destroy"
+    ]
+  },
+  "semantics": {
+    "caption": "Риск по службам и дням, баллы из 100",
+    "colScopes": 5,
+    "rowScopes": 2,
+    "marks": [
+      " уровень 1",
+      " уровень 2",
+      " уровень 4",
+      " уровень 4",
+      " уровень 2",
+      " уровень 1"
+    ],
+    "noData": 2,
+    "pattern": "repeating-linear-gradient(135deg, rgb(62, 76, 89) 0px, rgb(62, 76, 89) 4px, rgb(251, 251, 251) 4px, rgb(251, 251, 251) 6px)",
+    "scroll": {
+      "client": 324,
+      "width": 720
+    }
+  },
+  "tab": {
+    "class": "dk-tablewrap",
+    "label": "Таблица риска, горизонтальная прокрутка",
+    "outline": "auto"
+  },
+  "keyboardScroll": 320,
+  "shiftTab": "BODY",
+  "themes": [
+    {
+      "theme": "light",
+      "ink": "rgb(17, 116, 58)",
+      "noDataBackground": "rgb(251, 251, 251)",
+      "pattern": "repeating-linear-gradient(135deg, rgb(123, 135, 148) 0px, rgb(123, 135, 148) 4px, rgb(45, 55, 72) 4px, rgb(45, 55, 72) 6px)"
+    },
+    {
+      "theme": "dark",
+      "ink": "rgb(67, 209, 130)",
+      "noDataBackground": "rgb(37, 39, 47)",
+      "pattern": "repeating-linear-gradient(135deg, rgb(62, 76, 89) 0px, rgb(62, 76, 89) 4px, rgb(251, 251, 251) 4px, rgb(251, 251, 251) 6px)"
+    }
+  ],
+  "update": {
+    "tables": 1,
+    "text": "Риск по службам и дням, баллы из 100Ⅰ: < 25; Ⅱ: ≥ 25 и < 50; Ⅲ: ≥ 50 и < 75; Ⅳ: ≥ 75; штрихи: нет данных.Риск по службам и дням, баллы из 100ОбъектПонедельникВторникСредаЧетвергТестовая службаНет данных0Ⅰ35Ⅱ80Ⅳ"
+  },
+  "allNull": {
+    "missing": 4,
+    "numeric": 0,
+    "text": "Риск по службам и дням, баллы из 100Ⅰ: < 25; Ⅱ: ≥ 25 и < 50; Ⅲ: ≥ 50 и < 75; Ⅳ: ≥ 75; штрихи: нет данных.Риск по службам и дням, баллы из 100ОбъектПонедельникВторникСредаЧетвергНет наблюденийНет данныхНет данныхНет данныхНет данных"
+  },
+  "destroy": {
+    "text": "",
+    "tables": 0
+  },
+  "reinit": {
+    "tables": 1,
+    "cells": 8
+  },
+  "ax": [
+    {
+      "role": "region",
+      "name": "Риск по службам и дням"
+    },
+    {
+      "role": "table",
+      "name": "Риск по службам и дням, баллы из 100"
+    },
+    {
+      "role": "rowheader",
+      "name": "Служба теплоснабжения"
+    },
+    {
+      "role": "rowheader",
+      "name": "Служба водоснабжения"
+    },
+    {
+      "role": "columnheader",
+      "name": "ОБЪЕКТ"
+    },
+    {
+      "role": "columnheader",
+      "name": "ПОНЕДЕЛЬНИК"
+    },
+    {
+      "role": "columnheader",
+      "name": "ВТОРНИК"
+    },
+    {
+      "role": "columnheader",
+      "name": "СРЕДА"
+    },
+    {
+      "role": "columnheader",
+      "name": "ЧЕТВЕРГ"
+    }
+  ],
+  "errors": []
+}

@@ -66,7 +66,7 @@
   </section>
   <section class="sc-sec" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Компонент следует ширине контейнера и системным токенам. Фокус/мышь показывают, Escape закрывает. Касание кнопки переключает. aria-describedby сохраняет прежние ссылки. Подсказка не содержит фокусируемых элементов.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkTooltip(trigger, {text})</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+    <p>Компонент следует ширине контейнера и системным токенам. Фокус/мышь показывают, Escape закрывает только подсказку; вложенный dialog остаётся открытым. Касание кнопки переключает. aria-describedby сохраняет прежние ссылки. Подсказка не содержит фокусируемых элементов.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkTooltip(trigger, {text})</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Состояния</h2>
@@ -78,7 +78,7 @@
   </section>
   <section class="sc-sec">
     <h2>Доступность</h2>
-    <ul class="sc-list sc-list--wide"><li>Фокус/мышь показывают, Escape закрывает. Касание кнопки переключает. aria-describedby сохраняет прежние ссылки. Подсказка не содержит фокусируемых элементов.</li><li>Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.</li></ul>
+    <ul class="sc-list sc-list--wide"><li>Фокус/мышь показывают, Escape закрывает только подсказку; вложенный dialog остаётся открытым. Касание кнопки переключает. aria-describedby сохраняет прежние ссылки. Подсказка не содержит фокусируемых элементов.</li><li>Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.</li></ul>
   </section>
   <section class="sc-sec" data-group="Разработка">
     <h2>Токены</h2>

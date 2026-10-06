@@ -4483,6 +4483,9 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-bullet__actual { position: absolute; inset-block: var(--space-2); left: 0; background: var(--ink); }
 .dk-bullet__target { position: absolute; inset-block: 0; width: var(--focus-width); background: var(--ink); transform: translateX(-50%); }
 .dk-heatmap { min-width: 0; }
+.dk-heatmap__table { table-layout: auto; }
+.dk-heatmap__table th { white-space: normal; overflow-wrap: normal; }
+.dk-heatmap__table tbody th { font: var(--type-body); letter-spacing: 0; text-transform: none; color: var(--ink); }
 .dk-heatmap__table td { font-weight: var(--weight-ui); white-space: nowrap; }
 .dk-heatmap__mark { margin-left: var(--space-2); color: var(--ink-2); }
 .dk-annotations ol { padding-left: var(--space-6); }
