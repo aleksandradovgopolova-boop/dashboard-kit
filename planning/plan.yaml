@@ -11,55 +11,6 @@ goals:
   outcome:
     dynamic_semantic_colors_checked: true
 work:
-- id: ci-private-access
-  title: Согласовать supply-chain CI с доступами приватного репозитория
-  type: delivery
-  goal: reliable-dashboard-work
-  status: done
-  owner_role: delivery
-  depends_on: []
-  write_scope:
-  - .github/workflows/
-  value: high
-  affects:
-    delivery_operations: true
-    engineering_quality_security: false
-  pr: https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/8
-  branch: fix/select-search-and-ci
-- id: select-search-stability
-  title: Сохранять поле поиска при обновлении выпадающего списка
-  type: engineering
-  goal: reliable-dashboard-work
-  status: done
-  owner_role: frontend
-  depends_on: []
-  write_scope:
-  - js/dk-select.js
-  - tools/check-select.mjs
-  - REVIEW.md
-  - HANDOFF.md
-  value: high
-  affects:
-    delivery_operations: false
-    engineering_quality_security: true
-  pr: https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/8
-  branch: fix/select-search-and-ci
-- id: dynamic-color-checks
-  title: Реализовать проверку смысловых цветов в динамической разметке
-  type: quality
-  goal: accessible-dashboard-data
-  status: done
-  owner_role: qa
-  depends_on: []
-  write_scope:
-  - tools/check.py
-  - js/dk-util.js
-  value: medium
-  affects:
-    delivery_operations: false
-    engineering_quality_security: true
-  pr: https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/11
-  branch: codex/dashboard-backlog
 - id: live-accessibility
   title: Проверить фильтры скринридером и на живом телефоне/WebView
   type: quality
