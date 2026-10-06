@@ -1,6 +1,8 @@
 """Единый вход в документацию; компоненты берутся из общего генератора."""
 from html import escape as e
 import manifest_parts as MP
+import json
+from pathlib import Path
 
 RULES = [
  ('Порядок и KPI', [
@@ -53,6 +55,8 @@ def render(pages, component_render):
  start = start.replace('<title>Кнопка · dashboard-kit</title>', '<title>Правила и компоненты · dashboard-kit</title>')
  start = start.replace('tools/component_pages/p1_controls.py', 'tools/docs_guide.py')
  rules = ''.join('<div class="sc-note"><h3>'+e(title)+'</h3><ul class="sc-list">'+''.join('<li>'+e(x)+'</li>' for x in items)+'</ul></div>' for title,items in RULES)
+ policy = json.loads((Path(__file__).resolve().parent.parent/'.ai/project/uiux-policy.json').read_text())
+ heuristics = ''.join('<tr><td>'+e(h['name'])+'</td><td>'+e(h['constitution'] or 'Без точного UI-ID')+'</td><td>'+e(h['requirement'])+'</td></tr>' for h in policy['heuristics'])
  catalog = ''
  for group in dict.fromkeys(p['group'] for p in pages):
   rows = ''.join('<tr><td><a href="component-'+e(p['slug'])+'.html">'+e(p['title'])+'</a></td><td>'+p['purpose']+'</td><td>'+e(p['status'])+'</td></tr>' for p in pages if p['group']==group)
@@ -64,6 +68,7 @@ def render(pages, component_render):
   foundation += '<details class="dk-data-summary" id="foundation-'+e(p['id'])+'"><summary>'+e(p['title'])+'</summary><p>'+e(p['purpose'])+'</p><p>Статус: '+e(p['status'])+'</p><h3>Когда использовать</h3><ul class="sc-list">'+use+'</ul><h3>Правила и поведение</h3><ul class="sc-list">'+''.join('<li>'+e(x)+'</li>' for x in p.get('rules',[]))+'</ul><p>Классы: '+', '.join('<code>'+e(x)+'</code>' for x in p.get('owns',[]))+'</p><p>Скрипты: '+e(', '.join(p.get('scripts',[])) or 'не требуются')+'</p><ul class="sc-list">'+refs+'</ul></details>'
  return start + f'''<header class="sc-hero sc-hero--component"><p class="sc-hero__o">Библиотека интерфейса</p><h1>Правила и компоненты</h1><p class="sc-hero__lead">Как собрать экран, выбрать компонент и проверить его работу.</p></header>
 <section class="sc-sec" id="rules"><h2>Правила сборки</h2><p>Актуальные решения проекта. Источники: <a href="README.md">README</a>, <a href="DECISIONS.md">DECISIONS</a>, <a href="DESIGN-UX-ACCESSIBILITY.md">UX и доступность</a>, <a href="REVIEW.md">REVIEW</a>, <a href="HANDOFF.md">HANDOFF</a>. Поздние утверждённые решения заменяют исторические описания.</p>{rules}</section>
+<section class="sc-sec" id="uiux"><h2>UI/UX и эвристики</h2><p>Основной ответ сразу; детали по задаче. Система берёт на себя проверку ввода, форматирование и сохранение контекста. Одинаковые действия сохраняют названия и поведение между экранами.</p><p>Политика: <a href="UIUX.md">правила, кнопки, состояния и способы проверки</a>. Все 65 требований AI Ops перечислены в проектном реестре для ручного ревью; это не заявление о полном соответствии.</p><div class="dk-tablewrap"><table class="dk-table"><thead><tr><th scope="col">Эвристика</th><th scope="col">AI Ops</th><th scope="col">Применение в ките</th></tr></thead><tbody>{heuristics}</tbody></table></div><p>Кнопки: приоритет по задаче, понятный результат, квадратные кнопки-значки, объяснимая недоступность и обратная связь. См. <a href="component-button.html">Кнопка</a> и <a href="component-field.html">Поле и форма</a>.</p></section>
 <section class="sc-sec" id="catalog"><h2>Компоненты</h2><p>{len(pages)} страниц. На каждой: живой пример, назначение, анатомия, варианты, состояния, контент, доступность, токены, код, API и связанные компоненты.</p>{catalog}</section>
 <section class="sc-sec" id="foundations"><h2>Основа и каркас</h2><p>Правила и части без отдельной страницы компонента — из той же описи, которую использует сборка.</p>{foundation}</section>
 <section class="sc-sec" id="workflow"><h2>Как пользоваться справочником</h2><ol class="sc-list"><li>Определить вопрос экрана и прочитать правила сборки.</li><li>Найти компонент через поиск в меню; проверить назначение и ограничения.</li><li>Попробовать живой пример с мышью, клавиатурой и в обеих темах.</li><li>Взять код и сверить параметры, события, update и destroy с таблицей API.</li><li>Проверить состояния, узкий экран и увеличенный текст. Зафиксировать реальные ограничения проверки.</li></ol><p>Примеры: <a href="dashboard.html">Сводка</a> · <a href="regions.html">Регионы</a> · <a href="accidents.html">Аварии</a> · <a href="calendar.html">Календарь</a>.</p><p>Ориентир структуры документации: <a href="https://vkui.io/components/card-grid/">VKUI CardGrid</a>. API и поведение описаны для dashboard-kit.</p></section>

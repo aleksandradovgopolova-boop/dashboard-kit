@@ -9,6 +9,13 @@ async function test(){
  const host=()=>{const e=document.createElement('div');document.body.append(e);return e};
  const tick=()=>new Promise(r=>setTimeout(r,0));
  const key=(el,k,shift=false)=>el.dispatchEvent(new KeyboardEvent('keydown',{key:k,shiftKey:shift,bubbles:true,cancelable:true}));
+ const form=document.createElement('form');form.innerHTML='<div class="dk-ff"><label for="test-first">Имя</label><input id="test-first" name="first" required aria-describedby="test-hint"><div id="test-hint">Полное имя</div></div><div class="dk-ff"><label for="test-second">Город</label><input id="test-second" name="second" required></div><button type="submit">Сохранить</button>';document.body.append(form);
+ let submitted=0;const formApi=dkForm(form,{onSubmit:data=>{submitted++;ok(data.get('first')==='Анна','form submitted data')}}),first=form.elements.first,second=form.elements.second;
+ ok(!formApi.validate()&&form.querySelectorAll('[aria-invalid=true]').length===2,'form validates all fields');
+ form.requestSubmit();ok(document.activeElement===first&&submitted===0,'invalid form focuses first and prevents submission');
+ first.value='Анна';first.dispatchEvent(new Event('input',{bubbles:true}));ok(!first.hasAttribute('aria-invalid')&&first.getAttribute('aria-describedby')==='test-hint','corrected field preserves hint and removes error association');
+ second.value='Москва';formApi.clear();ok(first.value==='Анна'&&second.value==='Москва'&&!second.hasAttribute('aria-describedby')&&first.getAttribute('aria-describedby')==='test-hint','clear preserves input and removes only errors');
+ form.requestSubmit();ok(submitted===1&&!form.querySelector('.dk-err'),'valid form submits once');form.remove();
  ok(dkFmt.pct('bad')==='—'&&dkFmt.unit('bad','м')==='—'&&dkFmt.compact('Infinity')==='—'&&dkFmt.num(' ')==='—','format invalid values');
  let d=dkComparison(23,19,'decrease');ok(d.delta===4&&d.meaning==='crit','comparison');ok(dkComparison(0,0).percent===null,'zero baseline');ok(dkComparison(null,0).direction==='unknown','missing comparison');ok(dkComparison(-3,-6,'increase').percent===50,'negative baseline');
  const compareHost=host(),compare=dkPeriodComparison(compareHost,{current:10,previous:20,better:'decrease'});ok(compareHost.textContent.includes('Снижение'),'comparison text');compare.update({current:null,previous:20});ok(compareHost.textContent.includes('Нет данных'),'comparison update');
@@ -56,4 +63,4 @@ async function test(){
  [compare,bullet,ann,tree,state,resumed,unavailable,migration,editor].forEach(x=>x.destroy());
  return 'PASS: DOM charts, comparison edges, tree keyboard/search/parent, state, saved views/migration/storage, density, layout, CSV/SVG, tooltip, fullscreen fallback, details, lifecycle';
 }
-try{await regression(['js/dk-util.js','js/dk-select.js','js/dk-pager.js','js/dk-table.js','js/dk-modal.js','js/dk-analysis.js','js/dk-context.js','js/dk-workspace.js','js/dk-tree.js','js/dk-layout-editor.js'].map(f=>root+f),test,setup)}catch(e){console.error(e.message);process.exitCode=1}
+try{await regression(['js/dk-util.js','js/dk-form.js','js/dk-select.js','js/dk-pager.js','js/dk-table.js','js/dk-modal.js','js/dk-analysis.js','js/dk-context.js','js/dk-workspace.js','js/dk-tree.js','js/dk-layout-editor.js'].map(f=>root+f),test,setup)}catch(e){console.error(e.message);process.exitCode=1}

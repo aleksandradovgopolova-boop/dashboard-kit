@@ -18,6 +18,8 @@ stacks:
   evidence_source:
   - README.md
   - tools/check.py
+  - tools/uiux_policy.py
+  - .ai/project/uiux-policy.json
   - tools/check-mobile.mjs
   - tools/test.py
   - tools/check-advanced.mjs

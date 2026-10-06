@@ -2570,6 +2570,10 @@ def main() -> int:
     check_engine()
     check_zero_size()
     check_quiet(primitives, semantic, layers)
+    from uiux_policy import validate as validate_uiux
+    for error in validate_uiux(ROOT):
+        fail("UIUX", error)
+    notes.append("UI/UX: реестр и десять эвристик согласованы; ручное ревью отдельно")
     check_pages()
     check_manifest()
     check_classes()
