@@ -14,19 +14,18 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -42,7 +41,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Управление</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Управление</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-tabs.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>Вкладки</h1>
     <p class="sc-hero__lead">Перевести человека в другой раздел: у вкладки свой адрес и своя загрузка. Счётчик рядом с названием говорит, сколько там ждёт внимания.</p>
     <div class="sc-meta">
@@ -51,21 +61,21 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>Пять разделов мониторинга; текущий отмечен чертой и цветом.</p><div class="dk-panel"><nav class="dk-tabs" aria-label="Разделы мониторинга">
+    <p>Пять разделов мониторинга; текущий отмечен чертой и цветом.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><nav class="dk-tabs" aria-label="Разделы мониторинга">
       <a class="dk-tab" href="#" aria-current="page">Инфраструктура</a>
       <a class="dk-tab" href="#">Аварии <span class="dk-tab__n">23</span></a>
       <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
-      <a class="dk-tab" href="#">Бригады</a>
       <a class="dk-tab" href="#">Отчёты</a>
-    </nav></div>
+      <a class="dk-tab" href="#">Отчёты</a>
+    </nav></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Разделы одного уровня, у каждого свой адрес: «Аварии», «Заявки», «Бригады».</li><li>При переходе меняется вся страница или её основная часть.</li><li>Разделов от двух до шести — больше не помещается в строку на узком экране.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Переключение вида одних данных внутри виджета — <a href="component-segment.html">Сегмент</a>.</li><li>Больше шести разделов — боковое меню каркаса (<code>css/chrome.css</code>).</li><li>Действие, а не переход — <a href="component-button.html">Кнопка</a>.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Разделы одного уровня, у каждого свой адрес: «Обзор», «Записи», «Отчёты».</li><li>При переходе меняется вся страница или её основная часть.</li><li>Разделов от двух до шести — больше не помещается в строку на узком экране.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Переключение вида одних данных внутри виджета — <a href="component-segment.html">Сегмент</a>.</li><li>Больше шести разделов — боковое меню каркаса (<code>css/chrome.css</code>).</li><li>Действие, а не переход — <a href="component-button.html">Кнопка</a>.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
     <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><nav class="dk-tabs" aria-label="Пример">
       <a class="dk-tab" href="#" aria-current="page"><b class="sc-callout">1</b>Текущий</a>
@@ -73,11 +83,11 @@
       <a class="dk-tab" href="#">Отчёты</a>
     </nav></div><ol class="sc-anatomy__list"><li><b>Текущая вкладка</b> — <code>aria-current="page"</code>: цвет текста ink, жирность и черта снизу цветом <code>--control-on</code> — двумя признаками, не одним.</li><li><b>Обычная вкладка</b> — ссылка <code>&lt;a&gt;</code> с адресом; при наведении подпись темнеет.</li><li><b>Счётчик</b> — <code>dk-tab__n</code>: сколько объектов в разделе ждут внимания. Ноль не показывается.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
     <p>Размер один: строка вкладок стоит под заголовком страницы и не бывает мельче текста. На узком экране строка листается вбок, вкладки не переносятся и не прячутся — спрятанная вкладка выглядит как отсутствующий раздел.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-tabs</code></td><td>Строка вкладок, <code>&lt;nav&gt;</code> с aria-label.</td><td>Всегда.</td></tr><tr><td><code>dk-tab</code></td><td>Вкладка-ссылка.</td><td>На каждый раздел.</td></tr><tr><td><code>aria-current=&quot;page&quot;</code></td><td>Текущий раздел.</td><td>Ровно у одной вкладки.</td></tr><tr><td><code>dk-tab__n</code></td><td>Счётчик в вкладке.</td><td>Когда в разделе есть что-то, требующее внимания.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-panel"><nav class="dk-tabs" aria-label="Состояния">
       <a class="dk-tab" href="#" aria-current="page">Текущая</a>
@@ -87,19 +97,19 @@
     </nav></div>
     <div class="sc-note"><b>Недоступных вкладок не бывает.</b> Раздел, в который нельзя попасть, не показывают; если доступа нет — показывают страницу «Нет доступа» (<a href="component-empty.html">Состояния</a>), а не серую вкладку.</div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Существительное во множественном числе: «Аварии», «Заявки», «Отчёты».</li><li>Счётчик — число объектов, требующих действия, а не всего объектов в разделе.</li><li>Порядок вкладок постоянный: люди запоминают положение, а не название.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Глаголы: «Смотреть аварии».</li><li>Счётчик «1 284» — это статистика, а не сигнал; ей место в разделе.</li><li>Вкладка «Ещё…» с выпадающим списком — значит, разделов слишком много для вкладок.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Существительное во множественном числе: «Обзор», «Записи», «Отчёты».</li><li>Счётчик — число объектов, требующих действия, а не всего объектов в разделе.</li><li>Порядок вкладок постоянный: люди запоминают положение, а не название.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Глаголы: «Смотреть аварии».</li><li>Счётчик «1 284» — это статистика, а не сигнал; ей место в разделе.</li><li>Вкладка «Ещё…» с выпадающим списком — значит, разделов слишком много для вкладок.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Роль.</b> <code>&lt;nav aria-label&gt;</code> со ссылками, а не <code>tablist</code>: это переходы между страницами, и скринридер должен ждать загрузку.</li><li><b>Текущая</b> — <code>aria-current="page"</code>, скринридер объявляет «текущая страница».</li><li><b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Кольцо фокуса — только при навигации табом.</li><li><b>Контраст.</b> Черта текущей вкладки — <code>--control-on</code>, тот же серый, что у выбранного управления: не ниже 3:1 к поверхности.</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-tabs,dk-tab"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Вкладки — ссылки. Текущую отмечает сервер или страница, скрипта у компонента нет.</p><pre class="sc-code"><code>&lt;nav class=&quot;dk-tabs&quot; aria-label=&quot;Разделы мониторинга&quot;&gt;
   &lt;a class=&quot;dk-tab&quot; href=&quot;dashboard.html&quot; aria-current=&quot;page&quot;&gt;Сводка&lt;/a&gt;
@@ -107,7 +117,7 @@
   &lt;a class=&quot;dk-tab&quot; href=&quot;calendar.html&quot;&gt;Календарь&lt;/a&gt;
 &lt;/nav&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>aria-current=&quot;page&quot;</code></td><td>атрибут</td><td>Текущий раздел.</td></tr><tr><td><code>dk-tab__n</code></td><td>элемент</td><td>Счётчик; не показывать при нуле.</td></tr><tr><td><code>aria-label</code></td><td>атрибут nav</td><td>Название группы разделов для скринридера.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-segment.html">Сегмент</a> — переключение вида внутри виджета</li><li><a href="component-badge.html">Бейдж</a> — счётчик того же вида в других местах</li><li><a href="accidents.html">Страница «Аварии»</a> — вкладки в живом дашборде</li></ul>
   </section>

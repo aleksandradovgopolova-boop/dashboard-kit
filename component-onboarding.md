@@ -1,0 +1,57 @@
+# Онбординг-подсказка
+
+Короткое знакомство с новым действием: одна подсказка рядом с нужным элементом за раз.
+
+## Когда использовать
+
+- Новая функция требует первого знакомства в контексте интерфейса.
+- Короткая последовательность действий, которую можно пропустить.
+
+## Когда выбрать другое
+
+- Обычная подсказка при наведении — это tooltip, а не онбординг.
+- Обязательная инструкция или ошибка должна быть видна постоянно.
+
+## Контент: так
+
+- «Выберите период» — объясняет конкретное действие.
+- Не более одного короткого объяснения на шаг.
+
+## Контент: не так
+
+- Несколько подсказок одновременно.
+- Онбординг запускается при каждом посещении без возможности пропуска.
+
+## Доступность
+
+- Нативный dialog.showModal: фокус внутри, фон недоступен для взаимодействия.
+- Заголовок и описание связаны через aria-labelledby / aria-describedby.
+- Escape и внешний клик закрывают; фокус возвращается к кнопке запуска.
+- Подсказка не исчезает по таймеру. При исчезновении цели сценарий закрывается.
+
+## Размеры
+
+Ширина до 320 px, отступ от края экрана минимум 16 px. При нехватке места позиция меняется; длинное содержимое прокручивается.
+
+## Код
+
+```html
+<div class="dk-panel"><div class="dk-inline"><button class="dk-btn dk-btn--sm" id="onboard-period">30 дней</button><button class="dk-btn dk-btn--sm" id="onboard-export">Экспорт</button><button class="dk-btn dk-btn--sm dk-btn--primary" id="onboard-start">Показать подсказки</button></div><p class="dk-hint" id="onboard-status" role="status"></p></div>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  var tour = dkOnboarding({steps:[
+    {target:'#onboard-period', title:'Выберите период', text:'Период применяется ко всем показателям экрана.'},
+    {target:'#onboard-export', title:'Сохраните отчёт', text:'Экспорт использует выбранный период и фильтры.'}
+  ], onClose:function(reason){document.getElementById('onboard-status').textContent = reason === 'complete' ? 'Знакомство завершено' : 'Подсказки закрыты';}});
+  document.getElementById('onboard-start').addEventListener('click', function(){tour.start();});
+});
+</script>
+```
+
+## Параметры
+
+- `dkOnboarding(options)` (функция): Создаёт контроллер; steps — target (селектор или элемент), title, text.
+- `start(force)` (метод): Показывает первый шаг. force=true позволяет повторить завершённый сценарий.
+- `close() / destroy()` (методы): Закрывает / закрывает и освобождает контроллер.
+- `storageKey` (строка): Необязательный ключ localStorage; завершение и пропуск отмечаются done.
+- `onClose(reason)` (функция): complete, skip, escape, outside, close, destroy или missing-target.

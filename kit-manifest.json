@@ -43,6 +43,32 @@
     "requires": []
    },
    {
+    "file": "js/dk-focus-trap.js",
+    "how": "defer",
+    "defer": true,
+    "requires": []
+   },
+   {
+    "file": "js/dk-touch.js",
+    "how": "defer",
+    "defer": true,
+    "requires": []
+   },
+   {
+    "file": "js/dk-card-scroll.js",
+    "how": "defer",
+    "defer": true,
+    "requires": []
+   },
+   {
+    "file": "js/dk-onboarding.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-focus-trap.js"
+    ]
+   },
+   {
     "file": "vendor/echarts.min.js",
     "how": "defer",
     "defer": true,
@@ -185,9 +211,9 @@
    "kind": "компонент",
    "group": "Управление",
    "status": "стабильный",
-   "purpose": "Запустить действие: сохранить, назначить бригаду, открыть отчёт. На экране одна основная кнопка, остальные обычные или тихие — так видно, чего от человека ждут.",
+   "purpose": "Запустить действие: сохранить, добавить запись, открыть отчёт. На экране одна основная кнопка, остальные обычные или тихие — так видно, чего от человека ждут.",
    "use_when": [
-    "Действие меняет данные или открывает новый экран: «Добавить работу», «Закрыть аварию».",
+    "Действие меняет данные или открывает новый экран: «Добавить работу», «Удалить запись».",
     "На экране нужно показать, какое действие главное — оно одно и оно основное.",
     "Действие повторяется в каждой строке таблицы — тогда кнопка-значок с подписью для скринридера."
    ],
@@ -252,7 +278,7 @@
    ],
    "example": "<button class=\"dk-btn dk-btn--primary\">Добавить работу</button>\n<button class=\"dk-btn dk-btn--ghost\">Отмена</button>\n<button class=\"dk-iconbtn\" title=\"Обновить\" aria-label=\"Обновить\">\n  <svg class=\"dk-i\"><use href=\"#ti-refresh\"/></svg>\n</button>\n<a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Страница компонента →</a>",
    "rules": [
-    "Глагол в неопределённой форме: «Добавить работу», «Закрыть аварию».",
+    "Глагол в неопределённой форме: «Добавить работу», «Удалить запись».",
     "Одна основная кнопка на форму; стоит справа, обычная «Отмена» — левее и тихая.",
     "Подпись у кнопки-значка в `aria-label` совпадает с подсказкой.",
     "Опасное действие называется своим именем: «Удалить срез», а не «ОК»."
@@ -384,7 +410,7 @@
    "status": "стабильный",
    "purpose": "Перевести человека в другой раздел: у вкладки свой адрес и своя загрузка. Счётчик рядом с названием говорит, сколько там ждёт внимания.",
    "use_when": [
-    "Разделы одного уровня, у каждого свой адрес: «Аварии», «Заявки», «Бригады».",
+    "Разделы одного уровня, у каждого свой адрес: «Обзор», «Записи», «Отчёты».",
     "При переходе меняется вся страница или её основная часть.",
     "Разделов от двух до шести — больше не помещается в строку на узком экране."
    ],
@@ -434,7 +460,7 @@
    ],
    "example": "<nav class=\"dk-tabs\" aria-label=\"Разделы мониторинга\">\n  <a class=\"dk-tab\" href=\"dashboard.html\" aria-current=\"page\">Сводка</a>\n  <a class=\"dk-tab\" href=\"accidents.html\">Аварии <span class=\"dk-tab__n\">23</span></a>\n  <a class=\"dk-tab\" href=\"calendar.html\">Календарь</a>\n</nav>",
    "rules": [
-    "Существительное во множественном числе: «Аварии», «Заявки», «Отчёты».",
+    "Существительное во множественном числе: «Обзор», «Записи», «Отчёты».",
     "Счётчик — число объектов, требующих действия, а не всего объектов в разделе.",
     "Порядок вкладок постоянный: люди запоминают положение, а не название."
    ],
@@ -682,7 +708,7 @@
    "status": "стабильный",
    "purpose": "Ограничить срез данных одним или несколькими значениями из известного списка. Главное правило: выбранное видно, не открывая меню, — иначе человек смотрит на срез и уверен, что видит всё.",
    "use_when": [
-    "Значения известны заранее и их больше пяти: округа, регионы, бригады.",
+    "Значения известны заранее и их больше пяти: категории, статусы, исполнители.",
     "Выбор ограничивает данные на всей странице и применяется сразу.",
     "Рядом с каждым значением можно показать, сколько записей за ним."
    ],
@@ -789,6 +815,7 @@
     "dk-chipbar",
     "dk-chipbar__label",
     "dk-fchip",
+    "dk-fchip--secondary",
     "dk-fchip__x",
     "dk-menu",
     "dk-menu--right",
@@ -1492,7 +1519,7 @@
    "kind": "компонент",
    "group": "Данные",
    "status": "стабильный",
-   "purpose": "Сравнить много объектов по нескольким показателям: регионы по баллу и событиям, заявки по сроку и бригаде. Читается по строкам, сортируется по колонке, выбирается для действия.",
+   "purpose": "Сравнить много объектов по нескольким показателям: регионы по баллу и событиям, заявки по сроку и исполнителю. Читается по строкам, сортируется по колонке, выбирается для действия.",
    "use_when": [
     "Объектов больше семи и у каждого несколько показателей — сравнивать нужно по колонкам.",
     "По строке нужно действие: назначить, открыть, снять с контроля.",
@@ -1803,12 +1830,12 @@
    ],
    "example": "<div class=\"dk-widget dk-widget--s dk-tile\" style=\"--accent:var(--crit-ink)\">\n  <div class=\"dk-tile__head\">\n    <span class=\"dk-tile__icon\"><svg class=\"dk-i dk-i--sm\"><use href=\"#ti-alert-triangle\"/></svg></span>\n    <span class=\"dk-tile__label\">Аварии за сутки</span>\n  </div>\n  <div class=\"dk-tile__row\">\n    <span class=\"dk-metric-lg\">23</span>\n    <span class=\"dk-trend\" style=\"--accent:var(--crit-ink)\"><svg class=\"dk-i dk-i--sm\"><use href=\"#ti-arrow-up\"/></svg> +18%</span>\n  </div>\n  <div class=\"dk-chart dk-chart--spark\" id=\"sp\"></div>\n</div>\n\n<script>\ndkChart(document.getElementById('sp'), {\n  type: 'spark', categories: days,\n  series: [{ name: 'Аварии', data: [12, 14, 11, 16, 15, 19, 17] }]\n});\n</script>",
    "rules": [
-    "Подпись с периодом: «Аварии за сутки», «Обращений за 14 дней».",
+    "Подпись называет показатель. Общий период указан один раз; отличающийся интервал — в подписи: «Аварии за сутки».",
     "Тренд со знаком и словами, если нет числа: «без изменений».",
     "Единица рядом с числом только когда без неё непонятно: «42 мин»."
    ],
    "avoid": [
-    "Число без периода: «Аварии: 23» — за час? за год?",
+    "Период не указан ни на экране, ни у показателя: «Аварии: 23» — за час? за год?",
     "Красная стрелка вниз у «времени реакции» — падение здесь хорошо.",
     "Спарклайн с осями и подписями — в четверти колонки они мельче десяти пикселей."
    ],
@@ -1858,7 +1885,7 @@
    "use_when": [
     "Одно число, ради которого открывают экран: «регионов с высоким риском», «аварий сейчас».",
     "Число — часть целого, и важно, из чего оно сложено: 25 из 89, по уровням или по источникам.",
-    "Первый экран телефона: карточка встаёт сразу под фильтрами и отвечает раньше любого графика."
+    "Первый экран телефона, если одно главное число отвечает на основной вопрос пользователя."
    ],
    "instead": [
     {
@@ -1891,9 +1918,9 @@
    ],
    "api": [
     {
-     "name": "--accent",
-     "type": "переменная в style",
-     "what": "Смысл карточки: оттенок угла. Только crit / high / calm или не задавать."
+     "name": "dk-hero",
+     "type": "класс",
+     "what": "Нейтральная главная карточка; семантический цвет применяют к данным и обоснованным статусам, а не поверхности."
     },
     {
      "name": "--share",
@@ -1911,21 +1938,21 @@
      "what": "Мера «из скольких»; не пропускать, если она есть."
     }
    ],
-   "example": "<section class=\"dk-hero\" style=\"--accent:var(--crit)\">\n  <div class=\"dk-hero__label\">Регионов с высоким риском</div>\n  <div class=\"dk-hero__row\">\n    <div class=\"dk-hero__value\"><span class=\"dk-hero__n\">25</span><span class=\"dk-hero__of\">из 89</span></div>\n    <span class=\"dk-trend\" style=\"--accent:var(--crit-ink)\">\n      <svg class=\"dk-i dk-i--sm\"><use href=\"#ti-arrow-up-right\"/></svg>негатив растёт в 7</span>\n  </div>\n  <div class=\"dk-split\" role=\"img\" aria-label=\"Высокий 25, средний 35, низкий 29\">\n    <span class=\"dk-split__seg\" style=\"--share:25;--swatch:var(--crit)\"></span>\n    <span class=\"dk-split__seg\" style=\"--share:35;--swatch:var(--high)\"></span>\n    <span class=\"dk-split__seg\" style=\"--share:29;--swatch:var(--calm)\"></span>\n  </div>\n  <div class=\"dk-keys\">\n    <span class=\"dk-key\" style=\"--swatch:var(--crit)\"><i class=\"dk-key__dot\"></i>Высокий <b>25</b><span class=\"dk-key__d\">+1</span></span>\n  </div>\n</section>",
+   "example": "<section class=\"dk-hero\">\n  <div class=\"dk-hero__label\">Регионов с высоким риском</div>\n  <div class=\"dk-hero__row\">\n    <div class=\"dk-hero__value\"><span class=\"dk-hero__n\">25</span><span class=\"dk-hero__of\">из 89</span></div>\n    <span class=\"dk-trend\" style=\"--accent:var(--crit-ink)\">\n      <svg class=\"dk-i dk-i--sm\"><use href=\"#ti-arrow-up-right\"/></svg>негатив растёт в 7</span>\n  </div>\n  <div class=\"dk-split\" role=\"img\" aria-label=\"Высокий 25, средний 35, низкий 29\">\n    <span class=\"dk-split__seg\" style=\"--share:25;--swatch:var(--crit)\"></span>\n    <span class=\"dk-split__seg\" style=\"--share:35;--swatch:var(--high)\"></span>\n    <span class=\"dk-split__seg\" style=\"--share:29;--swatch:var(--calm)\"></span>\n  </div>\n  <div class=\"dk-keys\">\n    <span class=\"dk-key\" style=\"--swatch:var(--crit)\"><i class=\"dk-key__dot\"></i>Высокий <b>25</b><span class=\"dk-key__d\">+1</span></span>\n  </div>\n</section>",
    "rules": [
-    "Подпись с периодом: «Публикаций по всей стране · за 14 дней».",
+    "Подпись называет показатель; период добавляется только при отличии от общего интервала или отсутствии общего периода.",
     "Число с мерой: «25 из 89», а не голое «25».",
     "Метка отвечает «почему смотреть»: «негатив растёт в 7», «6 режимов ЧС»."
    ],
    "avoid": [
     "Две главные карточки на одном экране.",
-    "Оттенок акцентом бренда: у бренда нет смысла «плохо».",
+    "Декоративный оттенок, глубокая тень или цветная полоса для выделения карточки.",
     "Полоса без чипов — цвет без подписи."
    ],
    "a11y": [
     "Полоса — картинка: `role=\"img\"` и `aria-label` с составом словами; числа — в чипах под ней.",
     "Цвет не единственный признак: у каждой доли есть название и число в чипе.",
-    "Контраст. Знаменатель и подписи на поверхности — проверка КОНТРАСТ; оттенок уходит в поверхность к середине."
+    "Контраст. Знаменатель и подписи на нейтральной поверхности — проверка КОНТРАСТ."
    ],
    "related": [
     "legend",
@@ -2067,7 +2094,7 @@
    "status": "стабильный",
    "purpose": "Правая колонка дашборда: главное число, тренд и ранжированный список — кто хуже всех. Строки разделяются ритмом и наведением, не линейками.",
    "use_when": [
-    "Вопрос «у кого хуже» по одному показателю: регионы по баллу, бригады по просрочке.",
+    "Вопрос «у кого хуже» по одному показателю: регионы по баллу, команды по просрочке.",
     "Нужен верх списка, а не весь список — топ-5 или топ-10.",
     "Строка ведёт к объекту: клик открывает регион."
    ],
@@ -2190,6 +2217,7 @@
     "dk-bars",
     "dk-bar",
     "dk-fold",
+    "dk-fold--plain",
     "dk-row"
    ],
    "css": [
@@ -2250,6 +2278,7 @@
     "dk-bar__v",
     "dk-bars",
     "dk-fold",
+    "dk-fold--plain",
     "dk-fold__body",
     "dk-fold__head",
     "dk-fold__sum",
@@ -2367,6 +2396,332 @@
     "js/dk-util.js",
     "js/dk-uptime.js"
    ]
+  },
+  {
+   "id": "avatar",
+   "title": "Аватар",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Человек рядом с записью, комментарием или списком участников.",
+   "use_when": [
+    "Человек рядом с записью, комментарием или списком участников."
+   ],
+   "instead": [
+    {
+     "when": "Главное число дашборда — KPI-плитка.",
+     "use": null
+    },
+    {
+     "when": "Состояние объекта — статус с текстовой подписью.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-avatar",
+    "dk-avatars"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-avatar.html"
+   ],
+   "api": [
+    {
+     "name": "dk-avatar",
+     "type": "класс",
+     "what": "Инициалы или изображение."
+    },
+    {
+     "name": "dk-avatar--sm / --lg",
+     "type": "класс",
+     "what": "24 / 40 пикселей."
+    },
+    {
+     "name": "dk-avatars",
+     "type": "класс",
+     "what": "Перекрывающаяся группа."
+    }
+   ],
+   "example": "<span class=\"dk-avatar\" role=\"img\" aria-label=\"Анна Кузнецова\">АК</span>",
+   "rules": [
+    "Не более двух инициалов; полное имя рядом или в доступной подписи.",
+    "Изображение обрезается по контейнеру с object-fit:cover, без искажения пропорций."
+   ],
+   "avoid": [
+    "Случайный цвет аватара, который выглядит как статус риска.",
+    "Инициалы из пяти букв или фотография без доступного имени."
+   ],
+   "a11y": [
+    "Полное имя доступно скринридеру: role=\"img\" и aria-label для инициалов, alt для изображения.",
+    "Рядом есть имя — изображение декоративное, используйте alt=\"\"; инициалы скрывайте aria-hidden=\"true\".",
+    "При недоступной фотографии приложение заменяет её инициалами. Не оставляйте сломанное изображение."
+   ],
+   "related": [
+    "badge",
+    "chips-input",
+    "chips-select"
+   ],
+   "classes": [
+    "dk-avatar",
+    "dk-avatar--lg",
+    "dk-avatar--more",
+    "dk-avatar--sm",
+    "dk-avatars"
+   ],
+   "include": []
+  },
+  {
+   "id": "counter",
+   "title": "Счётчик",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Количество объектов внутри кнопки, вкладки или строки меню.",
+   "use_when": [
+    "Количество объектов внутри кнопки, вкладки или строки меню."
+   ],
+   "instead": [
+    {
+     "when": "Главное число дашборда — KPI-плитка.",
+     "use": null
+    },
+    {
+     "when": "Состояние объекта — статус с текстовой подписью.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-counter"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-counter.html"
+   ],
+   "api": [
+    {
+     "name": "dk-counter",
+     "type": "класс",
+     "what": "Нейтральная заливка."
+    },
+    {
+     "name": "dk-counter--sm",
+     "type": "класс",
+     "what": "Меньший размер."
+    },
+    {
+     "name": "dk-counter--brand",
+     "type": "класс",
+     "what": "Акцентная заливка."
+    },
+    {
+     "name": "dk-counter--crit",
+     "type": "класс",
+     "what": "Критическое состояние."
+    },
+    {
+     "name": "dk-counter--plain",
+     "type": "класс",
+     "what": "Без заливки, цвет контекста."
+    }
+   ],
+   "example": "<button class=\"dk-btn dk-btn--sm\">Сообщения <span class=\"dk-counter\">12</span></button>",
+   "rules": [
+    "Только число: 12; для больших значений — 99+ с точным доступным именем.",
+    "Название объекта находится рядом: «Сообщения 12»."
+   ],
+   "avoid": [
+    "Слово «новое» внутри счётчика — это бейдж.",
+    "Цвет ошибки для обычного количества объектов."
+   ],
+   "a11y": [
+    "Внутри подписанной кнопки число входит в её доступное имя.",
+    "Для 99+ укажите точное число и объект в aria-label.",
+    "Ноль показывайте только если отсутствие объектов важно для решения; скрытие счётчика не должно менять размер кнопки."
+   ],
+   "related": [
+    "badge",
+    "chips-input",
+    "chips-select"
+   ],
+   "classes": [
+    "dk-counter",
+    "dk-counter--brand",
+    "dk-counter--crit",
+    "dk-counter--plain",
+    "dk-counter--sm"
+   ],
+   "include": []
+  },
+  {
+   "id": "chip",
+   "title": "Чип",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Отдельное выбранное значение: метка или применённый фильтр. Можно удалить из набора.",
+   "use_when": [
+    "Отдельное выбранное значение: метка или применённый фильтр. Можно удалить из набора."
+   ],
+   "instead": [
+    {
+     "when": "Главное число дашборда — KPI-плитка.",
+     "use": null
+    },
+    {
+     "when": "Состояние объекта — статус с текстовой подписью.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-fchip",
+    "dk-chipbar"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-chip.html"
+   ],
+   "api": [
+    {
+     "name": "dk-fchip",
+     "type": "класс",
+     "what": "Значение с необязательным удалением."
+    },
+    {
+     "name": "dk-chipbar",
+     "type": "класс",
+     "what": "Строка применённых фильтров."
+    },
+    {
+     "name": "dk-chip",
+     "type": "класс",
+     "what": "Число с подписью."
+    },
+    {
+     "name": "disabled",
+     "type": "HTML-атрибут кнопки",
+     "what": "Удаление недоступно; без ложного клика."
+    }
+   ],
+   "example": "<div class=\"dk-panel\"><div class=\"dk-stack\"><div class=\"dk-inline\" id=\"x-chip-demo\"><span class=\"dk-fchip\">Email<button type=\"button\" class=\"dk-fchip__x\" aria-label=\"Убрать фильтр Email\"><svg class=\"dk-i\" aria-hidden=\"true\"><use href=\"#ti-x\"/></svg></button></span><span class=\"dk-fchip\">В работе<button type=\"button\" class=\"dk-fchip__x\" aria-label=\"Убрать фильтр В работе\"><svg class=\"dk-i\" aria-hidden=\"true\"><use href=\"#ti-x\"/></svg></button></span><span class=\"dk-fchip\">Без удаления</span></div><p class=\"dk-hint\" id=\"x-chip-status\" role=\"status\"></p></div></div>\n<script>\ndocument.getElementById('x-chip-demo').addEventListener('click', function(event) {\n  var button = event.target.closest('.dk-fchip__x');\n  if (!button) return;\n  var group = button.closest('.dk-inline');\n  var label = button.getAttribute('aria-label');\n  button.parentElement.remove();\n  var next = group.querySelector('button');\n  if (next) next.focus(); else { group.setAttribute('tabindex', '-1'); group.focus(); }\n  document.getElementById('x-chip-status').textContent = label + ': фильтр снят';\n});\n</script>",
+   "rules": [
+    "Одно выбранное значение: «Email» или «В работе».",
+    "Подпись удаления включает значение чипа."
+   ],
+   "avoid": [
+    "Обрезанное название, которое нельзя восстановить.",
+    "Чип выглядит как выбранный фильтр, но не влияет на данные."
+   ],
+   "a11y": [
+    "Удаление — настоящая кнопка с именем «Убрать фильтр Email», работает Enter и пробелом.",
+    "После удаления фокус переходит на следующую кнопку удаления или контейнер набора.",
+    "Для ввода или выбора набора используйте ChipsInput / ChipsSelect, где поведение уже реализовано."
+   ],
+   "related": [
+    "badge",
+    "chips-input",
+    "chips-select"
+   ],
+   "classes": [
+    "dk-chipbar",
+    "dk-chipbar__label",
+    "dk-fchip",
+    "dk-fchip--secondary",
+    "dk-fchip__x"
+   ],
+   "include": []
+  },
+  {
+   "id": "accordion",
+   "title": "Аккордеон",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "стабильный",
+   "purpose": "Раскрывает подробности по запросу: определения метрик, настройки и ответы на вопросы.",
+   "use_when": [
+    "Дополнительные сведения, которые не нужны при первом просмотре.",
+    "Несколько самостоятельных вопросов или групп настроек."
+   ],
+   "instead": [
+    {
+     "when": "Ключевые показатели и ошибки должны быть видны сразу.",
+     "use": null
+    },
+    {
+     "when": "Переход между страницами — навигация, а не аккордеон.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-fold"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-accordion.html"
+   ],
+   "api": [
+    {
+     "name": "open",
+     "type": "HTML-атрибут",
+     "what": "Раздел открыт."
+    },
+    {
+     "name": "name",
+     "type": "HTML-атрибут",
+     "what": "Общее имя для группы с одним открытым разделом."
+    },
+    {
+     "name": "dk-fold--plain",
+     "type": "класс",
+     "what": "Вариант без заливки."
+    }
+   ],
+   "example": "<details class=\"dk-fold \"><summary class=\"dk-fold__head\"><span class=\"dk-fold__title\">Как считается конверсия?</span><svg class=\"dk-i dk-i--sm\" aria-hidden=\"true\"><use href=\"#ti-chevron-down\"/></svg></summary><div class=\"dk-fold__body\">Число заказов / число посещений × 100%.</div></details>",
+   "rules": [
+    "Заголовок называет содержимое: «Как считается конверсия?».",
+    "Краткий ответ без повторения заголовка."
+   ],
+   "avoid": [
+    "Заголовок «Подробнее» у всех разделов.",
+    "Кнопка или ссылка внутри summary; разместите действия в раскрываемой части."
+   ],
+   "a11y": [
+    "Нативные details/summary обеспечивают клавиатуру и состояние раскрытия; не добавляйте им role=\"button\".",
+    "Не ставьте aria-hidden на содержимое вручную: браузер управляет доступностью скрытой части.",
+    "Фокус остаётся на summary при раскрытии и закрытии."
+   ],
+   "related": [
+    "banner",
+    "list"
+   ],
+   "classes": [
+    "dk-fold",
+    "dk-fold--plain",
+    "dk-fold__body",
+    "dk-fold__head",
+    "dk-fold__sum",
+    "dk-fold__title"
+   ],
+   "include": []
   },
   {
    "id": "chart",
@@ -2812,9 +3167,9 @@
      "what": "Вид баннера; закрывается только event."
     }
    ],
-   "example": "<div class=\"dk-banner dk-banner--crit\">\n  <svg class=\"dk-i\"><use href=\"#ti-alert-triangle\"/></svg>\n  <div class=\"dk-banner__text\">\n    <div class=\"dk-banner__title\">23 аварии требуют решения</div>\n    <div class=\"dk-banner__sub\">Две службы не отвечают последние сутки</div>\n  </div>\n</div>\n\n<script>\ndkToast('Работа добавлена в календарь');\ndkToast('Срез сброшен', { action: { name: 'Отменить', onClick: restore } });\nvar t = dkToast('Не удалось сохранить', { kind: 'crit' });\nt.close();\n</script>",
+   "example": "<div class=\"dk-banner dk-banner--crit\">\n  <svg class=\"dk-i\"><use href=\"#ti-alert-triangle\"/></svg>\n  <div class=\"dk-banner__text\">\n    <div class=\"dk-banner__title\">Не удалось обновить данные</div>\n    <div class=\"dk-banner__sub\">Проверьте подключение и повторите загрузку</div>\n  </div>\n</div>\n\n<script>\ndkToast('Работа добавлена в календарь');\ndkToast('Срез сброшен', { action: { name: 'Отменить', onClick: restore } });\nvar t = dkToast('Не удалось сохранить', { kind: 'crit' });\nt.close();\n</script>",
    "rules": [
-    "Заголовок баннера с числом и глаголом: «23 аварии требуют решения».",
+    "Заголовок баннера с числом и глаголом: «Не удалось обновить данные».",
     "Уведомление в прошедшем времени: «Работа добавлена в календарь».",
     "Тревожное уведомление говорит, что делать: «попробуйте ещё раз»."
    ],
@@ -2866,7 +3221,7 @@
    "status": "стабильный",
    "purpose": "Подтвердить опасное действие или заполнить короткую форму, не уходя со страницы. Одновременно открыто не больше одного окна: окно поверх окна загоняет человека в угол.",
    "use_when": [
-    "Действие необратимо или дорого: закрыть аварию, удалить срез — нужно подтверждение своими словами.",
+    "Действие необратимо или дорого: удалить запись, удалить срез — нужно подтверждение своими словами.",
     "Короткая форма из одного–трёх полей, после которой человек возвращается туда же.",
     "Нужно остановить всё остальное, пока не решено."
    ],
@@ -2927,10 +3282,10 @@
      "what": "Сам `<dialog>` — на него вешают `close`."
     }
    ],
-   "example": "<button class=\"dk-btn dk-btn--primary\" data-modal=\"#confirm\">Закрыть аварию</button>\n\n<dialog class=\"dk-modal\" id=\"confirm\" aria-labelledby=\"confirm-t\">\n  <form method=\"dialog\" class=\"dk-modal__form\">\n    <div class=\"dk-modal__head\"><h2 class=\"dk-modal__title\" id=\"confirm-t\">Закрыть аварию</h2></div>\n    <div class=\"dk-modal__body\"><p>Авария будет отмечена как устранённая.</p></div>\n    <div class=\"dk-modal__foot\">\n      <button class=\"dk-btn dk-btn--ghost\" value=\"cancel\">Отмена</button>\n      <button class=\"dk-btn dk-btn--primary\" value=\"ok\">Закрыть аварию</button>\n    </div>\n  </form>\n</dialog>\n\n<script>\nvar m = dkModal('#confirm');\nbutton.addEventListener('click', m.open);\nm.el.addEventListener('close', function () { if (m.returnValue === 'ok') closeAccident(); });\n</script>",
+   "example": "<button class=\"dk-btn dk-btn--primary\" data-modal=\"#confirm\">Удалить запись</button>\n\n<dialog class=\"dk-modal\" id=\"confirm\" aria-labelledby=\"confirm-t\">\n  <form method=\"dialog\" class=\"dk-modal__form\">\n    <div class=\"dk-modal__head\"><h2 class=\"dk-modal__title\" id=\"confirm-t\">Удалить запись</h2></div>\n    <div class=\"dk-modal__body\"><p>Запись будет удалена без возможности восстановления.</p></div>\n    <div class=\"dk-modal__foot\">\n      <button class=\"dk-btn dk-btn--ghost\" value=\"cancel\">Отмена</button>\n      <button class=\"dk-btn dk-btn--primary\" value=\"ok\">Удалить запись</button>\n    </div>\n  </form>\n</dialog>\n\n<script>\nvar m = dkModal('#confirm');\nbutton.addEventListener('click', m.open);\nm.el.addEventListener('close', function () { if (m.returnValue === 'ok') closeAccident(); });\n</script>",
    "rules": [
-    "Заголовок и кнопка подтверждения — одно и то же действие: «Закрыть аварию».",
-    "Текст — последствие: «Бригада освободится и вернётся в очередь».",
+    "Заголовок и кнопка подтверждения — одно и то же действие: «Удалить запись».",
+    "Текст — последствие: «Запись будет удалена без возможности восстановления».",
     "«Отмена» — всегда так, слева, тихая."
    ],
    "avoid": [
@@ -3060,6 +3415,730 @@
    "include": []
   },
   {
+   "id": "adaptive-icons",
+   "title": "Адаптивные иконки",
+   "kind": "компонент",
+   "group": "Утилиты",
+   "status": "стабильный",
+   "purpose": "Автоматический размер иконок для мыши и сенсорного управления.",
+   "use_when": [
+    "Иконки действий должны соответствовать размеру соседних контролов.",
+    "Один экран используется мышью и на сенсорном устройстве."
+   ],
+   "instead": [
+    {
+     "when": "Логотип, иллюстрация или график — это не адаптивная иконка.",
+     "use": null
+    },
+    {
+     "when": "Фиксированная иконка данных может использовать dk-i--sm или dk-i--lg.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-i--adaptive"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-adaptive-icons.html"
+   ],
+   "api": [
+    {
+     "name": "dk-i--adaptive",
+     "type": "класс",
+     "what": "Добавьте к dk-i или передайте в dkIcon.el."
+    }
+   ],
+   "example": "<button class=\"dk-btn dk-btn--sm\"><svg class=\"dk-i dk-i--adaptive\" aria-hidden=\"true\"><use href=\"#ti-search\"/></svg>Найти</button>",
+   "rules": [
+    "Одна иконка одного смысла во всех размерах.",
+    "Используйте существующие названия Tabler из dkIconNames."
+   ],
+   "avoid": [
+    "Маленькое окно автоматически считается телефоном.",
+    "Увеличить иконку, сохранив слишком маленькую область нажатия."
+   ],
+   "a11y": [
+    "Декоративная иконка: aria-hidden=\"true\"; имя кнопки задаётся текстом или aria-label.",
+    "CSS автоматически реагирует на смену режима указателя.",
+    "Tabler — один масштабируемый рисунок. Это адаптация размера, а не переключение двух отдельных рисунков VKUI."
+   ],
+   "related": [
+    "button"
+   ],
+   "classes": [
+    "dk-i--adaptive"
+   ],
+   "include": []
+  },
+  {
+   "id": "scrollview",
+   "title": "Прокручиваемая область",
+   "kind": "компонент",
+   "group": "Утилиты",
+   "status": "стабильный",
+   "purpose": "Нативная прокрутка длинного содержимого внутри ограниченной области.",
+   "use_when": [
+    "Список в боковой панели или модальном окне с ограниченной высотой.",
+    "Широкое содержимое требует горизонтального просмотра."
+   ],
+   "instead": [
+    {
+     "when": "Обычная статья — прокручивайте страницу целиком.",
+     "use": null
+    },
+    {
+     "when": "Сжимать основные показатели в прокручиваемые карточки ради первого экрана.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-scrollview"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-scrollview.html"
+   ],
+   "api": [
+    {
+     "name": "--scrollview-height",
+     "type": "переменная в style",
+     "what": "Ограничение высоты, по умолчанию 320px."
+    },
+    {
+     "name": "scroll",
+     "type": "DOM-событие",
+     "what": "Стандартный addEventListener; никаких особых API."
+    },
+    {
+     "name": "scrollTo",
+     "type": "DOM-метод",
+     "what": "Нативная программная прокрутка."
+    }
+   ],
+   "example": "<div class=\"dk-scrollview\" tabindex=\"0\" role=\"region\" aria-label=\"Список отчётов\" style=\"--scrollview-height:200px\"><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 1</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 2</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 3</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 4</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 5</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 6</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 7</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 8</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 9</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 10</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 11</span><span class=\"dk-row__value\">Готов</span></div><div class=\"dk-row\"><span class=\"dk-row__label\">Отчёт 12</span><span class=\"dk-row__value\">Готов</span></div></div>",
+   "rules": [
+    "Понятное имя области: «Список отчётов».",
+    "Полоса видна по правилам системы; содержимое не обрезается по ширине."
+   ],
+   "avoid": [
+    "Скрытая полоса без признаков продолжения содержимого.",
+    "Перехват wheel/touch или ловушка клавиатурного фокуса."
+   ],
+   "a11y": [
+    "tabindex=\"0\" позволяет прокручивать область стрелками и PageDown; Tab выводит фокус наружу.",
+    "Система может скрывать полосу до прокрутки. CSS не отменяет предпочтения пользователя.",
+    "Плавная прокрутка отключается при prefers-reduced-motion.",
+    "В forced-colors сохраняется системная полоса; не назначайте роль scrollbar обычному контейнеру."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-scrollview",
+    "dk-scrollview--contain",
+    "dk-scrollview--hidden-bar",
+    "dk-scrollview--horizontal",
+    "dk-scrollview--smooth"
+   ],
+   "include": []
+  },
+  {
+   "id": "onboarding",
+   "title": "Онбординг-подсказка",
+   "kind": "компонент",
+   "group": "Обратная связь",
+   "status": "стабильный",
+   "purpose": "Короткое знакомство с новым действием: одна подсказка рядом с нужным элементом за раз.",
+   "use_when": [
+    "Новая функция требует первого знакомства в контексте интерфейса.",
+    "Короткая последовательность действий, которую можно пропустить."
+   ],
+   "instead": [
+    {
+     "when": "Обычная подсказка при наведении — это tooltip, а не онбординг.",
+     "use": null
+    },
+    {
+     "when": "Обязательная инструкция или ошибка должна быть видна постоянно.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-onboarding"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-onboarding.js"
+   ],
+   "data": [],
+   "js": [
+    "dkOnboarding"
+   ],
+   "docs": [
+    "component-onboarding.html"
+   ],
+   "api": [
+    {
+     "name": "dkOnboarding(options)",
+     "type": "функция",
+     "what": "Создаёт контроллер; steps — target (селектор или элемент), title, text."
+    },
+    {
+     "name": "start(force)",
+     "type": "метод",
+     "what": "Показывает первый шаг. force=true позволяет повторить завершённый сценарий."
+    },
+    {
+     "name": "close() / destroy()",
+     "type": "методы",
+     "what": "Закрывает / закрывает и освобождает контроллер."
+    },
+    {
+     "name": "storageKey",
+     "type": "строка",
+     "what": "Необязательный ключ localStorage; завершение и пропуск отмечаются done."
+    },
+    {
+     "name": "onClose(reason)",
+     "type": "функция",
+     "what": "complete, skip, escape, outside, close, destroy или missing-target."
+    }
+   ],
+   "example": "<div class=\"dk-panel\"><div class=\"dk-inline\"><button class=\"dk-btn dk-btn--sm\" id=\"onboard-period\">30 дней</button><button class=\"dk-btn dk-btn--sm\" id=\"onboard-export\">Экспорт</button><button class=\"dk-btn dk-btn--sm dk-btn--primary\" id=\"onboard-start\">Показать подсказки</button></div><p class=\"dk-hint\" id=\"onboard-status\" role=\"status\"></p></div>\n<script>\nwindow.addEventListener('DOMContentLoaded', function () {\n  var tour = dkOnboarding({steps:[\n    {target:'#onboard-period', title:'Выберите период', text:'Период применяется ко всем показателям экрана.'},\n    {target:'#onboard-export', title:'Сохраните отчёт', text:'Экспорт использует выбранный период и фильтры.'}\n  ], onClose:function(reason){document.getElementById('onboard-status').textContent = reason === 'complete' ? 'Знакомство завершено' : 'Подсказки закрыты';}});\n  document.getElementById('onboard-start').addEventListener('click', function(){tour.start();});\n});\n</script>",
+   "rules": [
+    "«Выберите период» — объясняет конкретное действие.",
+    "Не более одного короткого объяснения на шаг."
+   ],
+   "avoid": [
+    "Несколько подсказок одновременно.",
+    "Онбординг запускается при каждом посещении без возможности пропуска."
+   ],
+   "a11y": [
+    "Нативный dialog.showModal: фокус внутри, фон недоступен для взаимодействия.",
+    "Заголовок и описание связаны через aria-labelledby / aria-describedby.",
+    "Escape и внешний клик закрывают; фокус возвращается к кнопке запуска.",
+    "Подсказка не исчезает по таймеру. При исчезновении цели сценарий закрывается."
+   ],
+   "related": [
+    "modal"
+   ],
+   "classes": [
+    "dk-onboarding",
+    "dk-onboarding__actions",
+    "dk-onboarding__step",
+    "dk-onboarding__target",
+    "dk-onboarding__text",
+    "dk-onboarding__title"
+   ],
+   "include": [
+    "js/dk-focus-trap.js",
+    "js/dk-onboarding.js"
+   ]
+  },
+  {
+   "id": "flex",
+   "title": "Flex",
+   "kind": "компонент",
+   "group": "Утилиты",
+   "status": "стабильный",
+   "purpose": "Раскладка элементов в строку или колонку с общими отступами и выравниванием.",
+   "use_when": [
+    "Кнопки и подписи внутри одной группы.",
+    "Колонка элементов с одинаковым интервалом."
+   ],
+   "instead": [
+    {
+     "when": "Сетка карточек — CardGrid или dk-grid.",
+     "use": null
+    },
+    {
+     "when": "Не меняйте визуальный порядок относительно DOM.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-flex"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-flex.html"
+   ],
+   "api": [
+    {
+     "name": "--flex-gap",
+     "type": "переменная в style",
+     "what": "По умолчанию --gap-inline; используйте токен интервала."
+    }
+   ],
+   "example": "<div class=\"dk-flex dk-flex--between\"><span>Отчёты</span><div class=\"dk-flex\"><button class=\"dk-btn dk-btn--sm\">Обновить</button><button class=\"dk-btn dk-btn--sm\">Экспорт</button></div></div>",
+   "rules": [
+    "Полные названия объектов и конкретные действия."
+   ],
+   "avoid": [
+    "Непонятные подписи «Далее» для перехода к объектам без контекста."
+   ],
+   "a11y": [
+    "Порядок чтения и Tab соответствует DOM; не используйте reverse для смысловой перестановки.",
+    "На телефоне кнопки имеют область нажатия минимум 44 px."
+   ],
+   "related": [],
+   "classes": [
+    "dk-flex",
+    "dk-flex--between",
+    "dk-flex--center",
+    "dk-flex--column",
+    "dk-flex--nowrap",
+    "dk-flex--start",
+    "dk-flex--stretch"
+   ],
+   "include": []
+  },
+  {
+   "id": "card-grid",
+   "title": "Сетка карточек",
+   "kind": "компонент",
+   "group": "Утилиты",
+   "status": "стабильный",
+   "purpose": "Адаптивная сетка карточек с равной высотой соседей.",
+   "use_when": [
+    "Сравнить несколько равноправных объектов.",
+    "Все карточки должны быть видны в потоке страницы."
+   ],
+   "instead": [
+    {
+     "when": "Сложный дашборд с разными долями виджетов — dk-grid.",
+     "use": null
+    },
+    {
+     "when": "Последовательные истории — CardScroll.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-card-grid"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-card-grid.html"
+   ],
+   "api": [
+    {
+     "name": "--card-min-width",
+     "type": "переменная в style",
+     "what": "Минимальная ширина, не больше ширины контейнера."
+    }
+   ],
+   "example": "<ul class=\"dk-card-grid\" aria-label=\"Отчёты\"><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 1</h3><p>Продажи по каналам.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 2</h3><p>Продажи по каналам и категориям товаров.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 3</h3><p>Продажи по каналам.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li></ul>",
+   "rules": [
+    "Полные названия объектов и конкретные действия."
+   ],
+   "avoid": [
+    "Непонятные подписи «Далее» для перехода к объектам без контекста."
+   ],
+   "a11y": [
+    "Порядок чтения и Tab соответствует DOM; не используйте reverse для смысловой перестановки.",
+    "На телефоне кнопки имеют область нажатия минимум 44 px."
+   ],
+   "related": [],
+   "classes": [
+    "dk-card-grid",
+    "dk-card-grid--l",
+    "dk-card-grid--m"
+   ],
+   "include": []
+  },
+  {
+   "id": "card-scroll",
+   "title": "Лента карточек",
+   "kind": "компонент",
+   "group": "Утилиты",
+   "status": "стабильный",
+   "purpose": "Горизонтальный список карточек с нативной прокруткой и кнопками навигации.",
+   "use_when": [
+    "Последовательность отчётов, материалов или историй.",
+    "На телефоне виден край следующей карточки."
+   ],
+   "instead": [
+    {
+     "when": "Основные KPI должны быть видны одновременно — CardGrid.",
+     "use": null
+    },
+    {
+     "when": "Не включайте автоматическое перелистывание.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-card-scroll"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-card-scroll.js"
+   ],
+   "data": [],
+   "js": [
+    "dkCardScroll"
+   ],
+   "docs": [
+    "component-card-scroll.html"
+   ],
+   "api": [
+    {
+     "name": "dkCardScroll(root)",
+     "type": "функция",
+     "what": "Подключает стрелки и обновляет доступность на границах."
+    },
+    {
+     "name": "refresh() / destroy()",
+     "type": "методы",
+     "what": "Обновить границы / удалить обработчики и наблюдателей."
+    },
+    {
+     "name": "--card-width",
+     "type": "переменная в style",
+     "what": "Ширина карточки, по умолчанию 260 px; ограничена 80% списка."
+    }
+   ],
+   "example": "<div class=\"dk-card-scroll\" id=\"demo-cards\"><div class=\"dk-card-scroll__actions\"><button class=\"dk-iconbtn dk-iconbtn--sm dk-scroll-arrow\" data-scroll-prev aria-label=\"Предыдущие отчёты\"><svg class=\"dk-i dk-i--adaptive\" aria-hidden=\"true\"><use href=\"#ti-chevron-left\"/></svg></button><button class=\"dk-iconbtn dk-iconbtn--sm dk-scroll-arrow\" data-scroll-next aria-label=\"Следующие отчёты\"><svg class=\"dk-i dk-i--adaptive\" aria-hidden=\"true\"><use href=\"#ti-chevron-right\"/></svg></button></div><ul class=\"dk-card-scroll__list\" tabindex=\"0\" aria-label=\"Отчёты\"><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 1</h3><p>Продажи по каналам.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 2</h3><p>Продажи по каналам и категориям товаров.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 3</h3><p>Продажи по каналам.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 4</h3><p>Продажи по каналам и категориям товаров.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 5</h3><p>Продажи по каналам.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 6</h3><p>Продажи по каналам и категориям товаров.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li></ul></div>\n<script>\nwindow.addEventListener('DOMContentLoaded',function(){dkCardScroll('#demo-cards');});\n</script>",
+   "rules": [
+    "Полные названия объектов и конкретные действия."
+   ],
+   "avoid": [
+    "Непонятные подписи «Далее» для перехода к объектам без контекста."
+   ],
+   "a11y": [
+    "Список ul/li, кнопки со смысловыми aria-label.",
+    "Tab достигает карточек; стрелки показывают недоступность направления через disabled.",
+    "Нативная прокрутка и prefers-reduced-motion сохранены; автоматического перелистывания нет.",
+    "RTL: направление перемещения учитывает direction списка."
+   ],
+   "related": [],
+   "classes": [
+    "dk-card-scroll",
+    "dk-card-scroll__actions",
+    "dk-card-scroll__list"
+   ],
+   "include": [
+    "js/dk-card-scroll.js"
+   ]
+  },
+  {
+   "id": "scroll-arrow",
+   "title": "Стрелка прокрутки",
+   "kind": "компонент",
+   "group": "Утилиты",
+   "status": "стабильный",
+   "purpose": "Доступная кнопка перемещения по прокручиваемому содержимому.",
+   "use_when": [
+    "Следующий или предыдущий фрагмент горизонтального списка."
+   ],
+   "instead": [
+    {
+     "when": "Стрелка перехода на страницу — обычная ссылка.",
+     "use": null
+    },
+    {
+     "when": "Одна иконка без имени действия.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-scroll-arrow"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-card-scroll.js"
+   ],
+   "data": [],
+   "js": [
+    "dkCardScroll"
+   ],
+   "docs": [
+    "component-scroll-arrow.html"
+   ],
+   "api": [
+    {
+     "name": "aria-label",
+     "type": "HTML-атрибут",
+     "what": "Называет действие: «Следующие отчёты»."
+    },
+    {
+     "name": "data-scroll-prev / data-scroll-next",
+     "type": "HTML-атрибуты",
+     "what": "Подключение к dkCardScroll."
+    }
+   ],
+   "example": "<div class=\"dk-card-scroll\" id=\"demo-cards\"><div class=\"dk-card-scroll__actions\"><button class=\"dk-iconbtn dk-iconbtn--sm dk-scroll-arrow\" data-scroll-prev aria-label=\"Предыдущие отчёты\"><svg class=\"dk-i dk-i--adaptive\" aria-hidden=\"true\"><use href=\"#ti-chevron-left\"/></svg></button><button class=\"dk-iconbtn dk-iconbtn--sm dk-scroll-arrow\" data-scroll-next aria-label=\"Следующие отчёты\"><svg class=\"dk-i dk-i--adaptive\" aria-hidden=\"true\"><use href=\"#ti-chevron-right\"/></svg></button></div><ul class=\"dk-card-scroll__list\" tabindex=\"0\" aria-label=\"Отчёты\"><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 1</h3><p>Продажи по каналам.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 2</h3><p>Продажи по каналам и категориям товаров.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 3</h3><p>Продажи по каналам.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 4</h3><p>Продажи по каналам и категориям товаров.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 5</h3><p>Продажи по каналам.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li><li><div class=\"dk-widget dk-widget--s\"><h3 class=\"dk-widget__title\">Отчёт 6</h3><p>Продажи по каналам и категориям товаров.</p><a class=\"dk-btn dk-btn--sm\" href=\"component-table.html\">Открыть пример таблицы</a></div></li></ul></div>\n<script>\nwindow.addEventListener('DOMContentLoaded',function(){dkCardScroll('#demo-cards');});\n</script>",
+   "rules": [
+    "Полные названия объектов и конкретные действия."
+   ],
+   "avoid": [
+    "Непонятные подписи «Далее» для перехода к объектам без контекста."
+   ],
+   "a11y": [
+    "Список ul/li, кнопки со смысловыми aria-label.",
+    "Tab достигает карточек; стрелки показывают недоступность направления через disabled.",
+    "Нативная прокрутка и prefers-reduced-motion сохранены; автоматического перелистывания нет.",
+    "RTL: направление перемещения учитывает direction списка."
+   ],
+   "related": [],
+   "classes": [
+    "dk-scroll-arrow"
+   ],
+   "include": [
+    "js/dk-card-scroll.js"
+   ]
+  },
+  {
+   "id": "popout",
+   "title": "Всплывающий слой",
+   "kind": "компонент",
+   "group": "Утилиты",
+   "status": "стабильный",
+   "purpose": "Оболочка модального слоя: размещение, подложка и недоступный фон.",
+   "use_when": [
+    "Модальное содержимое поверх страницы.",
+    "Окно по центру или у края экрана."
+   ],
+   "instead": [
+    {
+     "when": "Подсказка рядом с действием — Onboarding.",
+     "use": null
+    },
+    {
+     "when": "Не открывайте второй слой поверх первого.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-popout"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-modal.js"
+   ],
+   "data": [],
+   "js": [
+    "dkModal"
+   ],
+   "docs": [
+    "component-popout.html"
+   ],
+   "api": [
+    {
+     "name": "dkModal(root).open() / close()",
+     "type": "методы",
+     "what": "Нативный dialog; фокус и Escape поддерживает существующий контроллер."
+    },
+    {
+     "name": "data-modal",
+     "type": "HTML-атрибут",
+     "what": "Селектор окна для открытия кнопкой."
+    }
+   ],
+   "example": "<button class=\"dk-btn dk-btn--sm\" data-modal=\"#demo-popout\">Открыть слой</button><dialog class=\"dk-modal dk-popout\" id=\"demo-popout\" aria-labelledby=\"demo-popout-title\"><div class=\"dk-modal__head\"><h2 class=\"dk-modal__title\" id=\"demo-popout-title\">Настройки отчёта</h2></div><div class=\"dk-modal__body\"><p>Это всплывающий слой с затемнением и фокусом внутри.</p></div><form method=\"dialog\" class=\"dk-modal__foot\"><button class=\"dk-btn dk-btn--sm\">Закрыть</button></form></dialog>",
+   "rules": [
+    "Полные названия объектов и конкретные действия."
+   ],
+   "avoid": [
+    "Непонятные подписи «Далее» для перехода к объектам без контекста."
+   ],
+   "a11y": [
+    "Закрытие доступно кнопкой и Escape; фокус возвращается к запуску.",
+    "Заголовок окна связан через aria-labelledby. Фон исключается нативным showModal.",
+    "Не выдавайте один цикл Tab за полноценную модальность или недоступность фона."
+   ],
+   "related": [],
+   "classes": [
+    "dk-popout",
+    "dk-popout--bottom",
+    "dk-popout--clear",
+    "dk-popout--left",
+    "dk-popout--right",
+    "dk-popout--top"
+   ],
+   "include": [
+    "js/dk-modal.js"
+   ]
+  },
+  {
+   "id": "focus-trap",
+   "title": "Удержание фокуса",
+   "kind": "компонент",
+   "group": "Утилиты",
+   "status": "стабильный",
+   "purpose": "Tab и Shift+Tab циклически обходят интерактивные элементы открытого слоя.",
+   "use_when": [
+    "Собственный всплывающий слой, где фокус должен оставаться до закрытия."
+   ],
+   "instead": [
+    {
+     "when": "Не удерживайте фокус в обычной карточке или меню страницы.",
+     "use": null
+    },
+    {
+     "when": "Нативный dialog.showModal уже исключает фон; helper дополняет цикл, но не заменяет inert.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-focus-trap"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-focus-trap.js"
+   ],
+   "data": [],
+   "js": [
+    "dkFocusTrap"
+   ],
+   "docs": [
+    "component-focus-trap.html"
+   ],
+   "api": [
+    {
+     "name": "dkFocusTrap(root, options)",
+     "type": "функция",
+     "what": "Устанавливает цикл фокуса."
+    },
+    {
+     "name": "destroy()",
+     "type": "метод",
+     "what": "Снимает обработчики и возвращает предыдущий фокус."
+    },
+    {
+     "name": "onEscape",
+     "type": "функция",
+     "what": "Обязательный путь закрытия для собственного слоя."
+    }
+   ],
+   "example": "<button class=\"dk-btn dk-btn--sm\" id=\"demo-trap-start\">Проверить фокус</button><dialog class=\"dk-modal dk-popout\" id=\"demo-trap\" aria-labelledby=\"demo-trap-title\"><div class=\"dk-modal__head\"><h2 class=\"dk-modal__title\" id=\"demo-trap-title\">Проверка фокуса</h2></div><div class=\"dk-modal__body\"><p>Tab и Shift+Tab остаются внутри. Escape закрывает окно.</p><button class=\"dk-btn dk-btn--sm\">Первое действие</button><button class=\"dk-btn dk-btn--sm\">Второе действие</button></div><form method=\"dialog\" class=\"dk-modal__foot\"><button class=\"dk-btn dk-btn--sm\">Закрыть</button></form></dialog>\n<script>\nwindow.addEventListener('DOMContentLoaded',function(){\n var button=document.getElementById('demo-trap-start'),dialog=document.getElementById('demo-trap'),trap;\n button.addEventListener('click',function(){dialog.showModal();trap=dkFocusTrap(dialog,{onEscape:function(){dialog.close();}});});\n dialog.addEventListener('close',function(){if(trap){trap.destroy();trap=null;}button.focus();});\n});\n</script>",
+   "rules": [
+    "Полные названия объектов и конкретные действия."
+   ],
+   "avoid": [
+    "Непонятные подписи «Далее» для перехода к объектам без контекста."
+   ],
+   "a11y": [
+    "Закрытие доступно кнопкой и Escape; фокус возвращается к запуску.",
+    "Заголовок окна связан через aria-labelledby. Фон исключается нативным showModal.",
+    "Не выдавайте один цикл Tab за полноценную модальность или недоступность фона."
+   ],
+   "related": [],
+   "classes": [
+    "dk-focus-trap"
+   ],
+   "include": [
+    "js/dk-focus-trap.js"
+   ]
+  },
+  {
+   "id": "touch",
+   "title": "Жесты",
+   "kind": "компонент",
+   "group": "Утилиты",
+   "status": "стабильный",
+   "purpose": "Начало, движение, завершение и отмена pointer-жеста для мыши, пера и тача.",
+   "use_when": [
+    "Движение указателя в собственном слайдере или области жестов."
+   ],
+   "instead": [
+    {
+     "when": "Обычная кнопка — нативный click, с клавиатурой.",
+     "use": null
+    },
+    {
+     "when": "Не заменяйте нативную прокрутку ленты перехватом жестов.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-touch"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-touch.js"
+   ],
+   "data": [],
+   "js": [
+    "dkTouch"
+   ],
+   "docs": [
+    "component-touch.html"
+   ],
+   "api": [
+    {
+     "name": "dkTouch(root, options)",
+     "type": "функция",
+     "what": "onStart, onMove, onEnd, onCancel; threshold по умолчанию 8 px."
+    },
+    {
+     "name": "payload",
+     "type": "объект",
+     "what": "event, pointerType, startX/Y, shiftX/Y, duration, isSlide, isX/Y."
+    },
+    {
+     "name": "destroy()",
+     "type": "метод",
+     "what": "Удаляет обработчики и освобождает pointer capture."
+    }
+   ],
+   "example": "<div class=\"dk-touch dk-touch--pan-y dk-panel\" id=\"demo-touch\" style=\"min-height:160px\"><p>Проведите по этой области мышью или пальцем.</p><p class=\"dk-hint\" id=\"demo-touch-status\" role=\"status\">Жестов пока нет</p></div>\n<script>\nwindow.addEventListener('DOMContentLoaded',function(){\n dkTouch('#demo-touch',{onEnd:function(data){document.getElementById('demo-touch-status').textContent=data.isSlide?'Сдвиг: '+Math.round(data.shiftX)+' × '+Math.round(data.shiftY)+' px':'Нажатие без перемещения';},onCancel:function(){document.getElementById('demo-touch-status').textContent='Жест отменён браузером';}});\n});\n</script>",
+   "rules": [
+    "Полные названия объектов и конкретные действия."
+   ],
+   "avoid": [
+    "Непонятные подписи «Далее» для перехода к объектам без контекста."
+   ],
+   "a11y": [
+    "Жест не должен быть единственным способом выполнить действие: предусмотрите кнопки или клавиатуру.",
+    "pointercancel обрабатывается отдельно от успешного завершения.",
+    "Браузер сохраняет pan/zoom; helper не вызывает preventDefault."
+   ],
+   "related": [],
+   "classes": [
+    "dk-touch",
+    "dk-touch--pan-x",
+    "dk-touch--pan-y"
+   ],
+   "include": [
+    "js/dk-touch.js"
+   ]
+  },
+  {
    "id": "base",
    "title": "Основа страницы",
    "kind": "основа",
@@ -3166,6 +4245,7 @@
     "README.md#Раскладка дашборда на телефоне"
    ],
    "rules": [
+    "Равная высота соседних карточек — dk-grid--equal; ряд по самому высокому содержимому, без внутренней прокрутки.",
     "Ширина — долей (--quarter, --third, --half, --two-thirds, --full), а не числом колонок.",
     "Не больше трёх-четырёх виджетов в ряду; сверху вниз — от общего к частному.",
     "Размер S — четверть: число, подпись, тренд, спарклайн. График с осями в четверть не ставится.",
@@ -3186,6 +4266,7 @@
     "dk-data-summary",
     "dk-details",
     "dk-grid",
+    "dk-grid--equal",
     "dk-grid--even",
     "dk-grid--metrics",
     "dk-grid--stretch",
@@ -3323,6 +4404,7 @@
    "classes": [
     "dk-dot",
     "dk-i",
+    "dk-i--adaptive",
     "dk-i--after",
     "dk-i--lg",
     "dk-i--sm"
@@ -3659,9 +4741,9 @@
  },
  "hooks": {},
  "counts": {
-  "parts": 33,
-  "classes": 379,
-  "functions": 27,
+  "parts": 47,
+  "classes": 423,
+  "functions": 31,
   "chart_types": 12
  }
 }

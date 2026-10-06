@@ -14,22 +14,21 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="vendor/echarts.min.js" defer></script>
 <script src="js/dk-chart-theme.js" defer></script>
 <script src="js/dk-map.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -45,7 +44,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Визуализация</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Визуализация</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-map.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>Регионы: карта и плитки</h1>
     <p class="sc-hero__lead">Два вида на одних данных. Карта отвечает «где», плитки — «у кого хуже»: на карте площадь региона перебивает его значение. Переключатель — часть виджета, а не настройка.</p>
     <div class="sc-meta">
@@ -54,15 +64,15 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>89 регионов, шкала одного тона от светлого к тёмному, «нет данных» серым и в легенде. Переключите на плитки — по ним ходят стрелками.</p><div class="dk-widget"><div id="x-map"></div></div>
+    <p>89 регионов, шкала одного тона от светлого к тёмному, «нет данных» серым и в легенде. Переключите на плитки — по ним ходят стрелками.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-widget"><div id="x-map"></div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Показатель задан по регионам, и важно «где» — карта.</li><li>Важно сравнить регионы между собой равным весом — плитки.</li><li>Нужен доступ с клавиатуры — плитки: карта нарисована на canvas.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Топ-5 регионов — <a href="component-rank.html">Рейтинг</a>.</li><li>Несколько показателей на регион — <a href="component-table.html">Таблица</a>.</li><li>Динамика одного региона — <a href="component-chart.html">График</a>.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
     <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-map" data-view="tiles"><div class="dk-map__head"><b class="sc-callout">1</b><div class="dk-seg dk-seg--sm dk-seg--icons" role="group" aria-label="Вид данных"><button type="button" aria-pressed="false" title="Карта" aria-label="Карта"><svg class="dk-i dk-i--sm"><use href="#ti-map"/></svg></button><button type="button" aria-pressed="true" title="Плитки" aria-label="Плитки"><svg class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg></button></div></div>
       <div class="dk-map__body"><div class="dk-map__tiles" role="group" aria-label="3 региона" style="--cols:4;--rows:1;max-width:320px">
@@ -71,28 +81,28 @@
         <button type="button" class="dk-map__tile" style="grid-row:1;grid-column:3;--fill:var(--nodata)" title="Чукотский АО · нет данных"><b class="dk-map__abbr">ЧУК</b><span class="dk-map__val"><b class="sc-callout">4</b>—</span></button></div></div>
       <div class="dk-map__legend"><b class="sc-callout">5</b><span class="dk-map__key"><i style="background:var(--seq-1)"></i>28–41</span><span class="dk-map__key"><i style="background:var(--seq-3)"></i>55–68</span><span class="dk-map__key"><i style="background:var(--seq-5)"></i>82–95</span><span class="dk-map__key"><i style="background:var(--nodata)"></i>нет данных</span><span class="dk-map__unit">баллов риска</span></div></div></div><ol class="sc-anatomy__list"><li><b>Переключатель</b> — сегмент «карта / плитки»; в виджете с шапкой сам встаёт в неё справа, иначе — своя строка над картой.</li><li><b>Плитка</b> — кнопка с сокращением и значением; заливка — ступень шкалы через <code>--fill</code>.</li><li><b>Значение в плитке</b> — стоит в самой плитке, не только в подсказке: подсказку не получить ни пальцем, ни с клавиатуры.</li><li><b>Нет данных</b> — серый <code>--nodata</code> и прочерк — отдельная категория, а не ноль.</li><li><b>Легенда</b> — внизу, под тем, что объясняет: пороги названы числами, единица справа.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
     <p>Размер один: карта 420 px высотой (280 на узком экране), плитки 19×11 клеток по ширине виджета. Виджет — L: в половине колонки карта нечитаема.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>view: &#x27;map&#x27; | &#x27;tiles&#x27;</code></td><td>Начальный вид.</td><td>По умолчанию карта.</td></tr><tr><td><code>topo + object / geo</code></td><td>Контуры: TopoJSON (свой разбор) или GeoJSON.</td><td>Всегда для карты.</td></tr><tr><td><code>tiles</code></td><td>Раскладка плиток из файла.</td><td>Всегда для плиток.</td></tr><tr><td><code>values</code></td><td>{ id: число }; отсутствующий id — «нет данных».</td><td>Всегда.</td></tr><tr><td><code>steps / min / max</code></td><td>Свои пороги или границы шкалы.</td><td>Когда равные ступени не годятся.</td></tr><tr><td><code>controls</code></td><td>Куда поставить переключатель.</td><td>Не нужен, если карта в виджете с шапкой: встанет туда сама. false — оставить свою строку.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-widget"><div class="dk-map" data-view="map"><div class="dk-map__body"><div class="dk-empty"><div class="dk-empty__t">Карта не загрузилась</div><div>Контуры регионов не пришли.</div><div class="dk-empty__do">Откройте страницу по http, а не двойным кликом.</div></div></div></div></div>
     <div class="sc-note"><b>Без контуров карта сама переключается на плитки</b>, если они есть; без плиток — честное «плитки не загрузились». Контейнер без размера карту не роняет: она ждёт размера и дорисовывается (проверка НОЛЬ).</div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
     <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Пороги в легенде числами: «55–68», не «средне».</li><li>Единица измерения один раз, справа от легенды.</li><li>Сокращения регионов из файла раскладки — постоянные.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Радуга вместо лестницы одного тона.</li><li>Ноль вместо «нет данных».</li><li>Карта без переключателя на плитки — без мыши данных не получить.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Плитки — кнопки</b> с <code>aria-label</code> «регион · значение»; по сетке ходят стрелками, tabindex один на всю сетку.</li><li><b>Карта</b> недоступна с клавиатуры (canvas) — поэтому плитки обязательны, а не опция.</li><li><b>Шкала</b> — пять ступеней, все видны на своей доске в обеих темах (проверка ШКАЛА).</li><li><b>«Нет данных»</b> в тёмной теме 1,69:1 к поверхности — ниже нормы; открыто в HANDOFF.md (штриховка вместо цвета).</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-map"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Данные подаются объектами: на file:// fetch запрещён браузером, и виджет, который сам лезет за файлом, на двойной щелчок не открылся бы.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-widget&quot;&gt;
   &lt;div class=&quot;dk-widget__head&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Регионы&lt;/h3&gt;&lt;/div&gt;
@@ -112,7 +122,7 @@ m.view = &#x27;tiles&#x27;;
 m.setValues(next);                     // шкала пересчитается
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>topo, object / geo</code></td><td>объект</td><td>Контуры регионов.</td></tr><tr><td><code>tiles</code></td><td>объект</td><td>Раскладка плиток.</td></tr><tr><td><code>values</code></td><td>{id: число}</td><td>Значения; отсутствие — «нет данных».</td></tr><tr><td><code>unit, steps, min, max</code></td><td>строка, массив, числа</td><td>Легенда и шкала.</td></tr><tr><td><code>controls</code></td><td>селектор | элемент | false</td><td>Куда поставить сегмент. По умолчанию — в шапку своего виджета.</td></tr><tr><td><code>onSelect(id, value)</code></td><td>функция</td><td>Клик по региону или плитке.</td></tr><tr><td><code>scope / setScope(ids)</code></td><td>массив id | null</td><td>Регионы в срезе фильтра; остальные приглушены, «вне среза» — в легенде и подписи. Шкала — общая по стране.</td></tr><tr><td><code>view / setValues(v) / destroy()</code></td><td>API</td><td>Вид, данные, уборка.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-rank.html">Рейтинг</a> — верх списка регионов</li><li><a href="component-segment.html">Сегмент</a> — переключатель вида</li><li><a href="regions.html">Страница «Регионы»</a> — карта в живом дашборде</li></ul>
   </section>

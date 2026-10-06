@@ -14,19 +14,18 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -42,7 +41,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Обратная связь</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Обратная связь</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-empty.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>Состояния: загрузка, пусто, ошибка</h1>
     <p class="sc-hero__lead">Загрузка, «данных нет» и ошибка — это тоже компоненты. Без них дашборд в проде выглядит сломанным. Каждое отвечает на три вопроса: что произошло, почему и что делать.</p>
     <div class="sc-meta">
@@ -51,29 +61,29 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>Скелетон, пустое состояние, ошибка виджета и страница ошибки.</p><div class="dk-grid--even">
+    <p>Скелетон, пустое состояние, ошибка виджета и страница ошибки.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-grid--even">
       <div class="dk-panel"><div class="dk-overline" style="margin-bottom:var(--space-6)">Загрузка</div><span class="dk-vh">Загружаем показатели</span><div class="dk-skel" style="height:14px;width:60%;margin-bottom:var(--space-5)"></div><div class="dk-skel" style="height:14px;width:85%;margin-bottom:var(--space-5)"></div><div class="dk-skel" style="height:14px;width:45%"></div></div>
       <div class="dk-panel"><div class="dk-empty"><div class="dk-empty__t">Ничего не найдено</div><div>Под выбранные фильтры не попал ни один регион.</div><div class="dk-empty__do">Снимите фильтр по округу или расширьте период.</div></div></div>
       <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Динамика балла</h3><div class="dk-widget__actions"><button class="dk-iconbtn dk-iconbtn--sm" title="Обновить" aria-label="Обновить"><svg class="dk-i"><use href="#ti-refresh"/></svg></button></div></div><div class="dk-error"><span class="dk-error__icon"><svg class="dk-i"><use href="#ti-plug-connected-x"/></svg></span><h4 class="dk-error__title">Виджет не загрузился</h4><p class="dk-error__text">Остальные показатели на странице актуальны.</p><div class="dk-error__actions"><button class="dk-btn dk-btn--sm">Повторить</button></div></div></div>
     </div>
-    <div class="dk-panel" style="margin-top:var(--space-6)"><div class="dk-error dk-error--alarm"><span class="dk-error__icon"><svg class="dk-i"><use href="#ti-plug-connected-x"/></svg></span><h3 class="dk-error__title">Данные не загрузились</h3><p class="dk-error__text">Сервер не ответил. Показатели на экране могли остаться со вчерашнего среза — на них сейчас нельзя опираться.</p><div class="dk-error__actions"><button class="dk-btn dk-btn--primary"><svg class="dk-i"><use href="#ti-refresh"/></svg>Попробовать снова</button></div><div class="dk-error__code">ERR_TIMEOUT · 22.09.2026 23:14</div></div></div>
+    <div class="dk-panel" style="margin-top:var(--space-6)"><div class="dk-error dk-error--alarm"><span class="dk-error__icon"><svg class="dk-i"><use href="#ti-plug-connected-x"/></svg></span><h3 class="dk-error__title">Данные не загрузились</h3><p class="dk-error__text">Сервер не ответил. Показатели на экране могли остаться со вчерашнего среза — на них сейчас нельзя опираться.</p><div class="dk-error__actions"><button class="dk-btn dk-btn--primary"><svg class="dk-i"><use href="#ti-refresh"/></svg>Попробовать снова</button></div><div class="dk-error__code">ERR_TIMEOUT · 22.09.2026 23:14</div></div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Загрузка: данные ещё едут, и место под них известно — скелетон повторяет форму будущего содержимого.</li><li>Пусто: запрос выполнился, а ответ пуст — фильтры, период, новый объект.</li><li>Ошибка: запрос не выполнился; внутри виджета — компактно, на всю страницу — с кодом для поддержки.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Служба не отвечает сутки — это <a href="component-banner.html">Баннер</a> страницы, не ошибка виджета.</li><li>Ноль значений — не «пусто»: ноль — это ответ, и его показывает сам компонент (график, таблица).</li><li>Нет доступа — страница ошибки 403 (на <a href="showcase.html#stranicy-oshibok">витрине</a>), а не пустое состояние.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
     <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-grid--even"><div class="dk-panel"><div class="dk-empty"><div class="dk-empty__t"><b class="sc-callout">1</b>Ничего не найдено</div><div><b class="sc-callout">2</b>Под фильтры не попал ни один регион.</div><div class="dk-empty__do"><b class="sc-callout">3</b>Снимите фильтр по округу.</div></div></div>
       <div class="dk-panel"><div class="dk-error dk-error--alarm"><span class="dk-error__icon"><b class="sc-callout">4</b><svg class="dk-i"><use href="#ti-alert-triangle"/></svg></span><h3 class="dk-error__title">Данные не приходят</h3><p class="dk-error__text">Показатели — со среза до сбоя.</p><div class="dk-error__actions"><b class="sc-callout">5</b><button class="dk-btn dk-btn--primary">Попробовать снова</button></div><div class="dk-error__code"><b class="sc-callout">6</b>500 · req 8f3a-21c9</div></div></div></div></div><ol class="sc-anatomy__list"><li><b>Что произошло</b> — <code>dk-empty__t</code> / <code>dk-error__title</code>: заголовок одной фразой.</li><li><b>Почему</b> — строка причины простыми словами.</li><li><b>Что делать</b> — <code>dk-empty__do</code> или кнопка действия: без третьей строки человек не знает, его это вина или системы.</li><li><b>Значок ошибки</b> — <code>dk-error--alarm</code> красит его смыслом: данные ненадёжны.</li><li><b>Действие</b> — «Попробовать снова», «К сводке» — то, что действительно можно сделать.</li><li><b>Код</b> — внизу и мелко: нужен поддержке, а не читателю, но без него не объяснить, что сломалось.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
     <p>Два размера: внутри виджета (<code>h4</code>, кнопка sm) и на всю страницу (<code>h3</code>, основная кнопка, код). Скелетон — полосы высотой строки текста, ширины разные, чтобы не выглядели таблицей.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-skel</code></td><td>Полоса-заглушка; рядом скрытый текст для скринридера.</td><td>Загрузка.</td></tr><tr><td><code>dk-empty / __t / __do</code></td><td>Пустое состояние из трёх строк.</td><td>Пустой ответ.</td></tr><tr><td><code>dk-error</code></td><td>Ошибка виджета или страницы.</td><td>Запрос не выполнился.</td></tr><tr><td><code>dk-error--alarm</code></td><td>Значок цветом тревоги.</td><td>Данные на экране ненадёжны.</td></tr><tr><td><code>dk-error__code</code></td><td>Код для поддержки.</td><td>Страница ошибки; в виджете не нужен.</td></tr><tr><td><code>aria-busy=&quot;true&quot;</code></td><td>На виджете во время загрузки.</td><td>Всегда вместе со скелетоном.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-grid--even">
       <div class="dk-panel"><div class="dk-error"><span class="dk-error__icon"><svg class="dk-i"><use href="#ti-search"/></svg></span><h3 class="dk-error__title">Такой страницы нет</h3><p class="dk-error__text">Возможно, её переименовали или ссылка устарела.</p><div class="dk-error__actions"><button class="dk-btn dk-btn--primary">К сводке</button></div><div class="dk-error__code">404</div></div></div>
@@ -81,19 +91,19 @@
     </div>
     <div class="sc-note"><b>Чего здесь не бывает.</b> Обвинения пользователя («вы ввели неверный адрес»), технических подробностей на видном месте и юмора: смешная картинка на месте сломанного отчёта раздражает того, кому отчёт был нужен к совещанию.</div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
     <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Три строки: что, почему, что делать.</li><li>Действие — глаголом и выполнимое: «Снимите фильтр по округу».</li><li>Ошибка честно говорит, чему нельзя верить: «показатели — со вчерашнего среза».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>«Нет данных» одной строкой — тупик.</li><li>«Что-то пошло не так» — это не ответ на вопрос «что».</li><li>Скелетон, который не похож на то, что загрузится.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Скелетон</b> сопровождается скрытым текстом «Загружаем…» и <code>aria-busy</code> на виджете.</li><li><b>Действие</b> — настоящая кнопка или ссылка; фокус после ошибки уходит на неё, если страница целиком.</li><li><b>Не только цветом.</b> Тревога — значком и словами; красный лишь дополняет.</li><li><b>Контраст.</b> Тексты на поверхности панели — проверка КОНТРАСТ.</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-skel,dk-empty,dk-error"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Только разметка. Обёртка графика показывает пустое состояние сама (<code>empty</code>).</p><pre class="sc-code"><code>&lt;!-- загрузка --&gt;
 &lt;div class=&quot;dk-widget&quot; aria-busy=&quot;true&quot;&gt;
@@ -116,7 +126,7 @@
   &lt;div class=&quot;dk-error__actions&quot;&gt;&lt;button class=&quot;dk-btn dk-btn--sm&quot;&gt;Повторить&lt;/button&gt;&lt;/div&gt;
 &lt;/div&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-empty__t / __do</code></td><td>элементы</td><td>Заголовок и «что делать»; средняя строка — без класса.</td></tr><tr><td><code>dk-error--alarm</code></td><td>класс</td><td>Данные ненадёжны.</td></tr><tr><td><code>dk-error__code</code></td><td>элемент</td><td>Код и время для поддержки.</td></tr><tr><td><code>aria-busy</code></td><td>атрибут</td><td>На контейнере во время загрузки.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-banner.html">Баннер</a> — состояние всей страницы</li><li><a href="component-chart.html">График</a> — пустое состояние графика — встроенное</li><li><a href="showcase.html#stranicy-oshibok">Витрина: страницы ошибок</a> — все четыре страницы целиком</li></ul>
   </section>

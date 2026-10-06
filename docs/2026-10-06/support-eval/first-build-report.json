@@ -1,0 +1,123 @@
+{
+  "task_id": 8,
+  "artifact": "support.html",
+  "first_completed_snapshot": "first-completed.html",
+  "human_acceptance": null,
+  "necessary_questions": 0,
+  "repeated_questions": 0,
+  "kit_modified": false,
+  "review": "Sequential analyst and design/editor passes by builder; no independent expert acceptance claimed",
+  "data": {
+    "incoming": 360,
+    "closed": 310,
+    "queue_start": 20,
+    "queue_daily": [
+      25,
+      30,
+      38,
+      53,
+      68,
+      75,
+      70
+    ],
+    "overdue": 54,
+    "overdue_share": 15,
+    "threshold": 10,
+    "excess_pp": 5,
+    "channels": {
+      "email": 30,
+      "chat": 18,
+      "phone": 6
+    }
+  },
+  "measurements": {
+    "desktop": {
+      "viewport": [
+        1280,
+        720
+      ],
+      "scrollWidth": 1280,
+      "scrollHeight": 720,
+      "metric_heights": [
+        167,
+        167
+      ],
+      "chart_heights": [
+        340,
+        340
+      ]
+    },
+    "phone": {
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 390,
+      "scrollHeight": 1319,
+      "metric_heights": [
+        176,
+        176
+      ],
+      "chart_heights": [
+        336,
+        336
+      ]
+    },
+    "details_open_close": true,
+    "details_numeric_rows": 7
+  },
+  "technical_checks": {
+    "check_page": "PASS, including Chrome mobile/landscape/tablet checks",
+    "browser_exceptions": 0,
+    "snapshots": [
+      "support-1280-light.png",
+      "support-1280-dark.png",
+      "support-390-light.png",
+      "support-390-dark.png"
+    ]
+  },
+  "question_answers": [
+    {
+      "question": "Как меняется очередь?",
+      "answer": "Линейный график:25/30/38/53/68/75/70, с начальных20; входящие360,закрытые310,прирост50."
+    },
+    {
+      "question": "Какой канал создаёт больше просрочек?",
+      "answer": "Email30из54, чат18,телефон6; абсолютные числа, не доли входящих каналов."
+    },
+    {
+      "question": "Соблюдается ли SLA?",
+      "answer": "Нет по заданному критерию:54из360=15%, порог10%, превышение5п.п."
+    }
+  ],
+  "self_corrections_before_delivery": [
+    {
+      "category": "geometry",
+      "change": "Убрана доля full вне сетки: создавала неявные колонки и горизонтальное переполнение."
+    },
+    {
+      "category": "labels",
+      "change": "Полные названия KPI вместо обрезания."
+    },
+    {
+      "category": "composition",
+      "change": "Убрана дублирующая карточка email; число перенесено в соответствующий график."
+    },
+    {
+      "category": "geometry",
+      "change": "Убрана лишняя внешняя поверхность раскрытия; строки чисел и статуса выровнены на десктопе без уменьшения полей."
+    },
+    {
+      "category": "composition",
+      "change": "Неизвестный возраст очереди перенесён к её графику, без отдельного повторяющего блока."
+    }
+  ],
+  "remaining": [
+    "Возраст очереди и время SLA не заданы; не выдуманы.",
+    "Входящие по каналам неизвестны; сравнение долей просрочки каналов невозможно.",
+    "Живой телефон, WebView и живой скринридер не проверены.",
+    "Человек не принимал результат."
+  ],
+  "first_completed_sha256": "0e1bc51ded49ca905871d24faf2b84d946f64a8f550b163b4326033e307c5702",
+  "parent_review": "Questions and light desktop/phone screenshots reviewed; no observed blocker. Human acceptance remains null."
+}

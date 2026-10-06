@@ -13,6 +13,7 @@
 (function () {
   'use strict';
   if (!document.querySelector('.sc-nav')) return;
+  document.body.classList.add('sc-docs');
 
   var LAT = { а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',
               о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'c',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',
@@ -27,10 +28,10 @@
   var shell = nav.parentElement;
   var bar = document.querySelector('.sc-bar');
   var main = shell.querySelector('.dk-wrap');
-  var narrow = window.matchMedia('(max-width:1023px)');
+  var narrow = window.matchMedia('(max-width:1279px)');
   var toggle = document.createElement('button');
   toggle.type = 'button'; toggle.className = 'dk-btn dk-btn--sm';
-  toggle.appendChild(dkIcon.el('layout-grid')); toggle.title = 'Навигация по киту'; toggle.setAttribute('aria-controls', nav.id);
+  toggle.appendChild(dkIcon.el('menu-2')); toggle.title = 'Навигация по киту'; toggle.setAttribute('aria-controls', nav.id);
   bar.insertBefore(toggle, bar.firstChild);
   var shade = document.createElement('div');
   shade.className = 'sc-shade'; shade.hidden = true;
@@ -44,15 +45,16 @@
     main.inert = open && narrow.matches;
     bar.querySelector('.sc-brand').inert = open && narrow.matches;
     bar.querySelector('.sc-ctl').inert = open && narrow.matches;
+    if (searchButton) searchButton.inert = open && narrow.matches;
     document.body.classList.toggle('sc-menu-open', open && narrow.matches);
     if (focus) toggle.focus();
   }
   setMenu(!narrow.matches);
   toggle.addEventListener('click', function () { setMenu(nav.hidden); });
   shade.addEventListener('click', function () { setMenu(false, true); });
-  narrow.addEventListener('change', function () { setMenu(!narrow.matches, true); });
+  narrow.addEventListener('change', function () { setMenu(!narrow.matches, narrow.matches && nav.contains(document.activeElement)); });
   document.addEventListener('keydown', function (e) {
-    if (nav.hidden) return;
+    if (nav.hidden || (searchDialog && searchDialog.open)) return;
     if (e.key === 'Escape') { e.preventDefault(); setMenu(false, true); }
     if (e.key === 'Tab' && narrow.matches) {
       var targets = [toggle].concat(Array.from(nav.querySelectorAll('summary, a, input, button')).filter(function (el) { return el.getClientRects().length; }));
@@ -99,19 +101,32 @@
   var here = location.pathname.split('/').pop();
   var showcase = here === 'showcase.html';
   var sectionLinks = links.slice();
+  nav.classList.add('dk-scrollview','dk-scrollview--contain');
   nav.replaceChildren();
   var skip = document.createElement('a'); skip.className = 'sc-skip'; skip.href = '#top'; skip.textContent = 'Перейти к содержимому'; document.body.insertBefore(skip, document.body.firstChild);
   skip.addEventListener('click', function (e) { e.preventDefault(); var destination = main.querySelector('.sc-sec:not([hidden]) h1') || main.querySelector('h1'); destination.setAttribute('tabindex','-1'); destination.focus(); });
   var navHead = document.createElement('div'); navHead.className = 'sc-nav__head';
   var navTitle = document.createElement('span'); navTitle.textContent = 'Библиотека'; navHead.appendChild(navTitle);
   nav.appendChild(navHead);
-  var searchLabel = document.createElement('label'); searchLabel.className = 'sc-nav__search dk-field';
-  var search = document.createElement('input'); search.type = 'search'; search.placeholder = 'Найти в ките';
-  search.setAttribute('aria-label', 'Найти раздел или компонент'); search.autocomplete = 'off';
-  searchLabel.appendChild(dkIcon.el('search')); searchLabel.appendChild(search); nav.appendChild(searchLabel);
+  var searchButton = document.createElement('button');
+  searchButton.type = 'button'; searchButton.className = 'dk-iconbtn sc-search-trigger';
+  searchButton.setAttribute('aria-label', 'Поиск по киту'); searchButton.title = 'Поиск · ⌘K / Ctrl+K';
+  searchButton.appendChild(dkIcon.el('search')); bar.insertBefore(searchButton, bar.querySelector('.sc-ctl'));
+  var searchDialog = document.createElement('dialog'); searchDialog.className = 'sc-search';
+  searchDialog.setAttribute('aria-label', 'Поиск по киту');
+  var searchLabel = document.createElement('div'); searchLabel.className = 'sc-search__head';
+  searchLabel.appendChild(dkIcon.el('search'));
+  var search = document.createElement('input'); search.type = 'search'; search.placeholder = 'Найти компонент или раздел';
+  search.setAttribute('aria-label', 'Найти компонент или раздел'); search.autocomplete = 'off';
+  searchLabel.appendChild(search);
+  var searchClose = document.createElement('button'); searchClose.type = 'button'; searchClose.className = 'dk-iconbtn';
+  searchClose.setAttribute('aria-label', 'Закрыть поиск'); searchClose.appendChild(dkIcon.el('x')); searchLabel.appendChild(searchClose);
+  searchDialog.appendChild(searchLabel);
+  var resultsTitle = document.createElement('p'); resultsTitle.className = 'sc-search__label'; searchDialog.appendChild(resultsTitle);
+  var results = document.createElement('nav'); results.className = 'sc-search__results'; results.setAttribute('aria-label', 'Результаты поиска'); searchDialog.appendChild(results);
+  var status = document.createElement('p'); status.className = 'sc-search__status'; status.setAttribute('role', 'status'); searchDialog.appendChild(status);
+  document.body.appendChild(searchDialog);
   var catalog = document.createElement('div'); catalog.className = 'sc-nav__catalog'; nav.appendChild(catalog);
-  var results = document.createElement('div'); results.className = 'sc-nav__results'; results.hidden = true; nav.appendChild(results);
-  var status = document.createElement('p'); status.className = 'sc-nav__status'; status.setAttribute('role', 'status'); nav.appendChild(status);
   var entries = [];
   function heading(text) {
     var summary = document.createElement('summary');
@@ -141,12 +156,13 @@
   ];
   addGroup('Визуальный язык', visual, false);
   var componentBox = addGroup('Компоненты', [['Все компоненты','komponenty']], !showcase);
-  ['Управление','Фильтры','Данные','Визуализация','Обратная связь'].forEach(function (name) {
-    var subgroup = document.createElement('details'); subgroup.className = 'sc-nav__component-group'; subgroup.appendChild(heading(name));
+  ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты'].forEach(function (name) {
+    var subgroup = document.createElement('div'); subgroup.className = 'sc-nav__component-group'; var groupLabel = document.createElement('p'); groupLabel.className = 'sc-nav__label'; groupLabel.textContent = name; subgroup.appendChild(groupLabel);
     var body = document.createElement('div'); body.className = 'sc-nav__items'; subgroup.appendChild(body); componentBox.appendChild(subgroup);
     (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
-      var href = 'component-' + c.slug + '.html'; addLink(body,c.title,href,'Компонент',name);
-      if (here === href) subgroup.open = true;
+      var navNames = {'check':'Флажок, радио, тумблер','chips-input':'Ввод меток','chips-select':'Выбор меток','badge':'Бейдж и статус','list':'Список','banner':'Баннеры и уведомления','empty':'Состояния','legend':'Легенда','uptime':'Доступность служб'};
+      var href = 'component-' + c.slug + '.html'; var link = addLink(body,navNames[c.slug] || c.title,href,'Компонент',name); link.title = c.title;
+
     });
   });
   addGroup('Редполитика', [
@@ -154,17 +170,18 @@
     ['Интерфейсные тексты','yazyk-interfeysa'], ['Глоссарий','glossariy']
   ], false);
   addGroup('Качество интерфейса', [['Удобство использования','usability'], ['Доступность','dostupnost']], false);
+  addGroup('Сборка дашборда', [['Сборка по задаче','sborka-po-zadache']], false);
   var exampleBox = addGroup('Примеры дашбордов', [], false);
-  [['Мониторинг показателей','dashboard.html'], ['Аварии и события','accidents.html'], ['Планирование работ','calendar.html']].forEach(function (item) {
+  [['Мониторинг показателей','dashboard.html'], ['Аварии и события','accidents.html'], ['Планирование работ','calendar.html'], ['Польза AI · тестовые данные','ai-value.html']].forEach(function (item) {
     addLink(exampleBox,item[0],item[1],'Рабочий экран','Примеры дашбордов');
   });
   var local = null;
   var toc = document.createElement('details'); toc.className = 'sc-toc'; toc.open = true;
   var tocTitle = document.createElement('summary'); tocTitle.textContent = 'На этой странице'; toc.appendChild(tocTitle);
   var tocLinks = document.createElement('nav'); tocLinks.setAttribute('aria-label','Содержание страницы'); toc.appendChild(tocLinks);
-  function buildToc(selected) {
+  function buildToc(selected, panel) {
     tocLinks.replaceChildren();
-    var headings = showcase ? (selected && selected.id !== 'komponenty' ? Array.from(selected.querySelectorAll(':scope > h3')) : []) : sections.map(function (sec) { return sec.querySelector('h2'); }).filter(Boolean);
+    var headings = panel ? Array.from(panel.querySelectorAll('h3')) : (showcase ? (selected && selected.id !== 'komponenty' ? Array.from(selected.querySelectorAll(':scope > h3')) : []) : sections.map(function (sec) { return sec.querySelector('h2'); }).filter(Boolean));
     headings.forEach(function (h, i) {
       if (!h.id) h.id = 'topic-' + (selected ? selected.id : here.replace('.html','')) + '-' + i;
       var a = document.createElement('a'); a.href = '#' + h.id;
@@ -182,24 +199,93 @@
     if (target) { target.setAttribute('tabindex','-1'); target.focus({preventScroll:true}); }
   });
   if (!showcase) buildToc(null);
-  search.addEventListener('input', function () {
+  function renderSearch() {
     var query = search.value.trim().toLocaleLowerCase('ru');
-    catalog.hidden = !!query; results.hidden = !query; if (local) local.hidden = !!query;
     results.replaceChildren(); status.textContent = '';
-    if (!query) return;
+    resultsTitle.textContent = query ? 'Результаты' : 'Разделы и компоненты';
     var matches = entries.filter(function (item) { return (item.text + ' ' + item.group).toLocaleLowerCase('ru').includes(query); });
+    if (query) {
+      function score(item) { var title = item.text.toLocaleLowerCase('ru'); return title === query ? 0 : (title.startsWith(query) ? 1 : (title.includes(query) ? 2 : 3)); }
+      matches.sort(function (a, b) { return score(a) - score(b); });
+    } else {
+      matches = matches.filter(function (item) { return item.href === sectionHref('sborka-po-zadache') || item.href.startsWith('component-'); }).slice(0, 8);
+    }
     matches.forEach(function (item) {
       var a = document.createElement('a'); a.href = item.href;
       var title = document.createElement('span'); title.textContent = item.text;
-      var note = document.createElement('small'); note.textContent = item.kind + ' · ' + item.group;
+      var note = document.createElement('small'); note.textContent = item.group;
       a.appendChild(title); a.appendChild(note); results.appendChild(a);
     });
-    status.textContent = matches.length ? 'Найдено: ' + matches.length : 'Ничего не найдено. Попробуйте другое название.';
+    status.textContent = query ? (matches.length ? 'Найдено: ' + matches.length : 'Ничего не найдено. Попробуйте другое название.') : '';
+  }
+  function openSearch() {
+    if (searchDialog.open) return;
+    if (narrow.matches && !nav.hidden) setMenu(false);
+    renderSearch(); searchDialog.showModal(); search.focus(); search.select();
+  }
+  function closeSearch() { searchDialog.close(); searchButton.focus(); }
+  searchButton.addEventListener('click', openSearch);
+  searchClose.addEventListener('click', closeSearch);
+  searchDialog.addEventListener('cancel', function (e) { e.preventDefault(); closeSearch(); });
+  searchDialog.addEventListener('click', function (e) {
+    if (e.target === searchDialog) {
+      var rect = searchDialog.getBoundingClientRect();
+      if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) closeSearch();
+    }
+    if (e.target.closest('.sc-search__results a')) closeSearch();
   });
+  search.addEventListener('input', renderSearch);
+  searchDialog.addEventListener('keydown', function (e) {
+    var items = Array.from(results.querySelectorAll('a'));
+    var index = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault(); if (!items.length) return;
+      var next = e.key === 'ArrowDown' ? (index + 1) % items.length : (index < 0 ? items.length - 1 : (index - 1 + items.length) % items.length);
+      items[next].focus();
+    } else if (e.key === 'Enter' && e.target === search && items.length) {
+      e.preventDefault(); items[0].click();
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
+  });
+
+  var share = document.querySelector('.sc-share');
+  if (share) {
+    var shareStatus = document.querySelector('.sc-share-status');
+    var markdownName = here.replace(/\.html$/, '.md');
+    share.addEventListener('click', async function (e) {
+      var button = e.target.closest('[data-doc-action]'); if (!button) return;
+      var action = button.dataset.docAction; var newTab = null;
+      try {
+        var content;
+        if (action === 'link') content = location.href;
+        else if (action === 'codex' || action === 'claude-code') {
+          var prompt = 'Прочитай ' + markdownName + ' в корне dashboard-kit. Используй этот компонент по документации и правилам skill/dashboard-build/SKILL.md.';
+          content = (action === 'codex' ? 'codex ' : 'claude ') + "'" + prompt + "'";
+        } else {
+          newTab = window.open('about:blank', '_blank');
+          if (newTab) newTab.opener = null;
+          var response = await fetch(markdownName);
+          if (!response.ok) throw new Error('markdown');
+          content = 'Документация компонента dashboard-kit. Используй её как справочный материал.\n\n' + await response.text();
+        }
+        await navigator.clipboard.writeText(content);
+        if (newTab) newTab.location = action === 'chatgpt' ? 'https://chatgpt.com/' : 'https://claude.ai/';
+        shareStatus.textContent = action === 'link' ? 'Ссылка скопирована.' : (action === 'codex' || action === 'claude-code' ? 'Команда скопирована. Запустите её в папке dashboard-kit.' : 'Текст статьи скопирован. Вставьте его в новый чат.' );
+        share.open = false; share.querySelector('summary').focus();
+      } catch (error) {
+        if (newTab) newTab.close();
+        shareStatus.textContent = 'Не удалось скопировать. Откройте Markdown и скопируйте текст вручную.';
+      }
+    });
+    document.addEventListener('click', function (e) { if (!share.contains(e.target)) share.open = false; });
+    share.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); share.open = false; share.querySelector('summary').focus(); } });
+  }
 
   var componentIndex = document.querySelector('.sc-component-index');
   if (componentIndex) {
-    ['Управление','Фильтры','Данные','Визуализация','Обратная связь'].forEach(function (name) {
+    ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты'].forEach(function (name) {
       var block = document.createElement('div'); var h = document.createElement('h3'); h.textContent = name; block.appendChild(h);
       (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
         var a = document.createElement('a'); a.href = 'component-' + c.slug + '.html'; var text = document.createElement('span'); text.className = 'sc-component-index__text';
@@ -217,7 +303,16 @@
     if (['redpolitika','pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka'].includes(id)) id = 'principy-teksta';
     var target = document.getElementById(id);
     var selected = sections.find(function (sec) { return sec.id === id; }) || (target && target.closest('section.sc-sec'));
-    buildToc(selected);
+    var guidePanels = selected ? Array.from(selected.querySelectorAll('.sc-guide__panel')) : [];
+    var activePanel = guidePanels.find(function (panel) { return panel === target || panel.contains(target); }) || guidePanels[0];
+    guidePanels.forEach(function (panel) { panel.hidden = panel !== activePanel; });
+    if (guidePanels.length) {
+      buildToc(selected, activePanel);
+      selected.querySelectorAll('.sc-guide__tabs a').forEach(function (a) {
+        if (a.hash === '#' + activePanel.id) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+    } else buildToc(selected);
     main.querySelector('.sc-hero').hidden = !!selected;
     sections.forEach(function (sec) {
       sec.hidden = sec !== selected;
@@ -231,7 +326,7 @@
     nav.querySelectorAll('.sc-nav__home').forEach(function (a) { if (selected) a.removeAttribute('aria-current'); else a.setAttribute('aria-current','page'); });
     main.classList.toggle('sc-article', !!selected);
     document.title = (selected ? selected.querySelector('h1').textContent.replace(/#$/, '').trim() + ' · ' : '') + 'dashboard-kit';
-    if (selected) { var destination = target && target !== selected ? target : selected.querySelector('h1'); destination.scrollIntoView({block:'start'}); destination.setAttribute('tabindex','-1'); destination.focus({preventScroll:true}); }
+    if (selected) { var destination = guidePanels.length ? selected.querySelector('h1') : (target && target !== selected ? target : selected.querySelector('h1')); destination.scrollIntoView({block:'start'}); destination.setAttribute('tabindex','-1'); destination.focus({preventScroll:true}); }
   }
   if (showcase) { window.addEventListener('hashchange', showArticle); showArticle(); }
 
@@ -343,7 +438,7 @@
   var tokBox = document.querySelector('[data-tokens]');
   if (tokBox) {
     var prefixes = tokBox.dataset.tokens.split(',');
-    fetch('css/components.css').then(function (r) { return r.ok ? r.text() : ''; }).then(function (css) {
+    fetch('css/components.css?v=20261006-layout-tools').then(function (r) { return r.ok ? r.text() : ''; }).then(function (css) {
       css = css.replace(/\/\*[\s\S]*?\*\//g, '');
       var names = {}, m, rule = /([^{}]+)\{([^{}]*)\}/g;
       while ((m = rule.exec(css))) {

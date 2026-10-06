@@ -28,10 +28,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 
-GROUPS = ["Управление", "Фильтры", "Данные", "Визуализация", "Обратная связь"]
-MODULES = ["p1_controls", "p2_filters", "p3_data", "p4_viz", "p5_feedback"]
+GROUPS = ["Управление", "Фильтры", "Данные", "Визуализация", "Обратная связь", "Утилиты"]
+MODULES = ["p1_controls", "p2_filters", "p3_data", "p4_viz", "p5_feedback", "p6_utilities"]
 
-CATALOG_DESCRIPTIONS = {'chips-input': 'Ввод набора произвольных значений с отдельным удалением.', 'chips-select': 'Выбор нескольких значений из справочника с видимым набором.', 'button': 'Выполнение основного или дополнительного действия.', 'segment': 'Переключение вида одних и тех же данных.', 'tabs': 'Переход между разделами продукта.', 'check': 'Независимый выбор, выбор одного варианта и переключение режима.', 'field': 'Ввод данных с подписью, подсказкой и проверкой.', 'select': 'Выбор одного или нескольких значений из списка.', 'period': 'Выбор периода для просмотра и сравнения данных.', 'search': 'Поиск объекта по названию.', 'legend': 'Обозначение категорий данных и фильтрация по ним.', 'pager': 'Переход между страницами набора данных.', 'table': 'Сравнение объектов по общим признакам.', 'badge': 'Краткие метки, статусы и показатели внутри других компонентов.', 'tile': 'Отображение отдельного показателя и его изменения.', 'hero': 'Общее состояние и ключевой показатель экрана.', 'car': 'Группа связанных карточек с навигацией.', 'rank': 'Ранжирование объектов по выбранному показателю.', 'list': 'Список объектов с дополнительными данными и действиями.', 'uptime': 'История доступности служб за выбранный период.', 'chart': 'Сравнение величин, динамики и состава данных.', 'map': 'Географическое распределение показателей и альтернативный вид плитками.', 'calendar': 'Распределение работ и событий по датам.', 'banner': 'Состояние страницы и подтверждение выполненного действия.', 'modal': 'Подтверждение действия или выполнение отдельной задачи.', 'empty': 'Сообщения о загрузке, отсутствии данных и ошибке.'}
+CATALOG_DESCRIPTIONS = {'flex': 'Раскладка элементов в строку или колонку с общими отступами и выравниванием.', 'card-grid': 'Адаптивная сетка карточек с равной высотой соседей.', 'card-scroll': 'Горизонтальный список карточек с нативной прокруткой и кнопками навигации.', 'scroll-arrow': 'Доступная кнопка перемещения по прокручиваемому содержимому.', 'popout': 'Оболочка модального слоя: размещение, подложка и недоступный фон.', 'focus-trap': 'Tab и Shift+Tab циклически обходят интерактивные элементы открытого слоя.', 'touch': 'Начало, движение, завершение и отмена pointer-жеста для мыши, пера и тача.'} | {'onboarding':'Знакомство с действием рядом с целевым элементом.', 'adaptive-icons':'Размер иконок по контексту и способу управления.', 'scrollview':'Нативная прокрутка ограниченной области.', 'accordion': 'Раскрываемые определения, настройки и ответы на вопросы.', 'avatar': 'Человек: фото, инициалы и группа участников.', 'counter': 'Количество объектов в кнопке, вкладке или меню.', 'chip': 'Отдельное выбранное значение с удалением.', 'chips-input': 'Ввод набора произвольных значений с отдельным удалением.', 'chips-select': 'Выбор нескольких значений из справочника с видимым набором.', 'button': 'Выполнение основного или дополнительного действия.', 'segment': 'Переключение вида одних и тех же данных.', 'tabs': 'Переход между разделами продукта.', 'check': 'Независимый выбор, выбор одного варианта и переключение режима.', 'field': 'Ввод данных с подписью, подсказкой и проверкой.', 'select': 'Выбор одного или нескольких значений из списка.', 'period': 'Выбор периода для просмотра и сравнения данных.', 'search': 'Поиск объекта по названию.', 'legend': 'Обозначение категорий данных и фильтрация по ним.', 'pager': 'Переход между страницами набора данных.', 'table': 'Сравнение объектов по общим признакам.', 'badge': 'Краткие метки, статусы и показатели внутри других компонентов.', 'tile': 'Отображение отдельного показателя и его изменения.', 'hero': 'Общее состояние и ключевой показатель экрана.', 'car': 'Группа связанных карточек с навигацией.', 'rank': 'Ранжирование объектов по выбранному показателю.', 'list': 'Список объектов с дополнительными данными и действиями.', 'uptime': 'История доступности служб за выбранный период.', 'chart': 'Сравнение величин, динамики и состава данных.', 'map': 'Географическое распределение показателей и альтернативный вид плитками.', 'calendar': 'Распределение работ и событий по датам.', 'banner': 'Состояние страницы и подтверждение выполненного действия.', 'modal': 'Подтверждение действия или выполнение отдельной задачи.', 'empty': 'Сообщения о загрузке, отсутствии данных и ошибке.'}
 
 # Порядок блоков — из шаблона разбора. Менять порядок здесь, а не в страницах.
 BLOCKS = [
@@ -81,7 +81,7 @@ def render(p: dict) -> str:
     sec = []
     for i, (sid, title, group) in enumerate(BLOCKS):
         body = {
-            "zhivoy-primer": f'<p>{p["live_intro"]}</p>{p["live"]}' if p.get("live_intro") else p["live"],
+            "zhivoy-primer": ((f'<p>{p["live_intro"]}</p>' if p.get("live_intro") else "") + '<div class="sc-playground"><div class="sc-playground__canvas">' + p["live"] + '</div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>'),
             "kogda-ispolzovat": (
                 '<div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list">' + li(p["when_yes"]) +
                 '</ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list">' + li(p["when_no"]) +
@@ -109,7 +109,7 @@ def render(p: dict) -> str:
             "svyazannoe": '<ul class="sc-list sc-list--wide">' + related + '</ul>',
         }[sid]
         grp = f' data-group="{group}"' if group else ""
-        sec.append(f'  <section class="sc-sec"{grp}>\n    <h2>{title}</h2>\n    {body}\n  </section>\n')
+        sec.append(f'  <section class="sc-sec" id="{sid}"{grp}>\n    <h2>{title}</h2>\n    {body}\n  </section>\n')
 
     return f"""<!DOCTYPE html>
 <html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
@@ -127,19 +127,18 @@ def render(p: dict) -> str:
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
-{scripts}<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+{scripts}<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -155,7 +154,18 @@ def render(p: dict) -> str:
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · {esc(p["group"])}</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · {esc(p["group"])}</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-{esc(p["slug"])}.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>{esc(p["title"])}</h1>
     <p class="sc-hero__lead">{p["purpose"]}</p>
     <div class="sc-meta">
@@ -195,6 +205,13 @@ def build() -> dict[str, str]:
     """Имя файла → содержимое, включая указатель."""
     pages = load_pages()
     out = {f"component-{p['slug']}.html": render(p) for p in pages}
+    for p in pages:
+        text = '# ' + p['title'] + '\n\n' + p['purpose'] + '\n\n'
+        for title, key in [('Когда использовать','when_yes'), ('Когда выбрать другое','when_no'), ('Контент: так','content_ok'), ('Контент: не так','content_bad'), ('Доступность','a11y')]:
+            text += '## ' + title + '\n\n' + '\n'.join('- ' + re.sub('<[^>]+>', '', html.unescape(item)) for item in p[key]) + '\n\n'
+        text += '## Размеры\n\n' + re.sub('<[^>]+>', '', html.unescape(p['sizes'])) + '\n\n## Код\n\n```html\n' + p['code'] + '\n```\n\n## Параметры\n\n'
+        text += '\n'.join('- `' + name + '` (' + typ + '): ' + re.sub('<[^>]+>', '', html.unescape(desc)) for name, typ, desc in p['api']) + '\n'
+        out[f"component-{p['slug']}.md"] = text
     index = [{"slug": p["slug"], "title": p["title"], "group": p["group"], "description": CATALOG_DESCRIPTIONS[p["slug"]]} for p in pages]
     out["js/docs-index.js"] = (
         "/* СОБРАНО tools/build-component-pages.py — указатель страниц компонентов для\n"

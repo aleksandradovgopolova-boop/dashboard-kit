@@ -14,19 +14,18 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -42,7 +41,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Фильтры</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Фильтры</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-legend.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>Фильтры-легенда</h1>
     <p class="sc-hero__lead">Один ряд, который и объясняет цвета, и фильтрует по ним. Цвет приходит снаружи через <code>--swatch</code>: компонент не знает, что такое «риск».</p>
     <div class="sc-meta">
@@ -51,33 +61,33 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>Нажмите на чип — он включится заливкой своего цвета. «Все» без цвета включается серым, как любое управление.</p><div class="dk-legend">
+    <p>Нажмите на чип — он включится заливкой своего цвета. «Все» без цвета включается серым, как любое управление.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-legend">
       <button class="dk-lg is-on" aria-pressed="true"><i class="dk-lg__sw"></i>Все<b class="dk-lg__n">89</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--crit)"><i class="dk-lg__sw"></i>Высокий<b class="dk-lg__n">23</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--high)"><i class="dk-lg__sw"></i>Средний<b class="dk-lg__n">27</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--calm)"><i class="dk-lg__sw"></i>Низкий<b class="dk-lg__n">38</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--nodata)"><i class="dk-lg__sw"></i>Мало данных<b class="dk-lg__n">1</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--event)"><i class="dk-lg__sw"></i>Событие<b class="dk-lg__n">15</b></button>
-    </div>
+    </div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Категорий две–шесть, и у каждой есть свой цвет на графике или карте рядом.</li><li>Нужно одновременно объяснить цвета и дать их включать / выключать.</li><li>Рядом с категорией важно число: «Высокий 23».</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Категорий больше шести или у них нет цвета — <a href="component-select.html">Фильтр</a>.</li><li>Категории без данных рядом — обычная легенда графика, её рисует <a href="component-chart.html">dkChart</a> сам.</li><li>Один вариант из нескольких — <a href="component-segment.html">Сегмент</a>.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
     <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-legend">
       <button class="dk-lg is-on" aria-pressed="true" style="--swatch:var(--crit)"><b class="sc-callout">1</b><i class="dk-lg__sw"></i><b class="sc-callout">2</b>Высокий<b class="dk-lg__n"><b class="sc-callout">3</b>23</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--calm)"><i class="dk-lg__sw"></i>Низкий<b class="dk-lg__n">38</b></button>
     </div></div><ol class="sc-anatomy__list"><li><b>Чип</b> — кнопка с <code>aria-pressed</code>; включённый залит своим цветом на 22 %, чтобы не спорить с данными.</li><li><b>Метка цвета</b> — <code>dk-lg__sw</code> берёт <code>--swatch</code>; без него — серый.</li><li><b>Число</b> — сколько записей за категорией; ноль показывается приглушённым.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
     <p>Три размера по высоте контролов: <code>dk-lg--sm</code> 28, по умолчанию 32, <code>dk-lg--lg</code> 40; метка цвета растёт вместе.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-lg</code></td><td>Чип-фильтр.</td><td>Каждая категория.</td></tr><tr><td><code>is-on + aria-pressed</code></td><td>Включён.</td><td>Ставит скрипт страницы.</td></tr><tr><td><code>--swatch</code></td><td>Цвет категории через стиль.</td><td>Всегда, кроме «Все».</td></tr><tr><td><code>dk-lg--sm / dk-lg--lg</code></td><td>Размер.</td><td>По соседям.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-legend">
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--crit)"><i class="dk-lg__sw"></i>Выключен<b class="dk-lg__n">23</b></button>
@@ -87,19 +97,19 @@
     </div>
     <div class="sc-note" style="margin-top:var(--space-6)"><b>Выключенные категории не исчезают.</b> Чип остаётся на месте с приглушённой меткой: человек видит, что именно он отключил, и может вернуть.</div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
     <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Название категории — как в легенде графика рядом, слово в слово.</li><li>Первым — «Все» с общим числом.</li><li>Порядок — по смыслу (от худшего к лучшему), а не по алфавиту.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Разные названия на чипе и в легенде графика: «Высокий» и «Крит.».</li><li>Чип без числа: выбор вслепую.</li><li>Цвет, розданный по кругу, а не по смыслу.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Роль.</b> Кнопки с <code>aria-pressed</code>; скринридер читает «нажата / не нажата».</li><li><b>Не только цветом.</b> Включённый чип отличается заливкой всего чипа, не только меткой; число и подпись на месте.</li><li><b>Контраст.</b> Заливка 22 % своего цвета поверх поверхности — та же ступень, что у выбранной строки таблицы.</li><li><b>Клавиатура.</b> Обычные кнопки: Tab, Enter, пробел.</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-legend,dk-lg"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Поведение задаёт страница: компонент не знает, что делать с данными при выключении категории.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-legend&quot;&gt;
   &lt;button class=&quot;dk-lg is-on&quot; aria-pressed=&quot;true&quot;&gt;&lt;i class=&quot;dk-lg__sw&quot;&gt;&lt;/i&gt;Все&lt;b class=&quot;dk-lg__n&quot;&gt;89&lt;/b&gt;&lt;/button&gt;
@@ -117,7 +127,7 @@ legend.addEventListener(&#x27;click&#x27;, function (e) {
 });
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--swatch</code></td><td>переменная в style</td><td>Цвет категории; без него серый.</td></tr><tr><td><code>aria-pressed + is-on</code></td><td>атрибут и класс</td><td>Включён; оба ставятся вместе.</td></tr><tr><td><code>dk-lg__n</code></td><td>элемент</td><td>Число записей.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-select.html">Фильтр</a> — когда категорий больше шести</li><li><a href="component-chart.html">График</a> — легенду самого графика рисует обёртка</li><li><a href="component-map.html">Регионы</a> — легенда шкалы под картой</li></ul>
   </section>

@@ -14,20 +14,19 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-form.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -43,7 +42,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Управление</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Управление</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-field.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>Поле и форма</h1>
     <p class="sc-hero__lead">Принять от человека заявку, работу, комментарий. Форма на дашборде короткая, и правила у неё жёстче обычных: её заполняют между двумя срочными делами.</p>
     <div class="sc-meta">
@@ -52,9 +62,9 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>Подпись над полем, пример значения внутри, подсказка под ним. Отправьте пустую форму — фокус уйдёт на первое неверное поле, а ошибка скажет, что сделать.</p><div class="dk-panel"><form class="dk-form" id="ex-form">
+    <p>Подпись над полем, пример значения внутри, подсказка под ним. Отправьте пустую форму — фокус уйдёт на первое неверное поле, а ошибка скажет, что сделать.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><form class="dk-form" id="ex-form">
       <div class="dk-form__alarm" hidden></div>
       <div class="dk-ff dk-ff--wide">
         <label class="dk-label" for="x-name">Что за работа <span class="dk-label__req">обязательно</span></label>
@@ -79,13 +89,13 @@
         <button type="button" class="dk-btn" id="ex-form-reset">Очистить</button>
         <button type="submit" class="dk-btn dk-btn--primary">Добавить работу</button>
       </div>
-    </form><div class="dk-result" id="ex-form-out" style="margin-top:var(--space-6)"></div></div>
+    </form><div class="dk-result" id="ex-form-out" style="margin-top:var(--space-6)"></div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Человек вводит то, чего у системы нет: название работы, число жителей, комментарий.</li><li>Полей от одного до восьми; больше — это уже отдельная страница, а не виджет.</li><li>Данные применяются по кнопке, и до неё ничего не меняется.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Выбор значения из известного списка для среза данных — <a href="component-select.html">Фильтр</a>: он применяется сразу.</li><li>Выбор дат — <a href="component-period.html">Период</a>.</li><li>Подтверждение действия без ввода — <a href="component-modal.html">Модальное окно</a>.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
     <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><form class="dk-form" onsubmit="return false"><div class="dk-form__alarm"><b class="sc-callout">1</b>Заполните обязательные поля — 2 из 3</div>
       <div class="dk-ff"><label class="dk-label"><b class="sc-callout">2</b>Подпись <span class="dk-label__req">обязательно</span></label>
@@ -96,11 +106,11 @@
         <div class="dk-err"><b class="sc-callout">5</b>Не короче 5 знаков — сейчас 3</div></div>
       <div class="dk-form__foot"><b class="sc-callout">6</b><button type="button" class="dk-btn">Очистить</button><button type="button" class="dk-btn dk-btn--primary">Добавить</button></div></form></div><ol class="sc-anatomy__list"><li><b>Сводка ошибок</b> — <code>dk-form__alarm</code> над формой после неудачной отправки: сколько полей не заполнено.</li><li><b>Подпись над полем</b> — <code>dk-label</code>; пометка «обязательно» или «если известно» — у того, чего меньше.</li><li><b>Поле</b> — <code>dk-field</code> вокруг input или select: заливка вместо рамки; внутри пример значения, а не название.</li><li><b>Подсказка</b> — <code>dk-hint</code>: единица, формат, куда попадёт значение.</li><li><b>Ошибка</b> — <code>dk-err</code> под полем и <code>aria-invalid</code> на input: говорит, что сделать, а не что не так.</li><li><b>Подвал</b> — <code>dk-form__foot</code>: основная кнопка справа, обычная левее.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Поле одной высоты с контролами M (32); отдельных размеров у формы нет. Ширину задаёт сетка формы: <code>dk-ff</code> занимает половину, <code>dk-ff--wide</code> — всю строку.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-form</code></td><td>Форма с сеткой полей.</td><td>Всегда; внутри — dk-ff.</td></tr><tr><td><code>dk-ff / dk-ff--wide</code></td><td>Поле в полстроки или во всю.</td><td>Названия и комментарии — wide, числа и даты — половина.</td></tr><tr><td><code>dk-field</code></td><td>Обёртка input или select.</td><td>Все однострочные поля.</td></tr><tr><td><code>dk-field--search</code></td><td>Поле поиска со значком слева.</td><td>Поиск по списку, не в форме.</td></tr><tr><td><code>dk-area</code></td><td>Многострочное поле.</td><td>Комментарий, текст для рассылки.</td></tr><tr><td><code>dk-err + aria-invalid</code></td><td>Текст ошибки под полем и пометка на input.</td><td>Ставит dk-form.js; руками — только в статичном примере.</td></tr></tbody></table></div>
+    <p>Поле использует размер L (40 px); под пальцем высота увеличивается до 48 px. В одной строке выбирайте соседние контролы L. Ширину задаёт сетка формы: <code>dk-ff</code> занимает половину, <code>dk-ff--wide</code> — всю строку.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-form</code></td><td>Форма с сеткой полей.</td><td>Всегда; внутри — dk-ff.</td></tr><tr><td><code>dk-ff / dk-ff--wide</code></td><td>Поле в полстроки или во всю.</td><td>Названия и комментарии — wide, числа и даты — половина.</td></tr><tr><td><code>dk-field</code></td><td>Обёртка input или select.</td><td>Все однострочные поля.</td></tr><tr><td><code>dk-field--search</code></td><td>Поле поиска со значком слева.</td><td>Поиск по списку, не в форме.</td></tr><tr><td><code>dk-area</code></td><td>Многострочное поле.</td><td>Комментарий, текст для рассылки.</td></tr><tr><td><code>dk-err + aria-invalid</code></td><td>Текст ошибки под полем и пометка на input.</td><td>Ставит dk-form.js; руками — только в статичном примере.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-panel"><div class="dk-form">
       <div class="dk-ff"><label class="dk-label">Обычное</label><div class="dk-field"><input placeholder="Пример" aria-label="Обычное"></div></div>
@@ -110,19 +120,19 @@
     </div></div>
     <div class="sc-note"><b>Проверка не бьёт по рукам на каждом нажатии.</b> Первая — когда человек ушёл из поля или отправил форму; после этого поле проверяется на каждое изменение, чтобы ошибка исчезла сразу, как исправлена.</div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
     <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Подпись — название данных: «Затронуто жителей». Внутри поля — пример: «1240».</li><li>Ошибка говорит, что сделать: «Не короче 5 знаков — сейчас 3».</li><li>Подсказка отвечает на вопрос, который возникнет: «Человек, а не квартир».</li><li>Отмечено то, чего меньше: обязательные или необязательные, но не оба сразу.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Название данных плейсхолдером внутри поля — исчезает при вводе.</li><li>«Неверное значение», «Ошибка» — человек и так знает, что ошибся.</li><li>Звёздочка без расшифровки.</li><li>Кнопка «Отправить» — что именно произойдёт?</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Подписи.</b> <code>&lt;label for&gt;</code> у каждого поля; подсказка и ошибка связаны через текст под полем и <code>aria-invalid</code>.</li><li><b>Фокус после ошибки</b> уходит на первое неверное поле — форма, которая молча не отправилась, заставляет перечитывать её сверху.</li><li><b>Сводка</b> над формой объявляется скринридеру как живой регион.</li><li><b>Клавиатура.</b> Enter в поле отправляет форму; Escape ничего не сбрасывает — потерять набранное дороже, чем нажать «Очистить».</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-form,dk-ff,dk-field,dk-fieldset,dk-label,dk-hint,dk-err,dk-area"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Разметка — обычная форма с браузерными правилами (required, minlength, min/max); dk-form.js добавляет тексты ошибок, сводку и фокус.</p><pre class="sc-code"><code>&lt;form class=&quot;dk-form&quot; id=&quot;work&quot;&gt;
   &lt;div class=&quot;dk-form__alarm&quot; hidden&gt;&lt;/div&gt;
@@ -145,7 +155,7 @@ api.validate();   // true, если всё верно
 api.clear();      // снять ошибки
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>onSubmit(data)</code></td><td>функция</td><td>Зовётся только после успешной проверки; <code>data</code> — FormData.</td></tr><tr><td><code>check(el)</code></td><td>функция</td><td>Своя проверка поля поверх браузерной: вернуть текст ошибки или null.</td></tr><tr><td><code>validate()</code></td><td>метод</td><td>Проверить все поля, показать ошибки; вернуть true/false.</td></tr><tr><td><code>clear()</code></td><td>метод</td><td>Снять ошибки и сводку.</td></tr><tr><td><code>required, minlength, min, max, type</code></td><td>атрибуты input</td><td>Правила задаёт браузер; кит только формулирует ошибку по-русски.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-check.html">Флажок, радио, тумблер</a> — выбор внутри формы</li><li><a href="component-select.html">Фильтр</a> — выбор из списка для среза, не для формы</li><li><a href="component-period.html">Период</a> — даты</li><li><a href="component-modal.html">Модальное окно</a> — короткая форма в окне</li></ul>
   </section>

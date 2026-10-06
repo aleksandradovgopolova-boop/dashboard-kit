@@ -14,20 +14,19 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-notify.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -43,7 +42,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Обратная связь</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Обратная связь</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-banner.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>Баннер и уведомление</h1>
     <p class="sc-hero__lead">Баннер отвечает за состояние всей страницы и не закрывается, пока не ушла причина. Уведомление подтверждает действие человека и уходит само. Две разные вещи, которые часто путают.</p>
     <div class="sc-meta">
@@ -52,29 +62,29 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>Три баннера — тревога, штатно, событие (единственный закрываемый) — и три уведомления по кнопкам.</p><div class="dk-panel"><div class="dk-stack">
-      <div class="dk-banner dk-banner--crit"><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title">23 аварии требуют решения</div><div class="dk-banner__sub">Две службы не отвечают последние сутки</div></div><div class="dk-banner__stats"><div class="dk-banner__stat"><b>9/11</b><span>служб</span></div><div class="dk-banner__stat"><b>23/23</b><span>узлов</span></div></div></div>
-      <div class="dk-banner dk-banner--calm"><svg class="dk-i"><use href="#ti-circle-check"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Контур работает штатно</div><div class="dk-banner__sub">Службы, инфраструктура и источники данных отвечают</div></div></div>
+    <p>Три баннера — тревога, штатно, событие (единственный закрываемый) — и три уведомления по кнопкам.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-stack">
+      <div class="dk-banner dk-banner--crit"><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Не удалось обновить данные</div><div class="dk-banner__sub">Проверьте подключение и повторите загрузку</div></div></div>
+      <div class="dk-banner dk-banner--calm"><svg class="dk-i"><use href="#ti-circle-check"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Данные обновлены</div><div class="dk-banner__sub">Все источники доступны</div></div></div>
       <div class="dk-banner dk-banner--event"><svg class="dk-i"><use href="#ti-file-text"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Выгрузка за сентябрь готова</div><div class="dk-banner__sub">Файл доступен в разделе «Отчёты»</div></div><button class="dk-iconbtn dk-iconbtn--sm dk-banner__x" type="button" title="Закрыть" aria-label="Закрыть" onclick="this.closest('.dk-banner').remove()"><svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></div>
       <div class="sc-row" style="margin:0"><button class="dk-btn dk-btn--sm" data-toast="calm">Показать уведомление</button><button class="dk-btn dk-btn--sm" data-toast="undo">С отменой</button><button class="dk-btn dk-btn--sm" data-toast="crit">Тревожное</button></div>
-    </div></div>
+    </div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Баннер: состояние, которое касается всей страницы, — сбой служб, устаревшие данные, готовый отчёт.</li><li>Уведомление: подтвердить, что действие человека выполнено: «Срез сброшен», «Работа добавлена».</li><li>Уведомление с «Отменить»: действие обратимо, и отмена дешевле подтверждения заранее.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Новость о данных («Авария в Новосибирске») — не уведомление: уехавшее через пять секунд сообщение о новой аварии — это авария, которую никто не увидел. Это баннер или строка в ленте.</li><li>Проблема одного виджета — <a href="component-empty.html">ошибка внутри виджета</a>, не баннер страницы.</li><li>Подтверждение опасного действия — <a href="component-modal.html">Модальное окно</a>.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-stack"><div class="dk-banner dk-banner--crit"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title"><b class="sc-callout">2</b>23 аварии требуют решения</div><div class="dk-banner__sub"><b class="sc-callout">3</b>Две службы не отвечают последние сутки</div></div><div class="dk-banner__stats"><b class="sc-callout">4</b><div class="dk-banner__stat"><b>9/11</b><span>служб</span></div></div></div>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-stack"><div class="dk-banner dk-banner--crit"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title"><b class="sc-callout">2</b>Не удалось обновить данные</div><div class="dk-banner__sub"><b class="sc-callout">3</b>Проверьте подключение и повторите загрузку</div></div><div class="dk-banner__stats"><b class="sc-callout">4</b><div class="dk-banner__stat"><b>9/11</b><span>служб</span></div></div></div>
       <div class="dk-toast dk-toast--calm" style="position:static;max-width:520px"><svg class="dk-i"><use href="#ti-circle-check"/></svg><span class="dk-toast__text"><b class="sc-callout">5</b>Срез сброшен к настройкам по умолчанию</span><button type="button" class="dk-btn dk-btn--ghost dk-btn--sm"><b class="sc-callout">6</b>Отменить</button><button type="button" class="dk-iconbtn dk-iconbtn--sm" title="Закрыть" aria-label="Закрыть"><b class="sc-callout">7</b><svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></div></div></div><ol class="sc-anatomy__list"><li><b>Значок баннера</b> — вид состояния; цвет смысла — crit, high, calm, event.</li><li><b>Заголовок</b> — что случилось, с числом.</li><li><b>Подстрока</b> — почему и что это значит.</li><li><b>Показатели</b> — <code>dk-banner__stats</code>: «9/11 служб» — цифры, по которым видно масштаб.</li><li><b>Текст уведомления</b> — одна фраза в прошедшем времени: действие выполнено.</li><li><b>Действие</b> — «Отменить»; с ним уведомление не исчезает само.</li><li><b>Закрыть</b> — крестик есть всегда; у баннера — только у события.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
     <p>Размер один: баннер на всю ширину под шапкой страницы, уведомление до 520 px в правом нижнем углу, не больше трёх одновременно — старые уходят снизу.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-banner--crit / --high</code></td><td>Тревога: не закрывается.</td><td>Сбой, просрочка, устаревшие данные.</td></tr><tr><td><code>dk-banner--calm</code></td><td>Штатно.</td><td>Когда важно сказать, что всё в порядке.</td></tr><tr><td><code>dk-banner--event</code></td><td>Событие, единственный закрываемый.</td><td>Готовый отчёт, обновление.</td></tr><tr><td><code>dkToast(text)</code></td><td>Уведомление, уходит само.</td><td>Подтверждение действия.</td></tr><tr><td><code>kind: &#x27;crit&#x27; | &#x27;high&#x27; | &#x27;calm&#x27;</code></td><td>Вид уведомления.</td><td>По смыслу результата.</td></tr><tr><td><code>action: {name, onClick}</code></td><td>Кнопка в уведомлении; таймера нет.</td><td>Обратимое действие.</td></tr><tr><td><code>life</code></td><td>Время жизни в мс.</td><td>Явно — только если знаете, зачем.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-panel"><div class="dk-stack">
       <div class="dk-banner dk-banner--high"><svg class="dk-i"><use href="#ti-clock"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Данные устарели</div><div class="dk-banner__sub">Последний срез — 40 минут назад, телеметрия не отвечает</div></div></div>
@@ -82,25 +92,25 @@
     </div></div>
     <div class="sc-note"><b>Время жизни считается по длине текста</b>: четыре секунды плюс сорок миллисекунд на знак, не больше десяти. Под курсором и под фокусом отсчёт стоит. С действием таймера нет вовсе: «успей или потеряй» бьёт по тем, кто и так работает медленнее.</div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Заголовок баннера с числом и глаголом: «23 аварии требуют решения».</li><li>Уведомление в прошедшем времени: «Работа добавлена в календарь».</li><li>Тревожное уведомление говорит, что делать: «попробуйте ещё раз».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Баннер «Внимание!» без того, на что.</li><li>Уведомление «Успешно» — что именно?</li><li>Крестик на баннере о сбое — сбой, спрятанный руками человека, который через час о нём забудет.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Заголовок баннера с числом и глаголом: «Не удалось обновить данные».</li><li>Уведомление в прошедшем времени: «Работа добавлена в календарь».</li><li>Тревожное уведомление говорит, что делать: «попробуйте ещё раз».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Баннер «Внимание!» без того, на что.</li><li>Уведомление «Успешно» — что именно?</li><li>Крестик на баннере о сбое — сбой, спрятанный руками человека, который через час о нём забудет.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Уведомления</b> объявляются скринридеру: полка — живой регион.</li><li><b>Крестик</b> с <code>aria-label</code>; кнопка действия — обычная кнопка, Tab до неё возможен, поэтому таймера с действием нет.</li><li><b>Не только цветом.</b> Значок и текст у обоих; цвет — дополнение.</li><li><b>Контраст.</b> Заголовок и подстрока на заливке баннера — проверка КОНТРАСТ в обеих темах.</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-banner,dk-toast,dk-toasts"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Баннер — разметка. Уведомление — вызов функции; полка создаётся сама.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-banner dk-banner--crit&quot;&gt;
   &lt;svg class=&quot;dk-i&quot;&gt;&lt;use href=&quot;#ti-alert-triangle&quot;/&gt;&lt;/svg&gt;
   &lt;div class=&quot;dk-banner__text&quot;&gt;
-    &lt;div class=&quot;dk-banner__title&quot;&gt;23 аварии требуют решения&lt;/div&gt;
-    &lt;div class=&quot;dk-banner__sub&quot;&gt;Две службы не отвечают последние сутки&lt;/div&gt;
+    &lt;div class=&quot;dk-banner__title&quot;&gt;Не удалось обновить данные&lt;/div&gt;
+    &lt;div class=&quot;dk-banner__sub&quot;&gt;Проверьте подключение и повторите загрузку&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
@@ -111,7 +121,7 @@ var t = dkToast(&#x27;Не удалось сохранить&#x27;, { kind: &#x2
 t.close();
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkToast(text, opts)</code></td><td>функция</td><td>Показать уведомление; возвращает {close, el}.</td></tr><tr><td><code>opts.kind</code></td><td>'calm' | 'high' | 'crit'</td><td>Вид; по умолчанию calm.</td></tr><tr><td><code>opts.action</code></td><td>{name, onClick}</td><td>Кнопка; отключает таймер.</td></tr><tr><td><code>opts.life</code></td><td>число мс</td><td>Явное время жизни.</td></tr><tr><td><code>dk-banner--crit | --high | --calm | --event</code></td><td>класс</td><td>Вид баннера; закрывается только event.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-empty.html">Состояния</a> — ошибка одного виджета</li><li><a href="component-modal.html">Модальное окно</a> — подтверждение до действия</li><li><a href="component-uptime.html">Доступность служб</a> — то, о чём баннер сообщает</li></ul>
   </section>

@@ -24,7 +24,7 @@ PAGES = [
 {
     "slug": "table", "title": "Таблица", "group": "Данные", "status": "стабильный",
     "purpose": "Сравнить много объектов по нескольким показателям: регионы по баллу и событиям, заявки по сроку и "
-               "бригаде. Читается по строкам, сортируется по колонке, выбирается для действия.",
+               "исполнителю. Читается по строкам, сортируется по колонке, выбирается для действия.",
     "files": ["css/components.css", "js/dk-table.js"], "scripts": ["dk-table.js"],
     "live_intro": "Всё, что умеет таблица, в одном месте: закреплённая шапка и первая колонка, сортировка, выбор "
                   "строк со счётчиком, группы с подытогом, строка итога, числа табличными цифрами. В разметке ни "
@@ -276,7 +276,7 @@ t.selected; t.clear();
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label">Аварии за сутки</span></div><div class="dk-tile__row"><span class="dk-metric-lg">23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div><div class="dk-chart dk-chart--spark" id="x-sp1"></div></div></div>
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg></span><span class="dk-tile__label">Обращений</span></div><div class="dk-tile__row"><span class="dk-metric-lg">1 284</span><span class="dk-trend" style="--accent:var(--calm-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg> −6%</span></div><div class="dk-chart dk-chart--spark" id="x-sp2"></div></div></div>
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--high-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span><span class="dk-tile__label">Среднее время реакции</span></div><div class="dk-tile__row"><span class="dk-metric-lg">42 мин</span></div><div class="dk-chart dk-chart--spark" id="x-sp3"></div></div></div>
-      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--calm-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span><span class="dk-tile__label">Бригад в работе</span></div><div class="dk-tile__row"><span class="dk-metric-lg">17</span><span class="dk-trend">без изменений</span></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--calm-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span><span class="dk-tile__label">Задач в работе</span></div><div class="dk-tile__row"><span class="dk-metric-lg">17</span><span class="dk-trend">без изменений</span></div></div></div>
     </div>""",
     "live_script": """  window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkChart !== 'function') return;
@@ -295,7 +295,7 @@ t.selected; t.clear();
       <div class="dk-tile__row"><span class="dk-metric-lg"><b class="sc-callout">3</b>23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><b class="sc-callout">4</b><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div>
       <div class="dk-chart dk-chart--spark" id="x-an" style="position:relative"><b class="sc-callout" style="position:absolute;z-index:1">5</b></div></div></div></div>""",
     "anatomy": [("Значок", "<code>dk-tile__icon</code>: тон плитки через <code>--accent</code> — только смысл, не украшение."),
-                ("Подпись", "что за число; коротко и с периодом: «за сутки»."),
+                ("Подпись", "что за число и объект учёта. Период добавляйте, если он отличается от общего периода экрана или общий период не указан."),
                 ("Число", "<code>dk-metric-lg</code>, Golos 600, пропорциональные цифры: число одно и в колонку не встаёт, а табличная единица в «17» дала бы зазор."),
                 ("Тренд", "<code>dk-trend</code>: стрелка и дельта со знаком; цвет — смысл изменения."),
                 ("Спарклайн", "<code>type: 'spark'</code>: форма без осей; шкала не от нуля — единственное место, где это правильно.")],
@@ -313,10 +313,10 @@ t.selected; t.clear();
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile"><div class="dk-tile__head"><span class="dk-tile__label">Без тренда</span></div><div class="dk-tile__row"><span class="dk-metric-lg">17</span><span class="dk-trend">без изменений</span></div></div></div>
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)"><div class="dk-tile__head"><span class="dk-tile__label">Тревога</span></div><div class="dk-tile__row"><span class="dk-metric-lg" style="color:var(--crit-ink)">23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div></div></div>
     </div>""",
-    "content_ok": ["Подпись с периодом: «Аварии за сутки», «Обращений за 14 дней».",
+    "content_ok": ["Подпись называет показатель. Общий период указан один раз; отличающийся интервал — в подписи: «Аварии за сутки».",
                    "Тренд со знаком и словами, если нет числа: «без изменений».",
                    "Единица рядом с числом только когда без неё непонятно: «42 мин»."],
-    "content_bad": ["Число без периода: «Аварии: 23» — за час? за год?",
+    "content_bad": ["Период не указан ни на экране, ни у показателя: «Аварии: 23» — за час? за год?",
                     "Красная стрелка вниз у «времени реакции» — падение здесь хорошо.",
                     "Спарклайн с осями и подписями — в четверти колонки они мельче десяти пикселей."],
     "a11y": ["<b>Число</b> читается текстом; спарклайн — холст без подписи, и это осознанно: он повторяет тренд, который уже сказан словами.",
@@ -359,7 +359,7 @@ dkChart(document.getElementById('sp'), {
     "live_intro": "Нейтральная поверхность выделяет главное число типографикой и композицией. "
                   "Цвет передаёт данные и исключения, а не декоративную важность карточки.",
     "live": """<div class="dk-grid">
-      <div class="dk-col--half"><section class="dk-hero" style="--accent:var(--crit)">
+      <div class="dk-col--half"><section class="dk-hero">
         <div class="dk-hero__label">Регионов с высоким риском</div>
         <div class="dk-hero__row">
           <div class="dk-hero__value"><span class="dk-hero__n">25</span><span class="dk-hero__of">из 89</span></div>
@@ -392,11 +392,11 @@ dkChart(document.getElementById('sp'), {
     </div>""",
     "when_yes": ["Одно число, ради которого открывают экран: «регионов с высоким риском», «аварий сейчас».",
                  "Число — часть целого, и важно, из чего оно сложено: 25 из 89, по уровням или по источникам.",
-                 "Первый экран телефона: карточка встаёт сразу под фильтрами и отвечает раньше любого графика."],
+                 "Первый экран телефона, если одно главное число отвечает на основной вопрос пользователя."],
     "when_no": ["Главных чисел несколько и они равноправны — ряд <a href=\"component-tile.html\">KPI-плиток</a>: вторая главная карточка на экране отменяет первую.",
                 "Нужен ещё и список «кто хуже всех» — <a href=\"component-rank.html\">Рейтинг и сводка</a>.",
                 "Долей больше шести или их надо сравнивать точно — <a href=\"component-chart.html\">График</a>: отрезки полосы глазом точно не сравнить."],
-    "anatomy_html": """<section class="dk-hero" style="--accent:var(--crit);max-width:520px">
+    "anatomy_html": """<section class="dk-hero" style="max-width:520px">
       <div class="dk-hero__label"><b class="sc-callout">1</b>Регионов с высоким риском</div>
       <div class="dk-hero__row">
         <div class="dk-hero__value"><b class="sc-callout">2</b><span class="dk-hero__n">25</span><span class="dk-hero__of">из 89</span><b class="sc-callout">3</b></div>
@@ -405,13 +405,13 @@ dkChart(document.getElementById('sp'), {
       <div class="dk-split" role="img" aria-label="Высокий 25, средний 35, низкий 29"><span class="dk-split__seg" style="--share:25;--swatch:var(--crit)"></span><span class="dk-split__seg" style="--share:35;--swatch:var(--high)"></span><span class="dk-split__seg" style="--share:29;--swatch:var(--calm)"></span></div>
       <div class="dk-keys"><b class="sc-callout">5</b><span class="dk-key" style="--swatch:var(--crit)"><i class="dk-key__dot"></i>Высокий <b>25</b><span class="dk-key__d">+1</span></span><b class="sc-callout">6</b></div>
     </section>""",
-    "anatomy": [("Подпись", "что это за число и за какой период. Без периода число ничего не значит."),
+    "anatomy": [("Подпись", "что считаем и в каких единицах. Период укажите здесь, если он отличается от общего интервала экрана или общий интервал не указан."),
                 ("Главное число", "<code>dk-hero__n</code>, Golos 56 (<code>--type-metric-hero</code>): единственный такой кегль на экране."),
                 ("Знаменатель", "<code>dk-hero__of</code> — «из 89». Вдвое мельче и серее: это не второе число, а мера."),
                 ("Метка смысла", "пилюля <code>dk-trend</code> с цветом смысла: почему на число стоит смотреть."),
                 ("Полоса состава", "<code>dk-split</code>: отрезки в долю (<code>--share</code>), цвет — <code>--swatch</code>."),
                 ("Чипы", "<code>dk-key</code>: точка, название, число, изменение. Подписывают полосу — без них полоса цвет без слов.")],
-    "variants": [("--accent", "Оттенок верхнего угла и смысл карточки.", "Только смысловой цвет: crit, high, calm. Нет смысла — не задавать, карточка без оттенка."),
+    "variants": [("dk-hero", "Нейтральная поверхность без декоративного оттенка и глубокой тени.", "Одно главное число, выбранное по задаче пользователя."),
                  ("dk-split", "Полоса состава.", "Если число — сумма частей. Долей до шести."),
                  ("--share", "Доля отрезка — просто число.", "Абсолютные значения: 25, 35, 29 — складывать заранее не нужно."),
                  ("dk-keys / dk-key", "Чипы легенды с изменением.", "Всегда вместе с полосой."),
@@ -421,18 +421,18 @@ dkChart(document.getElementById('sp'), {
       <div class="dk-hero" aria-busy="true"><span class="dk-vh">Загружаем сводку</span><div class="dk-skel" style="height:14px;width:60%"></div><div class="dk-skel" style="height:56px;width:40%"></div><div class="dk-skel" style="height:10px"></div></div>
       <div class="dk-hero"><div class="dk-hero__label">Регионов с высоким риском</div><div class="dk-hero__row"><div class="dk-hero__value"><span class="dk-hero__n">0</span><span class="dk-hero__of">из 89</span></div><span class="dk-trend" style="--accent:var(--calm-ink)">всё спокойно</span></div><div class="dk-split" role="img" aria-label="Нет данных по составу"><span class="dk-split__seg"></span></div><div class="dk-keys"><span class="dk-key"><i class="dk-key__dot"></i>нет данных</span></div></div>
     </div>""",
-    "content_ok": ["Подпись с периодом: «Публикаций по всей стране · за 14 дней».",
+    "content_ok": ["Подпись называет показатель; период добавляется только при отличии от общего интервала или отсутствии общего периода.",
                    "Число с мерой: «25 из 89», а не голое «25».",
                    "Метка отвечает «почему смотреть»: «негатив растёт в 7», «6 режимов ЧС»."],
     "content_bad": ["Две главные карточки на одном экране.",
-                    "Оттенок акцентом бренда: у бренда нет смысла «плохо».",
+                    "Декоративный оттенок, глубокая тень или цветная полоса для выделения карточки.",
                     "Полоса без чипов — цвет без подписи."],
     "a11y": ["<b>Полоса — картинка</b>: <code>role=\"img\"</code> и <code>aria-label</code> с составом словами; числа — в чипах под ней.",
              "<b>Цвет не единственный признак</b>: у каждой доли есть название и число в чипе.",
-             "<b>Контраст.</b> Знаменатель и подписи на поверхности — проверка КОНТРАСТ; оттенок уходит в поверхность к середине."],
+             "<b>Контраст.</b> Знаменатель и подписи на нейтральной поверхности — проверка КОНТРАСТ."],
     "tokens": ["dk-hero", "dk-split", "dk-keys", "dk-key"],
     "code_intro": "Только разметка: скрипта у карточки нет. Числа — через <code>dkFmt</code>, доли — теми же числами в <code>--share</code>.",
-    "code": """<section class="dk-hero" style="--accent:var(--crit)">
+    "code": """<section class="dk-hero">
   <div class="dk-hero__label">Регионов с высоким риском</div>
   <div class="dk-hero__row">
     <div class="dk-hero__value"><span class="dk-hero__n">25</span><span class="dk-hero__of">из 89</span></div>
@@ -448,7 +448,7 @@ dkChart(document.getElementById('sp'), {
     <span class="dk-key" style="--swatch:var(--crit)"><i class="dk-key__dot"></i>Высокий <b>25</b><span class="dk-key__d">+1</span></span>
   </div>
 </section>""",
-    "api": [("--accent", "переменная в style", "Смысл карточки: оттенок угла. Только crit / high / calm или не задавать."),
+    "api": [("dk-hero", "класс", "Нейтральная главная карточка; семантический цвет применяют к данным и обоснованным статусам, а не поверхности."),
             ("--share", "число в style отрезка", "Доля отрезка полосы; складывать заранее не нужно."),
             ("--swatch", "переменная в style", "Цвет отрезка и точки чипа: смысл или серия, один и тот же для пары."),
             ("dk-hero__of", "элемент", "Мера «из скольких»; не пропускать, если она есть.")],
@@ -581,7 +581,7 @@ car.go(2);    // пролистать к третьей
         <button class="dk-rank__row"><span class="dk-rank__i">05</span><span class="dk-rank__name">Ростовская область</span><span class="dk-rank__v" style="--accent:var(--high-ink)">73</span></button></div></div>
       <div class="sc-stack"><div class="dk-chip"><span class="dk-chip__n" style="--accent:var(--crit-ink)">23</span><span class="dk-chip__l">высокий риск</span></div><div class="dk-chip"><span class="dk-chip__n" style="--accent:var(--high-ink)">27</span><span class="dk-chip__l">средний</span></div><div class="dk-chip"><span class="dk-chip__n" style="--accent:var(--calm-ink)">38</span><span class="dk-chip__l">низкий</span></div><div class="dk-chip"><span class="dk-chip__n">89</span><span class="dk-chip__l">всего субъектов</span></div></div>
     </div>""",
-    "when_yes": ["Вопрос «у кого хуже» по одному показателю: регионы по баллу, бригады по просрочке.",
+    "when_yes": ["Вопрос «у кого хуже» по одному показателю: регионы по баллу, команды по просрочке.",
                  "Нужен верх списка, а не весь список — топ-5 или топ-10.",
                  "Строка ведёт к объекту: клик открывает регион."],
     "when_no": ["Несколько показателей на объект — <a href=\"component-table.html\">Таблица</a>.",
@@ -679,6 +679,7 @@ car.go(2);    // пролистать к третьей
     "variants": [("dk-list / dk-list__row", "Лента событий; строка — кнопка.", "Верх ленты с «Показать все»."),
                  ("dk-bars / dk-bar", "Полосы от максимума.", "Три–семь категорий."),
                  ("dk-fold", "Раскрывающийся блок на <code>&lt;details&gt;</code>.", "Подробности с итогом в заголовке."),
+                 ("dk-fold--plain", "Раскрытие без заливки: разделительная линия и заголовок с зоной касания не менее 44 px.", "Определения метрик и дополнительные показатели под обзором. Стрелка <code>ti-chevron-down</code> обязательна в разметке."),
                  ("dk-row", "Строка «подпись — значение».", "Внутри раскрытия и в коротких сводках."),
                  ("--accent", "Тон значка, значения, полосы.", "Смысл, не украшение.")],
     "states": """<div class="dk-grid--even">
@@ -697,7 +698,7 @@ car.go(2);    // пролистать к третьей
              "<b>Раскрытие</b> — настоящий <code>&lt;details&gt;</code>: клавиатура и скринридер бесплатно.",
              "<b>Полосы</b> — число рядом читается; полоса декоративна.",
              "<b>Контраст.</b> Подстрока <code>--ink-3</code> на поверхности — не ниже 4,07:1."],
-    "tokens": ["dk-list", "dk-bars", "dk-bar", "dk-fold", "dk-row"],
+    "tokens": ["dk-list", "dk-bars", "dk-bar", "dk-fold", "dk-fold--plain", "dk-row"],
     "code_intro": "Только разметка. «Показать все» — событие страницы.",
     "code": """<div class="dk-list">
   <button class="dk-list__row" style="--accent:var(--crit-ink)" data-id="4821">
@@ -800,3 +801,244 @@ PAGES[-1]["live_script"] += """
       { name: 'Сбой сейчас', data: ['up','up','up','up','up','up','up','up','up','up','down','down'] },
       { name: 'Неизвестное состояние', data: ['up','up','up','что-то','up','up','none','none','none','none','none','none'] }] });
   });"""
+
+PAGES.append({'slug': 'avatar',
+ 'title': 'Аватар',
+ 'group': 'Данные',
+ 'status': 'стабильный',
+ 'purpose': 'Человек рядом с записью, комментарием или списком участников.',
+ 'files': ['css/components.css'],
+ 'scripts': [],
+ 'live_intro': 'Примеры в реальном контексте.',
+ 'live': '<div class="dk-panel"><div class="dk-stack"><div class="dk-inline"><span class="dk-avatar '
+         'dk-avatar--sm" role="img" aria-label="Анна Кузнецова">АК</span><span class="dk-avatar" role="img" '
+         'aria-label="Анна Кузнецова">АК</span><span class="dk-avatar dk-avatar--lg" role="img" '
+         'aria-label="Анна Кузнецова">АК</span><span>Анна Кузнецова</span></div><div class="dk-inline"><span '
+         'class="dk-avatars"><span class="dk-avatar" role="img" aria-label="Анна Кузнецова">АК</span><span '
+         'class="dk-avatar" role="img" aria-label="Борис Михайлов">БМ</span><span class="dk-avatar '
+         'dk-avatar--more" role="img" aria-label="Ещё 4 '
+         'участника">+4</span></span><span>Участники</span></div></div></div>',
+ 'when_yes': ['Человек рядом с записью, комментарием или списком участников.'],
+ 'when_no': ['Главное число дашборда — KPI-плитка.', 'Состояние объекта — статус с текстовой подписью.'],
+ 'anatomy_html': '<span class="dk-avatar" role="img" aria-label="Анна Кузнецова">АК</span>',
+ 'anatomy': [('Содержимое', 'Подпись и значение доступны без цвета.'),
+             ('Контекст', 'Находится рядом с объектом, к которому относится.')],
+ 'sizes': 'S — 24, M — 32, L — 40 пикселей. Размер изображения не определяет размер кнопки: интерактивная '
+          'область на сенсорном экране минимум 44 пикселя.',
+ 'variants': [('dk-avatar', 'Инициалы или изображение.', 'Человек.'),
+              ('dk-avatar--sm / --lg', '24 / 40 пикселей.', 'Плотная строка / профиль.'),
+              ('dk-avatars', 'Перекрывающаяся группа.', 'Несколько участников.')],
+ 'states': '<div class="dk-panel"><div class="dk-inline"><span class="dk-avatar dk-avatar--sm" role="img" '
+           'aria-label="Анна Кузнецова">АК</span><span class="dk-avatar" role="img" aria-label="Анна '
+           'Кузнецова">АК</span><span class="dk-avatar dk-avatar--lg" role="img" aria-label="Анна '
+           'Кузнецова">АК</span><span>Анна Кузнецова</span></div><div class="dk-inline"><span '
+           'class="dk-avatars"><span class="dk-avatar" role="img" aria-label="Анна Кузнецова">АК</span><span '
+           'class="dk-avatar" role="img" aria-label="Борис Михайлов">БМ</span><span class="dk-avatar '
+           'dk-avatar--more" role="img" aria-label="Ещё 4 '
+           'участника">+4</span></span><span>Участники</span></div></div>',
+ 'content_ok': ['Полные названия людей, объектов и значений.',
+                'Числа соответствуют данным; тестовые примеры не являются результатами продукта.'],
+ 'content_bad': ['Цвет без подписи и значения.', 'Непонятное число или инициалы без имени.'],
+ 'a11y': ['Полное имя доступно скринридеру: role="img" и aria-label для инициалов, alt для изображения.',
+          'Рядом есть имя — изображение декоративное, используйте alt=""; инициалы скрывайте '
+          'aria-hidden="true".',
+          'При недоступной фотографии приложение заменяет её инициалами. Не оставляйте сломанное '
+          'изображение.'],
+ 'tokens': ['dk-avatar', 'dk-avatars'],
+ 'code_intro': 'HTML и общие стили кита. Изменение данных выполняет приложение.',
+ 'code': '<span class="dk-avatar" role="img" aria-label="Анна Кузнецова">АК</span>',
+ 'api': [('dk-avatar', 'класс', 'Инициалы или изображение.'),
+         ('dk-avatar--sm / --lg', 'класс', '24 / 40 пикселей.'),
+         ('dk-avatars', 'класс', 'Перекрывающаяся группа.')],
+ 'related': [('component-badge.html', 'Бейдж и статус', 'состояние объекта'),
+             ('component-chips-input.html', 'ChipsInput', 'ввод набора'),
+             ('component-chips-select.html', 'ChipsSelect', 'выбор набора')]})
+
+PAGES.append({'slug': 'counter',
+ 'title': 'Счётчик',
+ 'group': 'Данные',
+ 'status': 'стабильный',
+ 'purpose': 'Количество объектов внутри кнопки, вкладки или строки меню.',
+ 'files': ['css/components.css'],
+ 'scripts': [],
+ 'live_intro': 'Примеры в реальном контексте.',
+ 'live': '<div class="dk-panel"><div class="dk-stack"><div class="dk-inline"><button class="dk-btn '
+         'dk-btn--sm">Сообщения <span class="dk-counter">12</span></button><span class="dk-counter '
+         'dk-counter--sm" aria-label="3 новых сообщения">3</span><span class="dk-counter dk-counter--brand" '
+         'aria-label="12 новых сообщений">12</span><span class="dk-counter dk-counter--crit" aria-label="125 '
+         'ошибок">99+</span></div></div></div>',
+ 'when_yes': ['Количество объектов внутри кнопки, вкладки или строки меню.'],
+ 'when_no': ['Главное число дашборда — KPI-плитка.', 'Состояние объекта — статус с текстовой подписью.'],
+ 'anatomy_html': '<button class="dk-btn dk-btn--sm">Сообщения <span class="dk-counter">12</span></button>',
+ 'anatomy': [('Содержимое', 'Подпись и значение доступны без цвета.'),
+             ('Контекст', 'Находится рядом с объектом, к которому относится.')],
+ 'sizes': 'S — 16, M — 20 пикселей по высоте. Ширина растёт с числом; счётчик не является отдельной кнопкой.',
+ 'variants': [('dk-counter', 'Нейтральная заливка.', 'Количество объектов.'),
+              ('dk-counter--sm', 'Меньший размер.', 'Компактный контекст.'),
+              ('dk-counter--brand', 'Акцентная заливка.', 'Новые объекты.'),
+              ('dk-counter--crit', 'Критическое состояние.', 'Число ошибок.'),
+              ('dk-counter--plain', 'Без заливки, цвет контекста.', 'Внутри акцентной кнопки.')],
+ 'states': '<div class="dk-panel"><div class="dk-inline"><button class="dk-btn dk-btn--sm">Сообщения <span '
+           'class="dk-counter">12</span></button><span class="dk-counter dk-counter--sm" aria-label="3 новых '
+           'сообщения">3</span><span class="dk-counter dk-counter--brand" aria-label="12 новых '
+           'сообщений">12</span><span class="dk-counter dk-counter--crit" aria-label="125 '
+           'ошибок">99+</span></div></div>',
+ 'content_ok': ['Полные названия людей, объектов и значений.',
+                'Числа соответствуют данным; тестовые примеры не являются результатами продукта.'],
+ 'content_bad': ['Цвет без подписи и значения.', 'Непонятное число или инициалы без имени.'],
+ 'a11y': ['Внутри подписанной кнопки число входит в её доступное имя.',
+          'Для 99+ укажите точное число и объект в aria-label.',
+          'Ноль показывайте только если отсутствие объектов важно для решения; скрытие счётчика не должно '
+          'менять размер кнопки.'],
+ 'tokens': ['dk-counter'],
+ 'code_intro': 'HTML и общие стили кита. Изменение данных выполняет приложение.',
+ 'code': '<button class="dk-btn dk-btn--sm">Сообщения <span class="dk-counter">12</span></button>',
+ 'api': [('dk-counter', 'класс', 'Нейтральная заливка.'),
+         ('dk-counter--sm', 'класс', 'Меньший размер.'),
+         ('dk-counter--brand', 'класс', 'Акцентная заливка.'),
+         ('dk-counter--crit', 'класс', 'Критическое состояние.'),
+         ('dk-counter--plain', 'класс', 'Без заливки, цвет контекста.')],
+ 'related': [('component-badge.html', 'Бейдж и статус', 'состояние объекта'),
+             ('component-chips-input.html', 'ChipsInput', 'ввод набора'),
+             ('component-chips-select.html', 'ChipsSelect', 'выбор набора')]})
+
+PAGES.append({'slug': 'chip',
+ 'title': 'Чип',
+ 'group': 'Данные',
+ 'status': 'стабильный',
+ 'purpose': 'Отдельное выбранное значение: метка или применённый фильтр. Можно удалить из набора.',
+ 'files': ['css/components.css'],
+ 'scripts': [],
+ 'live_intro': 'Примеры в реальном контексте.',
+ 'live': '<div class="dk-panel"><div class="dk-stack"><div class="dk-inline" id="x-chip-demo"><span '
+         'class="dk-fchip">Email<button type="button" class="dk-fchip__x" aria-label="Убрать фильтр '
+         'Email">×</button></span><span class="dk-fchip">В работе<button type="button" class="dk-fchip__x" '
+         'aria-label="Убрать фильтр В работе">×</button></span><span class="dk-fchip">Без '
+         'удаления</span></div><p class="dk-hint" id="x-chip-status" role="status"></p></div></div>',
+ 'when_yes': ['Отдельное выбранное значение: метка или применённый фильтр. Можно удалить из набора.'],
+ 'when_no': ['Главное число дашборда — KPI-плитка.', 'Состояние объекта — статус с текстовой подписью.'],
+ 'anatomy_html': '<span class="dk-fchip">Email<button type="button" class="dk-fchip__x" aria-label="Убрать '
+                 'фильтр Email">×</button></span>',
+ 'anatomy': [('Содержимое', 'Подпись и значение доступны без цвета.'),
+             ('Контекст', 'Находится рядом с объектом, к которому относится.')],
+ 'sizes': 'Используйте размер существующего чипа-фильтра. Сенсорная область удаления расширяется до 44 '
+          'пикселей; сохраняйте расстояние между целями.',
+ 'variants': [('dk-fchip', 'Значение с необязательным удалением.', 'Применённый фильтр.'),
+              ('dk-chipbar', 'Строка применённых фильтров.', 'Набор значений.'),
+              ('dk-chip', 'Число с подписью.', 'Состав сводки, а не выбранное значение.')],
+ 'states': '<div class="dk-panel"><span class="dk-fchip">Без удаления</span></div>',
+ 'content_ok': ['Полные названия людей, объектов и значений.',
+                'Числа соответствуют данным; тестовые примеры не являются результатами продукта.'],
+ 'content_bad': ['Цвет без подписи и значения.', 'Непонятное число или инициалы без имени.'],
+ 'a11y': ['Удаление — настоящая кнопка с именем «Убрать фильтр Email», работает Enter и пробелом.',
+          'После удаления фокус переходит на следующую кнопку удаления или контейнер набора.',
+          'Для ввода или выбора набора используйте ChipsInput / ChipsSelect, где поведение уже реализовано.'],
+ 'tokens': ['dk-fchip', 'dk-chipbar'],
+ 'code_intro': 'HTML и общие стили кита. Изменение данных выполняет приложение.',
+ 'code': '<span class="dk-fchip">Email<button type="button" class="dk-fchip__x" aria-label="Убрать фильтр '
+         'Email">×</button></span>',
+ 'api': [('dk-fchip', 'класс', 'Значение с необязательным удалением.'),
+         ('dk-chipbar', 'класс', 'Строка применённых фильтров.'),
+         ('dk-chip', 'класс', 'Число с подписью.')],
+ 'related': [('component-badge.html', 'Бейдж и статус', 'состояние объекта'),
+             ('component-chips-input.html', 'ChipsInput', 'ввод набора'),
+             ('component-chips-select.html', 'ChipsSelect', 'выбор набора')],
+ 'live_script': "document.getElementById('x-chip-demo').addEventListener('click', function(event) {\n"
+         "  var button = event.target.closest('.dk-fchip__x');\n"
+         '  if (!button) return;\n'
+         "  var group = button.closest('.dk-inline');\n"
+         "  var label = button.getAttribute('aria-label');\n"
+         '  button.parentElement.remove();\n'
+         "  var next = group.querySelector('button');\n"
+         "  if (next) next.focus(); else { group.setAttribute('tabindex', '-1'); group.focus(); }\n"
+         "  document.getElementById('x-chip-status').textContent = label + ': фильтр снят';\n"
+         '});'})
+
+PAGES.append({'slug': 'accordion',
+ 'title': 'Аккордеон',
+ 'group': 'Данные',
+ 'status': 'стабильный',
+ 'purpose': 'Раскрывает подробности по запросу: определения метрик, настройки и ответы на вопросы.',
+ 'files': ['css/components.css'],
+ 'scripts': [],
+ 'live_intro': 'Два независимых раздела. Можно раскрыть оба; Enter и пробел работают без JavaScript.',
+ 'live': '<div class="dk-panel"><div class="dk-stack"><details class="dk-fold "><summary '
+         'class="dk-fold__head"><span class="dk-fold__title">Как считается конверсия?</span><svg class="dk-i '
+         'dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary><div '
+         'class="dk-fold__body">Число заказов / число посещений × 100%.</div></details><details '
+         'class="dk-fold "><summary class="dk-fold__head"><span class="dk-fold__title">Какие заказы входят в '
+         'выручку?</span><svg class="dk-i dk-i--sm" aria-hidden="true"><use '
+         'href="#ti-chevron-down"/></svg></summary><div class="dk-fold__body">Оплаченные заказы за выбранный '
+         'период.</div></details></div></div>',
+ 'when_yes': ['Дополнительные сведения, которые не нужны при первом просмотре.',
+              'Несколько самостоятельных вопросов или групп настроек.'],
+ 'when_no': ['Ключевые показатели и ошибки должны быть видны сразу.',
+             'Переход между страницами — навигация, а не аккордеон.'],
+ 'anatomy_html': '<details class="dk-fold "><summary class="dk-fold__head"><span class="dk-fold__title">Как '
+                 'считается конверсия?</span><svg class="dk-i dk-i--sm" aria-hidden="true"><use '
+                 'href="#ti-chevron-down"/></svg></summary><div class="dk-fold__body">Число заказов / число '
+                 'посещений × 100%.</div></details>',
+ 'anatomy': [('summary', 'Весь заголовок — одна цель раскрытия.'),
+             ('Стрелка', 'Поворачивается при раскрытии; декоративна для скринридера.'),
+             ('Содержимое', 'Находится внутри details, скрывается браузером.')],
+ 'sizes': 'Заголовок минимум 44 пикселя по высоте. Содержимое определяет высоту открытого блока.',
+ 'variants': [('dk-fold', 'На нейтральной поверхности.', 'Самостоятельный блок.'),
+              ('dk-fold--plain', 'Без заливки.', 'Раздел внутри страницы.'),
+              ('details name="metric-definitions"',
+               'Одинаковое name у соседних details.',
+               'Только один раздел открыт одновременно в современных браузерах.')],
+ 'states': '<div class="dk-panel"><details open class="dk-fold "><summary class="dk-fold__head"><span '
+           'class="dk-fold__title">Как считается конверсия?</span><svg class="dk-i dk-i--sm" '
+           'aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary><div '
+           'class="dk-fold__body">Число заказов / число посещений × 100%.</div></details><details '
+           'class="dk-fold "><summary class="dk-fold__head"><span class="dk-fold__title">Закрытый '
+           'раздел</span><svg class="dk-i dk-i--sm" aria-hidden="true"><use '
+           'href="#ti-chevron-down"/></svg></summary><div '
+           'class="dk-fold__body">Подробности.</div></details></div>',
+ 'content_ok': ['Заголовок называет содержимое: «Как считается конверсия?».',
+                'Краткий ответ без повторения заголовка.'],
+ 'content_bad': ['Заголовок «Подробнее» у всех разделов.',
+                 'Кнопка или ссылка внутри summary; разместите действия в раскрываемой части.'],
+ 'a11y': ['Нативные details/summary обеспечивают клавиатуру и состояние раскрытия; не добавляйте им '
+          'role="button".',
+          'Не ставьте aria-hidden на содержимое вручную: браузер управляет доступностью скрытой части.',
+          'Фокус остаётся на summary при раскрытии и закрытии.'],
+ 'tokens': ['dk-fold'],
+ 'code_intro': 'Нативный HTML без отдельного скрипта. Атрибут open раскрывает блок по умолчанию.',
+ 'code': '<details class="dk-fold "><summary class="dk-fold__head"><span class="dk-fold__title">Как '
+         'считается конверсия?</span><svg class="dk-i dk-i--sm" aria-hidden="true"><use '
+         'href="#ti-chevron-down"/></svg></summary><div class="dk-fold__body">Число заказов / число '
+         'посещений × 100%.</div></details>',
+ 'api': [('open', 'HTML-атрибут', 'Раздел открыт.'),
+         ('name', 'HTML-атрибут', 'Общее имя для группы с одним открытым разделом.'),
+         ('dk-fold--plain', 'класс', 'Вариант без заливки.')],
+ 'related': [('component-list.html', 'Список', 'Постоянно видимые строки'),
+             ('component-banner.html', 'Баннер', 'Важные сообщения показываются сразу')]})
+
+for _page in PAGES:
+    if _page['slug'] == 'chip':
+        _page['code'] = _page['live'] + '\n<script>\n' + _page['live_script'] + '\n</script>'
+    if _page['slug'] == 'accordion':
+        _page['anatomy_html'] = _page['anatomy_html'].replace('Как считается конверсия?', '<b class="sc-callout">1</b> Как считается конверсия?').replace('<svg ', '<b class="sc-callout">2</b><svg ', 1).replace('Число заказов /', '<b class="sc-callout">3</b> Число заказов /').replace('<details ', '<details open ', 1)
+
+for _page in PAGES:
+    if _page['slug'] == 'counter':
+        _page['live'] = '<div class="dk-panel"><div class="dk-stack"><div class="dk-inline"><button class="dk-btn dk-btn--sm">Сообщения <span class="dk-counter">12</span></button><button class="dk-btn dk-btn--sm dk-btn--primary">Обработать <span class="dk-counter">8</span></button></div><div class="dk-inline"><span class="dk-counter dk-counter--sm" aria-label="3 сообщения">3</span><span class="dk-counter" aria-label="12 сообщений">12</span><span class="dk-counter dk-counter--crit" aria-label="125 ошибок">99+</span><span>Нейтральный · обычный · ошибка</span></div></div></div>'
+        _page['states'] = '<div class="dk-panel"><div class="dk-inline"><span>Пусто</span><span class="dk-counter">0</span><span>Один объект</span><span class="dk-counter">1</span><span>Большое количество</span><span class="dk-counter" aria-label="125 объектов">99+</span></div></div>'
+        _page['content_ok'] = ['Только число: 12; для больших значений — 99+ с точным доступным именем.', 'Название объекта находится рядом: «Сообщения 12».']
+        _page['content_bad'] = ['Слово «новое» внутри счётчика — это бейдж.', 'Цвет ошибки для обычного количества объектов.']
+        _page['variants'].append(('Внутри dk-btn--primary', 'Автоматическая контрастная заливка.', 'Основная кнопка.'))
+    if _page['slug'] == 'chip':
+        _page['live'] = _page['live'].replace('>×</button>', '><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button>')
+        _page['states'] = '<div class="dk-panel"><div class="dk-inline"><span class="dk-fchip">Только чтение</span><span class="dk-fchip dk-fchip--secondary">Второстепенная метка</span><span class="dk-fchip">Недоступно<button class="dk-fchip__x" disabled aria-label="Убрать метку Недоступно"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></span></div></div>'
+        _page['variants'].append(('dk-fchip--secondary', 'Менее выраженная поверхность.', 'Второстепенное значение.'))
+        _page['api'].append(('disabled', 'HTML-атрибут кнопки', 'Удаление недоступно; без ложного клика.'))
+        _page['code'] = _page['live'] + '\n<script>\n' + _page['live_script'] + '\n</script>'
+    if _page['slug'] == 'avatar':
+        _page['content_ok'] = ['Не более двух инициалов; полное имя рядом или в доступной подписи.', 'Изображение обрезается по контейнеру с object-fit:cover, без искажения пропорций.']
+        _page['content_bad'] = ['Случайный цвет аватара, который выглядит как статус риска.', 'Инициалы из пяти букв или фотография без доступного имени.']
+
+for _page in PAGES:
+    if _page['slug'] == 'chip':
+        _page['content_ok'] = ['Одно выбранное значение: «Email» или «В работе».', 'Подпись удаления включает значение чипа.']
+        _page['content_bad'] = ['Обрезанное название, которое нельзя восстановить.', 'Чип выглядит как выбранный фильтр, но не влияет на данные.']
