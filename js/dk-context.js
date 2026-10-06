@@ -4,6 +4,7 @@
   var serial=0;
   window.dkTooltip=function(trigger,opts){
     if(!trigger)return null;opts=opts||{};
+    window.dkDestroy(trigger);
     var stopped=false,shown=false,pinned=false,timer=null,tip=document.createElement('span'),id='dk-tooltip-'+(++serial);
     var original=trigger.getAttribute('aria-describedby');
     tip.id=id;tip.className='dk-tooltip';tip.setAttribute('role','tooltip');tip.textContent=opts.text||'';tip.hidden=true;

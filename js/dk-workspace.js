@@ -25,6 +25,7 @@
  window.dkState.normalize=state;
  window.dkDensity=function(el,opts){
   if(!el)return null;opts=opts||{};var root=opts.root||el.closest('.dk-root');if(!root)throw Error('density needs dk-root');
+  window.dkDestroy(el);
   var previous=root.getAttribute('data-density'),stopped=false;
   el.innerHTML='<label class="dk-density">Плотность <select aria-label="Плотность данных"><option value="comfortable">Обычная</option><option value="compact">Компактная</option></select></label>';
   var select=el.querySelector('select');
@@ -43,9 +44,9 @@
   filename:filename
  };
  window.dkFullscreen=function(el,button){
-  if(!el||!button)return null;var stopped=false,dialog=null,placeholder=null,opener=null,active=false;
+  if(!el||!button)return null;window.dkDestroy(button);var stopped=false,dialog=null,placeholder=null,opener=null,active=false;
   var oldPressed=button.getAttribute('aria-pressed');button.setAttribute('aria-pressed','false');
-  function reflect(){var previous=active;active=document.fullscreenElement===el||!!dialog;button.setAttribute('aria-pressed',String(active));if(previous&&!active&&opener&&opener.isConnected)opener.focus();}
+  function reflect(){var previous=active;active=document.fullscreenElement===el||!!dialog;if(!stopped)button.setAttribute('aria-pressed',String(active));if(previous&&!active&&opener&&opener.isConnected)opener.focus();}
   function restore(){if(!dialog)return;var d=dialog;dialog=null;if(placeholder&&placeholder.parentNode){placeholder.replaceWith(el);placeholder=null;}d.remove();reflect();if(opener&&opener.isConnected)opener.focus();}
   function fallback(){if(!el.isConnected||stopped)return;placeholder=document.createComment('dk-fullscreen');el.before(placeholder);dialog=document.createElement('dialog');dialog.className='dk-fullscreen';dialog.setAttribute('aria-label',el.getAttribute('aria-label')||'Полный экран');dialog.tabIndex=-1;placeholder.parentNode.append(dialog);dialog.append(el);dialog.addEventListener('close',restore,{once:true});dialog.showModal();dialog.focus();reflect();}
   async function enter(){if(stopped||active)return;opener=document.activeElement;try{if(!el.requestFullscreen)throw Error('fallback');await el.requestFullscreen();if(stopped&&document.fullscreenElement===el)await document.exitFullscreen();}catch(e){if(!stopped)fallback();}reflect();}

@@ -6,6 +6,7 @@
   if(!el)return null;opts=opts||{};var nodes=[],byId=Object.create(null),selected=new Set(),expanded=new Set(),stopped=false,query='',cursor=null,id='dk-tree-'+(++serial);
   function walk(items,parent,level){(items||[]).forEach(function(item){if(!item||item.id==null)throw TypeError('tree node needs id');var key=String(item.id);if(byId[key])throw Error('duplicate tree id');if(nodes.length>=1000)throw RangeError('tree supports up to 1000 nodes; narrow the taxonomy');var n={id:key,label:String(item.label||key),parent:parent,level:level,children:[],disabled:!!item.disabled};byId[key]=n;nodes.push(n);if(parent)parent.children.push(n);walk(item.children,n,level+1);});}
   walk(opts.nodes,null,1);
+  window.dkDestroy(el);
   function leaves(n){return n.children.length?n.children.reduce(function(all,c){return all.concat(leaves(c));},[]):[n];}
   function eligible(n){return !n.disabled&&(!n.parent||eligible(n.parent));}
   function normalize(values){selected.clear();(values||[]).forEach(function(key){var n=byId[String(key)];if(n)leaves(n).filter(eligible).forEach(function(x){selected.add(x.id);});});}

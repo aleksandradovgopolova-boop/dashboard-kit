@@ -4467,7 +4467,8 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   background-color: var(--nodata);
   background-image: repeating-linear-gradient(135deg, transparent 0, transparent 4px, var(--nodata-pattern) 4px, var(--nodata-pattern) 6px);
 }
-.dk-root td.dk-nodata { color: var(--ink); background: var(--surface); }
+/* Safari may retain the old background during a theme-variable transition. */
+.dk-root td.dk-nodata { color: var(--ink); background-color: var(--surface); background-image: none; transition: none; }
 .dk-root td.dk-nodata::before { content: ''; display: inline-block; width: var(--space-4); height: var(--space-4); margin-right: var(--space-2); background: repeating-linear-gradient(135deg, var(--nodata) 0, var(--nodata) 4px, var(--nodata-pattern) 4px, var(--nodata-pattern) 6px); }
 @media (forced-colors: active) {
   .dk-nodata, .dk-uptime__seg[data-state="none"] { outline: var(--focus-width) dashed CanvasText; }
