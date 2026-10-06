@@ -1122,19 +1122,12 @@ def check_spot(primitives: str, semantic: str) -> None:
 
     --nodata из проверки исключён, и это осознанное исключение с ценой:
     поднять серый «нет данных» до 3:1 значит сделать отсутствие данных таким
-    же громким, как сами данные. Правильный ответ для него — не цвет, а
-    штриховка: отсутствие должно читаться как «не значение», а не как тихое
-    значение. Контраст штриха --nodata-pattern теперь проверяется отдельно.
+    же громким, как сами данные. Отсутствие обозначается ровной нейтральной
+    заливкой и явным текстом «Нет данных».
     """
     need = 3.0
     ok = True
     for theme, table in theme_tables(primitives, semantic).items():
-        stripe = _color("--nodata-pattern", table)
-        for bg in ("--nodata", "--surface", "--surface-2"):
-            base = _color(bg, table)
-            if stripe and base and contrast(stripe, base) < need:
-                fail("NO DATA", f"{theme}: штрих против {bg} меньше 3:1")
-                ok = False
         for m in ("--crit", "--high", "--calm", "--event"):
             c = _color(m, table)
             if not c:

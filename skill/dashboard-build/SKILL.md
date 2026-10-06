@@ -91,6 +91,6 @@ python3 <кит>/tools/kit.py find карта      # поиск по описи
 
 Для drill-down, DOM-визуализаций, export/fullscreen и offline personalization
 читай [extensions.md](references/extensions.md), затем `kit.py show/head`.
-В JS смысл — `dkMeaning(name, 'text'/'fill')`; no-data — паттерн плюс текст.
+В JS смысл — `dkMeaning(name, 'text'/'fill')`; no-data — ровная нейтральная заливка плюс текст, без штриховки.
 Старые API сохранены, update/destroy описаны в описи. Общий state связывает host,
 а не автоматически превращает демонстрационные данные в production-срез.

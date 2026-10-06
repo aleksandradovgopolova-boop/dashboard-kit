@@ -219,7 +219,7 @@
 .dk-app[data-nav="folded"] .dk-side__name,
 .dk-app[data-nav="folded"] .dk-side__who { display: none; }
 
-.dk-app[data-nav="folded"] .dk-side__item,
+.dk-app[data-nav="folded"] .dk-side__item { justify-content: center; padding: 0; }
 /* СВЁРНУТОЕ МЕНЮ: В ШАПКЕ ОДИН КВАДРАТ, А НЕ ДВА.
 
    Было два: знак продукта и кнопка сворачивания. В рейку шириной 64 они не
@@ -650,4 +650,28 @@
   .dk-tabbar { height: auto; min-height: 68px; }
   .dk-tabbar__item { height: auto; min-height: 56px; }
   .dk-tabbar__item > span { overflow: visible; white-space: normal; text-overflow: clip; text-align: center; overflow-wrap: anywhere; }
+}
+
+/* Необязательная панель с иконками и меню профиля. */
+.dk-side__profile { position: relative; }
+.dk-side__profile > summary { display: flex; justify-content: center; align-items: center; min-height: var(--control-lg); cursor: pointer; list-style: none; border-radius: var(--radius-xl); }
+.dk-side__profile summary::-webkit-details-marker { display: none; }
+.dk-side__profile summary:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset-tight); }
+.dk-side__profile-menu { position: absolute; left: calc(100% + var(--space-6)); bottom: 0; z-index: var(--z-dropdown); width: 260px; max-width: calc(100vw - var(--space-8) * 2); padding: var(--space-6); border-radius: var(--radius-xl); background: var(--surface); border: var(--hairline) solid var(--rule); box-shadow: var(--elev-float); box-sizing: border-box; }
+.dk-side__profile-menu .dk-menu__item { width: 100%; box-sizing: border-box; text-decoration: none; }
+.dk-side__profile-menu button:disabled { opacity: 0.5; cursor: default; }
+.dk-side__profile-rule { height: var(--hairline); background: var(--rule); margin: var(--space-4) 0; }
+.dk-side__profile-themes { display: flex; flex-wrap: wrap; gap: var(--space-3); padding: var(--space-4) 0; }
+@media (min-width: 1024px) {
+  .dk-app--rail[data-nav="folded"] { --dk-side: 112px; }
+  .dk-app--rail .dk-side { top: var(--space-6); height: calc(100dvh - var(--space-6) * 2); margin: var(--space-6); padding: var(--space-5); border-radius: var(--space-9); box-sizing: border-box; }
+  .dk-app--rail[data-nav="folded"] .dk-side { width: 80px; }
+  .dk-app--rail[data-nav="folded"] .dk-side__item { justify-content: center; padding: 0; height: var(--control-lg); min-height: var(--control-lg); flex-shrink: 0; border-radius: var(--radius-xl); }
+  .dk-app--rail .dk-side__foot { border-top: var(--hairline) solid var(--rule); padding-top: var(--space-4); }
+}
+@media (max-width: 1023px) {
+  .dk-side__profile-menu { left: 0; bottom: calc(100% + var(--space-3)); }
+}
+@media (min-width: 1024px) {
+  .dk-app--rail .dk-side { z-index: var(--z-dropdown); }
 }

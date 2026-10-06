@@ -45,13 +45,13 @@
 <body class="dk-page">
 <a class="dk-skip" href="#main">К содержимому</a>
 
-<div class="dk-app" data-nav="closed">
+<div class="dk-app dk-app--rail" data-nav="folded">
 
   <aside class="dk-side">
     <div class="dk-side__head">
       <span class="dk-side__mark"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
       <span class="dk-side__name">Мониторинг</span>
-      <button class="dk-iconbtn dk-iconbtn--sm" data-act="fold" aria-pressed="false" title="Свернуть меню" aria-label="Свернуть меню">
+      <button class="dk-iconbtn dk-iconbtn--sm" data-act="fold" aria-pressed="true" title="Развернуть меню" aria-label="Развернуть меню">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg>
       </button>
     </div>
@@ -89,17 +89,17 @@
     </nav>
 
     <div class="dk-side__foot">
-      <a class="dk-side__item" href="#">
-        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-settings"/></svg>
-        <span class="dk-side__label">Настройки</span>
-      </a>
-      <div class="dk-side__user">
-        <span class="dk-avatar dk-avatar--sm">АС</span>
-        <span class="dk-side__who">
-          <b>Александр С.</b>
-          <span>диспетчер</span>
-        </span>
-      </div>
+      <details class="dk-side__profile">
+        <summary aria-label="Меню профиля" title="Меню профиля"><span class="dk-avatar">АС</span></summary>
+        <div class="dk-side__profile-menu">
+          <a class="dk-menu__item" href="index.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg>Помощь</a>
+          <details><summary class="dk-menu__item"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg>Настройки</summary>
+            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button class="dk-btn dk-btn--sm" type="button" data-theme-set="light">Светлая</button><button class="dk-btn dk-btn--sm" type="button" data-theme-set="dark">Тёмная</button></div>
+          </details>
+          <div class="dk-side__profile-rule"></div>
+          <button class="dk-menu__item" type="button" disabled title="Гостевой просмотр"><svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg>Выйти</button>
+        </div>
+      </details>
     </div>
   </aside>
 
@@ -153,8 +153,7 @@
              38 / 1, но с долей от 89 и полосой состава. Два блока с одним
              ответом на экране — это лишний блок (скилл, «убрать лишнее»). -->
         <div class="dk-grid dk-grid--overview">
-          <div class="dk-col--third"><div class="dk-stack">
-<section class="dk-hero" style="--accent:var(--crit)">
+          <div class="dk-col--full"><section class="dk-hero" style="--accent:var(--crit)">
               <div class="dk-hero__label">Регионов с высоким риском</div>
               <div class="dk-hero__row">
                 <div class="dk-hero__value"><span class="dk-hero__n">23</span><span class="dk-hero__of">из 89</span></div>
@@ -172,9 +171,9 @@
                 <span class="dk-key" style="--swatch:var(--calm)"><i class="dk-key__dot"></i>Низкий <b>38</b><span class="dk-key__d">−3</span></span>
                 <span class="dk-key" style="--swatch:var(--nodata)"><i class="dk-key__dot"></i>Мало данных <b>1</b></span>
               </div>
-            </section>
-<div class="dk-grid dk-grid--metrics">
-          <div class="dk-col--half">
+            </section></div>
+          <div class="dk-col--full"><div class="dk-grid dk-grid--metrics">
+          <div class="dk-col--quarter">
             <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--crit-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
@@ -186,7 +185,7 @@
               </div>
             </div>
           </div>
-          <div class="dk-col--half">
+          <div class="dk-col--quarter">
             <div class="dk-widget dk-widget--s dk-tile dk-tile--compact">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg></span>
@@ -198,7 +197,7 @@
               </div>
             </div>
           </div>
-          <div class="dk-col--half">
+          <div class="dk-col--quarter">
             <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--high-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span>
@@ -207,7 +206,7 @@
               <div class="dk-tile__row"><span class="dk-metric-lg">42 мин</span></div>
             </div>
           </div>
-          <div class="dk-col--half">
+          <div class="dk-col--quarter">
             <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--calm-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span>
@@ -219,10 +218,8 @@
               </div>
             </div>
           </div>
-        </div>
-          </div></div>
-          <div class="dk-col--two-thirds"><div class="dk-stack">
-<div class="dk-widget">
+        </div></div>
+          <div class="dk-col--half"><div class="dk-widget">
               <div class="dk-widget__head">
                 <h2 class="dk-widget__title">Аварии: факт и прогноз</h2>
                 <div class="dk-widget__actions">
@@ -231,12 +228,10 @@
                   <button class="dk-iconbtn dk-iconbtn--sm" id="d-fullscreen" type="button" title="Полный экран или выход" aria-label="Переключить полный экран графика"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
                 </div>
               </div>
-              <p class="dk-caption" style="margin:calc(var(--gap-section) * -1 + var(--space-3)) 0 0">
-                Ромбы и тонкая линия — последние трое суток: данные ещё не закрыты</p>
               <div class="dk-chart" id="d-line"></div>
               <p class="dk-caption" role="status" id="d-export-status"></p>
-            </div>
-<div class="dk-widget">
+            </div></div>
+          <div class="dk-col--half"><div class="dk-widget">
               <div class="dk-widget__head">
                 <h2 class="dk-widget__title">Последние события</h2>
               </div>
@@ -267,8 +262,7 @@
                 </button>
                 <button class="dk-list__more">Показать все 23 <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button>
               </div>
-            </div>
-          </div></div>
+            </div></div>
         </div>
 
         <div class="dk-grid" style="margin-top:var(--grid-gap)"><div class="dk-col--full">

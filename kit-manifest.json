@@ -2664,7 +2664,7 @@
     "Плитки — кнопки с `aria-label` «регион · значение»; по сетке ходят стрелками, tabindex один на всю сетку.",
     "Карта недоступна с клавиатуры (canvas) — поэтому плитки обязательны, а не опция.",
     "Шкала — пять ступеней, все видны на своей доске в обеих темах (проверка ШКАЛА).",
-    "«Нет данных» в тёмной теме 1,69:1 к поверхности — ниже нормы; открыто в HANDOFF.md (штриховка вместо цвета)."
+    "«Нет данных» в тёмной теме 1,69:1 к поверхности — ниже нормы; открыто в HANDOFF.md (ровная заливка и подпись «Нет данных»)."
    ],
    "related": [
     "rank",
@@ -4336,6 +4336,7 @@
    "related": [],
    "classes": [
     "dk-app",
+    "dk-app--rail",
     "dk-content",
     "dk-main",
     "dk-side",
@@ -4348,6 +4349,10 @@
     "dk-side__n",
     "dk-side__name",
     "dk-side__nav",
+    "dk-side__profile",
+    "dk-side__profile-menu",
+    "dk-side__profile-rule",
+    "dk-side__profile-themes",
     "dk-side__user",
     "dk-side__who",
     "dk-skip",
@@ -4612,7 +4617,7 @@
  "hooks": {},
  "counts": {
   "parts": 46,
-  "classes": 407,
+  "classes": 412,
   "functions": 41,
   "chart_types": 12
  }

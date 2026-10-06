@@ -406,10 +406,8 @@
     var root = el && el.closest ? el.closest('.dk-root') : null;
     return getComputedStyle(root || document.documentElement).getPropertyValue(token).trim();
   };
-  dkMeaning.decal = function (el) {
-    return {symbol: 'rect', symbolSize: 1, dashArrayX: [1, 0], dashArrayY: [1, 5],
-      rotation: -Math.PI / 4, color: getComputedStyle((el && el.closest('.dk-root')) || document.documentElement).getPropertyValue('--nodata-pattern').trim()};
-  };
+  // Compatibility helper: no-data is now solid, without hatching.
+  dkMeaning.decal = function () { return null; };
   window.dkMeaning = dkMeaning;
 
   window.dkAnchor = dkAnchor;
