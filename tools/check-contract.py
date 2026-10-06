@@ -22,3 +22,8 @@ policy=json.loads((ROOT/'.ai/project/uiux-policy.json').read_text())
 policy['coverage'].pop(next(iter(policy['coverage'])))
 assert validate(ROOT,policy), 'missing constitution rule accepted'
 print('PASS: UI/UX policy rejects invented mappings and incomplete coverage')
+
+policy=json.loads((ROOT/'.ai/project/uiux-policy.json').read_text())
+policy['patterns'][0]['components']=['nonexistent']
+assert validate(ROOT,policy), 'pattern accepted missing component'
+print('PASS: UX patterns reference actual component pages')

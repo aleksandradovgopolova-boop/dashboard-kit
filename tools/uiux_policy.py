@@ -24,4 +24,14 @@ def validate(root, policy=None):
         if row.get('status') != 'review-required' or not row.get('reason'):
             errors.append('Реестр требований не является отчётом об успешном UX-ревью')
             break
+    patterns = data.get('patterns', [])
+    if len(patterns) != 20 or len({p.get('id') for p in patterns}) != 20:
+        errors.append('Нужны 20 уникальных разобранных паттернов')
+    for p in patterns:
+        if not p.get('source', '').startswith('https://www.uprock.ru/education/') or not p.get('rules') or not all(p.get(k) for k in ['title','example_bad','example_good','review']):
+            errors.append('Паттерну нужны источник, правила, пример и способ ревью')
+        if not set(p.get('constitution', [])) <= ids:
+            errors.append('Неизвестный UI-ID в паттерне')
+        if not p.get('components') or any(not (root/('component-'+slug+'.html')).is_file() for slug in p['components']):
+            errors.append('Паттерн ссылается на несуществующий компонент')
     return errors

@@ -1,0 +1,32 @@
+/* Private page composition; component sizes and touch targets retain Kit tokens. */
+#d-dashboard [role="tabpanel"][hidden] { display: none; }
+#d-dashboard #d-views { margin-bottom: var(--grid-gap); max-width: 100%; flex-wrap: wrap; }
+#d-dashboard #d-views [aria-selected="true"] { background: var(--surface-3); color: var(--ink); }
+#d-dashboard #d-country-charts { margin-top: var(--grid-gap); }
+#d-dashboard #d-view-work .dk-tablewrap { max-height: 55svh; overflow: auto; }
+#d-dashboard #d-view-causes .dk-col--third { grid-column: span 6; }
+#d-dashboard #d-view-causes .dk-col--full:has(#d-uptime) { grid-column: span 6; }
+@media (min-width: 1200px) {
+  #d-dashboard .dk-tile--compact .dk-tile__head { min-height: 0; }
+  #d-dashboard .dk-tile--compact .dk-tile__row { flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: var(--gap-tight); }
+  #d-dashboard #d-country-charts .dk-widget { min-height: 300px; }
+  #d-dashboard #d-country-charts .dk-chart:not(.dk-chart--spark) { height: 200px; min-height: 200px; }
+  #d-dashboard #d-country-charts .dk-list { max-height: 240px; overflow: auto; }
+}
+@media (max-width: 767px) {
+  #d-dashboard #d-country-charts > .dk-col--third,
+  #d-dashboard #d-view-causes > .dk-grid > [class*="dk-col--"] { grid-column: 1 / -1; }
+  #d-dashboard #d-view-work .dk-tablewrap { max-height: none; }
+}
+
+#d-dashboard .dk-wrap--monitor { --pad-widget: calc(var(--space-5) * 2); }
+#d-dashboard .dk-wrap--monitor .dk-widget--s,
+#d-dashboard .dk-wrap--monitor .dk-hero { padding: calc(var(--space-5) * 2); }
+@media (max-width: 767px) {
+  #d-dashboard .dk-wrap--monitor { --pad-widget: calc(var(--space-4) * 2); }
+  #d-dashboard .dk-wrap--monitor .dk-widget--s,
+  #d-dashboard .dk-wrap--monitor .dk-hero { padding: calc(var(--space-4) * 2); }
+}
+@media (min-width: 1200px) {
+  #d-dashboard #d-view-causes .dk-car__track { max-height: calc(var(--space-8) * 5); overflow: auto; }
+}

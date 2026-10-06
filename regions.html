@@ -68,20 +68,20 @@
         <span class="dk-side__n">23</span>
       </a>
 
-      <a class="dk-side__item" href="#">
+      <a class="dk-side__item" role="link" tabindex="0" aria-disabled="true" aria-label="Заявки — недоступно в демонстрации" title="Недоступно в демонстрации">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg>
         <span class="dk-side__label">Заявки</span>
         <span class="dk-side__n">7</span>
       </a>
-      <a class="dk-side__item" href="#">
+      <a class="dk-side__item" role="link" tabindex="0" aria-disabled="true" aria-label="Бригады — недоступно в демонстрации" title="Недоступно в демонстрации">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-user"/></svg>
         <span class="dk-side__label">Бригады</span>
       </a>
-      <a class="dk-side__item" href="#">
+      <a class="dk-side__item" href="calendar.html">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-calendar"/></svg>
         <span class="dk-side__label">Календарь</span>
       </a>
-      <a class="dk-side__item" href="#">
+      <a class="dk-side__item" role="link" tabindex="0" aria-disabled="true" aria-label="Отчёты — недоступно в демонстрации" title="Недоступно в демонстрации">
         <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-table"/></svg>
         <span class="dk-side__label">Отчёты</span>
       </a>
@@ -126,7 +126,7 @@
 
         <div class="dk-region-tools" role="search" aria-label="Поиск и фильтр регионов">
 <div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" id="r-search" type="search" placeholder="Название региона или округа" aria-label="Название региона или округа" aria-controls="r-rank r-table" aria-describedby="r-results"></div>
-<div id="r-period"></div><div id="r-risk"></div><button class="dk-iconbtn" id="r-reset" type="button" aria-label="Сбросить фильтры" title="Сбросить фильтры"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><button type="button" class="dk-iconbtn" data-modal="#risk-info" aria-label="О показателе риска" title="О показателе риска"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></button></div>
+<span class="dk-caption" id="r-period">Демонстрационные данные за 30 дней</span><div id="r-risk"></div><button class="dk-iconbtn" id="r-reset" type="button" aria-label="Сбросить фильтры" title="Сбросить фильтры"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><button type="button" class="dk-iconbtn" data-modal="#risk-info" aria-label="О показателе риска" title="О показателе риска"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></button></div>
 <p class="dk-region-result" id="r-results" role="status" aria-live="polite" aria-atomic="true"></p>
 <!-- Сводка идёт первой не ради красоты. Карта отвечает на вопрос «где»,
              но не отвечает на «насколько всё плохо в целом» — а именно с этого
@@ -251,28 +251,19 @@
 
 
   window.addEventListener('DOMContentLoaded', function () {
-    if (typeof dkPeriod === 'function') {
-      dkPeriod(document.getElementById('r-period'), {
-        label: 'Период', size: 'md', value: { preset: 30 }, url: 'period', onChange: function () {}
-      });
-    }
 
     // Данные подаются объектами, а не читаются китом самостоятельно: на file://
     // fetch запрещён браузером, и виджет, который сам лезет за файлом, на
     // двойной клик просто не открылся бы. Это ограничение браузера, не кита.
     Promise.all([
       fetch('data/regions.topojson').then(function (r) { return r.json(); }),
-      fetch('data/regions-tiles.json').then(function (r) { return r.json(); })
+      fetch('data/regions-tiles.json').then(function (r) { return r.json(); }),
+      fetch('data/monitor-demo.json').then(function (r) { return r.json(); })
     ]).then(function (res) {
       var topo = res[0], tiles = res[1];
 
-      // Демонстрационные баллы риска: детерминированные, чтобы картинка не
-      // менялась при каждой перезагрузке.
-      var values = {}, seed = 11;
-      tiles.tiles.forEach(function (t) {
-        seed = (seed * 1103515245 + 12345) % 2147483648;
-        values[t.id] = 28 + seed % 68;
-      });
+      // Один демонстрационный источник для сводки и регионального среза.
+      var values = res[2].risk.values;
 
       var byId = {};
       tiles.tiles.forEach(function (t) { byId[t.id] = t.name; });

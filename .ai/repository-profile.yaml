@@ -24,6 +24,9 @@ stacks:
   - tools/test.py
   - tools/check-advanced.mjs
   - tools/check-runtime.mjs
+  - tools/check-filter-context.mjs
+  - tools/check-dashboard-overview.mjs
+  - data/monitor-demo.json
   - tools/check-sdk-snippets.mjs
   install_command: null
 ci:

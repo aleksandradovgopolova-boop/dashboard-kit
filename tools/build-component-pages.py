@@ -78,6 +78,8 @@ def render(p: dict) -> str:
     related = "".join(f'<li><a href="{esc(h)}">{t}</a>{(" — " + d) if d else ""}</li>' for h, t, d in p["related"])
     files = " · ".join(f'<a href="{esc(f)}"><code>{esc(f)}</code></a>' for f in p["files"])
     live_script = p.get("live_script", "")
+    policy = json.loads((ROOT/".ai/project/uiux-policy.json").read_text())
+    guidance = ''.join('<div class="sc-note"><h3>'+html.escape(row['title'])+'</h3><ul class="sc-list">'+li([html.escape(x) for x in row['rules']])+'</ul><p>Пример: '+html.escape(row['example_good'])+'</p><p>Проверка: '+html.escape(row['review'])+'</p><p><a href="'+html.escape(row['source'])+'">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>' for row in policy['patterns'] if p['slug'] in row['components'])
     sec = []
     for i, (sid, title, group) in enumerate(BLOCKS):
         body = {
@@ -85,7 +87,7 @@ def render(p: dict) -> str:
             "kogda-ispolzovat": (
                 '<div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list">' + li(p["when_yes"]) +
                 '</ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list">' + li(p["when_no"]) +
-                '</ul></div></div>'),
+                '</ul></div></div>' + guidance),
             "anatomiya": ('<p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy">' +
                           p["anatomy_html"] + '</div><ol class="sc-anatomy__list">' + anatomy + '</ol>'),
             "varianty-i-razmery": (

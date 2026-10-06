@@ -21,6 +21,10 @@
    {
     "file": "css/chrome.css",
     "when": "только если кит рисует всю страницу"
+   },
+   {
+    "file": "css/page.dashboard.css",
+    "when": "только пример dashboard.html; после chrome.css"
    }
   ],
   "scripts": [

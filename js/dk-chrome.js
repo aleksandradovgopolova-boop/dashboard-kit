@@ -18,7 +18,10 @@
     if (app.classList.contains('dk-app--rail')) {
       app.querySelectorAll('.dk-side__item').forEach(function (item) {
         var label = item.querySelector('.dk-side__label');
-        if (label) { item.setAttribute('aria-label', label.textContent.trim()); item.setAttribute('title', label.textContent.trim()); }
+        if (label) {
+          if (!item.hasAttribute('aria-label')) item.setAttribute('aria-label', label.textContent.trim());
+          if (!item.hasAttribute('title')) item.setAttribute('title', label.textContent.trim());
+        }
       });
       var profile = app.querySelector('.dk-side__profile');
       if (profile) {
