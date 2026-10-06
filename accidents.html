@@ -137,7 +137,7 @@
 
         <div class="dk-grid">
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--crit-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
                 <span class="dk-tile__label">Открыто сейчас</span>
@@ -146,11 +146,10 @@
                 <span class="dk-metric-lg">23</span>
                 <span class="dk-trend" style="--accent:var(--crit-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +4 за сутки</span>
               </div>
-              <div class="dk-chart dk-chart--spark" id="a-sp1"></div>
             </div>
           </div>
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--high-ink)">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--high-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span>
                 <span class="dk-tile__label">Просрочено по нормативу</span>
@@ -159,24 +158,22 @@
                 <span class="dk-metric-lg">4</span>
                 <span class="dk-trend" style="--accent:var(--high-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +1</span>
               </div>
-              <div class="dk-chart dk-chart--spark" id="a-sp2"></div>
             </div>
           </div>
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
                 <span class="dk-tile__label">Среднее время реакции</span>
               </div>
               <div class="dk-tile__row">
-                <span class="dk-metric-lg">42 мин</span>
+                <span class="dk-metric-lg">42 <span class="dk-tile__unit">мин</span></span>
                 <span class="dk-trend" style="--accent:var(--calm-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg> −8 мин</span>
               </div>
-              <div class="dk-chart dk-chart--spark" id="a-sp3"></div>
             </div>
           </div>
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--calm-ink)">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--calm-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg></span>
                 <span class="dk-tile__label">Устранено за сутки</span>
@@ -185,7 +182,6 @@
                 <span class="dk-metric-lg">19</span>
                 <span class="dk-trend" style="--accent:var(--calm-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +3</span>
               </div>
-              <div class="dk-chart dk-chart--spark" id="a-sp4"></div>
             </div>
           </div>
         </div>
@@ -433,15 +429,7 @@
       unit: 'ч'
     });
 
-    [['a-sp1', [18,19,17,20,21,19,23]],
-     ['a-sp2', [2,3,2,4,3,3,4]],
-     ['a-sp3', [58,55,51,49,47,45,42]],
-     ['a-sp4', [12,15,14,17,16,18,19]]].forEach(function (п) {
-      dkChart(document.getElementById(п[0]), {
-        type: 'spark', categories: п[1].map(function (_, i) { return String(i); }),
-        series: [{ name: '', data: п[1] }]
-      });
-    });
+
   });
 </script>
 </body>

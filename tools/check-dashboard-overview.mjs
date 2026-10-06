@@ -1,7 +1,7 @@
 // Проверяет выбранную композицию страны и рабочие представления в Chrome.
 import { launch, findChrome } from './browser-harness.mjs';
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve, extname, sep } from 'node:path';
 
@@ -67,9 +67,34 @@ try {
     assert(await evaluate(`document.activeElement.id==='d-tab-work' && document.getElementById('d-tab-work').getAttribute('aria-selected')==='true' && !document.getElementById('d-view-work').hidden && document.getElementById('d-table').getBoundingClientRect().height>0 && document.querySelectorAll('#d-table tbody tr').length===4 && !document.getElementById('d-pager')`), `${theme}: keyboard opens real work rows without invented pagination`);
     await send('Input.dispatchKeyEvent',{type:'keyDown',key:'End',code:'End',windowsVirtualKeyCode:35});
     await send('Input.dispatchKeyEvent',{type:'keyUp',key:'End',code:'End',windowsVirtualKeyCode:35});
-    await evaluate(`new Promise(resolve=>setTimeout(resolve,300))`);
+    await evaluate(`new Promise(resolve=>setTimeout(resolve,1000))`);
     assert(await evaluate(`document.activeElement.id==='d-tab-causes' && !document.getElementById('d-view-causes').hidden && document.getElementById('d-donut').getBoundingClientRect().width>0 && document.querySelector('#d-donut canvas')?.width>0`), `${theme}: End reaches causes and restores chart dimensions`);
-    assert(await evaluate(`document.getElementById('d-view-causes').getBoundingClientRect().bottom<=768 && document.documentElement.scrollHeight<=768`), `${theme}: causes view also fits with an internally scrollable list`);
+    const causesGeometry = await evaluate(`(()=>{
+      const track=document.querySelector('#d-car .dk-car__track'), cards=[...track.children];
+      const box=el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:r.height}};
+      return {panel:box(document.getElementById('d-view-causes')),track:box(track),cards:cards.map(box),donut:box(document.getElementById('d-donut').closest('.dk-widget')),uptime:box(document.getElementById('d-uptime').closest('.dk-widget')),page:document.documentElement.scrollHeight};})()`);
+    if(process.env.DK_ANALYTICS_SHOTS) {
+      const shot=await send('Page.captureScreenshot',{format:'png'});
+      await writeFile(`/tmp/dk-analytics-${theme}-1366.png`,Buffer.from(shot.data,'base64'));
+    }
+    assert(causesGeometry.panel.bottom<=768 && causesGeometry.page<=768, `${theme}: causes view fits: ${JSON.stringify(causesGeometry)}`);
+    assert(await evaluate(`(()=>{
+      const track=document.querySelector('#d-car .dk-car__track'),cards=[...track.children];
+      track.scrollTop=0;const viewport=track.getBoundingClientRect(),first=cards[0].getBoundingClientRect();
+      const complete=first.top>=viewport.top-1&&first.bottom<=viewport.bottom+1;
+      const contentComplete=cards.every(card=>[...card.querySelectorAll('.dk-car__tags,.dk-car__row,.dk-car__text')].every(el=>el.getBoundingClientRect().bottom<=card.getBoundingClientRect().bottom-parseFloat(getComputedStyle(card).paddingBottom)+1));
+      track.scrollTop=track.scrollHeight;const last=cards.at(-1).getBoundingClientRect();
+      const reached=last.top>=viewport.top-1&&last.bottom<=viewport.bottom+1;
+      const following=document.getElementById('d-donut').closest('.dk-widget').getBoundingClientRect();
+      track.scrollTop=0;
+      return cards.length===4&&complete&&contentComplete&&reached&&following.top>=track.getBoundingClientRect().bottom&&getComputedStyle(track).scrollbarWidth!=='none'&&track.tabIndex===0&&!!track.getAttribute('aria-label');
+    })()`), `${theme}: complete first and last risk cards, all metrics/reasons, scroll does not overlap the donut`);
+    if(process.env.DK_ANALYTICS_SHOTS) {
+      await evaluate(`document.querySelector('#d-car .dk-car__track').scrollTop=10000`);
+      const shot=await send('Page.captureScreenshot',{format:'png'});
+      await writeFile(`/tmp/dk-analytics-${theme}-1366-last.png`,Buffer.from(shot.data,'base64'));
+      await evaluate(`document.querySelector('#d-car .dk-car__track').scrollTop=0`);
+    }
     await evaluate(`document.getElementById('d-tab-country').click()`);
     assert(await evaluate(`!document.getElementById('d-view-country').hidden && document.querySelectorAll('#d-view-country .dk-tile').length===4`), `${theme}: returning preserves the overview`);
     for(const width of [390,320]) {
@@ -117,6 +142,29 @@ try {
       const pad=parseFloat(getComputedStyle(tile).paddingLeft);
       return Math.abs(head.left-card.left-pad)<=2&&Math.abs(row.left-card.left-pad)<=2;
     })`), `${width}: compact KPI share a leading edge with spacious padding`);
+  }
+  // Enlarged analytics copy must remain complete on tablet and phone; page scrolling is intentional.
+  for(const theme of ['dark','light']) for(const width of [1024,390]) {
+    await send('Emulation.setDeviceMetricsOverride',{width,height:768,deviceScaleFactor:1,mobile:width<768});
+    await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/dashboard.html?theme=${theme}`});
+    await evaluate(`document.fonts.ready.then(()=>new Promise(resolve=>setTimeout(resolve,700)))`);
+    await evaluate(`document.getElementById('d-tab-causes').click();document.querySelectorAll('#d-car .dk-car__item *').forEach(el=>{el.style.fontSize='24px';el.style.lineHeight='1.5'});new Promise(resolve=>setTimeout(resolve,300))`);
+    if(process.env.DK_ANALYTICS_SHOTS) {
+      const shot=await send('Page.captureScreenshot',{format:'png'});
+      await writeFile(`/tmp/dk-analytics-${theme}-${width}-large.png`,Buffer.from(shot.data,'base64'));
+    }
+    assert(await evaluate(`(()=>{
+      const cards=[...document.querySelectorAll('#d-car .dk-car__item')];
+      const complete=cards.every(card=>{
+        const b=card.getBoundingClientRect(),pad=parseFloat(getComputedStyle(card).paddingBottom);
+        const children=[...card.querySelectorAll('.dk-car__tags,.dk-car__row,.dk-car__text')];
+        return children.every(el=>{const r=el.getBoundingClientRect();return r.bottom<=b.bottom-pad+1&&r.right<=b.right+1&&!(getComputedStyle(el).overflow==='hidden'&&el.scrollHeight>el.clientHeight+1)}) &&
+          children[2].getBoundingClientRect().top>=children[1].getBoundingClientRect().bottom-1;
+      });
+      const track=document.querySelector('#d-car .dk-car__track').getBoundingClientRect();
+      const donut=document.getElementById('d-donut').closest('.dk-widget').getBoundingClientRect();
+      return complete&&document.documentElement.scrollWidth<=innerWidth&&donut.top>=track.bottom;
+    })()`), `${theme}/${width}: enlarged analytics names, metrics and reasons remain complete without overlap or page overflow`);
   }
   // A complete navigation word must occupy one line at 320px and after text enlargement.
   await send('Emulation.setDeviceMetricsOverride',{width:320,height:568,deviceScaleFactor:1,mobile:true});

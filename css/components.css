@@ -4381,11 +4381,6 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 
 /* 30.09 · спокойный точный рабочий инструмент. Плотность — явный выбор
    шаблона, а не случайная высота карточек. */
-.dk-tile--compact { height: 100%; box-sizing: border-box; }
-.dk-tile--compact .dk-tile__head { align-items: flex-start; }
-.dk-tile--compact .dk-tile__label { display: block; overflow: visible; }
-.dk-tile--compact .dk-tile__icon { display: none; }
-.dk-tile--compact .dk-tile__row { align-items: flex-start; flex-direction: column; }
 .dk-car--list .dk-car__track { flex-wrap: wrap; overflow: visible; margin: 0; padding: 0; }
 .dk-car--list .dk-car__item { flex: 1 1 40%; width: auto; max-width: none; }
 .dk-car--list :is(.dk-car__pos, .dk-car__nav, .dk-car__dots) { display: none; }
@@ -4666,4 +4661,71 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-wrap--monitor .dk-tile__row > .dk-trend {
   min-height: var(--space-8);
   box-sizing: border-box;
+}
+
+/* Согласованный компактный KPI: число и изменение рядом, без спарклайна.
+   Высота определяется полными подписями; крупный текст может перенести дельту. */
+.dk-root .dk-tile--compact {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  grid-template-columns: none;
+  padding: calc(var(--space-4) * 2);
+  gap: var(--space-5);
+  border-radius: var(--radius-md);
+}
+.dk-root .dk-tile--compact > .dk-tile__head {
+  grid-column: auto;
+  align-self: stretch;
+  align-items: flex-start;
+  min-height: 3lh;
+  gap: var(--space-3);
+  font: var(--type-caption);
+}
+.dk-root .dk-tile--compact .dk-tile__label {
+  display: block;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: unset;
+}
+.dk-root .dk-tile--compact .dk-tile__icon {
+  display: inline-flex;
+  width: var(--space-6);
+  height: var(--space-6);
+  margin-top: var(--space-1);
+  background: transparent;
+  color: var(--ink-2);
+}
+.dk-root .dk-tile--compact .dk-tile__icon .dk-i {
+  width: var(--space-6);
+  height: var(--space-6);
+}
+.dk-root .dk-tile--compact > .dk-tile__row {
+  grid-column: auto;
+  flex: none;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: var(--space-4);
+}
+.dk-root .dk-tile--compact .dk-metric-lg { font: var(--type-metric-lg); }
+.dk-tile__unit { font: var(--type-caption); color: var(--ink-2); }
+.dk-root .dk-tile--compact .dk-trend {
+  min-height: calc(var(--space-5) * 2);
+  align-self: center;
+  border-radius: var(--radius-sm);
+  font: var(--type-caption);
+  padding: var(--space-1) var(--space-2);
+  gap: var(--space-1);
+}
+.dk-root .dk-tile--compact .dk-trend .dk-i { width: var(--space-6); height: var(--space-6); }
+@media (min-width: 768px) {
+  .dk-root .dk-tile--compact { padding: calc(var(--space-5) * 2); }
+  .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile--compact) { grid-column: span 2; }
+}
+@media (min-width: 1200px) {
+  .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile--compact) { grid-column: span 3; }
+}
+@media (min-width: 1024px) {
+  .dk-root .dk-tile--compact > .dk-tile__head { min-height: 2lh; }
 }

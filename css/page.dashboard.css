@@ -7,8 +7,6 @@
 #d-dashboard #d-view-causes .dk-col--third { grid-column: span 6; }
 #d-dashboard #d-view-causes .dk-col--full:has(#d-uptime) { grid-column: span 6; }
 @media (min-width: 1200px) {
-  #d-dashboard .dk-tile--compact .dk-tile__head { min-height: 0; }
-  #d-dashboard .dk-tile--compact .dk-tile__row { flex-direction: row; align-items: center; flex-wrap: wrap; gap: var(--gap-tight); }
   #d-dashboard #d-country-charts .dk-widget { min-height: 300px; }
   #d-dashboard #d-country-charts .dk-chart:not(.dk-chart--spark) { height: 200px; min-height: 200px; }
   #d-dashboard #d-country-charts .dk-list { max-height: 240px; overflow: auto; }
@@ -20,7 +18,11 @@
 }
 
 @media (min-width: 1200px) {
-  #d-dashboard #d-view-causes .dk-car__track { max-height: calc(var(--space-8) * 5); overflow: auto; }
+  #d-dashboard #d-view-causes .dk-car__track { max-height: 8lh; overflow: auto; overscroll-behavior: contain; align-items: stretch; scrollbar-width: thin; }
+  #d-dashboard #d-view-causes .dk-car__item { padding: var(--pad-widget); gap: var(--gap-tight); }
+  #d-dashboard #d-view-causes .dk-car__row { flex-wrap: nowrap; align-items: center; }
+  #d-dashboard #d-view-causes .dk-car__who { flex: 1; }
+  #d-dashboard #d-view-causes .dk-car__track::-webkit-scrollbar { display: block; width: var(--space-4); }
 }
 
 /* Approved responsive composition: preserve content, padding and type sizes. */
@@ -44,8 +46,6 @@
   #d-dashboard #d-risk-summary .dk-keys { grid-column: 1 / -1; }
   #d-dashboard .dk-grid--metrics > .dk-col--quarter { grid-column: span 2; }
 }
-/* Compact KPI have no sparkline column. Container layout must keep their
-   labels and values on the same leading edge at intermediate widths. */
-#d-dashboard .dk-tile--compact { align-items: stretch; grid-template-columns: none; }
-#d-dashboard .dk-tile--compact > .dk-tile__head,
-#d-dashboard .dk-tile--compact > .dk-tile__row { grid-column: auto; align-self: stretch; }
+#d-dashboard #d-view-causes .dk-uptime > .dk-caption { margin: 0; }
+
+#d-dashboard #d-view-causes .dk-car__text { display: block; overflow: visible; }

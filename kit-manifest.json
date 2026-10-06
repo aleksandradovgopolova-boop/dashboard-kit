@@ -1851,6 +1851,16 @@
    ],
    "api": [
     {
+     "name": "dk-tile--compact",
+     "type": "класс",
+     "what": "Компактная плитка без спарклайна; число и дельта рядом, полные подписи и адаптивный перенос."
+    },
+    {
+     "name": "dk-tile__unit",
+     "type": "класс",
+     "what": "Единица меньшего размера внутри dk-metric-lg, остаётся частью доступного числа."
+    },
+    {
      "name": "--accent",
      "type": "переменная в style",
      "what": "Тон значка и тренда; смысловые -ink токены."
@@ -1897,6 +1907,7 @@
     "dk-tile__icon",
     "dk-tile__label",
     "dk-tile__row",
+    "dk-tile__unit",
     "dk-trend",
     "dk-widget",
     "dk-widget--s",
@@ -4621,7 +4632,7 @@
  "hooks": {},
  "counts": {
   "parts": 46,
-  "classes": 412,
+  "classes": 413,
   "functions": 41,
   "chart_types": 12
  }

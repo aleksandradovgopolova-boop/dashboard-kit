@@ -273,17 +273,11 @@ t.selected; t.clear();
     "files": ["css/components.css", "js/dk-charts.js"], "scripts": ["vendor/echarts.min.js", "dk-chart-theme.js", "dk-charts.js"],
     "live_intro": "Четыре плитки в ряд. Цвет тренда — смысл (рост аварий красный, падение времени реакции зелёный), а не направление стрелки.",
     "live": """<div class="dk-grid">
-      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label">Аварии за сутки</span></div><div class="dk-tile__row"><span class="dk-metric-lg">23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div><div class="dk-chart dk-chart--spark" id="x-sp1"></div></div></div>
-      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg></span><span class="dk-tile__label">Обращений</span></div><div class="dk-tile__row"><span class="dk-metric-lg">1 284</span><span class="dk-trend" style="--accent:var(--calm-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg> −6%</span></div><div class="dk-chart dk-chart--spark" id="x-sp2"></div></div></div>
-      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--high-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span><span class="dk-tile__label">Среднее время реакции</span></div><div class="dk-tile__row"><span class="dk-metric-lg">42 мин</span></div><div class="dk-chart dk-chart--spark" id="x-sp3"></div></div></div>
-      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--calm-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span><span class="dk-tile__label">Бригад в работе</span></div><div class="dk-tile__row"><span class="dk-metric-lg">17</span><span class="dk-trend">без изменений</span></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--crit-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label">Аварии за сутки</span></div><div class="dk-tile__row"><span class="dk-metric-lg">23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg></span><span class="dk-tile__label">Обращений</span></div><div class="dk-tile__row"><span class="dk-metric-lg">1 284</span><span class="dk-trend" style="--accent:var(--calm-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg> −6%</span></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--high-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span><span class="dk-tile__label">Среднее время реакции</span></div><div class="dk-tile__row"><span class="dk-metric-lg">42 <span class="dk-tile__unit">мин</span></span></div></div></div>
+      <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--calm-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span><span class="dk-tile__label">Бригад в работе</span></div><div class="dk-tile__row"><span class="dk-metric-lg">17</span><span class="dk-trend">без изменений</span></div></div></div>
     </div>""",
-    "live_script": """  window.addEventListener('DOMContentLoaded', function () {
-    if (typeof dkChart !== 'function') return;
-    var days = ['09.09','10.09','11.09','12.09','13.09','14.09','15.09','16.09','17.09','18.09','19.09','20.09','21.09','22.09'];
-    var spark = { 'x-sp1': [12,14,11,16,15,19,17,21,18,22,20,24,21,23], 'x-sp2': [1410,1388,1402,1350,1361,1329,1344,1312,1330,1298,1305,1288,1296,1284], 'x-sp3': [38,41,39,44,42,46,43,47,44,45,43,44,41,42] };
-    Object.keys(spark).forEach(function (id) { dkChart(document.getElementById(id), { type: 'spark', categories: days, series: [{ name: 'Значение', data: spark[id] }] }); });
-  });""",
     "when_yes": ["Одно текущее значение, которое смотрят первым: аварий сейчас, время реакции.",
                  "Важно направление: тренд к прошлому периоду.",
                  "Плиток две–шесть в ряд; больше — уже таблица."],
@@ -299,11 +293,13 @@ t.selected; t.clear();
                 ("Число", "<code>dk-metric-lg</code>, Golos 600, пропорциональные цифры: число одно и в колонку не встаёт, а табличная единица в «17» дала бы зазор."),
                 ("Тренд", "<code>dk-trend</code>: стрелка и дельта со знаком; цвет — смысл изменения."),
                 ("Спарклайн", "<code>type: 'spark'</code>: форма без осей; шкала не от нуля — единственное место, где это правильно.")],
-    "sizes": "Плитка — это виджет размера S (<code>dk-widget--s</code>): поле в 14 вместо 18, потому что в четверти "
+    "sizes": "Компактный вариант без спарклайна: поля 20 px на десктопе и 16 px на телефоне, число 28 px, нейтральный значок 14 px; дельта рядом с числом и может переноситься при крупном тексте. Подписи полностью видны. Обычная плитка — это виджет размера S (<code>dk-widget--s</code>): поле в 14 вместо 18, потому что в четверти "
              "колонки поле в 18 съедает пятую часть ширины. В M и L та же разметка, но там уже график с осями. "
              "На месте шире 320 px (телефон, половина колонки) плитка перестраивается сама: число с трендом "
              "слева, спарклайн справа — иначе она растягивается в пустую полосу.",
-    "variants": [("dk-widget dk-widget--s dk-tile", "Плитка в четверть колонки.", "Ряд KPI сверху дашборда."),
+    "variants": [("dk-tile--compact", "Нейтральный значок, полная подпись, число и прямоугольная дельта в одной строке; без спарклайна.", "Компактный ряд основных KPI."),
+                 ("dk-tile__unit", "Небольшая единица рядом с числом.", "Минуты, рубли и другие меры, когда они нужны."),
+                 ("dk-widget dk-widget--s dk-tile", "Плитка в четверть колонки.", "Ряд KPI сверху дашборда."),
                  ("--accent", "Тон значка и тренда.", "Смысл: crit-ink, high-ink, calm-ink; без него нейтральный."),
                  ("dk-trend", "Дельта к прошлому периоду.", "Если сравнивать есть с чем."),
                  ("dk-chart--spark", "Спарклайн 48 px высотой (64 на широком месте), точка на последнем значении.", "Если есть ряд за период.")],
@@ -343,7 +339,9 @@ dkChart(document.getElementById('sp'), {
   series: [{ name: 'Аварии', data: [12, 14, 11, 16, 15, 19, 17] }]
 });
 </script>""",
-    "api": [("--accent", "переменная в style", "Тон значка и тренда; смысловые -ink токены."),
+    "api": [("dk-tile--compact", "класс", "Компактная плитка без спарклайна; число и дельта рядом, полные подписи и адаптивный перенос."),
+            ("dk-tile__unit", "класс", "Единица меньшего размера внутри dk-metric-lg, остаётся частью доступного числа."),
+            ("--accent", "переменная в style", "Тон значка и тренда; смысловые -ink токены."),
             ("dk-metric-lg / dk-metric-xl", "класс", "Кегль числа 28 или 40."),
             ("type: 'spark'", "dkChart", "Спарклайн; <code>area: false</code> убирает заливку.")],
     "related": [("component-chart.html", "График", "когда нужны оси"),

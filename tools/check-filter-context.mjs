@@ -208,7 +208,7 @@ try {
           for(const row of visualRows.values()){
             const numberTops=row.map(card=>card.querySelector('.dk-metric-lg').getBoundingClientRect().top);
             assert(Math.max(...numberTops)-Math.min(...numberTops)<1,'KPI values share a common row baseline');
-            const trends=row.map(card=>card.querySelector('.dk-trend')).filter(Boolean).map(el=>el.getBoundingClientRect().top);
+            const trends=row.map(card=>{const trend=card.querySelector('.dk-trend');if(!trend)return null;const box=trend.getBoundingClientRect(),value=card.querySelector('.dk-metric-lg').getBoundingClientRect();return box.top<value.bottom&&box.bottom>value.top?box.top:null}).filter(top=>top!==null);
             if(trends.length)assert(Math.max(...trends)-Math.min(...trends)<1,'KPI trends share a common row baseline');
             const sparks=row.map(card=>card.querySelector('.dk-chart--spark')).filter(Boolean).map(el=>el.getBoundingClientRect().bottom);
             if(sparks.length)assert(Math.max(...sparks)-Math.min(...sparks)<1,'KPI sparklines share the same bottom edge');
@@ -224,6 +224,9 @@ try {
             assert(valueBox.right<=box.right-parseFloat(style.paddingRight)+1,'metric stays inside card padding');
             assert(card.scrollWidth<=card.clientWidth+1,'KPI content must not overflow horizontally');
             assert(box.left>=-1&&box.right<=innerWidth+1,'KPI stays in viewport');
+            assert(card.classList.contains('dk-tile--compact')&&!card.querySelector('.dk-chart--spark,button'),'selected compact KPI must not add chart or dummy actions');
+            const icon=card.querySelector('.dk-tile__icon');assert(icon&&getComputedStyle(icon).display!=='none'&&icon.getBoundingClientRect().width===14,'compact KPI has a neutral 14px icon');
+            const trend=card.querySelector('.dk-trend');if(trend){const rect=trend.getBoundingClientRect();assert(parseFloat(getComputedStyle(trend).borderRadius)<10,'compact KPI delta is rectangular');assert(rect.left>=box.left+pad-1&&rect.right<=box.right-parseFloat(style.paddingRight)+1,'delta stays inside card padding');assert(rect.left>=valueBox.right-1||rect.top>=valueBox.bottom-1,'inline or wrapped delta must not overlap value');}
           });
           assert(document.documentElement.scrollWidth<=innerWidth+1,'shared monitor must not overflow horizontally');
           return 'PASS: ${page}/${theme}/${width} four KPI '+(innerWidth>=768?'one row':'2×2')+', full labels and leading values';
