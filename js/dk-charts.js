@@ -415,7 +415,8 @@
     else if (type === 'bar-h') {
       option.tooltip = { trigger: 'axis' };
       option.yAxis = { type: 'category', data: spec.categories || [], inverse: true };
-      option.xAxis = { type: 'value', name: spec.unit || '' };
+      // Exact end labels carry the values; grid lines add redundant visual noise.
+      option.xAxis = { type: 'value', name: spec.unit || '', splitLine: { show: false } };
 
       /* ЗНАЧЕНИЕ ПОДПИСАНО У КОНЦА ПОЛОСЫ, И ГЛАВНОЕ — У НУЛЕВОЙ ТОЖЕ.
 

@@ -101,8 +101,6 @@
         <h1 class="dk-top__title">Аварии</h1>
       </div>
 
-      <div class="dk-top__at" id="a-at"></div>
-
       <div class="dk-top__tools">
         <span class="dk-caption" id="a-period">Демонстрационные данные за сутки</span>
         <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -193,11 +191,10 @@
         </div>
 
         <div class="dk-grid" style="margin-top:var(--grid-gap)">
-          <div class="dk-col--two-thirds">
+          <div class="dk-col--half">
             <div class="dk-widget">
               <div class="dk-widget__head">
-                <h2 class="dk-widget__title">Аварии по часам · сутки</h2>
-                <span class="dk-widget__hint" title="Количество открытых аварий по часам"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
+                <h2 class="dk-widget__title"><span>Аварии по часам</span><span class="dk-widget__hint" title="Количество открытых аварий по часам"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span></h2>
                 <div class="dk-widget__actions">
                   <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Обновить" aria-label="Обновить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-refresh"/></svg></button>
                   <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Выгрузить" aria-label="Выгрузить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
@@ -207,10 +204,10 @@
             </div>
           </div>
 
-          <div class="dk-col--third">
+          <div class="dk-col--half">
             <div class="dk-widget">
               <div class="dk-widget__head">
-                <h2 class="dk-widget__title">По типам</h2>
+                <h2 class="dk-widget__title">Аварии по типам</h2>
               </div>
               <div class="dk-chart" id="a-kinds"></div>
             </div>
@@ -364,9 +361,6 @@
   }
 
   window.addEventListener('DOMContentLoaded', function () {
-    var at = document.getElementById('a-at');
-    if (at) at.textContent = 'Демонстрационные данные';
-
 
     строки();
 

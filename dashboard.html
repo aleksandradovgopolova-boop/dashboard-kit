@@ -138,15 +138,16 @@
           <a class="dk-tab" href="calendar.html">Календарь</a>
         </nav>
 
+        <div class="dk-seg" id="d-views" role="tablist" aria-label="Представления сводки"><button type="button" role="tab" id="d-tab-country" aria-controls="d-view-country" aria-selected="true" tabindex="0">Обзор</button><button type="button" role="tab" id="d-tab-work" aria-controls="d-view-work" aria-selected="false" tabindex="-1">Работа</button><button type="button" role="tab" id="d-tab-causes" aria-controls="d-view-causes" aria-selected="false" tabindex="-1">Аналитика</button></div>
         <div class="dk-banner dk-banner--crit" style="margin-bottom:var(--grid-gap)">
           <svg aria-hidden="true" class="dk-i"><use href="#ti-alert-triangle"/></svg>
           <div class="dk-banner__text">
             <div class="dk-banner__title">23 аварии требуют решения</div>
           </div>
-          <a class="dk-btn dk-btn--sm" href="accidents.html">Открыть аварии</a>
+          <a class="dk-btn dk-btn--sm" href="accidents.html" aria-label="Открыть аварии" title="Открыть аварии"><span>Открыть аварии</span><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></a>
         </div>
 
-<div class="dk-seg" id="d-views" role="tablist" aria-label="Представления сводки"><button type="button" role="tab" id="d-tab-country" aria-controls="d-view-country" aria-selected="true" tabindex="0">Ситуация страны</button><button type="button" role="tab" id="d-tab-work" aria-controls="d-view-work" aria-selected="false" tabindex="-1">Работа</button><button type="button" role="tab" id="d-tab-causes" aria-controls="d-view-causes" aria-selected="false" tabindex="-1">Причины и службы</button></div>
+
 <section id="d-view-country" role="tabpanel" aria-labelledby="d-tab-country">
 <div class="dk-grid dk-grid--overview"><div class="dk-col--full"><section id="d-risk-summary" class="dk-hero" style="--accent:var(--crit)">
               <div class="dk-hero__label">Регионов с высоким риском</div>

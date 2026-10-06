@@ -677,3 +677,10 @@
 @media (min-width: 1024px) {
   .dk-app--rail .dk-side { z-index: var(--z-dropdown); }
 }
+/* Keep navigation names whole. Intrinsic item widths also support enlarged
+   text: any necessary overflow stays within the navigation, not the page. */
+@media (max-width: 767px) {
+  .dk-tabbar { overflow-x: auto; overscroll-behavior-x: contain; }
+  .dk-tabbar__item { flex: 1 0 auto; min-width: max-content; }
+  .dk-tabbar__item > span { max-width: none; white-space: nowrap; overflow-wrap: normal; }
+}

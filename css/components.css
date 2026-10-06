@@ -4559,12 +4559,12 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 /* Компактный рабочий обзор. Высота следует окну, содержимое не обрезается.
    Модификатор opt-in: витрина компонентов и встроенные блоки сохраняют размер. */
 .dk-wrap--monitor {
-  --pad-widget: var(--space-6);
+  --pad-widget: calc(var(--space-4) * 2);
   --grid-gap: var(--space-5);
   --gap-section: var(--space-4);
 }
-.dk-wrap--monitor .dk-widget--s { padding: var(--space-6); }
-.dk-wrap--monitor .dk-hero { padding: var(--space-6); gap: var(--gap-tight); }
+.dk-wrap--monitor .dk-widget--s { padding: var(--pad-widget); }
+.dk-wrap--monitor .dk-hero { padding: var(--pad-widget); gap: var(--gap-tight); }
 .dk-wrap--monitor .dk-chart:not(.dk-chart--spark) { height: clamp(180px, 25svh, 240px); }
 .dk-wrap--monitor .dk-chart--sm { height: clamp(150px, 20svh, 180px); }
 .dk-wrap--monitor .dk-chart--spark { height: 36px; }
@@ -4599,14 +4599,14 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   .dk-wrap--monitor .dk-tile__row > .dk-metric-lg { max-width: 100%; overflow-wrap: anywhere; }
   .dk-wrap--monitor .dk-chart--spark { height: 32px; }
 }
-@media (max-width: 359px) {
-  .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile) { grid-column: 1 / -1; }
+@media (min-width: 768px) {
+  .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile) { grid-column: span calc(var(--grid-cols) / 4); }
 }
 
 @media (min-width: 768px) {
-  .dk-wrap--monitor { --pad-widget: var(--space-7); }
+  .dk-wrap--monitor { --pad-widget: calc(var(--space-5) * 2); }
   .dk-wrap--monitor .dk-widget--s,
-  .dk-wrap--monitor .dk-hero { padding: var(--space-7); }
+  .dk-wrap--monitor .dk-hero { padding: var(--pad-widget); }
 }
 
 @media (max-width: 1199px) {
@@ -4641,3 +4641,29 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 }
 
 .dk-region-result:empty { display: none; }
+/* Monitoring KPI share a readable title/value/trend structure. The reserve
+   grows with text; labels remain complete and sparklines share the bottom. */
+.dk-wrap--monitor .dk-tile { display: flex; flex-direction: column; align-items: stretch; }
+.dk-wrap--monitor .dk-tile__head {
+  font: var(--type-caption);
+  min-height: 3lh;
+  align-items: flex-start;
+}
+.dk-wrap--monitor .dk-tile__row {
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.dk-wrap--monitor .dk-tile > .dk-chart--spark { margin-top: auto; flex: none; }
+@media (min-width: 1024px) {
+  .dk-wrap--monitor .dk-tile__head { min-height: 2lh; }
+}
+
+/* Подсказка остаётся с заголовком и выравнивается с текстом. */
+.dk-widget__title:has(> .dk-widget__hint) { display: flex; align-items: center; gap: var(--gap-inline); }
+.dk-widget__title:has(> .dk-widget__hint) > span:first-child { min-width: 0; }
+.dk-wrap--monitor .dk-tile__row > .dk-trend {
+  min-height: var(--space-8);
+  box-sizing: border-box;
+}

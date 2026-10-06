@@ -50,6 +50,7 @@ try {
         hiddenCauses:!visible(document.getElementById('d-donut')),
         padding:charts.map(el=>getComputedStyle(el).paddingLeft),
         canvas:document.querySelector('#d-line canvas')?.width||0};})()`);
+    assert(await evaluate(`(()=>{const tabs=document.getElementById('d-views').getBoundingClientRect(),header=document.querySelector('.dk-top').getBoundingClientRect(),status=document.querySelector('.dk-banner').getBoundingClientRect();return tabs.top>=header.bottom-1&&tabs.bottom<=status.top+1;})()`), `${theme}: view tabs follow the heading before status and data`);
     assert(result.country.bottom <= 768 && result.height <= 768, `${theme}: country overview must fit the complete working viewport`);
     assert(result.width <= 1366, `${theme}: no horizontal page overflow`);
     assert(result.tileCount === 4 && result.tiles.every(tile=>Math.abs(tile.top-result.tiles[0].top)<1), `${theme}: four KPI in one row`);
@@ -76,12 +77,64 @@ try {
       await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});
       await evaluate(`new Promise(resolve=>setTimeout(resolve,300))`);
       assert(await evaluate(`document.documentElement.scrollWidth<=${width} && [...document.querySelectorAll('#d-views button')].every(el=>el.getBoundingClientRect().height>=44)`), `${theme}/${width}: mobile reflow and usable tab targets`);
+      assert(await evaluate(`(()=>{
+        const cards=[...document.querySelectorAll('#d-view-country .dk-tile')].map(el=>el.getBoundingClientRect());
+        return cards.length===4 && Math.abs(cards[0].top-cards[1].top)<1 && Math.abs(cards[2].top-cards[3].top)<1 &&
+          cards[2].top>cards[0].bottom && cards[1].left>cards[0].right &&
+          Math.abs(cards[0].left-cards[2].left)<1 && Math.abs(cards[1].left-cards[3].left)<1;
+      })()`), `${theme}/${width}: exactly four KPI in two rows and two columns`);
+      assert(await evaluate(`(()=>{
+        const tabs=[...document.querySelectorAll('#d-views [role="tab"]')];
+        const boxes=tabs.map(el=>el.getBoundingClientRect());
+        return tabs.map(el=>el.textContent.trim()).join('|')==='Обзор|Работа|Аналитика' &&
+          boxes.every(box=>Math.abs(box.top-boxes[0].top)<1 && box.left>=0 && box.right<=innerWidth);
+      })()`), `${theme}/${width}: approved short view names stay in one visible row`);
+      assert(await evaluate(`(()=>{
+        const text=document.querySelector('.dk-banner__text').getBoundingClientRect();
+        const action=document.querySelector('.dk-banner > .dk-btn').getBoundingClientRect();
+        return action.left>=text.right-1 && Math.abs((action.top+action.bottom)/2-(text.top+text.bottom)/2)<2 && action.height>=44;
+      })()`), `${theme}/${width}: status action stays on the right in the same row with a touch target`);
+
       await evaluate(`document.getElementById('d-tab-work').click()`);
       assert(await evaluate(`document.documentElement.scrollWidth<=${width} && document.getElementById('d-table').getBoundingClientRect().width>0`), `${theme}/${width}: work cards stay accessible`);
       await evaluate(`document.getElementById('d-tab-country').click()`);
     }
   }
-  console.log('PASS: complete 1366×768 country overview, four KPI, equal widgets, keyboard views, genuine work rows, both themes and mobile reflow');
+  // Intermediate containers must not right-align KPI because of sparkline grid rules.
+  for (const width of [768, 1024, 1199]) {
+    await send('Emulation.setDeviceMetricsOverride',{width,height:720,deviceScaleFactor:1,mobile:false});
+    await send('Emulation.setTouchEmulationEnabled',{enabled:false});
+    await evaluate(`document.getElementById('d-tab-country').click();new Promise(resolve=>setTimeout(resolve,300))`);
+    assert(await evaluate(`(()=>{
+      const grid=document.getElementById('d-country-charts').getBoundingClientRect();
+      const cards=[...document.querySelectorAll('#d-country-charts .dk-widget')].map(el=>el.getBoundingClientRect());
+      return cards.length===3 && cards.every((card,index)=>Math.abs(card.left-grid.left)<1 &&
+        Math.abs(card.right-grid.right)<1 && (!index || card.top>=cards[index-1].bottom));
+    })()`), `${width}: all three detailed widgets stack at the full available width`);
+    assert(await evaluate(` [...document.querySelectorAll('#d-view-country .dk-tile')].every(tile=>{
+      const card=tile.getBoundingClientRect();const head=tile.querySelector('.dk-tile__head').getBoundingClientRect();
+      const row=tile.querySelector('.dk-tile__row').getBoundingClientRect();
+      const pad=parseFloat(getComputedStyle(tile).paddingLeft);
+      return Math.abs(head.left-card.left-pad)<=2&&Math.abs(row.left-card.left-pad)<=2;
+    })`), `${width}: compact KPI share a leading edge with spacious padding`);
+  }
+  // A complete navigation word must occupy one line at 320px and after text enlargement.
+  await send('Emulation.setDeviceMetricsOverride',{width:320,height:568,deviceScaleFactor:1,mobile:true});
+  await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});
+  await evaluate(`new Promise(resolve=>setTimeout(resolve,300))`);
+  for (const enlarged of [false,true]) {
+    if (enlarged) await evaluate(`document.querySelectorAll('.dk-tabbar__item').forEach(item=>item.style.fontSize='24px')`);
+    assert(await evaluate(`(()=>{
+      const nav=document.querySelector('.dk-tabbar');
+      return document.documentElement.scrollWidth<=320 && [...nav.querySelectorAll('.dk-tabbar__item')].every(item=>{
+        const label=item.querySelector('span'), text=label.firstChild;
+        const first=document.createRange();first.setStart(text,0);first.setEnd(text,1);
+        const last=document.createRange();last.setStart(text,text.length-1);last.setEnd(text,text.length);
+        const itemBox=item.getBoundingClientRect();
+        return Math.abs(first.getBoundingClientRect().top-last.getBoundingClientRect().top)<1&&itemBox.height>=44;
+      });})()`), `320/${enlarged?'large':'normal'} text: complete bottom navigation names, touch targets, internal overflow`);
+  }
+  console.log('PASS: complete 1366×768 country overview, four KPI, equal widgets, keyboard views, genuine work rows, both themes, mobile 2×2 KPI/one-row tabs/status action, full-width tablet stack');
 } catch (error) {
   console.error(error.message);
   process.exitCode = 1;

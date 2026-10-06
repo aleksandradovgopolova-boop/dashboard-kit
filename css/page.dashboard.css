@@ -8,7 +8,7 @@
 #d-dashboard #d-view-causes .dk-col--full:has(#d-uptime) { grid-column: span 6; }
 @media (min-width: 1200px) {
   #d-dashboard .dk-tile--compact .dk-tile__head { min-height: 0; }
-  #d-dashboard .dk-tile--compact .dk-tile__row { flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: var(--gap-tight); }
+  #d-dashboard .dk-tile--compact .dk-tile__row { flex-direction: row; align-items: center; flex-wrap: wrap; gap: var(--gap-tight); }
   #d-dashboard #d-country-charts .dk-widget { min-height: 300px; }
   #d-dashboard #d-country-charts .dk-chart:not(.dk-chart--spark) { height: 200px; min-height: 200px; }
   #d-dashboard #d-country-charts .dk-list { max-height: 240px; overflow: auto; }
@@ -19,14 +19,33 @@
   #d-dashboard #d-view-work .dk-tablewrap { max-height: none; }
 }
 
-#d-dashboard .dk-wrap--monitor { --pad-widget: calc(var(--space-5) * 2); }
-#d-dashboard .dk-wrap--monitor .dk-widget--s,
-#d-dashboard .dk-wrap--monitor .dk-hero { padding: calc(var(--space-5) * 2); }
-@media (max-width: 767px) {
-  #d-dashboard .dk-wrap--monitor { --pad-widget: calc(var(--space-4) * 2); }
-  #d-dashboard .dk-wrap--monitor .dk-widget--s,
-  #d-dashboard .dk-wrap--monitor .dk-hero { padding: calc(var(--space-4) * 2); }
-}
 @media (min-width: 1200px) {
   #d-dashboard #d-view-causes .dk-car__track { max-height: calc(var(--space-8) * 5); overflow: auto; }
 }
+
+/* Approved responsive composition: preserve content, padding and type sizes. */
+@media (max-width: 1199px) {
+  #d-dashboard #d-country-charts > .dk-col--third { grid-column: 1 / -1; }
+  #d-dashboard #d-country-charts .dk-chart:not(.dk-chart--spark) { height: 240px; min-height: 240px; }
+}
+@media (max-width: 767px) {
+  #d-dashboard #d-views { display: flex; flex-wrap: nowrap; width: 100%; }
+  #d-dashboard #d-views button { flex: 1; min-width: 0; white-space: nowrap; }
+  #d-dashboard .dk-banner { display: flex; flex-wrap: nowrap; align-items: center; }
+  #d-dashboard .dk-banner > .dk-btn { flex: none; }
+  #d-dashboard .dk-banner__title { font: var(--type-body); }
+  #d-dashboard .dk-banner > .dk-btn { width: var(--control-md); min-width: var(--control-md); padding: 0; margin-left: 0; }
+  #d-dashboard .dk-banner > .dk-btn > span { display: none; }
+
+  #d-dashboard #d-risk-summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--gap-tight); align-items: center; }
+  #d-dashboard #d-risk-summary .dk-hero__label { grid-column: 1; grid-row: 1; }
+  #d-dashboard #d-risk-summary .dk-hero__row { grid-column: 2; grid-row: 1; margin: 0; }
+  #d-dashboard #d-risk-summary .dk-split,
+  #d-dashboard #d-risk-summary .dk-keys { grid-column: 1 / -1; }
+  #d-dashboard .dk-grid--metrics > .dk-col--quarter { grid-column: span 2; }
+}
+/* Compact KPI have no sparkline column. Container layout must keep their
+   labels and values on the same leading edge at intermediate widths. */
+#d-dashboard .dk-tile--compact { align-items: stretch; grid-template-columns: none; }
+#d-dashboard .dk-tile--compact > .dk-tile__head,
+#d-dashboard .dk-tile--compact > .dk-tile__row { grid-column: auto; align-self: stretch; }
