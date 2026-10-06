@@ -1,0 +1,25 @@
+<!doctype html><html lang="ru" class="dk-root" data-theme="light" data-accent="blue"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>Служба поддержки — тестовый обзор</title><!-- dashboard-kit: base, layout, tile, chart, list, table. Собрано: python3 tools/kit.py head layout tile chart list table -->
+<script src="../../../js/dk-theme.js"></script>
+<link rel="stylesheet" href="../../../css/tokens.primitives.css">
+<link rel="stylesheet" href="../../../css/tokens.semantic.css">
+<link rel="stylesheet" href="../../../css/components.css">
+<script src="../../../js/dk-util.js"></script>
+<script src="../../../js/dk-icons.js" defer></script>
+<script src="../../../vendor/echarts.min.js" defer></script>
+<script src="../../../js/dk-chart-theme.js" defer></script>
+<script src="../../../js/dk-charts.js" defer></script>
+<script src="../../../js/dk-table.js" defer></script>
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+<style>.overview{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-6)}.metric-card .dk-tile__label{white-space:normal;overflow:visible;text-overflow:clip}.metric-note{margin:0}.metric-card{display:flex;flex-direction:column;gap:var(--space-4)}.chart-note{margin:0}.dk-widget__body{display:grid;gap:var(--space-4)}@media(min-width:768px){.metric-card .dk-tile__row{flex-direction:row;align-items:baseline;justify-content:space-between}} </style></head><body class="dk-page"><main class="dk-wrap overview"><header class="dk-head"><div><h1 class="dk-h1">Служба поддержки</h1><p class="dk-caption">7 дней · тестовые данные</p></div><p class="dk-caption">Фокус: очередь и просрочки</p></header>
+<div class="dk-grid dk-grid--equal">
+<section class="dk-widget dk-tile dk-col--half metric-card"><div class="dk-tile__head"><h2 class="dk-tile__label">Очередь на конец периода</h2></div><div class="dk-tile__row"><span class="dk-metric-xl" id="queueEnd"></span><span class="dk-trend" id="queueDelta"></span></div><p class="dk-caption metric-note" id="queueNote"></p></section>
+<section class="dk-widget dk-tile dk-col--half metric-card"><div class="dk-tile__head"><h2 class="dk-tile__label">Доля просроченных входящих</h2></div><div class="dk-tile__row"><span class="dk-metric-xl" id="lateShare" style="color:var(--crit-ink)"></span><span class="dk-trend" style="--accent:var(--crit-ink)">SLA не соблюдается</span></div><p class="dk-caption metric-note" id="slaNote"></p></section>
+
+</div>
+<div class="dk-grid dk-grid--equal">
+<section class="dk-widget dk-col--two-thirds"><div class="dk-widget__head"><h2 class="dk-widget__title">Как меняется очередь</h2></div><div class="dk-widget__body"><p class="dk-caption chart-note" id="flowNote"></p><div class="dk-chart dk-chart--sm" id="queueChart"></div><p class="dk-caption chart-note">Возраст очереди неизвестен; просрочки оставшихся заявок не определены.</p></div></section>
+<section class="dk-widget dk-col--third"><div class="dk-widget__head"><h2 class="dk-widget__title">Просрочки по каналам</h2></div><div class="dk-widget__body"><p class="dk-caption chart-note">Email: 30 из 54 просрочек — больше всего</p><div class="dk-chart dk-chart--sm" id="channelChart"></div><p class="dk-caption chart-note">Объём входящих по каналам неизвестен: доли просрочки каналов не сравнить.</p></div></section>
+</div>
+
+<div><details class="dk-fold dk-fold--plain"><summary class="dk-fold__head"><span class="dk-fold__title">Точные числа и расчёт очереди</span><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary><div class="dk-fold__body"><p class="dk-caption">Источник: тестовые данные из задания. Очередь на конец дня = очередь на начало дня + входящие − закрытые.</p><div class="dk-tablewrap" style="--table-min:520px"><table class="dk-table dk-table--ruled"><caption class="dk-vh">Потоки и очередь по дням, заявок</caption><thead><tr><th scope="col">День</th><th scope="col" class="dk-td-num">Входящие</th><th scope="col" class="dk-td-num">Закрытые</th><th scope="col" class="dk-td-num">Очередь</th></tr></thead><tbody id="daily"></tbody></table></div><p class="dk-caption" id="channelsText"></p><p class="dk-caption">SLA оценивается по доле просроченных среди входящих за период, порог — 10%. Длительность SLA и возраст заявок не заданы.</p></div></details></div>
+</main><script src="support.js" defer></script></body></html>

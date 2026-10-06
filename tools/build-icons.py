@@ -23,7 +23,7 @@ OUT = Path(__file__).resolve().parent.parent / "js" / "dk-icons.js"
 
 ICONS = [
     # навигация и управление
-    "search", "settings", "filter", "x", "check", "minus", "plus",
+    "menu-2", "search", "settings", "filter", "x", "check", "minus", "plus",
     "chevron-down", "chevron-right", "chevron-left",
     "dots-vertical", "refresh", "download", "external-link",
     # виды дашборда

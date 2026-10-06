@@ -14,20 +14,19 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-car.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -43,7 +42,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Данные</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Данные</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-car.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>Лента карточек</h1>
     <p class="sc-hero__lead">Несколько объектов, у каждого своя история: «Резко выросли за день», «В фокусе дня». Карточки стоят в ряд и листаются вбок; видна одна история целиком и краешек следующей — подсказка, что их несколько.</p>
     <div class="sc-meta">
@@ -52,9 +62,9 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>Пролистайте ленту: счётчик и точки идут за текущей карточкой. На экране с мышью в шапке появляются стрелки — колесом вбок листает не каждая мышь.</p><div class="dk-car" id="x-car">
+    <p>Пролистайте ленту: счётчик и точки идут за текущей карточкой. На экране с мышью в шапке появляются стрелки — колесом вбок листает не каждая мышь.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-car" id="x-car">
       <div class="dk-car__head"><h3 class="dk-car__title">Резко выросли за день</h3><span class="dk-push dk-car__pos">1 из 3</span>
         <span class="dk-car__nav"><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="prev" aria-label="Предыдущая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-left"/></svg></button><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="next" aria-label="Следующая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button></span></div>
       <ul class="dk-car__track" role="list">
@@ -78,13 +88,13 @@
         </li>
       </ul>
       <div class="dk-car__dots"></div>
-    </div>
+    </div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Три–семь объектов, и у каждого есть рассказ: было → стало, причина, где.</li><li>Верх телефонного экрана под главной карточкой: «что изменилось сегодня».</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Объектов больше семи или их надо сравнивать между собой — <a href="component-rank.html">Рейтинг</a> или <a href="component-table.html">Таблица</a>: в ленте видна одна карточка за раз.</li><li>Одно число с тем, из чего оно сложено — <a href="component-hero.html">Главная карточка</a>.</li><li>Список событий по времени — <a href="component-list.html">Список</a>.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
     <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-car"><div class="dk-car__head"><h3 class="dk-car__title"><b class="sc-callout">1</b>Резко выросли за день</h3><span class="dk-push dk-car__pos">1 из 3</span><b class="sc-callout">2</b></div>
       <ul class="dk-car__track" role="list"><li class="dk-car__item" style="--accent:var(--crit)">
@@ -93,27 +103,27 @@
           <span class="dk-car__change"><b class="sc-callout">5</b><span class="dk-car__from">30</span><span class="dk-car__arrow" aria-hidden="true">→</span><span class="dk-car__to" style="--to:var(--crit-ink)">57</span></span></span>
         <p class="dk-car__text"><b class="sc-callout">6</b>Авария теплосети; отключения ГВС и отопления.</p></li></ul></div></div><ol class="sc-anatomy__list"><li><b>Заголовок ленты</b> — <code>dk-car__title</code>: что объединяет карточки.</li><li><b>Счётчик</b> — <code>dk-car__pos</code> «1 из 3» — словами; точки под лентой только подсказка.</li><li><b>Метки</b> — <code>dk-car__tags</code>: пилюли <code>dk-trend</code> — почему карточка здесь.</li><li><b>Кто</b> — <code>dk-car__name</code> и <code>dk-car__sub</code>: объект и где он.</li><li><b>Было → стало</b> — <code>dk-car__change</code>: прежнее мельче, нынешнее крупным числом смысла.</li><li><b>Рассказ</b> — <code>dk-car__text</code>, две строки: причина словами.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
     <p>Карточка 300 px, но не шире 82% экрана: на телефоне от следующей остаётся видимая полоса. Размер один.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>--accent на dk-car__item</code></td><td>Оттенок карточки по смыслу.</td><td>Свой у каждой: разные объекты — разный риск.</td></tr><tr><td><code>--from / --to</code></td><td>Цвет прежнего и нынешнего значения.</td><td>Смысл значения: high-ink, crit-ink.</td></tr><tr><td><code>a.dk-car__item / button.dk-car__item</code></td><td>Карточка-ссылка или кнопка.</td><td>Если карточка открывает объект.</td></tr><tr><td><code>dk-car__nav</code></td><td>Стрелки назад и вперёд.</td><td>Всегда в разметке; видны только с мышью.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-grid--even"><div class="dk-panel"><div class="dk-empty"><div class="dk-empty__t">Сегодня резких изменений нет</div><div>Ни один регион не вырос больше чем на 10 баллов за сутки.</div><div class="dk-empty__do">Лента вернётся, когда изменения появятся.</div></div></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
     <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Заголовок отвечает, почему эти карточки вместе: «Резко выросли за день».</li><li>Было → стало числами: «30 → 57».</li><li>Рассказ — причина: «авария теплосети», а не «рост показателя».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Лента из одной карточки — это главная карточка.</li><li>Двадцать карточек: до последней не долистают.</li><li>Пустая лента без слов, когда изменений нет.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Лента — список</b>: <code>ul role="list"</code>, карточки — пункты; скринридер называет, сколько их.</li><li><b>Позиция словами</b>: счётчик «1 из 3»; точки скрыты от скринридера (<code>aria-hidden</code>).</li><li><b>Было → стало</b> — <code>aria-label</code> на паре чисел: «было 30, стало 57», стрелка скрыта.</li><li><b>Стрелки</b> — кнопки с подписью; на краях ленты отключаются.</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-car"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Разметку пишет страница, <code>dkCar</code> только оживляет её: счётчик, точки и стрелки.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-car&quot; id=&quot;car&quot;&gt;
   &lt;div class=&quot;dk-car__head&quot;&gt;
@@ -145,7 +155,7 @@ car.index;    // текущая карточка
 car.go(2);    // пролистать к третьей
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkCar(el)</code></td><td>функция</td><td>Оживляет разметку ленты; возвращает управление.</td></tr><tr><td><code>index</code></td><td>число, чтение</td><td>Номер текущей карточки, с нуля.</td></tr><tr><td><code>go(i)</code></td><td>функция</td><td>Пролистать к карточке; движение гасится системной настройкой.</td></tr><tr><td><code>destroy()</code></td><td>функция</td><td>Снять обработчики; сторож dk-util.js сделает это сам, когда узел уйдёт.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-hero.html">Главная карточка</a> — одно главное число экрана</li><li><a href="component-rank.html">Рейтинг и сводка</a> — много объектов для сравнения</li><li><a href="component-list.html">Список</a> — события по времени</li></ul>
   </section>

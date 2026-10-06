@@ -51,11 +51,11 @@
   /* Теней нет. Подъём читается только осветлением поверхности: фон → виджет
      даёт ступень 1.18:1, и её видно без всякой тени.
      Единственное исключение — --elev-overlay для всплывающих слоёв, см. ниже. */
-  --elev-overlay: var(--shade-overlay-dark);
-  --elev-widget:  var(--lift-dark);
-  --elev-float:   var(--lift-float-dark);
-  --elev-hero:    var(--lift-hero-dark);
-  --elev-bar:     var(--lift-bar-dark);
+  --elev-overlay: none;
+  --elev-widget:  none;
+  --elev-float:   none;
+  --elev-hero:    none;
+  --elev-bar:     none;
   /* Кромка того, что лежит на фоне страницы. Рамка настоящая, border: она
      единственная в ките и разрешена только пилюле на доске (п. 8). */
   --edge-float:   var(--veil-light-09);
@@ -104,11 +104,11 @@
      на 1.05:1 — без тени виджет переставал читаться. Поэтому фон страницы
      углублён до ступени 1.16:1, сопоставимой с тёмной темой. Цвет не выдуман:
      это фон кита, смешанный с его же серой лестницей. */
-  --elev-overlay: var(--shade-overlay-light);
-  --elev-widget:  var(--lift-light);
-  --elev-float:   var(--lift-float-light);
-  --elev-hero:    var(--lift-hero-light);
-  --elev-bar:     var(--lift-bar-light);
+  --elev-overlay: none;
+  --elev-widget:  none;
+  --elev-float:   none;
+  --elev-hero:    none;
+  --elev-bar:     none;
   --edge-float:   var(--veil-dark-08);
 
   color-scheme: light;

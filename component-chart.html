@@ -14,22 +14,21 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="vendor/echarts.min.js" defer></script>
 <script src="js/dk-chart-theme.js" defer></script>
 <script src="js/dk-charts.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -45,7 +44,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Визуализация</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Визуализация</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-chart.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>График</h1>
     <p class="sc-hero__lead">Обёртка над ECharts, которая закрывает опасное и оставляет нужное: тема из токенов, «данных нет» вместо пустого прямоугольника, легенда от двух серий, линия порога, обозначение прогноза. Двух осей Y и сглаживания не будет.</p>
     <div class="sc-meta">
@@ -54,29 +64,29 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>Четыре типа из одиннадцати: столбцы с линией нормы, линия с прогнозом, накопительные столбцы палитрой состояний, пончик с числом в центре. Остальные — на <a href="showcase.html#grafiki">витрине</a>.</p><div class="dk-grid--even">
+    <p>Четыре типа из одиннадцати: столбцы с линией нормы, линия с прогнозом, накопительные столбцы палитрой состояний, пончик с числом в центре. Остальные — на <a href="showcase.html#grafiki">витрине</a>.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-grid--even">
       <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">По округам · норма 4</h3></div><div id="x-bar" class="dk-chart"></div></div>
       <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Аварии: факт и прогноз</h3></div><div id="x-forecast" class="dk-chart"></div></div>
       <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Состав риска</h3></div><div id="x-stack" class="dk-chart"></div></div>
       <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Доли тиров</h3></div><div id="x-donut" class="dk-chart"></div></div>
-    </div>
+    </div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Читатель должен увидеть динамику, сравнить величины, увидеть состав или долю — вопрос выбирает тип (таблица на витрине).</li><li>Есть ширина: график с осями живёт в M и L, в S — только спарклайн.</li><li>Значений на оси категорий до сорока; дальше это сырые данные, а не картинка.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Одно текущее значение — <a href="component-tile.html">KPI-плитка</a>, а не столбчатый график из одного столбца.</li><li>Больше семи значимых категорий — <a href="component-table.html">Таблица</a>, а не ещё больше цветов.</li><li>«Где» на территории — <a href="component-map.html">Регионы</a>.</li></ul></div></div><div class="sc-note"><h3>Масштаб и пропорции</h3><ul class="sc-list"><li>Визуальный вес соответствует важности вопроса; размеры сопоставимых KPI одинаковы.</li><li>График получает площадь для читаемых подписей, карточки — достаточные поля.</li><li>Пропорции выбираются по данным и задаче; золотое сечение не является обязательной сеткой дашборда.</li></ul><p>Пример: Основной вопрос выделен, четыре KPI стоят равным рядом перед подробными графиками.</p><p>Проверка: Проверить иерархию без декоративных эффектов и чтение реальных значений.</p><p><a href="https://www.uprock.ru/education/masshtab-i-proporcii-v-kompozicii">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Дашборд по вопросу пользователя</h3><ul class="sc-list"><li>Сначала определить аудиторию и решение, которому помогает экран: мониторинг текущей ситуации, анализ причин или работа с объектами. Состав виджетов следует этим вопросам.</li><li>Обзор показывает основную картину без открытия деталей: 5 ± 2 главных KPI, максимум семь, затем объясняющие графики. Главная карточка нужна только для дополнительного контекста или состава.</li><li>Период, единицы и актуальность делают показатели сопоставимыми. Разные задачи можно разделить вкладками; данные для одновременной сверки остаются рядом.</li></ul><p>Пример: «Ситуация страны»: KPI и обзор динамики, округов и событий; рабочая таблица заявок — в отдельной вкладке той же задачи.</p><p>Проверка: По первому виду назвать ситуацию, изменение и зону внимания; затем найти объект и вернуться. Проверить 1366×768 без уменьшения текста и полей.</p><p><a href="https://www.uprock.ru/education/kak-sdelat-horoshiy-dashbord">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Иерархия без декоративного шума</h3><ul class="sc-list"><li>Важность выражается порядком, типографикой и группировкой. Сопоставимые показатели имеют один визуальный вес; вторичные действия не спорят с основным ответом.</li><li>Цвет дополняет смысл статуса текстом или значком. Акцент продукта и цвета риска имеют разные роли; текстуры, штрихи и пунктир не добавляются ради выразительности.</li><li>Иерархия сохраняется между экранами и в узком окне: не удалять заголовки групп и единицы только ради компактности. Пропорции и уровни берутся из токенов и задачи.</li></ul><p>Пример: Спокойные поверхности, ровный ряд KPI, читаемые заголовки и текстовый статус рядом с цветом риска.</p><p>Проверка: Проверить порядок чтения без цвета и декоративных эффектов; затем сравнить одинаковые показатели на соседних экранах и при увеличенном тексте.</p><p><a href="https://www.uprock.ru/education/vizualnaya-ierarhiya-zachem-nuzhna-na-sayte-i-kak-ee-sozdat">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
     <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title"><b class="sc-callout">1</b>Аварии по дням</h3><div class="dk-widget__actions"><button class="dk-iconbtn dk-iconbtn--sm" title="Обновить" aria-label="Обновить"><svg class="dk-i"><use href="#ti-refresh"/></svg></button></div></div>
       <div class="dk-chart" id="x-an" style="position:relative"><b class="sc-callout" style="position:absolute;left:var(--space-5);top:var(--space-5);z-index:1">2</b><b class="sc-callout" style="position:absolute;right:var(--space-8);top:34%;z-index:1">3</b><b class="sc-callout" style="position:absolute;left:44%;top:16%;z-index:1">4</b><b class="sc-callout" style="position:absolute;left:46%;bottom:var(--space-3);z-index:1">5</b></div></div></div><ol class="sc-anatomy__list"><li><b>Заголовок виджета</b> — что и за какой период; единица — в подписи оси или в заголовке, не в каждой подписи.</li><li><b>Ось значений</b> — от нуля у столбцов всегда; шаг целый, если данные целые. У спарклайна оси нет.</li><li><b>Линия порога</b> — <code>target</code>: серая сплошная линия с подписью; ось её не обрезает.</li><li><b>Прогноз</b> — <code>forecast: n</code>: последние n точек тонкой линией с ромбами и подписью «Прогноз»; в легенде отдельной строкой не стоит.</li><li><b>Легенда</b> — появляется от двух серий и стоит внизу, под тем, что объясняет.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
     <p>Высота — классами контейнера: <code>dk-chart--sm</code> 180, по умолчанию 220, <code>--lg</code> 340, <code>--xl</code> 440, <code>--spark</code> 48. Ширина — от сетки; график перестраивается при изменении ширины больше чем на десятую часть.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>type</code></td><td>line · area · step · bar · bar-stacked · bar-h · pie · donut · radar · sankey · scatter · spark</td><td>По вопросу читателя — таблица на витрине.</td></tr><tr><td><code>palette: &#x27;status&#x27;</code></td><td>Цвета состояния: crit, high, calm, nodata по порядку категорий.</td><td>Категории — состояние, а не принадлежность.</td></tr><tr><td><code>highlight: &#x27;имя&#x27;</code></td><td>Одна серия цветом, остальные серым.</td><td>История «вот эта выросла».</td></tr><tr><td><code>target</code></td><td>Линия порога или цели.</td><td>Операционные экраны — всегда.</td></tr><tr><td><code>forecast: n</code></td><td>Тонкая линия с ромбами.</td><td>Прогноз или незакрытые данные.</td></tr><tr><td><code>trend: true</code></td><td>Линия тренда у точечного.</td><td>Направление связи; ничего не доказывает.</td></tr><tr><td><code>total</code></td><td>Число в центре пончика.</td><td>Элемент разметки, не холста.</td></tr><tr><td><code>empty: {title, text, hint}</code></td><td>Тексты пустого состояния.</td><td>Всегда, если стандартные не подходят.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-grid--even">
       <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Данных нет</h3></div><div id="x-empty" class="dk-chart"></div></div>
@@ -85,19 +95,19 @@
     </div>
     <div class="sc-note"><b>Пустое состояние с третьей строкой.</b> «Данных нет» без «что делать» — тупик; обёртка по умолчанию отвечает на три вопроса, тексты меняются через <code>empty</code>.</div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
     <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Заголовок виджета с периодом: «Аварии по дням · 14 дней».</li><li>Единица один раз: в заголовке или в подписи оси (<code>unit</code>).</li><li>До шести серий; седьмая повторит цвет первой, и обёртка предупредит в консоли.</li><li>Ноль на столбце подписан, если категорий до восьми; в плотном ряду ноль — промежуток.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Две оси Y — обёртка не соберёт.</li><li>Сглаженная линия — показывает значения, которых не было.</li><li>Красная серия «потому что третья»: красный означает «плохо».</li><li>Пончик из девяти секторов — обёртка свернёт хвост в «Прочее».</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Холст без текста.</b> График — canvas; скринридер видит только заголовок виджета. Значения, которые важны, повторяются текстом: плитка, таблица, число в центре пончика (оно — элемент разметки).</li><li><b>Движение.</b> Системная настройка «меньше движения» выключает анимацию графика.</li><li><b>Цвет.</b> Палитра серий проверена на три вида дальтонизма (ПАЛИТРА); палитра состояний — на различимость смысла (СМЫСЛ).</li><li><b>Подсказка</b> при наведении не заменяет текст: на таче и с клавиатуры её нет.</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-chart,dk-empty"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Подключать после echarts и dk-chart-theme.js. Контейнер с высотой; обёртка сама следит за темой и размером.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-chart&quot; id=&quot;hours&quot;&gt;&lt;/div&gt;
 
@@ -115,7 +125,7 @@ c.instance;                    // экземпляр ECharts — в обход �
 c.destroy();                   // сторож похоронит и сам, когда узел уйдёт
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>type</code></td><td>строка</td><td>Тип графика; неизвестный — ошибка в консоли.</td></tr><tr><td><code>categories / series / data</code></td><td>массивы</td><td>Данные; у pie/donut — data, у sankey — nodes и links.</td></tr><tr><td><code>target</code></td><td>число | {value, label}</td><td>Линия порога на графиках с осями.</td></tr><tr><td><code>palette: &#x27;status&#x27;</code></td><td>строка</td><td>Четыре цвета состояния по порядку категорий.</td></tr><tr><td><code>highlight, forecast, trend, total, unit, labels</code></td><td>см. варианты</td><td>Модификаторы типов.</td></tr><tr><td><code>label</code></td><td>строка</td><td>Заголовок для скринридера. Подпись из данных — крайние значения, доли, норма — дописывается сама.</td></tr><tr><td><code>update(spec) / instance / destroy()</code></td><td>API</td><td>Перерисовать; доступ к ECharts; убрать.</td></tr><tr><td><code>exportImage()</code></td><td>Promise<Blob></td><td>PNG текущей отрисовки, отклоняет Promise без готового экземпляра.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-tile.html">KPI-плитка</a> — спарклайн в четверти колонки</li><li><a href="component-legend.html">Фильтры-легенда</a> — легенда, которая ещё и фильтрует</li><li><a href="showcase.html#grafiki">Витрина: графики</a> — все одиннадцать типов и таблица выбора</li><li><a href="vendor/echarts.modules.json">Список модулей ECharts</a> — что собрано в урезанный движок</li></ul>
   </section>

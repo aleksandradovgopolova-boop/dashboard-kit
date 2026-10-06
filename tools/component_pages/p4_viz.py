@@ -203,7 +203,7 @@ m.setValues(next);                     // шкала пересчитается
     if (typeof dkCalendar !== 'function') return;
     dkCalendar(document.getElementById('x-cal'), { month: '2026-09-01', events: [
       { date: '2026-09-05', name: 'Замена задвижки', kind: 'high' }, { date: '2026-09-09', name: 'Плановое отключение ГВС', kind: 'plan' },
-      { date: '2026-09-14', name: 'Прорыв, Советский р-н', kind: 'crit' }, { date: '2026-09-14', name: 'Аварийная бригада', kind: 'high' },
+      { date: '2026-09-14', name: 'Прорыв, Советский р-н', kind: 'crit' }, { date: '2026-09-14', name: 'Проверка данных', kind: 'high' },
       { date: '2026-09-14', name: 'Подвоз воды', kind: 'event' }, { date: '2026-09-14', name: 'Информирование жителей', kind: 'event' },
       { date: '2026-09-17', name: 'Подача восстановлена', kind: 'calm' }, { date: '2026-09-23', name: 'Прорыв теплотрассы', kind: 'crit' },
       { date: '2026-09-28', name: 'Проверка готовности к зиме', kind: 'event' }] });
@@ -216,7 +216,7 @@ m.setValues(next);                     // шкала пересчитается
                 "Работала служба или нет по времени — <a href=\"component-uptime.html\">Доступность служб</a>."],
     "anatomy_html": """<div class="dk-cal" data-view="month"><div class="dk-cal__head"><b class="sc-callout">1</b><div class="dk-seg dk-seg--sm" role="group" aria-label="Вид"><button type="button" aria-pressed="true">Месяц</button><button type="button" aria-pressed="false">Неделя</button></div><span class="dk-cal__month"><b class="sc-callout">2</b>Сентябрь 2026</span></div>
       <div class="dk-cal__grid" style="grid-template-columns:repeat(3, minmax(0,1fr))"><button type="button" class="dk-cal__day"><span class="dk-cal__n"><b class="sc-callout">3</b>13</span></button>
-        <button type="button" class="dk-cal__day" data-today="true"><span class="dk-cal__n"><b class="sc-callout">4</b>14</span><span class="dk-cal__e" style="--accent:var(--crit)"><b class="sc-callout">5</b>Прорыв</span><span class="dk-cal__e" style="--accent:var(--high)">Бригада</span><span class="dk-cal__e" style="--accent:var(--event)">Подвоз воды</span><span class="dk-cal__more"><b class="sc-callout">6</b>ещё 1</span></button>
+        <button type="button" class="dk-cal__day" data-today="true"><span class="dk-cal__n"><b class="sc-callout">4</b>14</span><span class="dk-cal__e" style="--accent:var(--crit)"><b class="sc-callout">5</b>Прорыв</span><span class="dk-cal__e" style="--accent:var(--high)">Проверка</span><span class="dk-cal__e" style="--accent:var(--event)">Подвоз воды</span><span class="dk-cal__more"><b class="sc-callout">6</b>ещё 1</span></button>
         <button type="button" class="dk-cal__day"><span class="dk-cal__n">15</span></button></div></div>""",
     "anatomy": [("Переключатель вида", "сегмент «месяц / неделя»."),
                 ("Название месяца", "с годом; стрелки листают."),

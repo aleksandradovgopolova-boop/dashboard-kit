@@ -14,20 +14,19 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-pager.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -43,7 +42,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Фильтры</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Фильтры</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-pager.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>Пагинация</h1>
     <p class="sc-hero__lead">Листать длинный список по страницам, называя, что и сколько показано: «21–40 из 89 регионов».</p>
     <div class="sc-meta">
@@ -52,15 +62,15 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>Счётчик слева отвечает «что я вижу», кнопки справа — «куда дальше». Текущая страница — серым, как любое выбранное управление.</p><div class="dk-panel"><div id="x-pager"></div></div>
+    <p>Счётчик слева отвечает «что я вижу», кнопки справа — «куда дальше». Текущая страница — серым, как любое выбранное управление.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div id="x-pager"></div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Записей больше, чем помещается на экране, и они равноправны: журнал аварий, список заявок.</li><li>Человеку важно знать, сколько всего и где он сейчас.</li><li>Сортировка и фильтры должны работать по всему набору, а не по видимой странице.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Записей до тридцати — просто прокрутка; полосу прокрутки не прячут.</li><li>Лента событий, которую читают сверху вниз, — кнопка «Показать ещё» в <a href="component-list.html">Списке</a>.</li><li>Рейтинг — <a href="component-rank.html">Рейтинг</a>: там показывают верх, а не листают.</li></ul></div></div><div class="sc-note"><h3>Фильтрация</h3><ul class="sc-list"><li>Область фильтра понятна; применённые значения видны. Все затронутые виджеты используют один срез.</li><li>Поиск, фильтрация и сортировка имеют разные роли. После изменения набора страница результатов остаётся допустимой.</li><li>Нет результатов — честное состояние с возможностью снять ограничение; не подменять его похожими данными молча. Сброс — компактный крестик.</li><li>Модель применения понятна: сразу либо черновик с явным «Применить». Черновик не выдаётся за текущий срез; отмена сохраняет предыдущий срез.</li></ul><p>Пример: KPI, карта и таблица обновлены из одного среза; возврат сохраняет фильтры.</p><p>Проверка: Проверить совместные фильтры, пустую выдачу, сброс, пагинацию и возвращение из деталей.</p><p><a href="https://www.uprock.ru/education/filtraciya-na-saytah">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Таблицы для чтения и сравнения</h3><ul class="sc-list"><li>Оставлять столбцы, необходимые для задачи; ключевой объект расположен первым. Текст выравнивается по началу строки, сопоставимые числа — по правому краю; единицы указаны в заголовке или у значения.</li><li>Пустое значение, отсутствие данных и ноль различаются. Статусы объясняются текстом; оформление строк помогает читать, без интенсивной заливки и лишней сетки.</li><li>При прокрутке сохранять связь ячейки с заголовком и объектом. На узком окне сравнение допускает прокрутку внутри таблицы, отдельные объекты могут стать карточками; не уменьшать шрифт и не превращать данные в изображение.</li><li>Пагинация, поиск и сортировка сохраняют допустимую позицию и контекст возврата. Выбранная модель длинной таблицы согласуется с задачей; статья не задаёт всем таблицам один режим.</li></ul><p>Пример: Ключевой объект и заголовки доступны при чтении; числа сравниваются по колонке; возврат сохраняет фильтр и страницу.</p><p>Проверка: Сравнить две строки, найти запись, открыть детали и вернуться; проверить длинные заголовки, отсутствие значения, сортировку и управление клавиатурой при внутренней прокрутке.</p><p><a href="https://www.uprock.ru/education/kak-rabotat-s-tablicami-v-vebe">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
     <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-pager"><div class="dk-pager__count"><b class="sc-callout">1</b><b>41–60</b> из <b>89</b> регионов</div>
       <div class="dk-pager__nav"><button type="button" class="dk-iconbtn dk-iconbtn--sm" aria-label="Назад"><b class="sc-callout">2</b><svg class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg></button>
@@ -68,11 +78,11 @@
         <button type="button" class="dk-iconbtn dk-iconbtn--sm" aria-label="Вперёд"><svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button>
         <label class="dk-pager__size"><b class="sc-callout">4</b><span class="dk-caption">по</span><div class="dk-field"><select aria-label="Записей на странице"><option>20</option></select><svg class="dk-i"><use href="#ti-chevron-down"/></svg></div></label></div></div></div><ol class="sc-anatomy__list"><li><b>Счётчик</b> — «41–60 из 89 регионов»: диапазон, всего и существительное в нужном падеже.</li><li><b>Стрелки</b> — назад и вперёд; на краях недоступны, но не исчезают.</li><li><b>Страницы</b> — первая, последняя и соседи текущей; между ними «…». Текущая — <code>aria-current="page"</code>, серая.</li><li><b>Размер страницы</b> — необязательный выбор «по 10 / 20 / 50»; при смене счётчик пересчитывается.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
     <p>Размер один; на узком экране номера страниц сворачиваются в «3 из 5» между стрелками — счётчик и стрелки остаются всегда.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>sizes: [10, 20, 50]</code></td><td>Выбор размера страницы.</td><td>Длинные журналы.</td></tr><tr><td><code>sizes: null</code></td><td>Размер не меняется.</td><td>По умолчанию.</td></tr><tr><td><code>noun: [&#x27;запись&#x27;, &#x27;записи&#x27;, &#x27;записей&#x27;]</code></td><td>Склонение существительного.</td><td>Всегда, если считаем не записи.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-panel"><div class="dk-stack">
       <div class="dk-pager"><div class="dk-pager__count"><b>1–20</b> из <b>89</b> регионов</div><div class="dk-pager__nav"><button type="button" class="dk-iconbtn dk-iconbtn--sm" aria-label="Назад" disabled><svg class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg></button><div class="dk-pager__pages"><button type="button" class="dk-pager__p" aria-current="page">1</button><button type="button" class="dk-pager__p">2</button><button type="button" class="dk-pager__p">3</button><span class="dk-pager__gap">…</span><button type="button" class="dk-pager__p">5</button></div><button type="button" class="dk-iconbtn dk-iconbtn--sm" aria-label="Вперёд"><svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button></div></div>
@@ -80,19 +90,19 @@
     </div></div>
     <div class="sc-note"><b>Первая страница и пустой список.</b> На первой странице стрелка «назад» недоступна, но на месте. При нуле записей пагинация не прячется, а честно пишет «0 регионов» — пустое состояние показывает сам список.</div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
     <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>«21–40 из 89 регионов» — диапазон, всего, существительное в падеже.</li><li>Существительное — то, что считаем: регионов, заявок, аварий.</li><li>Итог отрицательным не бывает: сдвиг ограничен нулём.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>«Страница 3 из 5» — не говорит, сколько записей.</li><li>«89 записей» для аварий — записи бывают у бухгалтера.</li><li>Пагинация, которая исчезает на одной странице: человек не знает, что видит всё.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Роли.</b> Текущая страница — <code>aria-current="page"</code>; стрелки — кнопки с <code>aria-label</code>.</li><li><b>Живая область.</b> Счётчик объявляется скринридеру при смене страницы.</li><li><b>Клавиатура.</b> Обычные кнопки: Tab, Enter.</li><li><b>Контраст.</b> Текущая страница залита <code>--control-on</code>, цифра на ней 4,79 / 5,04:1.</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-pager"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Контейнер пустой, разметку строит скрипт. Данные листает страница по <code>onChange</code>.</p><pre class="sc-code"><code>&lt;div id=&quot;pager&quot;&gt;&lt;/div&gt;
 
@@ -106,7 +116,7 @@ var pg = dkPager(document.getElementById(&#x27;pager&#x27;), {
 pg.page; pg.size; pg.setTotal(120);
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>total</code></td><td>число</td><td>Сколько всего записей.</td></tr><tr><td><code>size / sizes</code></td><td>число / массив</td><td>Размер страницы и доступные размеры.</td></tr><tr><td><code>page</code></td><td>число</td><td>Начальная страница.</td></tr><tr><td><code>noun</code></td><td>массив из трёх форм</td><td>«регион, региона, регионов».</td></tr><tr><td><code>onChange(e)</code></td><td>функция</td><td>e.page, e.size при смене.</td></tr><tr><td><code>page / size / setTotal(n)</code></td><td>API</td><td>Читать; пересчитать после фильтра.</td></tr><tr><td><code>update({total,page,size}) / destroy()</code></td><td>API</td><td>Тихое восстановление, page ограничивается количеством страниц. Старые goTo/setTotal сохранены.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — что листают</li><li><a href="component-list.html">Список</a> — «Показать ещё» вместо страниц</li><li><a href="accidents.html">Страница «Аварии»</a> — пагинация журнала с сортировкой по всему набору</li></ul>
   </section>

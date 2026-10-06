@@ -233,6 +233,12 @@
   align-items: start;
 }
 
+/* Равная высота карточек одного ряда без ограничения содержимого и прокрутки.
+   dk-grid--stretch оставлен для ряда, где высоту задаёт карта/первый блок. */
+.dk-grid--equal { align-items: stretch; }
+.dk-grid--equal > .dk-widget { height: 100%; box-sizing: border-box; }
+.dk-grid--equal > [class*="dk-col--"] > .dk-widget { height: 100%; box-sizing: border-box; }
+
 /* --- типографика ----------------------------------------------------------
    Готовые классы под именованные стили. Имена совпадают с названиями стилей
    в фигме: H1 там — dk-h1 здесь, спорить не о чем.                           */
@@ -1339,20 +1345,8 @@
   white-space: nowrap;
 }
 
-/* --- главная карточка экрана ---------------------------------------------
-   Одно главное число экрана с тем, из чего оно сложено: «25 из 89», метка
-   смысла, полоса состава и чипы с изменением. Сделано по мониторингу, на
-   который владелец кита равняет телефон (DECISIONS.md, п. 8): там это
-   первое, что человек видит, и отвечает оно сразу на три вопроса — сколько,
-   много ли это и из чего состоит.
-
-   НА ЭКРАНЕ ОНА ОДНА — по той же причине, что и акцентный блок сводки:
-   она отвечает на «куда смотреть первым», а два ответа — это отсутствие
-   ответа. Поэтому ей, и только ей, разрешены глубокая тень (--elev-hero) и
-   оттенок по смыслу: --accent красит верхний левый угол в 18% смыслового
-   цвета и уходит в поверхность к середине. Оттенок — это смысл, а не
-   украшение: без --accent карточки нет цвета вовсе, акцентом бренда она не
-   красится никогда (у бренда нет смысла «плохо»). */
+/* Главная карточка отличается иерархией числа. Нейтральная поверхность,
+   тонкая граница и отсутствие декоративной тени — решение 30.09.2026. */
 .dk-hero {
   display: flex;
   flex-direction: column;
@@ -2568,7 +2562,7 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
    соседей друг от друга — обводки у нас нет, но здесь фигуры накладываются,
    и без разделителя они сливаются в пятно. */
 .dk-avatars { display: inline-flex; align-items: center; }
-.dk-avatars .dk-avatar { margin-left: calc(var(--space-4) * -1); box-shadow: 0 0 0 2px var(--surface); }
+.dk-avatars .dk-avatar { margin-left: calc(var(--space-4) * -1); outline: 2px solid var(--surface); outline-offset: -2px; }
 .dk-avatars .dk-avatar:first-child { margin-left: 0; }
 .dk-avatars .dk-avatar--more { background: var(--surface-2); color: var(--ink-3); }
 
@@ -3578,6 +3572,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-fold { border-radius: var(--radius-lg); background: var(--surface-2); }
 
 .dk-fold__head {
+  min-height:44px;
   display: flex;
   align-items: center;
   gap: var(--gap-tight);
@@ -3599,6 +3594,13 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-fold__head .dk-i { flex: none; color: var(--ink-3); transition: transform var(--duration-fast) var(--ease-out); }
 .dk-fold[open] .dk-fold__head .dk-i { transform: rotate(180deg); }
 .dk-fold__body { padding: 0 var(--space-6) var(--space-6); }
+
+/* Для определений метрик: раскрытие тише данных, открытое состояние читается
+   по стрелке и разделителю, а не как большая залитая кнопка. */
+.dk-fold--plain { background: transparent; border-radius: 0; border-top: var(--hairline) solid var(--rule); }
+.dk-fold--plain > .dk-fold__head { padding: var(--space-4) 0; min-height: 44px; border-radius: 0; }
+.dk-fold--plain > .dk-fold__body { padding: var(--space-4) 0 var(--space-6); }
+.dk-fold--plain[open] > .dk-fold__head { border-bottom: var(--hairline) solid var(--rule); }
 
 /* --- полоса доступности ----------------------------------------------------
    Сутки делениями. Каждое деление — равный отрезок времени, и его длину надо
@@ -4457,6 +4459,94 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-chips__item{ display:inline-flex; align-items:center; gap:var(--space-3); max-width:100%; background:var(--control-soft); border-radius:var(--radius-md); padding-left:var(--control-pad-sm); }
 .dk-chips__text{ min-width:0; overflow-wrap:anywhere; font:var(--type-body); }
 
+/* Numeric count inside a label or control; never a standalone KPI. */
+.dk-counter{ display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; padding:0 var(--space-3); border-radius:var(--radius-full); background:var(--surface-3); color:var(--ink); font:var(--type-caption); font-weight:var(--weight-ui-strong); font-variant-numeric:tabular-nums; flex:none; }
+.dk-counter--sm{ min-width:16px; height:16px; padding:0 var(--space-2); }
+.dk-counter--brand{ background:var(--control-soft); color:var(--control-on); }
+.dk-counter--plain{ background:transparent; color:inherit; }
+.dk-counter--crit{ background:color-mix(in srgb, var(--crit) 18%, transparent); color:var(--crit-ink); }
+/* Keep the count readable inside an accent button. */
+.dk-btn--primary .dk-counter{ background:var(--brand-ink); color:var(--brand); }
+.dk-fchip--secondary{ background:var(--surface-2); color:var(--ink-2); }
+.dk-fchip__x:disabled{ color:var(--ink-3); cursor:default; }
+.dk-fchip__x .dk-i{ width:14px; height:14px; }
+
+/* Adaptive Tabler SVGs: compact mouse UI / regular touch UI. */
+.dk-i.dk-i--adaptive{ width:24px; height:24px; }
+.dk-btn--sm .dk-i.dk-i--adaptive,.dk-iconbtn--sm .dk-i.dk-i--adaptive{ width:20px; height:20px; }
+@media(hover:hover) and (pointer:fine){
+  .dk-i.dk-i--adaptive{ width:20px; height:20px; }
+  .dk-btn--sm .dk-i.dk-i--adaptive,.dk-iconbtn--sm .dk-i.dk-i--adaptive{ width:16px; height:16px; }
+}
+
+/* Native scrolling, styled without intercepting wheel/touch/keyboard. */
+.dk-scrollview{ min-width:0; max-width:100%; max-height:var(--scrollview-height,320px); overflow:auto; scrollbar-gutter:stable; scrollbar-color:var(--ink-3) var(--surface-2); }
+.dk-scrollview:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset-tight); }
+.dk-scrollview--horizontal{ max-height:none; overflow-x:auto; overflow-y:hidden; }
+.dk-scrollview--contain{ overscroll-behavior:contain; }
+.dk-scrollview--smooth{ scroll-behavior:smooth; }
+.dk-scrollview--hidden-bar{ scrollbar-width:none; }
+.dk-scrollview--hidden-bar::-webkit-scrollbar{ display:none; }
+@media(prefers-reduced-motion:reduce){ .dk-scrollview--smooth{ scroll-behavior:auto; } }
+@media(forced-colors:active){ .dk-scrollview{ scrollbar-color:auto; } .dk-scrollview--hidden-bar{ scrollbar-width:auto; } .dk-scrollview--hidden-bar::-webkit-scrollbar{ display:block; } }
+/* Auto-size ordinary action icons; explicit sm/lg stay fixed. */
+.dk-btn > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:24px; height:24px; }
+.dk-btn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:20px; height:20px; }
+@media(hover:hover) and (pointer:fine){
+ .dk-btn > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:20px; height:20px; }
+ .dk-btn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:16px; height:16px; }
+}
+.dk-scrollview{ --scrollview-height:320px; }
+
+/* Anchored onboarding dialog: native focus/inert, no shadow. */
+.dk-onboarding{ position:fixed; inset:auto; margin:0; width:min(320px,calc(100vw - var(--space-8) * 2)); max-height:calc(100dvh - var(--space-8) * 2); padding:var(--space-7); box-sizing:border-box; border:var(--hairline) solid var(--rule); border-radius:var(--radius-lg); background:var(--surface); color:var(--ink); overflow:auto; }
+.dk-onboarding::backdrop{ background:var(--scrim); }
+.dk-onboarding__step{ font:var(--type-caption); color:var(--ink-2); margin:0 0 var(--space-4); }
+.dk-onboarding__title{ font:var(--type-body-bold); margin:0 0 var(--space-4); }
+.dk-onboarding__text{ font:var(--type-body); margin:0 0 var(--space-6); }
+.dk-onboarding__actions{ display:flex; flex-wrap:wrap; justify-content:flex-end; gap:var(--space-4); }
+.dk-onboarding__target{ outline:var(--focus-width) solid var(--control-on); outline-offset:var(--space-3); }
+
+/* Layout atoms: preserve reading order and equal-height sibling cards. */
+.dk-flex{ --flex-gap:var(--gap-inline); display:flex; flex-wrap:wrap; align-items:center; gap:var(--flex-gap); min-width:0; }
+.dk-flex > *{ min-width:0; }
+.dk-flex--column{ flex-direction:column; align-items:stretch; }
+.dk-flex--nowrap{ flex-wrap:nowrap; }
+.dk-flex--between{ justify-content:space-between; }
+.dk-flex--center{ justify-content:center; }
+.dk-flex--start{ align-items:flex-start; }
+.dk-flex--stretch{ align-items:stretch; }
+.dk-card-grid{ --card-min-width:240px; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--card-min-width)),1fr)); align-items:stretch; gap:var(--gap-group); list-style:none; padding:0; margin:0; }
+.dk-card-grid > *{ min-width:0; display:flex; }
+.dk-card-grid > * > .dk-widget{ width:100%; }
+.dk-card-grid--m{ --card-min-width:360px; }
+.dk-card-grid--l{ grid-template-columns:minmax(0,1fr); }
+.dk-card-scroll{ min-width:0; }
+.dk-card-scroll__list{ --card-width:260px; display:flex; align-items:stretch; gap:var(--gap-group); overflow-x:auto; scroll-snap-type:x proximity; scrollbar-color:var(--ink-3) var(--surface-2); list-style:none; margin:0; padding:var(--space-3); }
+.dk-card-scroll__list > li{ flex:0 0 min(var(--card-width),80%); min-width:0; display:flex; scroll-snap-align:start; }
+.dk-card-scroll__list > li > .dk-widget{ width:100%; }
+.dk-card-scroll__list:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset-tight); }
+.dk-card-scroll__actions{ display:flex; justify-content:flex-end; gap:var(--space-4); margin-bottom:var(--space-4); }
+.dk-scroll-arrow{ border:var(--hairline) solid var(--rule); background:var(--surface); color:var(--ink); }
+.dk-scroll-arrow:disabled{ color:var(--ink-3); cursor:default; }
+.dk-touch{ touch-action:auto; }
+.dk-touch--pan-y{ touch-action:pan-y; }
+.dk-touch--pan-x{ touch-action:pan-x; }
+.dk-popout{ max-width:calc(100vw - var(--space-8) * 2); max-height:calc(100dvh - var(--space-8) * 2); }
+.dk-popout::backdrop{ background:var(--scrim); }
+.dk-popout--top{ margin-top:var(--space-8); margin-bottom:auto; }
+.dk-popout--bottom{ margin-top:auto; margin-bottom:var(--space-8); }
+.dk-popout--left{ margin-left:var(--space-8); margin-right:auto; }
+.dk-popout--right{ margin-left:auto; margin-right:var(--space-8); }
+.dk-popout--clear::backdrop{ background:transparent; }
+.dk-focus-trap:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset-tight); }
+
+.dk-card-grid > * > .dk-widget,.dk-card-scroll__list > li > .dk-widget{ display:flex; flex-direction:column; gap:var(--space-4); }
+.dk-card-grid > * > .dk-widget > p,.dk-card-scroll__list > li > .dk-widget > p{ flex:1; margin:0; }
+.dk-card-grid > * > .dk-widget > h3,.dk-card-scroll__list > li > .dk-widget > h3{ margin:0; }
+.dk-card-scroll__list{ scroll-padding-inline:var(--space-3); }
+.dk-card-scroll:dir(rtl) .dk-scroll-arrow .dk-i{ transform:scaleX(-1); }
+.dk-scrollview[tabindex]{ min-height:44px; }
 /* Missing observations use a neutral solid fill and explicit text. */
 .dk-nodata,
 .dk-split__seg:not([style*="--swatch"]),
@@ -4497,7 +4587,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-breadcrumbs li { display: flex; align-items: center; gap: var(--space-2); }
 .dk-breadcrumbs li + li::before { content: '/'; color: var(--ink-3); }
 .dk-breadcrumbs a { display: inline-flex; align-items: center; min-height: var(--control-md); color: var(--ink); }
-.dk-tooltip { position: fixed; z-index: var(--z-dropdown); max-width: min(320px, calc(100vw - var(--space-6))); padding: var(--space-3); border-radius: var(--radius-sm); background: var(--surface-3); color: var(--ink); box-shadow: var(--elev-float); font: var(--type-caption); }
+.dk-tooltip { position: fixed; z-index: var(--z-dropdown); max-width: min(320px, calc(100vw - var(--space-6))); padding: var(--space-3); border-radius: var(--radius-sm); background: var(--surface-3); color: var(--ink); box-shadow: none; font: var(--type-caption); }
 .dk-tooltip[hidden] { display: none; }
 /* Sidebar is a modal drill-down on narrow screens, with the same focus model. */
 .dk-modal.dk-sidebar { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; width: min(480px, 100%); max-width: 100%; border-radius: 0; }

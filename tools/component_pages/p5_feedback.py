@@ -8,8 +8,8 @@ PAGES = [
     "files": ["css/components.css", "js/dk-notify.js"], "scripts": ["dk-notify.js"],
     "live_intro": "Три баннера — тревога, штатно, событие (единственный закрываемый) — и три уведомления по кнопкам.",
     "live": """<div class="dk-panel"><div class="dk-stack">
-      <div class="dk-banner dk-banner--crit"><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title">23 аварии требуют решения</div><div class="dk-banner__sub">Две службы не отвечают последние сутки</div></div><div class="dk-banner__stats"><div class="dk-banner__stat"><b>9/11</b><span>служб</span></div><div class="dk-banner__stat"><b>23/23</b><span>узлов</span></div></div></div>
-      <div class="dk-banner dk-banner--calm"><svg class="dk-i"><use href="#ti-circle-check"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Контур работает штатно</div><div class="dk-banner__sub">Службы, инфраструктура и источники данных отвечают</div></div></div>
+      <div class="dk-banner dk-banner--crit"><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Не удалось обновить данные</div><div class="dk-banner__sub">Проверьте подключение и повторите загрузку</div></div></div>
+      <div class="dk-banner dk-banner--calm"><svg class="dk-i"><use href="#ti-circle-check"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Данные обновлены</div><div class="dk-banner__sub">Все источники доступны</div></div></div>
       <div class="dk-banner dk-banner--event"><svg class="dk-i"><use href="#ti-file-text"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Выгрузка за сентябрь готова</div><div class="dk-banner__sub">Файл доступен в разделе «Отчёты»</div></div><button class="dk-iconbtn dk-iconbtn--sm dk-banner__x" type="button" title="Закрыть" aria-label="Закрыть" onclick="this.closest('.dk-banner').remove()"><svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></div>
       <div class="sc-row" style="margin:0"><button class="dk-btn dk-btn--sm" data-toast="calm">Показать уведомление</button><button class="dk-btn dk-btn--sm" data-toast="undo">С отменой</button><button class="dk-btn dk-btn--sm" data-toast="crit">Тревожное</button></div>
     </div></div>""",
@@ -30,7 +30,7 @@ PAGES = [
     "when_no": ["Новость о данных («Авария в Новосибирске») — не уведомление: уехавшее через пять секунд сообщение о новой аварии — это авария, которую никто не увидел. Это баннер или строка в ленте.",
                 "Проблема одного виджета — <a href=\"component-empty.html\">ошибка внутри виджета</a>, не баннер страницы.",
                 "Подтверждение опасного действия — <a href=\"component-modal.html\">Модальное окно</a>."],
-    "anatomy_html": """<div class="dk-stack"><div class="dk-banner dk-banner--crit"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title"><b class="sc-callout">2</b>23 аварии требуют решения</div><div class="dk-banner__sub"><b class="sc-callout">3</b>Две службы не отвечают последние сутки</div></div><div class="dk-banner__stats"><b class="sc-callout">4</b><div class="dk-banner__stat"><b>9/11</b><span>служб</span></div></div></div>
+    "anatomy_html": """<div class="dk-stack"><div class="dk-banner dk-banner--crit"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title"><b class="sc-callout">2</b>Не удалось обновить данные</div><div class="dk-banner__sub"><b class="sc-callout">3</b>Проверьте подключение и повторите загрузку</div></div><div class="dk-banner__stats"><b class="sc-callout">4</b><div class="dk-banner__stat"><b>9/11</b><span>служб</span></div></div></div>
       <div class="dk-toast dk-toast--calm" style="position:static;max-width:520px"><svg class="dk-i"><use href="#ti-circle-check"/></svg><span class="dk-toast__text"><b class="sc-callout">5</b>Срез сброшен к настройкам по умолчанию</span><button type="button" class="dk-btn dk-btn--ghost dk-btn--sm"><b class="sc-callout">6</b>Отменить</button><button type="button" class="dk-iconbtn dk-iconbtn--sm" title="Закрыть" aria-label="Закрыть"><b class="sc-callout">7</b><svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></div></div>""",
     "anatomy": [("Значок баннера", "вид состояния; цвет смысла — crit, high, calm, event."),
                 ("Заголовок", "что случилось, с числом."),
@@ -53,7 +53,7 @@ PAGES = [
       <div class="dk-toast dk-toast--crit" style="position:static;max-width:520px"><svg class="dk-i"><use href="#ti-alert-circle"/></svg><span class="dk-toast__text">Не удалось сохранить срез — попробуйте ещё раз</span><button type="button" class="dk-iconbtn dk-iconbtn--sm" title="Закрыть" aria-label="Закрыть"><svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></div>
     </div></div>
     <div class="sc-note"><b>Время жизни считается по длине текста</b>: четыре секунды плюс сорок миллисекунд на знак, не больше десяти. Под курсором и под фокусом отсчёт стоит. С действием таймера нет вовсе: «успей или потеряй» бьёт по тем, кто и так работает медленнее.</div>""",
-    "content_ok": ["Заголовок баннера с числом и глаголом: «23 аварии требуют решения».",
+    "content_ok": ["Заголовок баннера с числом и глаголом: «Не удалось обновить данные».",
                    "Уведомление в прошедшем времени: «Работа добавлена в календарь».",
                    "Тревожное уведомление говорит, что делать: «попробуйте ещё раз»."],
     "content_bad": ["Баннер «Внимание!» без того, на что.",
@@ -68,8 +68,8 @@ PAGES = [
     "code": """<div class="dk-banner dk-banner--crit">
   <svg class="dk-i"><use href="#ti-alert-triangle"/></svg>
   <div class="dk-banner__text">
-    <div class="dk-banner__title">23 аварии требуют решения</div>
-    <div class="dk-banner__sub">Две службы не отвечают последние сутки</div>
+    <div class="dk-banner__title">Не удалось обновить данные</div>
+    <div class="dk-banner__sub">Проверьте подключение и повторите загрузку</div>
   </div>
 </div>
 
@@ -94,9 +94,9 @@ t.close();
                "открыто не больше одного окна: окно поверх окна загоняет человека в угол.",
     "files": ["css/components.css", "js/dk-modal.js"], "scripts": ["dk-modal.js"],
     "live_intro": "Настоящий <code>&lt;dialog&gt;</code>: ловушка фокуса, Escape, недоступность фона и возврат фокуса на кнопку делает браузер.",
-    "live": """<div class="dk-panel"><div class="sc-row" style="margin:0"><button class="dk-btn dk-btn--primary" data-modal="#x-confirm">Закрыть аварию</button><button class="dk-btn" data-modal="#x-form">Добавить работу</button></div>
+    "live": """<div class="dk-panel"><div class="sc-row" style="margin:0"><button class="dk-btn dk-btn--primary" data-modal="#x-confirm">Удалить запись</button><button class="dk-btn" data-modal="#x-form">Добавить работу</button></div>
       <div class="dk-result" id="x-modal-out" style="margin-top:var(--space-6)">Окно ещё не открывали</div></div>
-    <dialog class="dk-modal" id="x-confirm" aria-labelledby="x-confirm-t"><form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="x-confirm-t">Закрыть аварию</h2></div><div class="dk-modal__body"><p>Авария будет отмечена как устранённая. Бригада освободится и вернётся в очередь.</p></div><div class="dk-modal__foot"><button class="dk-btn dk-btn--ghost" value="cancel">Отмена</button><button class="dk-btn dk-btn--primary" value="ok">Закрыть аварию</button></div></form></dialog>
+    <dialog class="dk-modal" id="x-confirm" aria-labelledby="x-confirm-t"><form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="x-confirm-t">Удалить запись</h2></div><div class="dk-modal__body"><p>Запись будет удалена. Восстановить её не получится.</p></div><div class="dk-modal__foot"><button class="dk-btn dk-btn--ghost" value="cancel">Отмена</button><button class="dk-btn dk-btn--primary" value="ok">Удалить запись</button></div></form></dialog>
     <dialog class="dk-modal" id="x-form" aria-labelledby="x-form-t"><form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="x-form-t">Добавить работу</h2></div><div class="dk-modal__body"><div class="dk-form"><div class="dk-ff dk-ff--wide"><label class="dk-label" for="x-m-name">Что за работа</label><div class="dk-field"><input id="x-m-name" placeholder="Замена задвижки на вводе"></div></div></div></div><div class="dk-modal__foot"><button class="dk-btn dk-btn--ghost" value="cancel">Отмена</button><button class="dk-btn dk-btn--primary" value="ok">Добавить</button></div></form></dialog>""",
     "live_script": """  window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkModal !== 'function') return;
@@ -108,13 +108,13 @@ t.close();
       m.el.addEventListener('close', function () { out.textContent = 'Окно «' + m.el.querySelector('.dk-modal__title').textContent + '» закрыто: ' + (m.returnValue || 'Escape'); });
     });
   });""",
-    "when_yes": ["Действие необратимо или дорого: закрыть аварию, удалить срез — нужно подтверждение своими словами.",
+    "when_yes": ["Действие необратимо или дорого: удалить запись, удалить срез — нужно подтверждение своими словами.",
                  "Короткая форма из одного–трёх полей, после которой человек возвращается туда же.",
                  "Нужно остановить всё остальное, пока не решено."],
     "when_no": ["Подробности объекта — их лучше показывать на месте или боковой панелью (нет в ките, открыто в REVIEW.md).",
                 "Длинная форма — отдельная страница или <a href=\"component-field.html\">форма</a> в панели.",
                 "Уведомление о результате — <a href=\"component-banner.html\">Уведомление</a>."],
-    "anatomy_html": """<div class="dk-modal" style="position:static;display:block;max-width:520px;margin:0"><form method="dialog" class="dk-modal__form" onsubmit="return false"><div class="dk-modal__head"><h2 class="dk-modal__title"><b class="sc-callout">1</b>Закрыть аварию</h2></div><div class="dk-modal__body"><p><b class="sc-callout">2</b>Авария будет отмечена как устранённая. Бригада освободится и вернётся в очередь.</p></div><div class="dk-modal__foot"><b class="sc-callout">3</b><button type="button" class="dk-btn dk-btn--ghost">Отмена</button><button type="button" class="dk-btn dk-btn--primary"><b class="sc-callout">4</b>Закрыть аварию</button></div></form></div>""",
+    "anatomy_html": """<div class="dk-modal" style="position:static;display:block;max-width:520px;margin:0"><form method="dialog" class="dk-modal__form" onsubmit="return false"><div class="dk-modal__head"><h2 class="dk-modal__title"><b class="sc-callout">1</b>Удалить запись</h2></div><div class="dk-modal__body"><p><b class="sc-callout">2</b>Запись будет удалена. Восстановить её не получится.</p></div><div class="dk-modal__foot"><b class="sc-callout">3</b><button type="button" class="dk-btn dk-btn--ghost">Отмена</button><button type="button" class="dk-btn dk-btn--primary"><b class="sc-callout">4</b>Удалить запись</button></div></form></div>""",
     "anatomy": [("Заголовок", "действие глаголом, то же, что на кнопке подтверждения."),
                 ("Текст", "последствие простыми словами: что произойдёт после «да»."),
                 ("Подвал", "тихая «Отмена» слева, основная справа; порядок один во всём ките."),
@@ -128,8 +128,8 @@ t.close();
     "states": """<div class="dk-panel"><div class="sc-row" style="margin:0"><button class="dk-btn" data-modal="#x-busy">Окно с ожиданием</button></div></div>
     <dialog class="dk-modal" id="x-busy" aria-labelledby="x-busy-t"><form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="x-busy-t">Сохраняем срез</h2></div><div class="dk-modal__body"><span class="dk-vh">Сохраняем</span><div class="dk-skel" style="height:14px;width:70%;margin-bottom:var(--space-5)"></div><div class="dk-skel" style="height:14px;width:45%"></div></div><div class="dk-modal__foot"><button class="dk-btn dk-btn--ghost" value="cancel">Отмена</button><button class="dk-btn dk-btn--primary" disabled aria-busy="true">Сохраняем…</button></div></form></dialog>
     <div class="sc-note"><b>Второе окно не открывается поверх первого.</b> Если решение требует второго решения, второе живёт внутри первого окна. Попытка открыть второе закрывает первое и пишет предупреждение в консоль.</div>""",
-    "content_ok": ["Заголовок и кнопка подтверждения — одно и то же действие: «Закрыть аварию».",
-                   "Текст — последствие: «Бригада освободится и вернётся в очередь».",
+    "content_ok": ["Заголовок и кнопка подтверждения — одно и то же действие: «Удалить запись».",
+                   "Текст — последствие: «Запись будет удалена без возможности восстановления».",
                    "«Отмена» — всегда так, слева, тихая."],
     "content_bad": ["«Вы уверены?» — не говорит, в чём.",
                     "«ОК / Отмена» — что сделает «ОК»?",
@@ -140,15 +140,15 @@ t.close();
              "<b>Не проверялось</b> со скринридером; в старых браузерах без <code>showModal</code> окно не откроется и напишет ошибку."],
     "tokens": ["dk-modal"],
     "code_intro": "Разметка — <code>&lt;dialog&gt;</code> с формой <code>method=\"dialog\"</code>; скрипт — один вызов.",
-    "code": """<button class="dk-btn dk-btn--primary" data-modal="#confirm">Закрыть аварию</button>
+    "code": """<button class="dk-btn dk-btn--primary" data-modal="#confirm">Удалить запись</button>
 
 <dialog class="dk-modal" id="confirm" aria-labelledby="confirm-t">
   <form method="dialog" class="dk-modal__form">
-    <div class="dk-modal__head"><h2 class="dk-modal__title" id="confirm-t">Закрыть аварию</h2></div>
-    <div class="dk-modal__body"><p>Авария будет отмечена как устранённая.</p></div>
+    <div class="dk-modal__head"><h2 class="dk-modal__title" id="confirm-t">Удалить запись</h2></div>
+    <div class="dk-modal__body"><p>Запись будет удалена без возможности восстановления.</p></div>
     <div class="dk-modal__foot">
       <button class="dk-btn dk-btn--ghost" value="cancel">Отмена</button>
-      <button class="dk-btn dk-btn--primary" value="ok">Закрыть аварию</button>
+      <button class="dk-btn dk-btn--primary" value="ok">Удалить запись</button>
     </div>
   </form>
 </dialog>
@@ -165,7 +165,7 @@ m.el.addEventListener('close', function () { if (m.returnValue === 'ok') closeAc
             ("el", "свойство", "Сам <code>&lt;dialog&gt;</code> — на него вешают <code>close</code>.")],
     "related": [("component-button.html", "Кнопка", "порядок кнопок в подвале"),
                 ("component-field.html", "Поле и форма", "форма внутри окна"),
-                ("accidents.html", "Страница «Аварии»", "окно «Закрыть аварию» в живом дашборде")],
+                ("accidents.html", "Страница «Аварии»", "окно «Удалить запись» в живом дашборде")],
 },
 {
     "slug": "empty", "title": "Состояния: загрузка, пусто, ошибка", "group": "Обратная связь", "status": "стабильный",

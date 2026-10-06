@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
 <!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
      и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 <!-- defer, а не блокирующая загрузка. Три файла графиков весят 1148 КБ, и
      без defer разбор страницы вставал на них целиком: до первой отрисовки
      человек ждал движок, который нужен ниже первого экрана. Порядок при defer
@@ -39,7 +39,7 @@
 <script src="js/dk-map.js" defer></script>
 <script src="js/dk-notify.js" defer></script>
 <script src="js/dk-uptime.js" defer></script>
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 </head>
 <body class="dk-page">
 
@@ -77,7 +77,7 @@
       </div>
       <div class="sc-audience">
         <h2>Менеджеру</h2>
-        <a href="#usability">Удобство использования</a>
+        <a href="#sborka-po-zadache">Сборка по задаче</a>
         <a href="#redpolitika">Редполитика</a>
         <a href="#dostupnost">Доступность</a>
         <a href="#glossariy">Глоссарий</a>
@@ -93,13 +93,43 @@
     <a class="sc-example" href="dashboard.html">Посмотреть пример рабочего экрана <svg class="dk-i" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg></a>
   </header>
 
+  <section class="sc-sec sc-guide" id="sborka-po-zadache" data-group="Руководство">
+    <h2>Сборка дашборда по задаче</h2>
+    <p>Данные, аудитория, решение — остальное собирает исполнитель. Здесь показано, как выбрать график, выстроить экран и проверить результат.</p>
+    <nav class="dk-tabs sc-guide__tabs" aria-label="Разделы руководства">
+      <a class="dk-tab" href="#sborka-po-zadache--grafiki">Метрики и графики</a>
+      <a class="dk-tab" href="#sborka-po-zadache--kompoziciya">Композиция</a>
+      <a class="dk-tab" href="#sborka-po-zadache--razmery">Размеры</a>
+      <a class="dk-tab" href="#sborka-po-zadache--priemka">Приёмка</a>
+    </nav>
+    <div class="sc-guide__panel" id="sborka-po-zadache--grafiki">
+<h3>Число должно отвечать на вопрос</h3><div class="sc-compare"><figure><div class="sc-preview"><div class="sc-sample"><strong>Запросы без результата</strong><div class="sc-sample__number">52%</div><div class="sc-sample__track"><span style="width:52%"></span></div><div class="sc-sample__meta">52 из 100 запросов · порог 5%</div></div></div><figcaption><span class="sc-verdict sc-verdict--good">✓ Понятно</span>Видны объект, знаменатель и основание оценки.</figcaption></figure><figure><div class="sc-preview"><div class="sc-sample"><strong>Эффективность AI</strong><div class="sc-sample__number">52%</div><div class="sc-sample__meta">Показатель за выбранный период</div></div></div><figcaption><span class="sc-verdict sc-verdict--bad">× Неясно</span>Нельзя понять, что измерено и хорошо ли это.</figcaption></figure></div>
+      <h3>График выбирается по сравнению</h3><p>Примеры ниже — тестовые данные. В рабочем экране используйте подтверждённые значения.</p>
+      <div class="sc-compare"><figure><div class="sc-preview"><div class="sc-sample"><strong>Как меняется очередь?</strong><svg viewBox="0 0 300 120" role="img" aria-label="Очередь: 25, 30, 38, 53, 68, 75, 70 заявок"><path class="sc-chart__grid" d="M15 25H285 M15 65H285 M15 105H285"/><path class="sc-chart__line" d="M15 95L60 88L105 77L150 55L195 34L240 24L285 31"/><text x="15" y="118">День 1</text><text x="245" y="118">День 7</text></svg></div></div><figcaption><b>Динамика → линия</b>Одинаковые интервалы и одна единица: заявки.</figcaption></figure><figure><div class="sc-preview"><div class="sc-sample"><strong>Где больше просрочек?</strong><div class="sc-mini-bars"><div><span>Email</span><i style="--preview-width:100%"></i><b>30</b></div><div><span>Чат</span><i style="--preview-width:60%"></i><b>18</b></div><div><span>Телефон</span><i style="--preview-width:20%"></i><b>6</b></div></div></div></div><figcaption><b>Сравнение → столбцы</b>Полные названия и общая шкала: 30, 18 и 6 заявок.</figcaption></figure></div>
+      <p><a href="component-chart.html">Все виды графиков</a> · <a href="ai-value.html">Открыть пример AI-продукта</a></p>
+    </div>
+    <div class="sc-guide__panel" id="sborka-po-zadache--kompoziciya">
+<h3>Разделитель нужен, когда помогает читать</h3><div class="sc-compare"><figure><div class="sc-preview"><div class="sc-sample"><strong>Результаты</strong><div class="sc-sample__row"><span>Принятые результаты</span><b>7 из 9</b></div><div class="sc-sample__row"><span>Не использовано</span><b>4 из 11</b></div><div class="sc-sample__row"><span>Активные сотрудники</span><b>3 из 9</b></div></div></div><figcaption><span class="sc-verdict sc-verdict--good">✓ Понятно</span>Отступы и выравнивание уже разделяют строки.</figcaption></figure><figure><div class="sc-preview"><div class="sc-sample sc-sample--ruled"><strong>Результаты</strong><div class="sc-sample__row"><span>Принятые результаты</span><b>7 из 9</b></div><div class="sc-sample__row"><span>Не использовано</span><b>4 из 11</b></div><div class="sc-sample__row"><span>Активные сотрудники</span><b>3 из 9</b></div></div></div><figcaption><span class="sc-verdict sc-verdict--bad">× Неясно</span>Линии повторяют структуру и добавляют шум.</figcaption></figure></div>
+      <h3>Обзор отдельно от деталей</h3><div class="sc-preview sc-preview--wide"><div class="sc-sample"><div class="sc-sample__row"><strong>Запросы без результата</strong><b>52%</b></div><div class="sc-sample__meta">52 из 100 запросов · порог 5%</div><div class="sc-sample__detail">⌄ Определение и исходные данные</div></div></div>
+      <p>Главный ответ и знаменатель видны сразу. Формулы и исходные строки раскрываются по запросу через <code>dk-fold--plain</code>. Цвет обозначает данные или подтверждённое исключение.</p>
+    </div>
+    <div class="sc-guide__panel" id="sborka-po-zadache--razmery">
+      <h3>Соседние карточки — одинаковой высоты</h3><div class="sc-layout-demo" aria-label="Два равных по высоте виджета"><div><span>Основной график</span><div class="sc-layout-demo__plot"><svg viewBox="0 0 300 120" role="img" aria-label="Очередь: 25, 30, 38, 53, 68, 75, 70 заявок"><path class="sc-chart__grid" d="M15 25H285 M15 65H285 M15 105H285"/><path class="sc-chart__line" d="M15 95L60 88L105 77L150 55L195 34L240 24L285 31"/><text x="15" y="118">День 1</text><text x="245" y="118">День 7</text></svg></div></div><div><span>Сравнение</span><div class="sc-mini-bars"><div><span>Email</span><i style="--preview-width:100%"></i><b>30</b></div><div><span>Чат</span><i style="--preview-width:60%"></i><b>18</b></div><div><span>Телефон</span><i style="--preview-width:20%"></i><b>6</b></div></div></div></div><p>Используйте <code>dk-grid--equal</code>. Выравнивайте названия, значения и шкалы, сохраняя нормальные поля карточек.</p>
+      <h3>На телефоне меняется сетка, а не смысл</h3><div class="sc-device-demo"><figure><div class="sc-device sc-device--desktop"><div></div><div></div><div></div><div></div></div><figcaption><b>1280 × 720</b>Обзор в один экран, если это требуется задачей.</figcaption></figure><figure><div class="sc-device sc-device--phone"><div></div><div></div><div></div></div><figcaption><b>390 px</b>Одна колонка и естественная прокрутка.</figcaption></figure></div><p>Выбирайте состав обзора. Не уменьшайте шрифт и отступы ради одного экрана и не скрывайте переполнение.</p>
+    </div>
+    <div class="sc-guide__panel" id="sborka-po-zadache--priemka">
+      <h3>Три прохода до первого показа</h3><div class="sc-review-steps"><div><span>01</span><h4>Смысл данных</h4><p>Вопрос → метрика → объект → знаменатель → сравнение. Неизвестное определение отмечается явно.</p></div><div><span>02</span><h4>Дизайн и текст</h4><p>График отвечает на вопрос. Названия полные, соседние блоки выровнены, пояснения нужны для решения.</p></div><div><span>03</span><h4>Готовый экран</h4><p>Снимки обеих тем, телефон, клавиатура и измерение размеров. Найденные дефекты исправляются до сдачи.</p></div></div>
+      <h3>Что принимаем</h3><ul class="sc-list"><li>На каждый вопрос есть видимый ответ или назван пробел данных.</li><li>Объект, знаменатель и основание оценки понятны.</li><li>Графики показывают сравнение, динамику или состав.</li><li>Отступы, подписи и действия проверены в заданном размере.</li></ul><p>Качество кита оценивается по обязательным правкам человека после первой сдачи. Чистая техническая проверка сама по себе не доказывает понятность экрана.</p>
+    </div>
+  </section>
+
   <section class="sc-sec" id="komponenty" data-group="Компоненты">
     <h2>Компоненты</h2>
     <p>Выберите компонент по задаче. На каждой странице — интерактивный пример, правила использования, состояния, доступность и код.</p>
     <div class="sc-component-index"></div>
   </section>
 
-  <section class="sc-sec" id="effekty" data-group="Визуальный язык"><h2>Эффекты</h2><p>Поверхности и тени показывают, какие элементы связаны и какие находятся поверх страницы.</p><h3>Поверхности</h3><p>Фон страницы задаётся токеном <code>--bg</code>, основной блок — <code>--surface</code>, вложенный элемент — <code>--surface-2</code>. Не добавляйте новый оттенок для каждого блока.</p><h3>Тени и слои</h3><p>Используйте <code>--elev-widget</code> для виджетов и <code>--elev-overlay</code> для всплывающих слоёв. В тёмной теме различие слоёв поддерживается светлотой поверхности. Контур <code>--focus-width</code> обозначает фокус клавиатуры и не заменяется тенью.</p></section>
+  <section class="sc-sec" id="effekty" data-group="Визуальный язык"><h2>Эффекты</h2><p>Поверхности и контуры показывают, какие элементы связаны и какие находятся поверх страницы.</p><h3>Поверхности</h3><p>Фон страницы задаётся токеном <code>--bg</code>, основной блок — <code>--surface</code>, вложенный элемент — <code>--surface-2</code>. Не добавляйте новый оттенок для каждого блока.</p><h3>Контуры и слои</h3><p>Тени не используются, включая всплывающие слои. Различайте слои поверхностью и тонким контуром <code>--rule</code>. Контур <code>--focus-width</code> обозначает фокус клавиатуры и не заменяется тенью.</p></section>
   <section class="sc-sec" id="animacii" data-group="Визуальный язык"><h2>Анимации</h2><p>Движение объясняет изменение состояния и помогает следить за действием.</p><h3>Длительность</h3><p><code>--duration-fast</code> — 120 мс для быстрых изменений; <code>--duration-base</code> — 200 мс для появления и исчезновения. Используйте готовые токены вместо отдельных значений.</p><h3>Характер движения</h3><p><code>--ease-out</code> подходит для появления и исчезновения, <code>--ease-in-out</code> — для перемещения. Анимация не должна задерживать доступ к данным.</p><h3>Уменьшенное движение</h3><p>При <code>prefers-reduced-motion: reduce</code> длительности в ките обнуляются. Новый компонент должен уважать эту настройку и сохранять понятное состояние без анимации.</p></section>
   <section class="sc-sec" id="redpolitika" data-group="Редполитика"><h2>О редполитике</h2><p>Текст помогает понять данные, выбрать действие и восстановиться после ошибки.</p><h3>Общие правила</h3><p>Один термин обозначает одно понятие. Заголовок называет содержимое, кнопка — действие, сообщение об ошибке — способ продолжить работу. Пишите по существу и проверяйте текст в реальном интерфейсе.</p><h3>Проверка текста</h3><p>Проверьте смысл без соседних подсказок, длину на телефоне, единицы измерения и источник показателя. Название региона или объекта не сокращайте ради компактности.</p></section>
   <section class="sc-sec" id="principy-teksta" data-group="Редполитика">
@@ -228,7 +258,7 @@
     <p>Нейтральные поверхности поддерживают иерархию, акцент выделяет основное действие и ссылки, а цвета состояний передают смысл данных. Высокий риск, низкий риск и отсутствие данных имеют самостоятельные обозначения, которые сохраняются при смене темы.</p>
     <p><a href="#smyslovye">Палитра</a></p>
     <h3>Иконографика</h3>
-    <p>Контурные иконки Tabler дополняют подписи и обозначают знакомые действия. Единая геометрия и толщина штриха поддерживают целостность интерфейса. У кнопки без текста обязательно есть доступное название.</p>
+    <p>Контурные иконки <a href="https://tabler.io/icons" target="_blank" rel="noopener noreferrer">Tabler Icons ↗</a> дополняют подписи и обозначают знакомые действия. Единая геометрия и толщина штриха поддерживают целостность интерфейса. У кнопки без текста обязательно есть доступное название.</p>
     <p><a href="#ikonki">Иконографика</a></p>
     <h3>Эффекты и движение</h3>
     <p>Тени отделяют всплывающие элементы от основного содержимого. Анимация объясняет переход между состояниями и сохраняет связь с действием пользователя. Эффекты не должны затруднять чтение данных; при запросе на уменьшение движения переходы сокращаются.</p>
@@ -323,14 +353,41 @@
     </table>
     </div>
 
-    <div class="dk-grid">
-      <div class="dk-col--half"><div class="dk-well sc-cell">половина</div></div>
-      <div class="dk-col--quarter"><div class="dk-well sc-cell">четверть</div></div>
-      <div class="dk-col--quarter"><div class="dk-well sc-cell">четверть</div></div>
-      <div class="dk-col--third"><div class="dk-well sc-cell">треть</div></div>
-      <div class="dk-col--two-thirds"><div class="dk-well sc-cell">две трети</div></div>
-      <div class="dk-col--full"><div class="dk-well sc-cell">вся ширина</div></div>
+    <h3>Пример: 7 КПЭ интернет-магазина</h3>
+    <p>Выручка — главный показатель. Остальные шесть помогают объяснить результат: три карточки в каждом ряду. Данные примера — тестовые.</p>
+    <div class="sc-preview sc-preview--wide">
+      <div class="sc-seven-kpi">
+        <div class="dk-widget dk-widget--s dk-tile sc-seven-kpi__main">
+          <div class="dk-tile__head"><span class="dk-tile__label">Выручка</span></div>
+          <div class="dk-tile__row"><span class="dk-metric-xl">3,9 млн ₽</span></div>
+        </div>
+        <div class="dk-widget dk-widget--s dk-tile">
+          <div class="dk-tile__head"><span class="dk-tile__label">Заказы</span></div>
+          <div class="dk-tile__row"><span class="dk-metric-lg">1 248</span></div>
+        </div>
+        <div class="dk-widget dk-widget--s dk-tile">
+          <div class="dk-tile__head"><span class="dk-tile__label">Средний чек</span></div>
+          <div class="dk-tile__row"><span class="dk-metric-lg">3 125 ₽</span></div>
+        </div>
+        <div class="dk-widget dk-widget--s dk-tile">
+          <div class="dk-tile__head"><span class="dk-tile__label">Конверсия в заказ</span></div>
+          <div class="dk-tile__row"><span class="dk-metric-lg">4,2%</span></div>
+        </div>
+        <div class="dk-widget dk-widget--s dk-tile">
+          <div class="dk-tile__head"><span class="dk-tile__label">Повторные покупки</span></div>
+          <div class="dk-tile__row"><span class="dk-metric-lg">32%</span></div>
+        </div>
+        <div class="dk-widget dk-widget--s dk-tile">
+          <div class="dk-tile__head"><span class="dk-tile__label">Возвраты</span></div>
+          <div class="dk-tile__row"><span class="dk-metric-lg">2,1%</span></div>
+        </div>
+        <div class="dk-widget dk-widget--s dk-tile">
+          <div class="dk-tile__head"><span class="dk-tile__label">Активные покупатели</span></div>
+          <div class="dk-tile__row"><span class="dk-metric-lg">986</span></div>
+        </div>
+      </div>
     </div>
+    <p>На широком экране — 1 + 3 + 3. На планшете — главный показатель и три ряда по два. На телефоне — одна колонка. Если все семь КПЭ равнозначны, используйте ряды 4 + 3 без увеличения одной карточки.</p>
 
     <p style="margin-top:var(--space-7)">Под пальцем — на телефоне, планшете и
        телефоне боком — кнопки и поля вырастают до 44 пикселей. Решает указатель,
@@ -434,17 +491,17 @@
       </div>
       <div class="dk-col--half">
         <div class="dk-stack">
-          <div class="dk-row"><span class="dk-row__label">поле до края виджета</span><span class="dk-row__value dk-code">18</span></div>
-          <div class="dk-row"><span class="dk-row__label">шапка → тело</span><span class="dk-row__value dk-code">18</span></div>
-          <div class="dk-row"><span class="dk-row__label">блок → блок в теле</span><span class="dk-row__value dk-code">14</span></div>
-          <div class="dk-row"><span class="dk-row__label">внутри блока</span><span class="dk-row__value dk-code">10</span></div>
-          <p class="dk-caption" style="margin-top:var(--space-5)">Поле до края (18) больше зазора между блоками (14) намеренно: иначе содержимое липнет к краю, и виджет теряет собственные границы. Границ у нас нет — их роль играет именно это поле.</p>
+          <div class="dk-row"><span class="dk-row__label">поле до края виджета</span><span class="dk-row__value">18</span></div>
+          <div class="dk-row"><span class="dk-row__label">шапка → тело</span><span class="dk-row__value">18</span></div>
+          <div class="dk-row"><span class="dk-row__label">блок → блок в теле</span><span class="dk-row__value">14</span></div>
+          <div class="dk-row"><span class="dk-row__label">внутри блока</span><span class="dk-row__value">10</span></div>
+          <p class="dk-caption" style="margin-top:var(--space-5)">Поле до края (18) больше зазора между блоками (14) намеренно: иначе содержимое липнет к краю, и виджет теряет собственные границы. Тонкая граница и внутреннее поле отделяют виджет от соседних блоков.</p>
         </div>
       </div>
     </div>
 
     <div class="sc-note" style="margin-top:var(--space-8)">
-      <b>Отступ берётся только из шкалы.</b> <code>15px</code> «на глаз» — начало
+      <b>Отступ берётся только из шкалы.</b> Значения выше — базовые; <code>--pad-widget</code> зависит от ширины и указателя. <code>15px</code> «на глаз» — начало
       конца: через месяц их будет двадцать разных, и ни один нельзя будет
       поменять централизованно. На мобилке поле виджета ужимается на ступень
       автоматически — экран узкий, и 18 по каждой стороне съедают заметную долю
@@ -455,7 +512,7 @@
   <!-- ---------------------------------------------------------------- -->
   <section class="sc-sec" id="ikonki">
     <h2>Иконографика</h2>
-    <p>В dashboard-kit используются контурные иконки Tabler с исходной сеткой 24 × 24 и единой толщиной штриха. Иконка наследует цвет текста и масштабируется вместе с ним. В локальную библиотеку включаются только необходимые интерфейсу изображения.</p>
+    <p>В dashboard-kit используются контурные иконки <a href="https://tabler.io/icons" target="_blank" rel="noopener noreferrer">Tabler Icons ↗</a> с исходной сеткой 24 × 24 и единой толщиной штриха. Иконка наследует цвет текста и масштабируется вместе с ним. В локальную библиотеку включаются только необходимые интерфейсу изображения.</p>
     <div class="dk-panel">
       <div class="sc-icons" id="sc-icons"></div>
     </div>
@@ -954,7 +1011,7 @@
         <div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--calm-ink)">
           <div class="dk-tile__head">
             <span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span>
-            <span class="dk-tile__label">Бригад в работе</span>
+            <span class="dk-tile__label">Задач в работе</span>
           </div>
           <div class="dk-tile__row">
             <span class="dk-metric-lg">17</span>
@@ -1076,7 +1133,7 @@
         <a class="dk-tab" href="#" aria-current="page">Инфраструктура</a>
         <a class="dk-tab" href="#">Аварии <span class="dk-tab__n">23</span></a>
         <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
-        <a class="dk-tab" href="#">Бригады</a>
+        <a class="dk-tab" href="#">Отчёты</a>
         <a class="dk-tab" href="#">Отчёты</a>
       </nav>
 
@@ -1165,17 +1222,17 @@
           <div class="dk-bar" style="--accent:var(--crit-ink)">
             <div class="dk-bar__head"><span class="dk-bar__name">Отопление</span><span class="dk-bar__v">520</span></div>
             <div class="dk-bar__track"><div class="dk-bar__fill" style="width:100%"></div></div>
-            <div class="dk-bar__meta">41% обращений · 1 240 жителей · 18 бригад</div>
+            <div class="dk-bar__meta">41% обращений · 1 240 записей · 18 задач</div>
           </div>
           <div class="dk-bar" style="--accent:var(--high-ink)">
             <div class="dk-bar__head"><span class="dk-bar__name">Водоснабжение</span><span class="dk-bar__v">344</span></div>
             <div class="dk-bar__track"><div class="dk-bar__fill" style="width:66%"></div></div>
-            <div class="dk-bar__meta">27% обращений · 860 жителей · 11 бригад</div>
+            <div class="dk-bar__meta">27% обращений · 860 записей · 11 задач</div>
           </div>
           <div class="dk-bar">
             <div class="dk-bar__head"><span class="dk-bar__name">Электроснабжение</span><span class="dk-bar__v">228</span></div>
             <div class="dk-bar__track"><div class="dk-bar__fill" style="width:44%"></div></div>
-            <div class="dk-bar__meta">18% обращений · 410 жителей · 6 бригад</div>
+            <div class="dk-bar__meta">18% обращений · 410 записей · 6 задач</div>
           </div>
         </div>
       </div>
@@ -1414,7 +1471,7 @@
                   </span>
                 </div>
               </td>
-              <td data-sort="46"><span class="dk-status dk-status--high"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg>выехала бригада</span></td>
+              <td data-sort="46"><span class="dk-status dk-status--high"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg>в работе</span></td>
               <td class="dk-td-bar" data-sort="46">
                 <div class="dk-progress"><div class="dk-progress__track"><div class="dk-progress__fill" style="width:46%"></div></div><span class="dk-progress__value">46%</span></div>
               </td>
@@ -1456,7 +1513,7 @@
                   </span>
                 </div>
               </td>
-              <td data-sort="62"><span class="dk-status dk-status--high"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg>выехала бригада</span></td>
+              <td data-sort="62"><span class="dk-status dk-status--high"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg>в работе</span></td>
               <td class="dk-td-bar" data-sort="62">
                 <div class="dk-progress"><div class="dk-progress__track"><div class="dk-progress__fill" style="width:62%"></div></div><span class="dk-progress__value">62%</span></div>
               </td>
@@ -2136,7 +2193,7 @@
         { date: '2026-09-05', name: 'Замена задвижки', kind: 'high' },
         { date: '2026-09-09', name: 'Плановое отключение ГВС', kind: 'plan' },
         { date: '2026-09-14', name: 'Прорыв, Советский р-н', kind: 'crit' },
-        { date: '2026-09-14', name: 'Аварийная бригада', kind: 'high' },
+        { date: '2026-09-14', name: 'Проверка данных', kind: 'high' },
         { date: '2026-09-14', name: 'Подвоз воды', kind: 'event' },
         { date: '2026-09-14', name: 'Информирование жителей', kind: 'event' },
         { date: '2026-09-17', name: 'Подача восстановлена', kind: 'calm' },
@@ -2165,7 +2222,7 @@
         // Правило: выбрано видно числом, а не только заливкой строк.
         box.innerHTML = ids.length
           ? '<span class="dk-chipbar__label">Выбрано ' + ids.length + '</span>' +
-            '<button class="dk-btn dk-btn--sm">Назначить бригаду</button>' +
+            '<button class="dk-btn dk-btn--sm">Добавить запись</button>' +
             '<button class="dk-btn dk-btn--ghost dk-btn--sm">Снять выбор</button>'
           : '<span class="dk-chipbar__label">Ничего не выбрано — действия появятся здесь</span>';
       }

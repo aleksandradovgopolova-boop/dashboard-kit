@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Аватар · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p3_data.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__t">dashboard-kit</span>
+  </a>
+  <div class="sc-ctl">
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Данные</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-avatar.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
+    <h1>Аватар</h1>
+    <p class="sc-hero__lead">Человек рядом с записью, комментарием или списком участников.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Примеры в реальном контексте.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-stack"><div class="dk-inline"><span class="dk-avatar dk-avatar--sm" role="img" aria-label="Анна Кузнецова">АК</span><span class="dk-avatar" role="img" aria-label="Анна Кузнецова">АК</span><span class="dk-avatar dk-avatar--lg" role="img" aria-label="Анна Кузнецова">АК</span><span>Анна Кузнецова</span></div><div class="dk-inline"><span class="dk-avatars"><span class="dk-avatar" role="img" aria-label="Анна Кузнецова">АК</span><span class="dk-avatar" role="img" aria-label="Борис Михайлов">БМ</span><span class="dk-avatar dk-avatar--more" role="img" aria-label="Ещё 4 участника">+4</span></span><span>Участники</span></div></div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+  </section>
+  <section class="sc-sec" id="kogda-ispolzovat">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Человек рядом с записью, комментарием или списком участников.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Главное число дашборда — KPI-плитка.</li><li>Состояние объекта — статус с текстовой подписью.</li></ul></div></div>
+  </section>
+  <section class="sc-sec" id="anatomiya">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><span class="dk-avatar" role="img" aria-label="Анна Кузнецова">АК</span></div><ol class="sc-anatomy__list"><li><b>Содержимое</b> — Подпись и значение доступны без цвета.</li><li><b>Контекст</b> — Находится рядом с объектом, к которому относится.</li></ol>
+  </section>
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>S — 24, M — 32, L — 40 пикселей. Размер изображения не определяет размер кнопки: интерактивная область на сенсорном экране минимум 44 пикселя.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-avatar</code></td><td>Инициалы или изображение.</td><td>Человек.</td></tr><tr><td><code>dk-avatar--sm / --lg</code></td><td>24 / 40 пикселей.</td><td>Плотная строка / профиль.</td></tr><tr><td><code>dk-avatars</code></td><td>Перекрывающаяся группа.</td><td>Несколько участников.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec" id="sostoyaniya">
+    <h2>Состояния</h2>
+    <div class="dk-panel"><div class="dk-inline"><span class="dk-avatar dk-avatar--sm" role="img" aria-label="Анна Кузнецова">АК</span><span class="dk-avatar" role="img" aria-label="Анна Кузнецова">АК</span><span class="dk-avatar dk-avatar--lg" role="img" aria-label="Анна Кузнецова">АК</span><span>Анна Кузнецова</span></div><div class="dk-inline"><span class="dk-avatars"><span class="dk-avatar" role="img" aria-label="Анна Кузнецова">АК</span><span class="dk-avatar" role="img" aria-label="Борис Михайлов">БМ</span><span class="dk-avatar dk-avatar--more" role="img" aria-label="Ещё 4 участника">+4</span></span><span>Участники</span></div></div>
+  </section>
+  <section class="sc-sec" id="kontent">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Не более двух инициалов; полное имя рядом или в доступной подписи.</li><li>Изображение обрезается по контейнеру с object-fit:cover, без искажения пропорций.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Случайный цвет аватара, который выглядит как статус риска.</li><li>Инициалы из пяти букв или фотография без доступного имени.</li></ul></div></div>
+  </section>
+  <section class="sc-sec" id="dostupnost">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li>Полное имя доступно скринридеру: role="img" и aria-label для инициалов, alt для изображения.</li><li>Рядом есть имя — изображение декоративное, используйте alt=""; инициалы скрывайте aria-hidden="true".</li><li>При недоступной фотографии приложение заменяет её инициалами. Не оставляйте сломанное изображение.</li></ul>
+  </section>
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-avatar,dk-avatars"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec" id="kod">
+    <h2>Код</h2>
+    <p>HTML и общие стили кита. Изменение данных выполняет приложение.</p><pre class="sc-code"><code>&lt;span class=&quot;dk-avatar&quot; role=&quot;img&quot; aria-label=&quot;Анна Кузнецова&quot;&gt;АК&lt;/span&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-avatar</code></td><td>класс</td><td>Инициалы или изображение.</td></tr><tr><td><code>dk-avatar--sm / --lg</code></td><td>класс</td><td>24 / 40 пикселей.</td></tr><tr><td><code>dk-avatars</code></td><td>класс</td><td>Перекрывающаяся группа.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-badge.html">Бейдж и статус</a> — состояние объекта</li><li><a href="component-chips-input.html">ChipsInput</a> — ввод набора</li><li><a href="component-chips-select.html">ChipsSelect</a> — выбор набора</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+
+})();
+</script>
+</body>
+</html>

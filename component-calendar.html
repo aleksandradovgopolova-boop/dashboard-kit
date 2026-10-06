@@ -14,20 +14,19 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/docs.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
 <script src="js/dk-util.js"></script>
-<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-calendar.js" defer></script>
-<script src="js/docs-index.js" defer></script>
-<script src="js/docs.js" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
 </head>
 <body class="dk-page">
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
     <span class="sc-brand__t">dashboard-kit</span>
-    <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -43,7 +42,18 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
-    <p class="sc-hero__o">Компоненты · Визуализация</p>
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Визуализация</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-calendar.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
     <h1>Календарь работ</h1>
     <p class="sc-hero__lead">Показ работы: что происходит и когда. Не выбор периода. Цвет события — его вид, а не украшение: авария красная, плановое синее, завершённое зелёное.</p>
     <div class="sc-meta">
@@ -52,43 +62,43 @@
     </div>
   </header>
 
-  <section class="sc-sec" data-group="Обзор">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
     <h2>Живой пример</h2>
-    <p>Сентябрь: сетка всегда в шесть строк, больше трёх событий в дне — «ещё N». Стрелки, Home, End, PageUp, PageDown и Enter работают как в таблице.</p><div class="dk-widget"><div id="x-cal"></div></div>
+    <p>Сентябрь: сетка всегда в шесть строк, больше трёх событий в дне — «ещё N». Стрелки, Home, End, PageUp, PageDown и Enter работают как в таблице.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-widget"><div id="x-cal"></div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>События привязаны к датам, и важно видеть их вместе: работы, отключения, проверки.</li><li>Нужен и обзор месяца, и подробности недели по часам.</li><li>События бывают нескольких видов с разным смыслом.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Выбор интервала дат для среза — <a href="component-period.html">Период</a>.</li><li>Лента последних событий без дат — <a href="component-list.html">Список</a>.</li><li>Работала служба или нет по времени — <a href="component-uptime.html">Доступность служб</a>.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
     <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-cal" data-view="month"><div class="dk-cal__head"><b class="sc-callout">1</b><div class="dk-seg dk-seg--sm" role="group" aria-label="Вид"><button type="button" aria-pressed="true">Месяц</button><button type="button" aria-pressed="false">Неделя</button></div><span class="dk-cal__month"><b class="sc-callout">2</b>Сентябрь 2026</span></div>
       <div class="dk-cal__grid" style="grid-template-columns:repeat(3, minmax(0,1fr))"><button type="button" class="dk-cal__day"><span class="dk-cal__n"><b class="sc-callout">3</b>13</span></button>
-        <button type="button" class="dk-cal__day" data-today="true"><span class="dk-cal__n"><b class="sc-callout">4</b>14</span><span class="dk-cal__e" style="--accent:var(--crit)"><b class="sc-callout">5</b>Прорыв</span><span class="dk-cal__e" style="--accent:var(--high)">Бригада</span><span class="dk-cal__e" style="--accent:var(--event)">Подвоз воды</span><span class="dk-cal__more"><b class="sc-callout">6</b>ещё 1</span></button>
+        <button type="button" class="dk-cal__day" data-today="true"><span class="dk-cal__n"><b class="sc-callout">4</b>14</span><span class="dk-cal__e" style="--accent:var(--crit)"><b class="sc-callout">5</b>Прорыв</span><span class="dk-cal__e" style="--accent:var(--high)">Проверка</span><span class="dk-cal__e" style="--accent:var(--event)">Подвоз воды</span><span class="dk-cal__more"><b class="sc-callout">6</b>ещё 1</span></button>
         <button type="button" class="dk-cal__day"><span class="dk-cal__n">15</span></button></div></div></div><ol class="sc-anatomy__list"><li><b>Переключатель вида</b> — сегмент «месяц / неделя».</li><li><b>Название месяца</b> — с годом; стрелки листают.</li><li><b>Число дня</b> — кнопка-ячейка; дни соседних месяцев приглушены, но показаны — без них неделя рвётся.</li><li><b>Сегодня</b> — отмечено акцентом — единственное место акцента в календаре: ориентир во времени, не управление.</li><li><b>Событие</b> — полоска цвета вида через <code>--accent</code>; в недельном виде — блок по часам.</li><li><b>«Ещё N»</b> — больше трёх событий в дне; обрезать список молча значит скрыть часть работы.</li></ol>
   </section>
-  <section class="sc-sec" data-group="Использование">
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
     <p>Размер один: виджет L на всю ширину. Сетка месяца всегда шесть строк, чтобы страница не прыгала при перелистывании; высота часа в неделе — <code>hourHeight</code>, по умолчанию 48.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>view: &#x27;month&#x27; | &#x27;week&#x27;</code></td><td>Начальный вид.</td><td>Месяц для обзора, неделя для смены.</td></tr><tr><td><code>month / week</code></td><td>Какой месяц или неделю показать.</td><td>По умолчанию текущие.</td></tr><tr><td><code>events[]</code></td><td>{date, name, kind, from?, to?}; kind: crit · high · plan · calm · event.</td><td>Всегда.</td></tr><tr><td><code>max</code></td><td>Сколько событий в дне до «ещё N».</td><td>По умолчанию 3.</td></tr><tr><td><code>hourHeight</code></td><td>Высота часа в неделе.</td><td>Плотные смены.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-widget"><div id="x-cal-empty"></div></div>
     <div class="sc-note"><b>Пустой месяц — тоже месяц.</b> Сетка на месте, событий нет, и это видно; «данных нет» календарь не пишет: отсутствие работ — ответ.</div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kontent">
     <h2>Контент</h2>
     <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Название события — что делают: «Замена задвижки», «Подвоз воды».</li><li>Вид события по смыслу: авария crit, ограничение high, плановое plan, завершено calm, прочее event.</li><li>Дни соседних месяцев показаны приглушённо.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Цвета розданы по кругу — человек ищет закономерность там, где её нет.</li><li>Сетка в пять строк в короткий месяц — страница прыгает.</li><li>Событие без времени в недельном виде.</li></ul></div></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Клавиатура.</b> Дни — кнопки; стрелки, Home, End, PageUp, PageDown, Enter — как в таблице.</li><li><b>Не только цветом.</b> У события есть название; вид дублируется значком в подсказке.</li><li><b>Сегодня</b> помечено атрибутом и цветом.</li><li><b>Не проверялось</b> со скринридером в недельном виде по часам.</li></ul>
   </section>
-  <section class="sc-sec" data-group="Разработка">
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
     <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-cal"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="kod">
     <h2>Код</h2>
     <p>Контейнер пустой; события — массив объектов.</p><pre class="sc-code"><code>&lt;div id=&quot;cal&quot;&gt;&lt;/div&gt;
 
@@ -105,7 +115,7 @@ var cal = dkCalendar(document.getElementById(&#x27;cal&#x27;), {
 cal.view = &#x27;week&#x27;; cal.goTo(&#x27;2026-09-14&#x27;); cal.setEvents(list);
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>events[]</code></td><td>массив</td><td>date, name, kind; from/to для недели.</td></tr><tr><td><code>view, month, week, value, today</code></td><td>строки / даты</td><td>Что показать и что выбрано.</td></tr><tr><td><code>max, hourHeight</code></td><td>числа</td><td>Событий в дне до «ещё N»; высота часа.</td></tr><tr><td><code>onSelect(day) / onEvent(e)</code></td><td>функции</td><td>Клик по дню и по событию.</td></tr><tr><td><code>view / value / goTo(d) / setEvents(list)</code></td><td>API</td><td>Управление снаружи.</td></tr><tr><td><code>update({events,view}) / destroy()</code></td><td>API</td><td>Совместим со старым setEvents/view/goTo. На narrow/coarse неделя — agenda со временем словами и кнопками 44px, на desktop/fine — часовая сетка.</td></tr></tbody></table></div>
   </section>
-  <section class="sc-sec">
+  <section class="sc-sec" id="svyazannoe">
     <h2>Связанное</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-period.html">Период</a> — выбор дат — не календарь работ</li><li><a href="component-list.html">Список</a> — лента событий без сетки</li><li><a href="calendar.html">Страница «Календарь»</a> — календарь в живом приложении</li></ul>
   </section>
@@ -121,7 +131,7 @@ cal.view = &#x27;week&#x27;; cal.goTo(&#x27;2026-09-14&#x27;); cal.setEvents(lis
     if (typeof dkCalendar !== 'function') return;
     dkCalendar(document.getElementById('x-cal'), { month: '2026-09-01', events: [
       { date: '2026-09-05', name: 'Замена задвижки', kind: 'high' }, { date: '2026-09-09', name: 'Плановое отключение ГВС', kind: 'plan' },
-      { date: '2026-09-14', name: 'Прорыв, Советский р-н', kind: 'crit' }, { date: '2026-09-14', name: 'Аварийная бригада', kind: 'high' },
+      { date: '2026-09-14', name: 'Прорыв, Советский р-н', kind: 'crit' }, { date: '2026-09-14', name: 'Проверка данных', kind: 'high' },
       { date: '2026-09-14', name: 'Подвоз воды', kind: 'event' }, { date: '2026-09-14', name: 'Информирование жителей', kind: 'event' },
       { date: '2026-09-17', name: 'Подача восстановлена', kind: 'calm' }, { date: '2026-09-23', name: 'Прорыв теплотрассы', kind: 'crit' },
       { date: '2026-09-28', name: 'Проверка готовности к зиме', kind: 'event' }] });
