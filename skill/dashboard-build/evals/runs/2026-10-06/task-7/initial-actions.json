@@ -1,0 +1,58 @@
+[
+  {
+    "width": 390,
+    "theme": "dark",
+    "keyboardOpen": true,
+    "tabTrap": 18,
+    "focusReturn": true,
+    "slicePreserved": true,
+    "noData": true,
+    "touch": true,
+    "tooltipLifecycle": true,
+    "tooltipEscape": true,
+    "descriptionPreserved": true,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "theme": "light",
+    "keyboardOpen": true,
+    "tabTrap": 18,
+    "focusReturn": true,
+    "slicePreserved": true,
+    "noData": true,
+    "touch": true,
+    "tooltipLifecycle": true,
+    "tooltipEscape": true,
+    "descriptionPreserved": true,
+    "overflow": false
+  },
+  {
+    "width": 1280,
+    "theme": "dark",
+    "keyboardOpen": true,
+    "tabTrap": 18,
+    "focusReturn": true,
+    "slicePreserved": true,
+    "noData": true,
+    "touch": false,
+    "tooltipLifecycle": true,
+    "tooltipEscape": true,
+    "descriptionPreserved": true,
+    "overflow": false
+  },
+  {
+    "width": 1280,
+    "theme": "light",
+    "keyboardOpen": true,
+    "tabTrap": 18,
+    "focusReturn": true,
+    "slicePreserved": true,
+    "noData": true,
+    "touch": false,
+    "tooltipLifecycle": true,
+    "tooltipEscape": true,
+    "descriptionPreserved": true,
+    "overflow": false
+  }
+]

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Регион — контекст и риск</title><!-- dashboard-kit: base, breadcrumbs, details-sidebar, tooltip, list, type, empty, layout, button. Собрано: python3 tools/kit.py head breadcrumbs details-sidebar tooltip list type empty layout button -->
+<script src="../../../../../../js/dk-theme.js"></script>
+<link rel="stylesheet" href="../../../../../../css/tokens.primitives.css">
+<link rel="stylesheet" href="../../../../../../css/tokens.semantic.css">
+<link rel="stylesheet" href="../../../../../../css/components.css">
+<script src="../../../../../../js/dk-util.js"></script>
+<script src="../../../../../../js/dk-icons.js" defer></script>
+<script src="../../../../../../js/dk-modal.js" defer></script>
+<script src="../../../../../../js/dk-context.js" defer></script>
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+
+</head><body class="dk-page"><main class="dk-wrap dk-stack" id="overview">
+<header class="dk-head"><div><p class="dk-overline">Мониторинг регионов</p><h1 class="dk-h1">Центральный федеральный округ</h1></div></header>
+<nav class="dk-breadcrumbs" aria-label="Навигационный путь"><ol><li><a href="#overview">Мониторинг</a></li><li><a href="#regions">Регионы</a></li><li><span aria-current="page">Центральный федеральный округ</span></li></ol></nav>
+<p class="dk-sub" id="slice">Учебный срез · Центральный федеральный округ · 6 октября 2026 года · Все уровни риска</p>
+<div class="dk-grid"><section class="dk-widget dk-col--full" id="regions" aria-labelledby="regions-title">
+<div class="dk-widget__head"><h2 class="dk-widget__title" id="regions-title">Регионы в срезе</h2><button type="button" class="dk-btn" id="risk-help" aria-describedby="risk-note">Что значит риск?</button></div>
+<div class="dk-widget__body"><p class="dk-sub" id="risk-note">Балл от 0 до 100. Высокий риск — от 78, средний — от 40 до 77, низкий — до 39. Пороги учебные.</p><p class="dk-caption" role="status" id="result-count">В срезе 3 региона. Открытие деталей сохраняет этот список.</p><div class="dk-list" id="region-list"></div></div></section></div>
+<p class="dk-caption">Источник: локальный учебный набор, без подключения к производственным данным.</p>
+</main>
+<dialog class="dk-modal dk-sidebar" id="region-details" aria-labelledby="details-title"><div class="dk-modal__body dk-stack">
+<nav class="dk-breadcrumbs" aria-label="Навигационный путь к региону"><ol><li><a href="#overview" data-parent>Мониторинг</a></li><li><a href="#regions" data-parent>Регионы</a></li><li><a href="#regions" data-parent>Центральный федеральный округ</a></li><li><span aria-current="page" id="current-region"></span></li></ol></nav>
+<h2 class="dk-h2" id="details-title"></h2><p class="dk-display" id="details-risk"></p><p class="dk-body" id="details-status"></p>
+<p class="dk-body">Риск — условная оценка текущих наблюдений, не прогноз.</p><button type="button" class="dk-btn" id="details-help">Определение риска</button><p class="dk-sub">Порог высокого риска: 78 из 100. Учебная методика, не прогноз.</p>
+<div id="missing" class="dk-empty" hidden><div class="dk-empty__t">Нет наблюдений</div><div>Для региона в учебном срезе не передан балл.</div><div class="dk-empty__do">Сверьте данные с источником; отсутствие не означает нулевой риск.</div></div>
+<p class="dk-caption">Дата: 6 октября 2026 года. Исходный срез остаётся без изменений.</p>
+<form method="dialog"><button type="submit" class="dk-btn">Закрыть детали</button></form>
+</div></dialog>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+ const regions = [
+  {id:'ivanovo',name:'Ивановская область',score:92,status:'Высокий риск',meaning:'crit'},
+  {id:'tver',name:'Тверская область',score:46,status:'Средний риск',meaning:'high'},
+  {id:'kostroma',name:'Костромская область',score:null,status:'Нет данных',meaning:null}
+ ];
+ const modal = dkModal('#region-details');
+ const tipText = 'Риск — условная оценка текущих наблюдений по учебным порогам, не прогноз.';
+ window.tips = ['risk-help','details-help'].map(id=>dkTooltip(document.getElementById(id),{text:tipText}));
+ window.detailModal = modal;
+ regions.forEach(region=> {
+  const button = document.createElement('button');button.type='button';button.className='dk-list__row';button.dataset.id=region.id;
+  button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-controls','region-details');
+  const text=document.createElement('span');text.className='dk-list__text';
+  const name=document.createElement('span');name.className='dk-list__name';name.textContent=region.name;
+  const status=document.createElement('span');status.className='dk-list__sub';status.textContent=region.status+' · Открыть детали';
+  const value=document.createElement('span');value.className='dk-list__v';value.textContent=region.score===null?'Нет данных':dkFmt.num(region.score)+' / '+dkFmt.num(100);
+  if(region.meaning)value.style.color=dkMeaning(region.meaning,'text');else {const marker=document.createElement('span');marker.className='dk-nodata';marker.textContent='—';marker.setAttribute('aria-hidden','true');value.prepend(marker,document.createTextNode(' '));}
+  text.append(name,status);button.append(text,value);document.getElementById('region-list').append(button);
+  button.addEventListener('click',()=>{
+   document.getElementById('details-title').textContent=region.name;
+   document.getElementById('current-region').textContent=region.name;
+   const risk=document.getElementById('details-risk');risk.textContent=region.score===null?'Нет данных':dkFmt.num(region.score)+' из '+dkFmt.num(100);
+   risk.classList.remove('dk-nodata');risk.style.color=region.meaning?dkMeaning(region.meaning,'text'):'';
+   document.getElementById('details-status').textContent=region.status;
+   document.getElementById('missing').hidden=region.score!==null;
+   modal.open();
+  });
+ });
+ document.querySelectorAll('[data-parent]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();modal.close();}));
+});
+</script></body></html>

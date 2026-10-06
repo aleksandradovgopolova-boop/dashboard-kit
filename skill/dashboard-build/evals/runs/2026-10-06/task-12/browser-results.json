@@ -1,0 +1,220 @@
+[
+  {
+    "name": "state restoration to all controls",
+    "value": true
+  },
+  {
+    "name": "save rename apply default remove",
+    "value": true
+  },
+  {
+    "name": "saved format observed",
+    "value": {
+      "version": 1,
+      "defaultId": "muwjs3hh-1",
+      "views": [
+        {
+          "id": "muwjs3hh-1",
+          "name": "Полное название рабочего вида",
+          "state": {
+            "filters": {
+              "district": "ЦФО"
+            },
+            "period": "30",
+            "sort": {
+              "column": "name",
+              "dir": "asc"
+            },
+            "page": 2,
+            "size": 10,
+            "mode": "map",
+            "density": "compact"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "reload restores current",
+    "value": true
+  },
+  {
+    "name": "layout reorder width hide DOM identity",
+    "value": true
+  },
+  {
+    "name": "layout reload reset",
+    "value": true
+  },
+  {
+    "name": "empty data reset",
+    "value": true
+  },
+  {
+    "name": "no-data distinct from zero",
+    "value": true
+  },
+  {
+    "name": "editor control labels",
+    "value": [
+      {
+        "tag": "BUTTON",
+        "text": "Выше",
+        "label": null
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Ниже",
+        "label": null
+      },
+      {
+        "tag": "SELECT",
+        "text": "ПоловинаТретьДве третиПолная",
+        "label": "Ширина: Наблюдения по регионам"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Скрыть",
+        "label": null
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Выше",
+        "label": null
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Ниже",
+        "label": null
+      },
+      {
+        "tag": "SELECT",
+        "text": "ПоловинаТретьДве третиПолная",
+        "label": "Ширина: География наблюдений"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Скрыть",
+        "label": null
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Выше",
+        "label": null
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Ниже",
+        "label": null
+      },
+      {
+        "tag": "SELECT",
+        "text": "ПоловинаТретьДве третиПолная",
+        "label": "Ширина: Как хранится обзор"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Скрыть",
+        "label": null
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Сбросить раскладку",
+        "label": null
+      }
+    ]
+  },
+  {
+    "name": "keyboard state observed",
+    "value": {
+      "filters": {
+        "district": ""
+      },
+      "period": "14",
+      "sort": {
+        "column": "risk",
+        "dir": "desc"
+      },
+      "page": 1,
+      "size": 10,
+      "mode": "list",
+      "density": "comfortable"
+    }
+  },
+  {
+    "name": "keyboard Enter reset",
+    "value": true
+  },
+  {
+    "name": "keyboard layout move focus retained",
+    "value": true
+  },
+  {
+    "name": "saved view remove",
+    "value": true
+  },
+  {
+    "name": "cleanup double destroy remount",
+    "value": true
+  },
+  {
+    "name": "v0 current observed",
+    "value": {
+      "state": {
+        "filters": {
+          "district": "СФО"
+        },
+        "period": "7",
+        "sort": {
+          "column": "risk",
+          "dir": "desc"
+        },
+        "page": 1,
+        "size": 20,
+        "mode": "list",
+        "density": "comfortable"
+      },
+      "stored": "{\"version\":1,\"snapshot\":{\"filters\":{\"district\":\"СФО\"},\"period\":\"7\",\"sort\":{\"column\":\"risk\",\"dir\":\"desc\"},\"page\":1,\"size\":20,\"mode\":\"list\",\"density\":\"comfortable\"}}"
+    }
+  },
+  {
+    "name": "v0 current migration",
+    "value": true
+  },
+  {
+    "name": "saved SDK v0 migration",
+    "value": true
+  },
+  {
+    "name": "unknown version untouched",
+    "value": true
+  },
+  {
+    "name": "storage failure visible and memory works",
+    "value": true
+  },
+  {
+    "name": "390 compact no overflow",
+    "value": true
+  },
+  {
+    "name": "touch preferences opens",
+    "value": true
+  },
+  {
+    "name": "layout storage error memory change",
+    "value": true
+  },
+  {
+    "name": "filter Escape focus return",
+    "value": true
+  },
+  {
+    "name": "Tab advances focus",
+    "value": true
+  },
+  {
+    "name": "runtime errors",
+    "value": []
+  }
+]

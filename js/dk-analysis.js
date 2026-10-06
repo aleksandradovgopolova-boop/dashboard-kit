@@ -38,8 +38,8 @@
       var percent = function (v) { return Math.max(0, Math.min(100, (v - min) / (max - min) * 100)); };
       var ranges = (o.ranges || []).slice().sort(function (a,b) { return a.to - b.to; });
       if (ranges.some(function (r) { return !finite(r.to) || r.to < min || r.to > max; })) throw new RangeError('bullet: invalid range');
-      var text = (o.label || 'Показатель') + ': ' + fmt.num(o.actual) + (o.unit ? ' ' + o.unit : '') +
-        '; цель ' + fmt.num(o.target) + '; шкала ' + fmt.num(min) + '–' + fmt.num(max);
+      var text = (o.label || 'Показатель') + ': ' + (finite(o.actual) ? fmt.num(o.actual) + (o.unit ? ' ' + o.unit : '') : 'Нет данных') +
+        '; цель ' + (finite(o.target) ? fmt.num(o.target) : 'Нет данных') + '; шкала ' + fmt.num(min) + '–' + fmt.num(max);
       el.innerHTML = '<div class="dk-bullet"><div>' + esc(text) + '</div><div class="dk-bullet__track" aria-hidden="true"></div>' +
         '<p class="dk-caption">' + esc(ranges.map(function (r) { return (r.label || 'Диапазон') + ' до ' + fmt.num(r.to); }).join('; ')) + '</p></div>';
       var track = el.querySelector('.dk-bullet__track'), from = min;
@@ -60,7 +60,7 @@
       var columns=o.columns || [], rows=o.rows || [], cuts=o.thresholds || [25,50,75];
       if(cuts.length!==3 || cuts.some(function(n,i){return !finite(n)||(i && n<=cuts[i-1]);}))throw new RangeError('heatmap: three ascending thresholds');
       var meanings=['calm','high','high','crit'];
-      var legend='Низкий: < '+fmt.num(cuts[0])+'; средний: '+fmt.num(cuts[0])+'–'+fmt.num(cuts[2])+'; высокий: ≥ '+fmt.num(cuts[2])+'; штрихи: нет данных.';
+      var legend='Ⅰ: < '+fmt.num(cuts[0])+'; Ⅱ: ≥ '+fmt.num(cuts[0])+' и < '+fmt.num(cuts[1])+'; Ⅲ: ≥ '+fmt.num(cuts[1])+' и < '+fmt.num(cuts[2])+'; Ⅳ: ≥ '+fmt.num(cuts[2])+'; штрихи: нет данных.';
       el.innerHTML='<div class="dk-heatmap"><p>'+esc(o.label || 'Распределение по времени')+'</p><p class="dk-caption">'+esc(legend)+'</p>'+
         '<div class="dk-tablewrap"><table class="dk-table dk-heatmap__table"><caption class="dk-vh">'+esc(o.label || 'Тепловая карта')+'</caption><thead><tr><th scope="col">Объект</th>'+
         columns.map(function(c){return '<th scope="col">'+esc(c)+'</th>';}).join('')+'</tr></thead><tbody>'+
@@ -82,7 +82,7 @@
       // A row per label deliberately avoids collision at any font size.
       el.innerHTML='<div class="dk-annotations"><p>'+esc(o.label||'События на временной шкале')+'</p><ol>'+events.map(function(e){
         return '<li><span>'+esc(e.label)+' · '+esc(fmt.dateTime(e.start))+(e.end!==e.start?' – '+esc(fmt.dateTime(e.end)):'')+'</span><span class="dk-annotations__track" aria-hidden="true"><i></i></span></li>';
-      }).join('')+'</ol></div>';
+      }).join('')+'</ol>'+(events.length?'':'<p class="dk-caption">Событий за период нет</p>')+'</div>';
       el.querySelectorAll('li').forEach(function(li,i){var e=events[i],mark=li.querySelector('i');var a=Math.max(0,Math.min(100,(e.start-start)/(end-start)*100));var b=Math.max(0,Math.min(100,(e.end-start)/(end-start)*100));mark.style.left=a+'%';mark.style.width=Math.max(1,b-a)+'%';});
     });
   };

@@ -1,0 +1,162 @@
+[
+  {
+    "initial": {
+      "rows": 12,
+      "canvas": true,
+      "theme": "light"
+    }
+  },
+  {
+    "filterOptions": [
+      {
+        "text": "Тверская область6",
+        "role": "option"
+      },
+      {
+        "text": "Ярославская область6",
+        "role": "option"
+      },
+      {
+        "text": "Костромская область0",
+        "role": "option"
+      }
+    ]
+  },
+  {
+    "filtered": {
+      "rows": 6,
+      "regions": [
+        "Тверская область"
+      ],
+      "table": 6
+    }
+  },
+  {
+    "png": "downloads.html (1).crdownload",
+    "bytes": 1320139,
+    "signature": "4372323403000000"
+  },
+  {
+    "png": "requests-chart.png",
+    "bytes": 91458,
+    "signature": "89504e470d0a1a0a"
+  },
+  {
+    "csv": "requests-filtered.csv",
+    "text": "﻿\"Дата\",\"Регион\",\"Заявки, шт.\"\r\n\"01.10.2026\",\"Тверская область\",\"24\"\r\n\"02.10.2026\",\"Тверская область\",\"31\"\r\n\"03.10.2026\",\"Тверская область\",\"18\"\r\n\"04.10.2026\",\"Тверская область\",\"0\"\r\n\"05.10.2026\",\"Тверская область\",\"27\"\r\n\"06.10.2026\",\"Тверская область\",\"35\""
+  },
+  {
+    "fullscreen": {
+      "native": true,
+      "dialog": false,
+      "exitVisible": true,
+      "focus": "fullscreen"
+    }
+  },
+  {
+    "exitButton": {
+      "native": false,
+      "focus": "fullscreen"
+    }
+  },
+  {
+    "escape": {
+      "native": true,
+      "focus": "fullscreen"
+    }
+  },
+  {
+    "fallback": {
+      "dialog": true,
+      "focusInDialog": true,
+      "exitVisible": true
+    }
+  },
+  {
+    "fallbackTabCycle": true
+  },
+  {
+    "fallbackEscape": {
+      "dialog": false,
+      "focus": "fullscreen"
+    }
+  },
+  {
+    "noData": {
+      "rows": 0,
+      "tableEmpty": true,
+      "pngDisabled": true,
+      "chart": "Нет наблюденийДля выбранного региона журнал не содержит записей.Сбросьте фильтр, чтобы вернуть данные."
+    }
+  },
+  {
+    "emptyCsv": "requests-filtered.csv",
+    "text": "﻿\"Дата\",\"Регион\",\"Заявки, шт.\""
+  },
+  {
+    "keyboardDensityAttempt": "comfortable"
+  },
+  {
+    "desktopDensity": {
+      "value": "compact",
+      "root": "compact",
+      "rowHeight": 28
+    }
+  },
+  {
+    "mobileCompact": {
+      "coarse": true,
+      "width": 390,
+      "targets": [
+        {
+          "label": "Сменить тему",
+          "h": 44,
+          "w": 110.453125
+        },
+        {
+          "label": "Регион",
+          "h": 44,
+          "w": 99.078125
+        },
+        {
+          "label": "Сбросить фильтр",
+          "h": 44,
+          "w": 98.75
+        },
+        {
+          "label": "ОбычнаяКомпактная",
+          "h": 44,
+          "w": 124
+        },
+        {
+          "label": "Полный экран графика",
+          "h": 44,
+          "w": 165.59375
+        },
+        {
+          "label": "Сохранить график PNG",
+          "h": 44,
+          "w": 165.953125
+        },
+        {
+          "label": "Сохранить текущий срез CSV",
+          "h": 44,
+          "w": 203.5
+        }
+      ]
+    }
+  },
+  {
+    "theme": "dark"
+  },
+  {
+    "destroy": {
+      "chartDisposed": true,
+      "canvas": false,
+      "dialogs": 0
+    }
+  },
+  {
+    "exceptions": []
+  }
+]

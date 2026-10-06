@@ -2432,6 +2432,8 @@ ERP-сценарию и сознательно отложено:
 
 В JavaScript используйте `dkMeaning(name, role)`: `name` — `crit`, `high`,
 `calm`, `event`, `nodata`; обязательная `role` — `text` или `fill`.
+Для уровней риска высокий соответствует `crit`, средний — `high`, низкий —
+`calm`. Имя `high` обозначает предупреждение, а не русский уровень «Высокий риск».
 Например, `el.style.color = dkMeaning('crit', 'text')`. Для canvas:
 `dkMeaning.color('crit', 'fill', el)` разрешает токен в ближайшем `.dk-root`.
 Неизвестные роли/имена вызывают TypeError. Event в тексте нейтрален: его заливка

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="light" data-accent="blue">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Заявки — график и текущий срез</title><!-- dashboard-kit: base, layout, type, button, chart, table, select, fullscreen, export, density-controls. Собрано: python3 tools/kit.py head base layout type button chart table select fullscreen export density-controls -->
+<script src="../../../../../../js/dk-theme.js"></script>
+<link rel="stylesheet" href="../../../../../../css/tokens.primitives.css">
+<link rel="stylesheet" href="../../../../../../css/tokens.semantic.css">
+<link rel="stylesheet" href="../../../../../../css/components.css">
+<script src="../../../../../../js/dk-util.js"></script>
+<script src="../../../../../../js/dk-icons.js" defer></script>
+<script src="../../../../../../vendor/echarts.min.js" defer></script>
+<script src="../../../../../../js/dk-chart-theme.js" defer></script>
+<script src="../../../../../../js/dk-charts.js" defer></script>
+<script src="../../../../../../js/dk-select.js" defer></script>
+<script src="../../../../../../js/dk-table.js" defer></script>
+<script src="../../../../../../js/dk-workspace.js" defer></script>
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+
+<style>
+.page-head,.actions{display:flex;align-items:center;gap:var(--gap-inline);flex-wrap:wrap}
+.page-head{justify-content:space-between;margin-bottom:var(--gap-section)}
+.dk-widget__head{flex-wrap:wrap}.dk-widget__actions{max-width:100%;margin-left:0}.actions{flex-wrap:wrap}
+#exit{display:none} .dk-fullscreen #exit, #chart-widget:fullscreen #exit, dialog #exit{display:inline-flex}
+#chart-widget:fullscreen{overflow:auto} #chart-widget:fullscreen #chart{height:65vh}
+</style></head>
+<body class="dk-page"><main class="dk-wrap" id="main">
+<header class="page-head"><div><h1 class="dk-h1">Заявки по дням</h1><p class="dk-sub">1–6 октября 2026 · демонстрационные данные</p></div><button type="button" class="dk-btn" id="theme">Сменить тему</button></header>
+<div class="dk-toolbar"><div class="dk-toolbar__group"><div id="region-filter"></div><button type="button" class="dk-btn dk-btn--ghost" id="reset">Сбросить фильтр</button><div id="density"></div></div></div>
+<p id="slice-status" class="dk-sub" role="status" aria-live="polite"></p>
+<div class="dk-grid"><section class="dk-widget dk-col--full" id="chart-widget" aria-labelledby="chart-title">
+<div class="dk-widget__head"><h2 class="dk-widget__title" id="chart-title">Принятые заявки, шт. · 6 дней</h2><div class="dk-widget__actions actions"><button type="button" class="dk-btn" id="fullscreen">Полный экран графика</button><button type="button" class="dk-btn" id="exit">Выйти из полного экрана</button><button type="button" class="dk-btn" id="png">Сохранить график PNG</button></div></div>
+<div id="chart" class="dk-chart dk-chart--lg"></div><p class="dk-widget__hint">Источник: учебный журнал заявок. Точные значения текущего среза — в таблице ниже. Выход из полного экрана: Escape или кнопка выхода.</p>
+<p id="png-status" role="status" class="dk-sub"></p></section>
+<section class="dk-widget dk-col--full" aria-labelledby="table-title"><div class="dk-widget__head"><h2 class="dk-widget__title" id="table-title">Текущий срез в числах</h2><div class="dk-widget__actions"><button type="button" class="dk-btn" id="csv">Сохранить текущий срез CSV</button></div></div>
+<div class="dk-tablewrap" style="--table-min:520px"><table class="dk-table dk-table--zebra" id="data-table"><thead><tr><th scope="col">Дата</th><th scope="col">Регион</th><th scope="col" class="dk-td-num">Заявки, шт.</th></tr></thead><tbody id="rows"></tbody></table></div><p id="empty-table" class="dk-nodata" hidden>Нет наблюдений для выбранного региона. Сбросьте фильтр, чтобы вернуть данные.</p><p id="csv-status" class="dk-sub" role="status"></p></section></div>
+</main><script>
+document.addEventListener('DOMContentLoaded', function(){
+  const names=['Тверская область','Ярославская область'];
+  const days=['01.10.2026','02.10.2026','03.10.2026','04.10.2026','05.10.2026','06.10.2026'];
+  const rows=names.flatMap((region,i)=>days.map((date,j)=>({date,region,count:[[24,31,18,0,27,35],[16,22,25,19,28,20]][i][j]})));
+  let current=rows.slice();
+  const columns=[{key:'date',label:'Дата'},{key:'region',label:'Регион'},{key:'count',label:'Заявки, шт.'}];
+  function spec(){return {type:'line',categories:current.length?days.map(x=>x.slice(0,5)):[],series:names.filter(n=>current.some(r=>r.region===n)).map(n=>({name:n,data:days.map(d=>current.find(r=>r.region===n&&r.date===d)?.count??null)})),unit:'шт.',label:'Принятые заявки по дням, с 1 по 6 октября 2026 года',empty:{title:'Нет наблюдений',text:'Для выбранного региона журнал не содержит записей.',hint:'Сбросьте фильтр, чтобы вернуть данные.'}}}
+  const chart=dkChart(document.getElementById('chart'),spec());
+  const table=dkTable(document.getElementById('data-table'));
+  function render(value){current=rows.filter(r=>!value||r.region===value);const body=document.getElementById('rows');body.replaceChildren();current.forEach(r=>{const tr=document.createElement('tr');['date','region','count'].forEach(k=>{const td=document.createElement('td');td.textContent=k==='count'?dkFmt.num(r[k]):r[k];if(k==='count')td.className='dk-td-num';tr.append(td)});body.append(tr)});document.getElementById('slice-status').textContent=(value||'Все регионы')+' · '+dkFmt.num(current.length)+' строк';document.getElementById('empty-table').hidden=!!current.length;document.getElementById('png').disabled=!current.length;chart.update(spec());document.getElementById('csv-status').textContent='';document.getElementById('png-status').textContent=current.length?'':'PNG недоступен: нет наблюдений.';}
+  const filter=dkSelect(document.getElementById('region-filter'),{label:'Регион',mode:'single',options:[...names.map(n=>({value:n,name:n,count:6})),{value:'Костромская область',name:'Костромская область',count:0}],onChange:render});
+  const density=dkDensity(document.getElementById('density'),{root:document.documentElement,value:'comfortable'});
+  const fullscreen=dkFullscreen(document.getElementById('chart-widget'),document.getElementById('fullscreen'));
+  document.getElementById('exit').addEventListener('click',()=>fullscreen.exit());
+  document.getElementById('reset').addEventListener('click',()=>{filter.clear();render('')});
+  document.getElementById('csv').addEventListener('click',()=>{dkExport.csv(current,columns,'requests-filtered');document.getElementById('csv-status').textContent='CSV текущего среза подготовлен браузером: '+dkFmt.num(current.length)+' строк.'});
+  document.getElementById('png').addEventListener('click',async()=>{try{await dkExport.chart(chart,'requests-chart');document.getElementById('png-status').textContent='PNG текущего графика подготовлен браузером.'}catch(e){document.getElementById('png-status').textContent='Не удалось подготовить PNG. Повторите попытку.'}});
+  document.getElementById('theme').addEventListener('click',()=>dkTheme.theme=document.documentElement.dataset.theme==='dark'?'light':'dark');
+  render('');
+  window.demo={chart,table,filter,density,fullscreen,currentRows:()=>current.slice(),render,destroy(){fullscreen.destroy();density.destroy();filter.destroy();table.destroy();chart.destroy()}};
+});
+</script></body></html>

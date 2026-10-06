@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="light" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Факт, цель и события за смену</title>
+<!-- dashboard-kit: base, bullet-chart, period-comparison, timeline-annotations, layout, type. Собрано: python3 tools/kit.py head bullet-chart period-comparison timeline-annotations layout type -->
+<script src="../../../../../../js/dk-theme.js"></script>
+<link rel="stylesheet" href="../../../../../../css/tokens.primitives.css">
+<link rel="stylesheet" href="../../../../../../css/tokens.semantic.css">
+<link rel="stylesheet" href="../../../../../../css/components.css">
+<script src="../../../../../../js/dk-util.js"></script>
+<script src="../../../../../../js/dk-icons.js" defer></script>
+<script src="../../../../../../js/dk-analysis.js" defer></script>
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+</head>
+<body class="dk-page">
+<main class="dk-wrap">
+<header class="dk-head"><div>
+<p class="dk-overline">Оперативный контекст · учебный пример</p>
+<h1 class="dk-h1">Факт, цель и события за смену</h1>
+<p class="dk-sub">6 октября 2026 · 08:00–20:00 · время Москвы</p>
+</div></header>
+<div class="dk-grid">
+<section class="dk-widget dk-col--half" aria-labelledby="goal-title">
+<div class="dk-widget__head"><h2 class="dk-widget__title" id="goal-title">Устранение за смену</h2></div>
+<div class="dk-widget__body">
+<div id="bullet"></div>
+<p class="dk-body">Факт ниже цели на <span id="gap"></span></p>
+<p class="dk-caption">Диапазоны: 0–60% — ниже нормы; 60–80% — к цели; 80–100% — цель достигнута. Границы и единица заданы для примера.</p>
+</div></section>
+<section class="dk-widget dk-col--half" aria-labelledby="accidents-title">
+<div class="dk-widget__head"><h2 class="dk-widget__title" id="accidents-title">Аварии за смену</h2></div>
+<div class="dk-widget__body">
+<div id="comparison"></div>
+<p class="dk-body">Рост аварий — ухудшение. Сравниваются смены одинаковой длительности: 6 и 5 октября, 08:00–20:00.</p>
+</div></section>
+<section class="dk-widget dk-col--full" aria-labelledby="events-title">
+<div class="dk-widget__head"><h2 class="dk-widget__title" id="events-title">События на временной шкале</h2></div>
+<div class="dk-widget__body">
+<p class="dk-body">Точка — событие в один момент: в 10:00 начались работы. Диапазон — длительное событие: с 12:00 до 16:00 действовало ограничение.</p>
+<div id="annotations"></div>
+<p class="dk-caption">Шкала: 08:00–20:00. Положение показывает время события, длина полосы — его длительность. События дают контекст изменениям, но сами по себе не доказывают их причину.</p>
+</div></section>
+</div>
+<p class="dk-caption">Источник: числа из задания; названия показателя, смены, границы и события — демонстрационные допущения.</p>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const bulletOptions = {label:'Доля устранённых аварий',actual:72,target:80,min:0,max:100,unit:'%',ranges:[{to:60,label:'Ниже нормы'},{to:80,label:'К цели'},{to:100,label:'Цель достигнута'}]};
+  const comparisonOptions = {label:'6 октября к 5 октября',current:23,previous:19,better:'decrease'};
+  const annotationOptions = {label:'События за смену',start:'2026-10-06T08:00:00+03:00',end:'2026-10-06T20:00:00+03:00',events:[{label:'Начало работ',start:'2026-10-06T10:00:00+03:00'},{label:'Ограничение',start:'2026-10-06T12:00:00+03:00',end:'2026-10-06T16:00:00+03:00'}]};
+  document.getElementById('gap').textContent = dkFmt.num(bulletOptions.target - bulletOptions.actual) + ' п. п.';
+  window.demo = {
+    bullet: dkBullet(document.getElementById('bullet'), bulletOptions),
+    comparison: dkPeriodComparison(document.getElementById('comparison'), comparisonOptions),
+    annotations: dkTimelineAnnotations(document.getElementById('annotations'), annotationOptions),
+    options: {bullet:bulletOptions, comparison:comparisonOptions, annotations:annotationOptions}
+  };
+});
+</script>
+</body></html>

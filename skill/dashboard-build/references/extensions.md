@@ -31,3 +31,8 @@ component pages; не собирай их по памяти.
 Проверка всей библиотеки: `python3 tools/test.py`; страницы продукта:
 `python3 tools/check.py --page …`. Evals дополнены шестью сценариями;
 `check-evals.py` проверяет SDK fixtures/покрытие, не качество независимого агента.
+
+У DOM charts (`dkHeatmap`, `dkBullet`, `dkPeriodComparison`,
+`dkTimelineAnnotations`) `update(opts)` заменяет весь набор параметров.
+Для annotations каждый раз передавай start/end, даже если events пуст.
+Escape в подсказке внутри dialog сначала закрывает подсказку.
