@@ -165,17 +165,10 @@
     };
   }
 
-  /* --- прогноз и предварительные данные ----------------------------------
-     Последние n точек рисуются пунктиром. Сплошная линия — утверждение, что
-     так было; пунктир — что так, скорее всего, будет, или что данные ещё не
-     закрыты. Рисовать прогноз сплошной линией значит врать, а это дороже
-     любой экономии на разметке.
-
-     Ряд режется на два: сплошной и пунктирный. Отрезком линии в ECharts по
-     одной точке не управляют — стиль точки красит саму точку, но не путь к
-     ней. Стык дублируется в обоих рядах, иначе линия рвётся на границе.      */
+  /* Прогноз выделяется тонкой сплошной линией, ромбами и подписью.
+     Стык дублируется в обоих рядах, иначе линия рвётся на границе. */
   function splitForecast(data, n) {
-    var cut = Math.max(1, data.length - n);           // первая пунктирная точка
+    var cut = Math.max(1, data.length - n);           // первая прогнозная точка
     var head = data.map(function (v, i) { return i < cut ? v : null; });
     var tail = data.map(function (v, i) { return i >= cut - 1 ? v : null; });
     return { head: head, tail: tail };
@@ -391,8 +384,7 @@
       });
       applyHighlight(option.series, spec);
 
-      // Пунктирные хвосты — только у линейных типов: у столбцов «прогноз»
-      // показывают заливкой, а не штрихом, и это отдельный разговор.
+      // Прогнозный отрезок — только у линейных типов.
       if (type === 'line' || type === 'area' || type === 'step') {
         var tails = [];
         series.forEach(function (s, i) {
@@ -401,15 +393,17 @@
           option.series[i].data = parts.head;
           tails.push({
             name: s.name, type: 'line', data: parts.tail,
-            smooth: false, showSymbol: option.series[i].showSymbol,
+            smooth: false, showSymbol: true, symbol: 'emptyDiamond', symbolSize: 7,
+            endLabel: { show: true, formatter: 'Прогноз' },
             step: type === 'step' ? 'end' : false,
-            lineStyle: { type: [8, 6], color: seriesColor(i) },   // крупнее стандартного: мелкий штрих на плитке сливается в сплошную
+            lineStyle: { type: 'solid', width: 1, color: seriesColor(i) },
             itemStyle: { color: seriesColor(i) },
             areaStyle: type === 'area' ? { opacity: 0.1, color: seriesColor(i) } : null,
             z: option.series[i].z
           });
         });
         if (tails.length) {
+          option.grid.right = 76; // место для полной подписи «Прогноз»
           option.series = option.series.concat(tails);
           // В легенде хвост отдельной строкой не стоит: это та же величина,
           // просто ещё не закрытая.
@@ -647,11 +641,11 @@
        цвет там появляется только у значений за порогом, и порог обязан быть
        нарисован.
 
-       Линия серая и пунктирная — это ориентир, а не серия и не «плохо»:
+       Линия серая и сплошная — это ориентир, а не серия и не «плохо»:
        красной она сама превращалась бы в тревогу. Подпись у правого края,
        где заканчивается взгляд, прошедший по графику. Рисуется одной серией
        (первой): ECharts держит markLine на серии, а вторая такая же линия
-       поверх первой только утолщила бы пунктир. */
+       поверх первой только утолщила бы линию. */
     if (spec.target != null && option.series && option.series.length &&
         (type === 'line' || type === 'area' || type === 'step' ||
          type === 'bar' || type === 'bar-stacked' || type === 'bar-h')) {
@@ -659,7 +653,7 @@
       var точка = type === 'bar-h' ? { xAxis: цель.value } : { yAxis: цель.value };
       option.series[0].markLine = {
         silent: true, symbol: 'none', animation: false,
-        lineStyle: { type: [6, 4], width: 1, color: inkColor('--ink-3') },
+        lineStyle: { type: 'solid', width: 1, color: inkColor('--ink-3') },
         label: {
           show: цель.label != null, formatter: String(цель.label || ''),
           position: type === 'bar-h' ? 'insideStartTop' : 'end',
@@ -704,6 +698,12 @@
     if (Array.isArray(option.yAxis) && option.yAxis.length > 1) {
       console.error('dk-charts: две оси Y запрещены — раздели на два графика');
       option.yAxis = option.yAxis[0];
+    }
+
+    if (option.tooltip) {
+      option.tooltip.axisPointer = Object.assign({}, option.tooltip.axisPointer, {
+        lineStyle: { type: 'solid' }, crossStyle: { type: 'solid' }
+      });
     }
 
     return option;
@@ -814,6 +814,7 @@
           // «Последнее» — только у времени: у столбцов порядок категорий не время.
           (/^(line|area|step|spark)$/.test(type) ? ', последнее ' + n(last[0]) + unit : ''));
       });
+      if ((spec.series || []).some(function (s) { return s.forecast; })) parts.push('Прогноз: тонкая линия с ромбами, предварительные данные');
       if ((spec.series || []).length > 3) parts.push('Ещё серий: ' + (spec.series.length - 3));
     }
     if (spec.target != null) {
@@ -826,7 +827,7 @@
   }
 
   /* ПОДСКАЗКА ПО ОСИ. У серии с прогнозом две половины под одним именем —
-     сплошная и пунктирная, и на каждой точке одна из них пуста. Стандартная
+     фактическая и прогнозная, и на каждой точке одна из них пуста. Стандартная
      подсказка показывала обе: «Аварии 24» и под ней «Аварии —», то есть одна
      величина читалась двумя, и вторая — «нет данных» (проверочная задача
      скилла, 29.09). Здесь пустые значения не показываются, а одно имя
