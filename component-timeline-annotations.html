@@ -88,7 +88,9 @@
     <h2>Код</h2>
     <p></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-annotations&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkTimelineAnnotations(document.getElementById(&#x27;advanced-annotations&#x27;), {label:&#x27;События за смену&#x27;,start:&#x27;2026-10-06T08:00:00+03:00&#x27;,end:&#x27;2026-10-06T20:00:00+03:00&#x27;,events:[{label:&#x27;Начало работ&#x27;,start:&#x27;2026-10-06T10:00:00+03:00&#x27;},{label:&#x27;Ограничение&#x27;,start:&#x27;2026-10-06T12:00:00+03:00&#x27;,end:&#x27;2026-10-06T16:00:00+03:00&#x27;}]});
+});
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkTimelineAnnotations(el, opts)</code></td><td>API</td><td>start/end задают шкалу, events:{label,start,end?}[]; update(opts), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">

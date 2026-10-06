@@ -88,7 +88,9 @@
     <h2>Код</h2>
     <p></p><pre class="sc-code"><code>&lt;div class=&quot;dk-export&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;dk-btn&quot; id=&quot;advanced-export&quot;&gt;CSV текущего среза&lt;/button&gt;&lt;p role=&quot;status&quot; id=&quot;advanced-export-status&quot;&gt;&lt;/p&gt;&lt;/div&gt;
 &lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 document.getElementById(&#x27;advanced-export&#x27;).addEventListener(&#x27;click&#x27;,function(){dkExport.csv([{region:&#x27;Ивановская область&#x27;,risk:92}], [{key:&#x27;region&#x27;,label:&#x27;Регион&#x27;},{key:&#x27;risk&#x27;,label:&#x27;Риск&#x27;}], &#x27;regions-filtered&#x27;);document.getElementById(&#x27;advanced-export-status&#x27;).textContent=&#x27;CSV подготовлен браузером&#x27;;});
+});
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkExport.csv(rows, columns, name?)</code></td><td>Blob</td><td>UTF-8 BOM, CRLF, quotes; formula-like strings prefixed with apostrophe. Передавайте текущий срез, не исходные строки.</td></tr><tr><td><code>dkExport.chart(chart, name?)</code></td><td>Promise<Blob></td><td>PNG через dkChart.exportImage(). SVG только из переданного самодостаточного DOM SVG: dkExport.svg(svg,name?).</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">

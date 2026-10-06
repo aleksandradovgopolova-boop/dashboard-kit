@@ -88,7 +88,9 @@
     <h2>Код</h2>
     <p></p><pre class="sc-code"><code>&lt;button type=&quot;button&quot; class=&quot;dk-btn&quot; id=&quot;advanced-tooltip&quot;&gt;Что значит риск?&lt;/button&gt;
 &lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkTooltip(document.getElementById(&#x27;advanced-tooltip&#x27;), {text:&#x27;Риск — оценка по текущим порогам, не прогноз.&#x27;});
+});
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkTooltip(trigger, {text})</code></td><td>API</td><td>Именованная кнопка. show(), hide(), update({text}), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">

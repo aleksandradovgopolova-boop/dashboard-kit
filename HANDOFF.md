@@ -259,8 +259,17 @@ manifest/каталог/skill обновлены. Подробности API —
 
 Штриховка и dynamic meaning больше не требуют решения человека: реализованы
 по запросу 06.10. Известные ограничения физических устройств/живого SR и
-Safari/Firefox остаются открытыми. Независимый AI-agent eval не следует путать
+полного Safari/Firefox остаются открытыми. Независимый AI-agent eval не следует путать
 с deterministic SDK fixture coverage. Новые optional JS API экспериментальны.
 
 Проверки: tools/test.py (Chrome/Node обязательны), check.py --fast для короткого
 цикла. managed AI Ops не изменялся, канал stable/update через PR сохранён.
+
+Повторное ревью PR #11: исправлены повторный init tree/density/layout/tooltip,
+cleanup fullscreen aria-pressed и игнорирование null/некорректных layout records.
+Snippets новых компонентов ждут DOMContentLoaded. Новый browser consumer test
+собирает 13 SDK-примеров на шести чистых страницах, 24 сочетания темы/ширины;
+это не independent AI eval. У eval задач 7–12 уточнены конкретные ожидания.
+Desktop Safari 27 UI smoke выполнен (tree, tooltip, fullscreen, heatmap), найден
+и исправлен фон no-data при live theme switch. Полный WebDriver suite недоступен
+без изменения настройки Safari; Firefox/устройства/spoken SR ещё не проверены.

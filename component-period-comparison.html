@@ -88,7 +88,9 @@
     <h2>Код</h2>
     <p></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-comparison&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkPeriodComparison(document.getElementById(&#x27;advanced-comparison&#x27;), {label:&#x27;Аварии за сутки&#x27;,current:23,previous:19,better:&#x27;decrease&#x27;});
+});
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkComparison(current, previous, better)</code></td><td>чистая функция</td><td>Возвращает delta, percent, direction, meaning. better: increase/decrease/neutral.</td></tr><tr><td><code>dkPeriodComparison(el, opts)</code></td><td>API</td><td>current, previous, better, label, unit; update(opts), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">

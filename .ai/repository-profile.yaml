@@ -22,6 +22,7 @@ stacks:
   - tools/test.py
   - tools/check-advanced.mjs
   - tools/check-runtime.mjs
+  - tools/check-sdk-snippets.mjs
   install_command: null
 ci:
 - github-actions

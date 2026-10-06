@@ -974,3 +974,11 @@ Touch/narrow week календаря теперь agenda: каждый день 
 часовую сетку; media change перестраивает представление. Calendar получил
 update/destroy и cleanup событий/media listener. Месячная сетка сохраняет
 документированное исключение ширины дня; визуальные полосы не являются touch-целями.
+
+SDK consumer test копирует опубликованный код и `kit.py head` на чистые страницы:
+готовая doc page может скрывать ошибку порядка загрузки своими init wrappers.
+Поэтому snippets также ждут DOMContentLoaded. AI prompt eval и этот integration
+test учитываются отдельно. Cleanup старого экземпляра новых DOM-controls идёт
+до создания разметки, иначе dkOwn удаляет новый DOM при повторном init.
+No-data ячейка таблицы меняет фон без transition: desktop Safari сохранил старый
+фон при live смене темы, ухудшив контраст. Штрихован только маркер, текст на surface.

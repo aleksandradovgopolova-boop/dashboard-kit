@@ -88,7 +88,9 @@
     <h2>Код</h2>
     <p></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-tree&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkTreeSelect(document.getElementById(&#x27;advanced-tree&#x27;), {label:&#x27;Службы&#x27;,nodes:[{id:&#x27;all&#x27;,label:&#x27;Все службы&#x27;,children:[{id:&#x27;heat&#x27;,label:&#x27;Тепло&#x27;},{id:&#x27;water&#x27;,label:&#x27;Вода&#x27;}]}]});
+});
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkTreeSelect(el, opts)</code></td><td>API</td><td>nodes:{id,label,disabled?,children?}[], value: id[], onChange(ids). value(), expand(id), update({value}), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">

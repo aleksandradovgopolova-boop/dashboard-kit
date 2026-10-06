@@ -88,7 +88,9 @@
     <h2>Код</h2>
     <p></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-heatmap&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkHeatmap(document.getElementById(&#x27;advanced-heatmap&#x27;), {label:&#x27;Риск по службам&#x27;, columns:[&#x27;Пн&#x27;,&#x27;Вт&#x27;,&#x27;Ср&#x27;], thresholds:[25,50,75], rows:[{label:&#x27;Тепло&#x27;,values:[12,58,null]},{label:&#x27;Вода&#x27;,values:[0,77,35]}]});
+});
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkHeatmap(el, opts)</code></td><td>API</td><td>columns: string[], rows: {label,values}[], thresholds: три возрастающих числа. update(opts), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">

@@ -3231,7 +3231,7 @@
      "what": "Именованная кнопка. show(), hide(), update({text}), destroy()."
     }
    ],
-   "example": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-tooltip\">Что значит риск?</button>\n<script>\ndkTooltip(document.getElementById('advanced-tooltip'), {text:'Риск — оценка по текущим порогам, не прогноз.'});\n</script>",
+   "example": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-tooltip\">Что значит риск?</button>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkTooltip(document.getElementById('advanced-tooltip'), {text:'Риск — оценка по текущим порогам, не прогноз.'});\n});\n</script>",
    "rules": [
     "Нужно объяснить термин рядом с его употреблением.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3360,7 +3360,7 @@
      "what": "columns: string[], rows: {label,values}[], thresholds: три возрастающих числа. update(opts), destroy()."
     }
    ],
-   "example": "<div id=\"advanced-heatmap\"></div>\n<script>\ndkHeatmap(document.getElementById('advanced-heatmap'), {label:'Риск по службам', columns:['Пн','Вт','Ср'], thresholds:[25,50,75], rows:[{label:'Тепло',values:[12,58,null]},{label:'Вода',values:[0,77,35]}]});\n</script>",
+   "example": "<div id=\"advanced-heatmap\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkHeatmap(document.getElementById('advanced-heatmap'), {label:'Риск по службам', columns:['Пн','Вт','Ср'], thresholds:[25,50,75], rows:[{label:'Тепло',values:[12,58,null]},{label:'Вода',values:[0,77,35]}]});\n});\n</script>",
    "rules": [
     "Нужно найти сочетания объект × время, требующие внимания.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3429,7 +3429,7 @@
      "what": "actual, target, min, max, unit, ranges:{to,label}[], meaning?; update(opts), destroy()."
     }
    ],
-   "example": "<div id=\"advanced-bullet\"></div>\n<script>\ndkBullet(document.getElementById('advanced-bullet'), {label:'Устранение за смену', actual:72, target:80, min:0, max:100, unit:'%', ranges:[{to:60,label:'Ниже нормы'},{to:100,label:'Рабочий диапазон'}]});\n</script>",
+   "example": "<div id=\"advanced-bullet\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkBullet(document.getElementById('advanced-bullet'), {label:'Устранение за смену', actual:72, target:80, min:0, max:100, unit:'%', ranges:[{to:60,label:'Ниже нормы'},{to:100,label:'Рабочий диапазон'}]});\n});\n</script>",
    "rules": [
     "В KPI нужно сравнить одно число с целевым уровнем.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3505,7 +3505,7 @@
      "what": "current, previous, better, label, unit; update(opts), destroy()."
     }
    ],
-   "example": "<div id=\"advanced-comparison\"></div>\n<script>\ndkPeriodComparison(document.getElementById('advanced-comparison'), {label:'Аварии за сутки',current:23,previous:19,better:'decrease'});\n</script>",
+   "example": "<div id=\"advanced-comparison\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkPeriodComparison(document.getElementById('advanced-comparison'), {label:'Аварии за сутки',current:23,previous:19,better:'decrease'});\n});\n</script>",
    "rules": [
     "Нужно объяснить изменение KPI или сопровождать временной график.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3573,7 +3573,7 @@
      "what": "start/end задают шкалу, events:{label,start,end?}[]; update(opts), destroy()."
     }
    ],
-   "example": "<div id=\"advanced-annotations\"></div>\n<script>\ndkTimelineAnnotations(document.getElementById('advanced-annotations'), {label:'События за смену',start:'2026-10-06T08:00:00+03:00',end:'2026-10-06T20:00:00+03:00',events:[{label:'Начало работ',start:'2026-10-06T10:00:00+03:00'},{label:'Ограничение',start:'2026-10-06T12:00:00+03:00',end:'2026-10-06T16:00:00+03:00'}]});\n</script>",
+   "example": "<div id=\"advanced-annotations\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkTimelineAnnotations(document.getElementById('advanced-annotations'), {label:'События за смену',start:'2026-10-06T08:00:00+03:00',end:'2026-10-06T20:00:00+03:00',events:[{label:'Начало работ',start:'2026-10-06T10:00:00+03:00'},{label:'Ограничение',start:'2026-10-06T12:00:00+03:00',end:'2026-10-06T16:00:00+03:00'}]});\n});\n</script>",
    "rules": [
     "Нужно сопоставить изменение метрики с точкой события или диапазоном.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3641,7 +3641,7 @@
      "what": "enter()/exit(): Promise, destroy(). Нативный API или modal fallback."
     }
    ],
-   "example": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-fullscreen-button\">Полный экран</button><section class=\"dk-widget\" id=\"advanced-fullscreen\" aria-label=\"Доступность\"><h3>Доступность</h3><p>99,8% за сутки</p><button type=\"button\" class=\"dk-btn\" id=\"advanced-fullscreen-exit\">Закрыть полный экран</button></section>\n<script>\nvar fullscreen=dkFullscreen(document.getElementById('advanced-fullscreen'),document.getElementById('advanced-fullscreen-button')); document.getElementById('advanced-fullscreen-exit').addEventListener('click',function(){fullscreen.exit();});\n</script>",
+   "example": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-fullscreen-button\">Полный экран</button><section class=\"dk-widget\" id=\"advanced-fullscreen\" aria-label=\"Доступность\"><h3>Доступность</h3><p>99,8% за сутки</p><button type=\"button\" class=\"dk-btn\" id=\"advanced-fullscreen-exit\">Закрыть полный экран</button></section>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\nvar fullscreen=dkFullscreen(document.getElementById('advanced-fullscreen'),document.getElementById('advanced-fullscreen-button')); document.getElementById('advanced-fullscreen-exit').addEventListener('click',function(){fullscreen.exit();});\n});\n</script>",
    "rules": [
     "Много подписей или небольшая область графика.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3713,7 +3713,7 @@
      "what": "PNG через dkChart.exportImage(). SVG только из переданного самодостаточного DOM SVG: dkExport.svg(svg,name?)."
     }
    ],
-   "example": "<div class=\"dk-export\"><button type=\"button\" class=\"dk-btn\" id=\"advanced-export\">CSV текущего среза</button><p role=\"status\" id=\"advanced-export-status\"></p></div>\n<script>\ndocument.getElementById('advanced-export').addEventListener('click',function(){dkExport.csv([{region:'Ивановская область',risk:92}], [{key:'region',label:'Регион'},{key:'risk',label:'Риск'}], 'regions-filtered');document.getElementById('advanced-export-status').textContent='CSV подготовлен браузером';});\n</script>",
+   "example": "<div class=\"dk-export\"><button type=\"button\" class=\"dk-btn\" id=\"advanced-export\">CSV текущего среза</button><p role=\"status\" id=\"advanced-export-status\"></p></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndocument.getElementById('advanced-export').addEventListener('click',function(){dkExport.csv([{region:'Ивановская область',risk:92}], [{key:'region',label:'Регион'},{key:'risk',label:'Риск'}], 'regions-filtered');document.getElementById('advanced-export-status').textContent='CSV подготовлен браузером';});\n});\n</script>",
    "rules": [
     "Нужно передать текущий filtered dataset или сохранить график.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3780,7 +3780,7 @@
      "what": "root?: dk-root, value: comfortable/compact, onChange(value); value(), update({value}), destroy()."
     }
    ],
-   "example": "<div id=\"advanced-density\"></div>\n<script>\ndkDensity(document.getElementById('advanced-density'), {value:'comfortable'});\n</script>",
+   "example": "<div id=\"advanced-density\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkDensity(document.getElementById('advanced-density'), {value:'comfortable'});\n});\n</script>",
    "rules": [
     "Пользователь работает с длинной таблицей или списком.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3844,7 +3844,7 @@
      "what": "nodes:{id,label,disabled?,children?}[], value: id[], onChange(ids). value(), expand(id), update({value}), destroy()."
     }
    ],
-   "example": "<div id=\"advanced-tree\"></div>\n<script>\ndkTreeSelect(document.getElementById('advanced-tree'), {label:'Службы',nodes:[{id:'all',label:'Все службы',children:[{id:'heat',label:'Тепло'},{id:'water',label:'Вода'}]}]});\n</script>",
+   "example": "<div id=\"advanced-tree\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkTreeSelect(document.getElementById('advanced-tree'), {label:'Службы',nodes:[{id:'all',label:'Все службы',children:[{id:'heat',label:'Тепло'},{id:'water',label:'Вода'}]}]});\n});\n</script>",
    "rules": [
     "Выбор связан с реальной иерархией служб/территорий.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3919,7 +3919,7 @@
      "what": "key/state обязательны, storage?, applyDefault?. create(name), rename(id,name), apply(id), remove(id), setDefault(id|null), list(), destroy()."
     }
    ],
-   "example": "<div id=\"advanced-state\"></div><div id=\"advanced-views\"></div>\n<script>\nvar state=dkState(document.getElementById('advanced-state'), {filters:{service:'heat'},period:'14d'});dkSavedViews(document.getElementById('advanced-views'), {key:'dk-demo-views',state:state});\n</script>",
+   "example": "<div id=\"advanced-state\"></div><div id=\"advanced-views\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\nvar state=dkState(document.getElementById('advanced-state'), {filters:{service:'heat'},period:'14d'});dkSavedViews(document.getElementById('advanced-views'), {key:'dk-demo-views',state:state});\n});\n</script>",
    "rules": [
     "Пользователь регулярно возвращается к одним фильтрам и периодам.",
     "Показывайте полные названия, единицы и источник данных."
@@ -3982,7 +3982,7 @@
      "what": "container с детьми data-widget-id, key?/storage?/onChange. get(), update(layout), reset(), destroy(). layout:{id,span,hidden}[]."
     }
    ],
-   "example": "<div id=\"advanced-editor\"></div><div class=\"dk-grid\" id=\"advanced-layout\"><section class=\"dk-col--half dk-widget\" data-widget-id=\"risk\" data-widget-label=\"Риск\"><h3>Риск</h3><p>23 региона</p></section><section class=\"dk-col--half dk-widget\" data-widget-id=\"uptime\" data-widget-label=\"Доступность\"><h3>Доступность</h3><p>99,8%</p></section></div>\n<script>\ndkLayoutEditor(document.getElementById('advanced-editor'), {container:document.getElementById('advanced-layout'),key:'dk-demo-layout'});\n</script>",
+   "example": "<div id=\"advanced-editor\"></div><div class=\"dk-grid\" id=\"advanced-layout\"><section class=\"dk-col--half dk-widget\" data-widget-id=\"risk\" data-widget-label=\"Риск\"><h3>Риск</h3><p>23 региона</p></section><section class=\"dk-col--half dk-widget\" data-widget-id=\"uptime\" data-widget-label=\"Доступность\"><h3>Доступность</h3><p>99,8%</p></section></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkLayoutEditor(document.getElementById('advanced-editor'), {container:document.getElementById('advanced-layout'),key:'dk-demo-layout'});\n});\n</script>",
    "rules": [
     "Пользователь организует рабочий обзор под собственную задачу.",
     "Показывайте полные названия, единицы и источник данных."

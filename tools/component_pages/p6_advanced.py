@@ -105,5 +105,5 @@ for slug,title,group,purpose,yes,no,tokens,scripts,live,init,api,a11y,limits in 
       sizes='Компонент следует ширине контейнера и системным токенам. '+a11y,
       states='<p>'+limits+'</p>',content_ok=[yes,'Показывайте полные названия, единицы и источник данных.'],content_bad=[no,'Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение.'],
       a11y=[a11y,'Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.'],
-      tokens=tokens,code=live+('\n<script>\n'+init+'\n</script>' if init else ''),api=api,
+      tokens=tokens,code=live+('\n<script>\ndocument.addEventListener("DOMContentLoaded", function(){\n'+init+'\n});\n</script>' if init else ''),api=api,
       related=[('component-table.html','Таблица','точные числа'),('README.md','Подключение','dk-theme первым, dk-util до компонента')]))

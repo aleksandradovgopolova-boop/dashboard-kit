@@ -88,7 +88,9 @@
     <h2>Код</h2>
     <p></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-editor&quot;&gt;&lt;/div&gt;&lt;div class=&quot;dk-grid&quot; id=&quot;advanced-layout&quot;&gt;&lt;section class=&quot;dk-col--half dk-widget&quot; data-widget-id=&quot;risk&quot; data-widget-label=&quot;Риск&quot;&gt;&lt;h3&gt;Риск&lt;/h3&gt;&lt;p&gt;23 региона&lt;/p&gt;&lt;/section&gt;&lt;section class=&quot;dk-col--half dk-widget&quot; data-widget-id=&quot;uptime&quot; data-widget-label=&quot;Доступность&quot;&gt;&lt;h3&gt;Доступность&lt;/h3&gt;&lt;p&gt;99,8%&lt;/p&gt;&lt;/section&gt;&lt;/div&gt;
 &lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkLayoutEditor(document.getElementById(&#x27;advanced-editor&#x27;), {container:document.getElementById(&#x27;advanced-layout&#x27;),key:&#x27;dk-demo-layout&#x27;});
+});
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkLayoutEditor(el, opts)</code></td><td>API</td><td>container с детьми data-widget-id, key?/storage?/onChange. get(), update(layout), reset(), destroy(). layout:{id,span,hidden}[].</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">

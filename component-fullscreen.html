@@ -88,7 +88,9 @@
     <h2>Код</h2>
     <p></p><pre class="sc-code"><code>&lt;button type=&quot;button&quot; class=&quot;dk-btn&quot; id=&quot;advanced-fullscreen-button&quot;&gt;Полный экран&lt;/button&gt;&lt;section class=&quot;dk-widget&quot; id=&quot;advanced-fullscreen&quot; aria-label=&quot;Доступность&quot;&gt;&lt;h3&gt;Доступность&lt;/h3&gt;&lt;p&gt;99,8% за сутки&lt;/p&gt;&lt;button type=&quot;button&quot; class=&quot;dk-btn&quot; id=&quot;advanced-fullscreen-exit&quot;&gt;Закрыть полный экран&lt;/button&gt;&lt;/section&gt;
 &lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 var fullscreen=dkFullscreen(document.getElementById(&#x27;advanced-fullscreen&#x27;),document.getElementById(&#x27;advanced-fullscreen-button&#x27;)); document.getElementById(&#x27;advanced-fullscreen-exit&#x27;).addEventListener(&#x27;click&#x27;,function(){fullscreen.exit();});
+});
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkFullscreen(widget, button)</code></td><td>API</td><td>enter()/exit(): Promise, destroy(). Нативный API или modal fallback.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">

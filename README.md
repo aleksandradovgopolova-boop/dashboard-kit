@@ -2463,8 +2463,8 @@ component pages и machine-readable manifest. Новые JS-возможност
 
 Каждая component page содержит выбор/замену, markup, API, состояния,
 ограничения, accessibility/responsive и файлы подключения. Примеры с `<script>`
-выполняются после разметки и подключения файлов; на страницах документации
-инициализация ждёт DOMContentLoaded. Не вызывайте initializer раньше deferred JS.
+ждут DOMContentLoaded, включая snippets в описи, чтобы работать с deferred JS
+из `kit.py head`. Не вызывайте initializer раньше deferred JS.
 
 Старые `set`, `clear`, `setOptions`, `setTotal`, `goTo`, `setValues`, `setScope`
 сохранены. Новые `update` восстанавливают состояние без user-callback там,
@@ -2500,7 +2500,7 @@ state от host; экспорт DOM-страницы вместо dataset не �
 добавляет браузерную адаптацию. `python3 tools/test.py` — полный fail-closed suite:
 Node 22+/Chrome обязательны, JS syntax, generated files/manifest, 46 страниц ×
 3 размера, select/chips/meaning/advanced runtime regressions, 200% font tokens,
-320px reflow, AX names/ID references, PNG/decal и SDK eval fixtures. При отсутствии
+320px reflow, AX names/ID references, PNG/decal и SDK fixtures. При отсутствии
 Chrome suite падает, а не выдаёт пропуск за полный успех. CI запускает этот suite;
 `DK_EVIDENCE_DIR` сохраняет JSON runtime, artifact привязан к SHA. Исторические
 снимки 30.09 остаются reference evidence, не автоматическим pixel baseline.
@@ -2508,6 +2508,11 @@ Chrome suite падает, а не выдаёт пропуск за полный
 Skill evals содержат новые задания. `check-evals.py` доказывает наличие частей,
 examples/anti-patterns/a11y и dependency closure; это не независимый прогон
 AI-агента. В полной проверке отдельно выполняются реальные API/UI regressions.
+`check-sdk-snippets.mjs` копирует `head` и опубликованные примеры на шесть чистых
+страниц: проверяет загрузку deferred JS, 13 компонентов, sidebar/tooltip/fullscreen
+действия, живую смену темы no-data, AX names, touch 44px, 390/1280px и dark/light.
+С `DK_EVIDENCE_DIR` сохраняет 24 снимка и `sdk-snippets.json`. Это consumer
+integration, не выполнение prompt независимым AI-агентом.
 
 CI security boundary: в приватном репозитории CodeQL и Scorecard остаются
 capability-gated. Их skipped job не подтверждает SAST/supply-chain аудит.

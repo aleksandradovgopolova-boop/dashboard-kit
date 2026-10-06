@@ -88,7 +88,9 @@
     <h2>Код</h2>
     <p></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-state&quot;&gt;&lt;/div&gt;&lt;div id=&quot;advanced-views&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 var state=dkState(document.getElementById(&#x27;advanced-state&#x27;), {filters:{service:&#x27;heat&#x27;},period:&#x27;14d&#x27;});dkSavedViews(document.getElementById(&#x27;advanced-views&#x27;), {key:&#x27;dk-demo-views&#x27;,state:state});
+});
 &lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkState(el, initial)</code></td><td>API</td><td>get(), update(patch), destroy(); dk:statechange содержит snapshot. filters, period, sort, page, size, mode, density.</td></tr><tr><td><code>dkSavedViews(el, opts)</code></td><td>API</td><td>key/state обязательны, storage?, applyDefault?. create(name), rename(id,name), apply(id), remove(id), setDefault(id|null), list(), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">

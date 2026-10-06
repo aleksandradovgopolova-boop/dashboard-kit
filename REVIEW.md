@@ -803,5 +803,14 @@ manifest и eval tasks сформированы генератором. Перс
 error/versioning границы, экспорт принимает текущий dataset.
 
 Открыты объективные подтверждения: физические устройства/WebView, spoken SR,
-Safari/Firefox, независимый прогон новых skill задач; production агрегация и
+полный Safari/Firefox, независимый прогон новых skill задач; production агрегация и
 исследование пользователей. Новые API требуют полевого опыта до stable статуса.
+
+Повторное ревью PR #11 закрыло реальный reinit defect новых controls, stale
+tooltip describedby, late fullscreen aria cleanup и повреждённые layout records.
+Consumer assembly выявил вызов SDK до deferred JS: исправлены snippets в source
+генератора и manifest. `check-sdk-snippets.mjs` проверяет скопированные примеры,
+а не только готовые doc pages. Desktop Safari smoke выявил старый фон no-data
+при смене темы: transition ячейки отключён; после reload и dark→light текст читаем.
+Safari smoke охватывает tree/search/mixed, tooltip/Escape, fullscreen/exit/focus
+и heatmap/themes. Он не закрывает всю browser/device/SR матрицу.

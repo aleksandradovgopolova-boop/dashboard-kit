@@ -54,7 +54,11 @@ Reduced motion: браузерная среда выставляет prefers-red
 речью. CSS zoom/viewport не являются iOS Dynamic Type или Android font scale.
 
 Не доказаны: физические iPhone/Android, настоящий WebView, spoken VoiceOver/NVDA,
-реальные крупные системные шрифты, Safari/Firefox runtime. Safari установлен,
-но автоматизация Safari требует отдельной настройки; Firefox не является
-участником текущего suite. Feature detection/dialog fallback не заменяет эти
+реальные крупные системные шрифты, полный Safari/Firefox runtime. В desktop Safari
+27 выполнен ограниченный UI smoke: tree keyboard/search/mixed, tooltip/Escape,
+fullscreen exit/Escape/focus return, heatmap zero/null и live dark/light.
+Найдена и исправлена задержка фона no-data при смене темы: эта ячейка меняется
+без transition. WebDriver отказал из-за выключенного Allow remote automation;
+настройка не менялась. Firefox не является участником текущего suite.
+Feature detection/dialog fallback и desktop smoke не заменяют полные
 прогоны. План реальной проверки и задачи пользователей выше сохраняются.
