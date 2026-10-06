@@ -25,21 +25,19 @@
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
-    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
     <span class="sc-brand__t">dashboard-kit</span>
     <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
-    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
     </div>
   </div>
 </header>
 
-<div class="sc-shell">
-<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
 <div class="dk-wrap" id="top">
 
@@ -49,8 +47,6 @@
     <p class="sc-hero__lead">Запустить действие: сохранить, назначить бригаду, открыть отчёт. На экране одна основная кнопка, остальные обычные или тихие — так видно, чего от человека ждут.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
-      <span class="sc-meta__i">Figma: нет</span>
       <span class="sc-meta__i">код: <code>css/components.css</code></span>
     </div>
   </header>
@@ -77,7 +73,7 @@
   </section>
   <section class="sc-sec">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Действие меняет данные или открывает новый экран: «Добавить работу», «Закрыть аварию».</li><li>На экране нужно показать, какое действие главное — оно одно и оно основное.</li><li>Действие повторяется в каждой строке таблицы — тогда кнопка-значок с подписью для скринридера.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Переключение вида одних и тех же данных — <a href="component-segment.html">Сегмент</a>.</li><li>Переход в другой раздел с адресом — <a href="component-tabs.html">Вкладки</a> или ссылка.</li><li>Включить режим без подтверждения — <a href="component-check.html">Тумблер</a>.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Действие меняет данные или открывает новый экран: «Добавить работу», «Закрыть аварию».</li><li>На экране нужно показать, какое действие главное — оно одно и оно основное.</li><li>Действие повторяется в каждой строке таблицы — тогда кнопка-значок с подписью для скринридера.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Переключение вида одних и тех же данных — <a href="component-segment.html">Сегмент</a>.</li><li>Переход в другой раздел с адресом — <a href="component-tabs.html">Вкладки</a> или ссылка.</li><li>Включить режим без подтверждения — <a href="component-check.html">Тумблер</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec">
     <h2>Анатомия</h2>
@@ -140,11 +136,6 @@
 (function () {
   'use strict';
   var root = document.documentElement;
-  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
-  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
-    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
-  });
-  mark(root.getAttribute('data-theme'));
 
 })();
 </script>

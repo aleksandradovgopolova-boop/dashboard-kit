@@ -28,21 +28,19 @@
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
-    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
     <span class="sc-brand__t">dashboard-kit</span>
     <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
-    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
     </div>
   </div>
 </header>
 
-<div class="sc-shell">
-<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
 <div class="dk-wrap" id="top">
 
@@ -52,8 +50,6 @@
     <p class="sc-hero__lead">Одно главное число с трендом и формой: сколько сейчас и куда идёт. Размер S — четверть колонки; здесь число и спарклайн, а не график с осями.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
-      <span class="sc-meta__i">Figma: нет</span>
       <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-charts.js</code></span>
     </div>
   </header>
@@ -69,7 +65,7 @@
   </section>
   <section class="sc-sec">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Одно текущее значение, которое смотрят первым: аварий сейчас, время реакции.</li><li>Важно направление: тренд к прошлому периоду.</li><li>Плиток две–шесть в ряд; больше — уже таблица.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Сравнение многих значений — <a href="component-chart.html">График</a> в размере L.</li><li>Значение с планом и дельтой к нему — пока нет компонента; открыто в REVIEW.md («KPI с планом»).</li><li>Один показатель по многим объектам — <a href="component-rank.html">Рейтинг</a>.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Одно текущее значение, которое смотрят первым: аварий сейчас, время реакции.</li><li>Важно направление: тренд к прошлому периоду.</li><li>Плиток две–шесть в ряд; больше — уже таблица.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Сравнение многих значений — <a href="component-chart.html">График</a> в размере L.</li><li>Значение с планом и дельтой к нему — пока нет компонента; открыто в REVIEW.md («KPI с планом»).</li><li>Один показатель по многим объектам — <a href="component-rank.html">Рейтинг</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec">
     <h2>Анатомия</h2>
@@ -136,11 +132,6 @@ dkChart(document.getElementById(&#x27;sp&#x27;), {
 (function () {
   'use strict';
   var root = document.documentElement;
-  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
-  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
-    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
-  });
-  mark(root.getAttribute('data-theme'));
   window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkChart !== 'function') return;
     var days = ['09.09','10.09','11.09','12.09','13.09','14.09','15.09','16.09','17.09','18.09','19.09','20.09','21.09','22.09'];

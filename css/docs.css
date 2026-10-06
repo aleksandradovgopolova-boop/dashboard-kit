@@ -14,7 +14,7 @@
      не видно. Все пояснения были одинаковыми синими плашками, то есть акцент
      работал там, где кит от него отказался. Отсюда: шапка, оглавление слева,
      номер и группа над заголовком, заголовок 28 и нейтральные пояснения. */
-  .sc-bar{ position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:var(--space-8);
+  .sc-bar{ position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:var(--space-5);
     height:56px; padding:0 var(--page-pad);
     background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(10px); }
   .sc-brand{ display:flex; align-items:center; gap:var(--space-5); margin-right:auto; min-width:0;
@@ -28,67 +28,102 @@
   .sc-ctl__l{ font:var(--type-caption); color:var(--ink-3); }
   @media (max-width:640px){ .sc-brand__s, .sc-ctl__l{ display:none; } }
 
-  .sc-shell{ display:grid; grid-template-columns:232px minmax(0,1fr); gap:var(--space-9);
+  .sc-shell{ display:grid; grid-template-columns:304px minmax(0,1fr); gap:var(--space-9);
     max-width:1440px; margin:0 auto; padding:0 var(--page-pad); }
   .sc-shell > .dk-wrap{ max-width:none; margin:0; padding:0 0 calc(var(--space-9) * 2); min-width:0; }
 
-  /* Оглавление собирается скриптом из заголовков разделов: список, написанный
-     руками, разошёлся бы со страницей при первом же новом разделе. */
-  .sc-nav{ position:sticky; top:56px; align-self:start; max-height:calc(100vh - 56px);
-    overflow:auto; padding:var(--space-8) 0 var(--space-9); }
-  .sc-nav__g{ font:var(--type-overline); letter-spacing:var(--type-overline-track); text-transform:uppercase;
-    color:var(--ink-3); margin:var(--space-8) 0 var(--space-3); padding:0 var(--space-5); }
-  .sc-nav__g:first-child{ margin-top:0; }
-  .sc-nav a{ display:block; padding:var(--space-3) var(--space-5); border-radius:var(--radius-sm);
-    font:var(--type-body); color:var(--ink-2); text-decoration:none; }
-  @media (hover: hover) and (pointer: fine) {
-    .sc-nav a:hover{ color:var(--ink); background:var(--surface-2); }
+  /* Библиотека и оглавление — разные уровни навигации. */
+  .sc-nav{ position:sticky; top:56px; align-self:start; height:calc(100dvh - 56px);
+    overflow:auto; padding:var(--space-7) var(--space-5) var(--space-8);
+    background:transparent; scrollbar-width:thin; }
+  .sc-nav__head{ font:var(--type-body-bold); color:var(--ink); padding:var(--space-3) var(--space-4) var(--space-6); }
+  .sc-nav__search{ margin-bottom:var(--space-5); }
+  .sc-nav__search .dk-i{ flex:none; margin-left:var(--space-4); color:var(--ink-3); }
+  .sc-nav__views{ display:flex; margin-bottom:var(--space-6); }
+  .sc-nav__views button{ flex:1; min-height:44px; }
+  .sc-nav a{ display:flex; align-items:center; gap:var(--space-4); min-height:44px;
+    padding:var(--space-4) var(--space-6); border-radius:var(--radius-md); font:var(--type-body-lg);
+    color:var(--ink-2); text-decoration:none; }
+  .sc-nav a[aria-current]{ color:var(--ink); background:var(--control-soft); font-weight:400; }
+  .sc-nav a:focus-visible, .sc-nav summary:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:-2px; }
+  .sc-nav details{ margin-top:var(--space-2); }
+  .sc-nav summary{ list-style:none; display:flex; align-items:center; justify-content:space-between;
+    gap:var(--space-4); min-height:44px; padding:var(--space-4) var(--space-6);
+    cursor:pointer; border-radius:var(--radius-md); font:var(--type-body-lg); color:var(--ink-2); }
+  .sc-nav summary::-webkit-details-marker{ display:none; }
+  .sc-nav summary .dk-i{ width:16px; height:16px; flex:none; color:var(--ink-3); }
+  .sc-nav details[open] > summary .dk-i{ transform:rotate(90deg); }
+  .sc-nav__items{ padding:var(--space-5); margin-bottom:var(--space-6);
+    border-radius:var(--radius-lg); background:transparent; }
+  .sc-nav__category > summary{ font:var(--type-body-lg); }
+  .sc-nav__category[open] > summary{ color:var(--ink); }
+  .sc-nav__category[open] > summary .dk-i{ color:var(--ink); }
+  .sc-nav__items a{ font:var(--type-body); min-height:44px; }
+  .sc-nav__label{ font:var(--type-overline); color:var(--ink-3); padding:var(--space-6) var(--space-4) var(--space-2); }
+  .sc-glossary{ margin:var(--space-8) 0; max-width:68ch; }
+  .sc-glossary dt{ font:var(--type-body-bold); margin:var(--space-6) 0 var(--space-2); }
+  .sc-glossary dd{ font:var(--type-body-lg); margin:0; color:var(--ink-2); }
+  .sc-nav__local{ margin-top:var(--space-8); }
+  .sc-nav__results a{ flex-direction:column; align-items:start; gap:var(--space-1); }
+  .sc-nav__results small, .sc-nav__status{ font:var(--type-caption); color:var(--ink-3); }
+  .sc-nav__status{ margin:var(--space-4); }
+  @media (hover: hover) and (pointer: fine){
+    .sc-nav a:hover, .sc-nav summary:hover{ color:var(--ink); background:var(--surface-2); }
   }
-  /* Текущий раздел — серым, как любое выбранное управление (третий принцип). */
-  .sc-nav a[aria-current="true"]{ color:var(--ink); background:var(--control-soft); font-weight:var(--weight-ui-strong); }
-  .sc-nav a:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:-2px; }
-
-  /* Уже 1200 для оглавления сбоку нет места: оно становится строкой под
-     шапкой, которая листается вбок. Группы в строке не подписаны — там их
-     всё равно не прочесть. */
-  @media (max-width:1199px){
+  .sc-bar > .dk-btn{ min-height:44px; min-width:44px; padding:var(--space-4); background:transparent; }
+  .sc-shell--closed{ grid-template-columns:minmax(0,1fr); }
+  .sc-nav [hidden], .sc-nav[hidden], .sc-shade[hidden]{ display:none; }
+  .sc-shade{ display:none; }
+  @media (max-width:1023px){
     .sc-shell{ grid-template-columns:minmax(0,1fr); gap:0; }
-    .sc-nav{ top:56px; z-index:30; max-height:none; display:flex; gap:var(--space-2); overflow-x:auto;
-      padding:var(--space-4) 0; margin:0 calc(var(--page-pad) * -1); padding-inline:var(--page-pad);
-      background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(10px); }
-    .sc-nav__g{ display:none; }
-    .sc-nav a{ flex:none; white-space:nowrap; }
-    /* Полоса прокрутки под строкой читалась как черта-разделитель, которых
-       у кита нет. Что строка листается, и так видно по пункту, обрезанному
-       у края. */
-    .sc-nav{ scrollbar-width:none; }
-    .sc-nav::-webkit-scrollbar{ display:none; }
+    .sc-nav{ position:fixed; left:0; top:56px; bottom:0; width:min(320px, 85vw);
+      z-index:35; height:calc(100dvh - 56px); border-radius:0; padding:var(--space-6);
+      background:var(--surface); box-shadow:var(--elev-widget); }
+    .sc-shade{ display:block; position:fixed; inset:56px 0 0; z-index:34;
+      background:var(--scrim); }
+    .sc-menu-open{ overflow:hidden; }
   }
 
-  .sc-hero{ padding:calc(var(--space-9) * 2) 0 var(--space-9); max-width:780px; }
+  .sc-shell > .dk-wrap > [hidden]{ display:none; }
+  .sc-article .sc-sec{ padding-top:var(--space-9); scroll-margin-top:72px; }
+  .sc-article .sc-sec :is(h1,h2){ font:var(--type-display); letter-spacing:var(--type-display-track); }
+  .sc-component-index{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-8); }
+  .sc-component-index h3{ font:var(--type-h2); margin:0 0 var(--space-4); }
+  .sc-component-index a{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); min-height:44px; padding:var(--space-4) 0; font:var(--type-body); color:var(--ink-2); text-decoration:none; }
+  .sc-component-index a .dk-i{ flex:none; color:var(--ink-3); }
+  .sc-component-index a:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset); }
+  @media (max-width:640px){ .sc-component-index{ grid-template-columns:minmax(0,1fr); } }
+  .sc-hero{ padding:calc(var(--space-9) * 2) 0 var(--space-9); max-width:none; }
   .sc-hero__o{ font:var(--type-overline); letter-spacing:var(--type-overline-track); text-transform:uppercase;
     color:var(--ink-3); margin:0 0 var(--space-5); }
   .sc-hero h1{ font:var(--type-display); letter-spacing:var(--type-display-track); margin:0 0 var(--space-6); }
   .sc-hero__lead{ font:var(--type-body-lg); color:var(--ink-2); margin:0 0 var(--space-9); max-width:64ch; }
-  .sc-facts{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:var(--space-5); }
-  .sc-facts div{ background:var(--surface); box-shadow:var(--elev-widget); border-radius:var(--radius-lg);
-    padding:var(--space-7); }
-  .sc-facts b{ display:block; font:var(--type-metric-lg); letter-spacing:var(--type-metric-lg-track);
-    font-variant-numeric:tabular-nums; }
-  .sc-facts span{ font:var(--type-caption); color:var(--ink-3); }
-  @media (max-width:760px){ .sc-facts{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  .sc-audiences{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--space-6);
+    margin:calc(var(--space-9) * 2) 0 var(--space-8); }
+  .sc-audience{ background:var(--surface); border-radius:var(--radius-lg); padding:var(--space-7); min-width:0; }
+  .sc-audience h2{ font:var(--type-h1); letter-spacing:var(--type-h1-track); margin:0 0 var(--space-7); }
+  .sc-audience a{ display:flex; align-items:center; min-height:48px; padding:var(--space-4) 0;
+    font:var(--type-body-lg); color:var(--ink-2); text-decoration:none; }
+  .sc-example{ display:inline-flex; align-items:center; gap:var(--space-4); min-height:44px;
+    font:var(--type-body-lg); color:var(--ink-2); text-decoration:none; }
+  .sc-audience a:focus-visible, .sc-example:focus-visible{ outline:var(--focus-width) solid var(--brand);
+    outline-offset:var(--focus-offset); border-radius:var(--radius-xs); }
+  @media (hover: hover) and (pointer: fine){ .sc-audience a:hover, .sc-example:hover{ color:var(--ink); text-decoration:underline; } }
+  @media (max-width:760px){
+    .sc-audiences{ grid-template-columns:minmax(0,1fr); margin-top:var(--space-9); }
+  }
   .sc-sec{ padding:calc(var(--space-9) * 2) 0 0; scroll-margin-top:var(--space-9); }
   .sc-sec:first-of-type{ padding-top:var(--space-9); }
   .sc-eyebrow{ font:var(--type-overline); letter-spacing:var(--type-overline-track); text-transform:uppercase;
     color:var(--ink-3); margin:0 0 var(--space-4); font-variant-numeric:tabular-nums; }
-  .sc-sec h2{ font:var(--type-h1); letter-spacing:var(--type-h1-track); margin:0 0 var(--space-5);
+  .sc-sec :is(h1,h2){ font:var(--type-h1); letter-spacing:var(--type-h1-track); margin:0 0 var(--space-5);
     display:flex; align-items:baseline; gap:var(--space-5); }
   /* Ссылка на раздел: видна при наведении и с клавиатуры, чтобы прислать
      коллеге «вот тут» без пересказа, где искать. */
   .sc-anchor{ font:var(--type-h3); color:var(--ink-3); text-decoration:none; opacity:0; }
   .sc-anchor:focus-visible{ opacity:1; }
   @media (hover: hover) and (pointer: fine) {
-    .sc-sec h2:hover .sc-anchor{ opacity:1; }
+    .sc-sec :is(h1,h2):hover .sc-anchor{ opacity:1; }
   }
   /* У пальца наведения нет, и ссылка на раздел на таче не видна бы никогда. */
   @media (hover: none) { .sc-anchor{ opacity:1; } }
@@ -195,3 +230,35 @@
   border-radius:var(--radius-lg); font:var(--type-code); font-size:var(--text-caption); color:var(--ink-2);
   overflow:auto; max-width:100%; }
 .sc-api td{ vertical-align:top; }
+
+/* Ссылки руководства сохраняют цвет семантического токена после посещения. */
+.sc-sec > p a, .sc-sec > p a:visited{ color:var(--link); text-underline-offset:var(--space-1); }
+.sc-sec > h3{ font:var(--type-h2); margin:var(--space-8) 0 var(--space-5); }
+
+/* Содержание статьи отделено от глобального каталога. */
+.sc-toc{ padding:var(--space-6); margin:var(--space-8) 0; background:var(--surface); border-radius:var(--radius-md); max-width:68ch; }
+.sc-toc[hidden]{ display:none; }
+.sc-toc summary{ font:var(--type-body-bold); cursor:pointer; min-height:44px; display:flex; align-items:center; }
+.sc-toc nav{ display:grid; gap:var(--space-2); }
+.sc-toc a{ display:flex; align-items:center; min-height:44px; color:var(--ink-2); text-decoration:none; font:var(--type-body); }
+.sc-toc a:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset); }
+.sc-sec > h4{ font:var(--type-h3); margin:var(--space-7) 0 var(--space-4); }
+@media (hover: hover) and (pointer: fine){ .sc-toc a:hover{ color:var(--ink); text-decoration:underline; } }
+@media (min-width:1440px){
+  .sc-shell--toc{ padding-right:calc(var(--page-pad) + 240px); position:relative; }
+  .sc-toc{ position:fixed; top:92px; right:max(var(--page-pad),calc((100vw - 1440px) / 2 + var(--page-pad))); width:204px; max-height:calc(100dvh - 128px); overflow:auto; margin:0; background:transparent; padding:0; }
+}
+
+.sc-component-index__text{ display:grid; gap:var(--space-3); }
+.sc-component-index__text strong{ font:var(--type-body-bold); color:var(--ink); }
+.sc-component-index__text small{ font:var(--type-caption); color:var(--ink-2); }
+.sc-component-index a{ padding:var(--space-6); background:var(--surface); border-radius:var(--radius-md); align-items:flex-start; }
+.sc-component-index > div{ display:grid; gap:var(--space-4); align-content:start; }
+.sc-skip{ position:fixed; top:var(--space-4); left:max(var(--space-4),env(safe-area-inset-left)); z-index:60; padding:var(--space-6); background:var(--surface); color:var(--ink); transform:translateY(-200%); }
+.sc-skip:focus-visible{ transform:translateY(0); outline:var(--focus-width) solid var(--brand); }
+
+@media (min-width:640px) and (max-width:1439px){ .sc-toc nav{ grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:var(--space-7); } }
+.sc-toc a[aria-current]{ color:var(--ink); font-weight:var(--weight-ui-strong); }
+
+.sc-nav__component-group > summary{ font:var(--type-body); color:var(--ink-2); }
+.sc-nav__component-group .sc-nav__items{ padding:0 0 0 var(--space-5); }

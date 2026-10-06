@@ -28,21 +28,19 @@
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
-    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
     <span class="sc-brand__t">dashboard-kit</span>
     <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
-    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
     </div>
   </div>
 </header>
 
-<div class="sc-shell">
-<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
 <div class="dk-wrap" id="top">
 
@@ -52,8 +50,6 @@
     <p class="sc-hero__lead">Обёртка над ECharts, которая закрывает опасное и оставляет нужное: тема из токенов, «данных нет» вместо пустого прямоугольника, легенда от двух серий, линия порога, пунктир прогноза. Двух осей Y и сглаживания не будет.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
-      <span class="sc-meta__i">Figma: нет</span>
       <span class="sc-meta__i">код: <code>js/dk-charts.js</code> · <code>js/dk-chart-theme.js</code> · <code>vendor/echarts.min.js</code></span>
     </div>
   </header>
@@ -69,7 +65,7 @@
   </section>
   <section class="sc-sec">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Читатель должен увидеть динамику, сравнить величины, увидеть состав или долю — вопрос выбирает тип (таблица на витрине).</li><li>Есть ширина: график с осями живёт в M и L, в S — только спарклайн.</li><li>Значений на оси категорий до сорока; дальше это сырые данные, а не картинка.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Одно текущее значение — <a href="component-tile.html">KPI-плитка</a>, а не столбчатый график из одного столбца.</li><li>Больше семи значимых категорий — <a href="component-table.html">Таблица</a>, а не ещё больше цветов.</li><li>«Где» на территории — <a href="component-map.html">Регионы</a>.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Читатель должен увидеть динамику, сравнить величины, увидеть состав или долю — вопрос выбирает тип (таблица на витрине).</li><li>Есть ширина: график с осями живёт в M и L, в S — только спарклайн.</li><li>Значений на оси категорий до сорока; дальше это сырые данные, а не картинка.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Одно текущее значение — <a href="component-tile.html">KPI-плитка</a>, а не столбчатый график из одного столбца.</li><li>Больше семи значимых категорий — <a href="component-table.html">Таблица</a>, а не ещё больше цветов.</li><li>«Где» на территории — <a href="component-map.html">Регионы</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec">
     <h2>Анатомия</h2>
@@ -131,11 +127,6 @@ c.destroy();                   // сторож похоронит и сам, к�
 (function () {
   'use strict';
   var root = document.documentElement;
-  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
-  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
-    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
-  });
-  mark(root.getAttribute('data-theme'));
   window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkChart !== 'function') return;
     var days = ['09.09','10.09','11.09','12.09','13.09','14.09','15.09','16.09','17.09','18.09','19.09','20.09','21.09','22.09'];

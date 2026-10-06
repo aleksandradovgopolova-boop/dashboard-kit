@@ -72,6 +72,7 @@
     new MutationObserver(function () {
       if (!fromHost) write(KEY_THEME, root.getAttribute('data-theme') || 'dark');
       themeColor();
+      syncThemeControls();
     }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
   }
 
@@ -119,7 +120,12 @@
     }
     meta.setAttribute('content', bg);
   }
-  document.addEventListener('DOMContentLoaded', themeColor);
+  function syncThemeControls() {
+    document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.themeSet === root.getAttribute('data-theme')));
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function () { themeColor(); syncThemeControls(); });
   window.addEventListener('load', themeColor);
 
   /* Переключатель. Делегирование на документе, а не подписка на кнопку:
@@ -129,6 +135,12 @@
      Кнопкой считается #t-theme (так размечены страницы кита) или любой элемент
      с data-act="theme" — для чужой разметки, где наших идентификаторов нет. */
   document.addEventListener('click', function (e) {
+    var choice = e.target.closest && e.target.closest('[data-theme-set]');
+    if (choice) {
+      root.setAttribute('data-theme', choice.dataset.themeSet === 'light' ? 'light' : 'dark');
+      syncThemeControls();
+      return;
+    }
     var b = e.target.closest && e.target.closest('#t-theme, [data-act="theme"]');
     if (!b) return;
     root.setAttribute('data-theme',

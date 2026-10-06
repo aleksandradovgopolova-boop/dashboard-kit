@@ -116,10 +116,10 @@
       </div>
 
       <div class="dk-top__tools">
-        <div id="r-period"></div>
-        <button class="dk-iconbtn" id="t-theme" title="Сменить тему" aria-label="Сменить тему">
-          <svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg>
-        </button>
+        <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg></button>
+          <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-moon"/></svg></button>
+        </div>
       </div>
     </header>
 
@@ -128,9 +128,8 @@
 
         <div class="dk-region-tools" role="search" aria-label="Поиск и фильтр регионов">
 <div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" id="r-search" type="search" placeholder="Название региона или округа" aria-label="Название региона или округа" aria-controls="r-rank r-table" aria-describedby="r-results"></div>
-<div id="r-risk"></div><button class="dk-btn dk-btn--sm" id="r-reset" type="button">Сбросить фильтры</button></div>
+<div id="r-period"></div><div id="r-risk"></div><button class="dk-btn dk-btn--ghost" id="r-reset" type="button">Сбросить фильтры</button><button type="button" class="dk-iconbtn" data-modal="#risk-info" aria-label="О показателе риска" title="О показателе риска"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></button></div>
 <p class="dk-region-result" id="r-results" role="status" aria-live="polite" aria-atomic="true"></p>
-<p class="dk-caption">Демонстрационные данные. Балл риска: от 0 до 100. Высокий — от 78, средний — от 60 до 77, низкий — менее 60. Синие ступени карты показывают величину, цвет статуса — уровень риска.</p>
 <!-- Сводка идёт первой не ради красоты. Карта отвечает на вопрос «где»,
              но не отвечает на «насколько всё плохо в целом» — а именно с этого
              вопроса человек начинает. Без верхней строки экран начинался сразу
@@ -342,7 +341,7 @@
         document.getElementById('r-tbody').innerHTML =
           all.slice(from, from + PAGE).map(function (x) {
             var st = state(x.v);
-            return '<tr><td data-sort="' + esc(byId[x.id] || x.id) + '"><button class="dk-btn dk-btn--sm" type="button" data-region="' + esc(x.id) + '" aria-label="Открыть детали: ' + esc(byId[x.id] || x.id) + '">' + esc(byId[x.id] || x.id) + '</button></td>' +
+            return '<tr><td data-sort="' + esc(byId[x.id] || x.id) + '"><button class="dk-btn dk-btn--ghost" type="button" data-region="' + esc(x.id) + '" aria-label="Открыть детали: ' + esc(byId[x.id] || x.id) + '">' + esc(byId[x.id] || x.id) + '</button></td>' +
               '<td data-sort="' + esc(fd[x.id]) + '">' + esc(fd[x.id]) + '</td>' +
               '<td data-sort="' + x.v + '"><span class="dk-status dk-status--' + st[0] + '">' +
               '<svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#' + st[2] + '"/></svg>' + st[1] + '</span></td>' +
@@ -444,5 +443,11 @@
     });
   });
 </script>
+<dialog class="dk-modal" id="risk-info" aria-labelledby="risk-info-title">
+  <form method="dialog" class="dk-modal__form">
+    <div class="dk-modal__head"><h2 class="dk-modal__title" id="risk-info-title">О показателе риска</h2><button class="dk-iconbtn" value="close" aria-label="Закрыть" title="Закрыть"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div>
+    <div class="dk-modal__body"><p>Балл риска — от 0 до 100. Высокий риск — от 78, средний — от 60 до 77, низкий — менее 60.</p><p>Ступени синего на карте показывают величину показателя. Цвет статуса обозначает уровень риска.</p><p class="dk-caption">В примере используются демонстрационные данные.</p></div>
+  </form>
+</dialog>
 </body>
 </html>

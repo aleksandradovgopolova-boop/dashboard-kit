@@ -115,10 +115,10 @@
           '<span class="dk-map__key"><i style="background:var(--high)"></i>с перебоями</span>' +
           '<span class="dk-map__key"><i style="background:var(--crit)"></i>сбой</span>' +
           '<span class="dk-map__key"><i style="background:var(--nodata)"></i>нет данных</span>' +
-          (step ? '<span class="dk-map__unit">каждое деление — ' + esc(step) + '</span>' : '') +
         '</span>' +
         '<span class="dk-uptime__v"></span>' +
         '</div>';
+      if (step) html += '<p class="dk-caption">Интервал: ' + esc(step) + '</p>';
 
       // Строка, в которую пишется выбранное деление. Живёт одна на весь
       // виджет: три одинаковых объявления подряд скринридер читает как шум.

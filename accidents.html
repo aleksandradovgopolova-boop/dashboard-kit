@@ -107,9 +107,10 @@
 
       <div class="dk-top__tools">
         <div id="a-period"></div>
-        <button class="dk-iconbtn" id="t-theme" title="Сменить тему" aria-label="Сменить тему">
-          <svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg>
-        </button>
+        <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg></button>
+          <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-moon"/></svg></button>
+        </div>
       </div>
     </header>
 

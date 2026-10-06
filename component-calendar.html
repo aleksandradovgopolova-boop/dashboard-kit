@@ -26,21 +26,19 @@
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
-    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
     <span class="sc-brand__t">dashboard-kit</span>
     <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
-    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
     </div>
   </div>
 </header>
 
-<div class="sc-shell">
-<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
 <div class="dk-wrap" id="top">
 
@@ -50,8 +48,6 @@
     <p class="sc-hero__lead">Показ работы: что происходит и когда. Не выбор периода. Цвет события — его вид, а не украшение: авария красная, плановое синее, завершённое зелёное.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
-      <span class="sc-meta__i">Figma: нет</span>
       <span class="sc-meta__i">код: <code>js/dk-calendar.js</code></span>
     </div>
   </header>
@@ -62,7 +58,7 @@
   </section>
   <section class="sc-sec">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>События привязаны к датам, и важно видеть их вместе: работы, отключения, проверки.</li><li>Нужен и обзор месяца, и подробности недели по часам.</li><li>События бывают нескольких видов с разным смыслом.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Выбор интервала дат для среза — <a href="component-period.html">Период</a>.</li><li>Лента последних событий без дат — <a href="component-list.html">Список</a>.</li><li>Работала служба или нет по времени — <a href="component-uptime.html">Доступность служб</a>.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>События привязаны к датам, и важно видеть их вместе: работы, отключения, проверки.</li><li>Нужен и обзор месяца, и подробности недели по часам.</li><li>События бывают нескольких видов с разным смыслом.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Выбор интервала дат для среза — <a href="component-period.html">Период</a>.</li><li>Лента последних событий без дат — <a href="component-list.html">Список</a>.</li><li>Работала служба или нет по времени — <a href="component-uptime.html">Доступность служб</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec">
     <h2>Анатомия</h2>
@@ -121,11 +117,6 @@ cal.view = &#x27;week&#x27;; cal.goTo(&#x27;2026-09-14&#x27;); cal.setEvents(lis
 (function () {
   'use strict';
   var root = document.documentElement;
-  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
-  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
-    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
-  });
-  mark(root.getAttribute('data-theme'));
   window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkCalendar !== 'function') return;
     dkCalendar(document.getElementById('x-cal'), { month: '2026-09-01', events: [

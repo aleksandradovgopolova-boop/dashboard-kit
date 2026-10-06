@@ -121,10 +121,10 @@
 
       <div class="dk-top__tools">
         <div id="t-period"></div>
-        <button class="dk-iconbtn" id="t-theme" title="Сменить тему" aria-label="Сменить тему">
-          <svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg>
-        </button>
-        <button class="dk-btn dk-btn--sm" data-modal="#m-reset">Сбросить срез</button>
+        <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg></button>
+          <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-moon"/></svg></button>
+        </div>
       </div>
     </header>
 
@@ -143,12 +143,8 @@
           <svg aria-hidden="true" class="dk-i"><use href="#ti-alert-triangle"/></svg>
           <div class="dk-banner__text">
             <div class="dk-banner__title">23 аварии требуют решения</div>
-            <div class="dk-banner__sub">Рассылка жителям не отвечает последние три часа</div>
           </div>
-          <a class="dk-btn dk-btn--sm" href="accidents.html">Открыть аварии</a><div class="dk-banner__stats">
-            <div class="dk-banner__stat"><b>9/11</b><span>служб</span></div>
-            <div class="dk-banner__stat"><b>17</b><span>бригад в работе</span></div>
-          </div>
+          <a class="dk-btn dk-btn--sm" href="accidents.html">Открыть аварии</a>
         </div>
 
         <!-- Главное число экрана и что изменилось за сутки — первым рядом.
@@ -463,25 +459,6 @@
   </div>
 </div>
 
-<dialog class="dk-modal" id="m-reset">
-  <form method="dialog" class="dk-modal__form" id="reset-form">
-    <div class="dk-modal__head">
-      <h2 class="dk-modal__title">Сбросить сохранённый срез?</h2>
-      <button class="dk-iconbtn dk-iconbtn--sm" value="cancel" title="Закрыть" aria-label="Закрыть">
-        <svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-x"/></svg>
-      </button>
-    </div>
-    <div class="dk-modal__body">
-      <p style="margin:0">Срез «Сводка по стране» вернётся к настройкам по умолчанию:
-         период — последние 30 дней, фильтры сняты. Отменить это будет нельзя.</p>
-    </div>
-    <div class="dk-modal__foot">
-      <button class="dk-btn" value="cancel" autofocus>Отмена</button>
-      <button class="dk-btn dk-btn--primary" value="reset">Сбросить срез</button>
-    </div>
-  </form>
-</dialog>
-
 <script>
 
   var days = ['09.09','10.09','11.09','12.09','13.09','14.09','15.09',
@@ -498,16 +475,7 @@
       at.replaceChildren(l, ' ', v);
     }
 
-    // Уведомление подтверждает действие человека — ровно тот случай, для
-    // которого тост и существует.
-    var reset = document.getElementById('m-reset');
-    if (reset) reset.addEventListener('close', function () {
-      if (reset.returnValue === 'reset' && typeof dkToast === 'function') {
-        dkToast('Срез сброшен к настройкам по умолчанию', {
-          action: { name: 'Отменить', onClick: function () { dkToast('Срез возвращён'); } }
-        });
-      }
-    });
+
 
     if (typeof dkPeriod === 'function') {
       dkPeriod(document.getElementById('t-period'), {

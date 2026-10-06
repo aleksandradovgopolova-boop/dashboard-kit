@@ -427,3 +427,101 @@ pg.page; pg.size; pg.setTotal(120);
                 ("accidents.html", "Страница «Аварии»", "пагинация журнала с сортировкой по всему набору")],
 },
 ]
+
+# Составные поля: видимый набор введённых или выбранных значений.
+_CHIPS_COMMON = {
+    "group": "Фильтры", "status": "стабильный",
+    "files": ["css/components.css", "js/dk-chips.js"], "scripts": ["dk-chips.js"],
+    "sizes": "Отдельных размеров нет. Поле и кнопки используют размеры существующих компонентов; выбранные значения переносятся на следующую строку.",
+    "variants": [("value", "Начальный набор значений.", "Чтобы показать ранее введённые или выбранные данные."),
+                 ("disabled", "Отключает изменение набора.", "Когда поле временно недоступно."),
+                 ("placeholder", "Подсказка в пустом поле.", "Для примера ввода; не заменяет подпись.")],
+    "states": "<p><b>Пустое:</b> видны подпись и поле добавления. <b>Заполненное:</b> каждое значение показано отдельно и доступно для удаления. <b>Отключённое:</b> набор остаётся видимым, изменение недоступно.</p>",
+    "content_ok": ["Подпись называет набор: «Метки», «Службы».", "Названия значений сохраняют смысл без соседних элементов.", "Кнопка удаления называет конкретное значение."],
+    "content_bad": ["Placeholder вместо постоянной подписи.", "Все выбранные значения скрыты за счётчиком.", "Обязательные условия ввода описаны только после ошибки."],
+    "a11y": ["В текстовом поле Enter добавляет значение. Backspace в пустом поле переводит фокус на удаление последней метки; Enter или пробел выполняет удаление.",
+             "Выбор из списка использует нативный select. Уже выбранные и отключённые варианты недоступны для повторного выбора.",
+             "Поле имеет постоянную видимую подпись. Кнопки удаления получают доступное название с именем значения.",
+             "Добавление и удаление должны быть доступны с клавиатуры; фокус остаётся в рабочем контексте поля.",
+             "Отключённое состояние запрещает изменение, сохраняя выбранные значения для чтения.",
+             "Проверьте работу с длинными названиями, увеличенным текстом и на телефоне. Полная проверка со скринридером требует отдельного прохода."],
+    "tokens": ["dk-chips"],
+    "code_intro": "Подключите js/dk-chips.js после js/dk-util.js и js/dk-icons.js. Компонент сообщает значения; сохранение и применение фильтра выполняет приложение.",
+    "api": [("label", "строка", "Постоянная подпись поля."),
+            ("value", "массив строк", "Начальные значения."),
+            ("placeholder", "строка", "Подсказка в поле добавления."),
+            ("disabled", "boolean", "Запрет изменения набора."),
+            ("onChange(value)", "функция", "Получает новый массив значений после изменения пользователем."),
+            ("instance.value(nextArray)", "метод", "Без аргумента возвращает набор; с массивом заменяет значения."),
+            ("instance.disabled(bool)", "метод", "Без аргумента возвращает состояние; с boolean переключает доступность."),
+            ("instance.destroy()", "метод", "Удаление компонента и его обработчиков.")],
+}
+
+PAGES.extend([
+{
+    **_CHIPS_COMMON,
+    "slug": "chips-input", "title": "Ввод нескольких значений · ChipsInput",
+    "purpose": "Ввести несколько произвольных значений и сохранить каждое как отдельную метку. Набор остаётся видимым; ненужное значение можно удалить отдельно.",
+    "live_intro": "Введите метку и нажмите Enter. Удаление одной метки не меняет остальные.",
+    "live": '<div class="dk-panel"><div id="x-chips-input"></div><p class="dk-hint" id="x-chips-result" role="status"></p></div>',
+    "live_script": """window.addEventListener('DOMContentLoaded', function () {
+  var out = document.getElementById('x-chips-result');
+  dkChipsInput(document.getElementById('x-chips-input'), {
+    label: 'Метки', value: ['Плановые работы'], placeholder: 'Введите метку',
+    onChange: function (value) { out.textContent = value.length ? 'Метки: ' + value.join(', ') : 'Метки не добавлены'; }
+  });
+});""",
+    "when_yes": ["Пользователь создаёт набор произвольных меток или ключевых слов.", "Каждое значение нужно видеть и удалять независимо."],
+    "when_no": ["Выбор ограничен справочником — <a href=\"component-chips-select.html\">Выбор нескольких значений</a>.", "Одно значение или связный текст — <a href=\"component-field.html\">Поле и форма</a>."],
+    "anatomy_html": '<div class="dk-ff"><label class="dk-label"><b class="sc-callout">1</b> Метки</label><div class="dk-inline"><span class="dk-chip"><b class="sc-callout">2</b> Плановые работы</span></div><div class="dk-field"><b class="sc-callout">3</b><input aria-label="Пример поля меток" placeholder="Введите метку" readonly></div></div>',
+    "anatomy": [("Подпись", "объясняет, какие значения нужно ввести."), ("Набор меток", "показывает уже добавленные значения; у каждой метки есть удаление."), ("Поле добавления", "принимает следующее значение, не заменяя весь набор.")],
+    "code": """<div id="tags"></div>
+<script>
+var tags = dkChipsInput(document.getElementById('tags'), {
+  label: 'Метки',
+  value: ['Плановые работы'],
+  placeholder: 'Введите метку',
+  onChange: function (value) { /* сохранить массив строк */ }
+});
+tags.value(['Проверено']);
+// tags.destroy();
+</script>""",
+    "related": [("component-chips-select.html", "Выбор нескольких значений", "набор из готового справочника"), ("component-field.html", "Поле и форма", "обычный текстовый ввод")],
+},
+{
+    **_CHIPS_COMMON,
+    "slug": "chips-select", "title": "Выбор нескольких значений · ChipsSelect",
+    "purpose": "Выбрать несколько значений из готового списка. Выбранные значения показаны отдельными метками и доступны для удаления без повторного открытия списка.",
+    "live_intro": "Выберите службы из списка. Поле возвращает идентификаторы значений, а метки показывают понятные названия.",
+    "live": '<div class="dk-panel"><div id="x-chips-select"></div><p class="dk-hint" id="x-chips-result" role="status"></p></div>',
+    "live_script": """window.addEventListener('DOMContentLoaded', function () {
+  var out = document.getElementById('x-chips-result');
+  dkChipsSelect(document.getElementById('x-chips-select'), {
+    label: 'Службы', value: ['requests'], placeholder: 'Выберите службу',
+    options: [{value:'requests',label:'Приём заявок'}, {value:'telemetry',label:'Телеметрия сетей'}, {value:'notifications',label:'Рассылка жителям'}],
+    onChange: function (value) { out.textContent = value.length ? 'Выбрано служб: ' + value.length : 'Службы не выбраны'; }
+  });
+});""",
+    "when_yes": ["Пользователь выбирает несколько объектов из известного справочника.", "Выбранный набор важен для задачи и должен оставаться видимым."],
+    "when_no": ["Нужно создавать новые значения — <a href=\"component-chips-input.html\">Ввод нескольких значений</a>.", "В компактной строке фильтров достаточно подписи и счётчика — <a href=\"component-select.html\">Фильтр</a>.", "Несколько вариантов должны быть видны одновременно — <a href=\"component-check.html\">Флажки</a>."],
+    "anatomy_html": '<div class="dk-ff"><label class="dk-label"><b class="sc-callout">1</b> Службы</label><div class="dk-inline"><span class="dk-chip"><b class="sc-callout">2</b> Приём заявок</span></div><div class="dk-field"><b class="sc-callout">3</b><select aria-label="Пример выбора служб"><option>Выберите службу</option></select></div></div>',
+    "anatomy": [("Подпись", "называет выбираемый набор."), ("Выбранные значения", "показывают названия из справочника; каждое можно удалить отдельно."), ("Список добавления", "позволяет выбрать следующее значение из options.")],
+    "code": """<div id="services"></div>
+<script>
+var services = dkChipsSelect(document.getElementById('services'), {
+  label: 'Службы',
+  options: [
+    { value: 'requests', label: 'Приём заявок' },
+    { value: 'telemetry', label: 'Телеметрия сетей' }
+  ],
+  value: ['requests'],
+  placeholder: 'Выберите службу',
+  onChange: function (value) { /* применить выбранные идентификаторы */ }
+});
+services.value(['telemetry']);
+// services.destroy();
+</script>""",
+    "api": _CHIPS_COMMON["api"] + [("options", "массив {value, label, disabled?}", "Справочник: value — идентификатор, label — видимое название; disabled запрещает выбор пункта.")],
+    "related": [("component-chips-input.html", "Ввод нескольких значений", "произвольные метки"), ("component-select.html", "Фильтр", "компактный выбор из списка"), ("component-check.html", "Флажки", "небольшой набор видимых вариантов")],
+},
+])

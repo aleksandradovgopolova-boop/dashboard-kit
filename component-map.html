@@ -28,21 +28,19 @@
 
 <header class="sc-bar">
   <a class="sc-brand" href="showcase.html">
-    <span class="sc-brand__mark" aria-hidden="true"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span>
     <span class="sc-brand__t">dashboard-kit</span>
     <span class="sc-brand__s">← к витрине</span>
   </a>
   <div class="sc-ctl">
-    <span class="sc-ctl__l" aria-hidden="true">Тема</span>
     <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
     </div>
   </div>
 </header>
 
-<div class="sc-shell">
-<nav class="sc-nav" aria-label="Разделы страницы"></nav>
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
 <div class="dk-wrap" id="top">
 
@@ -52,8 +50,6 @@
     <p class="sc-hero__lead">Два вида на одних данных. Карта отвечает «где», плитки — «у кого хуже»: на карте площадь региона перебивает его значение. Переключатель — часть виджета, а не настройка.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">версия кита: не ведётся — открыто в DECISIONS.md, п. 5</span>
-      <span class="sc-meta__i">Figma: нет</span>
       <span class="sc-meta__i">код: <code>js/dk-map.js</code> · <code>data/regions.topojson</code> · <code>data/regions-tiles.json</code></span>
     </div>
   </header>
@@ -64,7 +60,7 @@
   </section>
   <section class="sc-sec">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Да</b><ul class="sc-list"><li>Показатель задан по регионам, и важно «где» — карта.</li><li>Важно сравнить регионы между собой равным весом — плитки.</li><li>Нужен доступ с клавиатуры — плитки: карта нарисована на canvas.</li></ul></div><div class="sc-note"><b>Нет → куда</b><ul class="sc-list"><li>Топ-5 регионов — <a href="component-rank.html">Рейтинг</a>.</li><li>Несколько показателей на регион — <a href="component-table.html">Таблица</a>.</li><li>Динамика одного региона — <a href="component-chart.html">График</a>.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Показатель задан по регионам, и важно «где» — карта.</li><li>Важно сравнить регионы между собой равным весом — плитки.</li><li>Нужен доступ с клавиатуры — плитки: карта нарисована на canvas.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Топ-5 регионов — <a href="component-rank.html">Рейтинг</a>.</li><li>Несколько показателей на регион — <a href="component-table.html">Таблица</a>.</li><li>Динамика одного региона — <a href="component-chart.html">График</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec">
     <h2>Анатомия</h2>
@@ -128,11 +124,6 @@ m.setValues(next);                     // шкала пересчитается
 (function () {
   'use strict';
   var root = document.documentElement;
-  function mark(v) { document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)); }); }
-  document.querySelectorAll('[data-theme-set]').forEach(function (b) {
-    b.addEventListener('click', function () { root.setAttribute('data-theme', b.dataset.themeSet); mark(b.dataset.themeSet); });
-  });
-  mark(root.getAttribute('data-theme'));
   window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkMap !== 'function') return;
     Promise.all([fetch('data/regions.topojson').then(function (r) { return r.json(); }), fetch('data/regions-tiles.json').then(function (r) { return r.json(); })])

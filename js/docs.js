@@ -23,6 +23,47 @@
   }
 
   var nav = document.querySelector('.sc-nav');
+  nav.id = 'sc-navigation';
+  var shell = nav.parentElement;
+  var bar = document.querySelector('.sc-bar');
+  var main = shell.querySelector('.dk-wrap');
+  var narrow = window.matchMedia('(max-width:1023px)');
+  var toggle = document.createElement('button');
+  toggle.type = 'button'; toggle.className = 'dk-btn dk-btn--sm';
+  toggle.appendChild(dkIcon.el('layout-grid')); toggle.title = 'Навигация по киту'; toggle.setAttribute('aria-controls', nav.id);
+  bar.insertBefore(toggle, bar.firstChild);
+  var shade = document.createElement('div');
+  shade.className = 'sc-shade'; shade.hidden = true;
+  shell.insertBefore(shade, nav);
+  function setMenu(open, focus) {
+    nav.hidden = !open;
+    shell.classList.toggle('sc-shell--closed', !open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Скрыть меню' : 'Открыть меню');
+    shade.hidden = !open || !narrow.matches;
+    main.inert = open && narrow.matches;
+    bar.querySelector('.sc-brand').inert = open && narrow.matches;
+    bar.querySelector('.sc-ctl').inert = open && narrow.matches;
+    document.body.classList.toggle('sc-menu-open', open && narrow.matches);
+    if (focus) toggle.focus();
+  }
+  setMenu(!narrow.matches);
+  toggle.addEventListener('click', function () { setMenu(nav.hidden); });
+  shade.addEventListener('click', function () { setMenu(false, true); });
+  narrow.addEventListener('change', function () { setMenu(!narrow.matches, true); });
+  document.addEventListener('keydown', function (e) {
+    if (nav.hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); setMenu(false, true); }
+    if (e.key === 'Tab' && narrow.matches) {
+      var targets = [toggle].concat(Array.from(nav.querySelectorAll('summary, a, input, button')).filter(function (el) { return el.getClientRects().length; }));
+      var first = targets[0], last = targets[targets.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  nav.addEventListener('click', function (e) {
+    if (narrow.matches && e.target.closest('a')) setMenu(false, true);
+  });
   var sections = Array.prototype.slice.call(document.querySelectorAll('section.sc-sec'));
   var group = '';
   var links = [];
@@ -32,16 +73,11 @@
     if (!h) return;
     var title = h.textContent.trim();
     if (!sec.id) sec.id = slug(title);
-    if (sec.dataset.group) {
-      group = sec.dataset.group;
-      var g = document.createElement('div');
-      g.className = 'sc-nav__g';
-      g.textContent = group;
-      nav.appendChild(g);
-    }
+    sec.querySelectorAll('h3').forEach(function (heading) { if (!heading.id) heading.id = sec.id + '--' + slug(heading.textContent); });
+    if (sec.dataset.group) group = sec.dataset.group;
     var eb = document.createElement('p');
     eb.className = 'sc-eyebrow';
-    eb.textContent = group + ' · ' + String(i + 1).padStart(2, '0');
+    eb.textContent = group;
     sec.insertBefore(eb, h);
 
     var a = document.createElement('a');
@@ -58,25 +94,156 @@
     links.push({ sec: sec, link: l });
   });
 
-  /* Страницы компонентов — группой в конце оглавления, из указателя
-     js/docs-index.js, который собирает tools/build-component-pages.py.
-     Список руками разошёлся бы с набором страниц при первом новом компоненте. */
-  if (window.dkDocsIndex && window.dkDocsIndex.length) {
-    var here = location.pathname.split('/').pop();
-    var g = document.createElement('div');
-    g.className = 'sc-nav__g'; g.textContent = 'Страницы компонентов'; nav.appendChild(g);
-    window.dkDocsIndex.forEach(function (c) {
-      var a = document.createElement('a');
-      a.href = 'component-' + c.slug + '.html'; a.textContent = c.title;
-      if (here === 'component-' + c.slug + '.html') a.setAttribute('aria-current', 'true');
-      nav.appendChild(a);
+  /* Навигация по задачам: обзор и компоненты рядом, без дублирующего
+     плоского списка. Названия компонентов приходят из общего указателя. */
+  var here = location.pathname.split('/').pop();
+  var showcase = here === 'showcase.html';
+  var sectionLinks = links.slice();
+  nav.replaceChildren();
+  var skip = document.createElement('a'); skip.className = 'sc-skip'; skip.href = '#top'; skip.textContent = 'Перейти к содержимому'; document.body.insertBefore(skip, document.body.firstChild);
+  skip.addEventListener('click', function (e) { e.preventDefault(); var destination = main.querySelector('.sc-sec:not([hidden]) h1') || main.querySelector('h1'); destination.setAttribute('tabindex','-1'); destination.focus(); });
+  var navHead = document.createElement('div'); navHead.className = 'sc-nav__head';
+  var navTitle = document.createElement('span'); navTitle.textContent = 'Библиотека'; navHead.appendChild(navTitle);
+  nav.appendChild(navHead);
+  var searchLabel = document.createElement('label'); searchLabel.className = 'sc-nav__search dk-field';
+  var search = document.createElement('input'); search.type = 'search'; search.placeholder = 'Найти в ките';
+  search.setAttribute('aria-label', 'Найти раздел или компонент'); search.autocomplete = 'off';
+  searchLabel.appendChild(dkIcon.el('search')); searchLabel.appendChild(search); nav.appendChild(searchLabel);
+  var catalog = document.createElement('div'); catalog.className = 'sc-nav__catalog'; nav.appendChild(catalog);
+  var results = document.createElement('div'); results.className = 'sc-nav__results'; results.hidden = true; nav.appendChild(results);
+  var status = document.createElement('p'); status.className = 'sc-nav__status'; status.setAttribute('role', 'status'); nav.appendChild(status);
+  var entries = [];
+  function heading(text) {
+    var summary = document.createElement('summary');
+    var label = document.createElement('span'); label.textContent = text;
+    summary.appendChild(label); summary.appendChild(dkIcon.el('chevron-right')); return summary;
+  }
+  function addLink(parent, text, href, kind, groupName) {
+    var existing = showcase && href.charAt(0) === '#' ? sectionLinks.find(function (x) { return x.sec.id === href.slice(1); }) : null;
+    var a = existing ? existing.link : document.createElement('a'); a.href = href; a.textContent = text;
+    if (here === href) a.setAttribute('aria-current', 'page'); parent.appendChild(a);
+    entries.push({text:text,href:href,kind:kind,group:groupName}); return a;
+  }
+  function sectionHref(id) { return (showcase ? '' : 'showcase.html') + '#' + id; }
+  function addGroup(name, items, open) {
+    var box = document.createElement('details'); box.className = 'sc-nav__category'; box.open = open;
+    box.appendChild(heading(name));
+    var body = document.createElement('div'); body.className = 'sc-nav__items'; box.appendChild(body);
+    items.forEach(function (item) { addLink(body, item[0], sectionHref(item[1]), 'Руководство', name); });
+    catalog.appendChild(box); return body;
+  }
+  var home = document.createElement('a'); home.className = 'sc-nav__home'; home.href = 'showcase.html';
+  home.appendChild(document.createTextNode('Обзор')); catalog.appendChild(home);
+  var visual = [
+    ['Основы визуального языка','tri-principa'], ['Палитра','smyslovye'], ['Типографика','tipografika'],
+    ['Иконографика','ikonki'], ['Структура и сетка','setka-i-ustroystva'],
+    ['Эффекты','effekty'], ['Анимации','animacii']
+  ];
+  addGroup('Визуальный язык', visual, false);
+  var componentBox = addGroup('Компоненты', [['Все компоненты','komponenty']], !showcase);
+  ['Управление','Фильтры','Данные','Визуализация','Обратная связь'].forEach(function (name) {
+    var subgroup = document.createElement('details'); subgroup.className = 'sc-nav__component-group'; subgroup.appendChild(heading(name));
+    var body = document.createElement('div'); body.className = 'sc-nav__items'; subgroup.appendChild(body); componentBox.appendChild(subgroup);
+    (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
+      var href = 'component-' + c.slug + '.html'; addLink(body,c.title,href,'Компонент',name);
+      if (here === href) subgroup.open = true;
+    });
+  });
+  addGroup('Редполитика', [
+    ['Принципы текста','principy-teksta'],
+    ['Интерфейсные тексты','yazyk-interfeysa'], ['Глоссарий','glossariy']
+  ], false);
+  addGroup('Качество интерфейса', [['Удобство использования','usability'], ['Доступность','dostupnost']], false);
+  var exampleBox = addGroup('Примеры дашбордов', [], false);
+  [['Мониторинг показателей','dashboard.html'], ['Аварии и события','accidents.html'], ['Планирование работ','calendar.html']].forEach(function (item) {
+    addLink(exampleBox,item[0],item[1],'Рабочий экран','Примеры дашбордов');
+  });
+  var local = null;
+  var toc = document.createElement('details'); toc.className = 'sc-toc'; toc.open = true;
+  var tocTitle = document.createElement('summary'); tocTitle.textContent = 'На этой странице'; toc.appendChild(tocTitle);
+  var tocLinks = document.createElement('nav'); tocLinks.setAttribute('aria-label','Содержание страницы'); toc.appendChild(tocLinks);
+  function buildToc(selected) {
+    tocLinks.replaceChildren();
+    var headings = showcase ? (selected && selected.id !== 'komponenty' ? Array.from(selected.querySelectorAll(':scope > h3')) : []) : sections.map(function (sec) { return sec.querySelector('h2'); }).filter(Boolean);
+    headings.forEach(function (h, i) {
+      if (!h.id) h.id = 'topic-' + (selected ? selected.id : here.replace('.html','')) + '-' + i;
+      var a = document.createElement('a'); a.href = '#' + h.id;
+      a.textContent = h.textContent.replace(/#$/, '').trim(); tocLinks.appendChild(a);
+      h.style.scrollMarginTop = '72px';
+    });
+    toc.hidden = !headings.length;
+    shell.classList.toggle('sc-shell--toc', !!headings.length);
+    if (selected) selected.insertBefore(toc, selected.querySelector(':scope > h3'));
+    else if (!showcase) main.insertBefore(toc, main.querySelector('.sc-sec'));
+  }
+  tocLinks.addEventListener('click', function (e) {
+    var a = e.target.closest('a'); if (!a) return;
+    var target = document.getElementById(a.hash.slice(1));
+    if (target) { target.setAttribute('tabindex','-1'); target.focus({preventScroll:true}); }
+  });
+  if (!showcase) buildToc(null);
+  search.addEventListener('input', function () {
+    var query = search.value.trim().toLocaleLowerCase('ru');
+    catalog.hidden = !!query; results.hidden = !query; if (local) local.hidden = !!query;
+    results.replaceChildren(); status.textContent = '';
+    if (!query) return;
+    var matches = entries.filter(function (item) { return (item.text + ' ' + item.group).toLocaleLowerCase('ru').includes(query); });
+    matches.forEach(function (item) {
+      var a = document.createElement('a'); a.href = item.href;
+      var title = document.createElement('span'); title.textContent = item.text;
+      var note = document.createElement('small'); note.textContent = item.kind + ' · ' + item.group;
+      a.appendChild(title); a.appendChild(note); results.appendChild(a);
+    });
+    status.textContent = matches.length ? 'Найдено: ' + matches.length : 'Ничего не найдено. Попробуйте другое название.';
+  });
+
+  var componentIndex = document.querySelector('.sc-component-index');
+  if (componentIndex) {
+    ['Управление','Фильтры','Данные','Визуализация','Обратная связь'].forEach(function (name) {
+      var block = document.createElement('div'); var h = document.createElement('h3'); h.textContent = name; block.appendChild(h);
+      (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
+        var a = document.createElement('a'); a.href = 'component-' + c.slug + '.html'; var text = document.createElement('span'); text.className = 'sc-component-index__text';
+        var title = document.createElement('strong'); title.textContent = c.title; text.appendChild(title);
+        var description = document.createElement('small'); description.textContent = c.description || ''; text.appendChild(description); a.appendChild(text);
+        a.appendChild(dkIcon.el('chevron-right')); block.appendChild(a);
+      }); componentIndex.appendChild(block);
     });
   }
+  /* Витрина читается как документация: один выбранный раздел, а не
+     непрерывная лента всех образцов. Существующие адреса разделов сохранены. */
+  function showArticle() {
+    if (!showcase) return;
+    var id = location.hash.slice(1);
+    if (['redpolitika','pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka'].includes(id)) id = 'principy-teksta';
+    var target = document.getElementById(id);
+    var selected = sections.find(function (sec) { return sec.id === id; }) || (target && target.closest('section.sc-sec'));
+    buildToc(selected);
+    main.querySelector('.sc-hero').hidden = !!selected;
+    sections.forEach(function (sec) {
+      sec.hidden = sec !== selected;
+      var heading = sec.querySelector('h2');
+      if (heading) { var title = document.createElement('h1'); while (heading.firstChild) title.appendChild(heading.firstChild); heading.replaceWith(title); }
+    });
+    sectionLinks.forEach(function (x) {
+      if (x.sec === selected) { x.link.setAttribute('aria-current','location'); var owner = x.link.closest('details'); if (owner) owner.open = true; }
+      else x.link.removeAttribute('aria-current');
+    });
+    nav.querySelectorAll('.sc-nav__home').forEach(function (a) { if (selected) a.removeAttribute('aria-current'); else a.setAttribute('aria-current','page'); });
+    main.classList.toggle('sc-article', !!selected);
+    document.title = (selected ? selected.querySelector('h1').textContent.replace(/#$/, '').trim() + ' · ' : '') + 'dashboard-kit';
+    if (selected) { var destination = target && target !== selected ? target : selected.querySelector('h1'); destination.scrollIntoView({block:'start'}); destination.setAttribute('tabindex','-1'); destination.focus({preventScroll:true}); }
+  }
+  if (showcase) { window.addEventListener('hashchange', showArticle); showArticle(); }
 
   /* Текущий раздел — тот, чей заголовок последним прошёл под шапку. Считается
      по положению, а не по «виден ли раздел»: длинный раздел виден долго, и
      подсветка прыгала бы между ним и соседом. */
   function current() {
+    var tocEntries = Array.from(tocLinks.querySelectorAll('a'));
+    var active = tocEntries[0];
+    tocEntries.forEach(function (a) { var h = document.getElementById(a.hash.slice(1)); if (h && h.getBoundingClientRect().top <= 112) active = a; });
+    tocEntries.forEach(function (a) { if (a === active) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current'); });
+    if (showcase) return;
     var line = 56 + 40;
     var cur = links[0];
     links.forEach(function (x) { if (x.sec.getBoundingClientRect().top <= line) cur = x; });
@@ -85,13 +252,7 @@
       else x.link.removeAttribute('aria-current');
     });
     // Ссылки на другие страницы компонентов подсветка разделов не трогает.
-    // В узком виде оглавление — строка вбок: текущий пункт держим в поле зрения.
-    // Положение считается относительно самой строки: offsetLeft отсчитывался
-    // от другого предка, и первый пункт уезжал за левый край.
-    if (cur && nav.scrollWidth > nav.clientWidth) {
-      var nr = nav.getBoundingClientRect(), lr = cur.link.getBoundingClientRect();
-      nav.scrollLeft += (lr.left + lr.width / 2) - (nr.left + nr.width / 2);
-    }
+
   }
   var ticking = false;
   window.addEventListener('scroll', function () {
@@ -161,15 +322,6 @@
   new MutationObserver(paint).observe(document.documentElement,
     { attributes: true, attributeFilter: ['data-theme', 'data-accent'] });
 
-  /* Числа в шапке. Токены смысла — объявления в семантическом слое, блоки —
-     имена вида .dk-имя без элемента и модификатора в слое компонентов,
-     проверки — функции check_ в tools/check.py. Если файл не прочитать
-     (страница открыта двойным щелчком), число остаётся прочерком, а не
-     выдуманным. */
-  function fact(name, value) {
-    var el = document.querySelector('[data-fact="' + name + '"]');
-    if (el && value) el.textContent = value;
-  }
   /* Токены компонента — со страницы стилей, а не руками. Берутся правила,
      чей селектор начинается с одного из перечисленных префиксов; из тел —
      все var(--…). Значение — с экрана, в текущей теме, и обновляется вместе
@@ -227,25 +379,4 @@
     tokBox.textContent = ''; tokBox.appendChild(li);
   }
 
-  if (!document.querySelector('[data-fact]')) return;
-  fact('sections', String(links.length));
-  /* Комментарии вырезаются только у CSS. Сначала вырезались у всех, и
-     шапка показывала «10 проверок» вместо двадцати: в check.py сочетания
-     слеша со звёздочкой стоят внутри регулярных выражений, и вырезание
-     съедало половину функций. Число из файла — тоже утверждение, и его
-     сверили с файлом. */
-  function count(url, re, css) {
-    return fetch(url).then(function (r) { return r.ok ? r.text() : ''; }).then(function (t) {
-      var seen = {}, m, n = 0;
-      if (css) t = t.replace(/\/\*[\s\S]*?\*\//g, '');
-      while ((m = re.exec(t))) { if (!seen[m[1]]) { seen[m[1]] = 1; n++; } }
-      return n ? String(n) : '';
-    }).catch(function () { return ''; });
-  }
-  count('css/tokens.semantic.css', /(--[a-z][\w-]*)\s*:/g, true).then(function (n) { fact('tokens', n); });
-  count('css/components.css', /\.(dk-[a-z]+(?:-[a-z]+)*)(?![\w-])/g, true).then(function (n) { fact('blocks', n); });
-  // Проверки считаются по нумерованному списку в шапке check.py — это их
-  // перечень. Не по функциям check_*: среди них есть check_page, команда
-  // для чужой страницы, и шапка показывала 26 проверок при 25 (29.09).
-  count('tools/check.py', /^\s+(\d+)\.\s+[А-ЯЁ]{3,}/gm).then(function (n) { fact('checks', n); });
 })();
