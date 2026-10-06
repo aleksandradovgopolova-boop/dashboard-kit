@@ -74,6 +74,8 @@
   }
 
   window.dkPager = function (host, opts) {
+    window.dkDestroy(host);
+    var stopped = false;
     opts = opts || {};
 
     // Отрицательный итог даёт «Показано 1–-5 из -5» — надпись, которая
@@ -93,6 +95,7 @@
     function pages() { return Math.max(1, Math.ceil(total / size)); }
 
     function go(next) {
+      if (stopped) return;
       next = Math.min(pages(), Math.max(1, next));
       if (next === page) return;
 
@@ -189,7 +192,7 @@
       }
     }
 
-    host.addEventListener('click', function (e) {
+    function onClick(e) {
       var step = e.target.closest('[data-step]');
       if (step && !step.disabled) { go(page + Number(step.dataset.step)); return; }
       var p = e.target.closest('[data-p]');
@@ -199,9 +202,9 @@
         var again = host.querySelector('[data-p="' + num + '"]');
         if (again) again.focus();
       }
-    });
+    }
 
-    host.addEventListener('change', function (e) {
+    function onChangeEvent(e) {
       if (!e.target.matches('[data-size]')) return;
       // Держим первую видимую запись на месте: иначе человек, сменивший размер,
       // проваливается в другое место списка и теряет то, что читал.
@@ -211,7 +214,7 @@
       render();
       onChange({ page: page, size: size, from: (page - 1) * size + 1,
                  to: Math.min(total, page * size) });
-    });
+    }
 
     /* Живая область: один узел на всю жизнь компонента, вне перерисовки.
        Видимого текста в ней нет — видимый счётчик рядом и так на экране,
@@ -224,12 +227,28 @@
 
     function say(text) { if (live.textContent !== text) live.textContent = text; }
 
+    host.addEventListener('click', onClick);
+    host.addEventListener('change', onChangeEvent);
+    var destroy = window.dkOwn(host, function () {
+      stopped = true;
+      host.removeEventListener('click', onClick); host.removeEventListener('change', onChangeEvent);
+      host.replaceChildren();
+    });
     render();
 
     return {
+      destroy: destroy,
+      update: function (next) {
+        if (stopped) return;
+        next = next || {};
+        if (next.total != null) total = count(next.total);
+        if (next.size != null) size = Math.max(1, count(next.size));
+        if (next.page != null) page = Math.max(1, count(next.page));
+        page = Math.min(page, pages()); render();
+      },
       get page() { return page; },
       get size() { return size; },
-      setTotal: function (n) { total = count(n); render(); },
+      setTotal: function (n) { if (stopped) return; total = count(n); render(); },
       goTo: go
     };
   };

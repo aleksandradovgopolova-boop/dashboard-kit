@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Экспорт среза · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p6_advanced.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-workspace.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Управление</p>
+    <h1>Экспорт среза</h1>
+    <p class="sc-hero__lead">Локально сохраняет текущие строки таблицы или изображение графика.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>экспериментальный</span>
+      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-workspace.js</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <div class="dk-export"><button type="button" class="dk-btn" id="advanced-export">CSV текущего среза</button><p role="status" id="advanced-export-status"></p></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно передать текущий filtered dataset или сохранить график.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Экспорт всего серверного набора: нужен отдельный серверный контракт.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div inert aria-hidden="true"><div class="dk-export"><button type="button" class="dk-btn" id="anatomy-export">CSV текущего среза</button><p role="status" id="anatomy-export-status"></p></div></div></div><ol class="sc-anatomy__list"><li><b>Контекст</b> — Локально сохраняет текущие строки таблицы или изображение графика.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Компонент следует ширине контейнера и системным токенам. Нативная кнопка с ясным названием формата. Экспорт не требует сервера; файл создаётся браузером. Об успешном скачивании ОС API не сообщает.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkExport.csv(rows, columns, name?)</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <p>Canvas-графики экспортируются PNG, не SVG. SVG с внешними ресурсами/скриптами отклоняется. Имя очищается. Blob возвращается без скачивания, если name не передан.</p>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Нужно передать текущий filtered dataset или сохранить график.</li><li>Показывайте полные названия, единицы и источник данных.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Экспорт всего серверного набора: нужен отдельный серверный контракт.</li><li>Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li>Нативная кнопка с ясным названием формата. Экспорт не требует сервера; файл создаётся браузером. Об успешном скачивании ОС API не сообщает.</li><li>Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-export"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p></p><pre class="sc-code"><code>&lt;div class=&quot;dk-export&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;dk-btn&quot; id=&quot;advanced-export&quot;&gt;CSV текущего среза&lt;/button&gt;&lt;p role=&quot;status&quot; id=&quot;advanced-export-status&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+&lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
+document.getElementById(&#x27;advanced-export&#x27;).addEventListener(&#x27;click&#x27;,function(){dkExport.csv([{region:&#x27;Ивановская область&#x27;,risk:92}], [{key:&#x27;region&#x27;,label:&#x27;Регион&#x27;},{key:&#x27;risk&#x27;,label:&#x27;Риск&#x27;}], &#x27;regions-filtered&#x27;);document.getElementById(&#x27;advanced-export-status&#x27;).textContent=&#x27;CSV подготовлен браузером&#x27;;});
+});
+&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkExport.csv(rows, columns, name?)</code></td><td>Blob</td><td>UTF-8 BOM, CRLF, quotes; formula-like strings prefixed with apostrophe. Передавайте текущий срез, не исходные строки.</td></tr><tr><td><code>dkExport.chart(chart, name?)</code></td><td>Promise<Blob></td><td>PNG через dkChart.exportImage(). SVG только из переданного самодостаточного DOM SVG: dkExport.svg(svg,name?).</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — точные числа</li><li><a href="README.md">Подключение</a> — dk-theme первым, dk-util до компонента</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+document.addEventListener("DOMContentLoaded", function(){document.getElementById('advanced-export').addEventListener('click',function(){dkExport.csv([{region:'Ивановская область',risk:92}], [{key:'region',label:'Регион'},{key:'risk',label:'Риск'}], 'regions-filtered');document.getElementById('advanced-export-status').textContent='CSV подготовлен браузером';});});
+})();
+</script>
+</body>
+</html>

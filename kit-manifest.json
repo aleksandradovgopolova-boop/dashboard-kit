@@ -174,6 +174,46 @@
     "requires": [
      "js/dk-util.js"
     ]
+   },
+   {
+    "file": "js/dk-analysis.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-context.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-workspace.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-tree.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
+    "file": "js/dk-layout-editor.js",
+    "how": "defer",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
    }
   ],
   "rule": "Подключать только то, что есть в include частей на странице, в этом порядке. Основа (часть base) — всегда."
@@ -761,6 +801,11 @@
      "name": "value / set(v) / clear() / setOptions(list)",
      "type": "API",
      "what": "Читать и менять снаружи."
+    },
+    {
+     "name": "update({value,options}) / destroy()",
+     "type": "API",
+     "what": "Тихое обновление; cleanup меню, focusout, anchor и подписок. Старые set/clear/setOptions сохранены."
     }
    ],
    "example": "<!-- Строка фильтров — прямо на странице, над содержимым. На телефоне она\n     становится строкой пилюль, которая листается вбок. -->\n<div class=\"dk-toolbar\">\n  <div class=\"dk-toolbar__group\">\n    <div id=\"period\"></div>\n    <div id=\"okrug\"></div>\n  </div>\n</div>\n\n<script>\nvar f = dkSelect(document.getElementById('okrug'), {\n  label: 'Округ',\n  options: [{ value: 'sfo', name: 'Сибирский', count: 10 }, /* … */],\n  mode: 'single',        // или 'multi'\n  url: 'okrug',          // ?okrug=sfo — ссылка на срез\n  onChange: function (value) { /* строка или массив (multi) */ }\n});\nf.value;                 // текущее\nf.set('sfo'); f.clear(); f.setOptions(list);\n</script>",
@@ -894,6 +939,11 @@
      "name": "value / text / set(v) / clear()",
      "type": "API",
      "what": "Читать и менять снаружи."
+    },
+    {
+     "name": "update({value}) / destroy()",
+     "type": "API",
+     "what": "Тихое восстановление периода. Старые set/clear сохранены; destroy освобождает календарь и подписки."
     }
    ],
    "example": "<!-- Период — первым в строке фильтров: он ограничивает всё остальное. -->\n<div class=\"dk-toolbar\">\n  <div class=\"dk-toolbar__group\">\n    <div id=\"period\"></div>\n    <div id=\"okrug\"></div>\n  </div>\n</div>\n\n<script>\nvar p = dkPeriod(document.getElementById('period'), {\n  label: 'Период',\n  value: { preset: 7 },              // или { from: '2026-09-11', to: '2026-09-24' }\n  url: 'period',                      // ?period=14d | 2026-09-11..2026-09-24\n  onChange: function (v) { /* v = { from: Date, to: Date, preset: 14|null } или null */ }\n});\np.value; p.text;                      // «Последние 14 дней»\np.set({ preset: 30 }); p.clear();\n</script>",
@@ -991,6 +1041,7 @@
     "dkDur",
     "dkEsc",
     "dkFmt",
+    "dkMeaning",
     "dkNum",
     "dkOwn",
     "dkUrl"
@@ -1212,6 +1263,11 @@
      "name": "page / size / setTotal(n)",
      "type": "API",
      "what": "Читать; пересчитать после фильтра."
+    },
+    {
+     "name": "update({total,page,size}) / destroy()",
+     "type": "API",
+     "what": "Тихое восстановление, page ограничивается количеством страниц. Старые goTo/setTotal сохранены."
     }
    ],
    "example": "<div id=\"pager\"></div>\n\n<script>\nvar pg = dkPager(document.getElementById('pager'), {\n  total: 89, size: 20, page: 1,\n  sizes: [10, 20, 50],                         // или null\n  noun: ['регион', 'региона', 'регионов'],\n  onChange: function (e) { /* e.page, e.size — запросить и показать срез */ }\n});\npg.page; pg.size; pg.setTotal(120);\n</script>",
@@ -1561,6 +1617,11 @@
      "name": "--table-min, --table-max",
      "type": "переменные на обёртке",
      "what": "Минимальная ширина и высота прокрутки; по умолчанию 720 и 480."
+    },
+    {
+     "name": "update({selected}) / destroy()",
+     "type": "API",
+     "what": "Восстановление выбора по data-id; cleanup обработчиков/observer без удаления таблицы. Sort host связывает через onSort."
     }
    ],
    "example": "<div class=\"dk-tablewrap dk-tablewrap--tall\" style=\"--table-min:860px;--table-max:420px\">\n  <table class=\"dk-table dk-table--zebra dk-table--sticky-head dk-table--sticky-col\" id=\"regions\">\n    <thead><tr>\n      <th class=\"dk-th-pick\"><label class=\"dk-check\" aria-label=\"Выбрать все на странице\">\n        <input type=\"checkbox\" data-pick-all><span class=\"dk-check__box\">…</span></label></th>\n      <th style=\"width:24%\" data-sortable=\"Регион\">Регион</th>\n      <th style=\"width:12%\" class=\"dk-td-num\" data-sortable=\"Балл\">Балл</th>\n    </tr></thead>\n    <tbody>\n      <tr data-id=\"RU-CR\">\n        <td class=\"dk-td-pick\">…<input type=\"checkbox\" data-pick value=\"RU-CR\">…</td>\n        <td>Крым</td>\n        <td class=\"dk-td-num\" data-sort=\"82\">82</td>\n      </tr>\n      <tr class=\"dk-tr-group\"><td colspan=\"2\">Сибирский округ</td><td class=\"dk-td-num\">73</td></tr>\n    </tbody>\n    <tfoot><tr><td></td><td>Итого</td><td class=\"dk-td-num\">155</td></tr></tfoot>\n  </table>\n</div>\n\n<script>\nvar t = dkTable(document.getElementById('regions'), {\n  onSelect: function (ids) { /* выбрано видно числом: ids.length */ },\n  onSort:   function (e)   { /* e.column, e.dir — если сортирует сервер */ }\n});\nt.selected; t.clear();\n</script>",
@@ -2448,6 +2509,11 @@
      "name": "update(spec) / instance / destroy()",
      "type": "API",
      "what": "Перерисовать; доступ к ECharts; убрать."
+    },
+    {
+     "name": "exportImage()",
+     "type": "Promise",
+     "what": "PNG текущей отрисовки, отклоняет Promise без готового экземпляра."
     }
    ],
    "example": "<div class=\"dk-chart\" id=\"hours\"></div>\n\n<script>\nvar c = dkChart(document.getElementById('hours'), {\n  type: 'bar',\n  categories: ['00', '01', '02'],\n  series: [{ name: 'Аварий', data: [1, 0, 2] }],\n  target: { value: 4, label: 'норма' },\n  unit: 'шт.',\n  empty: { title: 'За сутки аварий не было', text: 'Ни одной записи.', hint: 'Расширьте период.' }\n});\nc.update({ series: [ … ] });   // перерисовать с новыми данными\nc.instance;                    // экземпляр ECharts — в обход обёртки\nc.destroy();                   // сторож похоронит и сам, когда узел уйдёт\n</script>",
@@ -2576,6 +2642,11 @@
      "name": "view / setValues(v) / destroy()",
      "type": "API",
      "what": "Вид, данные, уборка."
+    },
+    {
+     "name": "update({values,scope,view}) / destroy()",
+     "type": "API",
+     "what": "Обновление одним проходом; старые setValues/setScope/view сохранены."
     }
    ],
    "example": "<div class=\"dk-widget\">\n  <div class=\"dk-widget__head\"><h3 class=\"dk-widget__title\">Регионы</h3></div>\n  <div id=\"regions\"></div>\n</div>\n\n<script>\nvar m = dkMap(document.getElementById('regions'), {\n  topo: topojson, object: 'ru89',      // контуры\n  tiles: tilesJson,                    // раскладка плиток\n  values: { 'RU-CR': 82, 'RU-NVS': 73 },\n  unit: 'баллов риска',\n  // controls не нужен: в виджете с шапкой переключатель встанет туда сам\n  onSelect: function (id, value) { }\n});\nm.view = 'tiles';\nm.setValues(next);                     // шкала пересчитается\n</script>",
@@ -2690,6 +2761,11 @@
      "name": "view / value / goTo(d) / setEvents(list)",
      "type": "API",
      "what": "Управление снаружи."
+    },
+    {
+     "name": "update({events,view}) / destroy()",
+     "type": "API",
+     "what": "Совместим со старым setEvents/view/goTo. На narrow/coarse неделя — agenda со временем словами и кнопками 44px, на desktop/fine — часовая сетка."
     }
    ],
    "example": "<div id=\"cal\"></div>\n\n<script>\nvar cal = dkCalendar(document.getElementById('cal'), {\n  view: 'month', month: '2026-09-01',\n  events: [\n    { date: '2026-09-14', name: 'Прорыв, Советский р-н', kind: 'crit' },\n    { date: '2026-09-14', from: '08:00', to: '13:00', name: 'Плановое отключение ГВС', kind: 'plan' }\n  ],\n  onSelect: function (day) { },\n  onEvent: function (e) { }\n});\ncal.view = 'week'; cal.goTo('2026-09-14'); cal.setEvents(list);\n</script>",
@@ -2715,6 +2791,7 @@
    ],
    "classes": [
     "dk-cal",
+    "dk-cal__agenda",
     "dk-cal__allday",
     "dk-cal__body",
     "dk-cal__col",
@@ -3060,6 +3137,876 @@
    "include": []
   },
   {
+   "id": "breadcrumbs",
+   "title": "Навигационный путь",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "стабильный",
+   "purpose": "Показывает место объекта в иерархии и путь к родителю.",
+   "use_when": [
+    "Есть вложенные разделы или drill-down по объектам."
+   ],
+   "instead": [
+    {
+     "when": "Один уровень навигации: используйте tabs.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-breadcrumbs"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-breadcrumbs.html"
+   ],
+   "api": [
+    {
+     "name": "aria-current=\"page\"",
+     "type": "атрибут",
+     "what": "Только последний пункт, текущий объект."
+    }
+   ],
+   "example": "<nav class=\"dk-breadcrumbs\" aria-label=\"Навигационный путь\"><ol><li><a href=\"dashboard.html\">Мониторинг</a></li><li><a href=\"regions.html\">Регионы</a></li><li><span aria-current=\"page\">Ивановская область</span></li></ol></nav>",
+   "rules": [
+    "Есть вложенные разделы или drill-down по объектам.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Один уровень навигации: используйте tabs.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Ссылки доступны Tab и Enter, текущий объект не ссылка. На узком экране путь переносится; названия не обрезаются.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-breadcrumbs"
+   ],
+   "include": []
+  },
+  {
+   "id": "tooltip",
+   "title": "Подсказка",
+   "kind": "компонент",
+   "group": "Обратная связь",
+   "status": "экспериментальный",
+   "purpose": "Короткое дополнительное объяснение показателя без перекрытия рабочего потока.",
+   "use_when": [
+    "Нужно объяснить термин рядом с его употреблением."
+   ],
+   "instead": [
+    {
+     "when": "Критические инструкции или интерактивные ссылки: используйте видимый текст или details sidebar.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-tooltip"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-context.js"
+   ],
+   "data": [],
+   "js": [
+    "dkTooltip"
+   ],
+   "docs": [
+    "component-tooltip.html"
+   ],
+   "api": [
+    {
+     "name": "dkTooltip(trigger, {text})",
+     "type": "API",
+     "what": "Именованная кнопка. show(), hide(), update({text}), destroy()."
+    }
+   ],
+   "example": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-tooltip\">Что значит риск?</button>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkTooltip(document.getElementById('advanced-tooltip'), {text:'Риск — оценка по текущим порогам, не прогноз.'});\n});\n</script>",
+   "rules": [
+    "Нужно объяснить термин рядом с его употреблением.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Критические инструкции или интерактивные ссылки: используйте видимый текст или details sidebar.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Фокус/мышь показывают, Escape закрывает. Касание кнопки переключает. aria-describedby сохраняет прежние ссылки. Подсказка не содержит фокусируемых элементов.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-tooltip"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-context.js"
+   ]
+  },
+  {
+   "id": "details-sidebar",
+   "title": "Боковые детали",
+   "kind": "компонент",
+   "group": "Обратная связь",
+   "status": "стабильный",
+   "purpose": "Детали выбранного объекта без перехода с текущего среза.",
+   "use_when": [
+    "Нужно сверить сведения об одном объекте с контекстом дашборда."
+   ],
+   "instead": [
+    {
+     "when": "Подтверждение разрушительного действия: используйте обычный modal.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-sidebar"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-modal.js"
+   ],
+   "data": [],
+   "js": [
+    "dkModal"
+   ],
+   "docs": [
+    "component-details-sidebar.html"
+   ],
+   "api": [
+    {
+     "name": "dkModal(el)",
+     "type": "существующий API",
+     "what": "open(), close(value), returnValue; sidebar — вариант modal, отдельного контроллера нет."
+    }
+   ],
+   "example": "<button type=\"button\" class=\"dk-btn\" data-modal=\"#advanced-details\">Детали региона</button><dialog class=\"dk-modal dk-sidebar\" id=\"advanced-details\" aria-labelledby=\"advanced-details-title\"><div class=\"dk-modal__body\"><h2 id=\"advanced-details-title\">Ивановская область</h2><p>Риск: 92 из 100. Порог высокого риска: 78.</p><form method=\"dialog\"><button class=\"dk-btn\" type=\"submit\">Закрыть</button></form></div></dialog>",
+   "rules": [
+    "Нужно сверить сведения об одном объекте с контекстом дашборда.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Подтверждение разрушительного действия: используйте обычный modal.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Именованный dialog, Tab/Shift+Tab удерживаются, Escape закрывает, фокус возвращается. На телефоне занимает всю ширину. Содержимое прокручивается, фон недоступен.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-sidebar"
+   ],
+   "include": [
+    "js/dk-modal.js"
+   ]
+  },
+  {
+   "id": "heatmap",
+   "title": "Тепловая карта",
+   "kind": "компонент",
+   "group": "Визуализация",
+   "status": "экспериментальный",
+   "purpose": "Сравнение интенсивности по объектам и интервалам с доступными числами.",
+   "use_when": [
+    "Нужно найти сочетания объект × время, требующие внимания."
+   ],
+   "instead": [
+    {
+     "when": "Есть только один ряд: используйте bar-h или uptime для доступности.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-heatmap"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-analysis.js"
+   ],
+   "data": [],
+   "js": [
+    "dkBullet",
+    "dkComparison",
+    "dkHeatmap",
+    "dkPeriodComparison",
+    "dkTimelineAnnotations"
+   ],
+   "docs": [
+    "component-heatmap.html"
+   ],
+   "api": [
+    {
+     "name": "dkHeatmap(el, opts)",
+     "type": "API",
+     "what": "columns: string[], rows: {label,values}[], thresholds: три возрастающих числа. update(opts), destroy()."
+    }
+   ],
+   "example": "<div id=\"advanced-heatmap\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkHeatmap(document.getElementById('advanced-heatmap'), {label:'Риск по службам', columns:['Пн','Вт','Ср'], thresholds:[25,50,75], rows:[{label:'Тепло',values:[12,58,null]},{label:'Вода',values:[0,77,35]}]});\n});\n</script>",
+   "rules": [
+    "Нужно найти сочетания объект × время, требующие внимания.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Есть только один ряд: используйте bar-h или uptime для доступности.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Настоящая таблица с заголовками scope и числовыми значениями. Четыре уровня отмечены I–IV, а отсутствие — текстом и штрихами. На телефоне таблица прокручивается внутри; цвета смысловые, не accent.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-heatmap",
+    "dk-heatmap__mark",
+    "dk-heatmap__table"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-analysis.js"
+   ]
+  },
+  {
+   "id": "bullet-chart",
+   "title": "Значение и цель",
+   "kind": "компонент",
+   "group": "Визуализация",
+   "status": "экспериментальный",
+   "purpose": "Компактно показывает факт, целевой уровень и контекст диапазонов.",
+   "use_when": [
+    "В KPI нужно сравнить одно число с целевым уровнем."
+   ],
+   "instead": [
+    {
+     "when": "Временной тренд: используйте line; доли целого: stacked-bar.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-bullet"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-analysis.js"
+   ],
+   "data": [],
+   "js": [
+    "dkBullet",
+    "dkComparison",
+    "dkHeatmap",
+    "dkPeriodComparison",
+    "dkTimelineAnnotations"
+   ],
+   "docs": [
+    "component-bullet-chart.html"
+   ],
+   "api": [
+    {
+     "name": "dkBullet(el, opts)",
+     "type": "API",
+     "what": "actual, target, min, max, unit, ranges:{to,label}[], meaning?; update(opts), destroy()."
+    }
+   ],
+   "example": "<div id=\"advanced-bullet\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkBullet(document.getElementById('advanced-bullet'), {label:'Устранение за смену', actual:72, target:80, min:0, max:100, unit:'%', ranges:[{to:60,label:'Ниже нормы'},{to:100,label:'Рабочий диапазон'}]});\n});\n</script>",
+   "rules": [
+    "В KPI нужно сравнить одно число с целевым уровнем.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Временной тренд: используйте line; доли целого: stacked-bar.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Факт, цель и шкала написаны словами. Декоративная полоса aria-hidden. Горизонтальная полоса работает без hover и не является контролом.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-bullet",
+    "dk-bullet__actual",
+    "dk-bullet__range",
+    "dk-bullet__target",
+    "dk-bullet__track"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-analysis.js"
+   ]
+  },
+  {
+   "id": "period-comparison",
+   "title": "Сравнение периодов",
+   "kind": "компонент",
+   "group": "Данные",
+   "status": "экспериментальный",
+   "purpose": "Показывает текущий и предыдущий показатель, абсолютную и относительную дельту.",
+   "use_when": [
+    "Нужно объяснить изменение KPI или сопровождать временной график."
+   ],
+   "instead": [
+    {
+     "when": "Несопоставимые периоды или разные единицы: сначала приведите данные к общей базе.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-comparison"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-analysis.js"
+   ],
+   "data": [],
+   "js": [
+    "dkBullet",
+    "dkComparison",
+    "dkHeatmap",
+    "dkPeriodComparison",
+    "dkTimelineAnnotations"
+   ],
+   "docs": [
+    "component-period-comparison.html"
+   ],
+   "api": [
+    {
+     "name": "dkComparison(current, previous, better)",
+     "type": "чистая функция",
+     "what": "Возвращает delta, percent, direction, meaning. better: increase/decrease/neutral."
+    },
+    {
+     "name": "dkPeriodComparison(el, opts)",
+     "type": "API",
+     "what": "current, previous, better, label, unit; update(opts), destroy()."
+    }
+   ],
+   "example": "<div id=\"advanced-comparison\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkPeriodComparison(document.getElementById('advanced-comparison'), {label:'Аварии за сутки',current:23,previous:19,better:'decrease'});\n});\n</script>",
+   "rules": [
+    "Нужно объяснить изменение KPI или сопровождать временной график.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Несопоставимые периоды или разные единицы: сначала приведите данные к общей базе.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Рост/снижение названы словами, смысл дельты не определяется только знаком. Текст переносится и подходит для компактного KPI. Скринридер получает оба числа.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-comparison",
+    "dk-comparison__delta"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-analysis.js"
+   ]
+  },
+  {
+   "id": "timeline-annotations",
+   "title": "События на шкале",
+   "kind": "компонент",
+   "group": "Визуализация",
+   "status": "экспериментальный",
+   "purpose": "Объясняет пики и интервалы изменениями, работами и инцидентами.",
+   "use_when": [
+    "Нужно сопоставить изменение метрики с точкой события или диапазоном."
+   ],
+   "instead": [
+    {
+     "when": "Требуется планировать календарь: используйте calendar.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-annotations"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-analysis.js"
+   ],
+   "data": [],
+   "js": [
+    "dkBullet",
+    "dkComparison",
+    "dkHeatmap",
+    "dkPeriodComparison",
+    "dkTimelineAnnotations"
+   ],
+   "docs": [
+    "component-timeline-annotations.html"
+   ],
+   "api": [
+    {
+     "name": "dkTimelineAnnotations(el, opts)",
+     "type": "API",
+     "what": "start/end задают шкалу, events:{label,start,end?}[]; update(opts), destroy()."
+    }
+   ],
+   "example": "<div id=\"advanced-annotations\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkTimelineAnnotations(document.getElementById('advanced-annotations'), {label:'События за смену',start:'2026-10-06T08:00:00+03:00',end:'2026-10-06T20:00:00+03:00',events:[{label:'Начало работ',start:'2026-10-06T10:00:00+03:00'},{label:'Ограничение',start:'2026-10-06T12:00:00+03:00',end:'2026-10-06T16:00:00+03:00'}]});\n});\n</script>",
+   "rules": [
+    "Нужно сопоставить изменение метрики с точкой события или диапазоном.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Требуется планировать календарь: используйте calendar.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "События сортируются по времени и перечислены полным текстом. Каждой подписи отдельная строка: столкновений нет при крупном шрифте. На телефоне сохраняется список, полосы вторичны.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-annotations",
+    "dk-annotations__track"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-analysis.js"
+   ]
+  },
+  {
+   "id": "fullscreen",
+   "title": "Полный экран",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "экспериментальный",
+   "purpose": "Временное увеличение виджета для чтения деталей.",
+   "use_when": [
+    "Много подписей или небольшая область графика."
+   ],
+   "instead": [
+    {
+     "when": "Полный экран должен скрыть обязательные сравнения: расширьте раскладку вместо него.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-fullscreen"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-workspace.js"
+   ],
+   "data": [],
+   "js": [
+    "dkDensity",
+    "dkExport",
+    "dkFullscreen",
+    "dkSavedViews",
+    "dkState"
+   ],
+   "docs": [
+    "component-fullscreen.html"
+   ],
+   "api": [
+    {
+     "name": "dkFullscreen(widget, button)",
+     "type": "API",
+     "what": "enter()/exit(): Promise, destroy(). Нативный API или modal fallback."
+    }
+   ],
+   "example": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-fullscreen-button\">Полный экран</button><section class=\"dk-widget\" id=\"advanced-fullscreen\" aria-label=\"Доступность\"><h3>Доступность</h3><p>99,8% за сутки</p><button type=\"button\" class=\"dk-btn\" id=\"advanced-fullscreen-exit\">Закрыть полный экран</button></section>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\nvar fullscreen=dkFullscreen(document.getElementById('advanced-fullscreen'),document.getElementById('advanced-fullscreen-button')); document.getElementById('advanced-fullscreen-exit').addEventListener('click',function(){fullscreen.exit();});\n});\n</script>",
+   "rules": [
+    "Много подписей или небольшая область графика.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Полный экран должен скрыть обязательные сравнения: расширьте раскладку вместо него.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Escape, кнопка выхода и восстановление фокуса. Fallback удерживает Tab. DOM-узел переносится, не клонируется; обработчики и данные остаются.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-fullscreen"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-workspace.js"
+   ]
+  },
+  {
+   "id": "export",
+   "title": "Экспорт среза",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "экспериментальный",
+   "purpose": "Локально сохраняет текущие строки таблицы или изображение графика.",
+   "use_when": [
+    "Нужно передать текущий filtered dataset или сохранить график."
+   ],
+   "instead": [
+    {
+     "when": "Экспорт всего серверного набора: нужен отдельный серверный контракт.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-export"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-workspace.js"
+   ],
+   "data": [],
+   "js": [
+    "dkDensity",
+    "dkExport",
+    "dkFullscreen",
+    "dkSavedViews",
+    "dkState"
+   ],
+   "docs": [
+    "component-export.html"
+   ],
+   "api": [
+    {
+     "name": "dkExport.csv(rows, columns, name?)",
+     "type": "Blob",
+     "what": "UTF-8 BOM, CRLF, quotes; formula-like strings prefixed with apostrophe. Передавайте текущий срез, не исходные строки."
+    },
+    {
+     "name": "dkExport.chart(chart, name?)",
+     "type": "Promise",
+     "what": "PNG через dkChart.exportImage(). SVG только из переданного самодостаточного DOM SVG: dkExport.svg(svg,name?)."
+    }
+   ],
+   "example": "<div class=\"dk-export\"><button type=\"button\" class=\"dk-btn\" id=\"advanced-export\">CSV текущего среза</button><p role=\"status\" id=\"advanced-export-status\"></p></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndocument.getElementById('advanced-export').addEventListener('click',function(){dkExport.csv([{region:'Ивановская область',risk:92}], [{key:'region',label:'Регион'},{key:'risk',label:'Риск'}], 'regions-filtered');document.getElementById('advanced-export-status').textContent='CSV подготовлен браузером';});\n});\n</script>",
+   "rules": [
+    "Нужно передать текущий filtered dataset или сохранить график.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Экспорт всего серверного набора: нужен отдельный серверный контракт.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Нативная кнопка с ясным названием формата. Экспорт не требует сервера; файл создаётся браузером. Об успешном скачивании ОС API не сообщает.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-export"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-workspace.js"
+   ]
+  },
+  {
+   "id": "density-controls",
+   "title": "Плотность данных",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "экспериментальный",
+   "purpose": "Уменьшает отступы для сравнения большего числа строк.",
+   "use_when": [
+    "Пользователь работает с длинной таблицей или списком."
+   ],
+   "instead": [
+    {
+     "when": "Нужно спрятать названия или уменьшить touch targets: плотность не решает это.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-density"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-workspace.js"
+   ],
+   "data": [],
+   "js": [
+    "dkDensity",
+    "dkExport",
+    "dkFullscreen",
+    "dkSavedViews",
+    "dkState"
+   ],
+   "docs": [
+    "component-density-controls.html"
+   ],
+   "api": [
+    {
+     "name": "dkDensity(el, opts)",
+     "type": "API",
+     "what": "root?: dk-root, value: comfortable/compact, onChange(value); value(), update({value}), destroy()."
+    }
+   ],
+   "example": "<div id=\"advanced-density\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkDensity(document.getElementById('advanced-density'), {value:'comfortable'});\n});\n</script>",
+   "rules": [
+    "Пользователь работает с длинной таблицей или списком.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Нужно спрятать названия или уменьшить touch targets: плотность не решает это.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Нативный select. Coarse pointer сохраняет 44px цели; шрифт полей 16px. Уменьшаются отступы widget/table/list, не текст и не содержимое.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-density"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-workspace.js"
+   ]
+  },
+  {
+   "id": "tree-select",
+   "title": "Выбор в иерархии",
+   "kind": "компонент",
+   "group": "Фильтры",
+   "status": "экспериментальный",
+   "purpose": "Выбирает группы и дочерние объекты в небольшом справочнике.",
+   "use_when": [
+    "Выбор связан с реальной иерархией служб/территорий."
+   ],
+   "instead": [
+    {
+     "when": "Плоский справочник: используйте select или ChipsSelect.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-tree",
+    "dk-tree-select"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-tree.js"
+   ],
+   "data": [],
+   "js": [
+    "dkTreeSelect"
+   ],
+   "docs": [
+    "component-tree-select.html"
+   ],
+   "api": [
+    {
+     "name": "dkTreeSelect(el, opts)",
+     "type": "API",
+     "what": "nodes:{id,label,disabled?,children?}[], value: id[], onChange(ids). value(), expand(id), update({value}), destroy()."
+    }
+   ],
+   "example": "<div id=\"advanced-tree\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkTreeSelect(document.getElementById('advanced-tree'), {label:'Службы',nodes:[{id:'all',label:'Все службы',children:[{id:'heat',label:'Тепло'},{id:'water',label:'Вода'}]}]});\n});\n</script>",
+   "rules": [
+    "Выбор связан с реальной иерархией служб/территорий.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Плоский справочник: используйте select или ChipsSelect.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Tree/Treeitem, aria-level/posinset/setsize, aria-checked mixed. Стрелки/Home/End перемещают, Right/Left раскрывают/сворачивают, Space/Enter выбирают. Поиск сохраняет поле и контекст родителей.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-tree",
+    "dk-tree-select",
+    "dk-tree__expand",
+    "dk-tree__item"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-tree.js"
+   ]
+  },
+  {
+   "id": "saved-views",
+   "title": "Сохранённые виды",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "экспериментальный",
+   "purpose": "Возвращает локальный рабочий срез со всеми согласованными параметрами.",
+   "use_when": [
+    "Пользователь регулярно возвращается к одним фильтрам и периодам."
+   ],
+   "instead": [
+    {
+     "when": "Нужны общие виды команды: локальное хранилище не является синхронизацией.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-saved-views"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-workspace.js"
+   ],
+   "data": [],
+   "js": [
+    "dkDensity",
+    "dkExport",
+    "dkFullscreen",
+    "dkSavedViews",
+    "dkState"
+   ],
+   "docs": [
+    "component-saved-views.html"
+   ],
+   "api": [
+    {
+     "name": "dkState(el, initial)",
+     "type": "API",
+     "what": "get(), update(patch), destroy(); dk:statechange содержит snapshot. filters, period, sort, page, size, mode, density."
+    },
+    {
+     "name": "dkSavedViews(el, opts)",
+     "type": "API",
+     "what": "key/state обязательны, storage?, applyDefault?. create(name), rename(id,name), apply(id), remove(id), setDefault(id|null), list(), destroy()."
+    }
+   ],
+   "example": "<div id=\"advanced-state\"></div><div id=\"advanced-views\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\nvar state=dkState(document.getElementById('advanced-state'), {filters:{service:'heat'},period:'14d'});dkSavedViews(document.getElementById('advanced-views'), {key:'dk-demo-views',state:state});\n});\n</script>",
+   "rules": [
+    "Пользователь регулярно возвращается к одним фильтрам и периодам.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Нужны общие виды команды: локальное хранилище не является синхронизацией.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Названия и действия видимы, status сообщает ошибки хранения. После действий фокус остаётся в контексте. Переименование использует поле Название вида.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-saved-views"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-workspace.js"
+   ]
+  },
+  {
+   "id": "layout-editor",
+   "title": "Раскладка виджетов",
+   "kind": "компонент",
+   "group": "Управление",
+   "status": "экспериментальный",
+   "purpose": "Меняет порядок, ширину и видимость зарегистрированных виджетов.",
+   "use_when": [
+    "Пользователь организует рабочий обзор под собственную задачу."
+   ],
+   "instead": [
+    {
+     "when": "Нужно редактировать содержание или создавать новые блоки: это не page builder.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-layout-editor"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-layout-editor.js"
+   ],
+   "data": [],
+   "js": [
+    "dkLayoutEditor"
+   ],
+   "docs": [
+    "component-layout-editor.html"
+   ],
+   "api": [
+    {
+     "name": "dkLayoutEditor(el, opts)",
+     "type": "API",
+     "what": "container с детьми data-widget-id, key?/storage?/onChange. get(), update(layout), reset(), destroy(). layout:{id,span,hidden}[]."
+    }
+   ],
+   "example": "<div id=\"advanced-editor\"></div><div class=\"dk-grid\" id=\"advanced-layout\"><section class=\"dk-col--half dk-widget\" data-widget-id=\"risk\" data-widget-label=\"Риск\"><h3>Риск</h3><p>23 региона</p></section><section class=\"dk-col--half dk-widget\" data-widget-id=\"uptime\" data-widget-label=\"Доступность\"><h3>Доступность</h3><p>99,8%</p></section></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkLayoutEditor(document.getElementById('advanced-editor'), {container:document.getElementById('advanced-layout'),key:'dk-demo-layout'});\n});\n</script>",
+   "rules": [
+    "Пользователь организует рабочий обзор под собственную задачу.",
+    "Показывайте полные названия, единицы и источник данных."
+   ],
+   "avoid": [
+    "Нужно редактировать содержание или создавать новые блоки: это не page builder.",
+    "Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение."
+   ],
+   "a11y": [
+    "Выше/Ниже, нативный select ширины, Показать/Скрыть и Сбросить работают клавиатурой и пальцем. Перемещается живой DOM, не копия. После действия восстанавливается фокус.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-layout-editor"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-layout-editor.js"
+   ]
+  },
+  {
    "id": "base",
    "title": "Основа страницы",
    "kind": "основа",
@@ -3071,6 +4018,7 @@
    ],
    "instead": [],
    "owns": [
+    "dk-nodata",
     "dk-root",
     "dk-page"
    ],
@@ -3085,6 +4033,7 @@
     "js/dk-icons.js"
    ],
    "js": [
+    "dkMeaning",
     "dkTheme",
     "dkUrl",
     "dkFmt",
@@ -3117,6 +4066,7 @@
    "a11y": [],
    "related": [],
    "classes": [
+    "dk-nodata",
     "dk-page",
     "dk-root"
    ],
@@ -3659,9 +4609,9 @@
  },
  "hooks": {},
  "counts": {
-  "parts": 33,
-  "classes": 379,
-  "functions": 27,
+  "parts": 46,
+  "classes": 405,
+  "functions": 41,
   "chart_types": 12
  }
 }

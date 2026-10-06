@@ -296,7 +296,7 @@
       // Текстовая ступень смысла, а не заливочная: это число человек читает,
       // а не опознаёт как пятно. Заливочный --crit даёт на тёмной теме 2.95:1
       // при норме 4.5:1 — см. проверку РОЛЬ в tools/check.py.
-      function tone(v) { return v >= 78 ? 'var(--crit-ink)' : v >= 60 ? 'var(--high-ink)' : 'var(--calm-ink)'; }
+      function tone(v) { return v >= 78 ? window.dkMeaning('crit', 'text') : v >= 60 ? window.dkMeaning('high', 'text') : window.dkMeaning('calm', 'text'); }
       // Значок у состояния свой: одинаковая галочка у «высокого» и «низкого»
       // риска — это подпись, которая спорит с собственным цветом.
       function state(v) {

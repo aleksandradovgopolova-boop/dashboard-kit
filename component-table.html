@@ -148,7 +148,7 @@ var t = dkTable(document.getElementById(&#x27;regions&#x27;), {
   onSort:   function (e)   { /* e.column, e.dir — если сортирует сервер */ }
 });
 t.selected; t.clear();
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>onSelect(ids)</code></td><td>функция</td><td>При каждой смене выбора с массивом <code>data-id</code>.</td></tr><tr><td><code>onSort(e)</code></td><td>функция</td><td>Передан — таблица не сортирует сама, а сообщает <code>e.column</code> и <code>e.dir</code>.</td></tr><tr><td><code>data-sortable</code></td><td>атрибут th</td><td>Имя колонки для сортировки.</td></tr><tr><td><code>data-sort</code></td><td>атрибут td</td><td>Значение для сортировки, когда текст ячейки — не оно.</td></tr><tr><td><code>--table-min, --table-max</code></td><td>переменные на обёртке</td><td>Минимальная ширина и высота прокрутки; по умолчанию 720 и 480.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>onSelect(ids)</code></td><td>функция</td><td>При каждой смене выбора с массивом <code>data-id</code>.</td></tr><tr><td><code>onSort(e)</code></td><td>функция</td><td>Передан — таблица не сортирует сама, а сообщает <code>e.column</code> и <code>e.dir</code>.</td></tr><tr><td><code>data-sortable</code></td><td>атрибут th</td><td>Имя колонки для сортировки.</td></tr><tr><td><code>data-sort</code></td><td>атрибут td</td><td>Значение для сортировки, когда текст ячейки — не оно.</td></tr><tr><td><code>--table-min, --table-max</code></td><td>переменные на обёртке</td><td>Минимальная ширина и высота прокрутки; по умолчанию 720 и 480.</td></tr><tr><td><code>update({selected}) / destroy()</code></td><td>API</td><td>Восстановление выбора по data-id; cleanup обработчиков/observer без удаления таблицы. Sort host связывает через onSort.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>
@@ -193,7 +193,7 @@ t.selected; t.clear();
       '<td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать ' + esc(r[2]) + '"><input type="checkbox" data-pick value="' + esc(r[1]) + '"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>' +
       '<td>' + esc(r[2]) + '</td>' +
       '<td data-sort="' + ({ crit: 3, high: 2, calm: 1 })[r[3]] + '"><span class="dk-status dk-status--' + st[0] + '"><svg class="dk-i dk-i--sm"><use href="#' + st[1] + '"/></svg>' + st[2] + '</span></td>' +
-      '<td class="dk-td-num" data-sort="' + r[4] + '"' + (r[4] >= 80 ? ' style="color:var(--crit)"' : r[4] >= 60 ? ' style="color:var(--high)"' : '') + '>' + fmt.num(r[4]) + '</td>' +
+      '<td class="dk-td-num" data-sort="' + r[4] + '"' + (r[4] >= 80 ? ' style="color:' + window.dkMeaning('crit', 'text') + '"' : r[4] >= 60 ? ' style="color:' + window.dkMeaning('high', 'text') + '"' : '') + '>' + fmt.num(r[4]) + '</td>' +
       '<td class="dk-td-num" data-sort="' + (r[5] == null ? '' : r[5]) + '">' + fmt.num(r[5]) + '</td>' +
       '<td class="dk-td-num" data-sort="' + r[6] + '">' + fmt.num(r[6]) + '</td>' +
       '<td class="dk-td-num" data-sort="' + r[7] + '">' + fmt.delta(r[7]) + '</td></tr>');

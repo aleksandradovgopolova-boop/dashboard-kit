@@ -38,3 +38,27 @@
 ## Правила дальнейшей сборки
 
 Сначала задача и её объект, затем число/контекст, затем доказательство и действие. Карусель не должна скрывать обязательные для решения объекты: для обзора использовать dk-car--list. Компактные KPI — dk-tile--compact и dk-grid--metrics. Каждому фильтру нужны имя, состояние, клавиатурный путь, результат/пустое состояние и сброс. Карта получает доступную таблицу с теми же данными. Диалог именуется, возвращает фокус и проверяется Tab/Shift+Tab/Escape. Любое исследование маркируется по типу доказательства: автоматический тест, экспертная проверка UI, AX tree, фактический screenreader, участники исследования.
+
+## 06.10.2026 — автоматическое runtime-доказательство и границы
+
+Полный suite: tools/test.py. Автоматически проверяются реальные DOM/API действия,
+фокус и Escape, tree клавиатура/search/mixed, named AX controls, ID references,
+200% увеличенные font tokens, reflow 320px, touch targets, safe-area emulation,
+обе темы и статический контраст. Runtime создаёт PNG реальным ECharts и проверяет
+наличие decal no-data; штрихи имеют 3:1 к своей заливке и поверхностям. Сводка
+начинается со статуса и состава; мобильная шапка не фиксируется над графиками.
+
+Reduced motion: браузерная среда выставляет prefers-reduced-motion=reduce;
+новые DOM-компоненты не вводят анимаций, существующий движок учитывает настройку.
+Это не проверка реальной системной настройки. AX names не являются услышанной
+речью. CSS zoom/viewport не являются iOS Dynamic Type или Android font scale.
+
+Не доказаны: физические iPhone/Android, настоящий WebView, spoken VoiceOver/NVDA,
+реальные крупные системные шрифты, полный Safari/Firefox runtime. В desktop Safari
+27 выполнен ограниченный UI smoke: tree keyboard/search/mixed, tooltip/Escape,
+fullscreen exit/Escape/focus return, heatmap zero/null и live dark/light.
+Найдена и исправлена задержка фона no-data при смене темы: эта ячейка меняется
+без transition. WebDriver отказал из-за выключенного Allow remote automation;
+настройка не менялась. Firefox не является участником текущего suite.
+Feature detection/dialog fallback и desktop smoke не заменяют полные
+прогоны. План реальной проверки и задачи пользователей выше сохраняются.

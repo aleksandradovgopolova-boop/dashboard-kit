@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 
 GROUPS = ["Управление", "Фильтры", "Данные", "Визуализация", "Обратная связь"]
-MODULES = ["p1_controls", "p2_filters", "p3_data", "p4_viz", "p5_feedback"]
+MODULES = ["p1_controls", "p2_filters", "p3_data", "p4_viz", "p5_feedback", "p6_advanced"]
 
 CATALOG_DESCRIPTIONS = {'chips-input': 'Ввод набора произвольных значений с отдельным удалением.', 'chips-select': 'Выбор нескольких значений из справочника с видимым набором.', 'button': 'Выполнение основного или дополнительного действия.', 'segment': 'Переключение вида одних и тех же данных.', 'tabs': 'Переход между разделами продукта.', 'check': 'Независимый выбор, выбор одного варианта и переключение режима.', 'field': 'Ввод данных с подписью, подсказкой и проверкой.', 'select': 'Выбор одного или нескольких значений из списка.', 'period': 'Выбор периода для просмотра и сравнения данных.', 'search': 'Поиск объекта по названию.', 'legend': 'Обозначение категорий данных и фильтрация по ним.', 'pager': 'Переход между страницами набора данных.', 'table': 'Сравнение объектов по общим признакам.', 'badge': 'Краткие метки, статусы и показатели внутри других компонентов.', 'tile': 'Отображение отдельного показателя и его изменения.', 'hero': 'Общее состояние и ключевой показатель экрана.', 'car': 'Группа связанных карточек с навигацией.', 'rank': 'Ранжирование объектов по выбранному показателю.', 'list': 'Список объектов с дополнительными данными и действиями.', 'uptime': 'История доступности служб за выбранный период.', 'chart': 'Сравнение величин, динамики и состава данных.', 'map': 'Географическое распределение показателей и альтернативный вид плитками.', 'calendar': 'Распределение работ и событий по датам.', 'banner': 'Состояние страницы и подтверждение выполненного действия.', 'modal': 'Подтверждение действия или выполнение отдельной задачи.', 'empty': 'Сообщения о загрузке, отсутствии данных и ошибке.'}
 
@@ -187,6 +187,16 @@ def load_pages() -> list[dict]:
         for p in mod.PAGES:
             p = dict(p)
             p["module"] = m
+            additions = {
+                "select": [("update({value,options}) / destroy()", "API", "Тихое обновление; cleanup меню, focusout, anchor и подписок. Старые set/clear/setOptions сохранены.")],
+                "period": [("update({value}) / destroy()", "API", "Тихое восстановление периода. Старые set/clear сохранены; destroy освобождает календарь и подписки.")],
+                "pager": [("update({total,page,size}) / destroy()", "API", "Тихое восстановление, page ограничивается количеством страниц. Старые goTo/setTotal сохранены.")],
+                "table": [("update({selected}) / destroy()", "API", "Восстановление выбора по data-id; cleanup обработчиков/observer без удаления таблицы. Sort host связывает через onSort.")],
+                "map": [("update({values,scope,view}) / destroy()", "API", "Обновление одним проходом; старые setValues/setScope/view сохранены.")],
+                "calendar": [("update({events,view}) / destroy()", "API", "Совместим со старым setEvents/view/goTo. На narrow/coarse неделя — agenda со временем словами и кнопками 44px, на desktop/fine — часовая сетка.")],
+                "chart": [("exportImage()", "Promise<Blob>", "PNG текущей отрисовки, отклоняет Promise без готового экземпляра.")],
+            }
+            p["api"] = list(p["api"]) + additions.get(p["slug"], [])
             pages.append(p)
     return pages
 
@@ -195,7 +205,7 @@ def build() -> dict[str, str]:
     """Имя файла → содержимое, включая указатель."""
     pages = load_pages()
     out = {f"component-{p['slug']}.html": render(p) for p in pages}
-    index = [{"slug": p["slug"], "title": p["title"], "group": p["group"], "description": CATALOG_DESCRIPTIONS[p["slug"]]} for p in pages]
+    index = [{"slug": p["slug"], "title": p["title"], "group": p["group"], "description": CATALOG_DESCRIPTIONS.get(p["slug"], p["purpose"])} for p in pages]
     out["js/docs-index.js"] = (
         "/* СОБРАНО tools/build-component-pages.py — указатель страниц компонентов для\n"
         "   оглавления документации (js/docs.js). Руками не править. */\n"

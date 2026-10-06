@@ -12,7 +12,7 @@ status: draft
 Читать AGENTS, README, DECISIONS, DESIGN, REVIEW, HANDOFF. Для компонентов — skill/dashboard-build/SKILL.md и references. Не добавлять сборку/фреймворк/зависимости ради AI Ops.
 
 ## Проверка и PR
-python3 tools/check.py --fast — быстрая проверка; python3 tools/check.py — полная (Node.js 22+ и Chrome). Пропуск браузера явно сообщать. После изменений генераторов/тем сверять нужные производные файлы по HANDOFF.
+python3 tools/check.py --fast — быстрая проверка; python3 tools/test.py — полный suite (Node.js 22+ и Chrome); python3 tools/check.py — правила и мобильная адаптация. Пропуск браузера явно сообщать. После изменений генераторов/тем сверять нужные производные файлы по HANDOFF.
 
 ## Ревью
 Объяснить проблему, поведение после правки, доказательства и ограничения. Изменения через PR; не сливать и не публиковать автоматически. Managed не редактировать; .github/workflows/ защищён. Нельзя трогать чужие незакоммиченные изменения.

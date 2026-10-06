@@ -106,7 +106,7 @@
      Порядок жёсткий и совпадает с порядком категорий: от худшего к лучшему,
      последним — отсутствие данных. Читателю не нужно сверяться с легендой:
      красный он уже знает по всему остальному дашборду.                      */
-  var STATUS = ['--crit', '--high', '--calm', '--nodata'];
+  var STATUS = ['crit', 'high', 'calm', 'nodata'];
 
   /* Категорий в палитре состояний ровно четыре, и пятая — это не «ещё одно
      состояние», а ошибка данных. Раньше всё после четвёртой получало цвет
@@ -122,7 +122,7 @@
                    'как «нет данных» — значение притворяется отсутствием. ' +
                    'Либо это не состояние, либо категории надо свести к четырём.');
     }
-    return inkColor(STATUS[Math.min(i, STATUS.length - 1)]);
+    return window.dkMeaning.color(STATUS[Math.min(i, STATUS.length - 1)], 'fill', cur);
   }
 
   function paint(spec, i) {
@@ -384,7 +384,7 @@
         }
         var tone = paint(spec, i);
         if (tone) {
-          base.itemStyle = Object.assign({}, base.itemStyle, { color: tone });
+          base.itemStyle = Object.assign({}, base.itemStyle, { color: tone, decal: spec.palette === 'status' && i === 3 ? window.dkMeaning.decal(cur) : null });
           if (base.type === 'line') base.lineStyle = { color: tone };
         }
         return base;
@@ -477,7 +477,7 @@
         center: центр,
         data: slices.map(function (d, i) {
           var tone = paint(spec, i);
-          return tone ? Object.assign({}, d, { itemStyle: { color: tone } }) : d;
+          return tone ? Object.assign({}, d, { itemStyle: { color: tone, decal: spec.palette === 'status' && i === 3 ? window.dkMeaning.decal(cur) : null } }) : d;
         }),
         /* Подписи на секторах выключены намеренно. В узком виджете четыре
            выноски налезают друг на друга и превращают диаграмму в кашу.
@@ -1000,6 +1000,11 @@
       update: function (next) {
         current = Object.assign({}, current, next || {});
         render();
+      },
+      exportImage: function () {
+        if (!inst || !el.isConnected) return Promise.reject(new Error('Chart is not rendered'));
+        try { return fetch(inst.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: getComputedStyle(rootOf(el)).getPropertyValue('--surface').trim() })).then(function (r) { return r.blob(); }); }
+        catch (e) { return Promise.reject(e); }
       },
       destroy: destroy
     };

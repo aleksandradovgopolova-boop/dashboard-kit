@@ -66,7 +66,7 @@ PAGES = [
       '<td class="dk-td-pick"><label class="dk-check" aria-label="Выбрать ' + esc(r[2]) + '"><input type="checkbox" data-pick value="' + esc(r[1]) + '"><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></td>' +
       '<td>' + esc(r[2]) + '</td>' +
       '<td data-sort="' + ({ crit: 3, high: 2, calm: 1 })[r[3]] + '"><span class="dk-status dk-status--' + st[0] + '"><svg class="dk-i dk-i--sm"><use href="#' + st[1] + '"/></svg>' + st[2] + '</span></td>' +
-      '<td class="dk-td-num" data-sort="' + r[4] + '"' + (r[4] >= 80 ? ' style="color:var(--crit)"' : r[4] >= 60 ? ' style="color:var(--high)"' : '') + '>' + fmt.num(r[4]) + '</td>' +
+      '<td class="dk-td-num" data-sort="' + r[4] + '"' + (r[4] >= 80 ? ' style="color:' + window.dkMeaning('crit', 'text') + '"' : r[4] >= 60 ? ' style="color:' + window.dkMeaning('high', 'text') + '"' : '') + '>' + fmt.num(r[4]) + '</td>' +
       '<td class="dk-td-num" data-sort="' + (r[5] == null ? '' : r[5]) + '">' + fmt.num(r[5]) + '</td>' +
       '<td class="dk-td-num" data-sort="' + r[6] + '">' + fmt.num(r[6]) + '</td>' +
       '<td class="dk-td-num" data-sort="' + r[7] + '">' + fmt.delta(r[7]) + '</td></tr>');

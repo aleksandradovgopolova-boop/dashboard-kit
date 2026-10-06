@@ -105,6 +105,8 @@
   }
 
   window.dkPeriod = function (host, opts) {
+    window.dkDestroy(host);
+    var stopped = false;
     opts = opts || {};
 
     if (typeof window.AirDatepicker !== 'function') {
@@ -366,12 +368,14 @@
       // называться ровно так же, как на самом фильтре, иначе человек решит,
       // что это два разных ограничения.
       get text() { return value ? (value.preset ? presetName(value.preset) : rangeLabel(value.from, value.to)) : ''; },
-      set: function (v) { apply(normalize(v), true); syncCalendar(); },
+      set: function (v) { if (stopped) return; apply(normalize(v), true); syncCalendar(); },
+      update: function (next) { if (!stopped && next && Object.prototype.hasOwnProperty.call(next, 'value')) { apply(normalize(next.value), true); syncCalendar(); } },
       clear: clear,
       // Та же история, что и у графика: destroy() был, но звать его никто не
       // обязан, а подписки висят на документе и переживают узел. Теперь за
       // погребением следит сторож из dk-util.js.
       destroy: own(host, function () {
+        stopped = true;
         document.removeEventListener('dk-popup', onPopup);
         document.removeEventListener('mousedown', onOutside, true);
         if (dp) { dp.destroy(); dp = null; }

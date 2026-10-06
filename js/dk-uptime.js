@@ -82,8 +82,8 @@
         // называется словами рядом.
         var breaks = (r.data || []).filter(function (x) { return x && x !== 'up'; }).length;
         html += '<div class="dk-uptime__row">' +
-          '<span class="dk-uptime__name"><span class="dk-dot" style="--accent:var(--' +
-          (p === null ? 'nodata' : p >= 99.5 ? 'calm' : p >= 95 ? 'high' : 'crit') + ')"></span>' +
+          '<span class="dk-uptime__name"><span class="dk-dot" style="--accent:' + window.dkMeaning(
+          (p === null ? 'nodata' : p >= 99.5 ? 'calm' : p >= 95 ? 'high' : 'crit'), 'fill') + '"></span>' +
           esc(r.name) + '</span>' +
           '<span class="dk-uptime__strip" tabindex="0" role="group" data-row="' + ri + '"' +
           ' aria-label="' + esc(r.name) + ', ' + (p === null ? 'нет данных' : p + '% доступности') +
@@ -111,10 +111,10 @@
       html += '<div class="dk-uptime__row" style="margin-top:var(--space-3)">' +
         '<span class="dk-uptime__name"></span>' +
         '<span class="dk-map__legend" style="flex:1">' +
-          '<span class="dk-map__key"><i style="background:var(--calm)"></i>работает</span>' +
-          '<span class="dk-map__key"><i style="background:var(--high)"></i>с перебоями</span>' +
-          '<span class="dk-map__key"><i style="background:var(--crit)"></i>сбой</span>' +
-          '<span class="dk-map__key"><i style="background:var(--nodata)"></i>нет данных</span>' +
+          '<span class="dk-map__key"><i style="background:' + window.dkMeaning('calm', 'fill') + '"></i>работает</span>' +
+          '<span class="dk-map__key"><i style="background:' + window.dkMeaning('high', 'fill') + '"></i>с перебоями</span>' +
+          '<span class="dk-map__key"><i style="background:' + window.dkMeaning('crit', 'fill') + '"></i>сбой</span>' +
+          '<span class="dk-map__key"><i class="dk-nodata"></i>нет данных</span>' +
         '</span>' +
         '<span class="dk-uptime__v"></span>' +
         '</div>';

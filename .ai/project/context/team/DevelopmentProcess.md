@@ -12,7 +12,7 @@ status: draft
 verified: читать пять исходных документов и локальные инструкции. Компоненты — после skill/dashboard-build/SKILL.md и references. Изменения кита через PR, канал stable, без автоматического merge/публикации. Управляемый .ai/managed не редактировать.
 
 ## Проверки
-Быстро: python3 tools/check.py --fast. Полно: python3 tools/check.py с Node.js 22+ и Chrome. Browser skip не полная проверка. Особые проверки и генераторы — README/HANDOFF; после правок команд актуализировать .ai/repository-profile.yaml.
+Быстро: python3 tools/check.py --fast. Полный suite: python3 tools/test.py с Node.js 22+ и Chrome; check.py проверяет правила и мобильную адаптацию. Browser skip не полная проверка. Особые проверки и генераторы — README/HANDOFF; после правок команд актуализировать .ai/repository-profile.yaml.
 
 ## Параллельная работа
 Не трогать чужие незакоммиченные изменения; выделять worktree и области записи.

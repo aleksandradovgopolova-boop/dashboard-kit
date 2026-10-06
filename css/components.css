@@ -4458,3 +4458,95 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-chips{ display:grid; gap:var(--space-4); min-width:0; }
 .dk-chips__item{ display:inline-flex; align-items:center; gap:var(--space-3); max-width:100%; background:var(--control-soft); border-radius:var(--radius-md); padding-left:var(--control-pad-sm); }
 .dk-chips__text{ min-width:0; overflow-wrap:anywhere; font:var(--type-body); }
+
+/* Missing observations have a texture, never a brighter data value.
+   Text remains explicit: texture alone is not an accessible label. */
+.dk-nodata,
+.dk-split__seg:not([style*="--swatch"]),
+.dk-uptime__seg[data-state="none"] {
+  background-color: var(--nodata);
+  background-image: repeating-linear-gradient(135deg, transparent 0, transparent 4px, var(--nodata-pattern) 4px, var(--nodata-pattern) 6px);
+}
+/* Safari may retain the old background during a theme-variable transition. */
+.dk-root td.dk-nodata { color: var(--ink); background-color: var(--surface); background-image: none; transition: none; }
+.dk-root td.dk-nodata::before { content: ''; display: inline-block; width: var(--space-4); height: var(--space-4); margin-right: var(--space-2); background: repeating-linear-gradient(135deg, var(--nodata) 0, var(--nodata) 4px, var(--nodata-pattern) 4px, var(--nodata-pattern) 6px); }
+@media (forced-colors: active) {
+  .dk-nodata, .dk-uptime__seg[data-state="none"] { outline: var(--focus-width) dashed CanvasText; }
+}
+
+/* DOM charts retain their numbers when CSS, color or canvas is unavailable. */
+.dk-comparison { display: grid; gap: var(--space-2); font: var(--type-body); }
+.dk-comparison__delta { font-weight: var(--weight-ui); }
+.dk-bullet { display: grid; gap: var(--space-3); }
+.dk-bullet__track { position: relative; height: var(--space-7); background: var(--surface-2); }
+.dk-bullet__range { position: absolute; inset-block: 0; }
+.dk-bullet__actual { position: absolute; inset-block: var(--space-2); left: 0; background: var(--ink); }
+.dk-bullet__target { position: absolute; inset-block: 0; width: var(--focus-width); background: var(--ink); transform: translateX(-50%); }
+.dk-heatmap { min-width: 0; }
+.dk-heatmap__table td { font-weight: var(--weight-ui); white-space: nowrap; }
+.dk-heatmap__mark { margin-left: var(--space-2); color: var(--ink-2); }
+.dk-annotations ol { padding-left: var(--space-6); }
+.dk-annotations li { padding-block: var(--space-3); }
+.dk-annotations__track { display: block; position: relative; height: var(--space-3); margin-top: var(--space-2); background: var(--surface-2); }
+.dk-annotations__track i { position: absolute; height: 100%; min-width: var(--focus-width); background: var(--event); }
+@media (max-width: 767px) {
+  .dk-annotations__track { height: var(--space-2); }
+}
+
+.dk-breadcrumbs ol { display: flex; flex-wrap: wrap; gap: var(--space-2); padding: 0; margin: 0; list-style: none; }
+.dk-breadcrumbs li { display: flex; align-items: center; gap: var(--space-2); }
+.dk-breadcrumbs li + li::before { content: '/'; color: var(--ink-3); }
+.dk-breadcrumbs a { display: inline-flex; align-items: center; min-height: var(--control-md); color: var(--ink); }
+.dk-tooltip { position: fixed; z-index: var(--z-dropdown); max-width: min(320px, calc(100vw - var(--space-6))); padding: var(--space-3); border-radius: var(--radius-sm); background: var(--surface-3); color: var(--ink); box-shadow: var(--elev-float); font: var(--type-caption); }
+.dk-tooltip[hidden] { display: none; }
+/* Sidebar is a modal drill-down on narrow screens, with the same focus model. */
+.dk-modal.dk-sidebar { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; width: min(480px, 100%); max-width: 100%; border-radius: 0; }
+@media (pointer: coarse) { .dk-breadcrumbs a { min-height: 44px; } }
+
+.dk-density { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.dk-density select, .dk-saved-views input { font: var(--type-body); color: var(--ink); background: var(--surface-2); border: 0; border-radius: var(--radius-sm); padding: var(--space-3); min-height: var(--control-md); }
+.dk-saved-views { display: grid; gap: var(--space-4); }
+.dk-saved-views label { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.dk-saved-views ul { list-style: none; padding: 0; }
+.dk-saved-views li { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; margin-bottom: var(--space-3); }
+.dk-fullscreen { position: fixed; inset: 0; width: 100%; max-width: 100%; height: 100dvh; max-height: 100dvh; margin: 0; border: 0; padding: var(--page-pad); background: var(--bg); color: var(--ink); overflow: auto; }
+.dk-root [data-density="compact"] .dk-widget,
+.dk-root[data-density="compact"] .dk-widget { padding: var(--space-4); }
+.dk-root[data-density="compact"] .dk-table td,
+.dk-root[data-density="compact"] .dk-table th { padding-block: var(--space-2); }
+.dk-root[data-density="compact"] .dk-list__row { padding-block: var(--space-2); }
+@media (pointer: coarse) {
+  .dk-density select, .dk-saved-views input { min-height: 44px; font-size: var(--text-title); }
+  .dk-root[data-density="compact"] .dk-list__row { min-height: 44px; }
+}
+
+.dk-tree-select { display: grid; gap: var(--space-3); }
+.dk-tree-select input, .dk-layout-editor select { font: var(--type-body); color: var(--ink); background: var(--surface-2); border: 0; padding: var(--space-3); border-radius: var(--radius-sm); min-height: var(--control-md); }
+.dk-tree { max-height: 480px; overflow: auto; }
+.dk-tree__item { min-height: var(--control-md); display: flex; align-items: center; padding: var(--space-2); cursor: pointer; }
+.dk-tree__item:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: calc(-1 * var(--focus-width)); }
+.dk-tree__item[aria-disabled="true"] { color: var(--ink-3); cursor: default; }
+.dk-layout-editor ul { list-style: none; padding: 0; }
+.dk-layout-editor li { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; margin-block: var(--space-4); }
+.dk-layout-editor label { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+@media (pointer: coarse) { .dk-tree__item, .dk-tree-select input, .dk-layout-editor select { min-height: 44px; font-size: var(--text-title); } }
+.dk-export { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.dk-tree__expand { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: var(--control-md); min-height: var(--control-md); }
+@media (pointer: coarse) { .dk-tree__expand { width: 44px; min-height: 44px; } }
+.dk-root [hidden] { display: none !important; }
+.dk-root .dk-trend { white-space: normal; max-width: 100%; min-width: 0; height: auto; flex-wrap: wrap; overflow-wrap: anywhere; }
+.dk-uptime__name { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.dk-uptime__v { width: auto; min-width: 44px; }
+.dk-fullscreen { padding-top: max(var(--page-pad), env(safe-area-inset-top, 0px)); padding-bottom: max(var(--page-pad), env(safe-area-inset-bottom, 0px)); padding-left: max(var(--page-pad), env(safe-area-inset-left, 0px)); padding-right: max(var(--page-pad), env(safe-area-inset-right, 0px)); }
+.dk-modal.dk-sidebar { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.dk-tree-select { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+.dk-tree-select input { width: 100%; min-width: 0; }
+.dk-tree__item { overflow-wrap: anywhere; }
+.dk-saved-views input { min-width: 0; max-width: 100%; }
+.dk-saved-views { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+.dk-saved-views .dk-btn, .dk-layout-editor .dk-btn, .dk-export .dk-btn { white-space: normal; height: auto; min-height: var(--control-md); max-width: 100%; overflow-wrap: anywhere; }
+.dk-cal__agenda { display: grid; gap: var(--space-4); }
+.dk-cal__agenda ul { list-style: none; padding: 0; margin: var(--space-2) 0; }
+.dk-cal__agenda li { margin-bottom: var(--space-2); }
+.dk-cal__agenda .dk-btn { white-space: normal; height: auto; min-height: 44px; max-width: 100%; text-align: left; overflow-wrap: anywhere; }
+.dk-root .dk-status { white-space: normal; min-width: 0; max-width: 100%; flex-wrap: wrap; overflow-wrap: anywhere; }

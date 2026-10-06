@@ -190,7 +190,7 @@
   var MINUS = '\u2212';
   var MONTHS = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
 
-  function isNone(v) { return v == null || v === '' || (typeof v === 'number' && !isFinite(v)); }
+  function isNone(v) { return v == null || (typeof v === 'string' && v.trim() === '') || !isFinite(Number(v)); }
 
   /* 1240.5 → «1 240,5». digits — сколько знаков после запятой; по умолчанию
      сколько есть, до двух. */
@@ -386,6 +386,31 @@
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.focus();
   });
+
+  /* Explicit role prevents data fills from becoming unreadable text.
+     Return a CSS expression for DOM; resolve against the owning root for canvas. */
+  var meanings = {
+    crit: {fill: '--crit', text: '--crit-ink'},
+    high: {fill: '--high', text: '--high-ink'},
+    calm: {fill: '--calm', text: '--calm-ink'},
+    event: {fill: '--event', text: '--ink'},
+    nodata: {fill: '--nodata', text: '--nodata-ink'}
+  };
+  function dkMeaning(name, role) {
+    if (!Object.prototype.hasOwnProperty.call(meanings, name) ||
+        (role !== 'text' && role !== 'fill')) throw new TypeError('dkMeaning: unknown meaning or role');
+    return 'var(' + meanings[name][role] + ')';
+  }
+  dkMeaning.color = function (name, role, el) {
+    var token = dkMeaning(name, role).slice(4, -1);
+    var root = el && el.closest ? el.closest('.dk-root') : null;
+    return getComputedStyle(root || document.documentElement).getPropertyValue(token).trim();
+  };
+  dkMeaning.decal = function (el) {
+    return {symbol: 'rect', symbolSize: 1, dashArrayX: [1, 0], dashArrayY: [1, 5],
+      rotation: -Math.PI / 4, color: getComputedStyle((el && el.closest('.dk-root')) || document.documentElement).getPropertyValue('--nodata-pattern').trim()};
+  };
+  window.dkMeaning = dkMeaning;
 
   window.dkAnchor = dkAnchor;
   window.dkBack = dkBack;

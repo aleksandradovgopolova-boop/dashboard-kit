@@ -34,7 +34,7 @@ css/ — дизайн; js/dk-* — UI; vendor/ — ECharts, Air Datepicker, Golo
 
 ## 7. Data Flows
 
-Данные хозяина/демо → функции компонентов → DOM/графики. Тема → localStorage. Реальная передача наружу, источники и retention требуют контракта хозяина.
+Данные хозяина/демо → функции компонентов → DOM/графики. Тема, saved views и layout → локальное storage; dkState связывает снимок с host. Реальная передача наружу, источники и retention требуют контракта хозяина.
 
 ## 8. API Architecture
 
@@ -58,7 +58,7 @@ JS API описаны README и component-*.html; dk-util подключаетс
 
 ## 13. Deployment Architecture
 
-Нет сборки продукта. Локальный file/HTTP — README. GitHub Actions запускает --fast и check-select; production-деплой unknown. См. docs/DEPLOYMENT.md.
+Нет сборки продукта. Локальный file/HTTP — README. GitHub Actions запускает полный tools/test.py; production-деплой unknown. См. docs/DEPLOYMENT.md.
 
 ## 14. Scalability
 
@@ -82,7 +82,7 @@ DECISIONS.md: изоляция .dk-root, ECharts, тема до отрисовк
 
 ## 19. Known Limitations
 
-Демо-данные и демонстрационные действия, nodata, реальные устройства/screenreader, Safari/Firefox, замеры загрузки — DESIGN/REVIEW/HANDOFF.
+Демо-данные, реальные устройства/screenreader, полные Safari/Firefox прогоны, замеры загрузки — DESIGN/REVIEW/HANDOFF.
 
 ## 20. Architecture Evolution
 

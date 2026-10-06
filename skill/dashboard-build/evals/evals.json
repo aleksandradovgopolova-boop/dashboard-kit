@@ -187,6 +187,221 @@
           "check": null
         }
       ]
+    },
+    {
+      "id": 7,
+      "components": [
+        "breadcrumbs",
+        "details-sidebar",
+        "tooltip"
+      ],
+      "prompt": "Собери навигационный путь к региону, детали региона справа и короткую подсказку определения риска. Сохрани модальный фокус и исходный срез.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        },
+        {
+          "text": "Breadcrumbs имеет именованный nav и ровно один aria-current=page; текущий объект не ссылка.",
+          "check": null
+        },
+        {
+          "text": "Sidebar открывается как именованный dialog, удерживает Tab/Shift+Tab, Escape возвращает фокус; исходные фильтры сохранены.",
+          "check": null
+        },
+        {
+          "text": "Tooltip работает по фокусу и касанию, закрывается Escape, сохраняет прежний aria-describedby; destroy и повторный init не оставляют старых подсказок.",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "components": [
+        "heatmap"
+      ],
+      "prompt": "Добавь только heatmap риска по службам и дням: значения 0, 35, 80 и null. Нужны легенда, числа, различимость без цвета и телефон.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        },
+        {
+          "text": "0 остаётся числом; null показан текстом «Нет данных» и паттерном в обеих темах.",
+          "check": null
+        },
+        {
+          "text": "Есть настоящая таблица с scope, видимые числа, легенда порогов и четыре уровня I–IV; смысл не зависит только от цвета или accent.",
+          "check": null
+        },
+        {
+          "text": "На 390px прокручивается только таблица, страница не шире viewport; не добавлены посторонние KPI или графики.",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "components": [
+        "bullet-chart",
+        "period-comparison",
+        "timeline-annotations"
+      ],
+      "prompt": "Добавь факт 72, цель 80 и диапазоны; сравни 23 аварии с 19 за предыдущий период; рост аварий плохой. Объясни точки и диапазоны событий на временной шкале.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        },
+        {
+          "text": "Факт 72, цель 80 и именованные диапазоны доступны текстом; декоративная полоса aria-hidden.",
+          "check": null
+        },
+        {
+          "text": "23 против 19 даёт абсолютный рост +4 и примерно +21,1%; better=decrease придаёт росту плохой смысл, не по знаку автоматически.",
+          "check": null
+        },
+        {
+          "text": "Есть точка и диапазон с полными датами/offset; подписи не сталкиваются на телефоне и при крупном тексте. previous=0 не даёт бесконечный процент, null не превращается в ноль.",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "components": [
+        "fullscreen",
+        "export",
+        "density-controls"
+      ],
+      "prompt": "Добавь полный экран графика с выходом и возвратом фокуса, PNG графика, CSV только отфильтрованных строк и компактную плотность. На телефоне сохраняй цели 44 px.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        },
+        {
+          "text": "Fullscreen использует native API или dialog fallback, имеет доступную кнопку выхода внутри виджета, Escape и восстановление фокуса; нет клонирования DOM.",
+          "check": null
+        },
+        {
+          "text": "PNG получен из настоящего dkChart.exportImage; CSV содержит только текущие отфильтрованные строки, UTF-8 BOM, экранирование кавычек и защиту от формул.",
+          "check": null
+        },
+        {
+          "text": "Compact меняет отступы, сохраняет текст и цели 44px на coarse pointer; destroy возвращает исходную плотность.",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "components": [
+        "tree-select"
+      ],
+      "prompt": "Добавь множественный выбор служб с родителем и детьми, mixed состоянием, поиском и стрелками. Для 1500 узлов назови ограничение и предложи сузить справочник.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        },
+        {
+          "text": "Выбор одного ребёнка даёт родителю aria-checked=mixed; выбор родителя охватывает только разрешённые leaves.",
+          "check": null
+        },
+        {
+          "text": "Arrow/Home/End/Space/Enter работают, поиск сохраняет поле и контекст родителя; treeitem имеет aria-level/posinset/setsize.",
+          "check": null
+        },
+        {
+          "text": "Предел 1000 узлов назван явно; 1500 не обрезаются молча. Предложено сузить справочник, не обещана виртуализация. destroy и повторный init не теряют новый DOM.",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "components": [
+        "saved-views",
+        "layout-editor"
+      ],
+      "prompt": "Сохрани офлайн filters/period/sort/page/size/map-list/density и раскладку widgets: порядок, ширина, hide/show/reset. Сделай keyboard/touch управление, ошибки storage, миграцию версии и cleanup.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        },
+        {
+          "text": "Снимок сохраняет filters/period/sort/page/size/mode/density; create/rename/apply/delete/default работают, внешний код не может изменить внутреннее состояние через get().",
+          "check": null
+        },
+        {
+          "text": "Названы v0→v1 миграция saved views и отказ от перезаписи неизвестной/повреждённой версии; storage failure даёт status и работу в памяти.",
+          "check": null
+        },
+        {
+          "text": "Layout меняет живые widgets: порядок/span/hide/show/reset, сохраняет v1, игнорирует неизвестные и некорректные записи; keyboard/touch доступны, на телефоне одна колонка.",
+          "check": null
+        },
+        {
+          "text": "destroy освобождает обработчики; повторный init сохраняет новые controls. Ограничения локального хранения и отсутствие team sync названы.",
+          "check": null
+        }
+      ]
     }
   ],
   "runs": [

@@ -15,7 +15,7 @@ verified: регионы и геометрия карты; значения се
 data/regions.topojson, data/regions-tiles.json; демо-данные страниц. DESIGN прямо предупреждает о несогласованных production-срезах.
 
 ## Storage
-Локальные файлы и память браузера; тема — localStorage js/dk-theme.js. Серверная БД и миграции не заявлены.
+Локальные файлы и память браузера; тема, saved views и layout — локальное storage (js/dk-theme.js, js/dk-workspace.js, js/dk-layout-editor.js); версии/ошибки хранения описаны README. Серверная БД и миграции не заявлены.
 
 ## Retention
 Политика хранения данных приложения-хозяина unknown.

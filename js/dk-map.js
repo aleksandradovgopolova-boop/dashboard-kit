@@ -150,6 +150,8 @@
   }
 
   window.dkMap = function (host, opts) {
+    window.dkDestroy(host);
+    var stopped = false;
     opts = opts || {};
 
     var name = opts.name || 'dk-regions';
@@ -212,7 +214,7 @@
 
     function color(v) {
       var b = bucket(v);
-      return b < 0 ? css('--nodata') : css('--seq-' + (b + 1));
+      return b < 0 ? window.dkMeaning.color('nodata', 'fill', host) : css('--seq-' + (b + 1));
     }
 
     /* ЛЕГЕНДА ВНИЗУ, ПЕРЕКЛЮЧАТЕЛЬ ВВЕРХУ. Раньше они стояли вместе в шапке,
@@ -284,7 +286,7 @@
           nfmt(Math.round(from)) + '–' + nfmt(Math.round(to)) + '</span>');
       }
       // Правило 3: отсутствие данных названо, а не спрятано среди нулей.
-      parts.push('<span class="dk-map__key"><i style="background:var(--nodata)"></i>нет данных</span>');
+      parts.push('<span class="dk-map__key"><i class="dk-nodata"></i>нет данных</span>');
       // Приглушение названо в легенде, как и «нет данных»: иначе бледный
       // регион читается как «низкое значение».
       if (scope) parts.push('<span class="dk-map__key dk-map__key--out"><i style="background:var(--seq-5)"></i>вне среза</span>');
@@ -365,13 +367,13 @@
           left: '2%', right: '2%', top: '2%', bottom: '2%',
           // Граница — цветом поверхности, как зазор в накопительных столбцах:
           // это не обводка, а разделение соседних заливок.
-          itemStyle: { areaColor: css('--nodata'), borderColor: css('--surface'), borderWidth: 0.6 },
+          itemStyle: { areaColor: window.dkMeaning.color('nodata', 'fill', host), borderColor: css('--surface'), borderWidth: 0.6 },
           emphasis: { itemStyle: { areaColor: css('--brand') }, label: { show: false } },
           select: { itemStyle: { areaColor: css('--brand') }, label: { show: false } },
           selectedMode: 'single',
           data: Object.keys(names).map(function (id) {
             return { name: id, value: values[id],
-              itemStyle: { areaColor: color(values[id]), opacity: inScope(id) ? 1 : 0.25 } };
+              itemStyle: { areaColor: color(values[id]), decal: bucket(values[id]) < 0 ? window.dkMeaning.decal(host) : null, opacity: inScope(id) ? 1 : 0.25 } };
           })
         }]
       }, true);
@@ -425,7 +427,7 @@
         // Строки со скобками там достаточно, чтобы дописать своё правило,
         // поэтому всё, что не число, становится нулём.
         var row = num(t.row), col = num(t.col);
-        html += '<button type="button" class="dk-map__tile' + (inScope(t.id) ? '' : ' dk-map__tile--out') + '"' +
+        html += '<button type="button" class="dk-map__tile' + (bucket(v) < 0 ? ' dk-nodata' : '') + (inScope(t.id) ? '' : ' dk-map__tile--out') + '"' +
           ' data-id="' + esc(t.id) + '" data-row="' + row + '" data-col="' + col + '"' +
           ' tabindex="' + (t.id === focusId ? '0' : '-1') + '"' +
           ' style="grid-row:' + (row + 1) + ';grid-column:' + (col + 1) +
@@ -477,6 +479,7 @@
     });
 
     function render() {
+      if (stopped) return;
       cur = rootOf(host);
       host.setAttribute('data-view', view);
       // Кнопки ищем в сегменте, а не в контейнере карты: сегмент может стоять
@@ -554,6 +557,8 @@
     // Погребение отдано сторожу из dk-util.js: подписка на тему висит на корне
     // документа и переживает узел, а звать destroy() руками никто не обязан.
     var destroy = own(host, function () {
+      stopped = true;
+      if (!host.contains(segEl)) segEl.remove();
       themeWatch.disconnect(); sizeWatch.disconnect();
       if (inst) { inst.dispose(); inst = null; }
       host.innerHTML = '';
@@ -562,6 +567,13 @@
     return {
       get view() { return view; },
       set view(v) { view = v === 'tiles' ? 'tiles' : 'map'; render(); },
+      update: function (next) {
+        next = next || {};
+        if (next.values) { values = next.values; rescale(); }
+        if (Object.prototype.hasOwnProperty.call(next, 'scope')) scope = next.scope && next.scope.length ? new Set(next.scope) : null;
+        if (next.view) view = next.view === 'tiles' ? 'tiles' : 'map';
+        render();
+      },
       setScope: function (ids) {
         scope = ids && ids.length ? new Set(ids) : null;
         render();

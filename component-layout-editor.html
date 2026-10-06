@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Раскладка виджетов · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p6_advanced.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/docs.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="js/dk-layout-editor.js" defer></script>
+<script src="js/docs-index.js" defer></script>
+<script src="js/docs.js" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__t">dashboard-kit</span>
+    <span class="sc-brand__s">← к витрине</span>
+  </a>
+  <div class="sc-ctl">
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <p class="sc-hero__o">Компоненты · Управление</p>
+    <h1>Раскладка виджетов</h1>
+    <p class="sc-hero__lead">Меняет порядок, ширину и видимость зарегистрированных виджетов.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>экспериментальный</span>
+      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-layout-editor.js</code></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <div id="advanced-editor"></div><div class="dk-grid" id="advanced-layout"><section class="dk-col--half dk-widget" data-widget-id="risk" data-widget-label="Риск"><h3>Риск</h3><p>23 региона</p></section><section class="dk-col--half dk-widget" data-widget-id="uptime" data-widget-label="Доступность"><h3>Доступность</h3><p>99,8%</p></section></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Пользователь организует рабочий обзор под собственную задачу.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Нужно редактировать содержание или создавать новые блоки: это не page builder.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div inert aria-hidden="true"><div id="anatomy-editor"></div><div class="dk-grid" id="anatomy-layout"><section class="dk-col--half dk-widget" data-widget-id="risk" data-widget-label="Риск"><h3>Риск</h3><p>23 региона</p></section><section class="dk-col--half dk-widget" data-widget-id="uptime" data-widget-label="Доступность"><h3>Доступность</h3><p>99,8%</p></section></div></div></div><ol class="sc-anatomy__list"><li><b>Контекст</b> — Меняет порядок, ширину и видимость зарегистрированных виджетов.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
+  </section>
+  <section class="sc-sec" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Компонент следует ширине контейнера и системным токенам. Выше/Ниже, нативный select ширины, Показать/Скрыть и Сбросить работают клавиатурой и пальцем. Перемещается живой DOM, не копия. После действия восстанавливается фокус.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkLayoutEditor(el, opts)</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Состояния</h2>
+    <p>Ширины third/half/two-thirds/full, скрытые виджеты доступны через редактор. На телефоне одна колонка; сохраняется десктопная ширина. Storage version=1; неизвестные id игнорируются, новые виджеты дополняют сохранённую раскладку. Destroy убирает редактор, не сбрасывает раскладку.</p>
+  </section>
+  <section class="sc-sec">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Пользователь организует рабочий обзор под собственную задачу.</li><li>Показывайте полные названия, единицы и источник данных.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Нужно редактировать содержание или создавать новые блоки: это не page builder.</li><li>Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение.</li></ul></div></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li>Выше/Ниже, нативный select ширины, Показать/Скрыть и Сбросить работают клавиатурой и пальцем. Перемещается живой DOM, не копия. После действия восстанавливается фокус.</li><li>Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.</li></ul>
+  </section>
+  <section class="sc-sec" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-layout-editor"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec">
+    <h2>Код</h2>
+    <p></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-editor&quot;&gt;&lt;/div&gt;&lt;div class=&quot;dk-grid&quot; id=&quot;advanced-layout&quot;&gt;&lt;section class=&quot;dk-col--half dk-widget&quot; data-widget-id=&quot;risk&quot; data-widget-label=&quot;Риск&quot;&gt;&lt;h3&gt;Риск&lt;/h3&gt;&lt;p&gt;23 региона&lt;/p&gt;&lt;/section&gt;&lt;section class=&quot;dk-col--half dk-widget&quot; data-widget-id=&quot;uptime&quot; data-widget-label=&quot;Доступность&quot;&gt;&lt;h3&gt;Доступность&lt;/h3&gt;&lt;p&gt;99,8%&lt;/p&gt;&lt;/section&gt;&lt;/div&gt;
+&lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
+dkLayoutEditor(document.getElementById(&#x27;advanced-editor&#x27;), {container:document.getElementById(&#x27;advanced-layout&#x27;),key:&#x27;dk-demo-layout&#x27;});
+});
+&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkLayoutEditor(el, opts)</code></td><td>API</td><td>container с детьми data-widget-id, key?/storage?/onChange. get(), update(layout), reset(), destroy(). layout:{id,span,hidden}[].</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — точные числа</li><li><a href="README.md">Подключение</a> — dk-theme первым, dk-util до компонента</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+document.addEventListener("DOMContentLoaded", function(){dkLayoutEditor(document.getElementById('advanced-editor'), {container:document.getElementById('advanced-layout'),key:'dk-demo-layout'});});
+})();
+</script>
+</body>
+</html>

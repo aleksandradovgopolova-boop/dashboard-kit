@@ -18,12 +18,12 @@ user_confirmed (Саша, 2026-10-06): кит пока не использует
 | Backend / API | verified: серверный продуктовый слой в составе библиотеки не заявлен | README, дерево |
 | Генерация / AI-workflow | verified: AI Ops обслуживает разработку; продуктовой AI-генерации не заявлено | .ai-ops.yaml, skill/dashboard-build |
 | Данные | verified: локальные карты и демо-данные; production-источник unknown | data/, DESIGN |
-| Хранилище | verified: тема хранится в localStorage; продуктовая БД не заявлена | js/dk-theme.js |
+| Хранилище | verified: тема, saved views и layout локальны; продуктовая БД не заявлена | js/dk-theme.js, js/dk-workspace.js, js/dk-layout-editor.js |
 | Деплой | verified: локально file/HTTP; production и эксплуатация unknown | README |
 | Провайдеры | verified: openai/anthropic указаны для AI Ops; активность и ключи unknown | .ai-ops.yaml |
 
 ## Что отложено и почему
-Сборка продукта не планируется (README). Штриховка nodata и ассоциативные цвета требуют решения и проверки (HANDOFF). Полноценный VoiceOver/NVDA, реальные устройства и данные требуют отдельной работы (DESIGN). Исследование понимания данных конечными пользователями отложено по решению Саши 06.10.2026.
+Сборка продукта не планируется (README). Штриховка nodata реализована в PR #11; ассоциативные цвета требуют отдельной проверки (HANDOFF). Полноценный VoiceOver/NVDA, реальные устройства и данные требуют отдельной работы (DESIGN). Исследование понимания данных конечными пользователями отложено по решению Саши 06.10.2026.
 
 ## Источники истины
 Решения — DECISIONS; готовность и пробелы — HANDOFF/REVIEW/DESIGN; CI — .github/workflows/dashboard-check.yml. Исторический полный QA — docs/2026-09-30/evidence/final-check.log; это не новый прогон.

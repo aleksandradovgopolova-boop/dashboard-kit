@@ -262,3 +262,10 @@
 
 .sc-nav__component-group > summary{ font:var(--type-body); color:var(--ink-2); }
 .sc-nav__component-group .sc-nav__items{ padding:0 0 0 var(--space-5); }
+/* Large text reflows headings; code keeps a local scroll container. */
+.sc-hero h1, .sc-sec :is(h1,h2,h3,h4), .sc-eyebrow { overflow-wrap: anywhere; min-width: 0; }
+.sc-sec :is(h1,h2) { flex-wrap: wrap; }
+.sc-sec :is(h1,h2) > span { min-width: 0; max-width: 100%; }
+.sc-code { position: relative; min-width: 0; }
+.sc-sec, .sc-list li { overflow-wrap: anywhere; }
+.sc-hero__lead { overflow-wrap: anywhere; }
