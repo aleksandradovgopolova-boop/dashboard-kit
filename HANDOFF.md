@@ -254,3 +254,19 @@ canvas-design), согласованы 29.09 вместе с планом:
 ## 30.09.2026 — утверждённый визуал и UX
 
 Актуальные принципы и ограничения: [DESIGN-UX-ACCESSIBILITY.md](DESIGN-UX-ACCESSIBILITY.md). Спокойный точный рабочий инструмент; нейтральные поверхности, сильная типографика, полные названия, семантический цвет данных и исключений. Прежние декоративные градиенты и глубокие тени главных карточек заменены.
+
+## 06.10.2026 — выполнение продуктового backlog
+
+PR #10 проверен, дополнен chips regression и смёржен (f3dad45). Добавлены
+semantic runtime contract, no-data patterns, mobile normal-flow header,
+13 SDK-сценариев, state/local personalization, lifecycle cleanup и полноценный
+CI suite `python3 tools/test.py`. Генераторы создают 39 component pages,
+manifest/каталог/skill обновлены. Подробности API — README и component pages.
+
+Штриховка и dynamic meaning больше не требуют решения человека: реализованы
+по запросу 06.10. Известные ограничения физических устройств/живого SR и
+Safari/Firefox остаются открытыми. Независимый AI-agent eval не следует путать
+с deterministic SDK fixture coverage. Новые optional JS API экспериментальны.
+
+Проверки: tools/test.py (Chrome/Node обязательны), check.py --fast для короткого
+цикла. managed AI Ops не изменялся, канал stable/update через PR сохранён.

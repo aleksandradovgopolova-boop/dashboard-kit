@@ -21,7 +21,7 @@
    через встроенный в node WebSocket (node 22+).
    ========================================================================== */
 
-import { spawn } from 'node:child_process';
+import {findChrome,launch} from './browser-harness.mjs';
 import { createServer } from 'node:http';
 import { readFile, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -56,29 +56,20 @@ const chrome = [process.env.DK_CHROME, '/Applications/Google Chrome.app/Contents
   '/Applications/Chromium.app/Contents/MacOS/Chromium', '/usr/bin/google-chrome', '/usr/bin/chromium']
   .find(p => p && existsSync(p));
 if (!chrome) { console.error('нет Chrome: укажи путь в DK_CHROME'); process.exit(1); }
-const profile = await mkdtemp(join(tmpdir(), 'dk-snap-'));
-const proc = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`,
-  '--no-first-run', '--hide-scrollbars', 'about:blank'], { stdio: ['ignore', 'ignore', 'pipe'] });
-const url = await new Promise((ok, no) => {
-  let buf = ''; const t = setTimeout(() => no(new Error('Chrome не ответил за 15 с')), 15000);
-  proc.stderr.on('data', d => { buf += d; const m = buf.match(/DevTools listening on (ws:\/\/\S+)/); if (m) { clearTimeout(t); ok(m[1]); } });
-});
-const ws = new WebSocket(url); await new Promise(ok => { ws.onopen = ok; });
-let id = 0; const wait = new Map(), L = [];
-ws.onmessage = e => { const m = JSON.parse(e.data); if (m.id && wait.has(m.id)) { const [a, b] = wait.get(m.id); wait.delete(m.id); m.error ? b(new Error(m.error.message)) : a(m.result); } else L.forEach(f => f(m)); };
-const send = (method, params = {}, sessionId) => new Promise((a, b) => { const n = ++id; wait.set(n, [a, b]); ws.send(JSON.stringify({ id: n, method, params, sessionId })); });
+const browser = await launch(chrome);
+const send = browser.send;
 const errors = [];
 try {
   const { targetId } = await send('Target.createTarget', { url: 'about:blank' });
   const { sessionId } = await send('Target.attachToTarget', { targetId, flatten: true });
   const s = (m, p) => send(m, p, sessionId);
-  L.push(m => { if (m.sessionId === sessionId && m.method === 'Runtime.exceptionThrown') errors.push(m.params.exceptionDetails.exception?.description?.split('\n')[0]); });
+  browser.on(m => { if (m.sessionId === sessionId && m.method === 'Runtime.exceptionThrown') errors.push(m.params.exceptionDetails.exception?.description?.split('\n')[0]); });
   await s('Runtime.enable'); await s('Page.enable');
   const mobile = W < 768;
   await s('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 2, mobile });
   if (mobile) await s('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
   await s('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
-  const loaded = new Promise(ok => L.push(m => m.sessionId === sessionId && m.method === 'Page.loadEventFired' && ok()));
+  const loaded = new Promise(ok => browser.on(m => m.sessionId === sessionId && m.method === 'Page.loadEventFired' && ok()));
   // Тема — параметром адреса, как её передаёт приложение (README, WebView).
   await s('Page.navigate', { url: `http://127.0.0.1:${srv.address().port}/${basename(file)}?theme=${THEME}` });
   await Promise.race([loaded, new Promise(ok => setTimeout(ok, 15000))]);
@@ -91,7 +82,6 @@ try {
   console.log('снимок:', OUT, `${W}×${H}`, THEME);
   if (errors.length) console.log('ошибки на странице:', [...new Set(errors)].join(' | '));
 } finally {
-  try { await send('Browser.close'); } catch { /* закрыт */ }
-  proc.kill(); srv.close(); await rm(profile, { recursive: true, force: true }).catch(() => {});
+  await browser.close(); srv.close();
 }
 process.exit(errors.length ? 1 : 0);

@@ -187,6 +187,145 @@
           "check": null
         }
       ]
+    },
+    {
+      "id": 7,
+      "components": [
+        "breadcrumbs",
+        "details-sidebar",
+        "tooltip"
+      ],
+      "prompt": "Собери навигационный путь к региону, детали региона справа и короткую подсказку определения риска. Сохрани модальный фокус и исходный срез.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "components": [
+        "heatmap"
+      ],
+      "prompt": "Добавь только heatmap риска по службам и дням: значения 0, 35, 80 и null. Нужны легенда, числа, различимость без цвета и телефон.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "components": [
+        "bullet-chart",
+        "period-comparison",
+        "timeline-annotations"
+      ],
+      "prompt": "Добавь факт 72, цель 80 и диапазоны; сравни 23 аварии с 19 за предыдущий период; рост аварий плохой. Объясни точки и диапазоны событий на временной шкале.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "components": [
+        "fullscreen",
+        "export",
+        "density-controls"
+      ],
+      "prompt": "Добавь полный экран графика с выходом и возвратом фокуса, PNG графика, CSV только отфильтрованных строк и компактную плотность. На телефоне сохраняй цели 44 px.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "components": [
+        "tree-select"
+      ],
+      "prompt": "Добавь множественный выбор служб с родителем и детьми, mixed состоянием, поиском и стрелками. Для 1500 узлов назови ограничение и предложи сузить справочник.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "components": [
+        "saved-views",
+        "layout-editor"
+      ],
+      "prompt": "Сохрани офлайн filters/period/sort/page/size/map-list/density и раскладку widgets: порядок, ширина, hide/show/reset. Сделай keyboard/touch управление, ошибки storage, миграцию версии и cleanup.",
+      "expected_output": "Использованы SDK-компоненты из manifest, проверены реальные действия и ограничения.",
+      "expectations": [
+        {
+          "text": "Прочитан kit.py list/show/head; нет самодельных дублей",
+          "check": null
+        },
+        {
+          "text": "Статическая и браузерная проверка страницы проходит",
+          "check": "page"
+        },
+        {
+          "text": "Названы no-data, keyboard, mobile, lifecycle и объективные ограничения",
+          "check": null
+        }
+      ]
     }
   ],
   "runs": [

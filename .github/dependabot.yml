@@ -25,17 +25,5 @@ updates:
     commit-message:
       prefix: "chore(ci)"
 
-  # Python-зависимости. Уберите или замените блок, если ваш стек другой (npm, gomod, cargo, maven, …):
-  # Dependabot поддерживает многие экосистемы — состав под ваш проект решаете вы.
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
-    labels: ["dependencies", "python"]
-    commit-message:
-      prefix: "chore(deps)"
-    # Группируем патч/минор в один PR, чтобы не плодить шум; мажор приходит отдельным PR на ревью.
-    groups:
-      minor-and-patch:
-        update-types: ["minor", "patch"]
+  # No pip manifests: core checks use stdlib, vendored browser assets are
+  # reviewed through explicit kit PRs instead of a nonfunctional pip updater.

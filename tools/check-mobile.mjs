@@ -67,16 +67,7 @@ const EXEMPT = [
 
 const TARGET = 44;
 
-function findChrome() {
-  const c = [
-    process.env.DK_CHROME,
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-    '/Applications/Chromium.app/Contents/MacOS/Chromium',
-    '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable',
-    '/usr/bin/chromium', '/usr/bin/chromium-browser',
-  ];
-  return c.find(p => p && existsSync(p)) || null;
-}
+import {findChrome,launch} from './browser-harness.mjs';
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript',
   '.mjs': 'text/javascript', '.json': 'application/json', '.topojson': 'application/json',
@@ -99,45 +90,6 @@ function serve() {
 }
 
 /* --- протокол отладки ------------------------------------------------------ */
-
-async function launch(chrome) {
-  const profile = await mkdtemp(join(tmpdir(), 'dk-mobile-'));
-  const proc = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`,
-    '--no-first-run', '--no-default-browser-check', '--disable-gpu', '--hide-scrollbars', 'about:blank'],
-    { stdio: ['ignore', 'ignore', 'pipe'] });
-  const url = await new Promise((ok, no) => {
-    let buf = '';
-    const t = setTimeout(() => no(new Error('Chrome не ответил за 15 с')), 15000);
-    proc.stderr.on('data', d => {
-      buf += d;
-      const m = buf.match(/DevTools listening on (ws:\/\/\S+)/);
-      if (m) { clearTimeout(t); ok(m[1]); }
-    });
-    proc.on('exit', c => no(new Error('Chrome вышел с кодом ' + c)));
-  });
-  const ws = new WebSocket(url);
-  await new Promise((ok, no) => { ws.onopen = ok; ws.onerror = no; });
-  let id = 0;
-  const wait = new Map();
-  const listeners = [];
-  ws.onmessage = e => {
-    const m = JSON.parse(e.data);
-    if (m.id && wait.has(m.id)) {
-      const [ok, no] = wait.get(m.id); wait.delete(m.id);
-      m.error ? no(new Error(m.error.message)) : ok(m.result);
-    } else if (m.method) listeners.forEach(f => f(m));
-  };
-  const send = (method, params = {}, sessionId) => new Promise((ok, no) => {
-    const n = ++id; wait.set(n, [ok, no]);
-    ws.send(JSON.stringify({ id: n, method, params, sessionId }));
-  });
-  const close = async () => {
-    try { await send('Browser.close'); } catch { /* уже закрыт */ }
-    proc.kill();
-    await rm(profile, { recursive: true, force: true }).catch(() => {});
-  };
-  return { send, on: f => listeners.push(f), off: f => listeners.splice(listeners.indexOf(f), 1), close };
-}
 
 /* --- замер внутри страницы ------------------------------------------------- *
    Функция уходит в страницу текстом, поэтому ничего снаружи не видит. */
@@ -344,7 +296,7 @@ async function checkPage(b, base, page, vp) {
     res.theme = [];
     for (const t of ['dark', 'light']) {
       const msg = await ev(t => { document.documentElement.setAttribute('data-theme', t);
-        return new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))); }, t).then(() => ev(themeColorMatches));
+        return new Promise(r => setTimeout(r, 100)); }, t).then(() => ev(themeColorMatches));
       if (msg) res.theme.push(msg);
     }
     res.errors = [...new Set(errors)];

@@ -21,7 +21,7 @@ export function findChrome() {
 export async function launch(chrome) {
   const profile = await mkdtemp(join(tmpdir(), 'dk-mobile-'));
   const proc = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`,
-    '--no-first-run', '--no-default-browser-check', '--disable-gpu', '--hide-scrollbars', 'about:blank'],
+    '--no-first-run', '--no-default-browser-check', '--disable-gpu', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows', '--hide-scrollbars', 'about:blank'],
     { stdio: ['ignore', 'ignore', 'pipe'] });
   let ws;
   try {
@@ -85,4 +85,22 @@ export async function launch(chrome) {
     await rm(profile, { recursive: true, force: true }).catch(() => {});
     throw e;
   }
+}
+
+export async function regression(files, test, setup = '') {
+  let browser;
+  try {
+    const chrome=findChrome(); if(!chrome) throw Error('Chrome не найден');
+    browser=await launch(chrome);
+    const {targetId}=await browser.send('Target.createTarget',{url:'about:blank'});
+    const {sessionId}=await browser.send('Target.attachToTarget',{targetId,flatten:true});
+    const evaluate=async expression=>{
+      const r=await browser.send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true},sessionId);
+      if(r.exceptionDetails) throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);
+      return r.result.value;
+    };
+    if(setup) await evaluate(setup);
+    for(const file of files) await evaluate(await readFile(file,'utf8'));
+    console.log(await evaluate(`(${test.toString()})()`));
+  } finally { if(browser) await browser.close(); }
 }

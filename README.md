@@ -2429,3 +2429,94 @@ ERP-сценарию и сознательно отложено:
 
 Источник классификации: [документация VKUI](https://vkui.io/components/card-grid/).
 Соответствие описывает назначение, а не совместимость API. Компоненты кита используют собственные токены и статический JavaScript.
+
+## Динамические смысловые цвета и отсутствие данных
+
+В JavaScript используйте `dkMeaning(name, role)`: `name` — `crit`, `high`,
+`calm`, `event`, `nodata`; обязательная `role` — `text` или `fill`.
+Например, `el.style.color = dkMeaning('crit', 'text')`. Для canvas:
+`dkMeaning.color('crit', 'fill', el)` разрешает токен в ближайшем `.dk-root`.
+Неизвестные роли/имена вызывают TypeError. Event в тексте нейтрален: его заливка
+не гарантирует текстовый контраст. Статическая CSS/HTML-разметка сохраняет токены;
+JS не конструирует их руками. `tools/check.py` проверяет литералы и сборку
+`var(--' + …)`, но не доказывает отсутствие всех возможных способов обфускации.
+
+Отсутствие наблюдений — не ноль и не «вне среза». `dk-nodata` добавляет тихую
+серую заливку с контрастными штрихами; рядом обязательно «Нет данных» или
+доступное имя. Для ячейки таблицы: `<td class="dk-nodata">Нет данных</td>`.
+Карта использует texture/decal для отсутствующих регионов, плитки и uptime —
+тот же CSS-паттерн. Сектор `palette:'status'` с индексом 3 получает штриховку.
+Временные ряды сохраняют `null` как разрыв: штриховать весь фон графика нельзя,
+поскольку это скроет границы пропуска. Доля данных без наблюдений должна быть
+названа в числовой альтернативе; текст не заменяется одним паттерном.
+
+## SDK: контекст, анализ и рабочий срез
+
+Новые optional-файлы подключаются через `python3 tools/kit.py head <части>`:
+`dk-analysis.js` (heatmap, bullet, period comparison, timeline annotations),
+`dk-context.js` (tooltip), `dk-workspace.js` (state, saved views, density,
+fullscreen/export), `dk-tree.js`, `dk-layout-editor.js`. Runtime-зависимостей
+не добавлено. Breadcrumbs — CSS/HTML; details sidebar — вариант существующего
+`dkModal`, без второго modal engine. Все 13 частей доступны в каталоге,
+component pages и machine-readable manifest. Новые JS-возможности помечены
+экспериментальными: контракт проверен, production-полевых данных ещё нет.
+
+Каждая component page содержит выбор/замену, markup, API, состояния,
+ограничения, accessibility/responsive и файлы подключения. Примеры с `<script>`
+выполняются после разметки и подключения файлов; на страницах документации
+инициализация ждёт DOMContentLoaded. Не вызывайте initializer раньше deferred JS.
+
+Старые `set`, `clear`, `setOptions`, `setTotal`, `goTo`, `setValues`, `setScope`
+сохранены. Новые `update` восстанавливают состояние без user-callback там,
+где это описано; table синхронизирует выбор через прежний onSelect. `destroy`
+идемпотентен, повторная инициализация освобождает предыдущий экземпляр. Обёртки
+charts и map сохраняют прежний API и automatic disposal.
+
+```js
+const state = dkState(stateHost, {
+  filters: {service: 'heat'}, period: '14d',
+  sort: {column: 'risk', dir: 'desc'}, page: 1, size: 20,
+  mode: 'map', density: 'comfortable'
+}, {url: 'view'}); // url optional, JSON snapshot в query
+stateHost.addEventListener('dk:statechange', ({detail}) => {
+  // Host вычисляет один dataset из detail.filters/period,
+  // затем обновляет KPI, графики, карту, таблицу и pager.
+  // Старый onSort использует ascending/descending: адаптируйте к asc/desc.
+});
+dkSavedViews(viewsHost, {key: 'my-dashboard.views', state});
+```
+
+`get()` возвращает копию; filters — строки/массивы строк, period — строка/null,
+sort — column/dir, pagination — положительные integers. Thresholds остаются
+настройкой показателя, не персональным фильтром. Saved views v1 хранит снимок;
+v0 views мигрирует, неизвестные версии не перезаписываются. При отказе storage
+состояние доступно в памяти и UI сообщает ограничение. Виды локальны для origin
+и не синхронизируются между людьми/устройствами. CSV получает текущий filtered
+state от host; экспорт DOM-страницы вместо dataset не выполняется.
+
+## Полный цикл проверок
+
+`python3 tools/check.py --fast` — статические правила; `python3 tools/check.py`
+добавляет браузерную адаптацию. `python3 tools/test.py` — полный fail-closed suite:
+Node 22+/Chrome обязательны, JS syntax, generated files/manifest, 46 страниц ×
+3 размера, select/chips/meaning/advanced runtime regressions, 200% font tokens,
+320px reflow, AX names/ID references, PNG/decal и SDK eval fixtures. При отсутствии
+Chrome suite падает, а не выдаёт пропуск за полный успех. CI запускает этот suite;
+`DK_EVIDENCE_DIR` сохраняет JSON runtime, artifact привязан к SHA. Исторические
+снимки 30.09 остаются reference evidence, не автоматическим pixel baseline.
+
+Skill evals содержат новые задания. `check-evals.py` доказывает наличие частей,
+examples/anti-patterns/a11y и dependency closure; это не независимый прогон
+AI-агента. В полной проверке отдельно выполняются реальные API/UI regressions.
+
+CI security boundary: в приватном репозитории CodeQL и Scorecard остаются
+capability-gated. Их skipped job не подтверждает SAST/supply-chain аудит.
+API branch protection на текущем тарифе отвечает 403; защита main не доказана.
+Dashboard workflow имеет read-only permissions, checkout без сохранения
+credentials, pinned action SHAs и ограниченные timeout; Dependabot обновляет
+GitHub Actions. Runtime artifacts привязаны к head SHA, не смешиваются с baseline.
+
+На сводке временной график расположен до второстепенных KPI: 521px от верха
+при 390×844 против прежних 793px. Состав риска виден ещё раньше. Кнопки графика
+сохраняют PNG и переключают полный экран; источника обновления у demo нет,
+поэтому «Обновить» отключено.

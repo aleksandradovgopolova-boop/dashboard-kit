@@ -1,0 +1,37 @@
+// Real-page runtime evidence; device emulation is not physical-device proof.
+import {launch,findChrome} from './browser-harness.mjs';
+import {createServer} from 'node:http';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {resolve,extname,sep} from 'node:path';
+const root=fileURLToPath(new URL('../',import.meta.url));
+const server=createServer(async(req,res)=>{try{const f=resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://local').pathname));if(!f.startsWith(resolve(root)+sep)){res.writeHead(403);return res.end()}const data=await readFile(f);res.setHeader('Content-Type',({'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json','.topojson':'application/json','.svg':'image/svg+xml'})[extname(f)]||'application/octet-stream');res.end(data);}catch{res.writeHead(404);res.end()}});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;const evidence=[];
+const pages=['dashboard.html','component-heatmap.html','component-tree-select.html','component-layout-editor.html','component-saved-views.html','component-fullscreen.html','component-tooltip.html','component-bullet-chart.html','component-period-comparison.html','component-timeline-annotations.html'];
+try{
+ browser=await launch(findChrome());const {targetId}=await browser.send('Target.createTarget',{url:'about:blank'});const {sessionId}=await browser.send('Target.attachToTarget',{targetId,flatten:true});const send=(m,p)=>browser.send(m,p,sessionId);
+ const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;};
+ await send('Runtime.enable');await send('Page.enable');
+ const errors=[];browser.on(m=>{if(m.sessionId===sessionId&&m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.exception?.description||m.params.exceptionDetails.text)});
+ for(const page of pages){
+  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await send('Emulation.setTouchEmulationEnabled',{enabled:true});await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+  await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/${page}`});
+  await evaluate(`new Promise((resolve,reject)=>{let n=0;const t=setInterval(()=>{if(document.readyState==='complete'){clearInterval(t);document.fonts.ready.then(()=>setTimeout(resolve,500));}else if(++n>100){clearInterval(t);reject(Error('page load timeout'));}},50);})`);
+  const basic=await evaluate(`(()=>{const ids=new Set(),duplicate=[];for(const e of document.querySelectorAll('[id]')){if(ids.has(e.id))duplicate.push(e.id);ids.add(e.id)}const dangling=[];for(const e of document.querySelectorAll('[aria-describedby],[aria-labelledby],[aria-controls]'))for(const a of ['aria-describedby','aria-labelledby','aria-controls'])for(const id of (e.getAttribute(a)||'').split(' ').filter(Boolean))if(!document.getElementById(id))dangling.push(id);return {duplicate,dangling,width:document.documentElement.scrollWidth,viewport:innerWidth,chartTop:document.getElementById('d-line')?.getBoundingClientRect().top,heroTop:document.querySelector('.dk-hero')?.getBoundingClientRect().top,sticky:document.querySelector('.dk-top')?getComputedStyle(document.querySelector('.dk-top')).position:null};})()`);
+  if(basic.duplicate.length||basic.dangling.length||basic.width>basic.viewport+1)throw Error(page+': '+JSON.stringify(basic));
+  const ax=await send('Accessibility.getFullAXTree');const unnamed=ax.nodes.filter(n=>!n.ignored&&['button','combobox','textbox','searchbox','dialog'].includes(n.role?.value)&&!n.name?.value);if(unnamed.length)throw Error(page+': unnamed controls '+unnamed.length);
+  if(page==='dashboard.html'&&(basic.heroTop>844/2||basic.chartTop>650||basic.sticky==='sticky'))throw Error('mobile information hierarchy regression');
+  // Doubling the actual font tokens tests large text without changing target sizes.
+  await evaluate(`(()=>{const root=document.documentElement,s=getComputedStyle(root);for(const key of Array.from(s).filter(k=>/^--(type-|text-)/.test(k))){const v=s.getPropertyValue(key);if(/px/.test(v))root.style.setProperty(key,v.replace(/([0-9.]+)px/g,(_,n)=>Number(n)*2+'px'));}})()`);
+  const large=await evaluate(`({width:document.documentElement.scrollWidth,viewport:innerWidth})`);if(large.width>large.viewport+1)throw Error(page+': large text overflow '+JSON.stringify(large));
+  await send('Emulation.setDeviceMetricsOverride',{width:320,height:720,deviceScaleFactor:1,mobile:false});await evaluate(`new Promise(r=>setTimeout(r,350))`);const zoom=await evaluate(`({width:document.documentElement.scrollWidth,viewport:innerWidth,textOverflow:(()=>{const a=[],w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(!n.textContent.trim()||n.parentElement.closest('.dk-tablewrap,.dk-vh'))continue;const r=document.createRange();r.selectNode(n);if(r.getBoundingClientRect().right>innerWidth+1)a.push({text:n.textContent.slice(0,60),cls:n.parentElement.className});}return a.slice(0,12);})(),overflow:Array.from(document.querySelectorAll('body *')).filter(e=>e.scrollWidth>e.clientWidth+1&&e.scrollWidth>320).map(e=>({cls:e.className,scroll:e.scrollWidth,width:e.clientWidth,overflow:getComputedStyle(e).overflowX})).slice(0,15),culprit:Array.from(document.querySelectorAll('body *')).filter(e=>e.getBoundingClientRect().right>innerWidth+1&&!e.closest('.dk-tablewrap,.dk-scroll,.dk-map__scroll')).map(e=>({tag:e.tagName,cls:e.className,parent:e.parentElement.className,text:e.textContent.slice(0,60)})).slice(0,15)})`);if(zoom.width>zoom.viewport+1)throw Error(page+': 320px reflow overflow '+JSON.stringify(zoom));
+  evidence.push({page,...basic,largeText:large,reflow320:zoom,axNamedControls:true});
+ }
+ // Chart export and map decals use the actual vendored rendering engine.
+ await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/component-chart.html`});await evaluate(`new Promise(r=>setTimeout(r,800))`);
+ const chart=await evaluate(`(async()=>{const el=document.createElement('div');el.className='dk-chart';el.style.height='200px';document.body.append(el);const chart=dkChart(el,{type:'donut',palette:'status',data:[{name:'Риск',value:1},{name:'Средний',value:1},{name:'Низкий',value:1},{name:'Нет данных',value:1}]});await new Promise(r=>setTimeout(r,100));const option=chart.instance.getOption();const blob=await chart.exportImage();if(!option.series[0].data[3].itemStyle.decal)throw Error('missing chart decal');if(blob.type!=='image/png'||blob.size<100)throw Error('invalid chart PNG');chart.destroy();return {pngBytes:blob.size,statusDecal:true};})()`);
+ if(errors.length)throw Error(errors.join('\n'));
+ const report={browser:'Chrome CDP',physicalDevices:false,screenReaderSpeech:false,pages:evidence,chart};
+ if(process.env.DK_EVIDENCE_DIR){await mkdir(process.env.DK_EVIDENCE_DIR,{recursive:true});await writeFile(resolve(process.env.DK_EVIDENCE_DIR,'runtime.json'),JSON.stringify(report,null,2));}
+ console.log('PASS: real pages, 200% font tokens, 320px reflow, named AX controls, mobile hierarchy, reduced-motion environment, PNG/status decal');console.log(JSON.stringify(evidence[0]));
+}catch(e){console.error(e.message);process.exitCode=1}finally{if(browser)await browser.close();server.close();}

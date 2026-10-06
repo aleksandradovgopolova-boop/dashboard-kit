@@ -577,6 +577,21 @@ def check_accent_role(primitives: str, semantic: str,
         notes.append("РОЛЬ · смысл, поставленный в текст, читается как текст")
 
 
+def check_dynamic_meaning(scripts, pages):
+    """Lexical guard, not a JavaScript parser; computed token construction is banned too."""
+    bodies = [(n, t) for n, t in scripts if n not in ("dk-util.js", "dk-chart-theme.js")]
+    for n, t in pages:
+        bodies.extend((n, x) for x in re.findall(r"<script\b[^>]*>(.*?)</script>", t, re.S))
+    bad = False
+    for n, t in bodies:
+        t = re.sub(r"//[^\n]*", "", strip_comments(t))
+        if re.search(r"--(?:crit|high|calm|event|nodata)(?:-ink|-dim|-d)?\b", t) or re.search(r"var\(\s*--['\"]\s*\+", t):
+            fail("DYNAMIC MEANING", f"{n}: semantic token in JavaScript; use dkMeaning(name, text/fill)")
+            bad = True
+    if not bad:
+        notes.append("DYNAMIC MEANING · динамический смысл только через dkMeaning с явной ролью")
+
+
 def script_files() -> list[Path]:
     return sorted((ROOT / "js").glob("*.js"))
 
@@ -1114,6 +1129,12 @@ def check_spot(primitives: str, semantic: str) -> None:
     need = 3.0
     ok = True
     for theme, table in theme_tables(primitives, semantic).items():
+        stripe = _color("--nodata-pattern", table)
+        for bg in ("--nodata", "--surface", "--surface-2"):
+            base = _color(bg, table)
+            if stripe and base and contrast(stripe, base) < need:
+                fail("NO DATA", f"{theme}: штрих против {bg} меньше 3:1")
+                ok = False
         for m in ("--crit", "--high", "--calm", "--event"):
             c = _color(m, table)
             if not c:
@@ -2538,6 +2559,7 @@ def main() -> int:
     check_raw_values(semantic, layers)
     check_unknown(primitives, semantic, layers, pages, scripts)
     check_inputs(layers)
+    check_dynamic_meaning(scripts, pages)
     check_accent_role(primitives, semantic, layers, pages)
     check_escaping(pages)
     styled = layers + [(n, page_css(t)) for n, t in pages]
