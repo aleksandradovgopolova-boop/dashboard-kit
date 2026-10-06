@@ -1,3 +1,12 @@
+<!-- template-version: 1 -->
+---
+read_tier: 2
+stability: evolving
+reviewed_at: '2026-10-06'
+owner: unassigned
+status: draft
+---
+
 # Product Passport
 
 ## Название и описание
@@ -13,16 +22,20 @@
 Владелец GitHub-репозитория: aleksandradovgopolova-boop. Состав продуктовой команды и роли не установлены.
 
 ## Статус и зрелость
-Работающая библиотека: 24 страницы компонентов, демо-экраны, история решений и ревью в документах. Короткая Git-история началась с импорта 5 октября и не измеряет зрелость продукта. Источники: HANDOFF.md, DECISIONS.md, REVIEW.md.
+Работающая библиотека: 26 страниц компонентов, демо-экраны, история решений и ревью в документах. Короткая Git-история началась с импорта 5 октября и не измеряет зрелость продукта. Источники: HANDOFF.md, DECISIONS.md, REVIEW.md.
 
 ## Здоровье (продукт / технологии / delivery)
-Продуктовые метрики неизвестны. Технологии: локальная полная проверка прошла — 31 страница в трёх размерах Chrome. dashboard-check, validate, secret-scan, feature-catalog, feature-coverage и record прошли на c12e79e в GitHub. Supply-chain проверка Scorecard упала с Resource not accessible by integration; CodeQL дошёл до анализа, но публикация упала: Code Scanning не включён (run 37298495711). В PR #8 недоступные проверки явно ограничены, основная регрессия прошла. Источники: GitHub Actions на c12e79e и docs/ai-ops-integration.txt.
+Продуктовые метрики неизвестны. Технологии: новый полный прогон 06.10.2026 tools/check.py прошёл — 33 страницы в трёх размерах Chrome (evidence .ai/project/evidence/product-context-full-check.txt). Следующие сведения CI исторические: dashboard-check, validate, secret-scan, feature-catalog, feature-coverage и record прошли на c12e79e в GitHub. Supply-chain проверка Scorecard упала с Resource not accessible by integration; CodeQL дошёл до анализа, но публикация упала: Code Scanning не включён (run 37298495711). В PR #8 недоступные проверки явно ограничены, основная регрессия прошла. Источники: GitHub Actions на c12e79e и docs/ai-ops-integration.txt.
 
 ## Версия и последний релиз
 Версия продукта и релизные теги не заданы. **4.3.2 — версия AI Ops, а не dashboard-kit.**
 
 ## Текущий milestone и прогресс
-Практический цикл работы: достоверный CI, план из существующих документов, устранение пересоздания поля поиска в dk-select. См. ROADMAP.md и planning/plan.yaml. Приоритет выбран для текущей работы по запросу пользователя; не предполагает утверждённую долгосрочную стратегию.
+PR #7/#8 merged 05.10.2026 (GitHub API проверен 06.10). Поиск и ограничения CI приняты; следующий кандидат — dynamic-color-checks. Практический цикл работы: достоверный CI, план из существующих документов, устранение пересоздания поля поиска в dk-select. См. ROADMAP.md и planning/plan.yaml. Приоритет выбран для текущей работы по запросу пользователя; не предполагает утверждённую долгосрочную стратегию.
 
 ## Риски и зависимости
 Vendor ECharts, Air Datepicker и локальные шрифты. Известные пробелы: скринридер, живые телефоны/WebView, Safari/Firefox, реальные замеры загрузки (HANDOFF.md). Изменения nodata и категориальных цветов требуют решения человека и измерений; не включены в текущую реализацию.
+
+
+## Актуальность снимка
+Черновик. Исторические статусы CI/PR выше относятся к источникам 05.10, не к новому аудиту. Текущая проверка и вопросы — .ai/project/ONBOARDING.md. Назначенные владельцы, production, продуктовые KPI и release-version unknown.
