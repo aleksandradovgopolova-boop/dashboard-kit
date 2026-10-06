@@ -102,7 +102,7 @@ try {
         const hint=document.querySelector('#a-hours').previousElementSibling.querySelector('.dk-widget__hint');
         assert(hint.closest('.dk-widget__title'),'chart information hint stays with its title');
         const bars=echarts.getInstanceByDom(document.getElementById('a-late')).getOption();
-        assert(bars.xAxis[0].splitLine.show===false&&bars.series.every(series=>series.label.show),'labelled horizontal bars need no grid lines');
+        assert(bars.xAxis[0].splitLine.show===false&&bars.xAxis[0].axisLabel.show===false&&bars.xAxis[0].axisTick.show===false&&bars.series.every(series=>series.label.show),'labelled horizontal bars need no grid lines');
         assert(bars.series[0].data.includes(0)&&bars.xAxis[0].name==='ч','removing grid preserves zero and unit');
         const button=document.querySelector('#a-tbody .dk-td-act button'),rows=document.getElementById('a-tbody').innerHTML;
         assert(button.disabled&&button.getAttribute('aria-describedby')==='a-demo-actions','demo close must be disabled with explanation');
