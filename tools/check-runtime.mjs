@@ -41,6 +41,18 @@ try{
   await send('Emulation.setDeviceMetricsOverride',{width:320,height:720,deviceScaleFactor:1,mobile:false});await evaluate(`new Promise(r=>setTimeout(r,350))`);const zoom=await evaluate(`({width:document.documentElement.scrollWidth,viewport:innerWidth,textOverflow:(()=>{const a=[],w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(!n.textContent.trim()||n.parentElement.closest('.dk-tablewrap,.dk-vh'))continue;const r=document.createRange();r.selectNode(n);if(r.getBoundingClientRect().right>innerWidth+1)a.push({text:n.textContent.slice(0,60),cls:n.parentElement.className});}return a.slice(0,12);})(),overflow:Array.from(document.querySelectorAll('body *')).filter(e=>e.scrollWidth>e.clientWidth+1&&e.scrollWidth>320).map(e=>({cls:e.className,scroll:e.scrollWidth,width:e.clientWidth,overflow:getComputedStyle(e).overflowX})).slice(0,15),culprit:Array.from(document.querySelectorAll('body *')).filter(e=>e.getBoundingClientRect().right>innerWidth+1&&!e.closest('.dk-tablewrap,.dk-scroll,.dk-map__scroll')).map(e=>({tag:e.tagName,cls:e.className,parent:e.parentElement.className,text:e.textContent.slice(0,60)})).slice(0,15)})`);if(zoom.width>zoom.viewport+1)throw Error(page+': 320px reflow overflow '+JSON.stringify(zoom));
   evidence.push({page,...basic,largeText:large,reflow320:zoom,axNamedControls:true});
  }
+ // The working overview must reflow in both themes, including short laptop windows.
+ for(const page of ['dashboard.html','accidents.html']) for(const theme of ['dark','light']) {
+  for(const [width,height] of [[320,568],[390,844],[768,1024],[1024,768],[1280,720],[1366,768],[1440,900],[1920,1080]]) {
+   await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<768});
+   await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/${page}?theme=${theme}`});
+   await evaluate(`new Promise(r=>setTimeout(r,550))`);
+   const fit=await evaluate(`(()=>{const widgets=[...document.querySelectorAll('.dk-widget,.dk-hero')].map(e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width}});return {width:document.documentElement.scrollWidth,viewport:innerWidth,widgets,overviewBottom:document.querySelector('.dk-grid--overview')?.getBoundingClientRect().bottom,mainChartsBottom:Math.max(...['a-hours','a-kinds'].map(id=>document.getElementById(id)?.closest('.dk-widget').getBoundingClientRect().bottom||0))};})()`);
+   if(fit.width>width+1||fit.widgets.some(w=>w.left< -1||w.right>width+1||w.width<=0))throw Error(page+' viewport '+width+' '+theme+': '+JSON.stringify(fit));
+   if(width>=1200&&(page==='dashboard.html'?fit.overviewBottom:fit.mainChartsBottom)>height)throw Error(page+' primary overview exceeds '+width+'x'+height);
+   evidence.push({page,theme,width,height,viewportFit:true,overviewBottom:fit.overviewBottom,mainChartsBottom:fit.mainChartsBottom});
+  }
+ }
  // Forecast and target must stay solid; preliminary data remains explicit.
  await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/dashboard.html`});
  await evaluate(`new Promise(r=>setTimeout(r,800))`);
