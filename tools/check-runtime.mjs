@@ -7,7 +7,7 @@ import {resolve,extname,sep} from 'node:path';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const server=createServer(async(req,res)=>{try{const f=resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://local').pathname));if(!f.startsWith(resolve(root)+sep)){res.writeHead(403);return res.end()}const data=await readFile(f);res.setHeader('Content-Type',({'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json','.topojson':'application/json','.svg':'image/svg+xml'})[extname(f)]||'application/octet-stream');res.end(data);}catch{res.writeHead(404);res.end()}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;const evidence=[];
-const pages=['dashboard.html','component-heatmap.html','component-tree-select.html','component-layout-editor.html','component-saved-views.html','component-fullscreen.html','component-tooltip.html','component-bullet-chart.html','component-period-comparison.html','component-timeline-annotations.html'];
+const pages=['calendar.html','dashboard.html','component-heatmap.html','component-tree-select.html','component-layout-editor.html','component-saved-views.html','component-fullscreen.html','component-tooltip.html','component-bullet-chart.html','component-period-comparison.html','component-timeline-annotations.html'];
 try{
  browser=await launch(findChrome());const {targetId}=await browser.send('Target.createTarget',{url:'about:blank'});const {sessionId}=await browser.send('Target.attachToTarget',{targetId,flatten:true});const send=(m,p)=>browser.send(m,p,sessionId);
  const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;};
@@ -21,6 +21,19 @@ try{
   if(basic.duplicate.length||basic.dangling.length||basic.width>basic.viewport+1)throw Error(page+': '+JSON.stringify(basic));
   const ax=await send('Accessibility.getFullAXTree');const unnamed=ax.nodes.filter(n=>!n.ignored&&['button','combobox','textbox','searchbox','dialog'].includes(n.role?.value)&&!n.name?.value);if(unnamed.length)throw Error(page+': unnamed controls '+unnamed.length);
   if(page==='dashboard.html'&&(basic.heroTop>844/2||basic.chartTop>650||basic.sticky==='sticky'))throw Error('mobile information hierarchy regression');
+  if(page==='dashboard.html'){
+    await send('Runtime.evaluate',{expression:"document.getElementById('d-fullscreen').click()",userGesture:true,awaitPromise:true});
+    await evaluate(`new Promise(r=>setTimeout(r,100))`);
+    basic.fullscreen=await evaluate(`document.fullscreenElement?'native':document.querySelector('dialog.dk-fullscreen[open]')?'fallback':'none'`);
+    if(basic.fullscreen==='none')throw Error('fullscreen action did not open');
+    await evaluate(`document.getElementById('d-fullscreen').click();new Promise(r=>setTimeout(r,100))`);
+  }
+  if(page==='calendar.html') {
+    await evaluate(`document.querySelector('.dk-cal [data-view=week]').click()`);
+    const agenda=await evaluate(`!!document.querySelector('.dk-cal__agenda')`);
+    if(!agenda)throw Error('touch calendar week did not use agenda');
+    basic.calendarAgenda=true;
+  }
   // Doubling the actual font tokens tests large text without changing target sizes.
   await evaluate(`(()=>{const root=document.documentElement,s=getComputedStyle(root);for(const key of Array.from(s).filter(k=>/^--(type-|text-)/.test(k))){const v=s.getPropertyValue(key);if(/px/.test(v))root.style.setProperty(key,v.replace(/([0-9.]+)px/g,(_,n)=>Number(n)*2+'px'));}})()`);
   const large=await evaluate(`({width:document.documentElement.scrollWidth,viewport:innerWidth})`);if(large.width>large.viewport+1)throw Error(page+': large text overflow '+JSON.stringify(large));
@@ -30,8 +43,10 @@ try{
  // Chart export and map decals use the actual vendored rendering engine.
  await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/component-chart.html`});await evaluate(`new Promise(r=>setTimeout(r,800))`);
  const chart=await evaluate(`(async()=>{const el=document.createElement('div');el.className='dk-chart';el.style.height='200px';document.body.append(el);const chart=dkChart(el,{type:'donut',palette:'status',data:[{name:'Риск',value:1},{name:'Средний',value:1},{name:'Низкий',value:1},{name:'Нет данных',value:1}]});await new Promise(r=>setTimeout(r,100));const option=chart.instance.getOption();const blob=await chart.exportImage();if(!option.series[0].data[3].itemStyle.decal)throw Error('missing chart decal');if(blob.type!=='image/png'||blob.size<100)throw Error('invalid chart PNG');chart.destroy();return {pngBytes:blob.size,statusDecal:true};})()`);
+ await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/component-map.html`});await evaluate(`new Promise(r=>setTimeout(r,800))`);
+ const map=await evaluate(`(()=>{const host=document.createElement('div');host.style.width='280px';document.body.append(host);const geometry={type:'FeatureCollection',features:[{type:'Feature',id:'a',properties:{id:'a',name:'Known'},geometry:{type:'Polygon',coordinates:[[[30,50],[31,50],[31,51],[30,51],[30,50]]]}},{type:'Feature',id:'b',properties:{id:'b',name:'Missing'},geometry:{type:'Polygon',coordinates:[[[32,50],[33,50],[33,51],[32,51],[32,50]]]}}]};const map=dkMap(host,{geo:geometry,name:'runtime-test',values:{a:0,b:null},tiles:{cols:2,rows:1,tiles:[{id:'a',abbr:'A',name:'Known',x:0,y:0},{id:'b',abbr:'B',name:'Missing',x:1,y:0}]}});const inst=echarts.getInstanceByDom(host.querySelector('.dk-map__canvas'));if(!inst)throw Error('map not rendered');const data=inst.getOption().series[0].data;if(!data.find(d=>d.name==='b').itemStyle.decal||data.find(d=>d.name==='a').itemStyle.decal)throw Error('map missing/zero decal');map.view='tiles';if(host.querySelectorAll('.dk-map__tile.dk-nodata').length!==1)throw Error('tile texture');map.destroy();return {canvasDecal:true,zeroIsData:true,tileTexture:true};})()`);
  if(errors.length)throw Error(errors.join('\n'));
- const report={browser:'Chrome CDP',physicalDevices:false,screenReaderSpeech:false,pages:evidence,chart};
+ const report={browser:'Chrome CDP',physicalDevices:false,screenReaderSpeech:false,pages:evidence,chart,map};
  if(process.env.DK_EVIDENCE_DIR){await mkdir(process.env.DK_EVIDENCE_DIR,{recursive:true});await writeFile(resolve(process.env.DK_EVIDENCE_DIR,'runtime.json'),JSON.stringify(report,null,2));}
- console.log('PASS: real pages, 200% font tokens, 320px reflow, named AX controls, mobile hierarchy, reduced-motion environment, PNG/status decal');console.log(JSON.stringify(evidence[0]));
+ console.log('PASS: real pages, 200% font tokens, 320px reflow, named AX controls, mobile hierarchy, reduced-motion environment, PNG/status decal');console.log(JSON.stringify(evidence.find(e=>e.page==='dashboard.html')));
 }catch(e){console.error(e.message);process.exitCode=1}finally{if(browser)await browser.close();server.close();}

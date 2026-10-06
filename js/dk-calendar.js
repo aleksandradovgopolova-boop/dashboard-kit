@@ -157,6 +157,13 @@
   }
 
   window.dkCalendar = function (host, opts) {
+    window.dkDestroy(host);
+    var stopped = false, releases = [];
+    var agendaMedia = window.matchMedia('(max-width: 767px), (pointer: coarse)');
+    function listen(node, type, callback) {
+      node.addEventListener(type, callback);
+      releases.push(function () { node.removeEventListener(type, callback); });
+    }
     opts = opts || {};
 
     var onSelect = opts.onSelect || function () {};
@@ -318,6 +325,20 @@
       titleEl.textContent = fmtDayShort.format(start) + ' — ' + fmtDayShort.format(end) +
                             ' ' + end.getFullYear();
 
+      if (agendaMedia.matches) {
+        var agenda = '<div class="dk-cal__agenda">';
+        for (var ai = 0; ai < WEEK; ai++) {
+          var date = addDays(start, ai);
+          var list = eventsOn(date).slice().sort(function (a, b) { return a.from - b.from; });
+          agenda += '<section><button class="dk-btn" type="button" data-date="' + key(date) + '" aria-pressed="' + String(selected && sameDay(selected, date) || false) + '">' + esc(fmtDayShort.format(date)) + '</button><ul>';
+          agenda += list.map(function (event) {
+            return '<li><button class="dk-btn dk-btn--ghost" type="button" data-id="' + events.indexOf(event) + '">' + esc(event.timed ? hhmm(event.from) + '–' + hhmm(event.till) + ' · ' + event.name : event.name + ' · весь день') + '</button></li>';
+          }).join('') || '<li>Нет событий</li>';
+          agenda += '</ul></section>';
+        }
+        bodyEl.innerHTML = agenda + '</div>';
+        return;
+      }
       var names = weekdayNames({ weekday: 'short' });
       var html = '<div class="dk-cal__wgrid">';
 
@@ -392,6 +413,7 @@
     }
 
     function render() {
+      if (stopped) return;
       host.setAttribute('data-view', view);
       host.querySelectorAll('[data-view]').forEach(function (b) {
         if (b.tagName === 'BUTTON') b.setAttribute('aria-pressed', String(b.dataset.view === view));
@@ -432,7 +454,7 @@
       if (cell) cell.focus();
     }
 
-    host.addEventListener('click', function (e) {
+    listen(host, 'click', function (e) {
       var v = e.target.closest('[data-view]');
       if (v && v.tagName === 'BUTTON') { view = v.dataset.view; cursor = null; render(); return; }
 
@@ -457,7 +479,7 @@
       }
     });
 
-    bodyEl.addEventListener('keydown', function (e) {
+    listen(bodyEl, 'keydown', function (e) {
       var s = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -WEEK, ArrowDown: WEEK }[e.key];
       if (s) {
         if (view === 'week' && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) return;
@@ -484,10 +506,26 @@
       }
     });
 
+    function onAgendaChange() {
+      var focused = host.contains(document.activeElement);
+      render();
+      if (focused) host.querySelector('[data-view="' + view + '"]').focus();
+    }
+    listen(agendaMedia, 'change', onAgendaChange);
+    var destroy = window.dkOwn(host, function () {
+      stopped = true; releases.forEach(function (off) { off(); }); host.replaceChildren();
+    });
     setEvents(opts.events);
     render();
 
     return {
+      destroy: destroy,
+      update: function (next) {
+        if (stopped) return; next = next || {};
+        if (next.events) setEvents(next.events);
+        if (next.view) view = next.view === 'week' ? 'week' : 'month';
+        render();
+      },
       get value() { return selected; },
       get view() { return view; },
       set view(v) { view = v === 'week' ? 'week' : 'month'; render(); },

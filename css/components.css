@@ -4544,3 +4544,8 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-saved-views input { min-width: 0; max-width: 100%; }
 .dk-saved-views { min-width: 0; grid-template-columns: minmax(0, 1fr); }
 .dk-saved-views .dk-btn, .dk-layout-editor .dk-btn, .dk-export .dk-btn { white-space: normal; height: auto; min-height: var(--control-md); max-width: 100%; overflow-wrap: anywhere; }
+.dk-cal__agenda { display: grid; gap: var(--space-4); }
+.dk-cal__agenda ul { list-style: none; padding: 0; margin: var(--space-2) 0; }
+.dk-cal__agenda li { margin-bottom: var(--space-2); }
+.dk-cal__agenda .dk-btn { white-space: normal; height: auto; min-height: 44px; max-width: 100%; text-align: left; overflow-wrap: anywhere; }
+.dk-root .dk-status { white-space: normal; min-width: 0; max-width: 100%; flex-wrap: wrap; overflow-wrap: anywhere; }

@@ -193,6 +193,7 @@ def load_pages() -> list[dict]:
                 "pager": [("update({total,page,size}) / destroy()", "API", "Тихое восстановление, page ограничивается количеством страниц. Старые goTo/setTotal сохранены.")],
                 "table": [("update({selected}) / destroy()", "API", "Восстановление выбора по data-id; cleanup обработчиков/observer без удаления таблицы. Sort host связывает через onSort.")],
                 "map": [("update({values,scope,view}) / destroy()", "API", "Обновление одним проходом; старые setValues/setScope/view сохранены.")],
+                "calendar": [("update({events,view}) / destroy()", "API", "Совместим со старым setEvents/view/goTo. На narrow/coarse неделя — agenda со временем словами и кнопками 44px, на desktop/fine — часовая сетка.")],
                 "chart": [("exportImage()", "Promise<Blob>", "PNG текущей отрисовки, отклоняет Promise без готового экземпляра.")],
             }
             p["api"] = list(p["api"]) + additions.get(p["slug"], [])
