@@ -4,18 +4,18 @@ goals:
 - id: reliable-dashboard-work
   status: active
   outcome:
-    search_input_survives_filtering: false
-    ci_limitations_are_explicit: false
+    search_input_survives_filtering: true
+    ci_limitations_are_explicit: true
 - id: accessible-dashboard-data
   status: active
   outcome:
-    dynamic_semantic_colors_checked: false
+    dynamic_semantic_colors_checked: true
 work:
 - id: ci-private-access
   title: Согласовать supply-chain CI с доступами приватного репозитория
   type: delivery
   goal: reliable-dashboard-work
-  status: in_progress
+  status: done
   owner_role: delivery
   depends_on: []
   write_scope:
@@ -30,7 +30,7 @@ work:
   title: Сохранять поле поиска при обновлении выпадающего списка
   type: engineering
   goal: reliable-dashboard-work
-  status: in_progress
+  status: done
   owner_role: frontend
   depends_on: []
   write_scope:
@@ -45,10 +45,10 @@ work:
   pr: https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/8
   branch: fix/select-search-and-ci
 - id: dynamic-color-checks
-  title: Спроектировать проверку смысловых цветов в динамической разметке
+  title: Реализовать проверку смысловых цветов в динамической разметке
   type: quality
   goal: accessible-dashboard-data
-  status: todo
+  status: done
   owner_role: qa
   depends_on: []
   write_scope:
@@ -58,6 +58,8 @@ work:
   affects:
     delivery_operations: false
     engineering_quality_security: true
+  pr: https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/11
+  branch: codex/dashboard-backlog
 - id: live-accessibility
   title: Проверить фильтры скринридером и на живом телефоне/WebView
   type: quality

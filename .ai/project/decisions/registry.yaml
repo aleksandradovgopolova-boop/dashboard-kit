@@ -1,0 +1,37 @@
+schema_version: 1
+kind: decisions-registry
+status: draft
+reviewed_at: '2026-10-06'
+owner: unassigned
+principles: []
+episodes:
+- id: static-no-build
+  question: Как подключать библиотеку?
+  decision: Без сборки продукта, статические теги и офлайн
+  reason: README объясняет простую эксплуатацию
+  reversibility: two-way
+  date: '2026-10-06'
+  context: Дата записи чернового индекса, не дата исходного решения. Источник имеет
+    приоритет.
+  source: README.md
+  confidence: high
+- id: isolated-root
+  question: Как встраивать в чужую страницу?
+  decision: .dk-root изолирует токены, .dk-page только для всей страницы
+  reason: Избежать утечек общих переменных
+  reversibility: two-way
+  date: '2026-10-06'
+  context: Дата записи чернового индекса, не дата исходного решения. Источник имеет
+    приоритет.
+  source: DECISIONS.md#1
+  confidence: high
+- id: calm-ux
+  question: Как должен выглядеть инструмент?
+  decision: Спокойные поверхности, полные названия, цвет данных и исключений
+  reason: Утверждённый визуал от 30.09 заменяет декоративные решения
+  reversibility: two-way
+  date: '2026-10-06'
+  context: Дата записи чернового индекса, не дата исходного решения. Источник имеет
+    приоритет.
+  source: DESIGN-UX-ACCESSIBILITY.md
+  confidence: high
