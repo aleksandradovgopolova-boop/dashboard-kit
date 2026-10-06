@@ -48,7 +48,7 @@
     <p class="sc-hero__lead">Возвращает локальный рабочий срез со всеми согласованными параметрами.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>экспериментальный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-workspace.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-workspace.js"><code>js/dk-workspace.js</code></a></span>
     </div>
   </header>
 
@@ -58,7 +58,7 @@
   </section>
   <section class="sc-sec">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Пользователь регулярно возвращается к одним фильтрам и периодам.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Нужны общие виды команды: локальное хранилище не является синхронизацией.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Пользователь регулярно возвращается к одним фильтрам и периодам.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Нужны общие виды команды: локальное хранилище не является синхронизацией.</li></ul></div></div><div class="sc-note"><h3>Фильтрация</h3><ul class="sc-list"><li>Область фильтра понятна; применённые значения видны. Все затронутые виджеты используют один срез.</li><li>Поиск, фильтрация и сортировка имеют разные роли. После изменения набора страница результатов остаётся допустимой.</li><li>Нет результатов — честное состояние с возможностью снять ограничение; не подменять его похожими данными молча. Сброс — компактный крестик.</li><li>Модель применения понятна: сразу либо черновик с явным «Применить». Черновик не выдаётся за текущий срез; отмена сохраняет предыдущий срез.</li></ul><p>Пример: KPI, карта и таблица обновлены из одного среза; возврат сохраняет фильтры.</p><p>Проверка: Проверить совместные фильтры, пустую выдачу, сброс, пагинацию и возвращение из деталей.</p><p><a href="https://www.uprock.ru/education/filtraciya-na-saytah">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
   </section>
   <section class="sc-sec">
     <h2>Анатомия</h2>
@@ -91,7 +91,7 @@
 document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 var state=dkState(document.getElementById(&#x27;advanced-state&#x27;), {filters:{service:&#x27;heat&#x27;},period:&#x27;14d&#x27;});dkSavedViews(document.getElementById(&#x27;advanced-views&#x27;), {key:&#x27;dk-demo-views&#x27;,state:state});
 });
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkState(el, initial)</code></td><td>API</td><td>get(), update(patch), destroy(); dk:statechange содержит snapshot. filters, period, sort, page, size, mode, density.</td></tr><tr><td><code>dkSavedViews(el, opts)</code></td><td>API</td><td>key/state обязательны, storage?, applyDefault?. create(name), rename(id,name), apply(id), remove(id), setDefault(id|null), list(), destroy().</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkState(el, initial)</code></td><td>API</td><td>get(), update(patch), destroy(); dk:statechange содержит snapshot. filters, period, sort, page, size, mode, density.</td></tr><tr><td><code>dkSavedViews(el, opts)</code></td><td>API</td><td>key/state обязательны, storage?, applyDefault?. create(name), rename(id,name), apply(id), remove(id), setDefault(id|null), list(), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>

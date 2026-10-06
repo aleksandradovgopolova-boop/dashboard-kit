@@ -48,7 +48,7 @@
     <p class="sc-hero__lead">Компактно показывает факт, целевой уровень и контекст диапазонов.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>экспериментальный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-analysis.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-analysis.js"><code>js/dk-analysis.js</code></a></span>
     </div>
   </header>
 
@@ -70,7 +70,7 @@
   </section>
   <section class="sc-sec">
     <h2>Состояния</h2>
-    <p>Отсутствующий факт штрихуется; отсутствующая цель не рисуется. Факт вне шкалы визуально ограничивается, полное число остаётся в тексте. max должен быть больше min.</p>
+    <p>Отсутствующий факт обозначается текстом и нейтральной заливкой; отсутствующая цель не рисуется. Факт вне шкалы визуально ограничивается, полное число остаётся в тексте. max должен быть больше min.</p>
   </section>
   <section class="sc-sec">
     <h2>Контент</h2>
@@ -91,7 +91,7 @@
 document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkBullet(document.getElementById(&#x27;advanced-bullet&#x27;), {label:&#x27;Устранение за смену&#x27;, actual:72, target:80, min:0, max:100, unit:&#x27;%&#x27;, ranges:[{to:60,label:&#x27;Ниже нормы&#x27;},{to:100,label:&#x27;Рабочий диапазон&#x27;}]});
 });
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkBullet(el, opts)</code></td><td>API</td><td>actual, target, min, max, unit, ranges:{to,label}[], meaning?; update(opts), destroy().</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkBullet(el, opts)</code></td><td>API</td><td>actual, target, min, max, unit, ranges:{to,label}[], meaning?; update(opts), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>

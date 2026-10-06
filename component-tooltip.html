@@ -48,7 +48,7 @@
     <p class="sc-hero__lead">Короткое дополнительное объяснение показателя без перекрытия рабочего потока.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>экспериментальный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-context.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-context.js"><code>js/dk-context.js</code></a></span>
     </div>
   </header>
 
@@ -58,7 +58,7 @@
   </section>
   <section class="sc-sec">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно объяснить термин рядом с его употреблением.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Критические инструкции или интерактивные ссылки: используйте видимый текст или details sidebar.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно объяснить термин рядом с его употреблением.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Критические инструкции или интерактивные ссылки: используйте видимый текст или details sidebar.</li></ul></div></div><div class="sc-note"><h3>Подсказки</h3><ul class="sc-list"><li>Только короткое дополнительное пояснение; необходимые инструкции остаются видимыми.</li><li>Появление по фокусу, наведению или явному касанию; Escape закрывает подсказку, фокус остаётся на кнопке.</li><li>Без ссылок и действий внутри. Не перекрывать источник пояснения; длинный текст — в деталях.</li></ul><p>Пример: Порог виден рядом с показателем, подсказка поясняет дополнительный термин.</p><p>Проверка: Проверить край окна, клавиатуру, касание и перевод указателя на подсказку.</p><p><a href="https://www.uprock.ru/education/chto-takoe-tooltip">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Текст для действия и восстановления</h3><ul class="sc-list"><li>Для каждого сообщения определить, что пользователь должен понять или сделать. Названия и единицы связаны с предметной задачей, один объект не получает разных синонимов на соседних экранах.</li><li>Сообщение об ошибке называет проблему и доступный следующий шаг без обвинений. Техническая диагностика не заменяет объяснение; обязательные инструкции видны рядом с действием.</li><li>Убирать повторы и технические подписи, сохраняя полные названия и важный контекст. Текст проверяется в обычном, пустом, ошибочном и недоступном состоянии, а не добавляется после компоновки.</li></ul><p>Пример: «Не удалось загрузить заявки. Фильтры сохранены». Действие: «Повторить загрузку».</p><p>Проверка: Прочитать сообщения без знания внутреннего устройства; назвать ожидаемый результат кнопки и способ исправить ошибку. Проверить одинаковые термины и длинный текст.</p><p><a href="https://www.uprock.ru/education/ux-kopirayting">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
   </section>
   <section class="sc-sec">
     <h2>Анатомия</h2>
@@ -91,7 +91,7 @@
 document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkTooltip(document.getElementById(&#x27;advanced-tooltip&#x27;), {text:&#x27;Риск — оценка по текущим порогам, не прогноз.&#x27;});
 });
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkTooltip(trigger, {text})</code></td><td>API</td><td>Именованная кнопка. show(), hide(), update({text}), destroy().</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkTooltip(trigger, {text})</code></td><td>API</td><td>Именованная кнопка. show(), hide(), update({text}), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>

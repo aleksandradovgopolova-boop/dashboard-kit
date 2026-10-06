@@ -47,7 +47,7 @@
     <p class="sc-hero__lead">Показывает место объекта в иерархии и путь к родителю.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a></span>
     </div>
   </header>
 
@@ -57,7 +57,7 @@
   </section>
   <section class="sc-sec">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Есть вложенные разделы или drill-down по объектам.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Один уровень навигации: используйте tabs.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Есть вложенные разделы или drill-down по объектам.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Один уровень навигации: используйте tabs.</li></ul></div></div><div class="sc-note"><h3>Шапка и завершение страницы</h3><ul class="sc-list"><li>Шапка показывает текущий раздел и общий контекст; локальные действия остаются у своего виджета.</li><li>Каркас добавляется только собственной странице; встраиваемый блок не дублирует меню хозяина.</li><li>Подвал нужен для полезных вторичных ссылок; на рабочем дашборде не добавлять большой промоблок автоматически.</li></ul><p>Пример: Раздел и актуальность сверху; помощь в утверждённом меню профиля.</p><p>Проверка: Проверить, что закреплённые панели не закрывают фокус и полезное содержимое.</p><p><a href="https://www.uprock.ru/education/header-and-footer-zachem-nuzhny-i-kak-sozdat">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Информационная архитектура</h3><ul class="sc-list"><li>Начинать с вопросов пользователя и карты данных/действий, затем выбирать навигацию.</li><li>Вкладки объединяют связанные картины задачи; отдельный экран отвечает на самостоятельный вопрос.</li><li>Для мониторинга меню остаётся плоским. Иерархия данных не требует вложенного меню продукта.</li><li>Основной ответ виден сразу; вкладки не прячут данные, необходимые для одновременного сравнения.</li></ul><p>Пример: Плоские разделы; подробности объекта открываются из нужной строки.</p><p>Проверка: Посчитать действия до ответа и проверить возврат без потери контекста.</p><p><a href="https://www.uprock.ru/education/informacionnaya-arhitektura">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
   </section>
   <section class="sc-sec">
     <h2>Анатомия</h2>
@@ -85,7 +85,7 @@
   </section>
   <section class="sc-sec">
     <h2>Код</h2>
-    <p></p><pre class="sc-code"><code>&lt;nav class=&quot;dk-breadcrumbs&quot; aria-label=&quot;Навигационный путь&quot;&gt;&lt;ol&gt;&lt;li&gt;&lt;a href=&quot;dashboard.html&quot;&gt;Мониторинг&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;regions.html&quot;&gt;Регионы&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;span aria-current=&quot;page&quot;&gt;Ивановская область&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>aria-current=&quot;page&quot;</code></td><td>атрибут</td><td>Только последний пункт, текущий объект.</td></tr></tbody></table></div>
+    <p></p><pre class="sc-code"><code>&lt;nav class=&quot;dk-breadcrumbs&quot; aria-label=&quot;Навигационный путь&quot;&gt;&lt;ol&gt;&lt;li&gt;&lt;a href=&quot;dashboard.html&quot;&gt;Мониторинг&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;regions.html&quot;&gt;Регионы&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;span aria-current=&quot;page&quot;&gt;Ивановская область&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>aria-current=&quot;page&quot;</code></td><td>атрибут</td><td>Только последний пункт, текущий объект.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>

@@ -53,6 +53,7 @@ CSS_ORDER = [
     ("css/tokens.semantic.css", "всегда"),
     ("css/components.css", "всегда"),
     ("css/chrome.css", "только если кит рисует всю страницу"),
+    ("css/page.dashboard.css", "только пример dashboard.html; после chrome.css"),
 ]
 
 # Чужой скрипт со своим стилем: подключил скрипт — подключи и стиль. Из кода

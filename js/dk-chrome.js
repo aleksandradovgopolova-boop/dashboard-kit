@@ -15,6 +15,23 @@
     var fold   = app.querySelector('[data-act="fold"]');
     var side   = app.querySelector('.dk-side');
 
+    if (app.classList.contains('dk-app--rail')) {
+      app.querySelectorAll('.dk-side__item').forEach(function (item) {
+        var label = item.querySelector('.dk-side__label');
+        if (label) {
+          if (!item.hasAttribute('aria-label')) item.setAttribute('aria-label', label.textContent.trim());
+          if (!item.hasAttribute('title')) item.setAttribute('title', label.textContent.trim());
+        }
+      });
+      var profile = app.querySelector('.dk-side__profile');
+      if (profile) {
+        document.addEventListener('click', function (e) { if (!profile.contains(e.target)) profile.open = false; });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && profile.open) { profile.open = false; profile.querySelector('summary').focus(); e.stopPropagation(); }
+        });
+      }
+    }
+
     function state() { return app.getAttribute('data-nav') || 'closed'; }
 
     function open() {

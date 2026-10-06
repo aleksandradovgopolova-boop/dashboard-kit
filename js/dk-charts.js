@@ -394,7 +394,7 @@
           tails.push({
             name: s.name, type: 'line', data: parts.tail,
             smooth: false, showSymbol: true, symbol: 'emptyDiamond', symbolSize: 7,
-            endLabel: { show: true, formatter: 'Прогноз' },
+            endLabel: { show: true, formatter: 'Прогноз', color: window.dkMeaning.color('nodata', 'text', cur), textBorderWidth: 0, textShadowBlur: 0 },
             step: type === 'step' ? 'end' : false,
             lineStyle: { type: 'solid', width: 1, color: seriesColor(i) },
             itemStyle: { color: seriesColor(i) },
@@ -415,7 +415,8 @@
     else if (type === 'bar-h') {
       option.tooltip = { trigger: 'axis' };
       option.yAxis = { type: 'category', data: spec.categories || [], inverse: true };
-      option.xAxis = { type: 'value', name: spec.unit || '' };
+      // Exact end labels carry the values; grid lines add redundant visual noise.
+      option.xAxis = { type: 'value', name: spec.unit || '', splitLine: { show: false }, axisLabel: { show: false }, axisTick: { show: false } };
 
       /* ЗНАЧЕНИЕ ПОДПИСАНО У КОНЦА ПОЛОСЫ, И ГЛАВНОЕ — У НУЛЕВОЙ ТОЖЕ.
 
@@ -814,7 +815,7 @@
           // «Последнее» — только у времени: у столбцов порядок категорий не время.
           (/^(line|area|step|spark)$/.test(type) ? ', последнее ' + n(last[0]) + unit : ''));
       });
-      if ((spec.series || []).some(function (s) { return s.forecast; })) parts.push('Прогноз: тонкая линия с ромбами, предварительные данные');
+      if ((spec.series || []).some(function (s) { return s.forecast; })) parts.push('Прогноз: предварительные данные');
       if ((spec.series || []).length > 3) parts.push('Ещё серий: ' + (spec.series.length - 3));
     }
     if (spec.target != null) {

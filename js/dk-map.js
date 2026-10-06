@@ -570,12 +570,14 @@
       update: function (next) {
         next = next || {};
         if (next.values) { values = next.values; rescale(); }
-        if (Object.prototype.hasOwnProperty.call(next, 'scope')) scope = next.scope && next.scope.length ? new Set(next.scope) : null;
+        if (Object.prototype.hasOwnProperty.call(next, 'scope')) scope = next.scope == null ? null : new Set(next.scope);
         if (next.view) view = next.view === 'tiles' ? 'tiles' : 'map';
         render();
       },
       setScope: function (ids) {
-        scope = ids && ids.length ? new Set(ids) : null;
+        // Пустой результат фильтра — пустой срез. Только null/undefined
+        // снимает ограничение: иначе карта противоречит пустой таблице и KPI.
+        scope = ids == null ? null : new Set(ids);
         render();
       },
       setValues: function (v) {

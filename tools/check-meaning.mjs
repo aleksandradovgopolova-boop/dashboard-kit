@@ -11,13 +11,13 @@ function test(){
  for(const theme of ['dark','light']){
  document.documentElement.dataset.theme=theme;
  const el=document.createElement('span');el.className='dk-nodata';document.body.append(el);
- ok(getComputedStyle(el).backgroundImage.includes('repeating-linear-gradient'),'texture '+theme);
- ok(dkMeaning.color('nodata','text',el),'resolved theme');ok(dkMeaning.decal(el).color===getComputedStyle(document.documentElement).getPropertyValue('--nodata-pattern').trim(),'canvas texture');el.remove();
+ ok(getComputedStyle(el).backgroundImage==='none','solid no-data '+theme);
+ ok(dkMeaning.color('nodata','text',el),'resolved theme');ok(dkMeaning.decal(el)===null,'no canvas hatching');el.remove();
  }
  const embedded=document.createElement('div');embedded.className='dk-root';embedded.dataset.theme='dark';document.body.append(embedded);
  ok(dkMeaning.color('crit','text',embedded)!==dkMeaning.color('crit','text',document.body),'root isolation');
  const host=document.createElement('div');document.body.append(host);const uptime=dkUptime(host,{rows:[{name:'Без данных',data:['none','up','down']} ]});
- ok(host.querySelector('[data-state=none]'),'missing state');ok(getComputedStyle(host.querySelector('[data-state=none]')).backgroundImage.includes('gradient'),'uptime texture');
- return 'PASS: meaning roles/rejection, dark/light texture, isolated roots, canvas decal, uptime';
+ ok(host.querySelector('[data-state=none]'),'missing state');ok(getComputedStyle(host.querySelector('[data-state=none]')).backgroundImage==='none','solid uptime');
+ return 'PASS: meaning roles/rejection, dark/light solid no-data, isolated roots, no canvas hatching, uptime';
 }
 try{await regression(['js/dk-util.js','js/dk-uptime.js'].map(f=>root+f),test,setup)}catch(e){console.error(e.message);process.exitCode=1}

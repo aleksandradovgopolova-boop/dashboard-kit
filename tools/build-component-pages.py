@@ -76,8 +76,10 @@ def render(p: dict) -> str:
     api = "".join(f"<tr><td><code>{esc(n)}</code></td><td>{t}</td><td>{d}</td></tr>" for n, t, d in p["api"])
     anatomy = "".join(f"<li><b>{b}</b> — {t}</li>" for b, t in p["anatomy"])
     related = "".join(f'<li><a href="{esc(h)}">{t}</a>{(" — " + d) if d else ""}</li>' for h, t, d in p["related"])
-    files = " · ".join(f"<code>{esc(f)}</code>" for f in p["files"])
+    files = " · ".join(f'<a href="{esc(f)}"><code>{esc(f)}</code></a>' for f in p["files"])
     live_script = p.get("live_script", "")
+    policy = json.loads((ROOT/".ai/project/uiux-policy.json").read_text())
+    guidance = ''.join('<div class="sc-note"><h3>'+html.escape(row['title'])+'</h3><ul class="sc-list">'+li([html.escape(x) for x in row['rules']])+'</ul><p>Пример: '+html.escape(row['example_good'])+'</p><p>Проверка: '+html.escape(row['review'])+'</p><p><a href="'+html.escape(row['source'])+'">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>' for row in policy['patterns'] if p['slug'] in row['components'])
     sec = []
     for i, (sid, title, group) in enumerate(BLOCKS):
         body = {
@@ -85,7 +87,7 @@ def render(p: dict) -> str:
             "kogda-ispolzovat": (
                 '<div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list">' + li(p["when_yes"]) +
                 '</ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list">' + li(p["when_no"]) +
-                '</ul></div></div>'),
+                '</ul></div></div>' + guidance),
             "anatomiya": ('<p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy">' +
                           p["anatomy_html"] + '</div><ol class="sc-anatomy__list">' + anatomy + '</ol>'),
             "varianty-i-razmery": (
@@ -103,7 +105,7 @@ def render(p: dict) -> str:
                        f'<ul class="sc-tokens" data-tokens="{esc(",".join(p["tokens"]))}">'
                        '<li class="sc-tokens__wait">Читаем css/components.css…</li></ul>'),
             "kod": (f'<p>{p.get("code_intro", "")}</p><pre class="sc-code"><code>{esc(p["code"])}</code></pre>'
-                    '<div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr>'
+                    '<h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr>'
                     '<th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th>'
                     f'</tr></thead><tbody>{api}</tbody></table></div>'),
             "svyazannoe": '<ul class="sc-list sc-list--wide">' + related + '</ul>',
@@ -205,6 +207,8 @@ def build() -> dict[str, str]:
     """Имя файла → содержимое, включая указатель."""
     pages = load_pages()
     out = {f"component-{p['slug']}.html": render(p) for p in pages}
+    from docs_guide import render as render_guide
+    out["index.html"] = render_guide(pages, render)
     index = [{"slug": p["slug"], "title": p["title"], "group": p["group"], "description": CATALOG_DESCRIPTIONS.get(p["slug"], p["purpose"])} for p in pages]
     out["js/docs-index.js"] = (
         "/* СОБРАНО tools/build-component-pages.py — указатель страниц компонентов для\n"

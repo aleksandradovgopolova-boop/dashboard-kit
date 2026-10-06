@@ -4381,11 +4381,6 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 
 /* 30.09 · спокойный точный рабочий инструмент. Плотность — явный выбор
    шаблона, а не случайная высота карточек. */
-.dk-tile--compact { height: 100%; box-sizing: border-box; }
-.dk-tile--compact .dk-tile__head { align-items: flex-start; }
-.dk-tile--compact .dk-tile__label { display: block; overflow: visible; }
-.dk-tile--compact .dk-tile__icon { display: none; }
-.dk-tile--compact .dk-tile__row { align-items: flex-start; flex-direction: column; }
 .dk-car--list .dk-car__track { flex-wrap: wrap; overflow: visible; margin: 0; padding: 0; }
 .dk-car--list .dk-car__item { flex: 1 1 40%; width: auto; max-width: none; }
 .dk-car--list :is(.dk-car__pos, .dk-car__nav, .dk-car__dots) { display: none; }
@@ -4393,6 +4388,9 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-region-tools .dk-search { flex: 1 1 50%; min-width: 0; height:var(--control-md); padding:0 var(--control-pad-md); border:0; background:var(--surface-2); border-radius:var(--radius-md); }
 .dk-region-tools .dk-search__input { width:100%; height:100%; font:var(--type-body); }
 .dk-region-tools .dk-search__icon{ width:16px; height:16px; }
+.dk-region-tools > div { min-width: 0; max-width: 100%; }
+.dk-region-tools .dk-select { max-width: 100%; }
+.dk-region-tools .dk-select__trigger { height: auto; min-height: var(--control-md); }
 .dk-region-result { margin: 0 0 var(--space-6); color: var(--ink-2); font: var(--type-body); }
 .dk-details { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-group); }
 .dk-details dt { color: var(--ink-2); }
@@ -4459,17 +4457,16 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-chips__item{ display:inline-flex; align-items:center; gap:var(--space-3); max-width:100%; background:var(--control-soft); border-radius:var(--radius-md); padding-left:var(--control-pad-sm); }
 .dk-chips__text{ min-width:0; overflow-wrap:anywhere; font:var(--type-body); }
 
-/* Missing observations have a texture, never a brighter data value.
-   Text remains explicit: texture alone is not an accessible label. */
+/* Missing observations use a neutral solid fill and explicit text. */
 .dk-nodata,
 .dk-split__seg:not([style*="--swatch"]),
 .dk-uptime__seg[data-state="none"] {
   background-color: var(--nodata);
-  background-image: repeating-linear-gradient(135deg, transparent 0, transparent 4px, var(--nodata-pattern) 4px, var(--nodata-pattern) 6px);
+  background-image: none;
 }
 /* Safari may retain the old background during a theme-variable transition. */
 .dk-root td.dk-nodata { color: var(--ink); background-color: var(--surface); background-image: none; transition: none; }
-.dk-root td.dk-nodata::before { content: ''; display: inline-block; width: var(--space-4); height: var(--space-4); margin-right: var(--space-2); background: repeating-linear-gradient(135deg, var(--nodata) 0, var(--nodata) 4px, var(--nodata-pattern) 4px, var(--nodata-pattern) 6px); }
+.dk-root td.dk-nodata::before { content: ''; display: inline-block; width: var(--space-4); height: var(--space-4); margin-right: var(--space-2); background: var(--nodata); }
 @media (forced-colors: active) {
   .dk-nodata, .dk-uptime__seg[data-state="none"] { outline: var(--focus-width) solid CanvasText; }
 }
@@ -4553,3 +4550,182 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-cal__agenda li { margin-bottom: var(--space-2); }
 .dk-cal__agenda .dk-btn { white-space: normal; height: auto; min-height: 44px; max-width: 100%; text-align: left; overflow-wrap: anywhere; }
 .dk-root .dk-status { white-space: normal; min-width: 0; max-width: 100%; flex-wrap: wrap; overflow-wrap: anywhere; }
+
+/* Компактный рабочий обзор. Высота следует окну, содержимое не обрезается.
+   Модификатор opt-in: витрина компонентов и встроенные блоки сохраняют размер. */
+.dk-wrap--monitor {
+  --pad-widget: calc(var(--space-4) * 2);
+  --grid-gap: var(--space-5);
+  --gap-section: var(--space-4);
+}
+.dk-wrap--monitor .dk-widget--s { padding: var(--pad-widget); }
+.dk-wrap--monitor .dk-hero { padding: var(--pad-widget); gap: var(--gap-tight); }
+.dk-wrap--monitor .dk-chart:not(.dk-chart--spark) { height: clamp(180px, 25svh, 240px); }
+.dk-wrap--monitor .dk-chart--sm { height: clamp(150px, 20svh, 180px); }
+.dk-wrap--monitor .dk-chart--spark { height: 36px; }
+.dk-wrap--monitor .dk-widget__head { flex-wrap: wrap; }
+.dk-wrap--monitor .dk-widget__title { font: var(--type-h3); }
+.dk-wrap--monitor .dk-widget__actions { flex-shrink: 0; }
+.dk-wrap--monitor .dk-grid--metrics { height: auto; }
+.dk-wrap--monitor .dk-caption:empty { display: none; }
+/* На планшете основная диаграмма требует всю строку; боковая сводка тоже
+   занимает строку, чтобы 1/2 + 1/1 не оставляли пустую половину сетки. */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .dk-wrap--monitor .dk-col--third:has(+ .dk-col--two-thirds),
+  .dk-wrap--monitor .dk-col--two-thirds + .dk-col--third { grid-column: span 8; }
+}
+@media (min-width: 1200px) {
+  .dk-grid--overview { align-items: start; }
+  .dk-wrap--monitor .dk-grid--metrics > .dk-col--half { grid-column: span 6; }
+}
+@media (max-width: 767px) {
+  .dk-wrap--monitor .dk-chart--spark { height: 48px; }
+  .dk-wrap--monitor .dk-chart:not(.dk-chart--spark) { height: 220px; }
+  .dk-wrap--monitor .dk-chart--sm { height: 180px; }
+}
+
+/* Четыре показателя на телефоне читаются как сводка 2×2, а не четыре
+   высоких экрана со спарклайнами. Полные подписи переносятся без line-clamp. */
+.dk-wrap--monitor .dk-tile__label { display: block; overflow: visible; overflow-wrap: anywhere; }
+@media (max-width: 767px) {
+  .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile) { grid-column: span 2; }
+  .dk-wrap--monitor .dk-tile__icon { display: none; }
+  .dk-wrap--monitor .dk-tile__row { flex-direction: column; align-items: flex-start; }
+  .dk-wrap--monitor .dk-tile__row > .dk-metric-lg { max-width: 100%; overflow-wrap: anywhere; }
+  .dk-wrap--monitor .dk-chart--spark { height: 32px; }
+}
+@media (min-width: 768px) {
+  .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile) { grid-column: span calc(var(--grid-cols) / 4); }
+}
+
+@media (min-width: 768px) {
+  .dk-wrap--monitor { --pad-widget: calc(var(--space-5) * 2); }
+  .dk-wrap--monitor .dk-widget--s,
+  .dk-wrap--monitor .dk-hero { padding: var(--pad-widget); }
+}
+
+@media (max-width: 1199px) {
+  .dk-grid--overview > [class*="dk-col--"] { grid-column: 1 / -1; }
+}
+/* Соседи имеют одну высоту по самому высокому содержимому ряда.
+   Без contain:size и внутренних ограничений: длинные подписи остаются видимы. */
+.dk-wrap--monitor .dk-grid { align-items: stretch; }
+.dk-wrap--monitor .dk-grid > [class*="dk-col--"] > .dk-widget,
+.dk-wrap--monitor .dk-grid > [class*="dk-col--"] > .dk-hero,
+.dk-wrap--monitor .dk-grid > [class*="dk-col--"] > .dk-grid--metrics {
+  height: 100%;
+  box-sizing: border-box;
+}
+.dk-wrap--monitor .dk-widget > .dk-chart:not(.dk-chart--spark) { flex-grow: 1; }
+
+/* Равные KPI: подпись, число и изменение стоят на общих линиях ряда. */
+.dk-wrap--monitor .dk-tile--compact { display: flex; }
+.dk-wrap--monitor .dk-tile--compact .dk-tile__head { min-height: calc(var(--text-caption) * 3); }
+.dk-wrap--monitor .dk-tile--compact .dk-tile__row { flex: 1; justify-content: flex-start; }
+@media (min-width: 1200px) {
+  .dk-grid--overview .dk-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    column-gap: var(--space-8);
+  }
+  .dk-grid--overview .dk-hero__label { grid-column: 1; grid-row: 1; }
+  .dk-grid--overview .dk-hero__row { grid-column: 1; grid-row: 2; }
+  .dk-grid--overview .dk-hero__n { font: var(--type-metric-xl); }
+  .dk-grid--overview .dk-keys { grid-column: 2; grid-row: 1; align-self: end; }
+  .dk-grid--overview .dk-split { grid-column: 2; grid-row: 2; align-self: center; }
+}
+
+.dk-region-result:empty { display: none; }
+/* Monitoring KPI share a readable title/value/trend structure. The reserve
+   grows with text; labels remain complete and sparklines share the bottom. */
+.dk-wrap--monitor .dk-tile { display: flex; flex-direction: column; align-items: stretch; }
+.dk-wrap--monitor .dk-tile__head {
+  font: var(--type-caption);
+  min-height: 3lh;
+  align-items: flex-start;
+}
+.dk-wrap--monitor .dk-tile__row {
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.dk-wrap--monitor .dk-tile > .dk-chart--spark { margin-top: auto; flex: none; }
+@media (min-width: 1024px) {
+  .dk-wrap--monitor .dk-tile__head { min-height: 2lh; }
+}
+
+/* Подсказка остаётся с заголовком и выравнивается с текстом. */
+.dk-widget__title:has(> .dk-widget__hint) { display: flex; align-items: center; gap: var(--gap-inline); }
+.dk-widget__title:has(> .dk-widget__hint) > span:first-child { min-width: 0; }
+.dk-wrap--monitor .dk-tile__row > .dk-trend {
+  min-height: var(--space-8);
+  box-sizing: border-box;
+}
+
+/* Согласованный компактный KPI: число и изменение рядом, без спарклайна.
+   Высота определяется полными подписями; крупный текст может перенести дельту. */
+.dk-root .dk-tile--compact {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  grid-template-columns: none;
+  padding: calc(var(--space-4) * 2);
+  gap: var(--space-5);
+  border-radius: var(--radius-md);
+}
+.dk-root .dk-tile--compact > .dk-tile__head {
+  grid-column: auto;
+  align-self: stretch;
+  align-items: flex-start;
+  min-height: 3lh;
+  gap: var(--space-3);
+  font: var(--type-caption);
+}
+.dk-root .dk-tile--compact .dk-tile__label {
+  display: block;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: unset;
+}
+.dk-root .dk-tile--compact .dk-tile__icon {
+  display: inline-flex;
+  width: var(--space-6);
+  height: var(--space-6);
+  margin-top: var(--space-1);
+  background: transparent;
+  color: var(--ink-2);
+}
+.dk-root .dk-tile--compact .dk-tile__icon .dk-i {
+  width: var(--space-6);
+  height: var(--space-6);
+}
+.dk-root .dk-tile--compact > .dk-tile__row {
+  grid-column: auto;
+  flex: none;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: var(--space-4);
+}
+.dk-root .dk-tile--compact .dk-metric-lg { font: var(--type-metric-lg); }
+.dk-tile__unit { font: var(--type-caption); color: var(--ink-2); }
+.dk-root .dk-tile--compact .dk-trend {
+  min-height: calc(var(--space-5) * 2);
+  align-self: center;
+  border-radius: var(--radius-sm);
+  font: var(--type-caption);
+  padding: var(--space-1) var(--space-2);
+  gap: var(--space-1);
+}
+.dk-root .dk-tile--compact .dk-trend .dk-i { width: var(--space-6); height: var(--space-6); }
+@media (min-width: 768px) {
+  .dk-root .dk-tile--compact { padding: calc(var(--space-5) * 2); }
+  .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile--compact) { grid-column: span 2; }
+}
+@media (min-width: 1200px) {
+  .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile--compact) { grid-column: span 3; }
+}
+@media (min-width: 1024px) {
+  .dk-root .dk-tile--compact > .dk-tile__head { min-height: 2lh; }
+}

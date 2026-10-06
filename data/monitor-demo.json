@@ -1,0 +1,150 @@
+{
+  "kind": "static-demo",
+  "risk": {
+    "periodDays": 30,
+    "thresholds": {
+      "high": 78,
+      "medium": 60
+    },
+    "total": 89,
+    "values": {
+      "spb": 40,
+      "murmansk": 52,
+      "moscow": 84,
+      "karelia": 32,
+      "nenets": 76,
+      "chukotka": 84,
+      "leningrad": 44,
+      "novgorod": 40,
+      "vologda": 28,
+      "arkhangelsk": 28,
+      "komi": 68,
+      "yamalo-nenets": 48,
+      "krasnoyarsk": 72,
+      "sakha": 36,
+      "magadan": 40,
+      "kamchatka": 60,
+      "kaliningrad": 48,
+      "pskov": 28,
+      "tver": 72,
+      "yaroslavl": 68,
+      "ivanovo": 92,
+      "kostroma": 52,
+      "mari-el": 72,
+      "kirov": 56,
+      "perm": 52,
+      "khmao": 92,
+      "tyumen": 84,
+      "tomsk": 40,
+      "kemerovo": 56,
+      "irkutsk": 68,
+      "amur": 44,
+      "smolensk": 80,
+      "kaluga": 72,
+      "moscow-oblast": 88,
+      "vladimir": 88,
+      "nizhny-novgorod": 52,
+      "chuvashia": 56,
+      "tatarstan": 40,
+      "udmurtia": 48,
+      "sverdlovsk": 44,
+      "kurgan": 28,
+      "novosibirsk": 44,
+      "khakassia": 40,
+      "buryatia": 28,
+      "jewish-ao": 60,
+      "khabarovsk": 40,
+      "sakhalin": 36,
+      "bryansk": 36,
+      "oryol": 44,
+      "tula": 48,
+      "ryazan": 52,
+      "mordovia": 32,
+      "ulyanovsk": 72,
+      "samara": 28,
+      "bashkortostan": 76,
+      "chelyabinsk": 84,
+      "omsk": 92,
+      "altai-rep": 52,
+      "tuva": 72,
+      "zabaykalsky": 68,
+      "primorsky": 60,
+      "kursk": 64,
+      "lipetsk": 60,
+      "tambov": 44,
+      "penza": 80,
+      "saratov": 80,
+      "orenburg": 68,
+      "altai-kray": 84,
+      "dnr": 52,
+      "belgorod": 44,
+      "voronezh": 28,
+      "volgograd": 40,
+      "lnr": 48,
+      "crimea": 28,
+      "adygea": 88,
+      "krasnodar": 40,
+      "rostov": 92,
+      "kalmykia": 28,
+      "astrakhan": 32,
+      "zaporozhye": 84,
+      "sevastopol": 64,
+      "karachay-cherkessia": 92,
+      "stavropol": 28,
+      "chechnya": 52,
+      "dagestan": 68,
+      "kherson": 48,
+      "kabardino-balkaria": 80,
+      "north-ossetia": 52,
+      "ingushetia": 40
+    },
+    "counts": {
+      "high": 18,
+      "medium": 20,
+      "low": 51,
+      "missing": 0
+    },
+    "districts": [
+      {
+        "code": "УФО",
+        "name": "Уральский",
+        "average": 63
+      },
+      {
+        "code": "ЦФО",
+        "name": "Центральный",
+        "average": 62
+      },
+      {
+        "code": "СФО",
+        "name": "Сибирский",
+        "average": 62
+      },
+      {
+        "code": "СКФО",
+        "name": "Северо-Кавказский",
+        "average": 59
+      },
+      {
+        "code": "ПФО",
+        "name": "Приволжский",
+        "average": 58
+      },
+      {
+        "code": "ЮФО",
+        "name": "Южный",
+        "average": 54
+      },
+      {
+        "code": "ДФО",
+        "name": "Дальневосточный",
+        "average": 51
+      },
+      {
+        "code": "СЗФО",
+        "name": "Северо-Западный",
+        "average": 44
+      }
+    ]
+  }
+}

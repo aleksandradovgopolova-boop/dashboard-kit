@@ -10,7 +10,13 @@
     tip.id=id;tip.className='dk-tooltip';tip.setAttribute('role','tooltip');tip.textContent=opts.text||'';tip.hidden=true;
     var root=trigger.closest('dialog')||trigger.closest('.dk-root')||document.body;root.append(tip);
     trigger.setAttribute('aria-describedby',(original?original+' ':'')+id);
-    function position(){var r=trigger.getBoundingClientRect();tip.style.left=Math.max(8,Math.min(r.left,innerWidth-tip.offsetWidth-8))+'px';tip.style.top=Math.max(8,Math.min(r.bottom+8,innerHeight-tip.offsetHeight-8))+'px';}
+    function position(){
+      var r=trigger.getBoundingClientRect(),height=tip.offsetHeight;
+      var top=r.bottom+8;
+      if(top+height>innerHeight-8)top=r.top-height-8;
+      tip.style.left=Math.max(8,Math.min(r.left,innerWidth-tip.offsetWidth-8))+'px';
+      tip.style.top=Math.max(8,Math.min(top,innerHeight-height-8))+'px';
+    }
     function show(){clearTimeout(timer);if(stopped)return;tip.hidden=false;shown=true;position();}
     function hide(){clearTimeout(timer);tip.hidden=true;shown=false;pinned=false;}
     function leave(){if(!pinned)timer=setTimeout(hide,180);}
