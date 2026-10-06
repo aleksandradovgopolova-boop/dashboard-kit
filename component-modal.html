@@ -48,7 +48,7 @@
     <p class="sc-hero__lead">Подтвердить опасное действие или заполнить короткую форму, не уходя со страницы. Одновременно открыто не больше одного окна: окно поверх окна загоняет человека в угол.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-modal.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-modal.js"><code>js/dk-modal.js</code></a></span>
     </div>
   </header>
 
@@ -108,7 +108,7 @@
 var m = dkModal(&#x27;#confirm&#x27;);
 button.addEventListener(&#x27;click&#x27;, m.open);
 m.el.addEventListener(&#x27;close&#x27;, function () { if (m.returnValue === &#x27;ok&#x27;) closeAccident(); });
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkModal(el | селектор)</code></td><td>функция</td><td>Обёртка над dialog; null, если окна нет.</td></tr><tr><td><code>open()</code></td><td>метод</td><td>Открыть; предыдущее окно закроется с предупреждением.</td></tr><tr><td><code>close(value)</code></td><td>метод</td><td>Закрыть с результатом.</td></tr><tr><td><code>returnValue</code></td><td>свойство</td><td>value нажатой кнопки; пусто при Escape.</td></tr><tr><td><code>el</code></td><td>свойство</td><td>Сам <code>&lt;dialog&gt;</code> — на него вешают <code>close</code>.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkModal(el | селектор)</code></td><td>функция</td><td>Обёртка над dialog; null, если окна нет.</td></tr><tr><td><code>open()</code></td><td>метод</td><td>Открыть; предыдущее окно закроется с предупреждением.</td></tr><tr><td><code>close(value)</code></td><td>метод</td><td>Закрыть с результатом.</td></tr><tr><td><code>returnValue</code></td><td>свойство</td><td>value нажатой кнопки; пусто при Escape.</td></tr><tr><td><code>el</code></td><td>свойство</td><td>Сам <code>&lt;dialog&gt;</code> — на него вешают <code>close</code>.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>

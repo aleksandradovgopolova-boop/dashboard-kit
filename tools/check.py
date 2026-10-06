@@ -1805,7 +1805,7 @@ def check_pages() -> None:
             fail("СТРАНИЦЫ", f"{name} разошёлся с генератором — правь tools/component_pages/ "
                              f"и пересобери: python3 tools/build-component-pages.py")
             bad = True
-        if name.endswith(".html"):
+        if name.startswith("component-") and name.endswith(".html"):
             found = re.findall(r"<h2>(.*?)</h2>", text)
             if found != titles:
                 fail("СТРАНИЦЫ", f"{name}: блоки {found} вместо {titles}")

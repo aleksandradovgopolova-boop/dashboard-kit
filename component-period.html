@@ -50,7 +50,7 @@
     <p class="sc-hero__lead">Ограничить срез по времени: готовые пресеты или свой диапазон. Стоит первым среди фильтров, потому что ограничивает всё остальное.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-period.js</code> · <code>vendor/air-datepicker.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-period.js"><code>js/dk-period.js</code></a> · <a href="vendor/air-datepicker.js"><code>vendor/air-datepicker.js</code></a></span>
     </div>
   </header>
 
@@ -117,7 +117,7 @@ var p = dkPeriod(document.getElementById(&#x27;period&#x27;), {
 });
 p.value; p.text;                      // «Последние 14 дней»
 p.set({ preset: 30 }); p.clear();
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>value</code></td><td>{preset} | {from, to}</td><td>Начальное значение; адрес главнее.</td></tr><tr><td><code>presets[]</code></td><td>массив {name, days}</td><td>Свой список пресетов.</td></tr><tr><td><code>minDate / maxDate</code></td><td>дата</td><td>Границы календаря; по умолчанию до сегодня.</td></tr><tr><td><code>url</code></td><td>строка</td><td>Ключ в адресе.</td></tr><tr><td><code>onChange(v)</code></td><td>функция</td><td>После применения; черновик не считается.</td></tr><tr><td><code>value / text / set(v) / clear()</code></td><td>API</td><td>Читать и менять снаружи.</td></tr><tr><td><code>update({value}) / destroy()</code></td><td>API</td><td>Тихое восстановление периода. Старые set/clear сохранены; destroy освобождает календарь и подписки.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>value</code></td><td>{preset} | {from, to}</td><td>Начальное значение; адрес главнее.</td></tr><tr><td><code>presets[]</code></td><td>массив {name, days}</td><td>Свой список пресетов.</td></tr><tr><td><code>minDate / maxDate</code></td><td>дата</td><td>Границы календаря; по умолчанию до сегодня.</td></tr><tr><td><code>url</code></td><td>строка</td><td>Ключ в адресе.</td></tr><tr><td><code>onChange(v)</code></td><td>функция</td><td>После применения; черновик не считается.</td></tr><tr><td><code>value / text / set(v) / clear()</code></td><td>API</td><td>Читать и менять снаружи.</td></tr><tr><td><code>update({value}) / destroy()</code></td><td>API</td><td>Тихое восстановление периода. Старые set/clear сохранены; destroy освобождает календарь и подписки.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>

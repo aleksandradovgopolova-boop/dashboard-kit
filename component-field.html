@@ -48,7 +48,7 @@
     <p class="sc-hero__lead">Принять от человека заявку, работу, комментарий. Форма на дашборде короткая, и правила у неё жёстче обычных: её заполняют между двумя срочными делами.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-form.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-form.js"><code>js/dk-form.js</code></a></span>
     </div>
   </header>
 
@@ -143,7 +143,7 @@ var api = dkForm(document.getElementById(&#x27;work&#x27;), {
 });
 api.validate();   // true, если всё верно
 api.clear();      // снять ошибки
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>onSubmit(data)</code></td><td>функция</td><td>Зовётся только после успешной проверки; <code>data</code> — FormData.</td></tr><tr><td><code>check(el)</code></td><td>функция</td><td>Своя проверка поля поверх браузерной: вернуть текст ошибки или null.</td></tr><tr><td><code>validate()</code></td><td>метод</td><td>Проверить все поля, показать ошибки; вернуть true/false.</td></tr><tr><td><code>clear()</code></td><td>метод</td><td>Снять ошибки и сводку.</td></tr><tr><td><code>required, minlength, min, max, type</code></td><td>атрибуты input</td><td>Правила задаёт браузер; кит только формулирует ошибку по-русски.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>onSubmit(data)</code></td><td>функция</td><td>Зовётся только после успешной проверки; <code>data</code> — FormData.</td></tr><tr><td><code>check(el)</code></td><td>функция</td><td>Своя проверка поля поверх браузерной: вернуть текст ошибки или null.</td></tr><tr><td><code>validate()</code></td><td>метод</td><td>Проверить все поля, показать ошибки; вернуть true/false.</td></tr><tr><td><code>clear()</code></td><td>метод</td><td>Снять ошибки и сводку.</td></tr><tr><td><code>required, minlength, min, max, type</code></td><td>атрибуты input</td><td>Правила задаёт браузер; кит только формулирует ошибку по-русски.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>

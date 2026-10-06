@@ -48,7 +48,7 @@
     <p class="sc-hero__lead">Баннер отвечает за состояние всей страницы и не закрывается, пока не ушла причина. Уведомление подтверждает действие человека и уходит само. Две разные вещи, которые часто путают.</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-notify.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-notify.js"><code>js/dk-notify.js</code></a></span>
     </div>
   </header>
 
@@ -109,7 +109,7 @@ dkToast(&#x27;Работа добавлена в календарь&#x27;);
 dkToast(&#x27;Срез сброшен&#x27;, { action: { name: &#x27;Отменить&#x27;, onClick: restore } });
 var t = dkToast(&#x27;Не удалось сохранить&#x27;, { kind: &#x27;crit&#x27; });
 t.close();
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkToast(text, opts)</code></td><td>функция</td><td>Показать уведомление; возвращает {close, el}.</td></tr><tr><td><code>opts.kind</code></td><td>'calm' | 'high' | 'crit'</td><td>Вид; по умолчанию calm.</td></tr><tr><td><code>opts.action</code></td><td>{name, onClick}</td><td>Кнопка; отключает таймер.</td></tr><tr><td><code>opts.life</code></td><td>число мс</td><td>Явное время жизни.</td></tr><tr><td><code>dk-banner--crit | --high | --calm | --event</code></td><td>класс</td><td>Вид баннера; закрывается только event.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkToast(text, opts)</code></td><td>функция</td><td>Показать уведомление; возвращает {close, el}.</td></tr><tr><td><code>opts.kind</code></td><td>'calm' | 'high' | 'crit'</td><td>Вид; по умолчанию calm.</td></tr><tr><td><code>opts.action</code></td><td>{name, onClick}</td><td>Кнопка; отключает таймер.</td></tr><tr><td><code>opts.life</code></td><td>число мс</td><td>Явное время жизни.</td></tr><tr><td><code>dk-banner--crit | --high | --calm | --event</code></td><td>класс</td><td>Вид баннера; закрывается только event.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>

@@ -48,7 +48,7 @@
     <p class="sc-hero__lead">Листать длинный список по страницам, называя, что и сколько показано: «21–40 из 89 регионов».</p>
     <div class="sc-meta">
       <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <code>css/components.css</code> · <code>js/dk-pager.js</code></span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-pager.js"><code>js/dk-pager.js</code></a></span>
     </div>
   </header>
 
@@ -104,7 +104,7 @@ var pg = dkPager(document.getElementById(&#x27;pager&#x27;), {
   onChange: function (e) { /* e.page, e.size — запросить и показать срез */ }
 });
 pg.page; pg.size; pg.setTotal(120);
-&lt;/script&gt;</code></pre><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>total</code></td><td>число</td><td>Сколько всего записей.</td></tr><tr><td><code>size / sizes</code></td><td>число / массив</td><td>Размер страницы и доступные размеры.</td></tr><tr><td><code>page</code></td><td>число</td><td>Начальная страница.</td></tr><tr><td><code>noun</code></td><td>массив из трёх форм</td><td>«регион, региона, регионов».</td></tr><tr><td><code>onChange(e)</code></td><td>функция</td><td>e.page, e.size при смене.</td></tr><tr><td><code>page / size / setTotal(n)</code></td><td>API</td><td>Читать; пересчитать после фильтра.</td></tr><tr><td><code>update({total,page,size}) / destroy()</code></td><td>API</td><td>Тихое восстановление, page ограничивается количеством страниц. Старые goTo/setTotal сохранены.</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>total</code></td><td>число</td><td>Сколько всего записей.</td></tr><tr><td><code>size / sizes</code></td><td>число / массив</td><td>Размер страницы и доступные размеры.</td></tr><tr><td><code>page</code></td><td>число</td><td>Начальная страница.</td></tr><tr><td><code>noun</code></td><td>массив из трёх форм</td><td>«регион, региона, регионов».</td></tr><tr><td><code>onChange(e)</code></td><td>функция</td><td>e.page, e.size при смене.</td></tr><tr><td><code>page / size / setTotal(n)</code></td><td>API</td><td>Читать; пересчитать после фильтра.</td></tr><tr><td><code>update({total,page,size}) / destroy()</code></td><td>API</td><td>Тихое восстановление, page ограничивается количеством страниц. Старые goTo/setTotal сохранены.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec">
     <h2>Связанное</h2>
