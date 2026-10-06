@@ -21,7 +21,7 @@ verified: читать пять исходных документов и лок�
 .github/workflows/ из .ai-ops.yaml; политика .ai-ops/POLICY.yaml требует решения человека.
 
 ## Неизвестно
-Состав команды, SLA ревью и политика релизных версий. Детали — CONTRIBUTING.md и TESTING.md.
+Ответственные за QA/release/security, SLA ревью и политика релизных версий. Продуктовые решения принимает Саша (user_confirmed, 06.10). Детали — CONTRIBUTING.md и TESTING.md.
 
 Источники: [README.md](../../../../README.md); [DECISIONS.md](../../../../DECISIONS.md); [DESIGN-UX-ACCESSIBILITY.md](../../../../DESIGN-UX-ACCESSIBILITY.md); [REVIEW.md](../../../../REVIEW.md); [HANDOFF.md](../../../../HANDOFF.md).
 

@@ -10,22 +10,22 @@ status: draft
 # Product Passport
 
 ## Название и описание
-**dashboard-kit** — статическая дизайн-система мониторинговых дашбордов ЖКХ: ванильные CSS/JavaScript, две темы, русский интерфейс, офлайн-первый. Источник: HANDOFF.md, «Что это»; README.md.
+**dashboard-kit** — статическая дизайн-система для любых дашбордов: ванильные CSS/JavaScript, две темы, русский интерфейс, офлайн-первый. Источник: HANDOFF.md, «Что это»; README.md.
 
 ## Аудитория и проблема
-Для сборки экранов мониторинга ЖКХ из согласованных компонентов с проверяемыми правилами цвета, контраста, поведения и доступности. Это описание назначения из HANDOFF.md и skill/dashboard-build; конкретные роли пользователей и метрики использования неизвестны.
+user_confirmed (Саша, 06.10.2026): пользователи — Саша, её команда, ИИ-агенты и другие пользователи, которым нужно быстро создать дашборд. Приоритеты — новые экраны быстрее, единое оформление, улучшение понимания данных. ЖКХ — примеры, не граница.
 
 ## Repository и окружения
-Приватный GitHub: https://github.com/aleksandradovgopolova-boop/dashboard-kit. Основная ветка main. Просмотр локально через HTTP или офлайн; отдельное production-окружение не установлено.
+Приватный GitHub: https://github.com/aleksandradovgopolova-boop/dashboard-kit. Основная ветка main. Просмотр локально через HTTP или офлайн; user_confirmed: кит пока не используется; запланировано применение в том числе в корпоративной ИИ-среде. Отдельное production-окружение не установлено.
 
 ## Owner и команда
-Владелец GitHub-репозитория: aleksandradovgopolova-boop. Состав продуктовой команды и роли не установлены.
+Владелец GitHub-репозитория: aleksandradovgopolova-boop. Продуктовые решения принимает Саша (user_confirmed, 06.10). QA/release/security-ответственные не назначены; GitHub-account владельца не выдаётся за эти роли.
 
 ## Статус и зрелость
 Работающая библиотека: 26 страниц компонентов, демо-экраны, история решений и ревью в документах. Короткая Git-история началась с импорта 5 октября и не измеряет зрелость продукта. Источники: HANDOFF.md, DECISIONS.md, REVIEW.md.
 
 ## Здоровье (продукт / технологии / delivery)
-Продуктовые метрики неизвестны. Технологии: новый полный прогон 06.10.2026 tools/check.py прошёл — 33 страницы в трёх размерах Chrome (evidence .ai/project/evidence/product-context-full-check.txt). Следующие сведения CI исторические: dashboard-check, validate, secret-scan, feature-catalog, feature-coverage и record прошли на c12e79e в GitHub. Supply-chain проверка Scorecard упала с Resource not accessible by integration; CodeQL дошёл до анализа, но публикация упала: Code Scanning не включён (run 37298495711). В PR #8 недоступные проверки явно ограничены, основная регрессия прошла. Источники: GitHub Actions на c12e79e и docs/ai-ops-integration.txt.
+user_confirmed: время типовой сборки, доля сборок без ручных исправлений, количество созданных дашбордов. Baseline/цели/способ сбора unknown. Исследование понимания конечными пользователями отложено. Технологии: новый полный прогон 06.10.2026 tools/check.py прошёл — 33 страницы в трёх размерах Chrome (evidence .ai/project/evidence/product-context-full-check.txt). Следующие сведения CI исторические: dashboard-check, validate, secret-scan, feature-catalog, feature-coverage и record прошли на c12e79e в GitHub. Supply-chain проверка Scorecard упала с Resource not accessible by integration; CodeQL дошёл до анализа, но публикация упала: Code Scanning не включён (run 37298495711). В PR #8 недоступные проверки явно ограничены, основная регрессия прошла. Источники: GitHub Actions на c12e79e и docs/ai-ops-integration.txt.
 
 ## Версия и последний релиз
 Версия продукта и релизные теги не заданы. **4.3.2 — версия AI Ops, а не dashboard-kit.**
@@ -38,4 +38,4 @@ Vendor ECharts, Air Datepicker и локальные шрифты. Извест�
 
 
 ## Актуальность снимка
-Черновик. Исторические статусы CI/PR выше относятся к источникам 05.10, не к новому аудиту. Текущая проверка и вопросы — .ai/project/ONBOARDING.md. Назначенные владельцы, production, продуктовые KPI и release-version unknown.
+Черновик. Исторические статусы CI/PR выше относятся к источникам 05.10, не к новому аудиту. Текущая проверка и вопросы — .ai/project/ONBOARDING.md. Product owner и три KPI подтверждены Сашей 06.10; QA/release/security, будущий deployment-контракт, метод/период/типовой сценарий измерений, baseline и release-version unknown.

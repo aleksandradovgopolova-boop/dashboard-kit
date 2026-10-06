@@ -12,7 +12,7 @@ status: draft
 verified: локальные ECharts (графики и карта), Air Datepicker (период), Golos, Tabler-иконки. Версии/лицензии сверять vendor/licenses, THIRD_PARTY_NOTICES.txt и vendor/echarts.modules.json. При отсутствии движка графиков соответствующие компоненты не могут рисовать.
 
 ## Сервисы
-Продуктовый внешний API и production-деплой unknown; обязательная удалённая загрузка не является контрактом кита.
+user_confirmed: кит пока не используется, корпоративная ИИ-среда запланирована. Продуктовый внешний API и production-деплой unknown; обязательная удалённая загрузка не является контрактом кита.
 
 ## Разработка
 GitHub Actions и AI Ops. .ai-ops.yaml указывает openai/anthropic, credentials_ref по именам env OPENAI_API_KEY и ANTHROPIC_API_KEY. Наличие значений, рабочий доступ и использование не проверялись. Секреты не читались.

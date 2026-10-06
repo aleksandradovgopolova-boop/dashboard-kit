@@ -15,7 +15,7 @@ verified: статический HTML/CSS/JavaScript, без сборки про
 CSS-слои, dk-* скрипты, демонстрационные страницы, vendor, карты data, tools, skill. AI Ops — отдельный контур разработки.
 
 ## Environments
-Локальный file и HTTP; CI GitHub Actions. Production unknown.
+Локальный file и HTTP; CI GitHub Actions. user_confirmed: кит пока не используется; корпоративная ИИ-среда — планируемое применение, а не production. Платформа неизвестна.
 
 ## Boundaries
 Хозяин поставляет данные и серверную безопасность; кит рисует, форматирует и управляет UI. Подробнее — корневой ARCHITECTURE.md.

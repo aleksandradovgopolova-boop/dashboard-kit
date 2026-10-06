@@ -118,7 +118,7 @@ README, AGENTS и CI существуют; CONTRIBUTING, TESTING, operations/dep
 AI_SECURITY/EVALS/prompt-model registry/runbooks AI-native условны: продукт не содержит AI runtime; skill evals уже есть в skill/dashboard-build/evals. Шаблон issue — уже .github protected зона, новая активация вне онбординга. Неприменимость — документация, не отключение гейтов/standard overrides.
 
 ## Граница полноты
-Неизвестные приватный security-contact, поддерживаемые версии и персональные назначения остаются открытыми. Наличие черновика не делает их подтверждёнными.
+Продуктовые решения принимает Саша (06.10); три KPI утверждены. Приватный security-contact, supported versions и назначения QA/release остаются открытыми; метод/период/сценарий измерений ещё не подтверждены. Наличие черновика не делает их подтверждёнными.
 
 Источники: [README.md](../../README.md); [DECISIONS.md](../../DECISIONS.md); [DESIGN-UX-ACCESSIBILITY.md](../../DESIGN-UX-ACCESSIBILITY.md); [REVIEW.md](../../REVIEW.md); [HANDOFF.md](../../HANDOFF.md).
 
