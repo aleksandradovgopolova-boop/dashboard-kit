@@ -25,6 +25,10 @@ jobs:
         env:
           DK_EVIDENCE_DIR: artifacts
         run: python3 tools/test.py
+      - name: Проверка протокола MCP
+        run: |
+          python3 -m pip install -r tools/mcp-requirements.txt
+          python3 tools/check-mcp.py
       - name: Сохранить проверяемые результаты runtime
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
