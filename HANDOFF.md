@@ -600,3 +600,15 @@ skill/dashboard-build/references/composition.md; скилл направляет
 09.10: regions.html переведён на dk-focus-layout — карта слева, фильтры и
 сводка с рейтингом справа; таблица ниже сохранена. Новый check-region-focus
 входит в tools/test.py. См. docs/2026-10-09/regions-focus-qa.md.
+## 08.10.2026 — первый MCP-прототип
+
+tools/mcp_server.py: пять read-only инструментов каталога, ресурс руководства
+и справки. Переиспользуется kit.py. SDK вынесен в tools/mcp-requirements.txt.
+Настоящий stdio клиент прошёл handshake, пять инструментов, порядок тегов,
+embed, ресурсы и ошибочные запросы (tools/check-mcp.py). Полная tools/check.py прошла: 62 страницы в трёх размерах. Проверен и
+Streamable HTTP: handshake, список инструментов и get_includes на localhost.
+В отдельной ветке ii-sreda реализован рендер за флагом VITE_DASHBOARD_KIT.
+Исследован main 4435236d;
+локальная копия отстала на 481 коммит, её изменения не тронуты.
+Следующий этап и запуск: docs/mcp.md. Изменения локальные, PR ещё не создан;
+публикации и слияния нет.

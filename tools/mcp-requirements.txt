@@ -1,0 +1,2 @@
+# Optional developer server; no dependency is added to dashboard runtime.
+mcp==1.30.0
