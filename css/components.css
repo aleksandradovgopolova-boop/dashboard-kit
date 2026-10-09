@@ -1916,31 +1916,9 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
   min-width: 0;
 }
 
-/* ВЫРАВНИВАНИЕ ШАПКИ ПО ВЕРХНЕЙ ЛИНИИ.
-
-   Заголовок и кнопка выше не центруются друг относительно друга, а оба
-   начинаются на линии отступа. Кнопка просто уходит ниже — она выше букв,
-   и это нормально.
-
-   Почему не «по центру»: тогда высоту строки задаёт кнопка, буквы
-   центруются в чужой высоте, и отступ сверху оказывается заметно больше
-   отступа слева.
-
-   Почему не «оптически, по значку внутри кнопки»: это правило для ГОЛОЙ
-   иконки. У нашей кнопки есть заливка, то есть видимый прямоугольник —
-   глаз равняется по нему, а не по значку внутри. Кнопка, поднятая выше
-   линии отступа, выглядит сбежавшей вверх. */
-/* Шапка виджета одной высоты всегда — есть в ней кнопки или нет.
-
-   Без этого ряд разъезжается: у виджета с кнопками шапка ровно на высоту
-   кнопки выше, чем у соседа без кнопок, и тело виджета съезжает вниз. На
-   дашборде виджеты стоят рядами по три-четыре, и такой сдвиг читается как
-   кривая вёрстка, хотя каждый виджет по отдельности собран правильно.
-
-   Цена — высота кнопки вместо высоты строки в шапках без действий. Это
-   осознанная плата за то, что место под действия у виджета постоянное: кнопка,
-   которая появляется и исчезает вместе с высотой блока, заставляет человека
-   перечитывать раскладку каждый раз. */
+/* Хедер: заголовок и действия выровнены по центру строки. Минимальная
+   высота равна компактному контролу, но длинный текст может увеличивать её.
+   Обзорный вариант разрешает перенос действий, не обрезая заголовок. */
 .dk-widget__head {
   display: flex;
   align-items: center;
@@ -1949,17 +1927,8 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
   min-width: 0;
 }
 
-/* Заголовок виджета — тихий. Его читают один раз, когда ищут нужный блок
-   глазами; данные внутри читают каждый раз заново. Крупный светлый заголовок
-   перетягивает на себя первый взгляд и отбирает его у числа, ради которого
-   виджет и стоит на странице.
-
-   Отсюда же требование к самому заголовку: он должен быть коротким. Длинная
-   фраза в верхнем регистре читается заметно хуже обычной строки — и это
-   правильное давление, потому что «Аварии по дням» лучше, чем «Динамика
-   количества аварийных ситуаций за выбранный период». */
-/* 30.09: заголовок помогает найти данные, поэтому не обрезаем его и
-   не превращаем в мелкую разреженную надпись. */
+/* Название помогает найти блок. Полный текст переносится без усечения;
+   обзорная типографика задаётся dk-widget--overview. */
 .dk-widget__title {
   font: var(--type-h3);
   letter-spacing: var(--type-h3-track);
@@ -4911,3 +4880,18 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-widget-icon { --icon-tone: var(--link); display: inline-flex; align-items: center; justify-content: center; width: var(--control-lg); height: var(--control-lg); flex: none; border-radius: var(--radius-full); color: var(--icon-tone); background: color-mix(in srgb, var(--icon-tone) 9%, var(--surface)); }
 .dk-widget-icon--crit { --icon-tone: var(--crit-ink); }
 .dk-widget-icon .dk-i { width: var(--space-8); height: var(--space-8); color: inherit; }
+
+/* Сборка из атомов: переносимый хедер страницы и слоты виджета. */
+.dk-head__titles { display: flex; flex-direction: column; gap: var(--space-2); flex: 1 1 20rem; min-width: 0; }
+.dk-head__title { margin: 0; color: var(--ink); font: var(--type-overview-title); overflow-wrap: anywhere; }
+.dk-head__subtitle { margin: 0; color: var(--ink-2); font: var(--type-body); }
+.dk-head__actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--gap-tight); min-width: 0; }
+.dk-widget--overview { gap: var(--space-5); }
+.dk-widget--overview > .dk-widget__head { flex-wrap: wrap; }
+.dk-widget--overview .dk-widget__title { font: var(--type-panel-title); }
+.dk-widget__heading { flex: 1 1 10rem; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.dk-widget__meta { margin: 0; font: var(--type-caption); color: var(--ink-2); }
+.dk-widget__footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--gap-inline); font: var(--type-caption); color: var(--ink-2); }
+.dk-widget--overview > .dk-widget__head > .dk-widget__actions { flex-wrap: wrap; min-width: 0; max-width: 100%; }
+@media (max-width: 1199px) { .dk-widget--overview .dk-widget__title { font: var(--type-h3); } }
+@media (max-width: 767px) { .dk-head__title { font: var(--type-h2); } .dk-head__actions { flex: 1 1 100%; } }

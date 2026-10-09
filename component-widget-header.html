@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Хедер виджета · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p7_composition.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs.js?v=20261006-layout-tools" defer></script>
+</head>
+<body class="dk-page">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="showcase.html">
+    <span class="sc-brand__t">dashboard-kit</span>
+  </a>
+  <div class="sc-ctl">
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Композиция</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-widget-header.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
+    <h1>Хедер виджета</h1>
+    <p class="sc-hero__lead">Называет вопрос виджета и размещает рядом его локальные действия. Не зависит от типа содержимого.</p>
+    <div class="sc-meta">
+      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
+      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a></span>
+    </div>
+  </header>
+
+  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
+    <h2>Живой пример</h2>
+    <p>Тот же хедер используется над картой, графиком и таблицей. Дополнительная строка контекста необязательна.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-widget dk-widget--overview"><header class="dk-widget__head">
+  <div class="dk-widget__heading">
+    <h3 class="dk-widget__title">Последние события</h3>
+    <p class="dk-widget__meta">Демонстрационные данные · за сутки</p>
+  </div>
+  <div class="dk-widget__actions"><a class="dk-btn dk-btn--ghost dk-btn--sm" href="accidents.html">Все аварии <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a></div>
+</header></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+  </section>
+  <section class="sc-sec" id="kogda-ispolzovat">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Любой содержательный виджет с названием.</li><li>Нужны локальные экспорт, полный экран, переход к деталям или смена представления.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Название всего экрана — хедер страницы.</li><li>Число KPI — компонент tile; не собирать KPI из хедера графика.</li></ul></div></div>
+  </section>
+  <section class="sc-sec" id="anatomiya">
+    <h2>Анатомия</h2>
+    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-widget dk-widget--overview"><header class="dk-widget__head">
+  <div class="dk-widget__heading"><b class="sc-callout">1</b>
+    <h3 class="dk-widget__title"><b class="sc-callout">2</b>Последние события</h3>
+    <p class="dk-widget__meta"><b class="sc-callout">3</b>Демонстрационные данные · за сутки</p>
+  </div>
+  <div class="dk-widget__actions"><b class="sc-callout">4</b><a class="dk-btn dk-btn--ghost dk-btn--sm" href="accidents.html">Все аварии <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a></div>
+</header></div></div><ol class="sc-anatomy__list"><li><b>Текстовая группа</b> — dk-widget__heading: заголовок и необязательная метаинформация.</li><li><b>Название</b> — dk-widget__title: h2 на рабочем экране; без усечения.</li><li><b>Контекст</b> — dk-widget__meta: единица, период или состояние только этого блока.</li><li><b>Действия</b> — dk-widget__actions: справа, в устойчивом порядке; на узком месте переносятся.</li></ol>
+  </section>
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Хедер наследует поля оболочки. Минимальная высота --control-sm; высота растёт с текстом. В обзорном виджете заголовок --type-panel-title (18/24), на ширине до 1199 px --type-h3. Группы разделены --gap-inline, действия --gap-tight.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-widget__head</code></td><td>Общий ряд.</td><td>Внутри dk-widget.</td></tr><tr><td><code>dk-widget__heading + __meta</code></td><td>Название и дополнительный контекст.</td><td>Когда одной строки названия недостаточно.</td></tr><tr><td><code>dk-widget__actions</code></td><td>Группа локальных контролов.</td><td>Ссылка на детали или кнопки с реальной реализацией.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec" id="sostoyaniya">
+    <h2>Состояния</h2>
+    <div class="dk-widget dk-widget--overview"><header class="dk-widget__head"><div class="dk-widget__heading"><h3 class="dk-widget__title">Обращения по регионам за выбранный период</h3><p class="dk-widget__meta">Нет данных за период</p></div></header></div>
+  </section>
+  <section class="sc-sec" id="kontent">
+    <h2>Контент</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Сначала назвать показатель: «Средний риск по округам».</li><li>Экспорт и полный экран сохраняют порядок в разных виджетах.</li><li>Во время загрузки или ошибки сохранять заголовок и выбранный срез.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Кнопки вплотную к длинному заголовку.</li><li>Обязательная иконка перед каждым названием без смысла.</li><li>Скрытый заголовок ради места для действий.</li></ul></div></div>
+  </section>
+  <section class="sc-sec" id="dostupnost">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li>Заголовки передают иерархию: один h1 страницы, h2 виджетов; в живых примерах справочника уровень сдвинут на один.</li><li>Название не обрезается многоточием. При увеличении текста хедер растёт, действия переносятся.</li><li>Переход — ссылка, изменение состояния — кнопка с доступным именем; декоративные SVG скрыты от скринридера.</li><li>Цвет не заменяет текст состояния. Клавиатурный фокус остаётся видимым, сенсорная цель не меньше 44 px.</li></ul>
+  </section>
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
+    <h2>Токены</h2>
+    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-widget__head,dk-widget__heading,dk-widget__title,dk-widget__meta,dk-widget__actions"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+  </section>
+  <section class="sc-sec" id="kod">
+    <h2>Код</h2>
+    <p></p><pre class="sc-code"><code>&lt;header class=&quot;dk-widget__head&quot;&gt;
+  &lt;div class=&quot;dk-widget__heading&quot;&gt;
+    &lt;h2 class=&quot;dk-widget__title&quot;&gt;Последние события&lt;/h2&gt;
+    &lt;p class=&quot;dk-widget__meta&quot;&gt;Демонстрационные данные · за сутки&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;dk-widget__actions&quot;&gt;&lt;a class=&quot;dk-btn dk-btn--ghost dk-btn--sm&quot; href=&quot;accidents.html&quot;&gt;Все аварии &lt;svg class=&quot;dk-i&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ti-chevron-right&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;/header&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>Слоты</code></td><td>HTML</td><td>Название обязательно; контекст и действия выводятся только при наличии.</td></tr><tr><td><code>Локальные контролы</code></td><td>Поведение</td><td>Триггер → результат в этом виджете → статус результата; ошибки не сбрасывают текущий срез.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>Связанное</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-page-header.html">Хедер страницы</a> — Контекст всего экрана</li><li><a href="component-widget.html">Каркас виджета</a> — Шапка → тело → подвал</li><li><a href="component-button.html">Кнопки</a> — Действия</li></ul>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+
+})();
+</script>
+</body>
+</html>

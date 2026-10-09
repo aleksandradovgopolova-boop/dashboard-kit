@@ -104,14 +104,14 @@
   </aside>
 
   <div class="dk-main">
-    <header class="dk-top">
+    <header class="dk-top dk-head">
       <button class="dk-iconbtn dk-top__burger" data-act="nav" title="Разделы" aria-label="Разделы">
         <svg aria-hidden="true" class="dk-i"><use href="#ti-layout-grid"/></svg>
       </button>
 
-      <div class="dk-top__titles">
-        <div class="dk-top__path">Мониторинг рисков в жилищно-коммунальном хозяйстве</div>
-        <h1 class="dk-top__title">Сводка по стране</h1>
+      <div class="dk-top__titles dk-head__titles">
+        <div class="dk-top__path dk-head__subtitle">Мониторинг рисков в жилищно-коммунальном хозяйстве</div>
+        <h1 class="dk-top__title dk-head__title">Сводка по стране</h1>
       </div>
 
       <!-- Цифра без времени — это цифра неизвестной свежести. Вкладка,
@@ -119,7 +119,7 @@
            уверенностью, что и свежая. Одна отметка на страницу, а не по
            одной на виджет. -->
 
-      <div class="dk-top__tools">
+      <div class="dk-top__tools dk-head__actions">
 <div class="dk-seg" id="d-views" role="tablist" aria-label="Представления сводки"><button type="button" role="tab" id="d-tab-country" aria-controls="d-view-country" aria-selected="true" tabindex="0">Обзор</button><button type="button" role="tab" id="d-tab-work" aria-controls="d-view-work" aria-selected="false" tabindex="-1">Работа</button><button type="button" role="tab" id="d-tab-causes" aria-controls="d-view-causes" aria-selected="false" tabindex="-1">Аналитика</button></div>
         <span class="dk-caption" id="t-period">Демонстрационные данные за 30 дней</span>
         <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
@@ -188,8 +188,8 @@
               </div>
             </div></div>
 <div class="dk-grid dk-grid--overview-panels" id="d-country-charts">
-<section class="dk-widget" id="d-map-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Карта рисков по регионам</h2><div id="d-map-controls" class="dk-widget__actions"></div></div><div class="d-map-body"><div id="d-map" ></div><div class="d-map-summary"><div class="dk-keys" id="d-risk-keys"><span class="dk-key" style="--swatch:var(--risk-area-high)"><i class="dk-key__dot"></i>Высокий <b>18</b></span><span class="dk-key" style="--swatch:var(--risk-area-medium)"><i class="dk-key__dot"></i>Средний <b>20</b></span><span class="dk-key" style="--swatch:var(--risk-area-low)"><i class="dk-key__dot"></i>Низкий <b>51</b></span><span class="dk-key" style="--swatch:var(--nodata)"><i class="dk-key__dot"></i>Нет данных <b>0</b></span></div><p class="dk-caption">Высокий ≥78<br>Средний 60–77<br>Низкий &lt;60 баллов</p><a class="dk-btn dk-btn--sm" href="regions.html">Открыть карту <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a></div></div></section>
-<div class="dk-widget" id="d-trend-widget">
+<section class="dk-widget dk-widget--overview" id="d-map-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Карта рисков по регионам</h2><div id="d-map-controls" class="dk-widget__actions"></div></div><div class="d-map-body dk-widget__body"><div id="d-map" ></div><div class="d-map-summary"><div class="dk-keys" id="d-risk-keys"><span class="dk-key" style="--swatch:var(--risk-area-high)"><i class="dk-key__dot"></i>Высокий <b>18</b></span><span class="dk-key" style="--swatch:var(--risk-area-medium)"><i class="dk-key__dot"></i>Средний <b>20</b></span><span class="dk-key" style="--swatch:var(--risk-area-low)"><i class="dk-key__dot"></i>Низкий <b>51</b></span><span class="dk-key" style="--swatch:var(--nodata)"><i class="dk-key__dot"></i>Нет данных <b>0</b></span></div><p class="dk-caption">Высокий ≥78<br>Средний 60–77<br>Низкий &lt;60 баллов</p><a class="dk-btn dk-btn--sm" href="regions.html">Открыть карту <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a></div></div></section>
+<div class="dk-widget dk-widget--overview" id="d-trend-widget">
               <div class="dk-widget__head">
                 <h2 class="dk-widget__title">Аварии: факт и прогноз</h2>
                 <div class="dk-widget__actions">
@@ -197,19 +197,19 @@
                   <button class="dk-iconbtn dk-iconbtn--sm" id="d-fullscreen" type="button" title="Полный экран или выход" aria-label="Переключить полный экран графика"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-external-link"></use></svg></button>
                 </div>
               </div>
-              <div class="dk-chart" id="d-line"></div>
+              <div class="dk-widget__body"><div class="dk-chart" id="d-line"></div></div>
               <p class="dk-caption" role="status" id="d-export-status"></p>
             </div>
-<div class="dk-widget" id="d-district-widget">
+<div class="dk-widget dk-widget--overview" id="d-district-widget">
               <div class="dk-widget__head">
                 <h2 class="dk-widget__title">Средний риск по округам</h2>
 
               </div>
-              <div class="dk-chart dk-chart--sm" id="d-bars"></div>
+              <div class="dk-widget__body"><div class="dk-chart dk-chart--sm" id="d-bars"></div></div>
             </div>
-<section class="dk-widget" id="d-events-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Последние события</h2><a class="dk-list__more" href="accidents.html">Все аварии <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a></div><div class="dk-tablewrap"><table class="dk-table dk-table--events" id="d-events"><thead><tr><th>Время</th><th>Событие</th><th>Регион</th><th>Статус</th><th class="dk-td-num">Пострадавшие</th></tr></thead><tbody><tr><td>14:20</td><td><span class="dk-td-main"><span class="dk-td-main__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"></use></svg></span>Прорыв теплотрассы</span></td><td>Новосибирская область</td><td><span class="dk-status dk-status--crit"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"></use></svg>в работе</span></td><td class="dk-td-num">1 240 чел.</td></tr><tr><td>12:05</td><td><span class="dk-td-main"><span class="dk-td-main__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"></use></svg></span>Отключение электроснабжения</span></td><td>Ростовская область</td><td><span class="dk-status dk-status--high"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-clock"></use></svg>выехала бригада</span></td><td class="dk-td-num">380 чел.</td></tr><tr><td>09:48</td><td><span class="dk-td-main"><span class="dk-td-main__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-circle-check"></use></svg></span>Подача восстановлена</span></td><td>Крым</td><td><span class="dk-status dk-status--calm"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-circle-check"></use></svg>устранена</span></td><td class="dk-td-num">96 чел.</td></tr><tr><td>08:12</td><td><span class="dk-td-main"><span class="dk-td-main__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"></use></svg></span>Замена задвижки</span></td><td>Забайкальский край</td><td><span class="dk-status dk-status--high"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-clock"></use></svg>выехала бригада</span></td><td class="dk-td-num">210 чел.</td></tr></tbody></table></div></section>
-<section class="dk-widget" id="d-types-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Типы аварий</h2><span class="dk-caption">За сутки</span></div><div class="dk-chart" id="d-types"></div></section>
-<section class="dk-widget" id="d-hours-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Динамика по статусам</h2><span class="dk-caption">30 дней · демо</span></div><div class="dk-chart" id="d-hours"></div></section>
+<section class="dk-widget dk-widget--overview" id="d-events-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Последние события</h2><div class="dk-widget__actions"><a class="dk-list__more" href="accidents.html">Все аварии <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a></div></div><div class="dk-widget__body"><div class="dk-tablewrap"><table class="dk-table dk-table--events" id="d-events"><thead><tr><th>Время</th><th>Событие</th><th>Регион</th><th>Статус</th><th class="dk-td-num">Пострадавшие</th></tr></thead><tbody><tr><td>14:20</td><td><span class="dk-td-main"><span class="dk-td-main__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"></use></svg></span>Прорыв теплотрассы</span></td><td>Новосибирская область</td><td><span class="dk-status dk-status--crit"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"></use></svg>в работе</span></td><td class="dk-td-num">1 240 чел.</td></tr><tr><td>12:05</td><td><span class="dk-td-main"><span class="dk-td-main__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"></use></svg></span>Отключение электроснабжения</span></td><td>Ростовская область</td><td><span class="dk-status dk-status--high"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-clock"></use></svg>выехала бригада</span></td><td class="dk-td-num">380 чел.</td></tr><tr><td>09:48</td><td><span class="dk-td-main"><span class="dk-td-main__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-circle-check"></use></svg></span>Подача восстановлена</span></td><td>Крым</td><td><span class="dk-status dk-status--calm"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-circle-check"></use></svg>устранена</span></td><td class="dk-td-num">96 чел.</td></tr><tr><td>08:12</td><td><span class="dk-td-main"><span class="dk-td-main__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-bolt"></use></svg></span>Замена задвижки</span></td><td>Забайкальский край</td><td><span class="dk-status dk-status--high"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-clock"></use></svg>выехала бригада</span></td><td class="dk-td-num">210 чел.</td></tr></tbody></table></div></div></section>
+<section class="dk-widget dk-widget--overview" id="d-types-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Типы аварий</h2><span class="dk-widget__meta">За сутки</span></div><div class="dk-widget__body"><div class="dk-chart" id="d-types"></div></div></section>
+<section class="dk-widget dk-widget--overview" id="d-hours-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Динамика по статусам</h2><span class="dk-widget__meta">30 дней · демо</span></div><div class="dk-widget__body"><div class="dk-chart" id="d-hours"></div></div></section>
 </div>
 <div class="dk-banner dk-banner--event d-insight"><span class="dk-widget-icon"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></span><div class="dk-banner__text"><div class="dk-banner__title">Ключевой вывод</div><div class="dk-banner__sub" id="d-insight-text">Высокий риск — у 18 из 89 регионов. Наибольший средний балл среди округов — в Уральском: 63.</div></div><button class="dk-btn dk-btn--primary dk-btn--sm" id="d-open-analysis" type="button">Подробнее в аналитике <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button></div>
 </section>

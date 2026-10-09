@@ -1957,11 +1957,15 @@
     "dk-tile__unit",
     "dk-trend",
     "dk-widget",
+    "dk-widget--overview",
     "dk-widget--s",
     "dk-widget__actions",
     "dk-widget__body",
+    "dk-widget__footer",
     "dk-widget__head",
+    "dk-widget__heading",
     "dk-widget__hint",
+    "dk-widget__meta",
     "dk-widget__title"
    ],
    "include": [
@@ -5162,6 +5166,252 @@
    ]
   },
   {
+   "id": "page-header",
+   "title": "Хедер страницы",
+   "kind": "компонент",
+   "group": "Композиция",
+   "status": "стабильный",
+   "purpose": "Собирает название экрана, его контекст и общие действия из типографики, подписей и контролов кита.",
+   "use_when": [
+    "Нужен общий заголовок самостоятельной страницы или встраиваемого дашборда."
+   ],
+   "instead": [
+    {
+     "when": "Заголовок одной карточки — хедер виджета.",
+     "use": null
+    },
+    {
+     "when": "Путь по иерархии — компонент breadcrumbs; не маскировать под него описание экрана.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-head"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-page-header.html"
+   ],
+   "api": [
+    {
+     "name": "dk-head",
+     "type": "HTML/CSS",
+     "what": "Самостоятельный компонент без JS. Для каркаса страницы kit.py head page-header chrome."
+    },
+    {
+     "name": "Атомы",
+     "type": "Состав",
+     "what": "Типографика + подпись + button/period/segment. Поведение контролов задают их API."
+    }
+   ],
+   "example": "<header class=\"dk-head\">\n  <div class=\"dk-head__titles\">\n    <h1 class=\"dk-head__title\">Сводка по стране</h1>\n    <p class=\"dk-head__subtitle\">Мониторинг рисков в ЖКХ</p>\n  </div>\n  <div class=\"dk-head__actions\">\n    <span class=\"dk-caption\">Демонстрационные данные за 30 дней</span>\n    <a class=\"dk-btn dk-btn--sm\" href=\"dashboard.html\">Открыть сводку</a>\n  </div>\n</header>",
+   "rules": [
+    "Название отвечает «что здесь», подпись уточняет контекст.",
+    "Общий период применяется ко всем связанным блокам; ограничение явно подписано."
+   ],
+   "avoid": [
+    "Фиксированная высота и обрезанный заголовок.",
+    "Фиктивная дата обновления или кнопка без результата.",
+    "Повторять один общий фильтр в каждой карточке."
+   ],
+   "a11y": [
+    "Заголовки передают иерархию: один h1 страницы, h2 виджетов; в живых примерах справочника уровень сдвинут на один.",
+    "Название не обрезается многоточием. При увеличении текста хедер растёт, действия переносятся.",
+    "Переход — ссылка, изменение состояния — кнопка с доступным именем; декоративные SVG скрыты от скринридера.",
+    "Цвет не заменяет текст состояния. Клавиатурный фокус остаётся видимым, сенсорная цель не меньше 44 px."
+   ],
+   "related": [
+    "button",
+    "empty",
+    "widget",
+    "widget-header"
+   ],
+   "classes": [
+    "dk-head",
+    "dk-head__actions",
+    "dk-head__subtitle",
+    "dk-head__title",
+    "dk-head__titles"
+   ],
+   "include": []
+  },
+  {
+   "id": "widget-header",
+   "title": "Хедер виджета",
+   "kind": "компонент",
+   "group": "Композиция",
+   "status": "стабильный",
+   "purpose": "Называет вопрос виджета и размещает рядом его локальные действия. Не зависит от типа содержимого.",
+   "use_when": [
+    "Любой содержательный виджет с названием.",
+    "Нужны локальные экспорт, полный экран, переход к деталям или смена представления."
+   ],
+   "instead": [
+    {
+     "when": "Название всего экрана — хедер страницы.",
+     "use": null
+    },
+    {
+     "when": "Число KPI — компонент tile; не собирать KPI из хедера графика.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-widget__head",
+    "dk-widget__heading",
+    "dk-widget__title",
+    "dk-widget__meta",
+    "dk-widget__actions"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-widget-header.html"
+   ],
+   "api": [
+    {
+     "name": "Слоты",
+     "type": "HTML",
+     "what": "Название обязательно; контекст и действия выводятся только при наличии."
+    },
+    {
+     "name": "Локальные контролы",
+     "type": "Поведение",
+     "what": "Триггер → результат в этом виджете → статус результата; ошибки не сбрасывают текущий срез."
+    }
+   ],
+   "example": "<header class=\"dk-widget__head\">\n  <div class=\"dk-widget__heading\">\n    <h2 class=\"dk-widget__title\">Последние события</h2>\n    <p class=\"dk-widget__meta\">Демонстрационные данные · за сутки</p>\n  </div>\n  <div class=\"dk-widget__actions\"><a class=\"dk-btn dk-btn--ghost dk-btn--sm\" href=\"accidents.html\">Все аварии <svg class=\"dk-i\" aria-hidden=\"true\"><use href=\"#ti-chevron-right\"/></svg></a></div>\n</header>",
+   "rules": [
+    "Сначала назвать показатель: «Средний риск по округам».",
+    "Экспорт и полный экран сохраняют порядок в разных виджетах.",
+    "Во время загрузки или ошибки сохранять заголовок и выбранный срез."
+   ],
+   "avoid": [
+    "Кнопки вплотную к длинному заголовку.",
+    "Обязательная иконка перед каждым названием без смысла.",
+    "Скрытый заголовок ради места для действий."
+   ],
+   "a11y": [
+    "Заголовки передают иерархию: один h1 страницы, h2 виджетов; в живых примерах справочника уровень сдвинут на один.",
+    "Название не обрезается многоточием. При увеличении текста хедер растёт, действия переносятся.",
+    "Переход — ссылка, изменение состояния — кнопка с доступным именем; декоративные SVG скрыты от скринридера.",
+    "Цвет не заменяет текст состояния. Клавиатурный фокус остаётся видимым, сенсорная цель не меньше 44 px."
+   ],
+   "related": [
+    "button",
+    "page-header",
+    "widget"
+   ],
+   "classes": [
+    "dk-widget__actions",
+    "dk-widget__head",
+    "dk-widget__heading",
+    "dk-widget__meta",
+    "dk-widget__title"
+   ],
+   "include": []
+  },
+  {
+   "id": "widget",
+   "title": "Каркас виджета",
+   "kind": "компонент",
+   "group": "Композиция",
+   "status": "стабильный",
+   "purpose": "Объединяет хедер, содержимое и необязательный подвал в одну повторяемую структуру с едиными отступами и состояниями.",
+   "use_when": [
+    "Нужно поместить график, карту, таблицу или список в общую поверхность.",
+    "Несколько блоков должны собираться по одинаковым правилам."
+   ],
+   "instead": [
+    {
+     "when": "Для KPI брать tile, для сообщения состояния banner.",
+     "use": null
+    },
+    {
+     "when": "Не оборачивать виджет ещё одним виджетом ради дополнительного фона.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-widget"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-widget.html"
+   ],
+   "api": [
+    {
+     "name": "Сборка",
+     "type": "Порядок",
+     "what": "dk-widget > header.dk-widget__head + div.dk-widget__body + footer.dk-widget__footer (опционально)."
+    },
+    {
+     "name": "Данные",
+     "type": "Ответственность",
+     "what": "Хост передаёт один согласованный срез в компоненты данных. Оболочка не вычисляет показатели."
+    },
+    {
+     "name": "Проверка",
+     "type": "Критерий",
+     "what": "320/390/1536 px, обе темы, длинный заголовок, 200% текст, клавиатура, загрузка/пусто/ошибка без потери контекста."
+    }
+   ],
+   "example": "<section class=\"dk-widget dk-widget--overview\">\n<header class=\"dk-widget__head\">\n  <div class=\"dk-widget__heading\">\n    <h2 class=\"dk-widget__title\">Последние события</h2>\n    <p class=\"dk-widget__meta\">Демонстрационные данные · за сутки</p>\n  </div>\n  <div class=\"dk-widget__actions\"><a class=\"dk-btn dk-btn--ghost dk-btn--sm\" href=\"accidents.html\">Все аварии <svg class=\"dk-i\" aria-hidden=\"true\"><use href=\"#ti-chevron-right\"/></svg></a></div>\n</header>\n  <div class=\"dk-widget__body\">\n    <div class=\"dk-row\"><span class=\"dk-row__label\">Прорыв теплотрассы</span><span class=\"dk-status dk-status--crit\">В работе</span></div>\n    <div class=\"dk-row\"><span class=\"dk-row__label\">Подача восстановлена</span><span class=\"dk-status dk-status--calm\">Устранена</span></div>\n  </div>\n  <footer class=\"dk-widget__footer\"><span>Два демонстрационных события</span><a class=\"dk-btn dk-btn--ghost dk-btn--sm\" href=\"component-table.html\">Табличный вариант</a></footer>\n</section>",
+   "rules": [
+    "Во всех состояниях сохранять название и контекст; тело заменяется загрузкой, пустым состоянием или ошибкой.",
+    "Ноль отображать как значение. Нет данных — отдельное состояние.",
+    "У таблицы прокручивается dk-tablewrap; вся страница не расширяется.",
+    "Легенда принадлежит графику и остаётся с ним при экспорте или полном экране."
+   ],
+   "avoid": [
+    "График без названия, единиц и периода.",
+    "Фиксированная высота, которая режет данные или длинный текст.",
+    "Декоративные обводки и тени.",
+    "Добавлять скролл внутри каждого виджета по умолчанию."
+   ],
+   "a11y": [
+    "Заголовки передают иерархию: один h1 страницы, h2 виджетов; в живых примерах справочника уровень сдвинут на один.",
+    "Название не обрезается многоточием. При увеличении текста хедер растёт, действия переносятся.",
+    "Переход — ссылка, изменение состояния — кнопка с доступным именем; декоративные SVG скрыты от скринридера.",
+    "Цвет не заменяет текст состояния. Клавиатурный фокус остаётся видимым, сенсорная цель не меньше 44 px.",
+    "Для именованной секции свяжите section и заголовок через уникальные aria-labelledby/id. Повторные экземпляры не разделяют id.",
+    "Статус обновления — role=status; ошибка объявляется в месте действия. Не переводить фокус при фоновом обновлении."
+   ],
+   "related": [
+    "empty",
+    "page-header",
+    "widget-header"
+   ],
+   "classes": [
+    "dk-widget",
+    "dk-widget--overview",
+    "dk-widget--s",
+    "dk-widget__actions",
+    "dk-widget__body",
+    "dk-widget__footer",
+    "dk-widget__head",
+    "dk-widget__heading",
+    "dk-widget__hint",
+    "dk-widget__meta",
+    "dk-widget__title"
+   ],
+   "include": []
+  },
+  {
    "id": "base",
    "title": "Основа страницы",
    "kind": "основа",
@@ -5270,7 +5520,10 @@
     "README.md#Правила раскладки дашборда",
     "README.md#Сетка и устройства",
     "README.md#Размер виджета",
-    "README.md#Раскладка дашборда на телефоне"
+    "README.md#Раскладка дашборда на телефоне",
+    "component-page-header.html",
+    "component-widget-header.html",
+    "component-widget.html"
    ],
    "rules": [
     "Равная высота соседних карточек — dk-grid--equal; ряд по самому высокому содержимому, без внутренней прокрутки.",
@@ -5304,6 +5557,10 @@
     "dk-grid--overview-panels",
     "dk-grid--stretch",
     "dk-head",
+    "dk-head__actions",
+    "dk-head__subtitle",
+    "dk-head__title",
+    "dk-head__titles",
     "dk-layout",
     "dk-layout--wide-side",
     "dk-panel",
@@ -5315,11 +5572,15 @@
     "dk-stack",
     "dk-well",
     "dk-widget",
+    "dk-widget--overview",
     "dk-widget--s",
     "dk-widget__actions",
     "dk-widget__body",
+    "dk-widget__footer",
     "dk-widget__head",
+    "dk-widget__heading",
     "dk-widget__hint",
+    "dk-widget__meta",
     "dk-widget__title",
     "dk-wrap",
     "dk-wrap--monitor"
@@ -5780,8 +6041,8 @@
  },
  "hooks": {},
  "counts": {
-  "parts": 60,
-  "classes": 467,
+  "parts": 63,
+  "classes": 475,
   "functions": 45,
   "chart_types": 12
  }

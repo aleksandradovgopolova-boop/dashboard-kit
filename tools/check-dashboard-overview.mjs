@@ -69,6 +69,7 @@ try {
     assert(result.visibleTitles.join('|')==='Карта рисков по регионам|Аварии: факт и прогноз|Средний риск по округам|Последние события|Типы аварий|Динамика по статусам', `${theme}: main country answer cannot be hidden in tabs`);
     assert(result.charts.length===6 && result.charts.every((chart,i)=>Math.abs(chart.top-result.charts[i<3?0:3].top)<1&&Math.abs(chart.height-result.charts[i<3?0:3].height)<1) && result.charts[3].top>=result.charts[0].bottom, `${theme}: six panels in two rows with equal neighboring heights`);
     assert(result.padding.every(pad=>parseFloat(pad)>=20), `${theme}: spacious desktop padding`);
+    assert(await evaluate(`[...document.querySelectorAll('#d-country-charts > .dk-widget')].every(el=>el.classList.contains('dk-widget--overview')&&el.querySelector(':scope > .dk-widget__head')&&el.querySelector(':scope > .dk-widget__body'))`), `${theme}: every overview panel uses the shared header and body contract`);
     assert(await evaluate(`(()=>{
       const option=id=>echarts.getInstanceByDom(document.getElementById(id)).getOption();
       const sum=values=>values.reduce((n,v)=>n+(typeof v==='object'?v.value:v),0);

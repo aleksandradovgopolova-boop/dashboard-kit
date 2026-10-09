@@ -17,7 +17,7 @@ def main():
     for file in sorted((ROOT / 'js').glob('*.js')):
         run([node, '--check', str(file)])
     run(['python3', 'tools/check.py'], timeout=600)
-    for name in ['select', 'chips', 'meaning', 'advanced', 'runtime', 'filter-context', 'dashboard-overview', 'sdk-snippets']:
+    for name in ['select', 'chips', 'meaning', 'advanced', 'runtime', 'filter-context', 'dashboard-overview', 'composition', 'sdk-snippets']:
         run([node, f'tools/check-{name}.mjs'])
     from tempfile import gettempdir
     evidence = Path(os.environ.get('DK_EVIDENCE_DIR', str(Path(gettempdir()) / 'dashboard-kit-evidence')))

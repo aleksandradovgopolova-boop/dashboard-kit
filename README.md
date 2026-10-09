@@ -2678,3 +2678,12 @@ null. Подпись «Прогноз» выводится обычным тек
 `dk-tile--compact`; подробнее — в каталоге компонентов. Сайдбар сохраняет
 свою прежнюю палитру через `--nav-*`. Изменения цвета проверяются
 `python3 tools/check.py`, тема графиков собирается `python3 tools/build-chart-theme.py`.
+
+
+## Хедеры и сборка виджета
+
+Атомы → хедер → тело данных → виджет → сетка → экран.
+Живые спецификации: [хедер страницы](component-page-header.html),
+[хедер виджета](component-widget-header.html), [каркас виджета](component-widget.html).
+Перед сборкой: `python3 tools/kit.py show page-header widget-header widget`.
+Правила для ИИ: [композиция](skill/dashboard-build/references/composition.md).

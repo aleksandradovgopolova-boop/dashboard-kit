@@ -17,8 +17,7 @@
 #d-dashboard .d-country-status strong { font: var(--type-h3); }
 #d-dashboard #d-country-charts { margin-top: var(--grid-gap); }
 #d-dashboard #d-country-charts > .dk-widget { min-width: 0; }
-#d-dashboard #d-country-charts .dk-widget__head { flex-wrap: nowrap; align-items: center; min-height: var(--control-sm); }
-#d-dashboard #d-country-charts .dk-widget__title { font: var(--type-h3); }
+#d-dashboard #d-country-charts .dk-widget__head { align-items: center; min-height: var(--control-sm); }
 #d-dashboard #d-country-charts .dk-widget__actions .dk-iconbtn { background: transparent; color: var(--ink-2); }
 #d-dashboard #d-country-charts .dk-chart { height: 200px; min-height: 200px; }
 #d-dashboard #d-country-charts .dk-caption { margin: 0; }
@@ -102,7 +101,6 @@
 #d-dashboard #d-kpis > .dk-tile { min-height: 142px; }
 #d-dashboard #d-kpis .dk-tile__head { min-height: 2lh; }
 #d-dashboard #d-country-charts .dk-widget__title { font-weight: var(--weight-ui); }
-#d-dashboard #d-country-charts .dk-widget { gap: var(--space-5); }
 #d-dashboard #d-map .dk-map__canvas { height: 180px; }
 #d-dashboard #d-risk-keys { gap: var(--space-5); }
 #d-dashboard #d-risk-keys .dk-key { grid-template-columns: auto minmax(0, 1fr) auto; }
@@ -126,11 +124,9 @@
 #d-dashboard .dk-top__title { font: var(--type-overview-title); }
 #d-dashboard .dk-top__path { font: var(--type-body); }
 #d-dashboard #d-kpis .dk-tile__label { font: var(--type-body); }
-#d-dashboard #d-country-charts .dk-widget__title { font: var(--type-panel-title); }
 #d-dashboard #d-alert > .dk-btn { min-height: 44px; padding-inline: var(--space-6); }
 @media (max-width: 1199px) {
   #d-dashboard #d-kpis .dk-tile__label { font: var(--type-caption); }
-  #d-dashboard #d-country-charts .dk-widget__title { font: var(--type-h3); }
 }
 @media (max-width: 767px) {
   #d-dashboard .dk-top__title { font: var(--type-h2); }

@@ -103,7 +103,7 @@ PARTS = [
                  "dk-panel", "dk-well", "dk-widget", "dk-scroll"],
         "css": ["css/components.css"], "scripts": [], "js": [],
         "docs": ["README.md#Правила раскладки дашборда", "README.md#Сетка и устройства",
-                 "README.md#Размер виджета", "README.md#Раскладка дашборда на телефоне"],
+                 "README.md#Размер виджета", "README.md#Раскладка дашборда на телефоне", "component-page-header.html", "component-widget-header.html", "component-widget.html"],
         "rules": [
             "Равная высота соседних карточек — dk-grid--equal; ряд по самому высокому содержимому, без внутренней прокрутки.",
                   "Ширина — долей (--quarter, --third, --half, --two-thirds, --full), а не числом колонок.",
