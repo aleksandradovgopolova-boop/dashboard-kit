@@ -52,7 +52,7 @@
 
 /* Референс 09.10: иерархия текущего обзора, без изменения навигации.
    Поверхность только внутри main: токены и внешний вид сайдбара сохранены. */
-#d-dashboard .dk-main, #d-dashboard .dk-top { background: color-mix(in srgb, var(--surface) 45%, var(--bg)); }
+#d-dashboard .dk-main, #d-dashboard .dk-top { background: var(--bg); }
 #d-dashboard .dk-banner--priority .dk-banner__title { display: flex; align-items: center; gap: var(--gap-inline); }
 #d-dashboard #d-risk-summary .dk-hero__label { font: var(--type-caption); }
 #d-dashboard #d-country-charts .dk-widget__actions .dk-iconbtn { background: transparent; color: var(--ink-2); }

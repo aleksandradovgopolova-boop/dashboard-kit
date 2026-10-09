@@ -1346,7 +1346,7 @@
 }
 
 /* Главная карточка отличается иерархией числа. Нейтральная поверхность,
-   тонкая граница и отсутствие декоративной тени — решение 30.09.2026. */
+   без декоративных рамок и теней — уточнение 09.10.2026. */
 .dk-hero {
   display: flex;
   flex-direction: column;
@@ -1355,7 +1355,7 @@
   border-radius: var(--radius-xl);
   background: var(--surface);
   box-shadow: none;
-  border: var(--hairline) solid var(--rule);
+  border: 0;
   color: var(--ink);
   min-width: 0;
 }
@@ -1901,7 +1901,7 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
   flex-direction: column;
   gap: var(--gap-section);          /* шапка → тело */
   background: var(--surface);
-  border: var(--hairline) solid var(--rule);
+  border: 0;
   border-radius: var(--radius-xl);
   box-shadow: none;   /* см. --lift-* в примитивах */
   padding: var(--pad-widget);

@@ -61,6 +61,8 @@ try {
     assert(await evaluate(`document.querySelectorAll('#d-risk-summary .dk-split__seg').length===4 && getComputedStyle(document.querySelector('#d-risk-summary .dk-split__seg:last-child')).display==='none' && echarts.getInstanceByDom(document.getElementById('d-bars')).getOption().yAxis[0].data.length===8`), `${theme}: zero share invisible and all eight districts represented`);
     assert(result.riskReady && result.riskHigh==='18', `${theme}: shared region counts must load without invented deltas`);
     assert(result.hiddenWork && result.hiddenCauses && result.canvas>0, `${theme}: hidden details and visible chart`);
+    assert(await evaluate(`[...document.querySelectorAll('#d-view-country .dk-widget, #d-risk-summary')].every(el=>{const s=getComputedStyle(el);return ['Top','Right','Bottom','Left'].every(side=>parseFloat(s['border'+side+'Width'])===0)&&s.boxShadow==='none'})`), `${theme}: cards separate through surfaces without decorative borders or shadows`);
+
     assert(await evaluate(`(()=>{
       const banner=document.querySelector('.dk-banner'), number=banner.querySelector('.dk-banner__number');
       const canvas=document.createElement('canvas'), ctx=canvas.getContext('2d');
@@ -116,6 +118,7 @@ try {
       await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});
       await evaluate(`new Promise(resolve=>setTimeout(resolve,300))`);
       assert(await evaluate(`document.documentElement.scrollWidth<=${width} && [...document.querySelectorAll('#d-views button')].every(el=>el.getBoundingClientRect().height>=44)`), `${theme}/${width}: mobile reflow and usable tab targets`);
+      assert(await evaluate(`getComputedStyle(document.querySelector('.dk-tabbar')).borderTopWidth==='0px'`), `${theme}/${width}: mobile navigation has no decorative frame`);
       assert(await evaluate(`(()=>{
         const cards=[...document.querySelectorAll('#d-view-country .dk-tile')].map(el=>el.getBoundingClientRect());
         return cards.length===4 && Math.abs(cards[0].top-cards[1].top)<1 && Math.abs(cards[2].top-cards[3].top)<1 &&

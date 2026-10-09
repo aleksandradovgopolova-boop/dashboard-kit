@@ -269,35 +269,35 @@
   },
   "light": {
     "color": [
-      "#1263CA",
+      "#2569EF",
       "#C42D78",
       "#DD6B20",
       "#099AA4",
-      "#9C4EF6",
+      "#6038A0",
       "#39A169"
     ],
     "backgroundColor": "transparent",
     "textStyle": {
       "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
       "fontSize": 12,
-      "color": "#52606D"
+      "color": "#425B88"
     },
     "title": {
       "textStyle": {
-        "color": "#2D3748",
+        "color": "#10204D",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 16,
         "fontWeight": 600
       },
       "subtextStyle": {
-        "color": "#616E7C",
+        "color": "#52658A",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
     },
     "legend": {
       "textStyle": {
-        "color": "#52606D",
+        "color": "#425B88",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
@@ -307,23 +307,23 @@
       "itemGap": 16
     },
     "tooltip": {
-      "backgroundColor": "#FBFBFB",
+      "backgroundColor": "#FFFFFF",
       "borderWidth": 0,
       "padding": [
         10,
         14
       ],
       "textStyle": {
-        "color": "#2D3748",
+        "color": "#10204D",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 14
       },
       "axisPointer": {
         "lineStyle": {
-          "color": "rgba(45,55,72,0.2)"
+          "color": "rgba(16,32,77,0.2)"
         },
         "crossStyle": {
-          "color": "rgba(45,55,72,0.2)"
+          "color": "rgba(16,32,77,0.2)"
         }
       }
     },
@@ -338,14 +338,14 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(45,55,72,0.2)"
+          "color": "rgba(16,32,77,0.2)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#52606D",
+        "color": "#425B88",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
@@ -360,21 +360,21 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(45,55,72,0.2)"
+          "color": "rgba(16,32,77,0.2)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#52606D",
+        "color": "#425B88",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "splitLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(45,55,72,0.08)",
+          "color": "rgba(16,32,77,0.08)",
           "width": 1,
           "opacity": 0.55
         }
@@ -387,21 +387,21 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(45,55,72,0.2)"
+          "color": "rgba(16,32,77,0.2)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#52606D",
+        "color": "#425B88",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "splitLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(45,55,72,0.08)",
+          "color": "rgba(16,32,77,0.08)",
           "width": 1,
           "opacity": 0.55
         }
@@ -414,21 +414,21 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(45,55,72,0.2)"
+          "color": "rgba(16,32,77,0.2)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#52606D",
+        "color": "#425B88",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "splitLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(45,55,72,0.08)",
+          "color": "rgba(16,32,77,0.08)",
           "width": 1,
           "opacity": 0.55
         }
@@ -454,36 +454,36 @@
     },
     "pie": {
       "itemStyle": {
-        "borderColor": "#FBFBFB",
+        "borderColor": "#FFFFFF",
         "borderWidth": 2
       },
       "label": {
-        "color": "#52606D",
+        "color": "#425B88",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "labelLine": {
         "lineStyle": {
-          "color": "rgba(45,55,72,0.2)"
+          "color": "rgba(16,32,77,0.2)"
         }
       }
     },
     "radar": {
       "axisLine": {
         "lineStyle": {
-          "color": "rgba(45,55,72,0.08)"
+          "color": "rgba(16,32,77,0.08)"
         }
       },
       "splitLine": {
         "lineStyle": {
-          "color": "rgba(45,55,72,0.08)"
+          "color": "rgba(16,32,77,0.08)"
         }
       },
       "splitArea": {
         "show": false
       },
       "axisName": {
-        "color": "#616E7C",
+        "color": "#52658A",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
@@ -497,21 +497,21 @@
         "opacity": 0.35
       },
       "label": {
-        "color": "#52606D",
+        "color": "#425B88",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
     },
     "visualMap": {
       "textStyle": {
-        "color": "#616E7C",
+        "color": "#52658A",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
     },
     "dataZoom": {
       "textStyle": {
-        "color": "#616E7C",
+        "color": "#52658A",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
