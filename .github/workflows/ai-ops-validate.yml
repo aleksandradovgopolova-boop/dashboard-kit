@@ -112,7 +112,7 @@ jobs:
       # артефактом прогона, чтобы его можно было сравнить с прошлым и обсудить на PR.
       - name: Сохранить governance-отчёт (артефакт прогона, история PR)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ai-ops-governance-report
           path: .ai/generated/governance-report.json

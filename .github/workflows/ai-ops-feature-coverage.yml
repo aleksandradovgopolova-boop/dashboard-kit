@@ -102,7 +102,7 @@ jobs:
               --seed
       - name: Сохранить предложенный baseline для принятия через PR
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: feature-coverage-baseline-${{ github.run_id }}
           path: .ai/feature-coverage-baseline.yaml
