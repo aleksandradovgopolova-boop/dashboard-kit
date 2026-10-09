@@ -4884,3 +4884,30 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 }
 
 .dk-tile__spark > .dk-chart--spark { width: 100%; height: 100%; }
+
+/* Компактная лента событий: пять колонок и семантические подложки без обводок. */
+.dk-table--events { --table-min: 520px; table-layout: fixed; font: var(--type-table-compact); }
+.dk-table--events th { font: inherit; text-transform: none; letter-spacing: normal; padding: var(--space-4); }
+.dk-table--events td { padding: var(--space-4); overflow-wrap: normal; }
+.dk-table--events th:nth-child(1) { width: 9%; }
+.dk-table--events th:nth-child(2) { width: 31%; }
+.dk-table--events th:nth-child(3) { width: 23%; }
+.dk-table--events th:nth-child(4) { width: 20%; }
+.dk-table--events th:nth-child(5) { width: 17%; }
+.dk-table--events .dk-td-main { gap: var(--space-3); }
+.dk-table--events .dk-td-main__icon { width: 26px; height: 26px; border-radius: var(--radius-sm); }
+.dk-table--events tbody tr { --accent: var(--ink-2); }
+.dk-table--events tr:has(.dk-status--crit) { --accent: var(--crit-ink); }
+.dk-table--events tr:has(.dk-status--high) { --accent: var(--high-ink); }
+.dk-table--events tr:has(.dk-status--calm) { --accent: var(--calm-ink); }
+.dk-table--events .dk-status { font: inherit; color: var(--accent, var(--ink)); background: color-mix(in srgb, var(--accent, var(--ink)) 9%, var(--surface)); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); }
+.dk-table--events .dk-status .dk-i { display: none; }
+.dk-table--events td.dk-td-num { color: var(--accent, var(--ink)); white-space: nowrap; }
+.dk-table--events td:first-child, .dk-table--events td:nth-child(3) { color: var(--ink-2); }
+
+@media (min-width: 768px) { .dk-table--events { --table-min: 0; } }
+
+/* Единый крупный значок внутри виджетов: контур на мягком круге. */
+.dk-widget-icon { --icon-tone: var(--link); display: inline-flex; align-items: center; justify-content: center; width: var(--control-lg); height: var(--control-lg); flex: none; border-radius: var(--radius-full); color: var(--icon-tone); background: color-mix(in srgb, var(--icon-tone) 9%, var(--surface)); }
+.dk-widget-icon--crit { --icon-tone: var(--crit-ink); }
+.dk-widget-icon .dk-i { width: var(--space-8); height: var(--space-8); color: inherit; }

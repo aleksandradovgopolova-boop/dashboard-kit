@@ -126,7 +126,8 @@
   }
 
   function paint(spec, i) {
-    return spec.palette === 'status' ? statusColor(i) : null;
+    if (spec.palette === 'status-area' && i < 3) return inkColor('--risk-area-' + ['high', 'medium', 'low'][i]);
+    return spec.palette === 'status' || spec.palette === 'status-area' ? statusColor(i) : null;
   }
 
   /* --- заливка под линией --------------------------------------------------
@@ -374,7 +375,8 @@
             // Зазор цветом поверхности: сегменты не сливаются в одну полосу.
             // borderRadius здесь же, одним объектом: двумя присваиваниями
             // подряд второе затирало первое — и скругление не снималось.
-            base.itemStyle = { borderRadius: 0, borderColor: surfaceColor(), borderWidth: 2 };
+            base.itemStyle = { borderRadius: 0, borderColor: surfaceColor(), borderWidth: spec.palette === 'status-area' ? 0 : 2 };
+            if (spec.palette === 'status-area') { base.barWidth = '66%'; base.barMinWidth = 1; base.barMaxWidth = 20; }
           }
         }
         var tone = paint(spec, i);
@@ -393,11 +395,11 @@
           if (!s.forecast) return;
           var parts = splitForecast(s.data || [], s.forecast);
           option.series[i].data = parts.head;
-          if (spec.forecastStyle === 'dashed') { option.series[i].symbolSize = 5; option.series[i].lineStyle = {width:2}; }
+          if (spec.forecastStyle === 'dashed') { option.series[i].symbol = 'circle'; option.series[i].symbolSize = 6; option.series[i].lineStyle = {width:2}; }
           tails.push({
             name: s.name, type: 'line', data: parts.tail,
             smooth: false, showSymbol: true, symbol: spec.forecastStyle === 'dashed' ? 'emptyCircle' : 'emptyDiamond', symbolSize: spec.forecastStyle === 'dashed' ? 5 : 7,
-            endLabel: { show: true, formatter: 'Прогноз', color: window.dkMeaning.color('nodata', 'text', cur), textBorderWidth: 0, textShadowBlur: 0 },
+            endLabel: { show: spec.forecastStyle !== 'dashed', formatter: 'Прогноз', color: window.dkMeaning.color('nodata', 'text', cur), textBorderWidth: 0, textShadowBlur: 0 },
             step: type === 'step' ? 'end' : false,
             lineStyle: { type: spec.forecastStyle === 'dashed' ? 'dashed' : 'solid', width: spec.forecastStyle === 'dashed' ? 2 : 1, color: seriesColor(i) },
             itemStyle: { color: seriesColor(i) },
@@ -407,6 +409,19 @@
         });
         if (tails.length) {
           option.grid.right = 76; // место для полной подписи «Прогноз»
+          if (spec.forecastStyle === 'dashed') {
+            option.grid.right = 12;
+            option.grid.top = 40;
+            var boundary = (series[0].data || []).length - series[0].forecast - 1;
+            var tail = tails[0];
+            tail.markArea = { silent: true, itemStyle: { color: seriesColor(0), opacity: 0.045 }, label: { show: true, position: 'insideBottom', color: inkColor('--ink-2'), fontSize: 11, distance: 12 }, data: [[{ name: 'Прогноз', xAxis: (spec.categories || [])[boundary] }, { xAxis: (spec.categories || []).slice(-1)[0] }]] };
+            tail.markLine = { silent: true, symbol: 'none', label: { show: false }, lineStyle: { color: seriesColor(0), opacity: 0.35, type: 'dashed', width: 1 }, data: [{ xAxis: (spec.categories || [])[boundary] }] };
+            if (!multi) {
+              option.series[0].name = 'Факт';
+              tail.name = 'Прогноз';
+              option.legend = { show: true, right: 0, top: 0, itemWidth: 28, itemHeight: 8, itemGap: 16, selectedMode: false, data: [{name:'Факт', icon:'path://M0,0 L28,0 L28,2 L0,2 Z'}, {name:'Прогноз', icon:'path://M0,0 L6,0 L6,2 L0,2 Z M11,0 L17,0 L17,2 L11,2 Z M22,0 L28,0 L28,2 L22,2 Z'}] };
+            }
+          }
           option.series = option.series.concat(tails);
           // В легенде хвост отдельной строкой не стоит: это та же величина,
           // просто ещё не закрытая.
@@ -417,9 +432,10 @@
 
     else if (type === 'bar-h') {
       option.tooltip = { trigger: 'axis' };
-      option.yAxis = { type: 'category', data: spec.categories || [], inverse: true };
+      option.grid.top = 8; option.grid.bottom = 4;
+      option.yAxis = { type: 'category', data: spec.categories || [], inverse: true, axisTick: { show: false }, axisLine: { show: false } };
       // Exact end labels carry the values; grid lines add redundant visual noise.
-      option.xAxis = { type: 'value', name: spec.unit || '', splitLine: { show: false }, axisLabel: { show: false }, axisTick: { show: false } };
+      option.xAxis = { type: 'value', name: spec.unit || '', splitLine: { show: false }, axisLabel: { show: false }, axisTick: { show: false }, axisLine: { show: false } };
 
       /* ЗНАЧЕНИЕ ПОДПИСАНО У КОНЦА ПОЛОСЫ, И ГЛАВНОЕ — У НУЛЕВОЙ ТОЖЕ.
 
@@ -438,6 +454,7 @@
           // Растущий конец полосы тоже прямой — по той же причине, что и верх
           // столбца: длина полосы и есть значение, а скругление съедает её
           // как раз там, где значение кончается. См. тему графиков.
+          barWidth: '66%', barMaxWidth: 20,
           itemStyle: { borderRadius: 0 },
           label: {
             show: true, position: 'right',

@@ -66,7 +66,7 @@ try {
     assert(result.width <= 1536, `${theme}: no horizontal page overflow`);
     assert(result.tileCount === 5 && result.tiles.every(tile=>Math.abs(tile.top-result.tiles[0].top)<1), `${theme}: five KPI in one row`);
     assert(result.charts.every(chart=>chart.top>=result.tiles[0].bottom), `${theme}: KPI before detailed charts`);
-    assert(result.visibleTitles.join('|')==='Карта рисков по регионам|Аварии: факт и прогноз|Средний риск по округам|Последние события|Типы аварий|Аварии по часам', `${theme}: main country answer cannot be hidden in tabs`);
+    assert(result.visibleTitles.join('|')==='Карта рисков по регионам|Аварии: факт и прогноз|Средний риск по округам|Последние события|Типы аварий|Динамика по статусам', `${theme}: main country answer cannot be hidden in tabs`);
     assert(result.charts.length===6 && result.charts.every((chart,i)=>Math.abs(chart.top-result.charts[i<3?0:3].top)<1&&Math.abs(chart.height-result.charts[i<3?0:3].height)<1) && result.charts[3].top>=result.charts[0].bottom, `${theme}: six panels in two rows with equal neighboring heights`);
     assert(result.padding.every(pad=>parseFloat(pad)>=20), `${theme}: spacious desktop padding`);
     assert(await evaluate(`(()=>{
@@ -74,9 +74,9 @@ try {
       const sum=values=>values.reduce((n,v)=>n+(typeof v==='object'?v.value:v),0);
       return [...document.querySelectorAll('#d-risk-keys b')].map(el=>el.textContent).join('|')==='18|20|51|0' &&
         option('d-bars').yAxis[0].data.length===8 && sum(option('d-types').series[0].data)===23 &&
-        option('d-hours').series[0].data.length===24 && sum(option('d-hours').series[0].data)===23 &&
+        option('d-hours').series.length===3 && option('d-hours').series.every(s=>s.data.length===30&&s.stack==='total') && document.getElementById('d-hours-widget').textContent.includes('демо') &&
         document.querySelectorAll('#d-events tbody tr').length===4 && document.querySelector('#d-map canvas')?.width>0;
-    })()`), `${theme}: shared map counts, eight districts, 23 accidents by type/hour and four event rows`);
+    })()`), `${theme}: shared map counts, eight districts, 23 accidents by type and explicit status demo and four event rows`);
     assert(await evaluate(`(()=>{
       const panel=document.getElementById('d-view-country').getBoundingClientRect(),insight=document.querySelector('.d-insight').getBoundingClientRect();
       return insight.bottom<=panel.bottom+1&&insight.top>=document.getElementById('d-country-charts').getBoundingClientRect().bottom;
@@ -119,18 +119,18 @@ try {
     })()`), `${theme}: district bars retain all averages and apply three amber/five green risk fills`);
     assert(await evaluate(`(()=>{
       const rows=[...document.querySelectorAll('#d-events tbody tr')].map(row=>[...row.cells].map(cell=>cell.textContent.trim()));
-      return [...document.querySelectorAll('#d-events th')].map(el=>el.textContent).join('|')==='Время|Событие|Регион|Статус|Людей'&&
+      return [...document.querySelectorAll('#d-events th')].map(el=>el.textContent).join('|')==='Время|Событие|Регион|Статус|Пострадавшие'&&
         JSON.stringify(rows)===JSON.stringify([
-          ['14:20','Прорыв теплотрассы','Новосибирская область','в работе','1 240'],
-          ['12:05','Отключение электроснабжения','Ростовская область','выехала бригада','380'],
-          ['09:48','Подача восстановлена','Крым','устранена','96'],
-          ['08:12','Замена задвижки','Забайкальский край','выехала бригада','210']
+          ['14:20','Прорыв теплотрассы','Новосибирская область','в работе','1 240 чел.'],
+          ['12:05','Отключение электроснабжения','Ростовская область','выехала бригада','380 чел.'],
+          ['09:48','Подача восстановлена','Крым','устранена','96 чел.'],
+          ['08:12','Замена задвижки','Забайкальский край','выехала бригада','210 чел.']
         ]);
     })()`), `${theme}: five event columns preserve all four original rows without invented status history`);
     assert(await evaluate(`(()=>{
       const series=echarts.getInstanceByDom(document.getElementById('d-line')).getOption().series;
       const predicted=series.filter(s=>s.lineStyle?.type==='dashed');
-      return predicted.length===1&&predicted[0].symbol==='emptyCircle'&&series.some(s=>s!==predicted[0]&&s.lineStyle?.type!=='dashed')&&
+      return predicted.length===1&&predicted[0].markArea.data.length===1&&predicted[0].markLine.data.length===1&&predicted[0].symbol==='emptyCircle'&&series.some(s=>s!==predicted[0]&&s.lineStyle?.type!=='dashed')&&
         JSON.stringify(predicted[0].data.filter(v=>v!==null).slice(-3))===JSON.stringify([25,27,24]);
     })()`), `${theme}: forecast is dashed with hollow markers and retains its three demo values`);
 
@@ -292,7 +292,7 @@ try {
         return Math.abs(first.getBoundingClientRect().top-last.getBoundingClientRect().top)<1&&itemBox.height>=44;
       });})()`), `320/${enlarged?'large':'normal'} text: complete bottom navigation names, touch targets, internal overflow`);
   }
-  console.log('PASS: reference overview at 1536px, five KPI, six panels, shared map counts, hourly/type totals, keyboard views, genuine work rows, both themes, mobile reflow and enlarged analytics');
+  console.log('PASS: reference overview at 1536px, five KPI, six panels, shared map counts, status demo/type totals, keyboard views, genuine work rows, both themes, mobile reflow and enlarged analytics');
 } catch (error) {
   console.error(error.message);
   process.exitCode = 1;
