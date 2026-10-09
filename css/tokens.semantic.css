@@ -718,3 +718,12 @@
 
 .dk-root[data-accent="violet"] { --nav-brand: var(--c-accent-violet); }
 .dk-root[data-accent="indigo"] { --nav-brand: var(--c-accent-indigo); }
+
+:root, .dk-root { --type-table-compact: var(--weight-regular) var(--size-10)/var(--lh-16) var(--font-sans); }
+
+:root, .dk-root { --type-overview-title: var(--weight-semibold) var(--size-32)/var(--lh-36) var(--font-sans); --type-panel-title: var(--weight-semibold) var(--size-18)/var(--lh-24) var(--font-sans); }
+
+/* Крупные области риска с подписанными значениями. Малые смысловые значки
+   сохраняют контрастные --crit/--high/--calm; текст всегда использует *-ink. */
+:root, .dk-root { --risk-area-high: var(--crit); --risk-area-medium: var(--high); --risk-area-low: var(--calm); }
+:root[data-theme="light"], .dk-root[data-theme="light"] { --risk-area-high: var(--c-risk-area-high); --risk-area-medium: var(--c-risk-area-medium); --risk-area-low: var(--c-risk-area-low); }

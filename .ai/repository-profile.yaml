@@ -22,6 +22,7 @@ stacks:
   - .ai/project/uiux-policy.json
   - tools/check-mobile.mjs
   - tools/test.py
+  - tools/preview.py
   - tools/check-advanced.mjs
   - tools/check-runtime.mjs
   - tools/check-filter-context.mjs
@@ -32,6 +33,7 @@ stacks:
 ci:
 - github-actions
 undetermined:
+- Локальный предпросмотр — python3 tools/preview.py --port 8771; стандартная библиотека Python, Cache-Control no-store. Не является сборкой продукта.
 - Статический HTML/CSS/JavaScript; сборка и TypeScript неприменимы. Профиль задан
   при интеграции по существующим файлам; автоматический детектор Kit не распознаёт
   этот стек без манифеста. Браузерные проверки требуют Node.js 22+ и Chrome.

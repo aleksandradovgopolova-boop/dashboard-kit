@@ -4850,3 +4850,37 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 @container (min-width: 210px) {
   .dk-root .dk-tile--prominent > .dk-tile__head { min-height: 1lh; flex: 1; }
 }
+
+/* Обзор по референсу: пять равноправных KPI и два ряда деталей.
+   Отдельный вариант сетки, не меняет четырёхкарточные экраны. */
+.dk-grid--five { grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: stretch; }
+.dk-grid--overview-panels { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1.05fr) minmax(0, 1fr); align-items: stretch; }
+.dk-root .dk-tile--overview { padding: var(--pad-widget); gap: var(--gap-group); }
+.dk-root .dk-tile--overview > .dk-tile__head { min-height: 2lh; flex: 1; }
+.dk-root .dk-tile--overview .dk-metric-lg { font: var(--type-metric-xl); }
+.dk-root .dk-tile--overview .dk-hero__of { font: var(--type-body); }
+@media (max-width: 1199px) {
+  .dk-grid--overview-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dk-grid--overview-panels > :first-child { grid-column: 1 / -1; }
+  .dk-root .dk-tile--overview .dk-metric-lg { font: var(--type-metric-lg); }
+}
+@media (max-width: 767px) {
+  .dk-grid--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dk-grid--five > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .dk-grid--overview-panels { grid-template-columns: minmax(0, 1fr); }
+}
+/* Подписи и значения соседей делят строки даже при переносе дельты. */
+.dk-grid--five > .dk-tile--overview { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
+.dk-grid--five > .dk-tile--overview > .dk-tile__row { align-self: start; }
+
+/* Обзорная карточка с компактной историей из того же набора данных. */
+.dk-tile--overview { position: relative; }
+.dk-tile--overview > .dk-tile__spark { position: absolute; right: var(--pad-widget); bottom: var(--pad-widget); width: 52px; height: 38px; }
+.dk-tile--overview:has(> .dk-tile__spark) > .dk-tile__row { padding-right: 56px; }
+@media (max-width: 1199px) {
+  .dk-tile--overview > .dk-tile__spark { position: static; right: auto; bottom: auto; width: 100%; height: 32px; grid-column: 1; }
+  .dk-grid--five > .dk-tile--overview { grid-row: span 3; }
+  .dk-tile--overview:has(> .dk-tile__spark) > .dk-tile__row { padding-right: 0; }
+}
+
+.dk-tile__spark > .dk-chart--spark { width: 100%; height: 100%; }

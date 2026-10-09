@@ -110,7 +110,7 @@
   --c-text-main-dark: #FBFBFB;  /* elements/dark/text/main          */
   --c-text-extra-dark: #A9B2C2; /* elements/text/extra              */
 
-  --c-board-light:    #EAF0FA;  /* референс 09.10; проверяется tools/check.py */
+  --c-board-light:    #EEF2F8;  /* референс 09.10; проверяется tools/check.py */
   --c-widget-1-light: #FFFFFF;  /* референс 09.10; проверяется tools/check.py */
   --c-widget-2-light: #E9F0FC;  /* референс 09.10; проверяется tools/check.py */
   --c-text-main-light: #10204D;  /* референс 09.10; проверяется tools/check.py */
@@ -575,3 +575,9 @@
   --c-navy-600: #425B88;
   --c-navy-500: #52658A;
 }
+
+:root { --size-10: 10px; }
+
+:root { --size-18: 18px; --size-32: 32px; --lh-36: 36px; }
+
+:root { --c-risk-area-high: #EF4D68; --c-risk-area-medium: #F7C34A; --c-risk-area-low: #55BB93; }

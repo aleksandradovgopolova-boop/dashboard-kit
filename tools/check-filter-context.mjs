@@ -179,24 +179,26 @@ try {
   }
   // Shared monitor KPI rule applies across the three related screens.
   for (const page of ['dashboard.html','regions.html','accidents.html']) {
+    const expectedKpis=page==='dashboard.html'?5:4;
     for (const theme of ['dark','light']) {
       for (const width of [320,390,768,1024,1366]) {
         await send('Emulation.setDeviceMetricsOverride',{width,height:768,deviceScaleFactor:1,mobile:width<768});
         await send('Emulation.setTouchEmulationEnabled',{enabled:width<768,maxTouchPoints:5});
         await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/${page}?theme=${theme}`});
         await evaluate(`new Promise((resolve,reject)=>{let tries=0;const timer=setInterval(()=>{
-          if(document.readyState==='complete'&&document.querySelectorAll('.dk-wrap--monitor .dk-tile').length===4){clearInterval(timer);document.fonts.ready.then(()=>setTimeout(resolve,250));}
+          if(document.readyState==='complete'&&document.querySelectorAll('.dk-wrap--monitor .dk-tile').length===${expectedKpis}){clearInterval(timer);document.fonts.ready.then(()=>setTimeout(resolve,250));}
           else if(++tries>100){clearInterval(timer);reject(Error('Monitor KPI page timeout'));}
         },50);})`);
         console.log(await evaluate(`(()=>{
           const assert=(value,message)=>{if(!value)throw Error(message)};
           const cards=[...document.querySelectorAll('.dk-wrap--monitor .dk-tile')];
           const boxes=cards.map(card=>card.getBoundingClientRect());
-          assert(boxes.length===4,'exactly four primary KPI');
+          assert(boxes.length===${expectedKpis},'expected primary KPI count');
           if(innerWidth>=768){
-            assert(boxes.every(box=>Math.abs(box.top-boxes[0].top)<1),'four KPI must share one row outside phone');
+            assert(boxes.every(box=>Math.abs(box.top-boxes[0].top)<1),'all KPI must share one row outside phone');
             for(let i=1;i<boxes.length;i++)assert(boxes[i].left>boxes[i-1].right,'desktop KPI keep separate columns and gutters');
           }else{
+            if(boxes.length===5)assert(boxes[4].top>=boxes[2].bottom&&Math.abs(boxes[4].left-boxes[0].left)<1&&Math.abs(boxes[4].right-boxes[1].right)<1,'fifth KPI spans both phone columns');
             assert(Math.abs(boxes[0].top-boxes[1].top)<1&&Math.abs(boxes[2].top-boxes[3].top)<1&&boxes[2].top>=boxes[0].bottom,'phone KPI must form two rows');
             assert(boxes[1].left>boxes[0].right&&Math.abs(boxes[0].left-boxes[2].left)<1&&Math.abs(boxes[1].left-boxes[3].left)<1,'phone KPI must form two columns, including 320px');
           }
@@ -224,12 +226,20 @@ try {
             assert(valueBox.right<=box.right-parseFloat(style.paddingRight)+1,'metric stays inside card padding');
             assert(card.scrollWidth<=card.clientWidth+1,'KPI content must not overflow horizontally');
             assert(box.left>=-1&&box.right<=innerWidth+1,'KPI stays in viewport');
-            assert(card.classList.contains('dk-tile--compact')&&!card.querySelector('.dk-chart--spark,button'),'selected compact KPI must not add chart or dummy actions');
+            assert(card.classList.contains('dk-tile--compact')&&!card.querySelector('button')&&(${expectedKpis}===5||!card.querySelector('.dk-chart--spark')),'compact KPI has no dummy actions; only the overview permits data-backed sparks');
+            const spark=card.querySelector('.dk-chart--spark');if(spark){
+              const r=spark.getBoundingClientRect();
+              assert(r.left>=box.left+pad-1&&r.right<=box.right-parseFloat(style.paddingRight)+1&&r.bottom<=box.bottom-parseFloat(style.paddingBottom)+1,'${page}/${theme}/${width} '+spark.id+' stays inside card padding '+JSON.stringify({spark:{left:r.left,right:r.right,bottom:r.bottom},card:{left:box.left,right:box.right,bottom:box.bottom},pad,paddingBottom:style.paddingBottom}));
+              for(const content of card.querySelectorAll('.dk-metric-lg,.dk-trend')){
+                const c=content.getBoundingClientRect();
+                assert(r.left>=c.right-1||r.right<=c.left+1||r.top>=c.bottom-1||r.bottom<=c.top+1,'spark does not overlap KPI value or delta');
+              }
+            }
             const icon=card.querySelector('.dk-tile__icon');assert(icon&&getComputedStyle(icon).display!=='none'&&icon.getBoundingClientRect().width===14,'compact KPI has a neutral 14px icon');
             const trend=card.querySelector('.dk-trend');if(trend){const rect=trend.getBoundingClientRect();assert(parseFloat(getComputedStyle(trend).borderRadius)<10,'compact KPI delta is rectangular');assert(rect.left>=box.left+pad-1&&rect.right<=box.right-parseFloat(style.paddingRight)+1,'delta stays inside card padding');assert(rect.left>=valueBox.right-1||rect.top>=valueBox.bottom-1,'inline or wrapped delta must not overlap value');}
           });
           assert(document.documentElement.scrollWidth<=innerWidth+1,'shared monitor must not overflow horizontally');
-          return 'PASS: ${page}/${theme}/${width} four KPI '+(innerWidth>=768?'one row':'2×2')+', full labels and leading values';
+          return 'PASS: ${page}/${theme}/${width} ${expectedKpis} KPI '+(innerWidth>=768?'one row':(${expectedKpis}===5?'two columns + full-width fifth':'2×2'))+', full labels and leading values';
         })()`));
       }
     }
