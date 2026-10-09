@@ -45,5 +45,24 @@ try {
         columns:document.getElementById('r-count-crit').textContent+'|'+document.getElementById('r-k-high').textContent+'|'+document.getElementById('r-k-low').textContent};})()`);
     assert(!geometry.overflow&&geometry.periodVisible&&Math.abs(geometry.aspect-1.9)<0.02&&geometry.columns==='18|20|51'&&(width<1200||geometry.dominant),`${theme}/${width}: ${JSON.stringify(geometry)}`);
   }
+  await evaluate(`(()=>{
+    const assert=(v,m)=>{if(!v)throw Error(m)};
+    const high=document.querySelector('#r-risk [data-risk="crit"]');
+    assert(high.getBoundingClientRect().height>0,'Risk chip is visible without opening settings');
+    high.click();
+    assert(high.getAttribute('aria-pressed')==='true','Selected risk chip');
+    assert(document.getElementById('r-k-total').textContent==='18','High risk scope has 18 regions');
+    assert(new URLSearchParams(location.search).get('risk')==='crit','Risk selection saved in URL');
+    assert(document.querySelectorAll('#r-risk [aria-pressed="true"]').length===1,'Only selected scope marked');
+    document.querySelector('#r-risk [data-risk=""]').click();
+    assert(document.getElementById('r-k-total').textContent==='89','All chip restores all regions');
+    const search=document.getElementById('r-search');search.value='Новосибирская';search.dispatchEvent(new Event('input',{bubbles:true}));
+    assert(document.querySelector('#r-risk [data-risk=""] .dk-lg__n').textContent==='1','Chip counts reflect search');
+    document.getElementById('r-reset').click();
+    assert(document.getElementById('r-k-total').textContent==='89','Reset restores scope');
+    document.querySelector('[data-modal="#r-settings"]').click();
+    assert(document.getElementById('r-settings').open,'Settings opens');
+    document.getElementById('r-settings').close();
+  })()`);
   console.log('PASS: region focus composition, map aspect, visible context, shared risk totals, both themes and phone widths');
 } finally { if(browser) await browser.close(); server.close(); }

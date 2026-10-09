@@ -120,14 +120,18 @@
   <footer class="dk-widget__footer"><details class="r-map-note"><summary>Как читать карту</summary><p class="dk-caption">Высокий риск ≥78 · средний 60–77 · низкий &lt;60 баллов. Нажмите на регион, чтобы открыть детали. Затемнённые регионы не входят в выбранный срез.</p></details></footer>
 </section>
 <aside class="dk-focus-layout__aside" aria-label="Сводка и регионы">
-<div class="r-filter-panel"><div class="dk-region-tools" role="search" aria-label="Поиск и фильтр регионов">
-<div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" id="r-search" type="search" placeholder="Название региона или округа" aria-label="Название региона или округа" aria-controls="r-rank r-table" aria-describedby="r-results"></div>
-<div id="r-risk"></div><button class="dk-iconbtn" id="r-reset" type="button" aria-label="Сбросить фильтры" title="Сбросить фильтры"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><button type="button" class="dk-iconbtn" data-modal="#risk-info" aria-label="О показателе риска" title="О показателе риска"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></button>      <div class="dk-top__tools">
-        <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg></button>
-          <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-moon"/></svg></button>
-        </div>
-      </div>
+<div class="r-filter-panel"><div class="dk-region-tools dk-region-tools--stacked" role="search" aria-label="Поиск и фильтр регионов">
+<div class="dk-region-tools__primary">
+<div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" id="r-search" type="search" placeholder="Регион или округ" aria-label="Название региона или округа" aria-controls="r-rank r-table" aria-describedby="r-results"></div>
+<span class="dk-region-tools__period" aria-label="Демонстрационный период: 30 дней">30 дней · демо</span>
+<button type="button" class="dk-iconbtn" data-modal="#r-settings" aria-label="Настройки экрана" title="Настройки экрана"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg></button>
+</div>
+<div class="dk-region-tools__filters"><div id="r-risk" class="dk-legend" role="group" aria-label="Уровень риска">
+<button type="button" class="dk-lg dk-lg--sm is-on" data-risk="" aria-pressed="true">Все<b class="dk-lg__n">89</b></button>
+<button type="button" class="dk-lg dk-lg--sm" data-risk="crit" aria-pressed="false" style="--swatch:var(--crit)"><i class="dk-lg__sw" aria-hidden="true"></i>Высокий<b class="dk-lg__n">18</b></button>
+<button type="button" class="dk-lg dk-lg--sm" data-risk="high" aria-pressed="false" style="--swatch:var(--high)"><i class="dk-lg__sw" aria-hidden="true"></i>Средний<b class="dk-lg__n">20</b></button>
+<button type="button" class="dk-lg dk-lg--sm" data-risk="calm" aria-pressed="false" style="--swatch:var(--calm)"><i class="dk-lg__sw" aria-hidden="true"></i>Низкий<b class="dk-lg__n">51</b></button>
+</div><button class="dk-iconbtn" id="r-reset" type="button" hidden aria-label="Сбросить фильтры" title="Сбросить фильтры"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div>
 </div>
 <p class="dk-region-result" id="r-results" role="status" aria-live="polite" aria-atomic="true"></p>
 </div>
@@ -342,15 +346,31 @@
       });
       var source = top();
       var searchInput = document.getElementById('r-search');
-      var riskFilter = dkSelect(document.getElementById('r-risk'), {
-        label: 'Уровень риска', url: 'risk',
-        options: [{ value: 'crit', name: 'Высокий риск', count: crit }, { value: 'high', name: 'Средний риск', count: high }, { value: 'calm', name: 'Низкий риск', count: source.length - crit - high }],
-        onChange: applyFilters
+      var riskValue = dkUrl.get('risk') || '';
+      if (['', 'crit', 'high', 'calm'].indexOf(riskValue) < 0) riskValue = '';
+      var riskChips = document.getElementById('r-risk');
+      riskChips.addEventListener('click', function (e) {
+        var chip = e.target.closest('[data-risk]');
+        if (!chip) return;
+        riskValue = chip.dataset.risk;
+        dkUrl.set('risk', riskValue);
+        applyFilters();
       });
       function applyFilters() {
         var query = searchInput.value.trim().toLocaleLowerCase('ru');
+        document.getElementById('r-reset').hidden = !query && !riskValue;
+        var matches = source.filter(function (x) {
+          return !query || ((byId[x.id] || x.id) + ' ' + (fd[x.id] || '')).toLocaleLowerCase('ru').includes(query);
+        });
+        riskChips.querySelectorAll('[data-risk]').forEach(function (chip) {
+          var key = chip.dataset.risk;
+          var selected = key === riskValue;
+          chip.setAttribute('aria-pressed', String(selected));
+          chip.classList.toggle('is-on', selected);
+          chip.querySelector('.dk-lg__n').textContent = matches.filter(function (x) { return !key || state(x.v)[0] === key; }).length;
+        });
         all = source.filter(function (x) {
-          return (!riskFilter.value || state(x.v)[0] === riskFilter.value) &&
+          return (!riskValue || state(x.v)[0] === riskValue) &&
             (!query || ((byId[x.id] || x.id) + ' ' + (fd[x.id] || '')).toLocaleLowerCase('ru').includes(query));
         });
         document.getElementById('r-map-title').textContent = 'Риски ЖКХ и инфраструктуры';
@@ -360,7 +380,7 @@
         paint(all.slice().sort(function (a, b) { return b.v - a.v; }).slice(0, 14));
         map.setScope(all.map(function (x) { return x.id; }));
         if (pager) { pager.setTotal(all.length); pager.goTo(1); }
-        document.getElementById('r-results').textContent = (query || riskFilter.value) ? (all.length ? 'Найдено: ' + all.length : 'Ничего не найдено') : '';
+        document.getElementById('r-results').textContent = (query || riskValue) ? (all.length ? 'Найдено: ' + all.length : 'Ничего не найдено') : '';
         document.getElementById('r-k-crit').textContent = all.filter(function (x) { return x.v >= 78; }).length;
         document.getElementById('r-k-high').textContent = all.filter(function (x) { return x.v >= 60 && x.v < 78; }).length;
         var nCrit = all.filter(function(x) { return x.v >= 78; }).length;
@@ -369,17 +389,17 @@
         document.getElementById('r-count-crit').textContent = nCrit;
         document.getElementById('r-k-low').textContent = nLow;
         document.getElementById('r-k-total').textContent = all.length;
-        document.getElementById('r-k-nodata').textContent = (query || riskFilter.value) ? 0 : tiles.tiles.length - source.length;
+        document.getElementById('r-k-nodata').textContent = (query || riskValue) ? 0 : tiles.tiles.length - source.length;
         document.getElementById('r-all-results').textContent = 'Все результаты: ' + all.length;
-        document.getElementById('r-scope').textContent = query || riskFilter.value ? 'Выбранный срез' : 'Сводка по стране';
-        document.getElementById('r-summary-title').textContent = query || riskFilter.value ? 'Результаты отбора' : 'Российская Федерация';
+        document.getElementById('r-scope').textContent = query || riskValue ? 'Выбранный срез' : 'Сводка по стране';
+        document.getElementById('r-summary-title').textContent = query || riskValue ? 'Результаты отбора' : 'Российская Федерация';
         document.getElementById('r-rank-caption').textContent = 'Наибольший риск · ' + Math.min(14, all.length) + ' регионов';
         ['crit','high','low'].forEach(function(key,i) { document.getElementById('r-share-'+key).style.flexGrow = [nCrit,nHigh,nLow][i]; });
 
         document.getElementById('r-k-avg').textContent = all.length ? Math.round(all.reduce(function (n,x) { return n+x.v; },0)/all.length) : '—';
       }
       searchInput.addEventListener('input', applyFilters);
-      document.getElementById('r-reset').addEventListener('click', function () { searchInput.value = ''; riskFilter.clear(); applyFilters(); searchInput.focus(); });
+      document.getElementById('r-reset').addEventListener('click', function () { searchInput.value = ''; riskValue = ''; dkUrl.set('risk', ''); applyFilters(); searchInput.focus(); });
       applyFilters();
     }).catch(function (e) {
       document.getElementById('r-map').innerHTML =
@@ -389,6 +409,11 @@
     });
   });
 </script>
+<dialog class="dk-modal" id="r-settings" aria-labelledby="r-settings-title">
+<form method="dialog" class="dk-modal__form">
+<div class="dk-modal__head"><h2 class="dk-modal__title" id="r-settings-title">Настройки экрана</h2><button class="dk-iconbtn" value="close" aria-label="Закрыть настройки" title="Закрыть настройки"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div>
+<div class="dk-modal__body"><p>Тема оформления</p><div class="dk-seg" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="light" aria-pressed="false">Светлая</button><button type="button" data-theme-set="dark" aria-pressed="true">Тёмная</button></div><details><summary>О показателе риска</summary><p>Балл риска — от 0 до 100. Высокий — от 78, средний — от 60 до 77, низкий — менее 60. В примере используются демонстрационные данные.</p></details></div>
+</form></dialog>
 <dialog class="dk-modal" id="risk-info" aria-labelledby="risk-info-title">
   <form method="dialog" class="dk-modal__form">
     <div class="dk-modal__head"><h2 class="dk-modal__title" id="risk-info-title">О показателе риска</h2><button class="dk-iconbtn" value="close" aria-label="Закрыть" title="Закрыть"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div>

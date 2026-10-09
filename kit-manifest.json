@@ -5576,6 +5576,10 @@
     "dk-push",
     "dk-region-result",
     "dk-region-tools",
+    "dk-region-tools--stacked",
+    "dk-region-tools__filters",
+    "dk-region-tools__period",
+    "dk-region-tools__primary",
     "dk-scroll",
     "dk-stack",
     "dk-well",
@@ -6050,7 +6054,7 @@
  "hooks": {},
  "counts": {
   "parts": 63,
-  "classes": 478,
+  "classes": 482,
   "functions": 45,
   "chart_types": 12
  }

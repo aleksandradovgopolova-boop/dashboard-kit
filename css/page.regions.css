@@ -13,8 +13,6 @@
 #r-page .r-map-note { width: 100%; background: var(--surface-2); border-radius: var(--radius-lg); padding: var(--space-6); }
 #r-page .r-map-note summary { cursor: pointer; min-height: var(--control-sm); font: var(--type-h3); }
 #r-page .r-map-note p { margin-bottom: 0; }
-#r-page .dk-region-tools { display: flex; flex-wrap: wrap; gap: var(--space-4); }
-#r-page .dk-region-tools .dk-search { flex: 1 1 100%; min-width: 0; }
 #r-page #r-period { flex: 1 1 100%; }
 #r-page .dk-top__tools { margin-left: auto; }
 #r-page #r-results:empty { display: none; }

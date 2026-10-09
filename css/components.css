@@ -4901,3 +4901,15 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-focus-layout__primary, .dk-focus-layout__aside { min-width: 0; }
 .dk-focus-layout__aside { display: flex; flex-direction: column; gap: var(--grid-gap); }
 @media (max-width: 1199px) { .dk-focus-layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* Постоянно видимый фильтр: выбор пользователя 09.10, не скрывать в настройках. */
+.dk-region-tools--stacked { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-4); margin-bottom: 0; }
+.dk-region-tools__primary { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: var(--space-4); align-items: center; }
+.dk-region-tools__primary .dk-search { width: 100%; }
+.dk-region-tools__period { display: flex; align-items: center; min-height: var(--control-md); padding-inline: var(--control-pad-md); background: var(--surface-2); border-radius: var(--radius-md); font: var(--type-caption); color: var(--ink-2); }
+.dk-region-tools__filters { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-4); }
+.dk-region-tools__filters > div { min-width: 0; max-width: 100%; }
+@media (max-width: 479px) {
+  .dk-region-tools__primary { grid-template-columns: minmax(0, 1fr) auto; }
+  .dk-region-tools__primary .dk-search { grid-column: 1 / -1; }
+}
