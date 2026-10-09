@@ -595,3 +595,8 @@ skill/dashboard-build/references/composition.md; скилл направляет
 история статусов — явно обозначенная демо, показатели сводки не выводятся из неё.
 Локальный предпросмотр без кеша: http://localhost:8771/dashboard.html?theme=light.
 Новый тест check-composition.mjs входит в tools/test.py.
+
+
+09.10: regions.html переведён на dk-focus-layout — карта слева, фильтры и
+сводка с рейтингом справа; таблица ниже сохранена. Новый check-region-focus
+входит в tools/test.py. См. docs/2026-10-09/regions-focus-qa.md.

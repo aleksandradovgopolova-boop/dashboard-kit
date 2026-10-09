@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/chrome.css">
+<link rel="stylesheet" href="css/page.regions.css">
 
 <!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
      и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
@@ -39,7 +40,7 @@
 <script src="js/dk-pager.js" defer></script>
 </head>
 
-<body class="dk-page">
+<body id="r-page" class="dk-page">
 <a class="dk-skip" href="#main">К содержимому</a>
 
 <div class="dk-app dk-app--rail" data-nav="folded">
@@ -103,103 +104,47 @@
   </aside>
 
   <div class="dk-main">
-    <header class="dk-top">
-      <button class="dk-iconbtn dk-top__burger" data-act="nav" title="Разделы" aria-label="Разделы">
+<header class="dk-top r-mobile-top">      <button class="dk-iconbtn dk-top__burger" data-act="nav" title="Разделы" aria-label="Разделы">
         <svg aria-hidden="true" class="dk-i"><use href="#ti-layout-grid"/></svg>
       </button>
 
-      <div class="dk-top__titles">
-        <div class="dk-top__path">Мониторинг · ЖКХ</div>
-        <h1 class="dk-top__title">Риск по регионам</h1>
-      </div>
+<span class="dk-caption">Регионы</span></header>
 
-      <div class="dk-top__tools">
+    <main class="dk-content" id="main" tabindex="-1">
+      <div class="dk-wrap dk-wrap--monitor">
+
+<div class="dk-focus-layout">
+<section class="dk-widget dk-focus-layout__primary" aria-labelledby="r-map-title">
+  <header class="dk-widget__head"><h1 class="dk-head__title" id="r-map-title">Риски ЖКХ и инфраструктуры</h1><div class="dk-widget__actions" id="r-map-controls"></div></header>
+  <div class="dk-widget__body r-map-body"><div id="r-map"></div></div>
+  <footer class="dk-widget__footer"><details class="r-map-note"><summary>Как читать карту</summary><p class="dk-caption">Высокий риск ≥78 · средний 60–77 · низкий &lt;60 баллов. Нажмите на регион, чтобы открыть детали. Затемнённые регионы не входят в выбранный срез.</p></details></footer>
+</section>
+<aside class="dk-focus-layout__aside" aria-label="Сводка и регионы">
+<div class="r-filter-panel"><div class="dk-region-tools" role="search" aria-label="Поиск и фильтр регионов">
+<div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" id="r-search" type="search" placeholder="Название региона или округа" aria-label="Название региона или округа" aria-controls="r-rank r-table" aria-describedby="r-results"></div>
+<div id="r-risk"></div><button class="dk-iconbtn" id="r-reset" type="button" aria-label="Сбросить фильтры" title="Сбросить фильтры"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><button type="button" class="dk-iconbtn" data-modal="#risk-info" aria-label="О показателе риска" title="О показателе риска"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></button>      <div class="dk-top__tools">
         <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
           <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg></button>
           <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-moon"/></svg></button>
         </div>
       </div>
-    </header>
-
-    <main class="dk-content" id="main" tabindex="-1">
-      <div class="dk-wrap dk-wrap--monitor">
-
-        <div class="dk-region-tools" role="search" aria-label="Поиск и фильтр регионов">
-<div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" id="r-search" type="search" placeholder="Название региона или округа" aria-label="Название региона или округа" aria-controls="r-rank r-table" aria-describedby="r-results"></div>
-<span class="dk-caption" id="r-period">Демонстрационные данные за 30 дней</span><div id="r-risk"></div><button class="dk-iconbtn" id="r-reset" type="button" aria-label="Сбросить фильтры" title="Сбросить фильтры"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><button type="button" class="dk-iconbtn" data-modal="#risk-info" aria-label="О показателе риска" title="О показателе риска"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></button></div>
+</div>
 <p class="dk-region-result" id="r-results" role="status" aria-live="polite" aria-atomic="true"></p>
-<!-- Сводка идёт первой не ради красоты. Карта отвечает на вопрос «где»,
-             но не отвечает на «насколько всё плохо в целом» — а именно с этого
-             вопроса человек начинает. Без верхней строки экран начинался сразу
-             с карты, и ответ на первый вопрос приходилось собирать глазами по
-             оттенкам заливки. -->
-        <div class="dk-grid">
-          <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--crit-ink)">
-              <div class="dk-tile__head">
-                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
-                <span class="dk-tile__label">Высокий риск</span>
-              </div>
-              <div class="dk-tile__row"><span class="dk-metric-lg" id="r-k-crit">—</span></div>
-            </div>
-          </div>
-          <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--high-ink)">
-              <div class="dk-tile__head">
-                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-circle"/></svg></span>
-                <span class="dk-tile__label">Средний риск</span>
-              </div>
-              <div class="dk-tile__row"><span class="dk-metric-lg" id="r-k-high">—</span></div>
-            </div>
-          </div>
-          <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact">
-              <div class="dk-tile__head">
-                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-map"/></svg></span>
-                <span class="dk-tile__label">Средний балл</span>
-              </div>
-              <div class="dk-tile__row"><span class="dk-metric-lg" id="r-k-avg">—</span></div>
-            </div>
-          </div>
-          <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--nodata-ink)">
-              <div class="dk-tile__head">
-                <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-minus"/></svg></span>
-                <span class="dk-tile__label">Без данных</span>
-              </div>
-              <div class="dk-tile__row"><span class="dk-metric-lg" id="r-k-nodata">—</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="dk-grid dk-grid--stretch" style="margin-top:var(--grid-gap)">
-
-          <div class="dk-col--two-thirds">
-            <div class="dk-widget">
-              <div class="dk-widget__head">
-              <h2 class="dk-widget__title" id="r-map-title">Карта риска</h2>
-                <span class="dk-widget__hint" title="Карта отвечает «где», плитки — «у кого хуже»"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
-                <!-- Переключатель вида карты переезжает сюда, в постоянное
-                     место действий виджета: у карты своя шапка появилась
-                     раньше, чем это место, и два ряда управления подряд
-                     читались как недоделка. -->
-                <div class="dk-widget__actions" id="r-map-controls"></div>
-              </div>
-              <div id="r-map"></div>
-            </div>
-          </div>
-
-          <div class="dk-col--third">
-            <div class="dk-widget">
-              <div class="dk-widget__head">
-                <h2 class="dk-widget__title" id="r-title">Регионы с наибольшим риском</h2>
-              </div>
-              <div class="dk-rank" id="r-rank"></div>
-            </div>
-          </div>
-
-        </div>
-
+</div>
+<section class="dk-widget r-summary-panel" aria-labelledby="r-summary-title">
+<header class="dk-widget__head"><div class="dk-widget__heading"><p class="dk-widget__meta" id="r-scope">Сводка по стране</p><h2 class="dk-widget__title" id="r-summary-title">Российская Федерация</h2><span class="dk-caption" id="r-period">Демонстрационные данные за 30 дней</span></div></header>
+<div class="r-risk-summary">
+<p class="dk-caption">Регионов с высоким риском</p>
+<div class="r-risk-value"><strong id="r-k-crit">—</strong><span>из <span id="r-k-total">89</span></span></div>
+<div class="r-risk-track" aria-hidden="true"><span id="r-share-crit"></span><span id="r-share-high"></span><span id="r-share-low"></span></div>
+<div class="r-risk-legend"><span>Высокий <b id="r-count-crit">—</b></span><span>Средний <b id="r-k-high">—</b></span><span>Низкий <b id="r-k-low">—</b></span></div>
+<p class="r-thresholds">Высокий ≥78 · средний 60–77 · низкий &lt;60</p><div class="r-risk-context"><span>Средний балл <b id="r-k-avg">—</b> / 100</span><span>Без данных <b id="r-k-nodata">—</b></span></div>
+</div>
+<header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title" id="r-title">Регионы</h2><p class="dk-widget__meta" id="r-rank-caption">Наибольший риск в выборке</p></div></header>
+<div class="dk-rank r-focus-rank" id="r-rank" tabindex="0" role="region" aria-label="Регионы по убыванию риска"></div><footer class="dk-widget__footer"><a class="dk-btn dk-btn--ghost dk-btn--sm" id="r-all-results" href="#r-table">Все регионы</a></footer>
+</section>
+</aside>
+</div>
         <!-- Таблица закрывает то, чего не умеют ни карта, ни рейтинг: карта
              показывает картину, рейтинг — верхушку, а работать человеку нужно
              со всеми восемьюдесятью девятью — сортировать, искать свой субъект,
@@ -270,7 +215,7 @@
 
       var map = dkMap(document.getElementById('r-map'), {
         topo: topo, object: 'ru89', tiles: tiles, values: values,
-        unit: 'баллов риска',
+        unit: 'баллов риска', palette: 'risk', steps: [60, 78],
         controls: '#r-map-controls',
         onSelect: function (id, v) {
           openRegion(id);
@@ -302,7 +247,7 @@
           list.map(function (x, i) {
             return '<button type="button" class="dk-rank__row" data-region="' + esc(x.id) + '" aria-label="' + esc((byId[x.id] || x.id) + ', ' + x.v + ' баллов риска, ' + state(x.v)[1] + ' риск. Открыть детали') + '"><span class="dk-rank__i">' +
               String(i + 1).padStart(2, '0') + '</span><span class="dk-rank__name">' +
-              esc(byId[x.id] || x.id) + '</span><span class="dk-rank__v" style="--accent:' +
+              esc(byId[x.id] || x.id) + '<span class="r-rank-meta">' + esc((fd && fd[x.id]) || '') + ' · ' + state(x.v)[1] + ' риск</span></span><span class="dk-rank__v" style="--accent:' +
               tone(x.v) + '">' + x.v + '</span></button>';
           }).join('');
       }
@@ -408,7 +353,7 @@
           return (!riskFilter.value || state(x.v)[0] === riskFilter.value) &&
             (!query || ((byId[x.id] || x.id) + ' ' + (fd[x.id] || '')).toLocaleLowerCase('ru').includes(query));
         });
-        document.getElementById('r-map-title').textContent = 'Карта риска';
+        document.getElementById('r-map-title').textContent = 'Риски ЖКХ и инфраструктуры';
         page = 1;
         resort();
         rows();
@@ -418,6 +363,19 @@
         document.getElementById('r-results').textContent = (query || riskFilter.value) ? (all.length ? 'Найдено: ' + all.length : 'Ничего не найдено') : '';
         document.getElementById('r-k-crit').textContent = all.filter(function (x) { return x.v >= 78; }).length;
         document.getElementById('r-k-high').textContent = all.filter(function (x) { return x.v >= 60 && x.v < 78; }).length;
+        var nCrit = all.filter(function(x) { return x.v >= 78; }).length;
+        var nHigh = all.filter(function(x) { return x.v >= 60 && x.v < 78; }).length;
+        var nLow = all.filter(function(x) { return x.v < 60; }).length;
+        document.getElementById('r-count-crit').textContent = nCrit;
+        document.getElementById('r-k-low').textContent = nLow;
+        document.getElementById('r-k-total').textContent = all.length;
+        document.getElementById('r-k-nodata').textContent = (query || riskFilter.value) ? 0 : tiles.tiles.length - source.length;
+        document.getElementById('r-all-results').textContent = 'Все результаты: ' + all.length;
+        document.getElementById('r-scope').textContent = query || riskFilter.value ? 'Выбранный срез' : 'Сводка по стране';
+        document.getElementById('r-summary-title').textContent = query || riskFilter.value ? 'Результаты отбора' : 'Российская Федерация';
+        document.getElementById('r-rank-caption').textContent = 'Наибольший риск · ' + Math.min(14, all.length) + ' регионов';
+        ['crit','high','low'].forEach(function(key,i) { document.getElementById('r-share-'+key).style.flexGrow = [nCrit,nHigh,nLow][i]; });
+
         document.getElementById('r-k-avg').textContent = all.length ? Math.round(all.reduce(function (n,x) { return n+x.v; },0)/all.length) : '—';
       }
       searchInput.addEventListener('input', applyFilters);
@@ -434,7 +392,7 @@
 <dialog class="dk-modal" id="risk-info" aria-labelledby="risk-info-title">
   <form method="dialog" class="dk-modal__form">
     <div class="dk-modal__head"><h2 class="dk-modal__title" id="risk-info-title">О показателе риска</h2><button class="dk-iconbtn" value="close" aria-label="Закрыть" title="Закрыть"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div>
-    <div class="dk-modal__body"><p>Балл риска — от 0 до 100. Высокий риск — от 78, средний — от 60 до 77, низкий — менее 60.</p><p>Ступени синего на карте показывают величину показателя. Цвет статуса обозначает уровень риска.</p><p class="dk-caption">В примере используются демонстрационные данные.</p></div>
+    <div class="dk-modal__body"><p>Балл риска — от 0 до 100. Высокий риск — от 78, средний — от 60 до 77, низкий — менее 60.</p><p>Цвет карты обозначает уровень риска по этим же порогам. Значения доступны в деталях региона и таблице.</p><p class="dk-caption">В примере используются демонстрационные данные.</p></div>
   </form>
 </dialog>
 </body>

@@ -4895,3 +4895,9 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-widget--overview > .dk-widget__head > .dk-widget__actions { flex-wrap: wrap; min-width: 0; max-width: 100%; }
 @media (max-width: 1199px) { .dk-widget--overview .dk-widget__title { font: var(--type-h3); } }
 @media (max-width: 767px) { .dk-head__title { font: var(--type-h2); } .dk-head__actions { flex: 1 1 100%; } }
+
+/* Главный объект + связанная сводка: выбранная композиция карты регионов. */
+.dk-focus-layout { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(340px, 1fr); gap: var(--grid-gap); align-items: stretch; }
+.dk-focus-layout__primary, .dk-focus-layout__aside { min-width: 0; }
+.dk-focus-layout__aside { display: flex; flex-direction: column; gap: var(--grid-gap); }
+@media (max-width: 1199px) { .dk-focus-layout { grid-template-columns: minmax(0, 1fr); } }

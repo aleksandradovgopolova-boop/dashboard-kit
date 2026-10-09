@@ -1,0 +1,49 @@
+// Проверяет выбранную композицию страны и рабочие представления в Chrome.
+import { launch, findChrome } from './browser-harness.mjs';
+import { createServer } from 'node:http';
+import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { resolve, extname, sep } from 'node:path';
+
+const root = fileURLToPath(new URL('../', import.meta.url));
+const server = createServer(async (req, res) => {
+  try {
+    const path = resolve(root, '.' + decodeURIComponent(new URL(req.url, 'http://local').pathname));
+    if (!path.startsWith(resolve(root) + sep)) { res.writeHead(403); res.end(); return; }
+    const data = await readFile(path);
+    res.setHeader('Content-Type', ({ '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.json': 'application/json', '.topojson': 'application/json' })[extname(path)] || 'application/octet-stream');
+    res.end(data);
+  } catch { res.writeHead(404); res.end(); }
+});
+await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+let browser;
+try {
+  const chrome = findChrome();
+  if (!chrome) throw Error('Chrome required');
+  browser = await launch(chrome);
+  const { targetId } = await browser.send('Target.createTarget', { url: 'about:blank' });
+  const { sessionId } = await browser.send('Target.attachToTarget', { targetId, flatten: true });
+  const send = (method, params) => browser.send(method, params, sessionId);
+  const evaluate = async expression => {
+    const result = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
+    if (result.exceptionDetails) throw Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text);
+    return result.result.value;
+  };
+  await send('Page.enable');
+  const assert = (value, message) => { if (!value) throw Error(message); };
+
+
+  for(const theme of ['dark','light']) for(const width of [320,390,1536]) {
+    await send('Emulation.setDeviceMetricsOverride',{width,height:874,deviceScaleFactor:1,mobile:width<768});
+    await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/regions.html?theme=${theme}`});
+    await evaluate(`new Promise((resolve,reject)=>{let n=0;const t=setInterval(()=>{if(document.getElementById('r-k-total')?.textContent==='89'&&document.querySelector('#r-rank button')){clearInterval(t);document.fonts.ready.then(()=>setTimeout(resolve,250));}else if(++n>100){clearInterval(t);reject(Error('Regions timeout'));}},50);})`);
+    const geometry=await evaluate(`(()=>{
+      const box=s=>document.querySelector(s).getBoundingClientRect();
+      const primary=box('.dk-focus-layout__primary'),summary=box('.r-summary-panel'),period=box('#r-period'),risk=box('.r-risk-summary'),map=box('#r-map .dk-map__canvas');
+      return {overflow:document.documentElement.scrollWidth>innerWidth+1,periodVisible:period.height>=16&&period.bottom<=risk.top,
+        aspect:map.width/map.height,dominant:primary.width>summary.width*1.8&&summary.left>=primary.right,
+        columns:document.getElementById('r-count-crit').textContent+'|'+document.getElementById('r-k-high').textContent+'|'+document.getElementById('r-k-low').textContent};})()`);
+    assert(!geometry.overflow&&geometry.periodVisible&&Math.abs(geometry.aspect-1.9)<0.02&&geometry.columns==='18|20|51'&&(width<1200||geometry.dominant),`${theme}/${width}: ${JSON.stringify(geometry)}`);
+  }
+  console.log('PASS: region focus composition, map aspect, visible context, shared risk totals, both themes and phone widths');
+} finally { if(browser) await browser.close(); server.close(); }

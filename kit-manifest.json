@@ -23,6 +23,10 @@
     "when": "только если кит рисует всю страницу"
    },
    {
+    "file": "css/page.regions.css",
+    "when": "только пример regions.html; после chrome.css"
+   },
+   {
     "file": "css/page.dashboard.css",
     "when": "только пример dashboard.html; после chrome.css"
    }
@@ -5503,6 +5507,7 @@
     "dk-grid--overview-panels",
     "dk-col",
     "dk-layout",
+    "dk-focus-layout",
     "dk-stack",
     "dk-push",
     "dk-head",
@@ -5548,6 +5553,9 @@
     "dk-col--two-thirds",
     "dk-data-summary",
     "dk-details",
+    "dk-focus-layout",
+    "dk-focus-layout__aside",
+    "dk-focus-layout__primary",
     "dk-grid",
     "dk-grid--equal",
     "dk-grid--even",
@@ -6042,7 +6050,7 @@
  "hooks": {},
  "counts": {
   "parts": 63,
-  "classes": 475,
+  "classes": 478,
   "functions": 45,
   "chart_types": 12
  }

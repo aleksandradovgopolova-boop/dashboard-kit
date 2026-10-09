@@ -174,11 +174,19 @@ try {
         }
       }
       assert(document.documentElement.scrollWidth<=innerWidth+1,'regions must not overflow viewport');
+      const primary=document.querySelector('.dk-focus-layout__primary').getBoundingClientRect();
+      const summary=document.querySelector('.r-summary-panel').getBoundingClientRect();
+      if(innerWidth>=1200)assert(primary.width>summary.width*1.8&&summary.left>primary.right,'map is dominant with related summary on right');
+      else assert(summary.top>=primary.bottom,'related summary follows map on narrow screens');
+      const map=document.querySelector('#r-map .dk-map__canvas').getBoundingClientRect();
+      assert(Math.abs(map.width/map.height-1.9)<0.02,'map preserves its original aspect ratio');
+      assert(document.querySelectorAll('h1').length===1,'one title, attached to primary object');
+
       return 'PASS: regions 10px grid gutters, '+pad+'px inner padding, equal adjacent heights and no horizontal overflow at ${width}px';
     })()`));
   }
   // Shared monitor KPI rule applies across the three related screens.
-  for (const page of ['dashboard.html','regions.html','accidents.html']) {
+  for (const page of ['dashboard.html','accidents.html']) {
     const expectedKpis=page==='dashboard.html'?5:4;
     for (const theme of ['dark','light']) {
       for (const width of [320,390,768,1024,1366]) {
