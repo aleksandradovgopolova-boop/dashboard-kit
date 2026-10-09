@@ -567,9 +567,9 @@
 
 /* Палитра сайдбара: светло-голубая по выбору пользователя 09.10. */
 .dk-root {
-  --c-nav-board-light: #EEF2F8;
-  --c-nav-widget-1-light: #E2EDFF;
-  --c-nav-widget-2-light: #D1E2FC;
+  --c-nav-board-light: #E2EDFF;
+  --c-nav-widget-1-light: #FBFBFB;
+  --c-nav-widget-2-light: #F3F4F6;
   --c-nav-text-main-light: #2D3748;
   --c-nav-accent-blue: #126CF1;
   --c-navy-600: #425B88;

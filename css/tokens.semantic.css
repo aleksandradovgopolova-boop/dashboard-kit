@@ -684,7 +684,7 @@
 .dk-root[data-theme="light"] {
   --nav-bg: var(--c-nav-board-light);
   --nav-surface: var(--c-nav-widget-1-light);
-  --nav-surface-2: var(--c-nav-widget-2-light);
+  --nav-surface-2: color-mix(in srgb, var(--c-nav-widget-2-light) 91%, var(--c-gray-300));
   --nav-surface-3: color-mix(in srgb, var(--c-nav-widget-2-light) 77%, var(--c-gray-300));
   --nav-ink: var(--c-nav-text-main-light);
   --nav-ink-2: var(--c-gray-500);
