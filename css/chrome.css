@@ -580,10 +580,10 @@
     height: 68px;
     padding: var(--space-3);
     box-sizing: border-box;
-    background: var(--surface);
+    background: var(--surface-2);
     -webkit-backdrop-filter: blur(18px);
     backdrop-filter: blur(18px);
-    border: 1px solid var(--edge-float);
+    border: 0;
     border-radius: var(--radius-lg);
     box-shadow: none;
   }
@@ -684,3 +684,25 @@
   .dk-tabbar__item { flex: 1 0 auto; min-width: max-content; }
   .dk-tabbar__item > span { max-width: none; white-space: nowrap; overflow-wrap: normal; }
 }
+
+/* Независимые цвета сайдбара: светло-голубой вариант выбран 09.10. */
+.dk-side {
+  --bg: var(--nav-bg);
+  --surface: var(--nav-surface);
+  --surface-2: var(--nav-surface-2);
+  --surface-3: var(--nav-surface-3);
+  --ink: var(--nav-ink);
+  --ink-2: var(--nav-ink-2);
+  --ink-3: var(--nav-ink-3);
+  --rule: var(--nav-rule);
+  --link: var(--nav-link);
+  --control-on: var(--nav-control-on);
+  --control-on-hover: var(--nav-control-on-hover);
+  --control-on-ink: var(--nav-control-on-ink);
+  --control-soft: var(--nav-control-soft);
+  --edge-float: var(--nav-edge-float);
+}
+.dk-app--rail { background: var(--nav-bg); }
+
+.dk-side__mark { background: var(--nav-brand); color: var(--nav-brand-ink); }
+.dk-side :focus-visible { outline-color: var(--nav-brand); }

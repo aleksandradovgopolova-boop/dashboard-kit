@@ -1,0 +1,66 @@
+/* Карта — главный объект; справа фильтры, сводка и связанный рейтинг. */
+#r-page .r-mobile-top { display: none; }
+#r-page .dk-wrap--monitor { max-width: none; padding-top: var(--space-6); }
+#r-page .dk-focus-layout { --grid-gap: var(--space-6); }
+#r-page .dk-focus-layout__primary { min-height: 680px; }
+#r-page .dk-focus-layout__primary > .dk-widget__head { align-items: flex-start; }
+#r-page .dk-focus-layout__primary .dk-head__title { font: var(--type-overview-title); }
+#r-page .r-map-body { flex: 1; justify-content: center; }
+#r-page #r-map .dk-map__canvas { height: auto; max-height: none; aspect-ratio: 1.9; }
+#r-page #r-map .dk-map__legend { display: none; }
+#r-page .dk-map__zoom { border: 0; }
+#r-page .dk-map__zoom button + button { border-top: 0; }
+#r-page .r-map-note { width: 100%; background: var(--surface-2); border-radius: var(--radius-lg); padding: var(--space-6); }
+#r-page .r-map-note summary { cursor: pointer; min-height: var(--control-sm); font: var(--type-h3); }
+#r-page .r-map-note p { margin-bottom: 0; }
+#r-page #r-period { flex: 1 1 100%; }
+#r-page .dk-top__tools { margin-left: auto; }
+#r-page #r-results:empty { display: none; }
+#r-page .r-summary-panel { flex: 1; min-height: 0; gap: var(--space-7); }
+#r-page .r-summary-panel > .dk-widget__head .dk-widget__title { font: var(--type-panel-title); }
+#r-page .r-risk-summary { background: var(--surface-2); border-radius: var(--radius-lg); padding: var(--space-7); }
+#r-page .r-risk-summary > p { margin: 0; }
+#r-page .r-risk-value { display: flex; align-items: baseline; gap: var(--space-4); margin-block: var(--space-7); }
+#r-page .r-risk-value strong { font: var(--type-metric-xl); color: var(--crit-ink); }
+#r-page .r-risk-value > span { font: var(--type-body-bold); color: var(--ink-2); }
+#r-page .r-risk-track { display: flex; gap: var(--space-2); height: var(--space-5); }
+#r-page .r-risk-track > span { flex-basis: 0; border-radius: var(--radius-full); }
+#r-page #r-share-crit { background: var(--risk-area-high); }
+#r-page #r-share-high { background: var(--risk-area-medium); }
+#r-page #r-share-low { background: var(--risk-area-low); }
+#r-page .r-risk-legend { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-6); font: var(--type-caption); }
+#r-page .r-risk-legend > span { flex: 1; white-space: nowrap; }
+#r-page .r-risk-context { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-6); font: var(--type-caption); color: var(--ink-2); }
+#r-page .r-focus-rank { overflow: auto; min-height: 0; background: var(--surface-2); border-radius: var(--radius-lg); }
+#r-page .r-focus-rank .dk-rank__head { display: none; }
+#r-page .r-focus-rank .dk-rank__row { grid-template-columns: 24px minmax(0, 1fr) auto; padding: var(--space-6); border: 0; gap: var(--space-4); align-items: start; }
+#r-page .r-focus-rank .dk-rank__name { white-space: normal; overflow: visible; font: var(--type-body-bold); }
+#r-page .r-rank-meta { display: block; margin-top: var(--space-4); font: var(--type-caption); color: var(--ink-2); }
+#r-page .r-focus-rank .dk-rank__v { font: var(--type-h2); }
+@media (min-width: 1200px) {
+  #r-page .dk-focus-layout { height: max(740px, calc(100svh - 28px)); }
+  #r-page .dk-focus-layout__aside { height: 100%; overflow: hidden; }
+  #r-page .r-summary-panel { overflow: hidden; }
+}
+@media (max-width: 1199px) {
+  #r-page .dk-focus-layout__aside { display: contents; }
+  #r-page .r-filter-panel { order: -1; }
+  #r-page .r-focus-rank { max-height: 480px; }
+  #r-page .dk-focus-layout__primary { min-height: 0; }
+  #r-page #r-map .dk-map__canvas { height: auto; }
+}
+@media (max-width: 767px) {
+  #r-page .r-mobile-top { display: flex; }
+  #r-page .dk-focus-layout__primary > .dk-widget__head { flex-wrap: wrap; }
+  #r-page .dk-focus-layout__primary .dk-head__title { font: var(--type-h2); }
+  #r-page #r-map .dk-map__canvas { height: auto; }
+  #r-page .r-map-note summary { min-height: 44px; }
+}
+
+#r-page .dk-main { background: var(--bg); }
+#r-page .r-thresholds { font: var(--type-caption); color: var(--ink-2); margin: var(--space-5) 0 0; }
+#r-page .r-summary-panel > .dk-widget__footer { flex: none; }
+#r-page .r-focus-rank { scrollbar-width: thin; }
+#r-page .r-summary-panel > :not(.r-focus-rank) { flex-shrink: 0; }
+#r-page .r-focus-rank { flex: 1 1 auto; }
+#r-page .r-summary-panel #r-period { flex: none; }

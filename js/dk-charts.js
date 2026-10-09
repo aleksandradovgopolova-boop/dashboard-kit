@@ -126,7 +126,8 @@
   }
 
   function paint(spec, i) {
-    return spec.palette === 'status' ? statusColor(i) : null;
+    if (spec.palette === 'status-area' && i < 3) return inkColor('--risk-area-' + ['high', 'medium', 'low'][i]);
+    return spec.palette === 'status' || spec.palette === 'status-area' ? statusColor(i) : null;
   }
 
   /* --- заливка под линией --------------------------------------------------
@@ -258,8 +259,10 @@
       /* У линии крайние точки стоят на краях сетки, и подпись под последней
          выходила за правый край наполовину: на телефоне «29.09» читалось как
          «29 се» (проверочная задача скилла, 29.09). Крайние подписи
-         прижимаются внутрь: первая — к левому краю, последняя — к правому. */
-      if (!option.xAxis.boundaryGap) option.xAxis.axisLabel = { alignMinLabel: 'left', alignMaxLabel: 'right' };
+         остаются в области графика: первая центрируется над началом оси,
+         последняя прижимается к правому краю. Левый отступ сетки вмещает
+         половину первой даты; сдвиг вправо сближал её со второй подписью. */
+      if (!option.xAxis.boundaryGap) option.xAxis.axisLabel = { alignMinLabel: 'center', alignMaxLabel: 'right' };
       /* Шаг оси не дробится, если данные целые. Счёт аварий не бывает
          дробным, а ось честно рисовала 0.5 / 1.5 / 2.5 — то есть предлагала
          читать величины, которых не существует. Проверяем сами данные, а не
@@ -372,7 +375,8 @@
             // Зазор цветом поверхности: сегменты не сливаются в одну полосу.
             // borderRadius здесь же, одним объектом: двумя присваиваниями
             // подряд второе затирало первое — и скругление не снималось.
-            base.itemStyle = { borderRadius: 0, borderColor: surfaceColor(), borderWidth: 2 };
+            base.itemStyle = { borderRadius: 0, borderColor: surfaceColor(), borderWidth: spec.palette === 'status-area' ? 0 : 2 };
+            if (spec.palette === 'status-area') { base.barWidth = '66%'; base.barMinWidth = 1; base.barMaxWidth = 20; }
           }
         }
         var tone = paint(spec, i);
@@ -391,12 +395,13 @@
           if (!s.forecast) return;
           var parts = splitForecast(s.data || [], s.forecast);
           option.series[i].data = parts.head;
+          if (spec.forecastStyle === 'dashed') { option.series[i].symbol = 'circle'; option.series[i].symbolSize = 6; option.series[i].lineStyle = {width:2}; }
           tails.push({
             name: s.name, type: 'line', data: parts.tail,
-            smooth: false, showSymbol: true, symbol: 'emptyDiamond', symbolSize: 7,
-            endLabel: { show: true, formatter: 'Прогноз', color: window.dkMeaning.color('nodata', 'text', cur), textBorderWidth: 0, textShadowBlur: 0 },
+            smooth: false, showSymbol: true, symbol: spec.forecastStyle === 'dashed' ? 'emptyCircle' : 'emptyDiamond', symbolSize: spec.forecastStyle === 'dashed' ? 5 : 7,
+            endLabel: { show: spec.forecastStyle !== 'dashed', formatter: 'Прогноз', color: window.dkMeaning.color('nodata', 'text', cur), textBorderWidth: 0, textShadowBlur: 0 },
             step: type === 'step' ? 'end' : false,
-            lineStyle: { type: 'solid', width: 1, color: seriesColor(i) },
+            lineStyle: { type: spec.forecastStyle === 'dashed' ? 'dashed' : 'solid', width: spec.forecastStyle === 'dashed' ? 2 : 1, color: seriesColor(i) },
             itemStyle: { color: seriesColor(i) },
             areaStyle: type === 'area' ? { opacity: 0.1, color: seriesColor(i) } : null,
             z: option.series[i].z
@@ -404,6 +409,19 @@
         });
         if (tails.length) {
           option.grid.right = 76; // место для полной подписи «Прогноз»
+          if (spec.forecastStyle === 'dashed') {
+            option.grid.right = 12;
+            option.grid.top = 40;
+            var boundary = (series[0].data || []).length - series[0].forecast - 1;
+            var tail = tails[0];
+            tail.markArea = { silent: true, itemStyle: { color: seriesColor(0), opacity: 0.045 }, label: { show: true, position: 'insideBottom', color: inkColor('--ink-2'), fontSize: 11, distance: 12 }, data: [[{ name: 'Прогноз', xAxis: (spec.categories || [])[boundary] }, { xAxis: (spec.categories || []).slice(-1)[0] }]] };
+            tail.markLine = { silent: true, symbol: 'none', label: { show: false }, lineStyle: { color: seriesColor(0), opacity: 0.35, type: 'dashed', width: 1 }, data: [{ xAxis: (spec.categories || [])[boundary] }] };
+            if (!multi) {
+              option.series[0].name = 'Факт';
+              tail.name = 'Прогноз';
+              option.legend = { show: true, right: 0, top: 0, itemWidth: 28, itemHeight: 8, itemGap: 16, selectedMode: false, data: [{name:'Факт', icon:'path://M0,0 L28,0 L28,2 L0,2 Z'}, {name:'Прогноз', icon:'path://M0,0 L6,0 L6,2 L0,2 Z M11,0 L17,0 L17,2 L11,2 Z M22,0 L28,0 L28,2 L22,2 Z'}] };
+            }
+          }
           option.series = option.series.concat(tails);
           // В легенде хвост отдельной строкой не стоит: это та же величина,
           // просто ещё не закрытая.
@@ -414,9 +432,10 @@
 
     else if (type === 'bar-h') {
       option.tooltip = { trigger: 'axis' };
-      option.yAxis = { type: 'category', data: spec.categories || [], inverse: true };
+      option.grid.top = 8; option.grid.bottom = 4;
+      option.yAxis = { type: 'category', data: spec.categories || [], inverse: true, axisTick: { show: false }, axisLine: { show: false } };
       // Exact end labels carry the values; grid lines add redundant visual noise.
-      option.xAxis = { type: 'value', name: spec.unit || '', splitLine: { show: false }, axisLabel: { show: false }, axisTick: { show: false } };
+      option.xAxis = { type: 'value', name: spec.unit || '', splitLine: { show: false }, axisLabel: { show: false }, axisTick: { show: false }, axisLine: { show: false } };
 
       /* ЗНАЧЕНИЕ ПОДПИСАНО У КОНЦА ПОЛОСЫ, И ГЛАВНОЕ — У НУЛЕВОЙ ТОЖЕ.
 
@@ -431,10 +450,11 @@
          сравнивать длины, а точное число человек всё равно читает у названия. */
       option.series = series.map(function (s) {
         return {
-          name: s.name, data: s.data, type: 'bar',
+          name: s.name, data: spec.palette === 'risk' && spec.steps && spec.steps.length === 2 ? s.data.map(function(d) { var v = typeof d === 'object' ? d.value : d; var role = v >= spec.steps[1] ? 'high' : v >= spec.steps[0] ? 'medium' : 'low'; return {value:v,itemStyle:{color:inkColor('--risk-area-' + role)}}; }) : s.data, type: 'bar',
           // Растущий конец полосы тоже прямой — по той же причине, что и верх
           // столбца: длина полосы и есть значение, а скругление съедает её
           // как раз там, где значение кончается. См. тему графиков.
+          barWidth: '66%', barMaxWidth: 20,
           itemStyle: { borderRadius: 0 },
           label: {
             show: true, position: 'right',
@@ -462,13 +482,14 @@
       /* Один центр на кольцо и на число внутри него. Держать его переменной,
          а не двумя литералами в разных местах файла, — единственный способ не
          повторить историю, когда кольцо стояло на 44%, а число на 41%. */
-      var центр = ['50%', '44%'];
+      var sideLegend = spec.legendPosition === 'right' && el.clientWidth >= 320;
+      var центр = sideLegend ? ['25%', '50%'] : ['50%', '44%'];
       var slices = foldSlices(spec.data || []);
       option.tooltip = { trigger: 'item', formatter: '{b}: {c} ({d}%)' };
-      option.legend = { bottom: 0, left: 'center', itemGap: 12, padding: [4, 0, 0, 0] };
+      option.legend = sideLegend ? { orient: 'vertical', right: 0, top: 'middle', itemGap: 16, itemWidth: 10, itemHeight: 10, formatter: function(name) { var d = slices.find(function(item) { return item.name === name; }); return name + '   ' + num(d ? d.value : 0); } } : { bottom: 0, left: 'center', itemGap: 12, padding: [4, 0, 0, 0] };
       option.series = [{
         type: 'pie',
-        radius: type === 'donut' ? ['58%', '82%'] : ['0%', '78%'],
+        radius: sideLegend ? (type === 'donut' ? ['52%', '78%'] : ['0%', '78%']) : (type === 'donut' ? ['58%', '82%'] : ['0%', '78%']),
         center: центр,
         data: slices.map(function (d, i) {
           var tone = paint(spec, i);
@@ -514,6 +535,7 @@
         }
         центрТекст.textContent = String(spec.total);
         центрТекст.style.setProperty('--at', центр[1]);
+        центрТекст.style.left = центр[0];
       }
     }
 
@@ -625,6 +647,12 @@
         lineStyle: { width: 2 },
         areaStyle: spec.area === false ? null : areaFill(0, false)
       }];
+      if (spec.sparkStyle === 'bar') {
+        option.xAxis.boundaryGap = true;
+        option.yAxis.min = 0;
+        option.yAxis.scale = false;
+        option.series = [{type:'bar', name:one.name, data:one.data, barWidth:'65%', barMinWidth:1, itemStyle:{color:window.dkMeaning.color(spec.tone || 'event','fill',cur),opacity:0.45}}];
+      }
       applyHighlight(option.series, spec);
     }
 

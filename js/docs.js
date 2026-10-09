@@ -157,7 +157,7 @@
   ];
   addGroup('Визуальный язык', visual, false);
   var componentBox = addGroup('Компоненты', [['Все компоненты','komponenty']], !showcase);
-  ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты'].forEach(function (name) {
+  ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты','Композиция'].forEach(function (name) {
     var subgroup = document.createElement('div'); subgroup.className = 'sc-nav__component-group'; var groupLabel = document.createElement('p'); groupLabel.className = 'sc-nav__label'; groupLabel.textContent = name; subgroup.appendChild(groupLabel);
     var body = document.createElement('div'); body.className = 'sc-nav__items'; subgroup.appendChild(body); componentBox.appendChild(subgroup);
     (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
@@ -286,7 +286,7 @@
 
   var componentIndex = document.querySelector('.sc-component-index');
   if (componentIndex) {
-    ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты'].forEach(function (name) {
+    ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты','Композиция'].forEach(function (name) {
       var block = document.createElement('div'); var h = document.createElement('h3'); h.textContent = name; block.appendChild(h);
       (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
         var a = document.createElement('a'); a.href = 'component-' + c.slug + '.html'; var text = document.createElement('span'); text.className = 'sc-component-index__text';

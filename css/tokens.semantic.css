@@ -661,3 +661,69 @@
 @media (prefers-reduced-motion: reduce) {
   .dk-root { --duration-fast: 0s; --duration-base: 0s; }
 }
+
+/* Отдельная палитра навигации: светло-голубая в светлой теме. */
+.dk-root[data-theme="dark"], .dk-root:not([data-theme]) {
+  --nav-bg: var(--c-board-dark);
+  --nav-surface: var(--c-widget-1-dark);
+  --nav-surface-2: var(--c-widget-2-dark);
+  --nav-surface-3: color-mix(in srgb, var(--c-widget-2-dark) 82%, var(--c-text-extra-dark));
+  --nav-ink: var(--c-text-main-dark);
+  --nav-ink-2: var(--c-text-extra-dark);
+  --nav-ink-3: var(--c-gray-300);
+  --nav-rule: var(--veil-light-07);
+  --nav-brand: var(--c-nav-accent-blue);
+  --nav-brand-ink: var(--c-widget-1-light);
+  --nav-link: color-mix(in srgb, var(--nav-brand) 55%, var(--c-text-main-dark));
+  --nav-control-on: var(--nav-ink-3);
+  --nav-control-on-hover: color-mix(in srgb, var(--nav-ink-3) 80%, var(--nav-ink-2));
+  --nav-control-on-ink: var(--nav-bg);
+  --nav-control-soft: color-mix(in srgb, var(--nav-ink) 8%, transparent);
+  --nav-edge-float: var(--veil-light-09);
+}
+.dk-root[data-theme="light"] {
+  --nav-bg: var(--c-nav-board-light);
+  --nav-surface: var(--c-nav-widget-1-light);
+  --nav-surface-2: color-mix(in srgb, var(--c-nav-widget-2-light) 91%, var(--c-gray-300));
+  --nav-surface-3: color-mix(in srgb, var(--c-nav-widget-2-light) 77%, var(--c-gray-300));
+  --nav-ink: var(--c-nav-text-main-light);
+  --nav-ink-2: var(--c-gray-500);
+  --nav-ink-3: var(--c-gray-400);
+  --nav-rule: var(--veil-dark-08);
+  --nav-brand: var(--c-nav-accent-blue);
+  --nav-brand-ink: var(--c-widget-1-light);
+  --nav-link: color-mix(in srgb, var(--nav-brand) 82%, var(--c-board-dark));
+  --nav-control-on: var(--nav-ink-3);
+  --nav-control-on-hover: color-mix(in srgb, var(--nav-ink-3) 80%, var(--nav-ink));
+  --nav-control-on-ink: var(--nav-surface);
+  --nav-control-soft: color-mix(in srgb, var(--nav-ink) 10%, transparent);
+  --nav-edge-float: var(--veil-dark-08);
+}
+
+/* Палитра референса 09.10: холодная доска, белые карточки, синий текст.
+   Ступени поверхностей остаются различимыми без декоративных рамок. */
+.dk-root[data-theme="light"] {
+  --bg: var(--c-board-light);
+  --surface-2: var(--c-widget-2-light);
+  --surface-3: color-mix(in srgb, var(--c-widget-2-light) 77%, var(--c-gray-300));
+  --ink-2: var(--c-navy-600);
+  --ink-3: var(--c-navy-500);
+}
+
+.dk-root[data-theme="light"] {
+  --control-on: var(--c-gray-400);
+  --control-on-hover: color-mix(in srgb, var(--c-gray-400) 80%, var(--ink));
+  --control-soft: color-mix(in srgb, var(--c-nav-text-main-light) 10%, transparent);
+}
+
+.dk-root[data-accent="violet"] { --nav-brand: var(--c-accent-violet); }
+.dk-root[data-accent="indigo"] { --nav-brand: var(--c-accent-indigo); }
+
+:root, .dk-root { --type-table-compact: var(--weight-regular) var(--size-10)/var(--lh-16) var(--font-sans); }
+
+:root, .dk-root { --type-overview-title: var(--weight-semibold) var(--size-32)/var(--lh-36) var(--font-sans); --type-panel-title: var(--weight-semibold) var(--size-18)/var(--lh-24) var(--font-sans); }
+
+/* Крупные области риска с подписанными значениями. Малые смысловые значки
+   сохраняют контрастные --crit/--high/--calm; текст всегда использует *-ink. */
+:root, .dk-root { --risk-area-high: var(--crit); --risk-area-medium: var(--high); --risk-area-low: var(--calm); }
+:root[data-theme="light"], .dk-root[data-theme="light"] { --risk-area-high: var(--c-risk-area-high); --risk-area-medium: var(--c-risk-area-medium); --risk-area-low: var(--c-risk-area-low); }

@@ -49,6 +49,8 @@ python3 <кит>/tools/kit.py find карта      # поиск по описи
 придумать определение. Продолжай работу с подтверждёнными показателями;
 не строй зависимый вывод до ответа.
 
+Перед сборкой хедеров и оболочек виджетов читать [composition.md](references/composition.md) и `kit.py show page-header widget-header widget`.
+
 Где подключать каркас: [chrome.md](references/chrome.md),
 [phone.md](references/phone.md). Выбор блока по структуре данных:
 [charts.md](references/charts.md), [data.md](references/data.md).

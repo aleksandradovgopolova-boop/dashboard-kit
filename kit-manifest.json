@@ -23,6 +23,10 @@
     "when": "только если кит рисует всю страницу"
    },
    {
+    "file": "css/page.regions.css",
+    "when": "только пример regions.html; после chrome.css"
+   },
+   {
     "file": "css/page.dashboard.css",
     "when": "только пример dashboard.html; после chrome.css"
    }
@@ -1581,6 +1585,7 @@
    "status": "стабильный",
    "purpose": "Сравнить много объектов по нескольким показателям: регионы по баллу и событиям, заявки по сроку и исполнителю. Читается по строкам, сортируется по колонке, выбирается для действия.",
    "use_when": [
+    "Для последних событий используйте dk-table--events: Время, Событие, Регион, Статус, Пострадавшие. Значок в dk-td-main__icon, численность с единицей чел.; фактические статусы и числа сохраняются.",
     "Объектов больше семи и у каждого несколько показателей — сравнивать нужно по колонкам.",
     "По строке нужно действие: назначить, открыть, снять с контроля.",
     "Точное число важнее формы: «73 события», а не «примерно столько же, сколько у соседа»."
@@ -1686,6 +1691,7 @@
    "classes": [
     "dk-table",
     "dk-table--cards",
+    "dk-table--events",
     "dk-table--ruled",
     "dk-table--sticky-col",
     "dk-table--sticky-head",
@@ -1878,9 +1884,24 @@
    ],
    "api": [
     {
+     "name": "dk-tile--overview",
+     "type": "класс",
+     "what": "Обзорная плитка с полными подписями; значение 40 px на широком экране и 28 px на планшете. Используется с dk-tile--compact."
+    },
+    {
+     "name": "dk-tile--prominent",
+     "type": "класс",
+     "what": "Опциональный акцент: метрика 40 px при внутренней ширине от 210 px, иначе 28 px. Полные подписи и перенос дельты сохраняются."
+    },
+    {
      "name": "dk-tile--compact",
      "type": "класс",
-     "what": "Компактная плитка без спарклайна; число и дельта рядом, полные подписи и адаптивный перенос."
+     "what": "По умолчанию без спарклайна; число и дельта рядом. В обзорной композиции история явно добавляется через dk-tile__spark."
+    },
+    {
+     "name": "dk-tile__spark",
+     "type": "класс",
+     "what": "Обёртка непосредственного потомка dk-tile--overview; внутри dk-chart--spark. Резервирует место рядом с числом, на узком экране переносится."
     },
     {
      "name": "dk-tile__unit",
@@ -1930,18 +1951,25 @@
     "dk-metric-xl",
     "dk-tile",
     "dk-tile--compact",
+    "dk-tile--overview",
+    "dk-tile--prominent",
     "dk-tile__head",
     "dk-tile__icon",
     "dk-tile__label",
     "dk-tile__row",
+    "dk-tile__spark",
     "dk-tile__unit",
     "dk-trend",
     "dk-widget",
+    "dk-widget--overview",
     "dk-widget--s",
     "dk-widget__actions",
     "dk-widget__body",
+    "dk-widget__footer",
     "dk-widget__head",
+    "dk-widget__heading",
     "dk-widget__hint",
+    "dk-widget__meta",
     "dk-widget__title"
    ],
    "include": [
@@ -2866,6 +2894,31 @@
      "what": "Четыре цвета состояния по порядку категорий."
     },
     {
+     "name": "sparkStyle / tone",
+     "type": "'bar' / 'crit' | 'calm' | 'event'",
+     "what": "Для spark: министолбцы с семантической заливкой. Не заменяют числовую историю."
+    },
+    {
+     "name": "palette: status-area",
+     "type": "Крупные красные, жёлтые, зелёные сегменты статусов",
+     "what": "Порядок серий: требуют решения, в работе, решено. Для накопленной динамики без зазоров."
+    },
+    {
+     "name": "forecastStyle",
+     "type": "'dashed'",
+     "what": "Для линии с forecast: пунктирная прогнозная часть и пустые круги."
+    },
+    {
+     "name": "palette: 'risk' / steps",
+     "type": "строка / два числа",
+     "what": "Для bar-h: пороги задают risk-area-low/medium/high по величине, например [60, 78]. Текст и небольшие значки используют контрастные ink-токены."
+    },
+    {
+     "name": "legendPosition",
+     "type": "'right'",
+     "what": "Для donut: легенда со значениями справа при ширине от 320 px, ниже — обычная нижняя легенда."
+    },
+    {
      "name": "highlight, forecast, trend, total, unit, labels",
      "type": "см. варианты",
      "what": "Модификаторы типов."
@@ -2994,6 +3047,11 @@
      "what": "Легенда и шкала."
     },
     {
+     "name": "palette",
+     "type": "'risk'",
+     "what": "С двумя порогами steps — risk-area-low/medium/high по возрастанию риска. Это заливки областей, не цвет текста или небольших значков; пороги и значения обязательны. Иначе остаётся последовательная шкала."
+    },
+    {
      "name": "controls",
      "type": "селектор | элемент | false",
      "what": "Куда поставить сегмент. По умолчанию — в шапку своего виджета."
@@ -3026,14 +3084,14 @@
     "Сокращения регионов из файла раскладки — постоянные."
    ],
    "avoid": [
-    "Радуга вместо лестницы одного тона.",
+    "Произвольная радуга вместо лестницы одного тона или осмысленной палитры риска с явными порогами.",
     "Ноль вместо «нет данных».",
     "Карта без переключателя на плитки — без мыши данных не получить."
    ],
    "a11y": [
     "Плитки — кнопки с `aria-label` «регион · значение»; по сетке ходят стрелками, tabindex один на всю сетку.",
     "Карта недоступна с клавиатуры (canvas) — поэтому плитки обязательны, а не опция.",
-    "Шкала — пять ступеней, все видны на своей доске в обеих темах (проверка ШКАЛА).",
+    "Шкала — по умолчанию пять последовательных ступеней; palette: risk с двумя порогами даёт три состояния. Пороги и единица остаются в легенде.",
     "«Нет данных» в тёмной теме 1,69:1 к поверхности — ниже нормы; открыто в HANDOFF.md (ровная заливка и подпись «Нет данных»)."
    ],
    "related": [
@@ -3217,7 +3275,8 @@
    "owns": [
     "dk-banner",
     "dk-toast",
-    "dk-toasts"
+    "dk-toasts",
+    "dk-widget-icon"
    ],
    "css": [
     "css/components.css"
@@ -3233,6 +3292,11 @@
     "component-banner.html"
    ],
    "api": [
+    {
+     "name": "dk-banner--priority / dk-banner__number",
+     "type": "классы",
+     "what": "Опциональный главный баннер обзора: крупное число, тонированная поверхность и действие. Использовать с crit/high/calm; обычные сообщения сохраняют прежний вид."
+    },
     {
      "name": "dkToast(text, opts)",
      "type": "функция",
@@ -3261,6 +3325,7 @@
    ],
    "example": "<div class=\"dk-banner dk-banner--crit\">\n  <svg class=\"dk-i\"><use href=\"#ti-alert-triangle\"/></svg>\n  <div class=\"dk-banner__text\">\n    <div class=\"dk-banner__title\">Не удалось обновить данные</div>\n    <div class=\"dk-banner__sub\">Проверьте подключение и повторите загрузку</div>\n  </div>\n</div>\n\n<script>\ndkToast('Работа добавлена в календарь');\ndkToast('Срез сброшен', { action: { name: 'Отменить', onClick: restore } });\nvar t = dkToast('Не удалось сохранить', { kind: 'crit' });\nt.close();\n</script>",
    "rules": [
+    "Крупный значок в сводке: dk-widget-icon — контур на мягком круге; dk-widget-icon--crit — авария. Размер и форма едины с другими виджетами, без обводки.",
     "Заголовок баннера с числом и глаголом: «Не удалось обновить данные».",
     "Уведомление в прошедшем времени: «Работа добавлена в календарь».",
     "Тревожное уведомление говорит, что делать: «попробуйте ещё раз»."
@@ -3287,6 +3352,8 @@
     "dk-banner--crit",
     "dk-banner--event",
     "dk-banner--high",
+    "dk-banner--priority",
+    "dk-banner__number",
     "dk-banner__stat",
     "dk-banner__stats",
     "dk-banner__sub",
@@ -3298,7 +3365,9 @@
     "dk-toast--crit",
     "dk-toast--high",
     "dk-toast__text",
-    "dk-toasts"
+    "dk-toasts",
+    "dk-widget-icon",
+    "dk-widget-icon--crit"
    ],
    "include": [
     "js/dk-util.js",
@@ -5101,6 +5170,252 @@
    ]
   },
   {
+   "id": "page-header",
+   "title": "Хедер страницы",
+   "kind": "компонент",
+   "group": "Композиция",
+   "status": "стабильный",
+   "purpose": "Собирает название экрана, его контекст и общие действия из типографики, подписей и контролов кита.",
+   "use_when": [
+    "Нужен общий заголовок самостоятельной страницы или встраиваемого дашборда."
+   ],
+   "instead": [
+    {
+     "when": "Заголовок одной карточки — хедер виджета.",
+     "use": null
+    },
+    {
+     "when": "Путь по иерархии — компонент breadcrumbs; не маскировать под него описание экрана.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-head"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-page-header.html"
+   ],
+   "api": [
+    {
+     "name": "dk-head",
+     "type": "HTML/CSS",
+     "what": "Самостоятельный компонент без JS. Для каркаса страницы kit.py head page-header chrome."
+    },
+    {
+     "name": "Атомы",
+     "type": "Состав",
+     "what": "Типографика + подпись + button/period/segment. Поведение контролов задают их API."
+    }
+   ],
+   "example": "<header class=\"dk-head\">\n  <div class=\"dk-head__titles\">\n    <h1 class=\"dk-head__title\">Сводка по стране</h1>\n    <p class=\"dk-head__subtitle\">Мониторинг рисков в ЖКХ</p>\n  </div>\n  <div class=\"dk-head__actions\">\n    <span class=\"dk-caption\">Демонстрационные данные за 30 дней</span>\n    <a class=\"dk-btn dk-btn--sm\" href=\"dashboard.html\">Открыть сводку</a>\n  </div>\n</header>",
+   "rules": [
+    "Название отвечает «что здесь», подпись уточняет контекст.",
+    "Общий период применяется ко всем связанным блокам; ограничение явно подписано."
+   ],
+   "avoid": [
+    "Фиксированная высота и обрезанный заголовок.",
+    "Фиктивная дата обновления или кнопка без результата.",
+    "Повторять один общий фильтр в каждой карточке."
+   ],
+   "a11y": [
+    "Заголовки передают иерархию: один h1 страницы, h2 виджетов; в живых примерах справочника уровень сдвинут на один.",
+    "Название не обрезается многоточием. При увеличении текста хедер растёт, действия переносятся.",
+    "Переход — ссылка, изменение состояния — кнопка с доступным именем; декоративные SVG скрыты от скринридера.",
+    "Цвет не заменяет текст состояния. Клавиатурный фокус остаётся видимым, сенсорная цель не меньше 44 px."
+   ],
+   "related": [
+    "button",
+    "empty",
+    "widget",
+    "widget-header"
+   ],
+   "classes": [
+    "dk-head",
+    "dk-head__actions",
+    "dk-head__subtitle",
+    "dk-head__title",
+    "dk-head__titles"
+   ],
+   "include": []
+  },
+  {
+   "id": "widget-header",
+   "title": "Хедер виджета",
+   "kind": "компонент",
+   "group": "Композиция",
+   "status": "стабильный",
+   "purpose": "Называет вопрос виджета и размещает рядом его локальные действия. Не зависит от типа содержимого.",
+   "use_when": [
+    "Любой содержательный виджет с названием.",
+    "Нужны локальные экспорт, полный экран, переход к деталям или смена представления."
+   ],
+   "instead": [
+    {
+     "when": "Название всего экрана — хедер страницы.",
+     "use": null
+    },
+    {
+     "when": "Число KPI — компонент tile; не собирать KPI из хедера графика.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-widget__head",
+    "dk-widget__heading",
+    "dk-widget__title",
+    "dk-widget__meta",
+    "dk-widget__actions"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-widget-header.html"
+   ],
+   "api": [
+    {
+     "name": "Слоты",
+     "type": "HTML",
+     "what": "Название обязательно; контекст и действия выводятся только при наличии."
+    },
+    {
+     "name": "Локальные контролы",
+     "type": "Поведение",
+     "what": "Триггер → результат в этом виджете → статус результата; ошибки не сбрасывают текущий срез."
+    }
+   ],
+   "example": "<header class=\"dk-widget__head\">\n  <div class=\"dk-widget__heading\">\n    <h2 class=\"dk-widget__title\">Последние события</h2>\n    <p class=\"dk-widget__meta\">Демонстрационные данные · за сутки</p>\n  </div>\n  <div class=\"dk-widget__actions\"><a class=\"dk-btn dk-btn--ghost dk-btn--sm\" href=\"accidents.html\">Все аварии <svg class=\"dk-i\" aria-hidden=\"true\"><use href=\"#ti-chevron-right\"/></svg></a></div>\n</header>",
+   "rules": [
+    "Сначала назвать показатель: «Средний риск по округам».",
+    "Экспорт и полный экран сохраняют порядок в разных виджетах.",
+    "Во время загрузки или ошибки сохранять заголовок и выбранный срез."
+   ],
+   "avoid": [
+    "Кнопки вплотную к длинному заголовку.",
+    "Обязательная иконка перед каждым названием без смысла.",
+    "Скрытый заголовок ради места для действий."
+   ],
+   "a11y": [
+    "Заголовки передают иерархию: один h1 страницы, h2 виджетов; в живых примерах справочника уровень сдвинут на один.",
+    "Название не обрезается многоточием. При увеличении текста хедер растёт, действия переносятся.",
+    "Переход — ссылка, изменение состояния — кнопка с доступным именем; декоративные SVG скрыты от скринридера.",
+    "Цвет не заменяет текст состояния. Клавиатурный фокус остаётся видимым, сенсорная цель не меньше 44 px."
+   ],
+   "related": [
+    "button",
+    "page-header",
+    "widget"
+   ],
+   "classes": [
+    "dk-widget__actions",
+    "dk-widget__head",
+    "dk-widget__heading",
+    "dk-widget__meta",
+    "dk-widget__title"
+   ],
+   "include": []
+  },
+  {
+   "id": "widget",
+   "title": "Каркас виджета",
+   "kind": "компонент",
+   "group": "Композиция",
+   "status": "стабильный",
+   "purpose": "Объединяет хедер, содержимое и необязательный подвал в одну повторяемую структуру с едиными отступами и состояниями.",
+   "use_when": [
+    "Нужно поместить график, карту, таблицу или список в общую поверхность.",
+    "Несколько блоков должны собираться по одинаковым правилам."
+   ],
+   "instead": [
+    {
+     "when": "Для KPI брать tile, для сообщения состояния banner.",
+     "use": null
+    },
+    {
+     "when": "Не оборачивать виджет ещё одним виджетом ради дополнительного фона.",
+     "use": null
+    }
+   ],
+   "owns": [
+    "dk-widget"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [],
+   "data": [],
+   "js": [],
+   "docs": [
+    "component-widget.html"
+   ],
+   "api": [
+    {
+     "name": "Сборка",
+     "type": "Порядок",
+     "what": "dk-widget > header.dk-widget__head + div.dk-widget__body + footer.dk-widget__footer (опционально)."
+    },
+    {
+     "name": "Данные",
+     "type": "Ответственность",
+     "what": "Хост передаёт один согласованный срез в компоненты данных. Оболочка не вычисляет показатели."
+    },
+    {
+     "name": "Проверка",
+     "type": "Критерий",
+     "what": "320/390/1536 px, обе темы, длинный заголовок, 200% текст, клавиатура, загрузка/пусто/ошибка без потери контекста."
+    }
+   ],
+   "example": "<section class=\"dk-widget dk-widget--overview\">\n<header class=\"dk-widget__head\">\n  <div class=\"dk-widget__heading\">\n    <h2 class=\"dk-widget__title\">Последние события</h2>\n    <p class=\"dk-widget__meta\">Демонстрационные данные · за сутки</p>\n  </div>\n  <div class=\"dk-widget__actions\"><a class=\"dk-btn dk-btn--ghost dk-btn--sm\" href=\"accidents.html\">Все аварии <svg class=\"dk-i\" aria-hidden=\"true\"><use href=\"#ti-chevron-right\"/></svg></a></div>\n</header>\n  <div class=\"dk-widget__body\">\n    <div class=\"dk-row\"><span class=\"dk-row__label\">Прорыв теплотрассы</span><span class=\"dk-status dk-status--crit\">В работе</span></div>\n    <div class=\"dk-row\"><span class=\"dk-row__label\">Подача восстановлена</span><span class=\"dk-status dk-status--calm\">Устранена</span></div>\n  </div>\n  <footer class=\"dk-widget__footer\"><span>Два демонстрационных события</span><a class=\"dk-btn dk-btn--ghost dk-btn--sm\" href=\"component-table.html\">Табличный вариант</a></footer>\n</section>",
+   "rules": [
+    "Во всех состояниях сохранять название и контекст; тело заменяется загрузкой, пустым состоянием или ошибкой.",
+    "Ноль отображать как значение. Нет данных — отдельное состояние.",
+    "У таблицы прокручивается dk-tablewrap; вся страница не расширяется.",
+    "Легенда принадлежит графику и остаётся с ним при экспорте или полном экране."
+   ],
+   "avoid": [
+    "График без названия, единиц и периода.",
+    "Фиксированная высота, которая режет данные или длинный текст.",
+    "Декоративные обводки и тени.",
+    "Добавлять скролл внутри каждого виджета по умолчанию."
+   ],
+   "a11y": [
+    "Заголовки передают иерархию: один h1 страницы, h2 виджетов; в живых примерах справочника уровень сдвинут на один.",
+    "Название не обрезается многоточием. При увеличении текста хедер растёт, действия переносятся.",
+    "Переход — ссылка, изменение состояния — кнопка с доступным именем; декоративные SVG скрыты от скринридера.",
+    "Цвет не заменяет текст состояния. Клавиатурный фокус остаётся видимым, сенсорная цель не меньше 44 px.",
+    "Для именованной секции свяжите section и заголовок через уникальные aria-labelledby/id. Повторные экземпляры не разделяют id.",
+    "Статус обновления — role=status; ошибка объявляется в месте действия. Не переводить фокус при фоновом обновлении."
+   ],
+   "related": [
+    "empty",
+    "page-header",
+    "widget-header"
+   ],
+   "classes": [
+    "dk-widget",
+    "dk-widget--overview",
+    "dk-widget--s",
+    "dk-widget__actions",
+    "dk-widget__body",
+    "dk-widget__footer",
+    "dk-widget__head",
+    "dk-widget__heading",
+    "dk-widget__hint",
+    "dk-widget__meta",
+    "dk-widget__title"
+   ],
+   "include": []
+  },
+  {
    "id": "base",
    "title": "Основа страницы",
    "kind": "основа",
@@ -5188,8 +5503,11 @@
     "dk-data-summary",
     "dk-wrap",
     "dk-grid",
+    "dk-grid--five",
+    "dk-grid--overview-panels",
     "dk-col",
     "dk-layout",
+    "dk-focus-layout",
     "dk-stack",
     "dk-push",
     "dk-head",
@@ -5207,12 +5525,17 @@
     "README.md#Правила раскладки дашборда",
     "README.md#Сетка и устройства",
     "README.md#Размер виджета",
-    "README.md#Раскладка дашборда на телефоне"
+    "README.md#Раскладка дашборда на телефоне",
+    "component-page-header.html",
+    "component-widget-header.html",
+    "component-widget.html"
    ],
    "rules": [
     "Равная высота соседних карточек — dk-grid--equal; ряд по самому высокому содержимому, без внутренней прокрутки.",
     "Ширина — долей (--quarter, --third, --half, --two-thirds, --full), а не числом колонок.",
-    "Не больше трёх-четырёх виджетов в ряду; сверху вниз — от общего к частному.",
+    "Не больше трёх-четырёх подробных виджетов в ряду; сверху вниз — от общего к частному.",
+    "dk-grid--five: пять KPI на широком экране, две колонки на телефоне; последняя нечётная карточка занимает строку.",
+    "dk-grid--overview-panels: панели 1.45:1.05:1; на планшете две колонки с первой панелью во всю строку, на телефоне одна.",
     "Размер S — четверть: число, подпись, тренд, спарклайн. График с осями в четверть не ставится.",
     "Фильтры — одной строкой над содержимым, а не внутри виджетов."
    ],
@@ -5230,13 +5553,22 @@
     "dk-col--two-thirds",
     "dk-data-summary",
     "dk-details",
+    "dk-focus-layout",
+    "dk-focus-layout__aside",
+    "dk-focus-layout__primary",
     "dk-grid",
     "dk-grid--equal",
     "dk-grid--even",
+    "dk-grid--five",
     "dk-grid--metrics",
     "dk-grid--overview",
+    "dk-grid--overview-panels",
     "dk-grid--stretch",
     "dk-head",
+    "dk-head__actions",
+    "dk-head__subtitle",
+    "dk-head__title",
+    "dk-head__titles",
     "dk-layout",
     "dk-layout--wide-side",
     "dk-panel",
@@ -5244,15 +5576,23 @@
     "dk-push",
     "dk-region-result",
     "dk-region-tools",
+    "dk-region-tools--stacked",
+    "dk-region-tools__filters",
+    "dk-region-tools__period",
+    "dk-region-tools__primary",
     "dk-scroll",
     "dk-stack",
     "dk-well",
     "dk-widget",
+    "dk-widget--overview",
     "dk-widget--s",
     "dk-widget__actions",
     "dk-widget__body",
+    "dk-widget__footer",
     "dk-widget__head",
+    "dk-widget__heading",
     "dk-widget__hint",
+    "dk-widget__meta",
     "dk-widget__title",
     "dk-wrap",
     "dk-wrap--monitor"
@@ -5713,8 +6053,8 @@
  },
  "hooks": {},
  "counts": {
-  "parts": 60,
-  "classes": 457,
+  "parts": 63,
+  "classes": 482,
   "functions": 45,
   "chart_types": 12
  }

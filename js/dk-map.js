@@ -212,9 +212,15 @@
       return cuts.length;
     }
 
+    function bucketColor(b) {
+      return opts.palette === 'risk' && cuts.length === 2
+        ? css('--risk-area-' + ['low', 'medium', 'high'][b])
+        : css('--seq-' + (b + 1));
+    }
+
     function color(v) {
       var b = bucket(v);
-      return b < 0 ? window.dkMeaning.color('nodata', 'fill', host) : css('--seq-' + (b + 1));
+      return b < 0 ? window.dkMeaning.color('nodata', 'fill', host) : bucketColor(b);
     }
 
     /* ЛЕГЕНДА ВНИЗУ, ПЕРЕКЛЮЧАТЕЛЬ ВВЕРХУ. Раньше они стояли вместе в шапке,
@@ -282,7 +288,7 @@
       for (var i = 0; i <= cuts.length; i++) {
         var from = i === 0 ? min : cuts[i - 1];
         var to = i === cuts.length ? max : cuts[i];
-        parts.push('<span class="dk-map__key"><i style="background:var(--seq-' + (i + 1) + ')"></i>' +
+        parts.push('<span class="dk-map__key"><i style="background:' + bucketColor(i) + '"></i>' +
           nfmt(Math.round(from)) + '–' + nfmt(Math.round(to)) + '</span>');
       }
       // Правило 3: отсутствие данных названо, а не спрятано среди нулей.
