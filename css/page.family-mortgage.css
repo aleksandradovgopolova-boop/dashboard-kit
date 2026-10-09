@@ -1,0 +1,32 @@
+/* Страница «Семейная ипотека».
+   Только композиция карты с именованной легендой — больше ничего.
+   Выравнивание KPI, единый стиль заголовков, высоту графиков панелей, ритм
+   секций (dk-flex--column) и шаг между блоками теперь даёт сам кит
+   (components.css). Только раскладка и токены — без сырых цветов. */
+
+/* Карта и именованная легенда компонуются рядом; встроенную шкалу dkMap
+   прячем — полная легенда с порогами и числами стоит справа. */
+#fm-dashboard .fm-map-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--gap-inline);
+  flex: 1;
+}
+#fm-dashboard #fm-map { min-width: 0; }
+#fm-dashboard #fm-map .dk-map__canvas { height: 200px; max-height: none; aspect-ratio: auto; }
+#fm-dashboard #fm-map .dk-map__legend { display: none; }
+
+#fm-dashboard .fm-map-summary { display: grid; gap: var(--gap-group); }
+#fm-dashboard #fm-keys { display: grid; gap: var(--space-5); font: var(--type-caption); }
+#fm-dashboard #fm-keys .dk-key { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--space-4); }
+#fm-dashboard #fm-keys b { color: var(--ink); }
+#fm-dashboard .fm-map-summary .dk-caption { font: var(--type-caption); }
+#fm-dashboard #fm-map-controls .dk-seg { font: var(--type-caption); }
+
+/* Узкий экран: карта и легенда — друг под другом, ключи в сетку по месту. */
+@media (max-width: 767px) {
+  #fm-dashboard .fm-map-body { grid-template-columns: minmax(0, 1fr); }
+  #fm-dashboard #fm-keys { grid-template-columns: repeat(auto-fit, minmax(min(100%, 12em), 1fr)); }
+  #fm-dashboard #fm-map .dk-map__canvas { height: 220px; }
+}

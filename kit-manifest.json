@@ -29,6 +29,10 @@
    {
     "file": "css/page.dashboard.css",
     "when": "только пример dashboard.html; после chrome.css"
+   },
+   {
+    "file": "css/page.family-mortgage.css",
+    "when": "только пример family-mortgage.html; после components.css"
    }
   ],
   "scripts": [
@@ -5509,6 +5513,7 @@
     "dk-layout",
     "dk-focus-layout",
     "dk-stack",
+    "dk-sections",
     "dk-push",
     "dk-head",
     "dk-panel",
@@ -5581,6 +5586,7 @@
     "dk-region-tools__period",
     "dk-region-tools__primary",
     "dk-scroll",
+    "dk-sections",
     "dk-stack",
     "dk-well",
     "dk-widget",
@@ -6054,7 +6060,7 @@
  "hooks": {},
  "counts": {
   "parts": 63,
-  "classes": 482,
+  "classes": 483,
   "functions": 45,
   "chart_types": 12
  }

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="light" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Семейная ипотека · dashboard-kit</title>
+<!-- dashboard-kit: base, chart, map, table, tile, rank, banner, bullet-chart.
+     Собрано: python3 tools/kit.py head base chart map table tile rank banner bullet-chart
+     Тема — первым и без defer: атрибут обязан стоять до первой отрисовки. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/page.family-mortgage.css">
+
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="vendor/echarts.min.js" defer></script>
+<script src="js/dk-chart-theme.js" defer></script>
+<script src="js/dk-charts.js" defer></script>
+<script src="js/dk-table.js" defer></script>
+<script src="js/dk-map.js" defer></script>
+<script src="js/dk-notify.js" defer></script>
+<script src="js/dk-analysis.js" defer></script>
+<!-- данные рядом с китом: data/family-mortgage-demo.json, data/regions.topojson,
+     data/regions-tiles.json; страница открывается по http -->
+</head>
+
+<body class="dk-page" id="fm-dashboard">
+<a class="dk-skip" href="#main">К содержимому</a>
+
+<div class="dk-wrap dk-wrap--monitor">
+
+  <header class="dk-head">
+    <div class="dk-head__titles">
+      <div class="dk-head__subtitle">Государственная программа льготного кредитования</div>
+      <h1 class="dk-head__title">Семейная ипотека</h1>
+    </div>
+    <div class="dk-head__actions">
+      <span class="dk-caption" id="fm-period">Демонстрационные данные за 30 дней</span>
+      <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+        <button type="button" data-theme-set="light" aria-pressed="true" aria-label="Светлая тема" title="Светлая тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg></button>
+        <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Тёмная тема" title="Тёмная тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-moon"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1" class="dk-sections">
+
+    <!-- Главный сигнал экрана: темп выдач к плану и сколько регионов отстаёт. -->
+    <div class="dk-banner dk-banner--high dk-banner--priority" id="fm-alert">
+      <span class="dk-widget-icon"><svg aria-hidden="true" class="dk-i"><use href="#ti-arrow-up-right"/></svg></span>
+      <div class="dk-banner__text">
+        <div class="dk-banner__title"><span class="dk-banner__number" id="fm-plan-pct">—</span> плана по выдачам</div>
+        <div class="dk-banner__sub" id="fm-alert-sub">Регионы с отставанием загружаются…</div>
+      </div>
+      <a class="dk-btn dk-btn--sm" href="#fm-dynamics" aria-label="Перейти к динамике выдач" title="Перейти к динамике выдач"><span>Динамика выдач</span><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></a>
+    </div>
+
+    <!-- Пять обзорных показателей. -->
+    <div class="dk-grid dk-grid--five" id="fm-kpis">
+      <section class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview" id="fm-kpi-regions">
+        <div class="dk-tile__head">
+          <span class="dk-tile__icon"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg></span>
+          <span class="dk-tile__label">Регионы с отставанием</span>
+        </div>
+        <div class="dk-tile__row"><span class="dk-metric-lg dk-hero__n" id="fm-regions-n">—</span><span class="dk-tile__unit dk-hero__of" id="fm-regions-of">из 89</span></div>
+      </section>
+
+      <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview" style="--accent:var(--calm-ink)">
+        <div class="dk-tile__head">
+          <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-home"></use></svg></span>
+          <span class="dk-tile__label">Выдано кредитов</span>
+        </div>
+        <div class="dk-tile__row">
+          <span class="dk-metric-lg" id="fm-issued">—</span>
+          <span class="dk-trend" style="--accent:var(--calm-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"></use></svg> +3%</span>
+        </div>
+      </div>
+
+      <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview" style="--accent:var(--calm-ink)">
+        <div class="dk-tile__head">
+          <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-file-text"></use></svg></span>
+          <span class="dk-tile__label">Объём выдач</span>
+        </div>
+        <div class="dk-tile__row">
+          <span class="dk-metric-lg"><span id="fm-volume">—</span> <span class="dk-tile__unit">млрд ₽</span></span>
+          <span class="dk-trend" style="--accent:var(--calm-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"></use></svg> +4%</span>
+        </div>
+      </div>
+
+      <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview">
+        <div class="dk-tile__head">
+          <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-info-circle"></use></svg></span>
+          <span class="dk-tile__label">Средняя ставка</span>
+        </div>
+        <div class="dk-tile__row"><span class="dk-metric-lg" id="fm-rate">—</span></div>
+      </div>
+
+      <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview">
+        <div class="dk-tile__head">
+          <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-circle-check"></use></svg></span>
+          <span class="dk-tile__label">Одобрение заявок</span>
+        </div>
+        <div class="dk-tile__row"><span class="dk-metric-lg" id="fm-approval">—</span></div>
+      </div>
+    </div>
+
+    <!-- Обзорные панели: карта, динамика, округа, рейтинг, спрос, бюджет. -->
+    <div class="dk-grid dk-grid--overview-panels" id="fm-panels">
+
+      <section class="dk-widget dk-widget--overview" id="fm-map-widget">
+        <div class="dk-widget__head">
+          <h2 class="dk-widget__title">Отставание от плана по регионам</h2>
+          <div id="fm-map-controls" class="dk-widget__actions"></div>
+        </div>
+        <div class="fm-map-body dk-widget__body">
+          <div id="fm-map"></div>
+          <div class="fm-map-summary">
+            <div class="dk-keys" id="fm-keys">
+              <span class="dk-key" style="--swatch:var(--risk-area-high)"><i class="dk-key__dot"></i>Сильно отстают <b id="fm-k-high">—</b></span>
+              <span class="dk-key" style="--swatch:var(--risk-area-medium)"><i class="dk-key__dot"></i>Отстают <b id="fm-k-medium">—</b></span>
+              <span class="dk-key" style="--swatch:var(--risk-area-low)"><i class="dk-key__dot"></i>По плану <b id="fm-k-low">—</b></span>
+              <span class="dk-key" style="--swatch:var(--nodata)"><i class="dk-key__dot"></i>Нет данных <b id="fm-k-missing">—</b></span>
+            </div>
+            <p class="dk-caption">Сильно отстают ≥78<br>Отстают 60–77<br>По плану &lt;60 баллов отставания</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="dk-widget dk-widget--overview" id="fm-dynamics">
+        <div class="dk-widget__head">
+          <h2 class="dk-widget__title">Выдачи: факт и план по месяцам</h2>
+        </div>
+        <div class="dk-widget__body"><div class="dk-chart" id="fm-line"></div></div>
+      </div>
+
+      <div class="dk-widget dk-widget--overview" id="fm-district-widget">
+        <div class="dk-widget__head">
+          <h2 class="dk-widget__title">Отставание по федеральным округам</h2>
+        </div>
+        <div class="dk-widget__body"><div class="dk-chart dk-chart--sm" id="fm-bars"></div></div>
+      </div>
+
+      <section class="dk-widget dk-widget--overview" id="fm-rank-widget">
+        <div class="dk-widget__head"><h2 class="dk-widget__title">Регионы с наибольшим отставанием</h2></div>
+        <div class="dk-widget__body">
+          <div class="dk-summary" style="--accent:var(--crit-ink)">
+            <div><div class="dk-trend"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-down"/></svg> отстают от плана</div></div>
+            <div class="dk-score"><span class="dk-score__v" id="fm-rank-score">—</span><span class="dk-score__of">/89</span></div>
+          </div>
+          <div class="dk-rank" id="fm-rank">
+            <div class="dk-rank__head"><span class="dk-overline">Регион</span><span class="dk-overline">Балл отставания</span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="dk-widget dk-widget--overview" id="fm-demand-widget">
+        <div class="dk-widget__head">
+          <h2 class="dk-widget__title">Спрос: подано заявок и одобрено</h2>
+        </div>
+        <div class="dk-widget__body"><div class="dk-chart dk-chart--sm" id="fm-demand"></div></div>
+      </div>
+
+      <section class="dk-widget dk-widget--overview" id="fm-budget-widget">
+        <div class="dk-widget__head"><h2 class="dk-widget__title">Освоение бюджета субсидий</h2></div>
+        <div class="dk-widget__body"><div id="fm-budget"></div></div>
+      </section>
+    </div>
+
+    <!-- Ключевой вывод. -->
+    <div class="dk-banner dk-banner--event">
+      <span class="dk-widget-icon"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></span>
+      <div class="dk-banner__text">
+        <div class="dk-banner__title">Ключевой вывод</div>
+        <div class="dk-banner__sub" id="fm-insight">Загрузка…</div>
+      </div>
+    </div>
+
+    <!-- Таблица регионов: сравнение по показателям. -->
+    <section class="dk-widget" id="fm-table-widget">
+      <div class="dk-widget__head">
+        <h2 class="dk-widget__title">Регионы: ключевые показатели</h2>
+        <span class="dk-widget__meta">12 регионов с наибольшим отставанием</span>
+      </div>
+      <div class="dk-widget__body">
+        <div class="dk-tablewrap">
+          <table class="dk-table dk-table--zebra dk-table--cards" id="fm-table" aria-label="Регионы: ключевые показатели">
+            <thead>
+              <tr>
+                <th scope="col" style="width:30%" data-sortable="Регион">Регион</th>
+                <th scope="col" style="width:16%" class="dk-td-num" data-sortable="Выдано">Выдано</th>
+                <th scope="col" style="width:18%" class="dk-td-num" data-sortable="Объём, млрд ₽">Объём, млрд&nbsp;₽</th>
+                <th scope="col" style="width:12%" class="dk-td-num" data-sortable="План, %">План,&nbsp;%</th>
+                <th scope="col" style="width:12%" class="dk-td-num" data-sortable="Ставка, %">Ставка,&nbsp;%</th>
+                <th scope="col" style="width:12%" data-sortable="Статус">Статус</th>
+              </tr>
+            </thead>
+            <tbody id="fm-tbody"></tbody>
+          </table>
+        </div>
+        <p class="dk-caption">Демонстрационные синтетические данные. Реального источника нет.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    var STATUS = { crit: 'Сильно отстаёт', high: 'Отстаёт', calm: 'По плану' };
+
+    fetch('data/family-mortgage-demo.json').then(function (r) {
+      if (!r.ok) throw Error('Не удалось загрузить данные программы');
+      return r.json();
+    }).then(function (data) {
+      var p = data.program, lag = data.lag, m = data.monthly, regions = data.regions;
+      var behind = lag.counts.high + lag.counts.medium;
+
+      // Главный сигнал.
+      document.getElementById('fm-plan-pct').textContent = dkFmt.pct(p.planPct);
+      document.getElementById('fm-alert-sub').textContent =
+        behind + ' из ' + lag.total + ' регионов отстают от плана выдач';
+
+      // KPI.
+      document.getElementById('fm-regions-n').textContent = dkFmt.num(behind);
+      document.getElementById('fm-regions-of').textContent = 'из ' + dkFmt.num(lag.total);
+      document.getElementById('fm-issued').textContent = dkFmt.num(p.issued);
+      document.getElementById('fm-volume').textContent = dkFmt.num(p.volume, 0);
+      document.getElementById('fm-rate').textContent = dkFmt.pct(p.avgRate, 1);
+      document.getElementById('fm-approval').textContent = dkFmt.pct(p.approval);
+
+      // Легенда карты.
+      document.getElementById('fm-k-high').textContent = dkFmt.num(lag.counts.high);
+      document.getElementById('fm-k-medium').textContent = dkFmt.num(lag.counts.medium);
+      document.getElementById('fm-k-low').textContent = dkFmt.num(lag.counts.low);
+      document.getElementById('fm-k-missing').textContent = dkFmt.num(lag.counts.missing);
+
+      // Карта.
+      Promise.all(['data/regions.topojson', 'data/regions-tiles.json'].map(function (u) {
+        return fetch(u).then(function (r) { if (!r.ok) throw Error('Карта недоступна'); return r.json(); });
+      })).then(function (files) {
+        dkMap(document.getElementById('fm-map'), {
+          topo: files[0], object: 'ru89', tiles: files[1], values: lag.values,
+          min: 0, max: 100, steps: [60, 78], palette: 'risk',
+          controls: '#fm-map-controls', unit: 'баллов отставания'
+        });
+        document.getElementById('fm-map').dataset.ready = 'true';
+      }).catch(function () {
+        document.getElementById('fm-map').textContent = 'Не удалось загрузить карту регионов.';
+      });
+
+      // Отставание по округам.
+      if (typeof dkChart === 'function') {
+        dkChart(document.getElementById('fm-bars'), {
+          type: 'bar-h', palette: 'risk', steps: [60, 78],
+          label: 'Средний балл отставания от плана по федеральным округам',
+          categories: lag.districts.map(function (d) { return d.name; }),
+          series: [{ name: 'Балл отставания', data: lag.districts.map(function (d) { return d.average; }) }]
+        });
+
+        // Динамика выдач: факт и план.
+        dkChart(document.getElementById('fm-line'), {
+          type: 'line', highlight: 'Факт',
+          label: 'Выдачи семейной ипотеки по месяцам: факт и план, кредитов',
+          categories: m.labels,
+          series: [
+            { name: 'План', data: m.issuedPlan },
+            { name: 'Факт', data: m.issuedFact }
+          ]
+        });
+
+        // Спрос: подано и одобрено.
+        dkChart(document.getElementById('fm-demand'), {
+          type: 'bar',
+          label: 'Спрос на семейную ипотеку по месяцам: подано заявок и одобрено',
+          categories: m.labels,
+          series: [
+            { name: 'Подано', data: m.applied },
+            { name: 'Одобрено', data: m.approved }
+          ]
+        });
+
+      }
+
+      // Бюджет субсидий.
+      if (typeof dkBullet === 'function') {
+        var b = p.budget;
+        dkBullet(document.getElementById('fm-budget'), {
+          label: 'Освоено субсидий за период', actual: b.spent, target: b.plan,
+          min: 0, max: b.limit, unit: '₽ млрд',
+          ranges: [
+            { to: b.plan, label: 'Плановое освоение' },
+            { to: b.limit, label: 'Годовой лимит' }
+          ]
+        });
+      }
+
+      // Рейтинг отстающих регионов (топ-10 по баллу отставания).
+      var sorted = regions.slice().sort(function (a, b) { return b.lag - a.lag; });
+      document.getElementById('fm-rank-score').textContent = dkFmt.num(behind);
+      var rank = document.getElementById('fm-rank');
+      sorted.slice(0, 10).forEach(function (r, i) {
+        var row = document.createElement('button');
+        row.className = 'dk-rank__row';
+        row.type = 'button';
+        row.dataset.id = r.id;
+        var accent = dkMeaning(r.status, 'text');
+        var num = document.createElement('span'); num.className = 'dk-rank__i';
+        num.textContent = String(i + 1).padStart(2, '0');
+        var name = document.createElement('span'); name.className = 'dk-rank__name';
+        name.textContent = r.name;
+        var val = document.createElement('span'); val.className = 'dk-rank__v';
+        val.style.setProperty('--accent', accent);
+        val.textContent = dkFmt.num(r.lag);
+        row.append(num, name, val);
+        rank.append(row);
+      });
+
+      // Таблица регионов (топ-12 по отставанию).
+      var tbody = document.getElementById('fm-tbody');
+      sorted.slice(0, 12).forEach(function (r) {
+        var tr = document.createElement('tr');
+        var statusClass = 'dk-status--' + r.status;
+        var icon = r.status === 'crit' ? 'ti-alert-triangle' : r.status === 'high' ? 'ti-clock' : 'ti-circle-check';
+
+        var tdName = document.createElement('td');
+        tdName.dataset.sort = r.name;
+        var main = document.createElement('span'); main.className = 'dk-td-main';
+        var sub = document.createElement('span'); sub.className = 'dk-td-main__text';
+        var nm = document.createElement('span'); nm.className = 'dk-td-main__name'; nm.textContent = r.name;
+        var fd = document.createElement('span'); fd.className = 'dk-td-main__sub'; fd.textContent = r.fdName + ' ФО';
+        sub.append(nm, fd); main.append(sub); tdName.append(main);
+
+        var tdIssued = document.createElement('td');
+        tdIssued.className = 'dk-td-num'; tdIssued.dataset.sort = r.issued;
+        tdIssued.textContent = dkFmt.num(r.issued);
+
+        var tdVolume = document.createElement('td');
+        tdVolume.className = 'dk-td-num'; tdVolume.dataset.sort = r.volume;
+        tdVolume.textContent = dkFmt.num(r.volume, 1);
+
+        var tdPlan = document.createElement('td');
+        tdPlan.className = 'dk-td-num'; tdPlan.dataset.sort = r.planPct;
+        tdPlan.textContent = dkFmt.pct(r.planPct);
+
+        var tdRate = document.createElement('td');
+        tdRate.className = 'dk-td-num'; tdRate.dataset.sort = r.rate;
+        tdRate.textContent = dkFmt.pct(r.rate, 1);
+
+        var tdStatus = document.createElement('td');
+        tdStatus.dataset.sort = r.status;
+        var st = document.createElement('span'); st.className = 'dk-status ' + statusClass;
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('class', 'dk-i dk-i--sm');
+        var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        use.setAttribute('href', '#' + icon); svg.append(use);
+        st.append(svg, document.createTextNode(STATUS[r.status])); tdStatus.append(st);
+
+        tr.append(tdName, tdIssued, tdVolume, tdPlan, tdRate, tdStatus);
+        tbody.append(tr);
+      });
+      if (typeof dkTable === 'function') dkTable(document.getElementById('fm-table'), {});
+
+      // Ключевой вывод.
+      var worstD = lag.districts[0];
+      var worstR = sorted[0];
+      document.getElementById('fm-insight').textContent =
+        'Выдачи — ' + dkFmt.pct(p.planPct) + ' плана. Сильнее всего отстаёт ' +
+        worstR.name + ' (' + dkFmt.num(worstR.lag) + ' баллов), среди округов — ' +
+        worstD.name + ' (' + dkFmt.num(worstD.average) + '). Одобрение заявок — ' +
+        dkFmt.pct(p.approval) + '.';
+    }).catch(function () {
+      document.getElementById('fm-plan-pct').textContent = '—';
+      document.getElementById('fm-alert-sub').textContent = 'Данные программы недоступны';
+      document.getElementById('fm-insight').textContent = 'Не удалось загрузить данные программы.';
+    });
+  });
+</script>
+</body>
+</html>

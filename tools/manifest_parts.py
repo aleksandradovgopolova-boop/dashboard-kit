@@ -59,6 +59,7 @@ CSS_ORDER = [
     ("css/chrome.css", "только если кит рисует всю страницу"),
     ("css/page.regions.css", "только пример regions.html; после chrome.css"),
     ("css/page.dashboard.css", "только пример dashboard.html; после chrome.css"),
+    ("css/page.family-mortgage.css", "только пример family-mortgage.html; после components.css"),
 ]
 
 # Чужой скрипт со своим стилем: подключил скрипт — подключи и стиль. Из кода
@@ -100,7 +101,7 @@ PARTS = [
                    "общая коробка для любого блока, шапка страницы, вложенная зона.",
         "use_when": ["Любой дашборд: блоки ставятся в dk-grid долями dk-col--*, каждый блок — dk-widget."],
         "instead": [],
-        "owns": ["dk-region-tools", "dk-region-result", "dk-details", "dk-data-summary", "dk-wrap", "dk-grid", "dk-grid--five", "dk-grid--overview-panels", "dk-col", "dk-layout", "dk-focus-layout", "dk-stack", "dk-push", "dk-head",
+        "owns": ["dk-region-tools", "dk-region-result", "dk-details", "dk-data-summary", "dk-wrap", "dk-grid", "dk-grid--five", "dk-grid--overview-panels", "dk-col", "dk-layout", "dk-focus-layout", "dk-stack", "dk-sections", "dk-push", "dk-head",
                  "dk-panel", "dk-well", "dk-widget", "dk-scroll"],
         "css": ["css/components.css"], "scripts": [], "js": [],
         "docs": ["README.md#Правила раскладки дашборда", "README.md#Сетка и устройства",

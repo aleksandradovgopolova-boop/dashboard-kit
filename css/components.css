@@ -414,6 +414,12 @@
   min-width: 0;
 }
 
+/* Секции дашборда: единый вертикальный шаг между крупными блоками (баннер,
+   ряд KPI, панели, вывод, таблица) — чтобы обзор был ровным без страничного
+   CSS. Через margin, а не flex: смена контекста на flex распирала узкий экран
+   широкими баннерами и сетками (замер 09.10). Шаг — grid-gap текущей обёртки. */
+.dk-sections > * + * { margin-top: var(--grid-gap); }
+
 /* Строка «подпись — значение». Основной способ показать число в виджете. */
 .dk-row {
   display: flex;
@@ -4614,7 +4620,10 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
    Модификатор opt-in: витрина компонентов и встроенные блоки сохраняют размер. */
 .dk-wrap--monitor {
   --pad-widget: calc(var(--space-4) * 2);
-  --grid-gap: var(--space-5);
+  /* space-6, а не space-5: прежний дефолт все дашборды всё равно переопределяли
+     на space-6 (dashboard/regions/family-mortgage) — приводим к реальности,
+     чтобы ритм между блоками был ровным без страничного CSS. (09.10) */
+  --grid-gap: var(--space-6);
   --gap-section: var(--space-4);
 }
 .dk-wrap--monitor .dk-widget--s { padding: var(--pad-widget); }
@@ -4832,6 +4841,11 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   .dk-grid--overview-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dk-grid--overview-panels > :first-child { grid-column: 1 / -1; }
   .dk-root .dk-tile--overview .dk-metric-lg { font: var(--type-metric-lg); }
+  /* Пять KPI в один ряд сжимались между планшетом и десктопом: у dk-grid--five
+     не было промежуточного шага (5 → сразу 2 на телефоне). Даём средний шаг —
+     три колонки, как у обзорных панелей рядом, чтобы дашборд был ровным без
+     страничного CSS. (family-mortgage, 09.10) */
+  .dk-grid--five { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 767px) {
   .dk-grid--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -4888,12 +4902,16 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-head__actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--gap-tight); min-width: 0; }
 .dk-widget--overview { gap: var(--space-5); }
 .dk-widget--overview > .dk-widget__head { flex-wrap: wrap; }
-.dk-widget--overview .dk-widget__title { font: var(--type-panel-title); }
+/* Заголовок обзорного виджета — интерфейсный вес (medium), а не жирный: единый
+   спокойный стиль шапок на всех дашбордах без страничного CSS. (09.10) */
+.dk-widget--overview .dk-widget__title { font: var(--type-panel-title); font-weight: var(--weight-ui); }
+/* Графики обзорных панелей — одной высоты, чтобы низ ряда не был рваным. */
+.dk-grid--overview-panels .dk-chart { min-height: 200px; }
 .dk-widget__heading { flex: 1 1 10rem; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
 .dk-widget__meta { margin: 0; font: var(--type-caption); color: var(--ink-2); }
 .dk-widget__footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--gap-inline); font: var(--type-caption); color: var(--ink-2); }
 .dk-widget--overview > .dk-widget__head > .dk-widget__actions { flex-wrap: wrap; min-width: 0; max-width: 100%; }
-@media (max-width: 1199px) { .dk-widget--overview .dk-widget__title { font: var(--type-h3); } }
+@media (max-width: 1199px) { .dk-widget--overview .dk-widget__title { font: var(--type-h3); font-weight: var(--weight-ui); } }
 @media (max-width: 767px) { .dk-head__title { font: var(--type-h2); } .dk-head__actions { flex: 1 1 100%; } }
 
 /* Главный объект + связанная сводка: выбранная композиция карты регионов. */
