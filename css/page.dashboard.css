@@ -49,3 +49,20 @@
 #d-dashboard #d-view-causes .dk-uptime > .dk-caption { margin: 0; }
 
 #d-dashboard #d-view-causes .dk-car__text { display: block; overflow: visible; }
+
+/* Референс 09.10: иерархия текущего обзора, без изменения навигации.
+   Поверхность только внутри main: токены и внешний вид сайдбара сохранены. */
+#d-dashboard .dk-main, #d-dashboard .dk-top { background: color-mix(in srgb, var(--surface) 45%, var(--bg)); }
+#d-dashboard .dk-banner--priority .dk-banner__title { display: flex; align-items: center; gap: var(--gap-inline); }
+#d-dashboard #d-risk-summary .dk-hero__label { font: var(--type-caption); }
+#d-dashboard #d-country-charts .dk-widget__actions .dk-iconbtn { background: transparent; color: var(--ink-2); }
+@media (hover: hover) and (pointer: fine) {
+  #d-dashboard #d-country-charts .dk-widget__actions .dk-iconbtn:hover { background: var(--surface-2); }
+}
+#d-dashboard #d-views [aria-selected="true"] { background: var(--surface); color: var(--ink); }
+@media (max-width: 767px) {
+  #d-dashboard .dk-banner--priority { gap: var(--gap-tight); }
+  #d-dashboard .dk-banner--priority .dk-banner__title { flex-wrap: wrap; gap: var(--space-2) var(--space-4); }
+  #d-dashboard .dk-banner--priority > .dk-i { display: none; }
+  #d-dashboard .dk-banner--priority .dk-banner__number { font: var(--type-metric-lg); }
+}

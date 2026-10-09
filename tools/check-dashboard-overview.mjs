@@ -51,7 +51,7 @@ try {
         padding:charts.map(el=>getComputedStyle(el).paddingLeft),
         canvas:document.querySelector('#d-line canvas')?.width||0};})()`);
     assert(await evaluate(`(()=>{const tabs=document.getElementById('d-views').getBoundingClientRect(),header=document.querySelector('.dk-top').getBoundingClientRect(),status=document.querySelector('.dk-banner').getBoundingClientRect();return tabs.top>=header.bottom-1&&tabs.bottom<=status.top+1;})()`), `${theme}: view tabs follow the heading before status and data`);
-    assert(result.country.bottom <= 768 && result.height <= 768, `${theme}: country overview must fit the complete working viewport`);
+    assert(result.country.bottom <= 768 && result.height <= 768, `${theme}: country overview must fit the complete working viewport: ${JSON.stringify(result)}`);
     assert(result.width <= 1366, `${theme}: no horizontal page overflow`);
     assert(result.tileCount === 4 && result.tiles.every(tile=>Math.abs(tile.top-result.tiles[0].top)<1), `${theme}: four KPI in one row`);
     assert(result.charts.every(chart=>chart.top>=result.tiles[0].bottom), `${theme}: KPI before detailed charts`);
@@ -61,6 +61,20 @@ try {
     assert(await evaluate(`document.querySelectorAll('#d-risk-summary .dk-split__seg').length===4 && getComputedStyle(document.querySelector('#d-risk-summary .dk-split__seg:last-child')).display==='none' && echarts.getInstanceByDom(document.getElementById('d-bars')).getOption().yAxis[0].data.length===8`), `${theme}: zero share invisible and all eight districts represented`);
     assert(result.riskReady && result.riskHigh==='18', `${theme}: shared region counts must load without invented deltas`);
     assert(result.hiddenWork && result.hiddenCauses && result.canvas>0, `${theme}: hidden details and visible chart`);
+    assert(await evaluate(`(()=>{
+      const banner=document.querySelector('.dk-banner'), number=banner.querySelector('.dk-banner__number');
+      const canvas=document.createElement('canvas'), ctx=canvas.getContext('2d');
+      const rgb=color=>{ctx.fillStyle=color;ctx.fillRect(0,0,1,1);return [...ctx.getImageData(0,0,1,1).data].slice(0,3)};
+      const lum=color=>rgb(color).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4}).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+      const contrast=(a,b)=>{a=lum(a);b=lum(b);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05)};
+      const action=banner.querySelector('.dk-btn'), bg=getComputedStyle(banner).backgroundColor;
+      if(contrast(getComputedStyle(action).color,getComputedStyle(action).backgroundColor)<4.5) throw Error('Priority action contrast '+contrast(getComputedStyle(action).color,getComputedStyle(action).backgroundColor));
+      return banner.classList.contains('dk-banner--priority') && number.textContent==='23' &&
+        parseFloat(getComputedStyle(number).fontSize)>=40 && contrast(getComputedStyle(number).color,bg)>=3 &&
+        contrast(getComputedStyle(action).color,getComputedStyle(action).backgroundColor)>=4.5 &&
+        [...document.querySelectorAll('.dk-tile--prominent .dk-metric-lg')].every(el=>parseFloat(getComputedStyle(el).fontSize)>=40);
+    })()`), `${theme}: priority count, readable action contrast and prominent desktop KPI`);
+
     await evaluate(`document.getElementById('d-tab-country').focus()`);
     await send('Input.dispatchKeyEvent',{type:'keyDown',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});
     await send('Input.dispatchKeyEvent',{type:'keyUp',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});

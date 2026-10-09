@@ -139,10 +139,10 @@
         </nav>
 
         <div class="dk-seg" id="d-views" role="tablist" aria-label="Представления сводки"><button type="button" role="tab" id="d-tab-country" aria-controls="d-view-country" aria-selected="true" tabindex="0">Обзор</button><button type="button" role="tab" id="d-tab-work" aria-controls="d-view-work" aria-selected="false" tabindex="-1">Работа</button><button type="button" role="tab" id="d-tab-causes" aria-controls="d-view-causes" aria-selected="false" tabindex="-1">Аналитика</button></div>
-        <div class="dk-banner dk-banner--crit" style="margin-bottom:var(--grid-gap)">
+        <div class="dk-banner dk-banner--crit dk-banner--priority" style="margin-bottom:var(--grid-gap)">
           <svg aria-hidden="true" class="dk-i"><use href="#ti-alert-triangle"/></svg>
           <div class="dk-banner__text">
-            <div class="dk-banner__title">23 аварии требуют решения</div>
+            <div class="dk-banner__title"><span class="dk-banner__number">23</span> аварии требуют решения</div>
           </div>
           <a class="dk-btn dk-btn--sm" href="accidents.html" aria-label="Открыть аварии" title="Открыть аварии"><span>Открыть аварии</span><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></a>
         </div>
@@ -168,7 +168,7 @@
               </div>
             </section></div><div class="dk-col--full"><div class="dk-grid dk-grid--metrics">
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--crit-ink)">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent" style="--accent:var(--crit-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span>
                 <span class="dk-tile__label">Аварии за сутки</span>
@@ -180,7 +180,7 @@
             </div>
           </div>
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg></span>
                 <span class="dk-tile__label">Обращений</span>
@@ -192,7 +192,7 @@
             </div>
           </div>
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--high-ink)">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent" style="--accent:var(--high-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span>
                 <span class="dk-tile__label">Среднее время реакции</span>
@@ -201,14 +201,14 @@
             </div>
           </div>
           <div class="dk-col--quarter">
-            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact" style="--accent:var(--calm-ink)">
+            <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent" style="--accent:var(--calm-ink)">
               <div class="dk-tile__head">
                 <span class="dk-tile__icon"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span>
                 <span class="dk-tile__label">Бригад в работе</span>
               </div>
               <div class="dk-tile__row">
                 <span class="dk-metric-lg">17</span>
-                <span class="dk-trend">без изменений</span>
+                <span class="dk-trend" style="--accent:var(--ink-2)">без изменений</span>
               </div>
             </div>
           </div>
@@ -216,7 +216,6 @@
               <div class="dk-widget__head">
                 <h2 class="dk-widget__title">Аварии: факт и прогноз</h2>
                 <div class="dk-widget__actions">
-                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" disabled title="Демонстрационные данные" aria-label="Обновление недоступно для демонстрационных данных"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-refresh"/></svg></button>
                   <button class="dk-iconbtn dk-iconbtn--sm" id="d-export" type="button" title="Экспорт PNG" aria-label="Экспорт графика в PNG"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
                   <button class="dk-iconbtn dk-iconbtn--sm" id="d-fullscreen" type="button" title="Полный экран или выход" aria-label="Переключить полный экран графика"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
                 </div>
@@ -227,9 +226,7 @@
             <div class="dk-widget">
               <div class="dk-widget__head">
                 <h2 class="dk-widget__title">Средний риск по округам</h2>
-                <div class="dk-widget__actions">
-                  <button class="dk-iconbtn dk-iconbtn--sm" type="button" disabled title="Недоступно в демонстрации" aria-label="Выгрузить"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-download"/></svg></button>
-                </div>
+
               </div>
               <div class="dk-chart dk-chart--sm" id="d-bars"></div>
             </div>
@@ -479,6 +476,7 @@
     if (typeof dkTable === 'function') dkTable(document.getElementById('d-table'), {});
     var viewTabs = Array.from(document.querySelectorAll('#d-views [role="tab"]'));
     function activateView(tab, moveFocus) {
+      document.querySelector('.dk-banner').classList.toggle('dk-banner--priority', tab.id === 'd-tab-country');
       viewTabs.forEach(function (item) {
         var selected = item === tab;
         item.setAttribute('aria-selected', String(selected));

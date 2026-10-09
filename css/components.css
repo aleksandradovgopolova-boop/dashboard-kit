@@ -4819,3 +4819,34 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 @media (min-width: 1024px) {
   .dk-root .dk-tile--compact > .dk-tile__head { min-height: 2lh; }
 }
+
+/* Приоритетное состояние: число и следующее действие читаются первыми.
+   Opt-in, чтобы обычные сообщения и встроенные баннеры не стали громче. */
+.dk-banner--priority {
+  --banner-ink: var(--ink);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: var(--space-5) var(--pad-widget);
+  background: color-mix(in srgb, var(--accent, var(--event)) 7%, var(--surface));
+}
+.dk-banner--priority.dk-banner--crit { --banner-ink: color-mix(in srgb, var(--crit-ink) 80%, var(--ink)); }
+.dk-banner--priority.dk-banner--high { --banner-ink: color-mix(in srgb, var(--high-ink) 80%, var(--ink)); }
+.dk-banner--priority.dk-banner--calm { --banner-ink: color-mix(in srgb, var(--calm-ink) 80%, var(--ink)); }
+.dk-banner--priority .dk-banner__text { flex: 1 1 12rem; }
+.dk-banner--priority .dk-banner__number { font: var(--type-metric-xl); letter-spacing: var(--type-metric-xl-track); color: var(--banner-ink); }
+.dk-banner--priority > .dk-i { width: var(--space-8); height: var(--space-8); color: var(--banner-ink); }
+.dk-banner--priority > .dk-btn { margin-left: 0; color: var(--banner-ink); background: color-mix(in srgb, var(--accent, var(--event)) 10%, var(--surface)); }
+@media (hover: hover) and (pointer: fine) {
+  .dk-banner--priority > .dk-btn:hover { background: color-mix(in srgb, var(--accent, var(--event)) 18%, var(--surface)); }
+}
+/* Крупное значение для обзорного KPI. Узкая карточка возвращает обычную
+   метрику; текст и дельта сохраняются целиком, без фиксированной высоты. */
+.dk-tile--prominent { container-type: inline-size; }
+@container (min-width: 210px) {
+  .dk-root .dk-tile--prominent .dk-metric-lg { font: var(--type-metric-xl); letter-spacing: var(--type-metric-xl-track); }
+}
+
+@container (min-width: 210px) {
+  .dk-root .dk-tile--prominent > .dk-tile__head { min-height: 1lh; flex: 1; }
+}

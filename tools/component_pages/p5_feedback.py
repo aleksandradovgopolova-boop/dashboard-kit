@@ -8,6 +8,7 @@ PAGES = [
     "files": ["css/components.css", "js/dk-notify.js"], "scripts": ["dk-notify.js"],
     "live_intro": "Три баннера — тревога, штатно, событие (единственный закрываемый) — и три уведомления по кнопкам.",
     "live": """<div class="dk-panel"><div class="dk-stack">
+      <div class="dk-banner dk-banner--crit dk-banner--priority"><svg class="dk-i" aria-hidden="true"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title"><span class="dk-banner__number">23</span> аварии требуют решения</div></div><a class="dk-btn dk-btn--sm" href="accidents.html">Открыть аварии</a></div>
       <div class="dk-banner dk-banner--crit"><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Не удалось обновить данные</div><div class="dk-banner__sub">Проверьте подключение и повторите загрузку</div></div></div>
       <div class="dk-banner dk-banner--calm"><svg class="dk-i"><use href="#ti-circle-check"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Данные обновлены</div><div class="dk-banner__sub">Все источники доступны</div></div></div>
       <div class="dk-banner dk-banner--event"><svg class="dk-i"><use href="#ti-file-text"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Выгрузка за сентябрь готова</div><div class="dk-banner__sub">Файл доступен в разделе «Отчёты»</div></div><button class="dk-iconbtn dk-iconbtn--sm dk-banner__x" type="button" title="Закрыть" aria-label="Закрыть" onclick="this.closest('.dk-banner').remove()"><svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></div>
@@ -41,7 +42,8 @@ PAGES = [
                 ("Закрыть", "крестик есть всегда; у баннера — только у события.")],
     "sizes": "Размер один: баннер на всю ширину под шапкой страницы, уведомление до 520 px в правом нижнем углу, "
              "не больше трёх одновременно — старые уходят снизу.",
-    "variants": [("dk-banner--crit / --high", "Тревога: не закрывается.", "Сбой, просрочка, устаревшие данные."),
+    "variants": [("dk-banner--priority", "Тонированная поверхность, крупное число и выделенное действие.", "Одно главное состояние обзора, вместе с crit/high/calm."),
+                 ("dk-banner--crit / --high", "Тревога: не закрывается.", "Сбой, просрочка, устаревшие данные."),
                  ("dk-banner--calm", "Штатно.", "Когда важно сказать, что всё в порядке."),
                  ("dk-banner--event", "Событие, единственный закрываемый.", "Готовый отчёт, обновление."),
                  ("dkToast(text)", "Уведомление, уходит само.", "Подтверждение действия."),
@@ -79,7 +81,8 @@ dkToast('Срез сброшен', { action: { name: 'Отменить', onClick
 var t = dkToast('Не удалось сохранить', { kind: 'crit' });
 t.close();
 </script>""",
-    "api": [("dkToast(text, opts)", "функция", "Показать уведомление; возвращает {close, el}."),
+    "api": [("dk-banner--priority / dk-banner__number", "классы", "Опциональный главный баннер обзора: крупное число, тонированная поверхность и действие. Использовать с crit/high/calm; обычные сообщения сохраняют прежний вид."),
+            ("dkToast(text, opts)", "функция", "Показать уведомление; возвращает {close, el}."),
             ("opts.kind", "'calm' | 'high' | 'crit'", "Вид; по умолчанию calm."),
             ("opts.action", "{name, onClick}", "Кнопка; отключает таймер."),
             ("opts.life", "число мс", "Явное время жизни."),

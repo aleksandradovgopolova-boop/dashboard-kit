@@ -1878,6 +1878,11 @@
    ],
    "api": [
     {
+     "name": "dk-tile--prominent",
+     "type": "класс",
+     "what": "Опциональный акцент: метрика 40 px при внутренней ширине от 210 px, иначе 28 px. Полные подписи и перенос дельты сохраняются."
+    },
+    {
      "name": "dk-tile--compact",
      "type": "класс",
      "what": "Компактная плитка без спарклайна; число и дельта рядом, полные подписи и адаптивный перенос."
@@ -1930,6 +1935,7 @@
     "dk-metric-xl",
     "dk-tile",
     "dk-tile--compact",
+    "dk-tile--prominent",
     "dk-tile__head",
     "dk-tile__icon",
     "dk-tile__label",
@@ -3234,6 +3240,11 @@
    ],
    "api": [
     {
+     "name": "dk-banner--priority / dk-banner__number",
+     "type": "классы",
+     "what": "Опциональный главный баннер обзора: крупное число, тонированная поверхность и действие. Использовать с crit/high/calm; обычные сообщения сохраняют прежний вид."
+    },
+    {
      "name": "dkToast(text, opts)",
      "type": "функция",
      "what": "Показать уведомление; возвращает {close, el}."
@@ -3287,6 +3298,8 @@
     "dk-banner--crit",
     "dk-banner--event",
     "dk-banner--high",
+    "dk-banner--priority",
+    "dk-banner__number",
     "dk-banner__stat",
     "dk-banner__stats",
     "dk-banner__sub",
@@ -5714,7 +5727,7 @@
  "hooks": {},
  "counts": {
   "parts": 60,
-  "classes": 457,
+  "classes": 460,
   "functions": 45,
   "chart_types": 12
  }
