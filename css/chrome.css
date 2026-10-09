@@ -685,7 +685,7 @@
   .dk-tabbar__item > span { max-width: none; white-space: nowrap; overflow-wrap: normal; }
 }
 
-/* Сайдбар сохранён при смене палитры рабочей области (09.10). */
+/* Независимые цвета сайдбара: светло-голубой вариант выбран 09.10. */
 .dk-side {
   --bg: var(--nav-bg);
   --surface: var(--nav-surface);
