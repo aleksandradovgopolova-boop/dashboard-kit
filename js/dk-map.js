@@ -159,7 +159,11 @@
     var values = opts.values || {};
     var unit = opts.unit || '';
     var onSelect = opts.onSelect || function () {};
-    var view = opts.view === 'tiles' ? 'tiles' : 'map';
+    // По умолчанию — плиточная карта (картограмма: каждый регион равной
+    // величины, мелкие не теряются, видно «где хуже» по всей стране разом).
+    // Географическая — по явному view:'map' или переключателю. Решение по
+    // продакшн-референсу monitor.testdash.site (DECISIONS 10.10).
+    var view = opts.view === 'map' ? 'map' : 'tiles';
     var ZOOMS = [1, 1.5, 2, 3];
     /* СРЕЗ. scope — регионы, которые попали в фильтр (например, один
        округ); остальные приглушаются, а не красятся «нет данных»: серый на
@@ -243,10 +247,10 @@
         // одних и тех же данных, не адрес и не страницу. Скринридер, услышав
         // «вкладка», ждёт новой загрузки, а получает перерисовку виджета.
         '<div class="dk-seg dk-seg--sm dk-seg--icons" role="group" aria-label="Вид данных">' +
-          '<button type="button" data-view="map" aria-pressed="true" title="Карта" aria-label="Карта">' +
-            '<svg class="dk-i dk-i--sm"><use href="#ti-map"/></svg></button>' +
-          '<button type="button" data-view="tiles" aria-pressed="false" title="Плитки" aria-label="Плитки">' +
+          '<button type="button" data-view="tiles" aria-pressed="true" title="Плитки" aria-label="Плитки">' +
             '<svg class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg></button>' +
+          '<button type="button" data-view="map" aria-pressed="false" title="Карта" aria-label="Карта">' +
+            '<svg class="dk-i dk-i--sm"><use href="#ti-map"/></svg></button>' +
         '</div>' +
       '</div>' +
       '<div class="dk-map__body"></div>' +
