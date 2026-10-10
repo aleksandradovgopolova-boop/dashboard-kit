@@ -4856,11 +4856,21 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-grid--five > .dk-tile--overview { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
 .dk-grid--five > .dk-tile--overview > .dk-tile__row { align-self: start; }
 
-/* Обзорная карточка с компактной историей из того же набора данных. */
+/* Обзорная карточка с компактной историей из того же набора данных.
+   Спарклайн — компактный угловой слой (absolute) на ВСЕХ ширинах: он не
+   занимает место в потоке, поэтому плитки со спарклайном и без него в одном
+   ряду выравниваются одинаково (subgrid остаётся span 2). Прежде на ≤1199 он
+   становился полноширокой полосой в потоке и давал рваный ряд при смешении
+   «со спарклайном / без» — убрано (#32, 10.10). */
 .dk-tile--overview { position: relative; }
-.dk-tile--overview > .dk-tile__spark { position: absolute; right: var(--pad-widget); bottom: var(--pad-widget); width: 52px; height: 38px; }
+.dk-tile--overview > .dk-tile__spark { position: absolute; right: var(--pad-widget); bottom: var(--pad-widget); width: 52px; height: 38px; pointer-events: none; }
 .dk-tile--overview:has(> .dk-tile__spark) > .dk-tile__row { padding-right: 56px; }
-@media (max-width: 1199px) {
+/* Телефон: плитка узкая, и угловой спарклайн сдавил бы крупное число (оно
+   переносилось: «96 112» в две строки). Здесь спарклайн уходит в поток под
+   число на всю ширину, число занимает полную ширину. Рваность ряда это не
+   возвращает: полос во всю ширину на планшете (ключевая жалоба #32) больше нет,
+   а на телефоне плитки и так идут по две и читаются как цельные. */
+@media (max-width: 767px) {
   .dk-tile--overview > .dk-tile__spark { position: static; right: auto; bottom: auto; width: 100%; height: 32px; grid-column: 1; }
   .dk-grid--five > .dk-tile--overview { grid-row: span 3; }
   .dk-tile--overview:has(> .dk-tile__spark) > .dk-tile__row { padding-right: 0; }

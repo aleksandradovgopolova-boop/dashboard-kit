@@ -80,6 +80,7 @@
           <span class="dk-metric-lg" id="fm-issued">—</span>
           <span class="dk-trend" style="--accent:var(--calm-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"></use></svg> +3%</span>
         </div>
+        <div class="dk-tile__spark"><div class="dk-chart dk-chart--spark" id="fm-sp-issued"></div></div>
       </div>
 
       <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview" style="--accent:var(--calm-ink)">
@@ -91,6 +92,7 @@
           <span class="dk-metric-lg"><span id="fm-volume">—</span> <span class="dk-tile__unit">млрд ₽</span></span>
           <span class="dk-trend" style="--accent:var(--calm-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up"></use></svg> +4%</span>
         </div>
+        <div class="dk-tile__spark"><div class="dk-chart dk-chart--spark" id="fm-sp-volume"></div></div>
       </div>
 
       <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview">
@@ -99,6 +101,7 @@
           <span class="dk-tile__label">Средняя ставка</span>
         </div>
         <div class="dk-tile__row"><span class="dk-metric-lg" id="fm-rate">—</span></div>
+        <div class="dk-tile__spark"><div class="dk-chart dk-chart--spark" id="fm-sp-rate"></div></div>
       </div>
 
       <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview">
@@ -285,6 +288,18 @@
           ]
         });
 
+        // Спарклайны KPI: компактная история показателя (демо-ряды).
+        var sparks = {
+          'fm-sp-issued': { tone: 'calm', data: m.issuedFact },
+          'fm-sp-volume': { tone: 'calm', data: [228, 243, 251, 247, 266, 278] },
+          'fm-sp-rate': { tone: 'event', data: [63, 62, 61, 61, 60, 60] }
+        };
+        Object.keys(sparks).forEach(function (id) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          dkChart(el, { type: 'spark', sparkStyle: 'bar', tone: sparks[id].tone,
+            categories: m.labels, series: [{ name: 'Значение', data: sparks[id].data }] });
+        });
       }
 
       // Бюджет субсидий.
