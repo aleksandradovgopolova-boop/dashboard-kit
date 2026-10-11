@@ -3582,7 +3582,11 @@
     "dk-error__icon",
     "dk-error__text",
     "dk-error__title",
-    "dk-skel"
+    "dk-skel",
+    "dk-skel--circle",
+    "dk-skel--fill",
+    "dk-skel--text",
+    "dk-skel--title"
    ],
    "include": []
   },
@@ -6067,7 +6071,7 @@
  "hooks": {},
  "counts": {
   "parts": 63,
-  "classes": 490,
+  "classes": 494,
   "functions": 45,
   "chart_types": 12
  }
