@@ -31,7 +31,11 @@ try {
   };
   await send('Page.enable');
   await send('Page.navigate', { url: `http://127.0.0.1:${server.address().port}/regions.html` });
-  await evaluate(`new Promise((resolve,reject)=>{let tries=0;const timer=setInterval(()=>{if(document.querySelector('#r-tbody tr')&&document.querySelector('#r-map .dk-map__canvas')){clearInterval(timer);resolve();}else if(++tries>100){clearInterval(timer);reject(Error('Region data timeout'));}},50);})`);
+  await evaluate(`new Promise((resolve,reject)=>{let tries=0;const timer=setInterval(()=>{if(document.querySelector('#r-tbody tr')&&document.querySelector('#r-map .dk-map__tiles, #r-map .dk-map__canvas')){clearInterval(timer);resolve();}else if(++tries>100){clearInterval(timer);reject(Error('Region data timeout'));}},50);})`);
+  // Карта по умолчанию — плитки; проверки дробления идут по гео-canvas, поэтому
+  // переключаем карту в географический вид и ждём его canvas.
+  await evaluate(`(()=>{const b=document.querySelector('button[data-view="map"]');if(b&&b.getAttribute('aria-pressed')!=='true')b.click();})()`);
+  await evaluate(`new Promise((resolve,reject)=>{let tries=0;const timer=setInterval(()=>{if(document.querySelector('#r-map .dk-map__canvas')){clearInterval(timer);resolve();}else if(++tries>100){clearInterval(timer);reject(Error('Region map canvas timeout'));}},50);})`);
   console.log(await evaluate(`(async()=>{
     const assert=(value,message)=>{if(!value)throw Error(message)};
     const search=document.getElementById('r-search');
@@ -147,6 +151,9 @@ try {
   }
   await send('Page.navigate', { url: `http://127.0.0.1:${server.address().port}/regions.html` });
   await evaluate(`new Promise((resolve,reject)=>{let tries=0;const timer=setInterval(()=>{if(document.querySelector('#r-tbody tr')){clearInterval(timer);resolve();}else if(++tries>100){clearInterval(timer);reject(Error('Region layout data timeout'));}},50);})`);
+  // Карта по умолчанию — плитки; проверка соотношения сторон идёт по гео-canvas.
+  await evaluate(`(()=>{const b=document.querySelector('button[data-view="map"]');if(b&&b.getAttribute('aria-pressed')!=='true')b.click();})()`);
+  await evaluate(`new Promise((resolve,reject)=>{let tries=0;const timer=setInterval(()=>{if(document.querySelector('#r-map .dk-map__canvas')){clearInterval(timer);resolve();}else if(++tries>100){clearInterval(timer);reject(Error('Region map canvas timeout'));}},50);})`);
   for (const width of [1366, 1024, 390]) {
     await send('Emulation.setDeviceMetricsOverride', { width, height: 844, deviceScaleFactor: 1, mobile: width < 600 });
     await evaluate(`new Promise(resolve=>setTimeout(resolve,250))`);

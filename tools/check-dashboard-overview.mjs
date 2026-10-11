@@ -48,6 +48,10 @@ try {
     await send('Emulation.setTouchEmulationEnabled', { enabled: false });
     await send('Page.navigate', { url: `http://127.0.0.1:${server.address().port}/dashboard.html?theme=${theme}` });
     await evaluate(`document.fonts.ready.then(()=>new Promise(resolve=>setTimeout(resolve,1200)))`);
+    // Карта сводки по умолчанию — плитки; проверки заливок/легенды/соотношения
+    // идут по гео-canvas, поэтому переключаем карту в географический вид.
+    await evaluate(`(()=>{const b=document.querySelector('button[data-view="map"]');if(b&&b.getAttribute('aria-pressed')!=='true')b.click();})()`);
+    await evaluate(`new Promise((resolve,reject)=>{let tries=0;const timer=setInterval(()=>{if(document.querySelector('#d-map .dk-map__canvas')){clearInterval(timer);resolve();}else if(++tries>100){clearInterval(timer);reject(Error('dashboard map canvas timeout'));}},50);})`);
     const result = await evaluate(`(()=>{
       const visible = el => el.getBoundingClientRect().width > 0 && el.getBoundingClientRect().height > 0;
       const country = document.getElementById('d-view-country');

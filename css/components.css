@@ -4649,10 +4649,11 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
    Модификатор opt-in: витрина компонентов и встроенные блоки сохраняют размер. */
 .dk-wrap--monitor {
   --pad-widget: calc(var(--space-4) * 2);
-  /* space-6, а не space-5: прежний дефолт все дашборды всё равно переопределяли
-     на space-6 (dashboard/regions/family-mortgage) — приводим к реальности,
-     чтобы ритм между блоками был ровным без страничного CSS. (09.10) */
-  --grid-gap: var(--space-6);
+  /* Шаг сетки мониторинга — 10px (space-5): утверждённое правило «общий
+     компактный шаг 10px» (layout.md), его проверяет check-filter-context на
+     regions/accidents. dashboard.html задаёт свой space-6 отдельно в page-CSS.
+     (ранее ошибочно поднимал дефолт до space-6 — откат, 11.10) */
+  --grid-gap: var(--space-5);
   --gap-section: var(--space-4);
 }
 .dk-wrap--monitor .dk-widget--s { padding: var(--pad-widget); }
@@ -4869,13 +4870,10 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 @media (max-width: 1199px) {
   .dk-grid--overview-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dk-grid--overview-panels > :first-child { grid-column: 1 / -1; }
+  /* Число на обзорной плитке на планшете мельче — так пять KPI помещаются в
+     один ряд, сужаясь, а не переносятся (утверждённое правило: все KPI в одном
+     ряду при ≥768, две колонки на телефоне — check-filter-context). */
   .dk-root .dk-tile--overview .dk-metric-lg { font: var(--type-metric-lg); }
-  /* Пять KPI в один ряд сжимались между планшетом и десктопом: у dk-grid--five
-     не было промежуточного шага (5 → сразу 2 на телефоне). Вместо жёсткого числа
-     колонок — заполнение по месту: столько карточек в ряд, сколько влезает без
-     сжатия (минимум ~170px). Там, где места хватает на все пять, они и встают в
-     один ряд; где нет — переносятся. (family-mortgage, 09–10.10) */
-  .dk-grid--five { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
 }
 @media (max-width: 767px) {
   .dk-grid--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
