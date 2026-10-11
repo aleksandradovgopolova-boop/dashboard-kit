@@ -251,6 +251,11 @@
             '<svg class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg></button>' +
           '<button type="button" data-view="map" aria-pressed="false" title="Карта" aria-label="Карта">' +
             '<svg class="dk-i dk-i--sm"><use href="#ti-map"/></svg></button>' +
+          // Список — доступная альтернатива плиткам: строки-кнопки от 44px, по
+          // которым можно попасть пальцем и пройти табом (плитки картограммы
+          // мельче 44px; DECISIONS 10.10).
+          '<button type="button" data-view="list" aria-pressed="false" title="Список" aria-label="Список">' +
+            '<svg class="dk-i dk-i--sm"><use href="#ti-menu-2"/></svg></button>' +
         '</div>' +
       '</div>' +
       '<div class="dk-map__body"></div>' +
@@ -499,7 +504,36 @@
         b.setAttribute('aria-pressed', String(b.dataset.view === view));
       });
       renderLegend();
-      view === 'tiles' ? renderTiles() : renderMap();
+      view === 'list' ? renderList() : view === 'tiles' ? renderTiles() : renderMap();
+    }
+
+    /* Список — текстовый ранжированный вид тех же данных: регион, цвет-статус и
+       значение в строке-кнопке от 44px. Доступная альтернатива плиткам
+       картограммы (по ним пальцем не попасть) и просто другой способ читать
+       «у кого хуже» — сверху вниз, а не по цвету на сетке. */
+    function renderList() {
+      var rows = tiles && tiles.tiles ? tiles.tiles.slice()
+        : Object.keys(names).map(function (id) { return { id: id }; });
+      rows.sort(function (a, b) {
+        var va = values[a.id], vb = values[b.id];
+        var na = typeof va === 'number', nb = typeof vb === 'number';
+        if (na && nb) return vb - va;        // больше — выше: «у кого хуже» сверху
+        return na ? -1 : nb ? 1 : 0;         // нет данных — в конец
+      });
+      var html = '<div class="dk-map__list" role="list" aria-label="Регионы по значению">';
+      rows.forEach(function (t, i) {
+        var v = values[t.id];
+        var shown = typeof v === 'number' ? nfmt(v) + (unit ? ' ' + unit : '') : 'нет данных';
+        html += '<button type="button" role="listitem" class="dk-map__li' +
+          (inScope(t.id) ? '' : ' dk-map__li--out') + '" data-id="' + esc(t.id) + '"' +
+          ' aria-label="' + esc(label(t.id)) + '">' +
+          '<span class="dk-map__li-rank">' + num(i + 1) + '</span>' +
+          '<span class="dk-map__li-dot' + (bucket(v) < 0 ? ' dk-nodata' : '') + '" style="--fill:' + color(v) + '" aria-hidden="true"></span>' +
+          '<span class="dk-map__li-name">' + esc(names[t.id] || t.id) + '</span>' +
+          '<span class="dk-map__li-val">' + esc(shown) + '</span>' +
+          '</button>';
+      });
+      bodyEl.innerHTML = html + '</div>';
     }
 
     /* Переключатель слушаем на самом сегменте, а не на контейнере карты.
@@ -515,7 +549,7 @@
     });
 
     host.addEventListener('click', function (e) {
-      var tile = e.target.closest('.dk-map__tile');
+      var tile = e.target.closest('.dk-map__tile, .dk-map__li');
       if (tile) onSelect(tile.dataset.id, values[tile.dataset.id]);
     });
 
@@ -576,12 +610,12 @@
 
     return {
       get view() { return view; },
-      set view(v) { view = v === 'tiles' ? 'tiles' : 'map'; render(); },
+      set view(v) { view = (v === 'tiles' || v === 'list') ? v : 'map'; render(); },
       update: function (next) {
         next = next || {};
         if (next.values) { values = next.values; rescale(); }
         if (Object.prototype.hasOwnProperty.call(next, 'scope')) scope = next.scope == null ? null : new Set(next.scope);
-        if (next.view) view = next.view === 'tiles' ? 'tiles' : 'map';
+        if (next.view) view = (next.view === 'tiles' || next.view === 'list') ? next.view : 'map';
         render();
       },
       setScope: function (ids) {

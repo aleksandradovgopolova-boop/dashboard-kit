@@ -3755,7 +3755,9 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   color: var(--ink);
   background: var(--fill, var(--nodata));
   border: 0;
-  border-radius: var(--radius-xs);
+  /* Круглые плитки — картограмма из точек: мягче квадратов, читается как
+     «точки риска по стране» (по продакшн-референсу, DECISIONS 10.10). */
+  border-radius: 50%;
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3772,6 +3774,25 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
    29.09). */
 .dk-map__abbr { font-weight: var(--weight-ui); opacity: .75; }
 .dk-map__val { font-weight: var(--weight-ui-strong); font-variant-numeric: tabular-nums; }
+
+/* Вид «Список» карты — ранжированные строки-кнопки от 44px: доступная
+   альтернатива плиткам (по ячейкам картограммы пальцем не попасть) и просто
+   чтение «у кого хуже» сверху вниз. Разделяются ритмом и наведением, не
+   линейками, — как рейтинг. */
+.dk-map__list { display: flex; flex-direction: column; overflow: auto; max-height: min(60dvh, 520px); overscroll-behavior: contain; }
+.dk-map__li {
+  display: flex; align-items: center; gap: var(--gap-inline);
+  min-height: 44px; padding: var(--space-3) var(--space-4);
+  border: 0; background: none; color: var(--ink);
+  font: inherit; text-align: left; cursor: pointer; border-radius: var(--radius-sm);
+}
+.dk-map__li-rank { min-width: 2.5ch; text-align: right; font: var(--type-caption); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.dk-map__li-dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--fill, var(--nodata)); }
+.dk-map__li-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dk-map__li-val { white-space: nowrap; font-weight: var(--weight-ui-strong); font-variant-numeric: tabular-nums; }
+.dk-map__li--out { opacity: .45; }
+.dk-map__li:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: calc(-1 * var(--focus-width)); }
+@media (hover: hover) and (pointer: fine) { .dk-map__li:hover { background: var(--surface-2); } }
 
 @media (hover: hover) and (pointer: fine) {
   .dk-map__tile:hover { transform: scale(1.12); }
