@@ -37,6 +37,9 @@ try {
     await send('Emulation.setDeviceMetricsOverride',{width,height:874,deviceScaleFactor:1,mobile:width<768});
     await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/regions.html?theme=${theme}`});
     await evaluate(`new Promise((resolve,reject)=>{let n=0;const t=setInterval(()=>{if(document.getElementById('r-k-total')?.textContent==='89'&&document.querySelector('#r-rank button')){clearInterval(t);document.fonts.ready.then(()=>setTimeout(resolve,250));}else if(++n>100){clearInterval(t);reject(Error('Regions timeout'));}},50);})`);
+    // Карта по умолчанию — плитки; проверка соотношения сторон идёт по гео-canvas.
+    await evaluate(`(()=>{const b=document.querySelector('button[data-view="map"]');if(b&&b.getAttribute('aria-pressed')!=='true')b.click();})()`);
+    await evaluate(`new Promise((resolve,reject)=>{let n=0;const t=setInterval(()=>{if(document.querySelector('#r-map .dk-map__canvas')){clearInterval(t);resolve();}else if(++n>100){clearInterval(t);reject(Error('Region map canvas timeout'));}},50);})`);
     const geometry=await evaluate(`(()=>{
       const box=s=>document.querySelector(s).getBoundingClientRect();
       const primary=box('.dk-focus-layout__primary'),summary=box('.r-summary-panel'),period=box('#r-period'),risk=box('.r-risk-summary'),map=box('#r-map .dk-map__canvas');

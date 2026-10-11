@@ -116,13 +116,13 @@
     <!-- Обзорные панели: карта, динамика, округа, рейтинг, спрос, бюджет. -->
     <div class="dk-grid dk-grid--overview-panels" id="fm-panels">
 
-      <section class="dk-widget dk-widget--overview" id="fm-map-widget">
+      <section class="dk-widget dk-widget--overview" id="fm-map-widget" aria-busy="true">
         <div class="dk-widget__head">
           <h2 class="dk-widget__title">Отставание от плана по регионам</h2>
           <div id="fm-map-controls" class="dk-widget__actions"></div>
         </div>
         <div class="fm-map-body dk-widget__body">
-          <div id="fm-map"></div>
+          <div id="fm-map"><div class="dk-skel" style="width:100%;aspect-ratio:1.9"></div><span class="dk-vh">Загрузка карты регионов</span></div>
           <div class="fm-map-summary">
             <div class="dk-keys" id="fm-keys">
               <span class="dk-key" style="--swatch:var(--risk-area-high)"><i class="dk-key__dot"></i>Сильно отстают <b id="fm-k-high">—</b></span>
@@ -185,7 +185,7 @@
     </div>
 
     <!-- Таблица регионов: сравнение по показателям. -->
-    <section class="dk-widget" id="fm-table-widget">
+    <section class="dk-widget" id="fm-table-widget" aria-busy="true">
       <div class="dk-widget__head">
         <h2 class="dk-widget__title">Регионы: ключевые показатели</h2>
         <span class="dk-widget__meta">12 регионов с наибольшим отставанием</span>
@@ -203,7 +203,13 @@
                 <th scope="col" style="width:12%" data-sortable="Статус">Статус</th>
               </tr>
             </thead>
-            <tbody id="fm-tbody"></tbody>
+            <tbody id="fm-tbody">
+              <tr><td colspan="6"><div class="dk-skel dk-skel--text"></div><span class="dk-vh">Загрузка показателей по регионам</span></td></tr>
+              <tr><td colspan="6"><div class="dk-skel dk-skel--text"></div></td></tr>
+              <tr><td colspan="6"><div class="dk-skel dk-skel--text"></div></td></tr>
+              <tr><td colspan="6"><div class="dk-skel dk-skel--text"></div></td></tr>
+              <tr><td colspan="6"><div class="dk-skel dk-skel--text"></div></td></tr>
+            </tbody>
           </table>
         </div>
         <p class="dk-caption">Демонстрационные синтетические данные. Реального источника нет.</p>
@@ -253,8 +259,10 @@
           controls: '#fm-map-controls', unit: 'баллов отставания'
         });
         document.getElementById('fm-map').dataset.ready = 'true';
+        document.getElementById('fm-map-widget').setAttribute('aria-busy', 'false');
       }).catch(function () {
         document.getElementById('fm-map').textContent = 'Не удалось загрузить карту регионов.';
+        document.getElementById('fm-map-widget').setAttribute('aria-busy', 'false');
       });
 
       // Отставание по округам.
@@ -338,6 +346,7 @@
 
       // Таблица регионов (топ-12 по отставанию).
       var tbody = document.getElementById('fm-tbody');
+      tbody.innerHTML = '';  // убрать скелетон загрузки перед реальными строками
       sorted.slice(0, 12).forEach(function (r) {
         var tr = document.createElement('tr');
         var statusClass = 'dk-status--' + r.status;
@@ -380,6 +389,7 @@
         tbody.append(tr);
       });
       if (typeof dkTable === 'function') dkTable(document.getElementById('fm-table'), {});
+      document.getElementById('fm-table-widget').setAttribute('aria-busy', 'false');
 
       // Ключевой вывод.
       var worstD = lag.districts[0];
@@ -393,6 +403,11 @@
       document.getElementById('fm-plan-pct').textContent = '—';
       document.getElementById('fm-alert-sub').textContent = 'Данные программы недоступны';
       document.getElementById('fm-insight').textContent = 'Не удалось загрузить данные программы.';
+      // Снять загрузку: скелетоны не должны пульсировать вечно при ошибке.
+      document.getElementById('fm-tbody').innerHTML =
+        '<tr><td colspan="6" class="dk-caption">Данные по регионам недоступны</td></tr>';
+      document.getElementById('fm-map-widget').setAttribute('aria-busy', 'false');
+      document.getElementById('fm-table-widget').setAttribute('aria-busy', 'false');
     });
   });
 </script>
