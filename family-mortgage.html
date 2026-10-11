@@ -57,6 +57,13 @@
       <div class="dk-banner__text">
         <div class="dk-banner__title"><span class="dk-banner__number" id="fm-plan-pct">—</span> плана по выдачам</div>
         <div class="dk-banner__sub" id="fm-alert-sub">Регионы с отставанием загружаются…</div>
+        <!-- Срезы-сигналы рядом с главным числом: ряд dk-trend со смысловым
+             тоном, не больше трёх, только значимое и не дублирующее KPI. -->
+        <div class="dk-flex" id="fm-signals" style="--flex-gap:var(--space-3);margin-top:var(--space-4)">
+          <span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-alert-triangle"/></svg><span id="fm-sig-high">—</span>&nbsp;сильно отстают</span>
+          <span class="dk-trend" style="--accent:var(--high-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-file-text"/></svg>Бюджет&nbsp;<span id="fm-sig-budget">—</span>%&nbsp;плана</span>
+          <span class="dk-trend" style="--accent:var(--calm-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg>Спрос&nbsp;<span id="fm-sig-demand">—</span></span>
+        </div>
       </div>
       <a class="dk-btn dk-btn--sm" href="#fm-dynamics" aria-label="Перейти к динамике выдач" title="Перейти к динамике выдач"><span>Динамика выдач</span><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></a>
     </div>
@@ -235,6 +242,13 @@
       document.getElementById('fm-alert-sub').textContent =
         behind + ' из ' + lag.total + ' регионов отстают от плана выдач';
 
+      // Срезы-сигналы: сильно отстают, освоение бюджета, рост спроса.
+      var budgetPct = Math.round(p.budget.spent / p.budget.plan * 100);
+      var demandGrowth = Math.round((m.applied[m.applied.length - 1] - m.applied[0]) / m.applied[0] * 100);
+      document.getElementById('fm-sig-high').textContent = dkFmt.num(lag.counts.high);
+      document.getElementById('fm-sig-budget').textContent = dkFmt.num(budgetPct);
+      document.getElementById('fm-sig-demand').textContent = '↑ ' + dkFmt.num(demandGrowth) + '%';
+
       // KPI.
       document.getElementById('fm-regions-n').textContent = dkFmt.num(behind);
       document.getElementById('fm-regions-of').textContent = 'из ' + dkFmt.num(lag.total);
@@ -346,7 +360,7 @@
 
       // Таблица регионов (топ-12 по отставанию).
       var tbody = document.getElementById('fm-tbody');
-      tbody.innerHTML = '';  // убрать скелетон загрузки перед реальными строками
+      tbody.replaceChildren();  // убрать скелетон загрузки перед реальными строками
       sorted.slice(0, 12).forEach(function (r) {
         var tr = document.createElement('tr');
         var statusClass = 'dk-status--' + r.status;
@@ -404,8 +418,11 @@
       document.getElementById('fm-alert-sub').textContent = 'Данные программы недоступны';
       document.getElementById('fm-insight').textContent = 'Не удалось загрузить данные программы.';
       // Снять загрузку: скелетоны не должны пульсировать вечно при ошибке.
-      document.getElementById('fm-tbody').innerHTML =
-        '<tr><td colspan="6" class="dk-caption">Данные по регионам недоступны</td></tr>';
+      var errRow = document.createElement('tr'), errCell = document.createElement('td');
+      errCell.colSpan = 6; errCell.className = 'dk-caption';
+      errCell.textContent = 'Данные по регионам недоступны';
+      errRow.append(errCell);
+      document.getElementById('fm-tbody').replaceChildren(errRow);
       document.getElementById('fm-map-widget').setAttribute('aria-busy', 'false');
       document.getElementById('fm-table-widget').setAttribute('aria-busy', 'false');
     });
