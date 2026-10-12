@@ -55,6 +55,20 @@
   #r-page .dk-focus-layout__primary .dk-head__title { font: var(--type-h2); }
   #r-page #r-map .dk-map__canvas { height: auto; }
   #r-page .r-map-note summary { min-height: 44px; }
+  /* Липкий поиск+фильтры (по продакшн-референсу): панель поиска/фильтра держится
+     у верха при прокрутке. Вешаем на .r-filter-panel, а не на вложенную строку:
+     sticky работает, пока виден КОНТЕЙНЕР, а на ≤1199 .r-filter-panel —
+     прямой ребёнок focus-layout (aside: display contents), контейнер высокий.
+     Липнет только панель поиска/фильтра, не высокая шапка со статусом/составом —
+     решение 06.10 про «липкую высокую шапку» сохраняется. */
+  #r-page .r-filter-panel {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg);
+    padding-block: var(--space-4);
+    margin-block: calc(var(--space-4) * -1);
+  }
 }
 
 #r-page .dk-main { background: var(--bg); }
