@@ -248,14 +248,14 @@
         // «вкладка», ждёт новой загрузки, а получает перерисовку виджета.
         '<div class="dk-seg dk-seg--sm dk-seg--icons" role="group" aria-label="Вид данных">' +
           '<button type="button" data-view="tiles" aria-pressed="true" title="Плитки" aria-label="Плитки">' +
-            '<svg class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg></button>' +
+            '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-layout-grid"/></svg></button>' +
           '<button type="button" data-view="map" aria-pressed="false" title="Карта" aria-label="Карта">' +
-            '<svg class="dk-i dk-i--sm"><use href="#ti-map"/></svg></button>' +
+            '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-map"/></svg></button>' +
           // Список — доступная альтернатива плиткам: строки-кнопки от 44px, по
           // которым можно попасть пальцем и пройти табом (плитки картограммы
           // мельче 44px; DECISIONS 10.10).
           '<button type="button" data-view="list" aria-pressed="false" title="Список" aria-label="Список">' +
-            '<svg class="dk-i dk-i--sm"><use href="#ti-menu-2"/></svg></button>' +
+            '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-menu-2"/></svg></button>' +
         '</div>' +
       '</div>' +
       '<div class="dk-map__body"></div>' +

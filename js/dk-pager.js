@@ -30,8 +30,8 @@
 (function () {
   'use strict';
 
-  var ICON_PREV = '<svg class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg>';
-  var ICON_NEXT = '<svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg>';
+  var ICON_PREV = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-left"/></svg>';
+  var ICON_NEXT = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg>';
 
   function plural(n, one, few, many) {
     var m = n % 100;

@@ -31,7 +31,8 @@
 <!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
 </head>
 <body class="dk-page">
-<div class="dk-wrap">
+<main class="dk-wrap" id="main" tabindex="-1">
+  <h1 class="dk-vh">Сводка аварийности</h1>
   <div class="dk-search">
     <svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg>
     <input class="dk-search__input" type="search" placeholder="Регион или округ" aria-label="Найти регион или округ" enterkeyhint="search" autocomplete="off">
@@ -103,7 +104,7 @@
       <tbody><tr data-id="RU-CR"><td>Крым</td><td class="dk-td-num" data-sort="82">82</td></tr><tr data-id="RU-NVS"><td>Новосибирская область</td><td class="dk-td-num" data-sort="73">73</td></tr><tr data-id="RU-SA"><td>Саха (Якутия)</td><td class="dk-td-num" data-sort="81">81</td></tr></tbody></table></div>
     </div></div>
   </div>
-</div>
+</main>
 <script>
 window.addEventListener('DOMContentLoaded', function () {
   dkCar(document.getElementById('car'));
