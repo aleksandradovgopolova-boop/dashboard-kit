@@ -41,6 +41,9 @@
                  иконка iPhone и маскируемая непрозрачны
   25. ТЕЛЕФОН    страницы на телефоне и планшете: ширина, цели, поля, вырез
                  (браузерная часть — tools/check-mobile.mjs; --fast её пропускает)
+  26. ДОСТУП     дашборды с клавиатуры: достижимость, видимый фокус, имена для
+                 скринридера, каркас страницы (tools/check-a11y.mjs; --fast её
+                 пропускает). Речь скринридера на живом устройстве — ручной шаг
 
 Код возврата 0 — всё чисто, 1 — есть нарушения. Непроверенное (например,
 ДВИЖОК без node) печатается знаком «?» и не выдаётся за чистое.
@@ -2325,6 +2328,53 @@ def check_phone(fast: bool = False) -> None:
                      f"не шире экрана, цели от 44 px, поля не зумятся, вырез обойдён")
 
 
+def check_a11y(fast: bool = False) -> None:
+    """Доступность собранных дашбордов — в настоящем браузере.
+
+    tools/check-a11y.mjs: каждый контрол достижим обходом Tab и на нём виден
+    фокус, обход не застревает ловушкой, у каждого контрола и значимой картинки
+    есть доступное имя из дерева доступности (то же, что читает скринридер),
+    у страницы есть ориентир main, один заголовок h1 и уровни без пропусков.
+    Нужны node 22+ и Chrome; без них часть печатается знаком «?», а не галочкой.
+    --fast пропускает её так же честно.
+
+    ЧЕГО НЕ ДЕЛАЕТ: не слышит, ПОНЯТНА ли речь на живом устройстве и верно ли
+    читается порядок вслух. «Имя есть» не равно «озвучено правильно». Реальное
+    озвучивание скринридером на живом устройстве — ручной шаг (README, ROADMAP).
+    """
+    import json
+    import shutil
+    import subprocess
+
+    script = ROOT / "tools" / "check-a11y.mjs"
+    node = shutil.which("node")
+    if fast:
+        skipped.append("ДОСТУП · браузерная часть пропущена (--fast): клавиатура, "
+                       "имена и каркас страниц не проверены")
+        return
+    if not node or not script.exists():
+        skipped.append("ДОСТУП · не проверено: нет node")
+        return
+    try:
+        r = subprocess.run([node, str(script), "--json"], capture_output=True,
+                           text=True, timeout=600, cwd=ROOT)
+        res = json.loads(r.stdout.strip().splitlines()[-1])
+    except Exception as e:                       # noqa: BLE001
+        fail("ДОСТУП", f"tools/check-a11y.mjs не отработал: {e}; {r.stderr[-300:] if 'r' in dir() else ''}")
+        return
+    if res.get("skipped"):
+        skipped.append(f"ДОСТУП · не проверено: {res['skipped']}")
+        return
+    bad = False
+    for msg in res["problems"]:
+        fail("ДОСТУП", msg)
+        bad = True
+    if not bad:
+        notes.append(f"ДОСТУП · {res['pages']} дашбордов: контролы достижимы с клавиатуры "
+                     f"с видимым фокусом, у контролов есть имена, каркас страниц на месте "
+                     f"(речь скринридера на живом устройстве — ручной шаг)")
+
+
 def check_page(path: Path) -> None:
     """Страница, собранная ВНЕ кита, по правилам кита: python3 tools/check.py --page путь.
 
@@ -2579,6 +2629,7 @@ def main() -> int:
     check_classes()
     check_app_icons()
     check_phone(fast="--fast" in sys.argv)
+    check_a11y(fast="--fast" in sys.argv)
 
     print()
     for n in notes:

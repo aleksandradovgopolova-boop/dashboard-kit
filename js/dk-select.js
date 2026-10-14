@@ -37,10 +37,10 @@
 (function () {
   'use strict';
 
-  var ICON_CHECK = '<svg class="dk-i"><use href="#ti-check"/></svg>';
-  var ICON_CARET = '<svg class="dk-i dk-i--sm dk-select__caret"><use href="#ti-chevron-down"/></svg>';
-  var ICON_X = '<svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg>';
-  var ICON_SEARCH = '<svg class="dk-i dk-i--sm"><use href="#ti-search"/></svg>';
+  var ICON_CHECK = '<svg class="dk-i" aria-hidden="true"><use href="#ti-check"/></svg>';
+  var ICON_CARET = '<svg class="dk-i dk-i--sm dk-select__caret" aria-hidden="true"><use href="#ti-chevron-down"/></svg>';
+  var ICON_X = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-x"/></svg>';
+  var ICON_SEARCH = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-search"/></svg>';
 
   var openOne = null;   // одновременно открыт может быть только один фильтр
 
@@ -144,7 +144,7 @@
             var on = selected.has(o.value);
             var mark = mode === 'multi'
               ? '<span class="dk-menu__box">' + ICON_CHECK + '</span>'
-              : '<svg class="dk-i dk-menu__mark"><use href="#ti-check"/></svg>';
+              : '<svg class="dk-i dk-menu__mark" aria-hidden="true"><use href="#ti-check"/></svg>';
             return '<li role="presentation"><button type="button" class="dk-menu__item" role="option"' +
               ' id="' + uid + '-opt-' + i + '"' +
               ' aria-selected="' + on + '" data-value="' + esc(o.value) + '"' +

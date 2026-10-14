@@ -96,12 +96,12 @@
     var el = document.createElement('div');
     el.className = 'dk-toast dk-toast--' + kind;
     el.innerHTML =
-      '<svg class="dk-i"><use href="#' + ICON[kind] + '"/></svg>' +
+      '<svg class="dk-i" aria-hidden="true"><use href="#' + ICON[kind] + '"/></svg>' +
       '<span class="dk-toast__text">' + esc(text) + '</span>' +
       (action ? '<button type="button" class="dk-btn dk-btn--ghost dk-btn--sm">' +
                 esc(action.name) + '</button>' : '') +
       '<button type="button" class="dk-iconbtn dk-iconbtn--sm" title="Закрыть" aria-label="Закрыть">' +
-      '<svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button>';
+      '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-x"/></svg></button>';
 
     host.appendChild(el);
 

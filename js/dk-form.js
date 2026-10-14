@@ -32,7 +32,7 @@
 (function () {
   'use strict';
 
-  var ICON = '<svg class="dk-i dk-i--sm"><use href="#ti-alert-circle"/></svg>';
+  var ICON = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-alert-circle"/></svg>';
 
   // Слова наши, а не браузерные. Каждое говорит, что сделать.
   function message(el) {
