@@ -26,7 +26,10 @@
    10 строк распределяются по высоте, без пустоты внизу. */
 #fm-dashboard #fm-rank-widget { display: flex; flex-direction: column; }
 #fm-dashboard #fm-rank-widget .dk-widget__body { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-#fm-dashboard #fm-rank { flex: 1; justify-content: space-between; overflow: visible; }
+/* Рейтинг заполняет высоту РАВНЫМИ строками (а не огромными промежутками
+   между ними): каждая строка растёт одинаково, подпись по центру. */
+#fm-dashboard #fm-rank { flex: 1; justify-content: flex-start; overflow: visible; }
+#fm-dashboard #fm-rank .dk-rank__row { flex: 1 0 auto; }
 
 /* Ряд «почему отстаём» — спрос и бюджет, две равные колонки. */
 #fm-dashboard #fm-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -60,6 +63,11 @@
    премиум-референсе (тени кит не использует). */
 #fm-dashboard .dk-widget, #fm-dashboard .dk-hero { border: 1px solid var(--edge-float); }
 
+/* KPI без спарклайна — чистая плитка (иконка+подпись, крупное число, тренд).
+   Спарклайн-«кучка» в углу читался дёшево; историю показателя лучше дать
+   отдельным аккуратным графиком, а не крошечной врезкой. */
+#fm-dashboard .dk-tile__spark { display: none; }
+
 /* Плотнее, чтобы ключевые виджеты влезали в один экран. */
 /* Герой: число меньше (56→40), поля и зазоры плотнее. */
 #fm-dashboard .dk-hero { padding: var(--space-6); gap: var(--gap-inline); }
@@ -76,8 +84,22 @@
 #fm-dashboard .fm-map-body { display: block; flex: 1; }
 #fm-dashboard #fm-map { min-width: 0; }
 #fm-dashboard #fm-map .dk-map__canvas { max-height: none; }
-#fm-dashboard #fm-map .dk-map__pan { max-height: none; }
+/* Карта вмещается целиком — внутренний скролл не нужен и не должен перехватывать
+   прокрутку страницы (из-за этого экран скроллился тяжело). */
+#fm-dashboard #fm-map .dk-map__pan { max-height: none; overflow: visible; }
+/* Больше воздуха у плиток слева и справа. */
+#fm-dashboard #fm-map .dk-map__pan { padding-inline: var(--space-5); }
+/* Плитки симпатичнее — больше воздуха между ними и скругление крупнее (под
+   продакшн-референс владельца). */
+#fm-dashboard #fm-map .dk-map__tiles { gap: var(--space-3); }
 #fm-dashboard #fm-map-controls .dk-seg { font: var(--type-caption); }
+/* Кнопки масштаба меньше — были слишком крупные (48px). Только для мыши: на
+   сенсоре кит держит цель 44px. */
+@media (hover: hover) and (pointer: fine) {
+  #fm-dashboard .dk-map__zoom { width: 34px; }
+  #fm-dashboard .dk-map__zoom button { width: 34px; height: 34px; }
+  #fm-dashboard .dk-map__zoom button .dk-i { width: 16px; height: 16px; }
+}
 /* Переключатели вида карты крупнее — на десктопе 16px-иконки в тесных кнопках
    читались мелко. Только для мыши: на сенсоре кит держит цель 44px (иначе
    палец не попадёт — это ловит проверка ТЕЛЕФОН). Сегмент-контейнер (подложка)
