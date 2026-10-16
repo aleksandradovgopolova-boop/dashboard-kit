@@ -4,11 +4,10 @@
    секций (dk-flex--column) и шаг между блоками теперь даёт сам кит
    (components.css). Только раскладка и токены — без сырых цветов. */
 
-/* Больше воздуха — под премиум-референс: щедрее промежутки МЕЖДУ карточками на
-   планшете и десктопе. Внутренние поля не трогаем: от этого компактные
-   KPI-плитки раздувались пустотой между числом и спарклайном. */
+/* Умеренный промежуток между карточками: достаточно воздуха, но ключевые
+   виджеты влезают в один экран (24px было слишком, 10px монитора — тесно). */
 @media (min-width: 768px) {
-  #fm-dashboard { --grid-gap: var(--space-8); }
+  #fm-dashboard { --grid-gap: var(--space-6); }
 }
 
 /* Главный ряд во всю ширину: карта (шире) слева + рейтинг справа. Так нет
@@ -39,22 +38,31 @@
 #fm-dashboard .fm-topbar { background: var(--surface-2); border-bottom: 1px solid var(--rule); }
 #fm-dashboard .fm-topbar__inner {
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
-  height: 68px; max-width: var(--page-max); margin-inline: auto; padding-inline: var(--page-pad);
+  height: 52px; max-width: var(--page-max); margin-inline: auto; padding-inline: var(--page-pad);
 }
 #fm-dashboard .fm-brand { display: flex; align-items: center; gap: var(--space-5); min-width: 0; }
 #fm-dashboard .fm-brand__mark {
   display: inline-flex; align-items: center; justify-content: center; flex: none;
-  width: 36px; height: 36px; border-radius: var(--radius-full);
+  width: 30px; height: 30px; border-radius: var(--radius-full);
   background: var(--surface-3); color: var(--ink);
 }
-#fm-dashboard .fm-brand__mark .dk-i { width: 20px; height: 20px; }
+#fm-dashboard .fm-brand__mark .dk-i { width: 18px; height: 18px; }
 #fm-dashboard .fm-brand__name { margin: 0; font: var(--type-h2); letter-spacing: var(--type-h2-track); color: var(--ink); overflow-wrap: anywhere; }
 #fm-dashboard .fm-topbar__tools { display: flex; align-items: center; gap: var(--space-6); flex: none; }
 #fm-dashboard .fm-topbar__asof { white-space: nowrap; }
 #fm-dashboard .fm-topbar__asof b { color: var(--ink); }
 
 /* Контент под баром — небольшой отступ сверху. */
-#fm-dashboard .dk-wrap--monitor { padding-top: var(--space-7); }
+#fm-dashboard .dk-wrap--monitor { padding-top: var(--space-6); }
+
+/* Плотнее, чтобы ключевые виджеты влезали в один экран. */
+/* Герой: число меньше (56→40), поля и зазоры плотнее. */
+#fm-dashboard .dk-hero { padding: var(--space-6); gap: var(--gap-inline); }
+#fm-dashboard .dk-hero__n { font: var(--type-metric-xl); }
+#fm-dashboard .dk-hero .dk-trend { margin-bottom: 0; }
+/* KPI: шапка без принудительных трёх строк, поля плотнее. */
+#fm-dashboard .dk-tile--compact { padding: var(--space-5); }
+#fm-dashboard .dk-tile--compact > .dk-tile__head { min-height: 2lh; }
 
 /* Карта: легенду даёт сама dkMap, приписку сбоку убрали. Карта заполняет свою
    колонку целиком (без центрирования — иначе пустоты по бокам), кнопки
