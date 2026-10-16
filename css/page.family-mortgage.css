@@ -52,16 +52,17 @@
 #fm-dashboard .fm-topbar__asof { white-space: nowrap; }
 #fm-dashboard .fm-topbar__asof b { color: var(--ink); }
 
-/* Контент под баром — небольшой отступ сверху. */
-#fm-dashboard .dk-wrap--monitor { padding-top: var(--space-6); }
+/* Контент под баром — небольшой отступ сверху. Внутреннее поле виджета —
+   единое для всех карточек (14px), чтобы отступы не разъезжались. */
+#fm-dashboard .dk-wrap--monitor { padding-top: var(--space-6); --pad-widget: var(--space-6); }
 
 /* Плотнее, чтобы ключевые виджеты влезали в один экран. */
 /* Герой: число меньше (56→40), поля и зазоры плотнее. */
 #fm-dashboard .dk-hero { padding: var(--space-6); gap: var(--gap-inline); }
 #fm-dashboard .dk-hero__n { font: var(--type-metric-xl); }
 #fm-dashboard .dk-hero .dk-trend { margin-bottom: 0; }
-/* KPI: шапка без принудительных трёх строк, поля плотнее. */
-#fm-dashboard .dk-tile--compact { padding: var(--space-5); }
+/* KPI: шапка без принудительных трёх строк; поле — то же единое 14px. */
+#fm-dashboard .dk-tile--compact { padding: var(--space-6); }
 #fm-dashboard .dk-tile--compact > .dk-tile__head { min-height: 2lh; }
 
 /* Карта: легенду даёт сама dkMap, приписку сбоку убрали. Карта заполняет свою
@@ -78,6 +79,6 @@
    палец не попадёт — это ловит проверка ТЕЛЕФОН). Сегмент-контейнер (подложка)
    кит даёт сам. */
 @media (hover: hover) and (pointer: fine) {
-  #fm-dashboard #fm-map-controls .dk-seg button { height: 36px; border-radius: var(--radius-sm); }
-  #fm-dashboard #fm-map-controls .dk-seg button .dk-i { width: 18px; height: 18px; }
+  #fm-dashboard #fm-map-controls .dk-seg button { height: 30px; border-radius: var(--radius-sm); }
+  #fm-dashboard #fm-map-controls .dk-seg button .dk-i { width: 16px; height: 16px; }
 }
