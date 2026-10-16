@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Сетка кита · dashboard-kit</title>
+<!-- dashboard-kit: base. Эталон сетки — показывает размеры настоящими классами
+     кита (dk-grid + dk-col--*), значения берутся из токенов, не выдуманы.
+     Собрано: python3 tools/kit.py head base -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<script>try{if(localStorage.getItem('dk-theme')==null)localStorage.setItem('dk-theme','dark');}catch(e){}</script>
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/page.grid.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+</head>
+
+<body class="dk-page" id="grid-ref">
+
+<header class="gr-topbar">
+  <div class="gr-topbar__inner">
+    <div class="gr-brand">
+      <span class="gr-brand__mark" aria-hidden="true"><svg class="dk-i"><use href="#ti-layout-grid"/></svg></span>
+      <h1 class="gr-brand__name">Сетка кита</h1>
+    </div>
+    <span class="dk-caption gr-topbar__sub">Размеры виджетов, отступы, радиусы и кнопки</span>
+  </div>
+</header>
+
+<div class="dk-wrap">
+  <main id="main" tabindex="-1" class="dk-sections">
+
+    <!-- Рабочая область -->
+    <section class="dk-widget">
+      <div class="dk-widget__head"><h2 class="dk-widget__title">Рабочая область</h2></div>
+      <div class="dk-widget__body">
+        <dl class="gr-facts">
+          <div class="gr-fact"><dt>Максимальная ширина</dt><dd id="gr-page-max">—</dd></div>
+          <div class="gr-fact"><dt>Поля по краям</dt><dd id="gr-page-pad">—</dd></div>
+          <div class="gr-fact"><dt>Колонок в сетке</dt><dd id="gr-cols">—</dd></div>
+          <div class="gr-fact"><dt>Промежуток между виджетами</dt><dd id="gr-gap">—</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Сценарии каркаса: сетка одна, рабочая область подстраивается -->
+    <section class="dk-widget">
+      <div class="dk-widget__head"><h2 class="dk-widget__title">Сценарии каркаса</h2><span class="dk-widget__meta">сетка одна — рабочая область подстраивается</span></div>
+      <div class="dk-widget__body">
+        <div class="gr-scenarios">
+          <figure class="gr-scn">
+            <div class="gr-scn__frame">
+              <div class="gr-scn__side">меню</div>
+              <div class="gr-scn__main"><div class="gr-scn__top">хедер</div><div class="gr-scn__area"><span>рабочая область</span></div></div>
+            </div>
+            <figcaption>Хедер + боковое меню</figcaption>
+          </figure>
+          <figure class="gr-scn">
+            <div class="gr-scn__frame">
+              <div class="gr-scn__main"><div class="gr-scn__top">хедер</div><div class="gr-scn__area"><span>рабочая область</span></div></div>
+            </div>
+            <figcaption>Только хедер</figcaption>
+          </figure>
+          <figure class="gr-scn">
+            <div class="gr-scn__frame">
+              <div class="gr-scn__main"><div class="gr-scn__area"><span>рабочая область</span></div></div>
+            </div>
+            <figcaption>Без каркаса — встроенный</figcaption>
+          </figure>
+        </div>
+        <p class="dk-caption">Боковое меню и хедер — отключаемый слой кита. Сетка внутри рабочей области одна и та же: те же колонки, поля и промежутки. Меняется только размер и положение области — кит держит это сам, поэтому дашборд одинаково работает и самостоятельной страницей, и внутри чужого приложения.</p>
+      </div>
+    </section>
+
+    <!-- Адаптация: как доли перестраиваются по экранам -->
+    <section class="dk-widget">
+      <div class="dk-widget__head">
+        <h2 class="dk-widget__title">Адаптация по экранам</h2>
+        <span class="dk-widget__meta">одна сетка, колонки и доли меняются сами</span>
+      </div>
+      <div class="dk-widget__body">
+        <div class="dk-tablewrap">
+          <table class="dk-table dk-table--zebra gr-adapt">
+            <thead><tr>
+              <th scope="col">Экран</th><th scope="col" class="dk-td-num">Колонок</th>
+              <th scope="col" class="dk-td-num">1/4</th><th scope="col" class="dk-td-num">1/3</th>
+              <th scope="col" class="dk-td-num">1/2</th><th scope="col" class="dk-td-num">2/3</th>
+              <th scope="col" class="dk-td-num">1/1</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Десктоп&nbsp;≥&nbsp;1200</td><td class="dk-td-num">12</td><td class="dk-td-num">3</td><td class="dk-td-num">4</td><td class="dk-td-num">6</td><td class="dk-td-num">8</td><td class="dk-td-num">12</td></tr>
+              <tr><td>Планшет&nbsp;768–1199</td><td class="dk-td-num">8</td><td class="dk-td-num">4</td><td class="dk-td-num">4</td><td class="dk-td-num">4</td><td class="dk-td-num">8</td><td class="dk-td-num">8</td></tr>
+              <tr><td>Телефон&nbsp;&lt;&nbsp;768</td><td class="dk-td-num">4</td><td class="dk-td-num">4</td><td class="dk-td-num">4</td><td class="dk-td-num">4</td><td class="dk-td-num">4</td><td class="dk-td-num">4</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="dk-caption">Число — сколько колонок занимает доля на этом экране. На телефоне любая доля занимает все 4 колонки, то есть виджеты идут в один столбец. Правила держит сам кит — верстать под каждый экран руками не нужно.</p>
+      </div>
+    </section>
+
+    <!-- Ширины виджетов по сетке: показаны НАСТОЯЩЕЙ сеткой кита -->
+    <section class="dk-widget">
+      <div class="dk-widget__head">
+        <h2 class="dk-widget__title">Ширины виджетов по сетке</h2>
+        <span class="dk-widget__meta">настоящие классы dk-col-* и ряд KPI</span>
+      </div>
+      <div class="dk-widget__body">
+
+        <div class="dk-grid gr-demo" id="gr-row-full"><div class="dk-col--full gr-cell"><span class="gr-cell__t">Во всю ширину</span><span class="gr-cell__m">dk-col--full · 1/1</span></div></div>
+
+        <div class="dk-grid gr-demo"><div class="dk-col--two-thirds gr-cell"><span class="gr-cell__t">Две трети</span><span class="gr-cell__m">dk-col--two-thirds · 2/3</span></div><div class="dk-col--third gr-cell gr-cell--2"><span class="gr-cell__t">Треть</span><span class="gr-cell__m">dk-col--third · 1/3</span></div></div>
+
+        <div class="dk-grid gr-demo"><div class="dk-col--half gr-cell"><span class="gr-cell__t">Половина</span><span class="gr-cell__m">dk-col--half · 1/2</span></div><div class="dk-col--half gr-cell gr-cell--2"><span class="gr-cell__t">Половина</span><span class="gr-cell__m">dk-col--half · 1/2</span></div></div>
+
+        <div class="dk-grid gr-demo"><div class="dk-col--third gr-cell"><span class="gr-cell__t">Треть</span><span class="gr-cell__m">1/3</span></div><div class="dk-col--third gr-cell gr-cell--2"><span class="gr-cell__t">Треть</span><span class="gr-cell__m">1/3</span></div><div class="dk-col--third gr-cell gr-cell--3"><span class="gr-cell__t">Треть</span><span class="gr-cell__m">1/3</span></div></div>
+
+        <div class="dk-grid gr-demo"><div class="dk-col--quarter gr-cell"><span class="gr-cell__t">Четверть</span><span class="gr-cell__m">1/4</span></div><div class="dk-col--quarter gr-cell gr-cell--2"><span class="gr-cell__t">Четверть</span><span class="gr-cell__m">1/4</span></div><div class="dk-col--quarter gr-cell gr-cell--3"><span class="gr-cell__t">Четверть</span><span class="gr-cell__m">1/4</span></div><div class="dk-col--quarter gr-cell gr-cell--4"><span class="gr-cell__t">Четверть</span><span class="gr-cell__m">1/4</span></div></div>
+
+        <div class="dk-grid dk-grid--five gr-demo gr-demo--kpi">
+          <div class="gr-cell gr-cell--kpi"><span class="gr-cell__m">KPI 1/5</span></div>
+          <div class="gr-cell gr-cell--kpi gr-cell--2"><span class="gr-cell__m">KPI 1/5</span></div>
+          <div class="gr-cell gr-cell--kpi gr-cell--3"><span class="gr-cell__m">KPI 1/5</span></div>
+          <div class="gr-cell gr-cell--kpi gr-cell--4"><span class="gr-cell__m">KPI 1/5</span></div>
+          <div class="gr-cell gr-cell--kpi gr-cell--5"><span class="gr-cell__m">KPI 1/5</span></div>
+        </div>
+        <p class="dk-caption">Карта обзора = 3 из 5 KPI (ширина трёх плиток), рейтинг = 2 из 5 — так края совпадают с рядом KPI.</p>
+      </div>
+    </section>
+
+    <!-- Отступы: внешние держат ритм экрана, внутренние — дыхание виджета -->
+    <section class="dk-widget">
+      <div class="dk-widget__head"><h2 class="dk-widget__title">Отступы</h2><span class="dk-widget__meta">внешние держат ритм экрана, внутренние — дыхание виджета</span></div>
+      <div class="dk-widget__body gr-gaps">
+        <div class="gr-gaps__col">
+          <h3 class="dk-overline gr-gaps__h">Внешние</h3>
+          <dl class="gr-facts">
+            <div class="gr-fact"><dt>Поля страницы по краям</dt><dd id="gr-page-pad-2">—</dd></div>
+            <div class="gr-fact"><dt>Между виджетами</dt><dd id="gr-gap-2">—</dd></div>
+          </dl>
+        </div>
+        <div class="gr-gaps__col">
+          <h3 class="dk-overline gr-gaps__h">Внутренние</h3>
+          <dl class="gr-facts">
+            <div class="gr-fact"><dt>Поле виджета</dt><dd id="gr-pad">—</dd></div>
+            <div class="gr-fact"><dt>Между группами</dt><dd id="gr-gap-group">—</dd></div>
+            <div class="gr-fact"><dt>Между элементами</dt><dd id="gr-gap-inline">—</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Радиусы и кнопки -->
+    <div class="dk-grid">
+      <!-- Радиусы -->
+      <section class="dk-widget dk-col--half">
+        <div class="dk-widget__head"><h2 class="dk-widget__title">Радиусы скругления</h2></div>
+        <div class="dk-widget__body">
+          <ul class="gr-radii">
+            <li><span class="gr-swatch" style="border-radius:var(--radius-lg)"></span><span>Виджет, панель, блок — <b id="gr-r-widget">—</b></span></li>
+            <li><span class="gr-swatch" style="border-radius:var(--radius-md)"></span><span>Кнопки, чипы, поля — <b id="gr-r-control">—</b></span></li>
+            <li><span class="gr-swatch" style="border-radius:var(--radius-sm)"></span><span>Сегмент — <b id="gr-r-seg">—</b></span></li>
+            <li><span class="gr-swatch" style="border-radius:var(--radius-xs)"></span><span>Бейдж, метка — <b id="gr-r-badge">—</b></span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Высоты кнопок -->
+      <section class="dk-widget dk-col--half">
+        <div class="dk-widget__head"><h2 class="dk-widget__title">Высоты кнопок</h2></div>
+        <div class="dk-widget__body gr-btns">
+          <div class="gr-btn-row"><button type="button" class="dk-btn dk-btn--primary">Кнопка M</button><span class="dk-caption" id="gr-h-md">—</span></div>
+          <div class="gr-btn-row"><button type="button" class="dk-btn">Кнопка M</button><span class="dk-caption">обычная</span></div>
+          <div class="gr-btn-row"><button type="button" class="dk-btn dk-btn--sm">Кнопка S</button><span class="dk-caption" id="gr-h-sm">—</span></div>
+          <p class="dk-caption">На сенсоре кит поднимает цель до 44px.</p>
+        </div>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // Числа берём из вычисленных токенов — страница показывает ПРАВДУ, а не копию.
+  window.addEventListener('DOMContentLoaded', function () {
+    var cs = getComputedStyle(document.documentElement);
+    function tok(name) { return cs.getPropertyValue(name).trim(); }
+    function px(name) { var v = tok(name); return v || '—'; }
+    var root = document.getElementById('grid-ref');
+    var wrap = document.querySelector('.dk-wrap');
+    var wcs = getComputedStyle(wrap);
+    var set = function (id, val) { var e = document.getElementById(id); if (e) e.textContent = val; };
+
+    set('gr-page-max', px('--page-max'));
+    set('gr-page-pad', wcs.paddingLeft);
+    // Число колонок — из фактической сетки первого демо-ряда.
+    var grid = document.querySelector('.gr-demo');
+    var cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+    set('gr-cols', cols + ' колонок');
+    var gap = getComputedStyle(grid).columnGap;
+    set('gr-gap', gap); set('gr-gap-2', gap);
+    set('gr-pad', px('--pad-widget'));
+    set('gr-gap-group', px('--gap-group'));
+    set('gr-page-pad-2', wcs.paddingLeft);
+    set('gr-gap-inline', px('--gap-inline'));
+
+    function rpx(name) { var probe = document.createElement('div'); probe.style.width = 'var(' + name + ')'; document.body.appendChild(probe); var w = getComputedStyle(probe).width; probe.remove(); return w; }
+    set('gr-r-widget', rpx('--radius-lg'));
+    set('gr-r-control', rpx('--radius-md'));
+    set('gr-r-seg', rpx('--radius-sm'));
+    set('gr-r-badge', rpx('--radius-xs'));
+
+    function hpx(name) { var probe = document.createElement('div'); probe.style.height = 'var(' + name + ')'; document.body.appendChild(probe); var h = getComputedStyle(probe).height; probe.remove(); return h; }
+    set('gr-h-md', hpx('--control-md'));
+    set('gr-h-sm', hpx('--control-sm'));
+  });
+</script>
+</body>
+</html>

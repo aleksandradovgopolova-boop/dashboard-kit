@@ -1,0 +1,63 @@
+/* Эталон сетки кита. Только раскладка и токены — без сырых цветов.
+   Блоки сетки — нейтральные поверхности (акцент-заливку кит бережёт для
+   фокуса/кнопок/ссылок — правило «тишина»), размеры подписаны. */
+
+/* Хедер-бар, как у дашборда. */
+#grid-ref .gr-topbar { background: var(--surface-2); border-bottom: 1px solid var(--rule); }
+#grid-ref .gr-topbar__inner {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
+  height: 68px; max-width: var(--page-max); margin-inline: auto; padding-inline: var(--page-pad);
+}
+#grid-ref .gr-brand { display: flex; align-items: center; gap: var(--space-5); min-width: 0; }
+#grid-ref .gr-brand__mark {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 36px; height: 36px; border-radius: var(--radius-full);
+  background: var(--surface-3); color: var(--ink);
+}
+#grid-ref .gr-brand__mark .dk-i { width: 20px; height: 20px; }
+#grid-ref .gr-brand__name { margin: 0; font: var(--type-h2); letter-spacing: var(--type-h2-track); color: var(--ink); }
+#grid-ref .gr-topbar__sub { white-space: nowrap; }
+#grid-ref .dk-wrap { padding-top: var(--space-7); }
+
+/* Факты — пары «что : размер». */
+#grid-ref .gr-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--gap-group); margin: 0; }
+#grid-ref .gr-fact { display: grid; gap: var(--space-2); }
+#grid-ref .gr-fact dt { font: var(--type-caption); color: var(--ink-2); }
+#grid-ref .gr-fact dd { margin: 0; font: var(--type-metric); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* Демо-ряды сетки. */
+#grid-ref .gr-demo { margin-bottom: var(--grid-gap); }
+#grid-ref .gr-cell {
+  display: flex; flex-direction: column; justify-content: center; gap: var(--space-2);
+  min-height: 64px; padding: var(--space-5) var(--space-6);
+  background: var(--surface-3); border: 1px solid var(--edge-float);
+  border-radius: var(--radius-lg);
+}
+#grid-ref .gr-cell--kpi { min-height: 48px; align-items: center; text-align: center; padding: var(--space-4); }
+#grid-ref .gr-cell__t { font: var(--type-body-bold); color: var(--ink); }
+#grid-ref .gr-cell__m { font: var(--type-caption); color: var(--ink-2); }
+
+/* Сценарии каркаса — схемы: меню / хедер / рабочая область. */
+#grid-ref .gr-scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--gap-section); margin-bottom: var(--gap-group); }
+#grid-ref .gr-scn { margin: 0; display: grid; gap: var(--space-4); }
+#grid-ref .gr-scn__frame { display: flex; gap: var(--space-2); height: 140px; padding: var(--space-2); background: var(--surface-2); border: 1px solid var(--edge-float); border-radius: var(--radius-lg); }
+#grid-ref .gr-scn__side { flex: none; width: 30px; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; font: var(--type-caption); color: var(--ink-2); background: var(--surface-3); border-radius: var(--radius-md); }
+#grid-ref .gr-scn__main { flex: 1; display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+#grid-ref .gr-scn__top { flex: none; height: 26px; display: flex; align-items: center; justify-content: center; font: var(--type-caption); color: var(--ink-2); background: var(--surface-3); border-radius: var(--radius-md); }
+#grid-ref .gr-scn__area { flex: 1; display: flex; align-items: center; justify-content: center; font: var(--type-caption); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-md); }
+#grid-ref .gr-scn figcaption { font: var(--type-body-bold); color: var(--ink); }
+
+/* Отступы — две группы рядом. */
+#grid-ref .gr-gaps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--gap-section); }
+#grid-ref .gr-gaps__col { display: grid; gap: var(--gap-group); align-content: start; }
+#grid-ref .gr-gaps__h { margin: 0; }
+
+/* Радиусы. */
+#grid-ref .gr-radii { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--gap-group); }
+#grid-ref .gr-radii li { display: flex; align-items: center; gap: var(--space-5); font: var(--type-body); color: var(--ink); }
+#grid-ref .gr-radii b { color: var(--ink); font-variant-numeric: tabular-nums; }
+#grid-ref .gr-swatch { flex: none; width: 44px; height: 44px; background: var(--surface-3); border: 1px solid var(--edge-float); }
+
+/* Кнопки. */
+#grid-ref .gr-btns { display: grid; gap: var(--gap-group); }
+#grid-ref .gr-btn-row { display: flex; align-items: center; gap: var(--space-5); }

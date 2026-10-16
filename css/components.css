@@ -3763,9 +3763,10 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   color: var(--ink);
   background: var(--fill, var(--nodata));
   border: 0;
-  /* Круглые плитки — картограмма из точек: мягче квадратов, читается как
-     «точки риска по стране» (по продакшн-референсу, DECISIONS 10.10). */
-  border-radius: 50%;
+  /* Квадратные плитки с лёгким скруглением: это плиточная картограмма, а не
+     россыпь точек — тайл должен читаться как ячейка карты (решение владельца
+     14.10, разворот круглых точек от 10.10). */
+  border-radius: var(--radius-sm);
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -4571,7 +4572,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-bullet { display: grid; gap: var(--space-3); }
 .dk-bullet__track { position: relative; height: var(--space-7); background: var(--surface-2); }
 .dk-bullet__range { position: absolute; inset-block: 0; }
-.dk-bullet__actual { position: absolute; inset-block: var(--space-2); left: 0; background: var(--ink); }
+.dk-bullet__actual { position: absolute; inset-block: var(--space-2); left: 0; background: var(--seq-1); border-radius: var(--radius-sm); }
 .dk-bullet__target { position: absolute; inset-block: 0; width: var(--focus-width); background: var(--ink); transform: translateX(-50%); }
 .dk-heatmap { min-width: 0; }
 .dk-heatmap__table { table-layout: auto; }
@@ -4940,16 +4941,23 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-head__actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--gap-tight); min-width: 0; }
 .dk-widget--overview { gap: var(--space-5); }
 .dk-widget--overview > .dk-widget__head { flex-wrap: wrap; }
-/* Заголовок обзорного виджета — интерфейсный вес (medium), а не жирный: единый
-   спокойный стиль шапок на всех дашбордах без страничного CSS. (09.10) */
-.dk-widget--overview .dk-widget__title { font: var(--type-panel-title); font-weight: var(--weight-ui); }
+/* Заголовок обзорного виджета — прописными вразрядку, приглушённо-серый
+   (overline-стиль), как на продакшн-референсе «РАСХОД НА МОДЕЛИ / КТО ЖЖЁТ /
+   ТОП МОДЕЛЕЙ»: шапка — тихий ярлык секции, а не крупный заголовок (решение
+   владельца 14.10). */
+.dk-widget--overview .dk-widget__title {
+  font: var(--type-overline);
+  letter-spacing: var(--type-overline-track);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
 /* Графики обзорных панелей — одной высоты, чтобы низ ряда не был рваным. */
 .dk-grid--overview-panels .dk-chart { min-height: 200px; }
 .dk-widget__heading { flex: 1 1 10rem; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
 .dk-widget__meta { margin: 0; font: var(--type-caption); color: var(--ink-2); }
 .dk-widget__footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--gap-inline); font: var(--type-caption); color: var(--ink-2); }
 .dk-widget--overview > .dk-widget__head > .dk-widget__actions { flex-wrap: wrap; min-width: 0; max-width: 100%; }
-@media (max-width: 1199px) { .dk-widget--overview .dk-widget__title { font: var(--type-h3); font-weight: var(--weight-ui); } }
+@media (max-width: 1199px) { .dk-widget--overview .dk-widget__title { font: var(--type-overline); letter-spacing: var(--type-overline-track); } }
 @media (max-width: 767px) { .dk-head__title { font: var(--type-h2); } .dk-head__actions { flex: 1 1 100%; } }
 
 /* Главный объект + связанная сводка: выбранная композиция карты регионов. */

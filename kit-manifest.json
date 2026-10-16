@@ -33,6 +33,10 @@
    {
     "file": "css/page.family-mortgage.css",
     "when": "только пример family-mortgage.html; после components.css"
+   },
+   {
+    "file": "css/page.grid.css",
+    "when": "только эталон сетки grid.html; после components.css"
    }
   ],
   "scripts": [

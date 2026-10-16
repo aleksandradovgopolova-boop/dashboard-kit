@@ -60,6 +60,7 @@ CSS_ORDER = [
     ("css/page.regions.css", "только пример regions.html; после chrome.css"),
     ("css/page.dashboard.css", "только пример dashboard.html; после chrome.css"),
     ("css/page.family-mortgage.css", "только пример family-mortgage.html; после components.css"),
+    ("css/page.grid.css", "только эталон сетки grid.html; после components.css"),
 ]
 
 # Чужой скрипт со своим стилем: подключил скрипт — подключи и стиль. Из кода

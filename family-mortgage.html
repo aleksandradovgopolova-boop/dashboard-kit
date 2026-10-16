@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dk-root" lang="ru" data-theme="light" data-accent="blue">
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -10,6 +10,9 @@
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<!-- Дашборд-витрина по умолчанию тёмный (под продакшн-референс). Явный выбор
+     человека в переключателе главнее и сохраняется — здесь только дефолт. -->
+<script>try{if(localStorage.getItem('dk-theme')==null)localStorage.setItem('dk-theme','dark');}catch(e){}</script>
 <script src="js/dk-theme.js"></script>
 
 <link rel="stylesheet" href="css/tokens.primitives.css">
@@ -31,23 +34,24 @@
 </head>
 
 <body class="dk-page" id="fm-dashboard">
-<a class="dk-skip" href="#main">К содержимому</a>
 
-<div class="dk-wrap dk-wrap--monitor">
-
-  <header class="dk-head">
-    <div class="dk-head__titles">
-      <div class="dk-head__subtitle">Государственная программа льготного кредитования</div>
-      <h1 class="dk-head__title">Семейная ипотека</h1>
+<header class="fm-topbar">
+  <div class="fm-topbar__inner">
+    <div class="fm-brand">
+      <span class="fm-brand__mark" aria-hidden="true"><svg class="dk-i"><use href="#ti-home"/></svg></span>
+      <h1 class="fm-brand__name">Семейная ипотека</h1>
     </div>
-    <div class="dk-head__actions">
-      <span class="dk-caption" id="fm-period">Демонстрационные данные за 30 дней</span>
+    <div class="fm-topbar__tools">
+      <span class="dk-caption fm-topbar__asof" id="fm-period">Данные актуальны на&nbsp;<b>29.09.2025</b></span>
       <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
         <button type="button" data-theme-set="light" aria-pressed="true" aria-label="Светлая тема" title="Светлая тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg></button>
         <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Тёмная тема" title="Тёмная тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-moon"/></svg></button>
       </div>
     </div>
-  </header>
+  </div>
+</header>
+
+<div class="dk-wrap dk-wrap--monitor">
 
   <main id="main" tabindex="-1" class="dk-sections">
 
@@ -66,12 +70,12 @@
       <div class="dk-split" role="img" id="fm-split" aria-label="Состав: сильно отстают, отстают, по плану">
         <span class="dk-split__seg" style="--swatch:var(--crit)" id="fm-seg-high"></span>
         <span class="dk-split__seg" style="--swatch:var(--high)" id="fm-seg-medium"></span>
-        <span class="dk-split__seg" style="--swatch:var(--calm)" id="fm-seg-low"></span>
+        <span class="dk-split__seg" style="--swatch:var(--risk-area-low)" id="fm-seg-low"></span>
       </div>
       <div class="dk-keys">
         <span class="dk-key" style="--swatch:var(--crit)"><i class="dk-key__dot"></i>Сильно отстают <b id="fm-k-high">—</b></span>
         <span class="dk-key" style="--swatch:var(--high)"><i class="dk-key__dot"></i>Отстают <b id="fm-k-medium">—</b></span>
-        <span class="dk-key" style="--swatch:var(--calm)"><i class="dk-key__dot"></i>По плану <b id="fm-k-low">—</b></span>
+        <span class="dk-key" style="--swatch:var(--risk-area-low)"><i class="dk-key__dot"></i>По плану <b id="fm-k-low">—</b></span>
       </div>
     </section>
 
@@ -83,6 +87,7 @@
           <span class="dk-tile__label">Выполнение плана</span>
         </div>
         <div class="dk-tile__row"><span class="dk-metric-lg" id="fm-planpct">—</span></div>
+        <div class="dk-tile__spark"><div class="dk-chart dk-chart--spark" id="fm-sp-planpct"></div></div>
       </section>
 
       <div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview" style="--accent:var(--calm-ink)">
@@ -124,12 +129,12 @@
           <span class="dk-tile__label">Одобрение заявок</span>
         </div>
         <div class="dk-tile__row"><span class="dk-metric-lg" id="fm-approval">—</span></div>
+        <div class="dk-tile__spark"><div class="dk-chart dk-chart--spark" id="fm-sp-approval"></div></div>
       </div>
     </div>
 
-    <!-- Обзорные панели: карта, динамика, округа, рейтинг, спрос, бюджет. -->
-    <div class="dk-grid dk-grid--overview-panels" id="fm-panels">
-
+    <!-- Главный ряд во всю ширину: где отстаём (карта) + кто отстаёт (рейтинг). -->
+    <div class="dk-grid" id="fm-top">
       <section class="dk-widget dk-widget--overview" id="fm-map-widget" aria-busy="true">
         <div class="dk-widget__head">
           <h2 class="dk-widget__title">Отставание от плана по регионам</h2>
@@ -137,39 +142,21 @@
         </div>
         <div class="fm-map-body dk-widget__body">
           <div id="fm-map"><div class="dk-skel" style="width:100%;aspect-ratio:1.9"></div><span class="dk-vh">Загрузка карты регионов</span></div>
-          <div class="fm-map-summary">
-            <p class="dk-caption">Состав — в карточке сверху.<br>Сильно отстают ≥78<br>Отстают 60–77<br>По плану &lt;60 баллов отставания</p>
-          </div>
         </div>
       </section>
-
-      <div class="dk-widget dk-widget--overview" id="fm-dynamics">
-        <div class="dk-widget__head">
-          <h2 class="dk-widget__title">Выдачи: факт и план по месяцам</h2>
-        </div>
-        <div class="dk-widget__body"><div class="dk-chart" id="fm-line"></div></div>
-      </div>
-
-      <div class="dk-widget dk-widget--overview" id="fm-district-widget">
-        <div class="dk-widget__head">
-          <h2 class="dk-widget__title">Отставание по федеральным округам</h2>
-        </div>
-        <div class="dk-widget__body"><div class="dk-chart dk-chart--sm" id="fm-bars"></div></div>
-      </div>
 
       <section class="dk-widget dk-widget--overview" id="fm-rank-widget">
         <div class="dk-widget__head"><h2 class="dk-widget__title">Регионы с наибольшим отставанием</h2></div>
         <div class="dk-widget__body">
-          <div class="dk-summary" style="--accent:var(--crit-ink)">
-            <div><div class="dk-trend"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-down"/></svg> отстают от плана</div></div>
-            <div class="dk-score"><span class="dk-score__v" id="fm-rank-score">—</span><span class="dk-score__of">/89</span></div>
-          </div>
           <div class="dk-rank" id="fm-rank">
             <div class="dk-rank__head"><span class="dk-overline">Регион</span><span class="dk-overline">Балл отставания</span></div>
           </div>
         </div>
       </section>
+    </div>
 
+    <!-- Почему отстаём: спрос и освоение бюджета. -->
+    <div class="dk-grid dk-grid--overview-panels" id="fm-panels">
       <div class="dk-widget dk-widget--overview" id="fm-demand-widget">
         <div class="dk-widget__head">
           <h2 class="dk-widget__title">Спрос: подано заявок и одобрено</h2>
@@ -181,6 +168,26 @@
         <div class="dk-widget__head"><h2 class="dk-widget__title">Освоение бюджета субсидий</h2></div>
         <div class="dk-widget__body"><div id="fm-budget"></div></div>
       </section>
+    </div>
+
+    <!-- Динамика и округа — вторым планом, под ключевой историей. -->
+    <div class="dk-grid">
+      <div class="dk-col--half">
+        <div class="dk-widget dk-widget--overview" id="fm-dynamics">
+          <div class="dk-widget__head">
+            <h2 class="dk-widget__title">Выдачи: факт и план по месяцам</h2>
+          </div>
+          <div class="dk-widget__body"><div class="dk-chart" id="fm-line"></div></div>
+        </div>
+      </div>
+      <div class="dk-col--half">
+        <div class="dk-widget dk-widget--overview" id="fm-district-widget">
+          <div class="dk-widget__head">
+            <h2 class="dk-widget__title">Отставание по федеральным округам</h2>
+          </div>
+          <div class="dk-widget__body"><div class="dk-chart dk-chart--sm" id="fm-bars"></div></div>
+        </div>
+      </div>
     </div>
 
     <!-- Ключевой вывод. -->
@@ -310,10 +317,16 @@
         });
 
         // Спарклайны KPI: компактная история показателя (демо-ряды).
+        // Все пять KPI с историей — единый вид ряда. Выполнение плана и
+        // одобрение считаются из месячных данных, а не выдумываются.
+        var planPctSeries = m.issuedFact.map(function (v, i) { return Math.round(v / m.issuedPlan[i] * 100); });
+        var approvalSeries = m.approved.map(function (v, i) { return Math.round(v / m.applied[i] * 100); });
         var sparks = {
+          'fm-sp-planpct': { tone: 'calm', data: planPctSeries },
           'fm-sp-issued': { tone: 'calm', data: m.issuedFact },
           'fm-sp-volume': { tone: 'calm', data: [228, 243, 251, 247, 266, 278] },
-          'fm-sp-rate': { tone: 'event', data: [63, 62, 61, 61, 60, 60] }
+          'fm-sp-rate': { tone: 'event', data: [63, 62, 61, 61, 60, 60] },
+          'fm-sp-approval': { tone: 'calm', data: approvalSeries }
         };
         Object.keys(sparks).forEach(function (id) {
           var el = document.getElementById(id);
@@ -338,7 +351,6 @@
 
       // Рейтинг отстающих регионов (топ-10 по баллу отставания).
       var sorted = regions.slice().sort(function (a, b) { return b.lag - a.lag; });
-      document.getElementById('fm-rank-score').textContent = dkFmt.num(behind);
       var rank = document.getElementById('fm-rank');
       sorted.slice(0, 10).forEach(function (r, i) {
         var row = document.createElement('button');
