@@ -321,12 +321,15 @@
         // одобрение считаются из месячных данных, а не выдумываются.
         var planPctSeries = m.issuedFact.map(function (v, i) { return Math.round(v / m.issuedPlan[i] * 100); });
         var approvalSeries = m.approved.map(function (v, i) { return Math.round(v / m.applied[i] * 100); });
+        // Спарклайны KPI — нейтральным тоном: цвет на дашборде значит риск, а
+        // декоративная история показателя не должна кричать неоном (уводим от
+        // штампа «тёмное + неон» к приглушённому премиум-виду).
         var sparks = {
-          'fm-sp-planpct': { tone: 'calm', data: planPctSeries },
-          'fm-sp-issued': { tone: 'calm', data: m.issuedFact },
-          'fm-sp-volume': { tone: 'calm', data: [228, 243, 251, 247, 266, 278] },
-          'fm-sp-rate': { tone: 'event', data: [63, 62, 61, 61, 60, 60] },
-          'fm-sp-approval': { tone: 'calm', data: approvalSeries }
+          'fm-sp-planpct': { tone: 'neutral', data: planPctSeries },
+          'fm-sp-issued': { tone: 'neutral', data: m.issuedFact },
+          'fm-sp-volume': { tone: 'neutral', data: [228, 243, 251, 247, 266, 278] },
+          'fm-sp-rate': { tone: 'neutral', data: [63, 62, 61, 61, 60, 60] },
+          'fm-sp-approval': { tone: 'neutral', data: approvalSeries }
         };
         Object.keys(sparks).forEach(function (id) {
           var el = document.getElementById(id);

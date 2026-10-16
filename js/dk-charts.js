@@ -651,7 +651,11 @@
         option.xAxis.boundaryGap = true;
         option.yAxis.min = 0;
         option.yAxis.scale = false;
-        option.series = [{type:'bar', name:one.name, data:one.data, barWidth:'65%', barMinWidth:1, itemStyle:{color:window.dkMeaning.color(spec.tone || 'event','fill',cur),opacity:0.45}}];
+        // tone:'neutral' — приглушённый спарклайн (--ink-3): для декоративной
+        // истории KPI, где цвет не несёт смысла и не должен кричать неоном.
+        var sparkFill = spec.tone === 'neutral' ? inkColor('--ink-2') : window.dkMeaning.color(spec.tone || 'event','fill',cur);
+        var sparkOpacity = spec.tone === 'neutral' ? 0.7 : 0.45;
+        option.series = [{type:'bar', name:one.name, data:one.data, barWidth:'65%', barMinWidth:1, itemStyle:{color:sparkFill,opacity:sparkOpacity}}];
       }
       applyHighlight(option.series, spec);
     }

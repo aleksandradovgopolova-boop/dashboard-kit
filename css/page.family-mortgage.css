@@ -56,6 +56,10 @@
    единое для всех карточек (14px), чтобы отступы не разъезжались. */
 #fm-dashboard .dk-wrap--monitor { padding-top: var(--space-6); --pad-widget: var(--space-6); }
 
+/* Крафт: тонкая граница карточек — чёткое разделение на тёмном фоне, как в
+   премиум-референсе (тени кит не использует). */
+#fm-dashboard .dk-widget, #fm-dashboard .dk-hero { border: 1px solid var(--edge-float); }
+
 /* Плотнее, чтобы ключевые виджеты влезали в один экран. */
 /* Герой: число меньше (56→40), поля и зазоры плотнее. */
 #fm-dashboard .dk-hero { padding: var(--space-6); gap: var(--gap-inline); }
