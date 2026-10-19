@@ -447,7 +447,7 @@
           ' tabindex="' + (t.id === focusId ? '0' : '-1') + '"' +
           ' style="grid-row:' + (row + 1) + ';grid-column:' + (col + 1) +
           ';--fill:' + color(v) + '"' +
-          ' title="' + esc(label(t.id)) + '" aria-label="' + esc(label(t.id)) + '">' +
+          ' aria-label="' + esc(label(t.id)) + '">' +
           // Значение стоит В плитке, а не только в подсказке: плитки объявлены
           // ответом на вопрос «у кого хуже», а подсказку не получить ни
           // пальцем, ни с клавиатуры.
@@ -552,6 +552,29 @@
       var tile = e.target.closest('.dk-map__tile, .dk-map__li');
       if (tile) onSelect(tile.dataset.id, values[tile.dataset.id]);
     });
+
+    // Стилизованный тултип плитки: название + точка цвета статуса + значение.
+    // Заменяет нативный title — он не стилизуется и чужой на тёмной теме.
+    var tip = null;
+    function tipShow(el) {
+      var id = el.dataset.id; if (!id || !names[id]) return;
+      if (!tip) { tip = document.createElement('div'); tip.className = 'dk-tooltip dk-map__tip'; tip.setAttribute('role', 'tooltip'); document.body.appendChild(tip); }
+      var v = values[id];
+      tip.innerHTML = '<span class="dk-map__tip-name">' + esc(names[id]) + '</span>' +
+        '<span class="dk-map__tip-v"><i class="dk-map__tip-dot" style="background:' + color(v) + '"></i>' +
+        (typeof v === 'number' ? esc(nfmt(v) + (unit ? ' ' + unit : '')) : 'нет данных') + '</span>';
+      tip.hidden = false;
+      var r = el.getBoundingClientRect(), t = tip.getBoundingClientRect();
+      var left = Math.max(8, Math.min(r.left + r.width / 2 - t.width / 2, window.innerWidth - t.width - 8));
+      var top = r.top - t.height - 8; if (top < 8) top = r.bottom + 8;
+      tip.style.left = Math.round(left) + 'px'; tip.style.top = Math.round(top) + 'px';
+    }
+    function tipHide() { if (tip) tip.hidden = true; }
+    host.addEventListener('pointerover', function (e) { var el = e.target.closest && e.target.closest('.dk-map__tile, .dk-map__li'); if (el) tipShow(el); });
+    host.addEventListener('pointerout', function (e) { var el = e.target.closest && e.target.closest('.dk-map__tile, .dk-map__li'); if (el && !el.contains(e.relatedTarget)) tipHide(); });
+    host.addEventListener('focusin', function (e) { var el = e.target.closest && e.target.closest('.dk-map__tile, .dk-map__li'); if (el) tipShow(el); });
+    host.addEventListener('focusout', tipHide);
+    window.addEventListener('scroll', tipHide, true);
 
     // Плитки — сетка, и ходить по ней надо стрелками, а не двадцатью табами.
     host.addEventListener('keydown', function (e) {

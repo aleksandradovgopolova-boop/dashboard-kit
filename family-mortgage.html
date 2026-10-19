@@ -166,7 +166,23 @@
 
       <section class="dk-widget dk-widget--overview" id="fm-budget-widget">
         <div class="dk-widget__head"><h2 class="dk-widget__title">Освоение бюджета субсидий</h2></div>
-        <div class="dk-widget__body"><div id="fm-budget"></div></div>
+        <div class="dk-widget__body">
+          <div class="fm-budget">
+            <div class="fm-budget__head">
+              <div class="fm-budget__big"><span id="fm-bud-spent">—</span> <span class="fm-budget__u">₽&nbsp;млрд</span></div>
+              <div class="fm-budget__pct" id="fm-bud-pct">—</div>
+            </div>
+            <div class="fm-budget__bar" role="img" id="fm-bud-bar" aria-label="Освоение бюджета">
+              <div class="fm-budget__fill" id="fm-bud-fill"></div>
+              <div class="fm-budget__target" id="fm-bud-target"></div>
+            </div>
+            <div class="fm-budget__scale">
+              <span>Освоено <b id="fm-bud-s2">—</b></span>
+              <span>Цель <b id="fm-bud-plan">—</b></span>
+              <span>Лимит <b id="fm-bud-limit">—</b></span>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
 
@@ -339,18 +355,22 @@
         });
       }
 
-      // Бюджет субсидий.
-      if (typeof dkBullet === 'function') {
-        var b = p.budget;
-        dkBullet(document.getElementById('fm-budget'), {
-          label: 'Освоено субсидий за период', actual: b.spent, target: b.plan,
-          min: 0, max: b.limit, unit: '₽ млрд',
-          ranges: [
-            { to: b.plan, label: 'Плановое освоение' },
-            { to: b.limit, label: 'Годовой лимит' }
-          ]
-        });
-      }
+      // Бюджет субсидий — чистый виджет: крупное число освоено + % плана,
+      // полоса освоено→цель→лимит с маркером цели.
+      (function () {
+        var b = p.budget; // spent, plan, limit
+        var fn = function (n) { return (typeof dkFmt !== 'undefined' && dkFmt.num) ? dkFmt.num(n) : String(n); };
+        var set = function (id, t) { var e = document.getElementById(id); if (e) e.textContent = t; };
+        set('fm-bud-spent', fn(b.spent));
+        set('fm-bud-pct', Math.round(b.spent / b.plan * 100) + '% плана');
+        set('fm-bud-s2', fn(b.spent));
+        set('fm-bud-plan', fn(b.plan));
+        set('fm-bud-limit', fn(b.limit));
+        var fill = document.getElementById('fm-bud-fill'); if (fill) fill.style.width = (b.spent / b.limit * 100) + '%';
+        var tg = document.getElementById('fm-bud-target'); if (tg) tg.style.left = (b.plan / b.limit * 100) + '%';
+        var bar = document.getElementById('fm-bud-bar');
+        if (bar) bar.setAttribute('aria-label', 'Освоено ' + fn(b.spent) + ' из ' + fn(b.limit) + ' ₽ млрд, цель ' + fn(b.plan));
+      })();
 
       // Рейтинг отстающих регионов (топ-10 по баллу отставания).
       var sorted = regions.slice().sort(function (a, b) { return b.lag - a.lag; });

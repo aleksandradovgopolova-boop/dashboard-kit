@@ -4593,6 +4593,11 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-breadcrumbs li + li::before { content: '/'; color: var(--ink-3); }
 .dk-breadcrumbs a { display: inline-flex; align-items: center; min-height: var(--control-md); color: var(--ink); }
 .dk-tooltip { position: fixed; z-index: var(--z-dropdown); max-width: min(320px, calc(100vw - var(--space-6))); padding: var(--space-3); border-radius: var(--radius-sm); background: var(--surface-3); color: var(--ink); box-shadow: none; font: var(--type-caption); }
+/* Тултип плитки карты: название + строка со статус-точкой и значением. */
+.dk-map__tip { display: grid; gap: var(--space-2); pointer-events: none; padding: var(--space-4) var(--space-5); border-radius: var(--radius-md); border: var(--hairline) solid var(--rule); }
+.dk-map__tip-name { font: var(--type-body-bold); color: var(--ink); }
+.dk-map__tip-v { display: flex; align-items: center; gap: var(--space-3); color: var(--ink-2); font: var(--type-caption); }
+.dk-map__tip-dot { width: 10px; height: 10px; border-radius: var(--radius-sm); flex: none; }
 .dk-tooltip[hidden] { display: none; }
 /* Sidebar is a modal drill-down on narrow screens, with the same focus model. */
 .dk-modal.dk-sidebar { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; width: min(480px, 100%); max-width: 100%; border-radius: 0; }

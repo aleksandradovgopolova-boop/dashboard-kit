@@ -3126,6 +3126,10 @@
     "dk-map__tile",
     "dk-map__tile--out",
     "dk-map__tiles",
+    "dk-map__tip",
+    "dk-map__tip-dot",
+    "dk-map__tip-name",
+    "dk-map__tip-v",
     "dk-map__unit",
     "dk-map__val",
     "dk-map__zoom"
@@ -6075,7 +6079,7 @@
  "hooks": {},
  "counts": {
   "parts": 63,
-  "classes": 494,
+  "classes": 498,
   "functions": 45,
   "chart_types": 12
  }
