@@ -80,11 +80,11 @@
    пятна (не мутный смыв), чтобы стекло их фростило в текстуру с vibrancy. */
 #fm-dashboard.dk-page {
   background:
-    radial-gradient(52% 55% at 16% 12%, var(--glass-glow-1), transparent 66%),
-    radial-gradient(56% 55% at 86% 18%, var(--glass-glow-2), transparent 66%),
-    radial-gradient(58% 58% at 78% 86%, var(--glass-glow-3), transparent 66%),
-    radial-gradient(54% 56% at 16% 88%, var(--glass-glow-4), transparent 66%),
-    radial-gradient(62% 64% at 50% 50%, var(--glass-glow-c), transparent 72%),
+    radial-gradient(64% 66% at 22% 10%, var(--glass-glow-1), transparent 78%),
+    radial-gradient(66% 66% at 80% 16%, var(--glass-glow-2), transparent 78%),
+    radial-gradient(68% 68% at 74% 88%, var(--glass-glow-3), transparent 78%),
+    radial-gradient(64% 66% at 20% 90%, var(--glass-glow-4), transparent 78%),
+    radial-gradient(90% 85% at 50% 50%, var(--glass-glow-c), transparent 92%),
     var(--bg);
   background-attachment: fixed;
 }

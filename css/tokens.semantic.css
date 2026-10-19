@@ -528,11 +528,11 @@
   --glass-sheen:        linear-gradient(135deg, color-mix(in srgb, var(--c-glass-hi) 10%, transparent), transparent 40%);
   --glass-hover:        color-mix(in srgb, var(--c-glass-hi) 10%, transparent);
   --glass-hover-strong: color-mix(in srgb, var(--c-glass-hi) 14%, transparent);
-  --glass-glow-1: color-mix(in srgb, var(--c-glass-glow-1) 40%, transparent);
-  --glass-glow-2: color-mix(in srgb, var(--c-glass-glow-2) 36%, transparent);
-  --glass-glow-3: color-mix(in srgb, var(--c-glass-glow-3) 30%, transparent);
-  --glass-glow-4: color-mix(in srgb, var(--c-glass-glow-4) 28%, transparent);
-  --glass-glow-c: color-mix(in srgb, var(--c-glass-glow-c) 20%, transparent);
+  --glass-glow-1: color-mix(in srgb, var(--c-glass-glow-1) 50%, transparent);
+  --glass-glow-2: color-mix(in srgb, var(--c-glass-glow-2) 46%, transparent);
+  --glass-glow-3: color-mix(in srgb, var(--c-glass-glow-3) 42%, transparent);
+  --glass-glow-4: color-mix(in srgb, var(--c-glass-glow-4) 38%, transparent);
+  --glass-glow-c: color-mix(in srgb, var(--c-glass-glow-c) 34%, transparent);
 
   /* Отступ дорожки сегмента. Связан с радиусами правилом 2: поменяешь его —
      пересчитай --round-2, иначе внутренний угол перестанет вписываться. */
