@@ -4982,3 +4982,41 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   .dk-region-tools__primary { grid-template-columns: minmax(0, 1fr) auto; }
   .dk-region-tools__primary .dk-search { grid-column: 1 / -1; }
 }
+
+/* === СТЕКЛО: общие компоненты ============================================
+   Нейтральные управляющие поверхности переведены на стеклянный материал:
+   полупрозрачная заливка, тонкая светящаяся кромка (часть стекла, не плоская
+   обводка), размытие-vibrancy и ховер-подсветка стекла вместо плоской заливки.
+   НЕ трогаем якоря смысла: основную кнопку (--brand), кольцо фокуса и выбранный
+   сегмент (--control-on), заполненный фильтр (--control-soft) — они остаются
+   плотными и ведут глаз. Секция отключаемая: убрать её — компоненты вернутся к
+   плоским поверхностям. Стекло читается на разноцветной подложке дашборда; на
+   плоской странице деградирует мягко — чуть более светлая полупрозрачная
+   поверхность с кромкой. */
+
+.dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost),
+.dk-iconbtn {
+  background: var(--glass-sheen), var(--glass-surface);
+  border: 1px solid var(--glass-edge-soft);
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
+  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
+}
+.dk-seg,
+.dk-search,
+.dk-select__trigger {
+  background: var(--glass-chip);
+  border: 1px solid var(--glass-edge-soft);
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
+  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
+}
+.dk-chip {
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-edge-soft);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost):hover,
+  .dk-iconbtn:hover { background: var(--glass-sheen), var(--glass-hover); color: var(--ink); }
+  .dk-btn--ghost:hover { background: var(--glass-hover); }
+  .dk-seg button:not([aria-pressed="true"]):not(.is-on):hover { background: var(--glass-hover); }
+  .dk-select__trigger:hover { background: var(--glass-hover); }
+}
