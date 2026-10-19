@@ -36,7 +36,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import manifest_parts as MP  # noqa: E402
 
 OUT = ROOT / "kit-manifest.json"
-CSS_FILES = ["css/components.css", "css/chrome.css"]
+CSS_FILES = ["css/components.css", "css/chrome.css", "css/glass.css"]
 CLASS = re.compile(r"\.(dk-[a-z0-9]+(?:(?:__|--|-)[a-z0-9]+)*)")
 
 
