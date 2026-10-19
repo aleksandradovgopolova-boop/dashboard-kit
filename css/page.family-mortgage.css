@@ -117,11 +117,6 @@
   backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
   border: 1px solid var(--glass-edge-soft);
 }
-#fm-dashboard .dk-trend {
-  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  border: 1px solid var(--glass-edge-soft);
-}
 #fm-dashboard .fm-topbar__tools .dk-seg button[aria-pressed="true"] {
   background: var(--glass-surface-2);
 }
