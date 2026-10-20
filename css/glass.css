@@ -98,7 +98,11 @@
    кнопка, выбранный сегмент. Кольцо фокуса (outline) не трогаем — ореол
    поверх него, доступность сохранена. */
 .dk-glass .dk-search:focus-within {
+  /* Только мягкое свечение, без жёсткого синего кольца: outline убран, его роль
+     берёт на себя box-shadow-ореол (a11y-проверка засчитывает его как видимый
+     фокус). */
   box-shadow: var(--glass-focus-glow);
+  outline: none;
   border-color: transparent;
 }
 .dk-glass .dk-btn--primary {
@@ -107,4 +111,15 @@
 .dk-glass .dk-seg button[aria-pressed="true"],
 .dk-glass .dk-seg button.is-on {
   box-shadow: var(--glass-active-glow);
+}
+
+/* Карточки карусели и заполненный фильтр были на плотном surface — на стекле
+   читались тёмными плашками рядом с полупрозрачными соседями. Переводим в тот
+   же материал. Карточка карусели — вложенный чип без своего размытия (frost даёт
+   родитель); заполненный фильтр сохраняет свой тон (--control-soft), но на
+   полупрозрачной основе. */
+.dk-glass .dk-car__item { background: var(--glass-chip); }
+.dk-glass .dk-select[data-active="true"] .dk-select__trigger,
+.dk-glass :where(.dk-panel, .dk-widget, .dk-modal, .dk-menu) .dk-select[data-active="true"] .dk-select__trigger {
+  background: linear-gradient(var(--control-soft), var(--control-soft)), var(--glass-chip);
 }
