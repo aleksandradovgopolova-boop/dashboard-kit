@@ -397,6 +397,8 @@
 
   --type-overline:       var(--weight-semibold) var(--size-12)/var(--lh-16) var(--font-sans);
   --type-overline-track: var(--track-caps);
+  /* Тот же капс, но обычным весом — единый заголовок виджета (не жирный). */
+  --type-overline-regular: var(--weight-ui) var(--size-12)/var(--lh-16) var(--font-sans);
 
   --type-code:       var(--weight-regular) var(--size-14)/var(--lh-20) var(--font-mono);
   --type-code-track: var(--track-none);

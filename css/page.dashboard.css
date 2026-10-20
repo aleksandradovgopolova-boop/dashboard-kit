@@ -100,7 +100,6 @@
 #d-dashboard .d-status-row { min-height: 90px; }
 #d-dashboard #d-kpis > .dk-tile { min-height: 142px; }
 #d-dashboard #d-kpis .dk-tile__head { min-height: 2lh; }
-#d-dashboard #d-country-charts .dk-widget__title { font-weight: var(--weight-ui); }
 #d-dashboard #d-map .dk-map__canvas { height: 180px; }
 #d-dashboard #d-risk-keys { gap: var(--space-5); }
 #d-dashboard #d-risk-keys .dk-key { grid-template-columns: auto minmax(0, 1fr) auto; }

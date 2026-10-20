@@ -1935,10 +1935,15 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
 
 /* Название помогает найти блок. Полный текст переносится без усечения;
    обзорная типографика задаётся dk-widget--overview. */
+/* ЕДИНЫЙ ЗАГОЛОВОК ВИДЖЕТА — аккуратный капс, НЕ жирный. Один стиль на все
+   виджеты во всём ките (решение владельца): верхний регистр, разрядка,
+   обычный вес (не semibold), приглушённый тон. Раньше заголовки расходились —
+   где белый h3 полужирным, где серый капс; сведено к одному. */
 .dk-widget__title {
-  font: var(--type-h3);
-  letter-spacing: var(--type-h3-track);
-  color: var(--ink);
+  font: var(--type-overline-regular);
+  letter-spacing: var(--type-overline-track);
+  text-transform: uppercase;
+  color: var(--ink-2);
   margin: 0;
   min-width: 0;
   overflow-wrap: anywhere;
@@ -4668,7 +4673,6 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-wrap--monitor .dk-chart--sm { height: clamp(150px, 20svh, 180px); }
 .dk-wrap--monitor .dk-chart--spark { height: 36px; }
 .dk-wrap--monitor .dk-widget__head { flex-wrap: wrap; }
-.dk-wrap--monitor .dk-widget__title { font: var(--type-h3); }
 .dk-wrap--monitor .dk-widget__actions { flex-shrink: 0; }
 .dk-wrap--monitor .dk-grid--metrics { height: auto; }
 .dk-wrap--monitor .dk-caption:empty { display: none; }
@@ -4950,19 +4954,16 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
    (overline-стиль), как на продакшн-референсе «РАСХОД НА МОДЕЛИ / КТО ЖЖЁТ /
    ТОП МОДЕЛЕЙ»: шапка — тихий ярлык секции, а не крупный заголовок (решение
    владельца 14.10). */
-.dk-widget--overview .dk-widget__title {
-  font: var(--type-overline);
-  letter-spacing: var(--type-overline-track);
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
+/* Заголовок обзорного виджета — тот же, что у всех: один стиль заголовка на
+   весь кит. Раньше здесь был капс-оверлайн серым (--ink-3); рядом с обычными
+   белыми заголовками это читалось как два разных вида. Единообразие важнее
+   отдельной «обзорной» типографики — владелец кита свёл их к одному. */
 /* Графики обзорных панелей — одной высоты, чтобы низ ряда не был рваным. */
 .dk-grid--overview-panels .dk-chart { min-height: 200px; }
 .dk-widget__heading { flex: 1 1 10rem; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
 .dk-widget__meta { margin: 0; font: var(--type-caption); color: var(--ink-2); }
 .dk-widget__footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--gap-inline); font: var(--type-caption); color: var(--ink-2); }
 .dk-widget--overview > .dk-widget__head > .dk-widget__actions { flex-wrap: wrap; min-width: 0; max-width: 100%; }
-@media (max-width: 1199px) { .dk-widget--overview .dk-widget__title { font: var(--type-overline); letter-spacing: var(--type-overline-track); } }
 @media (max-width: 767px) { .dk-head__title { font: var(--type-h2); } .dk-head__actions { flex: 1 1 100%; } }
 
 /* Главный объект + связанная сводка: выбранная композиция карты регионов. */
