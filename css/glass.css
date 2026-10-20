@@ -194,6 +194,13 @@
    а у липких колонок — своя заливка. Переводим в стеклянный чип. Зебра уже
    полупрозрачная. */
 .dk-glass .dk-table--cards > tbody > tr { background: var(--glass-chip); }
+/* Сорт-пилюли-заголовки карточного режима были плотными (--surface-2): у
+   правила в components.css тройная специфичность, поэтому перебиваем его
+   под .dk-glass тем же тройным селектором + .dk-glass. Чип без своего blur —
+   мелкий элемент не мутим. */
+.dk-glass .dk-table--cards.dk-table--cards.dk-table--cards > thead > tr > th:is([aria-sort], .dk-th-pick) {
+  background: var(--glass-chip);
+}
 .dk-glass .dk-table--sticky-col thead th:first-child,
 .dk-glass .dk-table--sticky-col thead .dk-th-pick + th,
 .dk-glass .dk-table--sticky-col td:first-child,
