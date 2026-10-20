@@ -164,3 +164,19 @@
   box-shadow: var(--glass-focus-glow);
   outline: none;
 }
+
+/* Клетки календаря — плотные тёмные плашки на стекле. Переводим в стеклянный
+   чип (без своего размытия: клеток в сетке много). Полоски событий — данные,
+   остаются плотным цветом. Выбранный день сохраняет тон --control-soft. */
+.dk-glass .dk-cal__day { background: var(--glass-chip); }
+.dk-glass .dk-cal__day[aria-selected="true"] {
+  background: linear-gradient(var(--control-soft), var(--control-soft)), var(--glass-chip);
+}
+.dk-glass .dk-cal__day[data-other="true"] { background: none; }
+@media (hover: hover) and (pointer: fine) {
+  .dk-glass .dk-cal__day:hover { background: var(--glass-hover); }
+}
+
+/* Одиночные иконки-кнопки — круглые фростовые кружки (рефы Google/Gemini).
+   Сегментные иконки в дорожке это не трогает: там свой радиус. */
+.dk-glass .dk-iconbtn { border-radius: var(--radius-full); }
