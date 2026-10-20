@@ -45,8 +45,8 @@
 #d-dashboard #d-view-causes .dk-car__text { display: block; overflow: visible; }
 #d-dashboard #d-view-causes .dk-uptime > .dk-caption { margin: 0; }
 @media (hover: hover) and (pointer: fine) {
-  #d-dashboard .d-country-status:hover { background: var(--surface-2); }
-  #d-dashboard #d-country-charts .dk-widget__actions .dk-iconbtn:hover { background: var(--surface-2); }
+  #d-dashboard .d-country-status:hover { background: var(--glass-sheen), var(--glass-surface-2); }
+  #d-dashboard #d-country-charts .dk-widget__actions .dk-iconbtn:hover { background: var(--glass-sheen), var(--glass-hover); }
 }
 @media (min-width: 1200px) {
   #d-dashboard #d-view-causes .dk-car__track { max-height: 8lh; overflow: auto; overscroll-behavior: contain; align-items: stretch; scrollbar-width: thin; }
