@@ -28,12 +28,13 @@
 }
 
 /* Панели: полупрозрачное стекло, сильный blur + saturate (vibrancy), тонкая
-   светящаяся кромка (часть материала, не плоская обводка). */
+   светящаяся кромка — это БЛИК (--glass-sheen, фон-градиент), а НЕ обводка:
+   у кита карточки без border и тени (принцип дизайн-системы, тест
+   check-dashboard-overview). Край стекла даёт блик + полупрозрачность. */
 .dk-glass .dk-widget,
 .dk-glass .dk-hero,
 .dk-glass .dk-panel {
   background: var(--glass-sheen), var(--glass-surface);
-  border: 1px solid var(--glass-edge);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
 }
@@ -72,15 +73,25 @@
    баннер-уведомление и «колодец»-вставка. На стекле их плотная заливка
    смотрелась чужеродной — переводим в тот же материал. Баннер сохраняет свой
    смысловой тон (--accent), но становится цветным стеклом. */
-.dk-glass .dk-banner {
+/* Приоритетный баннер (--priority) НЕ трогаем: у него свой тёмный непрозрачный
+   фон (accent 7% на --surface), который держит контраст крупного числа ≥3
+   (тест check-dashboard-overview). Стеклим только обычные баннеры-уведомления:
+   тон как у базового (accent 16% на ПРОЗРАЧНОМ) + блик + размытие. */
+.dk-glass .dk-banner:not(.dk-banner--priority) {
   background:
     var(--glass-sheen),
-    color-mix(in srgb, var(--accent, var(--event)) 16%, var(--glass-surface));
-  border: 1px solid var(--glass-edge-soft);
+    color-mix(in srgb, var(--accent, var(--event)) 16%, transparent);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
 }
 .dk-glass .dk-well { background: var(--glass-chip); }
+/* Кнопка-действие в баннере остаётся ПЛОТНОЙ: это CTA, ему нужен контраст ≥4.5
+   (тест check-dashboard-overview), который полупрозрачное стекло не держит. */
+.dk-glass .dk-banner .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost) {
+  background: var(--surface-2);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
 
 /* Шапка таблицы была залита плотным серым (--surface-2) — на стекле это
    тяжёлая серая плашка поперёк панели. Делаем её лёгким стеклянным чипом с
@@ -128,7 +139,6 @@
    поверх стекла. Переводим в тот же стеклянный чип с размытием и кромкой. */
 .dk-glass .dk-map__zoom {
   background: var(--glass-chip);
-  border: 1px solid var(--glass-edge-soft);
   -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
   backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
 }
@@ -143,7 +153,6 @@
 .dk-glass .dk-modal,
 .dk-glass .dk-tooltip {
   background: var(--glass-sheen), var(--glass-surface-2);
-  border: 1px solid var(--glass-edge);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
 }

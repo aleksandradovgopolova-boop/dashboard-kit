@@ -5015,7 +5015,6 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost),
 .dk-iconbtn {
   background: var(--glass-sheen), var(--glass-surface);
-  border: 1px solid var(--glass-edge-soft);
   -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
   backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
 }
@@ -5023,13 +5022,11 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-search,
 .dk-select__trigger {
   background: var(--glass-chip);
-  border: 1px solid var(--glass-edge-soft);
   -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
   backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
 }
 .dk-chip {
   background: var(--glass-surface);
-  border: 1px solid var(--glass-edge-soft);
 }
 @media (hover: hover) and (pointer: fine) {
   .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost):hover,
@@ -5059,7 +5056,6 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-badge--crit,
 .dk-badge--high,
 .dk-badge--calm {
-  border: 1px solid var(--glass-edge-soft);
   -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy));
   backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy));
 }
