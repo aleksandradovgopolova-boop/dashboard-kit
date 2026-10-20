@@ -11,7 +11,15 @@
 #r-page .dk-map__zoom { border: 0; }
 #r-page .dk-map__zoom button + button { border-top: 0; }
 #r-page .r-map-note { width: 100%; background: var(--glass-chip); border-radius: var(--radius-lg); padding: var(--space-6); }
-#r-page .r-map-note summary { cursor: pointer; min-height: var(--control-sm); font: var(--type-h3); }
+#r-page .r-map-note summary { cursor: pointer; min-height: var(--control-sm); font: var(--type-h3); display: flex; align-items: center; gap: var(--space-3); list-style: none; }
+/* Нативный треугольник ▶ у <details> убран — вместо него шеврон кита, который
+   поворачивается при раскрытии. Один язык иконок во всём ките. */
+#r-page .r-map-note summary::-webkit-details-marker,
+#r-page .r-fold summary::-webkit-details-marker { display: none; }
+#r-page .r-fold summary { cursor: pointer; display: flex; align-items: center; gap: var(--space-3); list-style: none; font: var(--type-body-bold); }
+#r-page .r-fold-caret { flex: none; color: var(--ink-3); transition: transform var(--duration-fast) var(--ease-out); }
+#r-page .r-map-note[open] summary .r-fold-caret,
+#r-page .r-fold[open] summary .r-fold-caret { transform: rotate(90deg); }
 #r-page .r-map-note p { margin-bottom: 0; }
 #r-page #r-period { flex: 1 1 100%; }
 #r-page .dk-top__tools { margin-left: auto; }
