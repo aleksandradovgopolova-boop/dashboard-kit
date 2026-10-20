@@ -259,12 +259,14 @@
   display: flex;
   align-items: center;
   gap: var(--gap-group);
-  padding: var(--space-5) var(--page-pad);
+  /* Отступ сверху равен боковому (--page-pad): заголовок не должен быть прижат
+     к верху, когда по бокам воздух. Один инсет на верх и на бока. */
+  padding: var(--page-pad);
   /* Липкая шапка прилипает к верху окна, и при запуске с главного экрана
      (PWA) это верх под строкой состояния — часы и заряд легли бы поверх
      заголовка. Отступ внутри шапки, а не top: иначе в щель над ней было бы
      видно уезжающее содержимое. */
-  padding-top: max(var(--space-5), env(safe-area-inset-top, 0px));
+  padding-top: max(var(--page-pad), env(safe-area-inset-top, 0px));
   background: var(--bg);
   min-width: 0;
 }
