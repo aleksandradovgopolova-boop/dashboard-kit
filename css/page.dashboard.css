@@ -1,6 +1,5 @@
 /* Композиция выбранного референса. Каркас и левое меню сохранены. */
 #d-dashboard [role="tabpanel"][hidden], #d-dashboard [hidden] { display: none; }
-#d-dashboard .dk-main, #d-dashboard .dk-top { background: var(--bg); }
 #d-dashboard .dk-top { padding-top: var(--space-6); padding-bottom: var(--space-6); }
 #d-dashboard .dk-top__titles { display: flex; flex-direction: column; gap: var(--space-2); }
 #d-dashboard .dk-top__title { order: -1; }

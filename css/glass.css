@@ -180,3 +180,21 @@
 /* Одиночные иконки-кнопки — круглые фростовые кружки (рефы Google/Gemini).
    Сегментные иконки в дорожке это не трогает: там свой радиус. */
 .dk-glass .dk-iconbtn { border-radius: var(--radius-full); }
+
+/* Компонентные поверхности, которые ещё оставались плотными на стекле: поиск
+   внутри панели фильтров, метка периода и кнопки-легенды карты. Переводим в
+   стеклянный чип. Активная легенда сохраняет свой смысловой тон. */
+.dk-glass .dk-region-tools .dk-search,
+.dk-glass .dk-region-tools__period,
+.dk-glass .dk-lg {
+  background: var(--glass-chip);
+}
+
+/* Таблицы: в карточном режиме строки превращаются в карточки (были плотными),
+   а у липких колонок — своя заливка. Переводим в стеклянный чип. Зебра уже
+   полупрозрачная. */
+.dk-glass .dk-table--cards > tbody > tr { background: var(--glass-chip); }
+.dk-glass .dk-table--sticky-col thead th:first-child,
+.dk-glass .dk-table--sticky-col thead .dk-th-pick + th,
+.dk-glass .dk-table--sticky-col td:first-child,
+.dk-glass .dk-table--sticky-col .dk-td-pick + td { background: var(--glass-chip); }

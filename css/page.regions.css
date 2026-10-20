@@ -64,7 +64,6 @@
   #r-page .r-map-note summary { min-height: 44px; }
 }
 
-#r-page .dk-main { background: var(--bg); }
 #r-page .r-thresholds { font: var(--type-caption); color: var(--ink-2); margin: var(--space-5) 0 0; }
 #r-page .r-summary-panel > .dk-widget__footer { flex: none; }
 #r-page .r-focus-rank { scrollbar-width: thin; }
