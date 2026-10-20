@@ -123,3 +123,44 @@
 .dk-glass :where(.dk-panel, .dk-widget, .dk-modal, .dk-menu) .dk-select[data-active="true"] .dk-select__trigger {
   background: linear-gradient(var(--control-soft), var(--control-soft)), var(--glass-chip);
 }
+
+/* Кнопки зума карты были почти плотными (0.9) без размытия — тёмная плашка
+   поверх стекла. Переводим в тот же стеклянный чип с размытием и кромкой. */
+.dk-glass .dk-map__zoom {
+  background: var(--glass-chip);
+  border: 1px solid var(--glass-edge-soft);
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
+  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
+}
+
+/* === СТЕКЛО: оверлеи и все оставшиеся компоненты =========================
+   Выпадающие меню, поповеры, модалки/шиты, подсказки, аккордеон — всё, что
+   всплывает над контентом, тоже стекло. Оверлеи плотнее панелей (surface-2) и
+   с сильным размытием: они парят над произвольным контентом и должны читаться.
+   Данные внутри не трогаем. */
+.dk-glass .dk-menu,
+.dk-glass .dk-pop,
+.dk-glass .dk-modal,
+.dk-glass .dk-tooltip {
+  background: var(--glass-sheen), var(--glass-surface-2);
+  border: 1px solid var(--glass-edge);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
+}
+.dk-glass .dk-fold { background: var(--glass-chip); }
+.dk-glass .dk-menu__item[data-cursor="true"] { background: var(--glass-hover); }
+@media (hover: hover) and (pointer: fine) {
+  .dk-glass .dk-menu__item:hover,
+  .dk-glass .dk-fold__head:hover { background: var(--glass-hover); }
+}
+
+/* Единый фокус — мягкое свечение, без жёсткого синего кольца (как у поиска).
+   a11y-проверка засчитывает box-shadow как видимый фокус. */
+.dk-glass .dk-select__trigger:focus-visible,
+.dk-glass .dk-btn:focus-visible,
+.dk-glass .dk-iconbtn:focus-visible,
+.dk-glass .dk-seg button:focus-visible,
+.dk-glass .dk-tab:focus-visible {
+  box-shadow: var(--glass-focus-glow);
+  outline: none;
+}
