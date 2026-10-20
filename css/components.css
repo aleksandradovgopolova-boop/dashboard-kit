@@ -2821,7 +2821,12 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
    Третья строка уже не нужна: подпись длиннее двух строк — это описание, а
    не подпись. */
 .dk-tile__label {
-  font-size: var(--text-caption);
+  /* Тот же единый заголовок, что у .dk-widget__title: аккуратный капс, не
+     жирный. KPI-плитки — это те же виджеты, их подпись не должна отличаться
+     регистром от заголовков графиков и списков. */
+  font: var(--type-overline-regular);
+  letter-spacing: var(--type-overline-track);
+  text-transform: uppercase;
   color: var(--ink-2);
   overflow: hidden;
   display: -webkit-box;
@@ -4642,6 +4647,12 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-export { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
 .dk-tree__expand { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: var(--control-md); min-height: var(--control-md); }
 @media (pointer: coarse) { .dk-tree__expand { width: 44px; min-height: 44px; } }
+/* Чекбокс узла дерева — нормальная иконка кита в рамке-боксе, а не текстовый
+   глиф (☑/◩/☐). Состояние берётся из data-state; выбранное — нейтральная
+   заливка --control-on (не акцент), как у сегмента. */
+.dk-tree__check { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 18px; height: 18px; margin-right: var(--space-3); border-radius: var(--radius-xs); background: var(--surface-2); color: var(--control-on-ink); }
+.dk-tree__check[data-state="true"], .dk-tree__check[data-state="mixed"] { background: var(--control-on); }
+.dk-tree__check .dk-i { width: 14px; height: 14px; }
 .dk-root [hidden] { display: none !important; }
 .dk-root .dk-trend { white-space: normal; max-width: 100%; min-width: 0; height: auto; flex-wrap: wrap; overflow-wrap: anywhere; }
 .dk-uptime__name { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }

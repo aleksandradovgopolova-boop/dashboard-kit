@@ -250,6 +250,7 @@
     "how": "defer",
     "defer": true,
     "requires": [
+     "js/dk-icons.js",
      "js/dk-util.js"
     ]
    },
@@ -5053,11 +5054,13 @@
    "classes": [
     "dk-tree",
     "dk-tree-select",
+    "dk-tree__check",
     "dk-tree__expand",
     "dk-tree__item"
    ],
    "include": [
     "js/dk-util.js",
+    "js/dk-icons.js",
     "js/dk-tree.js"
    ]
   },
@@ -6126,7 +6129,7 @@
  "hooks": {},
  "counts": {
   "parts": 64,
-  "classes": 499,
+  "classes": 500,
   "functions": 45,
   "chart_types": 12
  }

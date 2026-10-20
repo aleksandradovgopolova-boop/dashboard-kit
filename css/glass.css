@@ -81,3 +81,13 @@
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
 }
 .dk-glass .dk-well { background: var(--glass-chip); }
+
+/* Шапка таблицы была залита плотным серым (--surface-2) — на стекле это
+   тяжёлая серая плашка поперёк панели. Делаем её лёгким стеклянным чипом с
+   размытием: читается как шапка, но не спорит со стеклом. Зебра-строки уже
+   полупрозрачные, их не трогаем. */
+.dk-glass .dk-table th {
+  background: var(--glass-chip);
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
+  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
+}
