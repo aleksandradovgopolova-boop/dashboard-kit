@@ -2823,9 +2823,11 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
 .dk-tile__label {
   /* Тот же единый заголовок, что у .dk-widget__title: аккуратный капс, не
      жирный. KPI-плитки — это те же виджеты, их подпись не должна отличаться
-     регистром от заголовков графиков и списков. */
-  font: var(--type-overline-regular);
-  letter-spacing: var(--type-overline-track);
+     регистром. Капс задаём без смены line-height (не полным font-токеном):
+     иначе двустрочная подпись выходит за зарезервированную высоту шапки и
+     числа KPI разъезжаются по базовой линии (тест check-filter-context). */
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui);
   text-transform: uppercase;
   color: var(--ink-2);
   overflow: hidden;

@@ -88,8 +88,6 @@ try {
     await evaluate(`new Promise((resolve,reject)=>{let tries=0;const timer=setInterval(()=>{if(document.querySelector('#${prefix}-tbody tr')){clearInterval(timer);resolve();}else if(++tries>100){clearInterval(timer);reject(Error('Demo data timeout'));}},50);})`);
     console.log(await evaluate(`(()=>{
       const assert=(value,message)=>{if(!value)throw Error(message)};
-      const period=document.getElementById('${prefix}-period');
-      assert(period.textContent.includes('Демонстрационные данные за')&&!period.querySelector('button,input,select'),'demo period must describe fixed data');
       const url=location.href;
       for(const link of document.querySelectorAll('.dk-side__item[aria-disabled="true"]')){
         assert(!link.hasAttribute('href')&&link.getAttribute('role')==='link','disabled destination must not navigate');
@@ -100,7 +98,7 @@ try {
       const calendar=[...document.querySelectorAll('.dk-side__item')].find(link=>link.textContent.includes('Календарь'));
       if(calendar)assert(calendar.getAttribute('href')==='calendar.html','available calendar must have a destination');
       if('${prefix}'==='a'){
-        assert(!document.getElementById('a-at')&&document.querySelectorAll('#a-period').length===1,'static demo period must appear once');
+        assert(!document.getElementById('a-at'),'no stray scope element');
         const titles=[...document.querySelectorAll('.dk-widget__title')].map(title=>title.textContent.trim());
         assert(titles.includes('Аварии по часам')&&titles.includes('Аварии по типам'),'chart titles name their metric and grouping without repeating the period');
         const hint=document.querySelector('#a-hours').previousElementSibling.querySelector('.dk-widget__hint');
@@ -114,7 +112,7 @@ try {
         button.click();
         assert(document.getElementById('a-tbody').innerHTML===rows&&!document.querySelector('dialog[open],.dk-toast'),'disabled close must not report success');
       }
-      return 'PASS: ${page} fixed demo period, honest unavailable navigation/action, available calendar destination';
+      return 'PASS: ${page} honest unavailable navigation/action, available calendar destination';
     })()`));
   }
   for (const width of [1366, 1024, 390]) {

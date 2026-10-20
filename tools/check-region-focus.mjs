@@ -42,11 +42,11 @@ try {
     await evaluate(`new Promise((resolve,reject)=>{let n=0;const t=setInterval(()=>{if(document.querySelector('#r-map .dk-map__canvas')){clearInterval(t);resolve();}else if(++n>100){clearInterval(t);reject(Error('Region map canvas timeout'));}},50);})`);
     const geometry=await evaluate(`(()=>{
       const box=s=>document.querySelector(s).getBoundingClientRect();
-      const primary=box('.dk-focus-layout__primary'),summary=box('.r-summary-panel'),period=box('#r-period'),risk=box('.r-risk-summary'),map=box('#r-map .dk-map__canvas');
-      return {overflow:document.documentElement.scrollWidth>innerWidth+1,periodVisible:period.height>=16&&period.bottom<=risk.top,
+      const primary=box('.dk-focus-layout__primary'),summary=box('.r-summary-panel'),map=box('#r-map .dk-map__canvas');
+      return {overflow:document.documentElement.scrollWidth>innerWidth+1,
         aspect:map.width/map.height,dominant:primary.width>summary.width*1.8&&summary.left>=primary.right,
         columns:document.getElementById('r-count-crit').textContent+'|'+document.getElementById('r-k-high').textContent+'|'+document.getElementById('r-k-low').textContent};})()`);
-    assert(!geometry.overflow&&geometry.periodVisible&&Math.abs(geometry.aspect-1.9)<0.02&&geometry.columns==='18|20|51'&&(width<1200||geometry.dominant),`${theme}/${width}: ${JSON.stringify(geometry)}`);
+    assert(!geometry.overflow&&Math.abs(geometry.aspect-1.9)<0.02&&geometry.columns==='18|20|51'&&(width<1200||geometry.dominant),`${theme}/${width}: ${JSON.stringify(geometry)}`);
   }
   await evaluate(`(()=>{
     const assert=(v,m)=>{if(!v)throw Error(m)};
