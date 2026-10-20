@@ -511,6 +511,7 @@
   --radius-md:   var(--round-3);
   --radius-lg:   var(--round-4);
   --radius-xl:   var(--round-4);
+  --radius-2xl:  var(--round-6);
   --radius-full: var(--round-pill);
 
   /* СТЕКЛО (глассморфизм) — материал поверхностей и компонентов.
