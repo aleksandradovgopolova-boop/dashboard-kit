@@ -91,3 +91,20 @@
   -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
   backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
 }
+
+/* === СТЕКЛО: светящийся ореол на фокусе/активном =========================
+   «Подсвеченное стекло» из рефов Google/Gemini. Свечение — мягкий цветной
+   bloom, только там, где акцент разрешён (ТИШИНА): фокус поиска, основная
+   кнопка, выбранный сегмент. Кольцо фокуса (outline) не трогаем — ореол
+   поверх него, доступность сохранена. */
+.dk-glass .dk-search:focus-within {
+  box-shadow: var(--glass-focus-glow);
+  border-color: transparent;
+}
+.dk-glass .dk-btn--primary {
+  box-shadow: var(--glass-primary-glow);
+}
+.dk-glass .dk-seg button[aria-pressed="true"],
+.dk-glass .dk-seg button.is-on {
+  box-shadow: var(--glass-active-glow);
+}

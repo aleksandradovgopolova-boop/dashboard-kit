@@ -536,6 +536,22 @@
   --glass-glow-4: color-mix(in srgb, var(--c-glass-glow-4) 38%, transparent);
   --glass-glow-c: color-mix(in srgb, var(--c-glass-glow-c) 34%, transparent);
 
+  /* Светящийся ОРЕОЛ на фокусе/активном — «подсвеченное стекло» (рефы
+     Google/Gemini). Мягкий цветной bloom из тонов подложки на фокусе; у
+     основной кнопки — свечение её акцента; у выбранного управления — нейтральный
+     светлый ореол (без цвета, чтобы не спорить с данными). Применяется только
+     там, где акцент разрешён: фокус, основная кнопка, выбранное. */
+  --glass-focus-glow:
+    0 0 0 2px color-mix(in srgb, var(--c-glass-hi) 20%, transparent),
+    0 0 12px 2px color-mix(in srgb, var(--c-glass-glow-1) 50%, transparent),
+    0 0 28px 8px color-mix(in srgb, var(--c-glass-glow-2) 32%, transparent);
+  --glass-primary-glow:
+    0 0 16px 2px color-mix(in srgb, var(--brand) 42%, transparent),
+    0 0 32px 8px color-mix(in srgb, var(--brand) 22%, transparent);
+  --glass-active-glow:
+    0 0 0 1px color-mix(in srgb, var(--c-glass-hi) 16%, transparent),
+    0 0 12px 2px color-mix(in srgb, var(--c-glass-hi) 12%, transparent);
+
   /* Отступ дорожки сегмента. Связан с радиусами правилом 2: поменяешь его —
      пересчитай --round-2, иначе внутренний угол перестанет вписываться. */
   --track-pad: var(--step-2);
