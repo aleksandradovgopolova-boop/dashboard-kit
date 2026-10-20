@@ -204,7 +204,7 @@
     },
     "pie": {
       "itemStyle": {
-        "borderColor": "#25272F",
+        "borderColor": "transparent",
         "borderWidth": 2
       },
       "label": {
@@ -454,7 +454,7 @@
     },
     "pie": {
       "itemStyle": {
-        "borderColor": "#FFFFFF",
+        "borderColor": "transparent",
         "borderWidth": 2
       },
       "label": {

@@ -67,3 +67,17 @@
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
+
+/* Коробочные поверхности, которые были нарисованы под старый плотный фон:
+   баннер-уведомление и «колодец»-вставка. На стекле их плотная заливка
+   смотрелась чужеродной — переводим в тот же материал. Баннер сохраняет свой
+   смысловой тон (--accent), но становится цветным стеклом. */
+.dk-glass .dk-banner {
+  background:
+    var(--glass-sheen),
+    color-mix(in srgb, var(--accent, var(--event)) 16%, var(--glass-surface));
+  border: 1px solid var(--glass-edge-soft);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
+}
+.dk-glass .dk-well { background: var(--glass-chip); }

@@ -137,8 +137,10 @@ def build(table: dict[str, str], mode: str) -> dict:
 
         "pie": {
             "itemStyle": {
-                # Зазор цветом поверхности: сектора не слипаются в одно пятно.
-                "borderColor": surface,
+                # Зазор ПРОЗРАЧНЫЙ, а не цветом поверхности: на стекле заливка
+                # цветом фона читалась тяжёлой тёмной обводкой. Прозрачный зазор
+                # отделяет сектора и на стекле, и на плоской панели.
+                "borderColor": "transparent",
                 "borderWidth": 2,
             },
             "label": {"color": ink2, "fontFamily": font, "fontSize": size_base},
