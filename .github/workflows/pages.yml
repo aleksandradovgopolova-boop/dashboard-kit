@@ -1,8 +1,11 @@
 name: Publish Dashboard Kit
 
-# Publication stays manual; changes to the kit continue through pull requests.
+# One-time bootstrap; restore workflow_dispatch-only after the first deployment.
 on:
   workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: [.github/workflows/pages.yml]
 
 permissions:
   contents: read
@@ -13,7 +16,7 @@ concurrency:
 
 jobs:
   publish:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'Publish Dashboard Kit once'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
