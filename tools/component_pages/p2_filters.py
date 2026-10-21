@@ -142,7 +142,7 @@ f.set('sfo'); f.clear(); f.setOptions(list);
                 "Показ работ по дням — <a href=\"component-calendar.html\">Календарь</a>: это не фильтр, а представление.",
                 "Два–три фиксированных интервала без календаря — <a href=\"component-segment.html\">Сегмент</a> «7 дней / 30 дней»."],
     "anatomy_html": """<div class="dk-select dk-period" data-active="true"><button type="button" class="dk-select__trigger" aria-haspopup="dialog" aria-expanded="true"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-calendar"/></svg><span class="dk-select__label">Последние 7 дней</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
-    <div class="dk-menu dk-period__menu" style="position:static;margin-top:var(--space-5);max-width:520px;display:flex;gap:var(--space-7)">
+    <div class="dk-menu dk-period__menu sc-period-anatomy" style="position:static;margin-top:var(--space-5);display:flex;gap:var(--space-7)">
       <ul class="dk-menu__list dk-period__presets" role="list" style="min-width:180px"><b class="sc-callout">2</b>
         <li><button type="button" class="dk-menu__item" aria-pressed="false"><span class="dk-menu__name">Сегодня</span></button></li>
         <li><button type="button" class="dk-menu__item" aria-pressed="true"><span class="dk-menu__name">Последние 7 дней</span></button></li>

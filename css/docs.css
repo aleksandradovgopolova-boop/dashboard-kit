@@ -74,7 +74,7 @@
   .sc-shell--closed{ grid-template-columns:minmax(0,1fr); }
   .sc-nav [hidden], .sc-nav[hidden], .sc-shade[hidden]{ display:none; }
   .sc-shade{ display:none; }
-  @media (max-width:1279px){
+  @media (max-width:1023px){
     .sc-shell{ grid-template-columns:minmax(0,1fr); gap:0; }
     .sc-nav{ position:fixed; left:0; top:56px; bottom:0; width:min(320px, 85vw);
       z-index:35; height:calc(100dvh - 56px); border-radius:0; padding:var(--space-6);
@@ -215,7 +215,7 @@
   border-radius:var(--radius-full); background:var(--control-on); color:var(--control-on-ink);
   font:var(--type-caption); font-weight:var(--weight-ui-strong); vertical-align:middle; text-transform:none;
   letter-spacing:normal; }
-.sc-tokens{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:var(--space-3); }
+.sc-tokens{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%,260px),1fr)); gap:var(--space-3); }
 .sc-tokens li{ display:flex; align-items:center; gap:var(--space-4); padding:var(--space-4) var(--space-5); min-width:0;
   background:var(--surface);  border-radius:var(--radius-md); font:var(--type-code); font-size:var(--text-caption); }
 /* Имя не переносится, длинное значение (стек шрифтов) обрезается многоточием:
@@ -328,15 +328,15 @@
 .sc-docs .sc-toc summary{ color:var(--ink-3); font:var(--type-overline); }
 .sc-docs .sc-guide > p{ max-width:none; }
 .sc-docs .sc-preview,.sc-docs .sc-layout-demo,.sc-docs .sc-device{ background:var(--bg); }
-@media(min-width:1024px){
+@media(min-width:1440px){
   .sc-docs .sc-shell--toc{ padding-right:calc(var(--page-pad) + 204px); position:relative; }
   .sc-docs .sc-toc{ position:fixed; top:92px; right:max(var(--page-pad),calc((100vw - 1680px) / 2 + var(--page-pad))); width:180px; max-height:calc(100dvh - 128px); overflow:auto; margin:0; padding:0; }
   .sc-docs .sc-toc nav{ display:block; border-left:1px solid var(--rule); padding-left:var(--space-5); }
 }
-@media(max-width:1279px){ .sc-docs .sc-shell{ grid-template-columns:minmax(0,1fr); } }
+@media(max-width:1023px){ .sc-docs .sc-shell{ grid-template-columns:minmax(0,1fr); } }
 .sc-docs .sc-shell--closed{ grid-template-columns:minmax(0,1fr); }
 .sc-docs .sc-hero--component{ margin-top:var(--space-7); padding:var(--space-7); background:var(--bg); border:1px solid var(--rule); border-radius:var(--radius-lg); }
-.sc-docs .sc-hero--component .sc-hero__lead{ margin-bottom:var(--space-5); }
+.sc-docs .sc-hero--component .sc-hero__lead{ font:var(--type-body); margin-bottom:var(--space-5); }
 .sc-playground{ border:1px solid var(--rule); border-radius:var(--radius-lg); }
 .sc-playground__canvas{ padding:var(--space-6); background:var(--bg); min-width:0; }
 .sc-playground__footer{ display:flex; justify-content:space-between; flex-wrap:wrap; align-items:center; gap:var(--space-5); padding:var(--space-2) var(--space-6); background:var(--surface); border-top:1px solid var(--rule); font:var(--type-caption); color:var(--ink-2); }
@@ -430,13 +430,13 @@
 @media(max-width:767px){ .sc-seven-kpi{ grid-template-columns:minmax(0,1fr); } }
 
 /* Compact component catalog with a distinct category level. */
-.sc-docs .sc-nav__component-group .sc-nav__label{ font:var(--type-caption); font-weight:var(--weight-ui-strong); color:var(--ink-3); padding:var(--space-7) var(--space-5) var(--space-3); }
+.sc-docs .sc-nav__component-group > summary{ color:var(--ink-2); padding-inline:var(--space-5); }
 .sc-docs .sc-nav__component-group .sc-nav__items{ padding-left:var(--space-3); }
 .sc-docs .sc-nav__component-group .sc-nav__items a{ padding-left:var(--space-5); padding-right:var(--space-5); }
-@media(hover:hover) and (pointer:fine){ .sc-docs .sc-nav__component-group .sc-nav__items a{ min-height:var(--control-md); padding-top:var(--space-3); padding-bottom:var(--space-3); } }
+@media(hover:hover) and (pointer:fine){ .sc-docs .sc-nav__component-group .sc-nav__items a{ min-height:36px; padding-top:var(--space-3); padding-bottom:var(--space-3); } }
 
 /* The right-hand contents column disappears below its breakpoint. */
-@media(max-width:1023px){ .sc-docs .sc-toc{ display:none; } }
+@media(max-width:1439px){ .sc-docs .sc-toc{ display:none; } }
 
 .sc-docs .sc-nav.dk-scrollview{ max-height:none; }
 /* Large text reflows headings; code keeps a local scroll container. */
@@ -450,4 +450,33 @@
 /* Ссылки справочника — самостоятельные цели выбора на таче. */
 @media (pointer: coarse) {
   .sc-guide .sc-sec a, .sc-meta__i a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; padding: var(--space-3) var(--space-2); box-sizing: border-box; }
+}
+
+/* Стартовая страница и компактные справочные таблицы. */
+.sc-docs .sc-hero--overview{ padding:var(--space-9) 0; }
+.sc-hero--overview h1{ font:var(--type-h1); }
+.sc-hero--overview h2{ font:var(--type-h2); margin:var(--space-9) 0 var(--space-5); }
+.sc-overview-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-6); margin-top:var(--space-8); }
+.sc-overview-grid a{ display:flex; flex-direction:column; gap:var(--space-4); padding:var(--space-7); border:1px solid var(--rule); border-radius:var(--radius-lg); background:var(--bg); color:var(--ink-2); font:var(--type-body); text-decoration:none; min-width:0; }
+.sc-overview-grid strong{ color:var(--ink); font:var(--type-body-bold); }
+.sc-overview-grid__meta{ color:var(--ink-3); font:var(--type-caption); }
+.sc-overview__examples{ display:flex; flex-wrap:wrap; gap:var(--space-4) var(--space-7); }
+.sc-overview__examples a{ display:inline-flex; align-items:center; min-height:44px; color:var(--ink); font:var(--type-body); }
+.sc-overview-grid a:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset); }
+@media (hover: hover){ .sc-overview-grid a:hover{ border-color:var(--ink-3); } }
+@media(max-width:640px){ .sc-overview-grid{ grid-template-columns:minmax(0,1fr); } }
+.sc-docs .sc-article .sc-sec :is(h1,h2){ font:var(--type-h1); letter-spacing:var(--type-h1-track); }
+.sc-docs .dk-tablewrap > .sc-api{ min-width:560px; }
+.sc-api :is(th,td){ white-space:normal; overflow-wrap:anywhere; }
+.sc-scroll-hint{ font:var(--type-caption); color:var(--ink-3); margin:var(--space-3) 0 var(--space-5); }
+.sc-scroll-hint[hidden]{ display:none; }
+.sc-docs .dk-tablewrap:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset); }
+.sc-docs .sc-nav details[open] > summary > .dk-i{ transform:rotate(90deg); }
+.sc-docs .sc-nav details:not([open]) > summary > .dk-i{ transform:none; }
+.sc-period-anatomy{ width:100%; max-width:520px; }
+.sc-period-anatomy .dk-period__presets{ max-width:100%; }
+.sc-period-anatomy .dk-period__cal{ flex:0 1 auto; width:auto; max-width:100%; min-width:0; }
+@media(max-width:640px){
+  .sc-docs .sc-bar{ padding-inline:var(--space-4); gap:var(--space-2); }
+  .sc-docs .sc-brand__t{ white-space:nowrap; }
 }
