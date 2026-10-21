@@ -336,7 +336,7 @@
 @media(max-width:1023px){ .sc-docs .sc-shell{ grid-template-columns:minmax(0,1fr); } }
 .sc-docs .sc-shell--closed{ grid-template-columns:minmax(0,1fr); }
 .sc-docs .sc-hero--component{ margin-top:var(--space-7); padding:var(--space-7); background:var(--bg); border:1px solid var(--rule); border-radius:var(--radius-lg); }
-.sc-docs .sc-hero--component .sc-hero__lead{ margin-bottom:var(--space-5); }
+.sc-docs .sc-hero--component .sc-hero__lead{ font:var(--type-body); margin-bottom:var(--space-5); }
 .sc-playground{ border:1px solid var(--rule); border-radius:var(--radius-lg); }
 .sc-playground__canvas{ padding:var(--space-6); background:var(--bg); min-width:0; }
 .sc-playground__footer{ display:flex; justify-content:space-between; flex-wrap:wrap; align-items:center; gap:var(--space-5); padding:var(--space-2) var(--space-6); background:var(--surface); border-top:1px solid var(--rule); font:var(--type-caption); color:var(--ink-2); }
@@ -476,3 +476,7 @@
 .sc-period-anatomy{ width:100%; max-width:520px; }
 .sc-period-anatomy .dk-period__presets{ max-width:100%; }
 .sc-period-anatomy .dk-period__cal{ flex:0 1 auto; width:auto; max-width:100%; min-width:0; }
+@media(max-width:640px){
+  .sc-docs .sc-bar{ padding-inline:var(--space-4); gap:var(--space-2); }
+  .sc-docs .sc-brand__t{ white-space:nowrap; }
+}
