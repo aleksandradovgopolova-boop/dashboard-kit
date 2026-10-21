@@ -26,6 +26,7 @@ stacks:
   - tools/check-advanced.mjs
   - tools/check-runtime.mjs
   - tools/check-filter-context.mjs
+  - tools/check-docs.mjs
   - tools/check-dashboard-overview.mjs
   - data/monitor-demo.json
   - tools/check-sdk-snippets.mjs

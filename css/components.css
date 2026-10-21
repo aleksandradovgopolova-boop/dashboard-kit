@@ -4386,10 +4386,13 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 /* Прокрутка внутри блока не должна утягивать за собой страницу: дочитал
    список до конца — и вместо остановки уехал весь дашборд. */
 .dk-menu__list,
-.dk-tablewrap,
 .dk-cal__hours,
 .dk-side__nav,
 .dk-modal__body { overscroll-behavior: contain; }
+
+/* Горизонтальная таблица не перехватывает вертикальную прокрутку страницы.
+   Ограниченная по высоте таблица тоже передаёт её странице у края. */
+.dk-tablewrap { overscroll-behavior-x: contain; overscroll-behavior-y: auto; }
 
 /* --- служебное ------------------------------------------------------------ */
 
