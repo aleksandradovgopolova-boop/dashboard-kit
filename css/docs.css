@@ -473,3 +473,6 @@
 .sc-docs .dk-tablewrap:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset); }
 .sc-docs .sc-nav details[open] > summary > .dk-i{ transform:rotate(90deg); }
 .sc-docs .sc-nav details:not([open]) > summary > .dk-i{ transform:none; }
+.sc-period-anatomy{ width:100%; max-width:520px; }
+.sc-period-anatomy .dk-period__presets{ max-width:100%; }
+.sc-period-anatomy .dk-period__cal{ flex:0 1 auto; width:auto; max-width:100%; min-width:0; }

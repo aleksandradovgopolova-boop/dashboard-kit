@@ -374,9 +374,20 @@
 
   /* Нативная прокрутка, без перехвата колеса. В фокус попадают только
      действительно прокручиваемые таблицы; авторские атрибуты сохраняются. */
-  document.querySelectorAll('.dk-tablewrap').forEach(function (wrap) {
+  var scrollWrappers = new Map();
+  function watchTables() {
+    scrollWrappers.forEach(function (state, wrap) {
+      if (main.contains(wrap)) return;
+      state.observer.disconnect(); state.hint.remove(); scrollWrappers.delete(wrap);
+    });
+    main.querySelectorAll('.dk-tablewrap').forEach(function (wrap) {
     var table = wrap.querySelector('table');
     if (!table) return;
+    var state = scrollWrappers.get(wrap);
+    if (state) {
+      if (state.table !== table) { state.observer.unobserve(state.table); state.observer.observe(table); state.table = table; }
+      state.update(); return;
+    }
     var original = {};
     ['tabindex','role','aria-label'].forEach(function (name) { original[name] = wrap.getAttribute(name); });
     var hint = document.createElement('p'); hint.className = 'sc-scroll-hint';
@@ -395,8 +406,12 @@
       });
     }
     var observer = new ResizeObserver(updateScroll); observer.observe(wrap); observer.observe(table);
+    scrollWrappers.set(wrap, {table:table, observer:observer, hint:hint, update:updateScroll});
     updateScroll();
-  });
+    });
+  }
+  watchTables();
+  new MutationObserver(watchTables).observe(main, {childList:true, subtree:true});
 
   /* Значение под каждым образцом цвета. Берётся с экрана, а не из файла:
      половина токенов собрана color-mix, и в файле у них формула, а не цвет. */
