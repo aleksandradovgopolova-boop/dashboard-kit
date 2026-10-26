@@ -22,6 +22,8 @@ from __future__ import annotations
 import concurrent.futures as _cf
 import json
 import sys
+from datetime import datetime, timezone
+from time import monotonic
 from pathlib import Path
 
 import yaml
@@ -48,43 +50,63 @@ def _safe_run(package_runner, pkg):
     return r
 
 
+def _timed_run(package_runner, row, queued_at, pkg):
+    """Факт входа в callback, а не рекомендация/физический model spawn."""
+    started = monotonic()
+    row.update(runner_started_at=datetime.now(timezone.utc).isoformat(),
+               queue_seconds=max(0.0, started - queued_at))
+    try:
+        return _safe_run(package_runner, pkg)
+    finally:
+        row.update(runner_finished_at=datetime.now(timezone.utc).isoformat(),
+                   execution_seconds=max(0.0, monotonic() - started))
+
+
 def _run_packages(plan, by_id, package_runner, max_parallel=pp.MAX_PARALLEL):
-    """Прогнать пакеты: независимые группы (bounded ≤2) конкурентно; зависимые — по topo-порядку, ТОЛЬКО
-    если ВСЕ depends_on уже дали доказательный pass (dependency-aware stop: провал зависимости не даёт
-    стартовать downstream). Сбой runner -> структурный package failure (не крэш executor)."""
+    """Готовые пакеты занимают свободный слот (≤2), не ожидая постороннюю работу.
+
+    Зависимость должна иметь доказательный pass; области АКТИВНЫХ пакетов не пересекаются.
+    Результаты возвращаются в integration_order, независимо от порядка завершения futures.
+    """
     results, trace = {}, []
-
-    def deps_ok(pid):
-        for d in (by_id[pid].get("depends_on") or []):
-            if results.get(d, {}).get("status") != "pass":
-                return False, d
-        return True, None
-
-    # 1) независимые параллельные группы — конкурентно (≤2 одновременно), с изоляцией сбоев
-    for group in plan["parallel_groups"]:
-        if len(group) == 1:
-            pid = group[0]
-            results[pid] = _safe_run(package_runner, by_id[pid]); trace.append({"pkg": pid, "mode": "single"})
-            continue
-        with _cf.ThreadPoolExecutor(max_workers=max_parallel) as ex:
-            futs = {ex.submit(_safe_run, package_runner, by_id[pid]): pid for pid in group[:max_parallel]}
-            for fut in _cf.as_completed(futs):
-                pid = futs[fut]
-                results[pid] = fut.result(); trace.append({"pkg": pid, "mode": "parallel"})
-        for pid in group[max_parallel:]:   # хвост группы (если >2) — сериализуем (bounded)
-            results[pid] = _safe_run(package_runner, by_id[pid]); trace.append({"pkg": pid, "mode": "serialized-tail"})
-    # 2) зависимые — строго по топо-порядку; НЕ стартуем, пока все depends_on не pass
-    for pid in plan["integration_order"]:
-        if pid in results:
-            continue
-        ok, bad = deps_ok(pid)
-        if not ok:
-            results[pid] = {"status": "blocked-dependency", "sha": None,
-                            "gate_report": {"all_pass": False}, "blocked_by": bad}
-            trace.append({"pkg": pid, "mode": "blocked-dependency", "dep": bad})
-            continue
-        results[pid] = _safe_run(package_runner, by_id[pid]); trace.append({"pkg": pid, "mode": "dependent"})
-    return results, trace
+    pending, running = list(plan["integration_order"]), {}
+    limit = max(1, min(max_parallel, pp.MAX_PARALLEL))
+    with _cf.ThreadPoolExecutor(max_workers=limit) as pool:
+        while pending or running:
+            for pid in list(pending):
+                deps = by_id[pid].get("depends_on") or []
+                bad = next((d for d in deps if d in results and
+                            not pp.integration_gate([d], {d: results[d]})["proceed"]), None)
+                if bad is not None:
+                    results[pid] = {"status": "blocked-dependency", "sha": None,
+                                    "gate_report": {"all_pass": False}, "blocked_by": bad}
+                    trace.append({"pkg": pid, "mode": "blocked-dependency", "dep": bad,
+                                  "submitted_at": None, "runner_started_at": None, "runner_finished_at": None,
+                                  "queue_seconds": None, "execution_seconds": None})
+                    pending.remove(pid)
+                    continue
+                if len(running) >= limit or not all(d in results for d in deps):
+                    continue
+                if any(not pp.can_parallel(by_id[pid], by_id[row["pkg"]])[0]
+                       for row in running.values()):
+                    continue
+                mode = "dependent" if deps else ("parallel" if running else "single")
+                for row in running.values():
+                    if row["mode"] == "single":
+                        row["mode"] = "parallel"
+                row = {"pkg": pid, "mode": mode, "submitted_at": datetime.now(timezone.utc).isoformat(),
+                       "runner_started_at": None, "runner_finished_at": None,
+                       "queue_seconds": None, "execution_seconds": None}
+                running[pool.submit(_timed_run, package_runner, row, monotonic(), by_id[pid])] = row
+                pending.remove(pid)
+            if running:
+                done, _ = _cf.wait(running, return_when=_cf.FIRST_COMPLETED)
+                for future in done:
+                    row = running.pop(future)
+                    
+                    results[row["pkg"]] = _safe_run(lambda _, f=future: f.result(), by_id[row["pkg"]])
+                    trace.append(row)
+    return {pid: results[pid] for pid in plan["integration_order"]}, trace
 
 
 def execute_parallel(wg, package_runner, integration_runner, contract_shas=None, max_parallel=pp.MAX_PARALLEL):
@@ -102,7 +124,7 @@ def execute_parallel(wg, package_runner, integration_runner, contract_shas=None,
     contract_shas = dict(contract_shas or {})
     shared = plan["contract_first"]
 
-    # общий контракт обязан быть зафиксирован ПЕРЕД пакетами (contract-first)
+    
     unfixed = [c for c in shared if not pp._sha_like(contract_shas.get(c))]
     if unfixed:
         return {"proceed": False, "stage": "contract-first",
@@ -127,7 +149,7 @@ def execute_parallel(wg, package_runner, integration_runner, contract_shas=None,
     return {"proceed": bool(final.get("proceed")), "stage": "fan-in", "decision": final,
             "package_results": results, "trace": trace, "plan": plan,
             "integration_sha": integration_sha, "aggregate": aggregate,
-            # ОДИН DeliveryIntent — только при зелёном aggregate на integration-SHA
+            
             "delivery": {"intents": 1 if open_pr else 0, "open_pr": open_pr,
                          "integration_sha": integration_sha if open_pr else None}}
 

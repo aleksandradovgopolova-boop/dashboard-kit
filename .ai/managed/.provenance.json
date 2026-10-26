@@ -3,17 +3,17 @@
   "package": "ai-first-system",
   "source": "https://github.com/aleksandradovgopolova-boop/ai-ops-kit.git",
   "source_identity": {
-    "path": "/Users/sasad/Documents/Codex/2026-10-05/referenced-chatgpt-conversation-this-is-an-2/work/ai-ops-stable",
-    "sha": "d45d4c0960ff",
+    "path": "/private/tmp/slice2b-dashboard/kit",
+    "sha": "78a65b6d14f4",
     "branch": "HEAD",
-    "tag": "v4.3.2",
+    "tag": "v4.11.4",
     "is_release": true,
     "origin": "https://github.com/aleksandradovgopolova-boop/ai-ops-kit.git"
   },
-  "installed_version": "4.3.2",
+  "installed_version": "4.11.4",
   "installed_at": null,
   "managed_root": ".ai/managed",
   "presets": [],
   "checksums_file": ".checksums.json",
-  "note": "Initial install by ai-ops init."
+  "note": "Updated 4.3.2 -> 4.11.4 by ai-ops CLI."
 }

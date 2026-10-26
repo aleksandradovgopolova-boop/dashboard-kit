@@ -33,7 +33,7 @@ import yaml
 
 KINDS = ("local", "ci", "preview", "staging", "production", "unknown")
 
-# Имя -> kind. Порядок важен: сначала более специфичные подстроки.
+
 _KIND_HINTS = (
     ("prod", "production"), ("release", "production"), ("live", "production"),
     ("stag", "staging"), ("preprod", "staging"), ("uat", "staging"), ("qa", "staging"),
@@ -44,7 +44,7 @@ _KIND_HINTS = (
 _SECRET_REF_RE = re.compile(r"secrets\.([A-Z_][A-Z0-9_]*)")
 _ENV_FILE_RE = re.compile(r"^\.env\.([A-Za-z0-9_-]+)$")
 _ENV_KEY_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\s*=")
-# Имена файлов .env, которые НЕ являются окружением (примеры/шаблоны).
+
 _ENV_FILE_SKIP = ("example", "sample", "template", "dist", "local")
 
 
@@ -214,7 +214,7 @@ def assess(root):
         "kind": "EnvironmentMap",
         "environments_status": "not_detected" if not environments else "detected",
         "environments": environments,
-        # ТОЛЬКО имена. Значений здесь нет и быть не может.
+        
         "secret_names": sorted(secret_names),
         "secret_sources": {k: sorted(set(v)) for k, v in sorted(secret_names.items())},
         "findings": findings,

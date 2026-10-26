@@ -46,11 +46,11 @@ from pathlib import Path
 from ai_ops_kit.shared.gitio import git
 from ai_ops_kit.planning import contours as _contours
 
-# Классификация зрелости, реконструкция и состояние контуров вынесены в проб-свободный спутник
-# repo_audit_analysis.py (module-size, структурный разрез). Статусы provenance и порог свежести
-# объявлены ТАМ (одно место), а фасад ре-экспортирует их прежними именами: внешний код и тесты
-# продолжают читать `repo_audit.VERIFIED`, `repo_audit.classify` и т.д. Направление импортов
-# одностороннее — спутник фасад НЕ импортирует, обратного ребра нет.
+
+
+
+
+
 from ai_ops_kit.planning.repo_audit_analysis import (  # noqa: E402,F401
     CONFLICTING,
     INFERRED,
@@ -63,16 +63,16 @@ from ai_ops_kit.planning.repo_audit_analysis import (  # noqa: E402,F401
     VERIFIED,
 )
 
-# Расширения, считающиеся исходным кодом при классификации. Список узкий сознательно: markdown и
-# yaml не делают репозиторий продуктом, иначе папка с документацией классифицировалась бы как
-# EARLY_PRODUCT.
+
+
+
 _SRC_EXT = {".py", ".ts", ".tsx", ".js", ".jsx", ".go", ".rs", ".java", ".kt", ".rb", ".php",
             ".swift", ".cs", ".c", ".cc", ".cpp", ".h", ".hpp", ".scala", ".ex", ".exs", ".dart",
             ".vue", ".svelte", ".sql"}
 _SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "__pycache__", "dist", "build", ".next",
               "target", "vendor", ".ai", ".mypy_cache", ".pytest_cache", ".ruff_cache",
-              # `.claude/worktrees/*` — копии этого же репозитория. Без исключения кит
-              # предъявлял бы как доказательство путь во временной копии самого себя.
+              
+              
               ".claude"}
 
 
@@ -131,7 +131,7 @@ def _measure_storybook(root: Path) -> dict:
             break
     result["stories"] = story_count
 
-    # Build script: storybook в package.json scripts
+    
     pkg_json = root / "package.json"
     if pkg_json.is_file():
         try:
@@ -140,7 +140,7 @@ def _measure_storybook(root: Path) -> dict:
             scripts = pkg.get("scripts", {})
             result["build_script"] = any("storybook" in v for v in scripts.values()
                                          if isinstance(v, str))
-            # Версия из dependencies
+            
             for dep_key in ("dependencies", "devDependencies"):
                 deps = pkg.get(dep_key, {})
                 for name in ("@storybook/react", "@storybook/vue", "@storybook/svelte",
@@ -153,7 +153,7 @@ def _measure_storybook(root: Path) -> dict:
         except (OSError, ValueError, KeyError):
             pass
 
-    # present = config + stories (не только dependency)
+    
     result["present"] = has_config and story_count > 0
     return result
 
@@ -173,12 +173,12 @@ def discover(child_root) -> dict:
         for p in root.rglob("*"):
             if not p.is_file():
                 continue
-            # ОТНОСИТЕЛЬНО корня, а не абсолютно. `p.parts` включает предков корня, поэтому
-            # репозиторий, лежащий под каталогом с именем `build`, `dist`, `vendor` или
-            # `.claude/worktrees/*` (штатное место работы агентов Claude Code), терял ВЕСЬ код:
-            # `source_files: 0` -> класс NEW_PRODUCT с уверенностью high и «работающей системы я не
-            # нашёл» на живом продукте. Ниже, в `_find`, фильтр с самого начала был относительным —
-            # два разных правила в одном модуле.
+            
+            
+            
+            
+            
+            
             if any(part in _SKIP_DIRS for part in p.relative_to(root).parts):
                 continue
             if p.suffix.lower() in _SRC_EXT:
@@ -203,12 +203,12 @@ def discover(child_root) -> dict:
     ev["test_files"] = tests if readable else None
     ev["commits"] = commits
     ev["release_history"] = [t for t in (tags or "").splitlines() if t][:5] if tags is not None else None
-    # CI ПРОДУКТА, А НЕ СВОЙ (F-019, живой прогон severnaya_traektoriya 2026-08-12). Каталог
-    # `.github/workflows` создаёт САМ установщик — он кладёт туда `ai-ops-*.yml`. Прежде условие
-    # «каталог существует» выполнялось этими файлами, и в репозитории БЕЗ собственного CI кит
-    # объявлял владельцу «ci_pipeline: build/lint/test, status=verified», ссылаясь на артефакты,
-    # которые сам же и записал секунду назад. Придуманный продуктовый факт со статусом
-    # «подтверждено» — худший из возможных: владелец верит, что кит прочитал ЕГО конвейер.
+    
+    
+    
+    
+    
+    
     ev["ci"] = _product_ci(root)
     ev["containers"] = _exists("Dockerfile", "docker-compose.yml", "docker-compose.yaml")
     ev["dependency_manifests"] = _exists("package.json", "requirements.txt", "pyproject.toml",
@@ -257,10 +257,10 @@ def discover(child_root) -> dict:
     return ev
 
 
-# Работа с файлом ответов владельца (`.ai/project/onboarding-answers.yaml`) вынесена в
-# проб-свободный спутник repo_audit_answers.py (module-size, P2). Ре-экспорт сохраняет прежние имена:
-# внешние импортёры (`repo_audit.write_question_file`, `from ...repo_audit import read_answers,
-# answers_path, AnswersCorrupt`) продолжают работать. Поведение не менялось — чистый перенос.
+
+
+
+
 from ai_ops_kit.planning.repo_audit_answers import (  # noqa: E402,F401
     ANSWERS_REL,
     AnswersCorrupt,
@@ -290,11 +290,11 @@ def audit(child_root, evidence: dict | None = None, model: dict | None = None) -
     ai_only = [r["contour"] for r in rows
                if r["state"] != VERIFIED and r["ai_can_reconstruct"] == "full" and not r["questions"]]
     human = [r["contour"] for r in rows if r["state"] != VERIFIED and r["needs_human"]]
-    # Блокирующий пробел — ЛЮБОЕ незакрытое состояние на блокирующем ярусе, а не только полное
-    # отсутствие. Прежде считались лишь missing/unknown, поэтому контур яруса `required_now` в
-    # состоянии `partial` объявлялся незаблокированным — и один отчёт давал два противоположных
-    # ответа о нём (`gap_plan` его блокирующим считал). В child-репозитории кита `.ai-ops.yaml`
-    # есть ВСЕГДА, значит контур границ AI не попадал в blocking_gaps никогда.
+    
+    
+    
+    
+    
     blocking_tiers = {t.get("id") for t in (model.get("gap_tiers") or []) if t.get("blocks_work")}
     # SR-1: версия стандарта репозитория (отдельная от версии пакета) + сходится ли отпечаток
     # состава требований с объявленным. Расхождение = требования правили, а версию не подняли.
@@ -373,8 +373,8 @@ def run(child_root) -> dict:
     cls = classify(ev, model)
     rec = reconstruct(child_root, ev, model)
     aud = audit(child_root, ev, model)
-    # Противоречия источников истины — на верхний уровень отчёта: их поднимает reconstruct на
-    # факте, но человеку (`model`) и презентеру нужен явный список, а не раскопки в факте.
+    
+    
     conflicts = (rec.get("persistence") or {}).get("conflicts") or []
     return {"schema_version": 1, "kind": "repository-understanding",
             "classification": cls, "evidence": ev, "reconstructed": rec, "audit": aud,

@@ -25,11 +25,11 @@ try:                                          # v3.38 (лента №5): вал�
     from ai_ops_kit.validation import _bootstrap   # noqa: F401 — импорт пакетом (после pip install)
 except ImportError:                                # запуск скриптом: корня на пути ещё нет,
     import _bootstrap                              # noqa: F401 — и положить его может только он сам
-# Проверка реестра ADR (read-only чтение каталога) вынесена ВНИЗ в пакет `checks`: рантайм
-# (intelligence.evolution_triggers) зовёт check_registry()/DEFAULT_DIR отсюда вниз, без ребра
-# intelligence -> validation. Раньше проверка ui_impact бралась из gate_policy.UI_IMPACT (gates,
-# capabilities) — из primitives его тянуть нельзя, вокабуляр теперь из architecture_decision.
-# Имена ре-экспортируются для обратной совместимости.
+
+
+
+
+
 from ai_ops_kit.checks.adr_registry import DEFAULT_DIR, check_registry  # noqa: E402,F401
 
 

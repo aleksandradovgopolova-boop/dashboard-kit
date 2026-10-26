@@ -39,11 +39,11 @@ def record(memory_dir, wid, summary, areas=None, decisions=None, lessons=None,
         print("ОШИБКА: --summary обязателен (что изменилось за задачу).")
         return 1
     at = at or _today()
-    # v3.7.1 (#4) governance-БАРЬЕР: merge-memory запись self-ingested. Без подтверждения человека
-    # (human_confirmed) MemoryGovernancePolicy НЕ пропускает (анти-самоотравление) -> запись НЕ создаётся
-    # (было advisory). Куратор подтверждает через --human-confirmed. Ровно заявленная граница.
-    # v3.7.2 FAIL-CLOSED: ошибка governance-кода/enforcement -> запись НЕ создаётся (было except: pass ->
-    # писала при сбое = fail-open). Барьер должен падать в блок, а не пропускать.
+    
+    
+    
+    
+    
     _entry = {"id": str(wid), "self_ingested": True, "human_confirmed": bool(human_confirmed),
               "provenance": {"origin": f"merge WorkItem {wid}", "source_type": "derived",
                              "upstream": [f"WorkItem:{wid}"]},

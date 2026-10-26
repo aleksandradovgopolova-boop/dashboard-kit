@@ -13,10 +13,11 @@ from pathlib import Path
 
 from ai_ops_kit.planning import contours as _contours
 from ai_ops_kit.planning.plan_model import (
-    items, goals, freeze_state, _freeze_lift_errors, frozen_work,
+    items, goals, current_milestone, freeze_state, _freeze_lift_errors, frozen_work,
     KIND, DECLARABLE, DERIVED, ACTIVE_DECLARABLE, CLOSED_DECLARABLE, VALUE,
     FORBIDDEN_ITEM_KEYS, OWNER_WAIT_STATUS, OWNER_WAIT_KEY, HISTORY_REL,
     GOAL_STATUSES, FREEZE_RELATIONS, FREEZE_DECISION,
+    MILESTONE_KEY, MILESTONE_STATUSES,
 )
 
 
@@ -84,15 +85,52 @@ def _workitem_status_errors(w, where):
     elif st not in ACTIVE_DECLARABLE:
         errors.append(f"{where}: status '{st}' вне словаря активного плана "
                       f"({list(ACTIVE_DECLARABLE)}); закрытое — в {HISTORY_REL}")
-    # WAITING БЕЗ НАЗВАННОГО ДЕЙСТВИЯ — ФАНТОМНОЕ СОСТОЯНИЕ. Статус говорит «ждём владельца»,
-    # но пока не сказано ЧЕГО именно ждём, план неотличим от застрявшего: ровно та ловушка,
-    # ради которой статус и заведён. Поэтому `waiting_on` с непустым текстом — обязателен.
+    
+    
+    
     if st == OWNER_WAIT_STATUS and not str(w.get(OWNER_WAIT_KEY) or "").strip():
         errors.append(f"{where}: статус '{OWNER_WAIT_STATUS}' без непустого '{OWNER_WAIT_KEY}' — "
                       f"waiting без названного действия владельца это фантомное состояние: план "
                       f"выглядит осмысленным, а чего он ждёт — нигде. Назовите ожидаемый шаг: "
                       f"`{OWNER_WAIT_KEY}: <какое действие владельца разблокирует работу>`")
     return errors, warns
+
+
+def _milestone_errors(m, gids) -> list:
+    """Минимальная проверка ИМЕНОВАННОГО текущего milestone (`current_milestone`). -> список ошибок.
+
+    Аддитивно к остальным правилам плана. Milestone — тот же уровень объявления, что и работа,
+    поэтому и правила те же по духу: `id` — slug (движок и `--feature` ждут его же), `status` — из
+    объявляемого набора, `linked_goals` — существующие id целей плана, и — как у работы — НАЗВАТЬ
+    ИСПОЛНИТЕЛЯ нельзя (роль/направление, не вендор: иначе смена runtime переписывала бы веху).
+    Отсутствие ключа — не ошибка: milestone необязателен, паспорт тогда откатывается к прокси.
+    """
+    errors = []
+    if not isinstance(m, dict):
+        return [f"{MILESTONE_KEY}: ожидался mapping, получен {type(m).__name__}"]
+    mid = m.get("id")
+    if not mid or not _engine_id_ok(str(mid)):
+        errors.append(f"{MILESTONE_KEY}: id '{mid}' непригоден — нужен slug нижнего регистра "
+                      f"({_engine_id_pattern()})")
+    if not (m.get("name") or "").strip():
+        errors.append(f"{MILESTONE_KEY}: нет name — веха без имени не первоклассна")
+    st = m.get("status")
+    if st not in MILESTONE_STATUSES:
+        errors.append(f"{MILESTONE_KEY}: status '{st}' вне объявляемого набора "
+                      f"({list(MILESTONE_STATUSES)})")
+    linked = m.get("linked_goals")
+    if not isinstance(linked, list) or not linked:
+        errors.append(f"{MILESTONE_KEY}: linked_goals должен быть непустым списком id целей — "
+                      f"веха без связи с направлением не приоритизируется")
+    else:
+        for g in linked:
+            if g not in gids:
+                errors.append(f"{MILESTONE_KEY}: linked_goals '{g}' не резолвится в goals плана")
+    for k in FORBIDDEN_ITEM_KEYS:
+        if k in m:
+            errors.append(f"{MILESTONE_KEY}: поле '{k}' запрещено — веха называет направление, "
+                          f"исполнителя выбирает роутер в момент запуска")
+    return errors
 
 
 def validate_history(closed, plan=None) -> dict:
@@ -145,6 +183,41 @@ def validate_history(closed, plan=None) -> dict:
     return {"errors": errors, "warnings": warns}
 
 
+def _goal_errors(plan, gl, root) -> list:
+    """Ошибки уровня ЦЕЛЕЙ: заморозка умений (freeze_relation + снятие) и статус цели.
+
+    Вынесено из validate (func-size; чистый перенос без смены поведения).
+
+    ЗАМОРОЗКА УМЕНИЙ ИСПОЛНЯЕТСЯ ПРОВЕРКОЙ, А НЕ ПАМЯТЬЮ (работа `capability-freeze-enforced`):
+    решение владельца существовало записью с 17.08 и ничем не сверялось (18.08 кит сам предложил
+    взять работу из замороженной цели). Отношение цели к заморозке — обязательное объявление:
+    необъявленная цель означала бы «правило не про меня», то есть тихий обход.
+
+    СНЯТИЕ ЗАМОРОЗКИ ОБЯЗАНО ОПИРАТЬСЯ НА ДОКАЗАТЕЛЬСТВО: решением (`freeze_lifted_by`, запись в
+    реестре) или исходом (`true` + полевое доказательство). Обе половины проверяет
+    `_freeze_lift_errors`. Статус цели ВЛИЯЕТ НА ПРИОРИТЕТ (`goal_priority`), поэтому опечатка в нём
+    молча переставила бы весь план — ловим здесь, где она видна человеку.
+    """
+    errors = []
+    _fz = freeze_state(plan)
+    for g in (gl if _fz.get("applies") else []):
+        rel = g.get("freeze_relation")
+        if rel is None:
+            errors.append(f"цель '{g['id']}': не объявлено freeze_relation "
+                          f"({list(FREEZE_RELATIONS)}) — заморозка умений (решение {FREEZE_DECISION}) "
+                          f"проверяется по назначению цели, и необъявленное назначение делает правило "
+                          f"необязательным для этой цели")
+        elif rel not in FREEZE_RELATIONS:
+            errors.append(f"цель '{g['id']}': freeze_relation '{rel}' вне {list(FREEZE_RELATIONS)}")
+    errors.extend(_freeze_lift_errors(_fz, root))
+    for g in gl:
+        st = g.get("status")
+        if st is not None and st not in GOAL_STATUSES:
+            errors.append(f"цель '{g['id']}': status '{st}' вне {list(GOAL_STATUSES)} — "
+                          f"от статуса зависит приоритет работ этой цели")
+    return errors
+
+
 def validate(plan, model=None, closed=None, root=None):
     """Структура + семантика плана. -> {"errors": [...], "warnings": [...]}.
 
@@ -172,33 +245,13 @@ def validate(plan, model=None, closed=None, root=None):
     dup_g = sorted({g for g in gids if gids.count(g) > 1})
     if dup_g:
         errors.append(f"дубли id целей: {dup_g}")
-    # ЗАМОРОЗКА УМЕНИЙ ИСПОЛНЯЕТСЯ ПРОВЕРКОЙ, А НЕ ПАМЯТЬЮ (работа `capability-freeze-enforced`).
-    # Решение владельца существовало записью с 17.08 и ничем не сверялось: 18.08 кит сам предложил
-    # взять работу из замороженной цели. Отношение цели к заморозке — обязательное объявление:
-    # необъявленная цель означала бы «правило не про меня», то есть тихий обход.
-    _fz = freeze_state(plan)
-    for g in (gl if _fz.get("applies") else []):
-        rel = g.get("freeze_relation")
-        if rel is None:
-            errors.append(f"цель '{g['id']}': не объявлено freeze_relation "
-                          f"({list(FREEZE_RELATIONS)}) — заморозка умений (решение {FREEZE_DECISION}) "
-                          f"проверяется по назначению цели, и необъявленное назначение делает правило "
-                          f"необязательным для этой цели")
-        elif rel not in FREEZE_RELATIONS:
-            errors.append(f"цель '{g['id']}': freeze_relation '{rel}' вне {list(FREEZE_RELATIONS)}")
-    # СНЯТИЕ ЗАМОРОЗКИ ОБЯЗАНО ОПИРАТЬСЯ НА ДОКАЗАТЕЛЬСТВО, А НЕ НА САМОДЕКЛАРАЦИЮ. Снять заморозку
-    # можно двумя способами (решением `freeze_lifted_by` и исходом, ставшим `true`), и каждый обязан
-    # чем-то подкрепляться: решение — записью в реестре, исход — полевым доказательством. Обе
-    # половины проверяет `_freeze_lift_errors` — вынесено в помощник, чтобы `validate` не росла за
-    # потолок и чтобы оба пути снятия были видны рядом.
-    errors.extend(_freeze_lift_errors(_fz, root))
-    # Статус цели ТЕПЕРЬ ВЛИЯЕТ НА ПРИОРИТЕТ (`goal_priority`), поэтому опечатка в нём молча
-    # переставляла бы весь план. Проверяем здесь — единственное место, где она видна человеку.
-    for g in gl:
-        st = g.get("status")
-        if st is not None and st not in GOAL_STATUSES:
-            errors.append(f"цель '{g['id']}': status '{st}' вне {list(GOAL_STATUSES)} — "
-                          f"от статуса зависит приоритет работ этой цели")
+    errors.extend(_goal_errors(plan, gl, root))
+
+    
+    
+    m = current_milestone(plan)
+    if m is not None:
+        errors.extend(_milestone_errors(m, gids))
 
     ws = items(plan)
     if not ws:

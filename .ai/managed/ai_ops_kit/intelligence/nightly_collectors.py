@@ -33,11 +33,11 @@ def _git(root: Path, *args) -> tuple[int, str, str]:
             timeout=30,
         )
         return result.returncode, result.stdout, result.stderr
-    # Узкий тип (фаза 0, 19.08.2026): запуск может не состояться (нет бинаря, права, битый
-    # симлинк) или не уложиться в timeout. Любое ДРУГОЕ исключение здесь — дефект вызова, и он
-    # обязан всплыть, а не превратиться в «rc=1» и молча стать «команда не сработала».
-    # Тип ошибки НАЗЫВАЕТСЯ в тексте: «не смогли запустить» и «команда вернула ошибку» —
-    # разные ответы, и по голому str(e) их не различить.
+    
+    
+    
+    
+    
     except (OSError, subprocess.SubprocessError) as e:
         return 1, "", f"{type(e).__name__}: {e}"
 
@@ -47,7 +47,7 @@ def _get_recent_commits(root: Path, since: str | None = None) -> list[dict]:
     if since:
         range_spec = f"{since}..HEAD"
     else:
-        # Last 24 hours
+        
         since_time = (datetime.now() - timedelta(hours=24)).isoformat()
         range_spec = f"--since={since_time}"
 
@@ -74,7 +74,7 @@ def _get_changed_files(root: Path, since: str | None = None) -> list[str]:
         range_spec = f"{since}..HEAD"
     else:
         since_time = (datetime.now() - timedelta(hours=24)).isoformat()
-        # Get files from commits in last 24h
+        
         rc, out, _ = _git(root, "log", f"--since={since_time}", "--name-only", "--pretty=format:")
         if rc != 0:
             return []
@@ -106,9 +106,9 @@ def _check_plan_status(root: Path) -> dict:
             s = w.get("status", "unknown")
             by_status[s] = by_status.get(s, 0) + 1
         return {"exists": True, "total": len(work), "by_status": by_status}
-    # Узкий тип: файл может не читаться, YAML — не разбираться, а пустой документ даёт None и
-    # падает на `.get`. Причина НАЗЫВАЕТСЯ: «план не прочитали» и «работ нет» — разные ответы,
-    # и обзор, который их путает, отчитается о тишине там, где была поломка.
+    
+    
+    
     except (OSError, yaml.YAMLError, AttributeError) as e:
         return {"exists": True, "error": f"план не разобран ({type(e).__name__}: {e})"}
 
@@ -136,38 +136,38 @@ def _check_open_prs(root: Path) -> dict:
             prs = json.loads(result.stdout)
             return {"open_prs": len(prs), "prs": prs[:5]}  # First 5
         return {"open_prs": None, "unavailable": f"gh вернул код {result.returncode}"}
-    # Узкий тип: gh может отсутствовать, не уложиться в timeout или отдать не-JSON.
-    # Здесь стоял `pass`, и причина исчезала совсем; отсутствие данных выглядело так же, как
-    # «открытых PR нет». `None` вместо `-1` — тот же инвариант, что и у usage: unavailable не
-    # число и не ноль, а отдельное состояние, и оно названо в `unavailable`.
+    
+    
+    
+    
     except (OSError, subprocess.SubprocessError, ValueError) as e:
         return {"open_prs": None, "unavailable": f"{type(e).__name__}: {e}"}
 
 
-# НАХОДКИ, А НЕ КОЛИЧЕСТВА (v0, 20.08.2026).
-#
-# Скелет обзора считал коммиты и файлы. «5 коммитов, 12 файлов» не расхождение: человеку нечего с
-# этим делать, и бриф из таких строк перестают читать через неделю. Работа обещает НАХОДИТЬ
-# расхождения — с документацией, тестами, архитектурой, Storybook, планом.
-#
-# СВОЮ АНАЛИТИКУ НЕ ПИШЕМ. В поставку дочки уже едут 24 валидатора, каждый из которых умеет
-# отвечать на свой вопрос. Обзор — АГРЕГАТОР: он запускает их процессом (так же, как CI дочки) и
-# собирает ответы. Писать вторую реализацию тех же проверок значило бы завести вторую правду —
-# ровно то, что кит запрещает везде.
-#
-# ЧЕГО НЕ СМОГЛИ — НАЗЫВАЕТСЯ. Валидатор, которого нет в поставке или который не запустился,
-# даёт `unknown`, а не «нарушений нет». Третье состояние не сворачивается во второе.
-# КАК ЗВАТЬ КАЖДЫЙ — ОБЪЯВЛЕНО, А НЕ УГАДАНО (замер 20.08.2026).
-#
-# Первая редакция звала все валидаторы одинаково — путём к корню. Пять из восьми ответили
-# `IsADirectoryError` или подсказкой по использованию, и обзор отчитался о них как о РАСХОЖДЕНИЯХ.
-# То есть он выдал СВОЮ ошибку вызова за дефект продукта — худшее, что может сделать проверка:
-# человек пошёл бы чинить то, что не сломано, а настоящие находки утонули бы в шуме.
-#
-# Способ вызова замерен по каждому:
-#   root     — принимает корень репозитория;
-#   none     — без аргумента проверяет пакет целиком;
-#   artifact — принимает путь к КОНКРЕТНОМУ артефакту; нет артефакта -> «не проверено», НЕ находка.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 CHECKS = (
     {"title": "документация", "name": "validate_freshness", "how": "root",
      "subject": "документы, у которых истёк срок ревизии"},
@@ -177,12 +177,12 @@ CHECKS = (
      "subject": "связность артефактов между собой"},
     {"title": "заявления", "name": "validate_claims", "how": "none",
      "subject": "публичные числа против кода"},
-    # РОД ДОКУМЕНТА ОБЪЯВЛЕН, И ЭТО НЕ ПЕДАНТИЗМ (замер 20.08.2026). Здесь стояло
-    # `planning/plan.yaml` — и `validate_plan_artifact` честно ответил «kind должен быть
-    # plan-artifact», потому что проверяет RunPlan ФИЧИ, а не delivery-план репозитория.
-    # Обзор выдал этот ответ за РАСХОЖДЕНИЕ и трижды сообщил владельцу о дефекте, которого нет.
-    # Ошибка вызова второго рода: файл существует, валидатор запускается — и проверяет не то.
-    # Поэтому род документа сверяется ДО запуска: не совпал — «не проверено», а не находка.
+    
+    
+    
+    
+    
+    
     {"title": "план работы", "name": "validate_plan_artifact", "how": "artifact",
      "artifact": "features/*/plan.yaml", "kind": "plan-artifact",
      "subject": "RunPlan фичи и его связность"},
@@ -277,18 +277,18 @@ def run_checks(root: Path, timeout: int = 120) -> list[dict]:
         # не поймёт даже, о чём речь. На трёх дочках из трёх это была ПОЛОВИНА всех находок.
         wrong_call = "Traceback" in full or re.search(r"(?i)использование:|usage:", full)
         if wrong_call:
-            # Показываем ПЕРВУЮ строку: в отказе по вызову она и есть суть жалобы, а последняя —
-            # хвост подсказки. Раньше человек получал именно хвост.
+            
+            
             detail = lines[0][:220] if lines else f"код {r.returncode}, вывод пуст"
             out.append({**rec, "ok": None, "detail": f"позвали неверно — {detail}"})
             continue
         detail = lines[-1][:220] if lines else f"код {r.returncode}, вывод пуст"
         out.append({**rec, "ok": r.returncode == 0, "detail": detail})
 
-    # ПОСТУПЛЕНИЕ СОБЫТИЙ — ОТДЕЛЬНЫЙ ВОПРОС, И ЕГО НЕ ЗАКРЫВАЕТ КАТАЛОГ. `validate_event_catalog`
-    # отвечает «что мы обещали слать»; доехало ли хоть одно — не знает никто. Цепочка продукта
-    # (Outcome Contract -> Tracking Plan -> реализация -> ПОСТУПЛЕНИЕ -> Product Health) рвётся
-    # ровно здесь и рвётся молча: план выглядит выполненным, дашборд пустой.
+    
+    
+    
+    
     from ai_ops_kit.intelligence import event_arrival
     rep = event_arrival.assess(root)
     out.append({

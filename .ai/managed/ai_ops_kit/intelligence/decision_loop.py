@@ -36,10 +36,10 @@ from pathlib import Path
 
 import yaml
 
-# Проверяющая логика формы feature_target и гейт каталога решений вынесены ВНИЗ в пакет `checks`
-# (слой primitives, #541): контур гейтов (`gates.gate_executor`) не вправе импортировать
-# `intelligence` (слой выше + kernel-boundary), поэтому чистая/read-only проверка живёт в `checks`,
-# а оба вызывателя тянут её ВНИЗ. Имена ре-экспортируются для обратной совместимости API и тестов.
+
+
+
+
 from ai_ops_kit.checks.feature_decision import (  # noqa: F401
     DIRECTIONS,
     check_feature_target,
@@ -111,7 +111,7 @@ def decide(root: Path, decision_id: str, status: str, decided_by: str = "owner",
     if status not in ("approved", "rejected", "deferred"):
         return {"error": f"Invalid status: {status}. Must be approved|rejected|deferred"}
 
-    # Find the decision file
+    
     decisions_dir = _decisions_dir(root)
     decision_files = list(decisions_dir.glob(f"*-{decision_id}.yaml"))
 
@@ -223,7 +223,7 @@ def format_decisions(decisions: list[dict]) -> str:
 
     lines = ["# Product Decisions\n"]
 
-    # Group by status
+    
     by_status = {}
     for d in decisions:
         s = d.get("status", "unknown")
@@ -255,7 +255,7 @@ def main():
 
     sub = ap.add_subparsers(dest="command")
 
-    # Propose
+    
     propose_p = sub.add_parser("propose", help="Propose a new decision")
     propose_p.add_argument("--id", required=True, help="Decision ID")
     propose_p.add_argument("--proposal", required=True, help="What is proposed")
@@ -265,14 +265,14 @@ def main():
     propose_p.add_argument("--feature-target", default="",
                            help="JSON: {baseline, target, guardrails} — измеримое обязательство фичи")
 
-    # Decide
+    
     decide_p = sub.add_parser("decide", help="Record a decision")
     decide_p.add_argument("--id", required=True, help="Decision ID")
     decide_p.add_argument("--status", required=True, choices=["approved", "rejected", "deferred"])
     decide_p.add_argument("--by", default="owner", help="Who decided")
     decide_p.add_argument("--outcome", default="", help="What happened after")
 
-    # List
+    
     list_p = sub.add_parser("list", help="List decisions")
     list_p.add_argument("--status", choices=["pending", "approved", "rejected", "deferred"])
     list_p.add_argument("--json", action="store_true")
@@ -282,13 +282,13 @@ def main():
     args = ap.parse_args()
 
     if args.selftest:
-        # ЧЕСТНЫЙ --selftest (фаза 0, 19.08.2026). Здесь печаталась строка о пройденном
-        # селфтесте и три строки «... : OK» — без единого вызова проверяемых функций. То есть
-        # модуль УТВЕРЖДАЛ проверку, которой не было: ровно класс «объявлено, но не
-        # исполняется», против которого стоит весь кит (ср. R-31/R-32 — две фиктивные проверки
-        # в валидаторах). Образец честной формы — devtools/mutation_probe.py: модуль объясняет
-        # себя и называет, где лежат его настоящие проверки. Правило репозитория (AGENTS.md):
-        # тест модуля живёт в tests/, а не в продакшн-модуле, который едет в child-репозиторий.
+        
+        
+        
+        
+        
+        
+        
         print(__doc__)
         print("Проверки модуля — в tests/unit/ (AGENTS.md: selftest не живёт в продакшн-модуле).")
         return 0

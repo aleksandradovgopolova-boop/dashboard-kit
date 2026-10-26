@@ -29,7 +29,7 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface
 
-# ─── общий примитив ───────────────────────────────────────────────────────────────────────────────
+
 
 
 def _lineno(source: str, pos: int) -> int:
@@ -43,13 +43,13 @@ def _route(rel_path: str, lineno: int, path_value: str, extractor: str) -> Surfa
                    confidence="inferred", extractor=extractor)
 
 
-# ─── Express ───────────────────────────────────────────────────────────────────────────────────────
-# Файл считается express-бэкендом только при явном индикаторе импорта — иначе одноимённый чужой
-# `.get(...)`/`.use(...)` дал бы ложный маршрут (симметрия с import-сужением питон-экстракторов).
+
+
+
 _EXPRESS_INDICATOR_RE = re.compile(
     r"""(?:require\(\s*|from\s+)['"]express['"]|import\s+express\b""")
-# `<ident>.<method>("/path", ...)`. method — HTTP-глагол Express или `use`/`all` (монтирование).
-# Путь — строковый литерал в кавычках, начинающийся с "/". Backtick/переменная/выражение мимо.
+
+
 _EXPRESS_ROUTE_RE = re.compile(
     r"""\b[A-Za-z_$][\w$]*\.(get|post|put|delete|patch|options|head|all|use)\s*\(\s*"""
     r"""(['"])(/[^'"]*)\2""")
@@ -72,9 +72,9 @@ def extract_express_routes(parsed: ParsedFile) -> list:
     return out
 
 
-# ─── Nest ────────────────────────────────────────────────────────────────────────────────────────
-# Nest-контроллеры узнаём по импорту из `@nestjs/...`. `@Controller("prefix")` задаёт префикс класса,
-# `@Get("/x")`/`@Post(...)`/… — путь метода; полный маршрут = префикс + путь метода.
+
+
+
 _NEST_INDICATOR = "@nestjs"
 _NEST_CONTROLLER_RE = re.compile(r"@Controller\s*\(\s*(?:(['\"])(.*?)\1)?")
 _NEST_METHOD_RE = re.compile(
@@ -99,7 +99,7 @@ def extract_nest_routes(parsed: ParsedFile) -> list:
     src = parsed.source
     if _NEST_INDICATOR not in src:
         return []
-    # (позиция → префикс) всех @Controller в файле, чтобы привязать метод к ближайшему до него.
+    
     controllers = [(m.start(), (m.group(2) or "")) for m in _NEST_CONTROLLER_RE.finditer(src)]
     out: list = []
     for m in _NEST_METHOD_RE.finditer(src):
@@ -115,11 +115,11 @@ def extract_nest_routes(parsed: ParsedFile) -> list:
     return out
 
 
-# ─── Next ────────────────────────────────────────────────────────────────────────────────────────
-# Next выводит серверный маршрут из РАСКЛАДКИ ФАЙЛОВ, а не из содержимого: экстрактор смотрит
-# `parsed.rel_path`. Два серверных источника: Pages API (`pages/api/**`) и App Router Route Handler
-# (`app/**/route.ext`). UI-страницы (`pages/index.tsx`, `app/**/page.tsx`) — это НЕ серверный route,
-# их здесь нет намеренно (иной вид поверхности). Разбор структурный → confidence: inferred.
+
+
+
+
+
 _NEXT_ROUTE_SUFFIXES = frozenset({".js", ".ts", ".jsx", ".tsx", ".mjs", ".cjs"})
 _NEXT_ROUTE_HANDLER_STEMS = frozenset({"route"})
 

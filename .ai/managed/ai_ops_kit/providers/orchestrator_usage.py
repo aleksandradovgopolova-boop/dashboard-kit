@@ -10,6 +10,7 @@ import hashlib
 import json
 import shutil
 import sys
+import threading
 import tempfile
 from pathlib import Path
 
@@ -17,9 +18,23 @@ import yaml
 
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
-# v3.1 (trace v0.2): аккумулятор статистики вызовов модели — tokens/latency/cost для трейсе. Вызывающий
-# (ai_ops_run) дренирует после прогона и эмитит в journal + отчёт. Наблюдаемость, не источник истины.
+
+
 _CALL_STATS = []
+_WORKER_CALLS = threading.local()
+
+
+def _call_buffers():
+    """Отдельный буфер текущего worker; старые main-thread alias'ы фасада остаются живыми.
+
+    ThreadPool-пакеты не наследуют контекст координатора и не дренируют соседей.
+    Это изоляция существующего thread executor, не async/native session launcher.
+    """
+    if threading.current_thread() is threading.main_thread():
+        return _CALL_STATS, _CALL_CONTEXT
+    if not hasattr(_WORKER_CALLS, "stats"):
+        _WORKER_CALLS.stats, _WORKER_CALLS.context = [], {}
+    return _WORKER_CALLS.stats, _WORKER_CALLS.context
 
 
 def _load_pricing_from_registry() -> dict:
@@ -43,34 +58,37 @@ def _load_pricing_from_registry() -> dict:
     return result
 
 
-# Цены $/1M токенов читаются из registry/models.yaml (SoT), не хардкод.
-# При отсутствии модели в реестре cost_usd_est=None (честно: неизвестно).
+
+
 _PRICE_PER_MTOK = _load_pricing_from_registry()
 
 
 def drain_call_stats():
     """Забрать и очистить накопленную статистику вызовов модели (per-call {model,in,out,latency_s,cost})."""
-    global _CALL_STATS
-    s, _CALL_STATS = _CALL_STATS, []
-    return s
+    stats, _ = _call_buffers()
+    result = list(stats)
+    stats.clear()
+    return result
 
 
-# v3.10.0 Usage Truth: контекст вызова (role/trigger/provider/runtime/run_id/workitem_id/package_id).
-# ai_ops_run ставит его через provider-обёртку ПЕРЕД вызовом; _record_call вмерживает в каждую запись.
+
+
 _CALL_CONTEXT = {}
 
 
 def set_call_context(**ctx):
-    _CALL_CONTEXT.update({k: v for k, v in ctx.items() if v is not None})
+    _, context = _call_buffers()
+    context.update({k: v for k, v in ctx.items() if v is not None})
 
 
 def clear_call_context():
-    _CALL_CONTEXT.clear()
+    _, context = _call_buffers()
+    context.clear()
 
 
 def _record_call(model, in_tok, out_tok, latency_s, provider=None, cost=None, cost_status=None):
-    # v3.10.0 Usage Truth. cost: ИЗМЕРЕННАЯ стоимость (напр. claude -p total_cost_usd). Иначе оценка по
-    # прайс-таблице, если есть токены+цена (cost_status=estimated); иначе None (unavailable).
+    
+    
     if cost is not None:
         cost_status = cost_status or "measured"
     else:
@@ -87,8 +105,9 @@ def _record_call(model, in_tok, out_tok, latency_s, provider=None, cost=None, co
            "cost": cost, "cost_status": cost_status,
            "latency": (round(latency_s, 3) if latency_s is not None else None),
            "cost_usd_est": cost}   # cost_usd_est — назад-совместимо (budget/cost_account/trace)
-    rec.update(_CALL_CONTEXT)      # role/trigger/run_id/workitem_id/package_id/runtime/provider
-    _CALL_STATS.append(rec)
+    stats, context = _call_buffers()
+    rec.update(context)      # role/trigger/run_id/workitem_id/package_id/runtime/provider
+    stats.append(rec)
 
 
 def main(argv):

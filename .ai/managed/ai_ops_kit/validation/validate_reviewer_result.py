@@ -30,9 +30,9 @@ try:                                          # v3.38 (лента №5): вал�
     from ai_ops_kit.validation import _bootstrap   # noqa: F401 — импорт пакетом (после pip install)
 except ImportError:                                # запуск скриптом: корня на пути ещё нет,
     import _bootstrap                              # noqa: F401 — и положить его может только он сам
-# Проверяющая логика вынесена ВНИЗ (пакет `checks`, слой primitives): и рантайм (engine.pipeline_evidence,
-# providers.orchestrator), и эта CLI-обёртка импортируют её вниз — без восходящих рёбер к validation.
-# check и ST ре-экспортируются для обратной совместимости (тесты, старые вызовы .check/.ST).
+
+
+
 from ai_ops_kit.checks.reviewer_result import ST, check   # noqa: E402,F401
 
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
@@ -65,7 +65,7 @@ def main(argv):
     gate_ids = _gate_ids()
     errors = []
     if gate_ids is None:
-        # Fail-closed сохранён: ошибка есть, но называет ПРИЧИНУ — сломан реестр, а не гейт.
+        
         errors.append("quality/gates.yaml не прочитан — принадлежность гейта реестру НЕ проверена; "
                       "это не «гейт отсутствует»")
     errors += check(data, gate_ids)

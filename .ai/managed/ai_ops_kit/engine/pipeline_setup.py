@@ -54,8 +54,8 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
     resume_info = ({"requested": bool(resume), "resumed": False,
                     "reused_worktree": False, "reused_branch": False}
                    if (resume or reevaluate_only) else None)
-    # v3.0.1/v3.0.7 (P0): рабочая ветка форкается от РАЗРЕШЁННОГО base (--base), а НЕ от HEAD.
-    # base=None -> AUTO-резолв (upstream/remote-default/текущая ветка), не хардкод 'main'.
+    
+    
     _br = _resolve_base(child_root, base)   # base может быть None (auto) или явной веткой
     base_sha = _br.get("base_sha")
     base_ref = _br.get("base_ref") or base or "HEAD"
@@ -94,11 +94,11 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
         branch = f"ai-ops/{wid}"
         wp = child_root / ".ai" / "worktrees" / wid
         branch_exists = _wt._branch_exists(child_root, branch)
-        # v2.109 Real Resume: продолжаем ПОВЕРХ подтверждённой работы — ветку/коммиты НЕ удаляем.
+        
         reused = False
         if (resume or reevaluate_only) and (branch_exists or wp.is_dir()):
             if not wp.is_dir() and branch_exists:
-                # worktree утерян, но ветка (коммиты) на месте -> пере-подключаем worktree к ветке
+                
                 rc = _wt.add(child_root, wid, branch, quiet=_wt_quiet)
                 if rc != 0:
                     return {"error": {"schema_version": 1, "kind": "execution-pipeline", "workitem_id": wid,
@@ -117,27 +117,27 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
             reused = True
         if not reused:
             if resume:
-                # resume запрошен, но продолжать нечего (ни ветки, ни worktree) — честный свежий старт
+                
                 resume_info["reason"] = (f"ни ветки {branch}, ни worktree нет — продолжать нечего; "
                                          f"выполняется свежий старт")
-            # finding живого прогона: worktree от ПРЕДЫДУЩЕГО прогона того же wid молча
-            # переиспользовался -> прогон шёл поверх грязного состояния (нечистый baseline).
-            # P0.3 (аудит v2.79): но слепо удалять прошлую ветку ОПАСНО — там могут быть НЕсохранённые
-            # коммиты (PR не открылся и т.п.). Удаляем только если на ветке нет работы ЛИБО явный discard.
+            
+            
+            
+            
             if wp.is_dir() or branch_exists:
                 ahead = 0
                 if branch_exists:
-                    # коммиты на ветке ai-ops/<wid>, которых нет в текущем HEAD -> несохранённая работа
+                    
                     rc_a, out_a, _ = _git(child_root, "rev-list", "--count", branch, "^HEAD")
                     ahead = int(out_a) if rc_a == 0 and out_a.isdigit() else 0
                 if ahead > 0 and not discard_previous:
                     return {"error": {"schema_version": 1, "kind": "execution-pipeline", "workitem_id": wid,
                             "status": "error",
-                            # obs 2dbfc337 (поле 20.08.2026) + B2-10: здесь назывались ВНУТРЕННИЕ
-                            # параметры движка — `resume=True (--resume)` и `discard_previous=True
-                            # (--discard)`. Человек читает это через `ai-ops`, где `--resume` нет
-                            # вовсе (argparse принимает его за сокращение `--resume-from` и падает),
-                            # а продолжение — это ИНТЕНТ `resume`. Печатаем РЕАЛЬНЫЕ команды.
+                            
+                            
+                            
+                            
+                            
                             "error": f"предыдущий прогон feature='{wid}' имеет {ahead} несохранённых "
                                      f"коммит(ов) на ветке {branch}. Чтобы не потерять работу, прогон "
                                      f"остановлен. Продолжить поверх них: "
@@ -155,7 +155,7 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
             if rc == 0:
                 work_root = wp
                 worktree_rel = wp.relative_to(child_root).as_posix()
-                # v3.0.1 (P0): свежая ветка обязана форкнуться РОВНО от base_sha (иначе `--base` — фикция)
+                
                 if base_sha:
                     _rc_h, _wh, _ = _git(wp, "rev-parse", "HEAD")
                     if _rc_h != 0 or (_wh or "").strip() != base_sha:
@@ -167,8 +167,8 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
                                 "loop": None, "isolation": {"worktree": None}, "gates": None,
                                 "ready_for_pr": False, "overall_status": "error"}}
         if work_root is child_root:
-            # finding adversarial-review: НЕ деградируем молча в основное дерево — это исполнило бы
-            # правки и коммит в main вопреки isolate=True. Останавливаемся честной ошибкой.
+            
+            
             return {"error": {"schema_version": 1, "kind": "execution-pipeline", "workitem_id": wid,
                     "status": "error",
                     "error": f"isolate=True, но worktree .ai/worktrees/{wid} не создан "
@@ -257,34 +257,34 @@ def _prepare_environment(profile, work_root, pol, is_git, *, install_deps, isola
     ДОПОЛНИТЕЛЬНО получает ворота-инструменты кита (ruff/pytest/…) из координаторского venv, чтобы
     гейты исполнялись НАСТОЯЩИМ набором (как CI), а не ослабленным. Провал провижининга уходит в
     `prepare` -> prepare_ok=False -> честная деградация вердикта. Путь ДОЧЕК (не self-host) не тронут."""
-    # P0.6/v2.93: снимок untracked ДО install/baseline — удалить только НОВЫЕ (package-lock и т.п.),
-    # не тронув untracked пользователя. Игнорируемые (node_modules) сюда не попадают.
+    
+    
     untracked_before_prep = _untracked(work_root) if is_git else set()
-    # 3b. зависимости стека В ИЗОЛИРОВАННОМ worktree (иначе build/lint/test = exit 127); в основном
-    #     дереве НЕ ставим. node_modules обычно в .gitignore -> дерево чистое.
+    
+    
     prepare = None
     if install_deps and isolate:
         prepare = _install_dependencies(profile, work_root, pol)
-        # #468 SELF-HOST: прогон над самим китом получает ворота-инструменты кита в среду прогона —
-        # так гейты исполняются НАСТОЯЩИМ набором (как CI). Только self-host; путь дочек не тронут.
+        
+        
         if tool_broker._is_kit_self_host(work_root):
             _prov = _provision_kit_gate_tools(work_root)
-            # Результат едет в `prepare` (наблюдаемость в отчёте) И влияет на prepare_ok: провал
-            # провижининга -> prepare_ok=False -> честная деградация (не ослабленная зелень).
+            
+            
             prepare = (prepare or []) + [{
                 "language": "kit-self-host", "command": "provision gate-tools",
                 "allowed": True, "ok": _prov["ok"], "exit_code": None,
                 "output_tail": _prov["reason"][-200:]}]
     # P0.6: install обязан ПРОЙТИ — иначе baseline/проверки недостоверны, прогон не может быть ready.
     prepare_ok = (prepare is None) or all(p.get("ok") for p in prepare)
-    # 3c. baseline-evidence: прогон проверок на БАЗЕ до правок — отличить пред-существующие провалы
-    #     репо от РЕГРЕССИЙ этой правки (finding живого прогона: ii-sreda был красным сам по себе).
+    
+    
     baseline_checks = None
     if baseline_diff:
         baseline_checks = evidence_collector.collect(profile, work_root, pol, broker=tool_broker)["checks"]
-    # P0.6+v2.93: install/baseline могли намутить tracked (lock/снапшоты) И создать новые untracked.
-    # Откатываем ОБА вида ДО модели, иначе `git add -A` втянул бы файлы подготовки в AI-коммит:
-    # tracked — `checkout -- .`; новые untracked (delta к снимку) — адресно (untracked юзера не трогаем).
+    
+    
+    
     prepare_mutated_tree = False
     if is_git and not _tree_clean(work_root):
         prepare_mutated_tree = True
@@ -306,7 +306,7 @@ def _commit_work(work_root, wid, task, is_git, applied, authored, shell_changed,
     SHA); reevaluate переиспользует HEAD. work_produced_by (broker/shell/model-commit) — факт для
     человека. v3.38 (K6): вынесено из run_pipeline. -> (committed_sha, work_branch, produced_by, clean)."""
     committed_sha, work_branch = None, None
-    # ЧЕМ произведена работа: «правок 0» при живом коммите читается как «кит не работает».
+    
     work_produced_by = ("broker" if applied else ("shell" if shell_changed else None))
     tree_clean_before_checks = None
     # v2.93: коммитим при правках В ДЕРЕВЕ (git-diff/untracked, вкл. shell и артефакты), не только
@@ -330,7 +330,7 @@ def _commit_work(work_root, wid, task, is_git, applied, authored, shell_changed,
             pass
         committed_sha = _commit_on_branch(work_root, work_branch,
                                           f"ai-ops: {task[:60]}")
-        # Коммитить нечего, но HEAD ушёл от базы -> модель зафиксировала сама. Берём ЕЁ коммит: ground truth — git.
+        
         if committed_sha is None and self_committed:
             _rc_b, _out_b, _ = _git(work_root, "rev-parse", "--abbrev-ref", "HEAD")
             work_branch = _out_b.strip() if _rc_b == 0 and _out_b.strip() != "HEAD" else work_branch
@@ -341,10 +341,20 @@ def _commit_work(work_root, wid, task, is_git, applied, authored, shell_changed,
     return committed_sha, work_branch, work_produced_by, tree_clean_before_checks
 
 
+def _verification_changed_files(root, base_sha, revision):
+    """Весь диапазон задачи; неизвестный scope — полный профиль, не docs-only skip."""
+    if not base_sha or not revision:
+        return None
+    rc, output, _ = _git(root, "diff", "--no-renames", "--name-only", "-z", base_sha, revision, "--")
+    if rc:
+        return None
+    return sorted({path for path in output.split("\0") if path})
+
+
 def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, loop, *,
                        commit, is_git, committed_sha, base_sha, authored_ev, allow_missing_tests,
                        calibrated_enforcement, ui_evidence, review, reviewer_proposer, budget,
-                       strict_judge_qualified, security_reviewer_proposer, reevaluate_only):
+                       strict_judge_qualified, security_reviewer_proposer, reevaluate_only, verification_intent="merge_candidate"):
     """Сбор evidence на зафиксированном SHA и наполнение gate_ev: реальный прогон проверок профиля
     через Broker, intake/regression/authored/reevaluate-seed, освобождения по неприменимым проверкам,
     UI-evidence на точном SHA, seam-scan advisory, независимые ревью и доменный security-вердикт.
@@ -354,9 +364,13 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
     not_applicable/exempt_reason/tests_warn/ui_evidence_bundle/seam_advisory/reviews/security_pack_result/
     effective_approval_signals).
     """
-    # v3.26.1 Progressive Verification: передаём changed_files для targeted test execution
-    _changed_for_verification = _committed_changed_files(work_root, committed_sha) if (commit and is_git and committed_sha) else None
-    coll = evidence_collector.collect(profile, work_root, pol, changed_files=_changed_for_verification, broker=tool_broker)
+    
+    _changed_for_verification = (_verification_changed_files(work_root, base_sha, committed_sha)
+                                 if commit and is_git else None)
+    
+    
+    coll = evidence_collector.collect(profile, work_root, pol, changed_files=_changed_for_verification,
+        broker=tool_broker, lifecycle_intent=verification_intent)
 
     # 6a. finding аудита (P0.5): проверки могли намутить дерево (build-артефакты, lock-файлы) —
     #     тогда собранный evidence уже не отражает закоммиченный SHA. Фиксируем факт, не скрываем.
@@ -364,16 +378,16 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
     # tracked-правки от проверок по-прежнему делают дерево грязным (evidence-целостность сохранена).
     tree_clean_after_checks = _tree_clean_after_checks(work_root) if (commit and is_git) else None
 
-    # 6b. intake-evidence из сигналов: классификация УЖЕ произошла (task_type/size/risk в signals) —
-    #     это реальный evidence для intake_completeness, а не фабрикация (finding живого прогона).
+    
+    
     gate_ev = dict(coll["gate_evidence"])
     intake = _intake_evidence(signals)
     if intake:
         gate_ev.setdefault("intake_completeness", intake)
-    # v3.30 (раунд C, T1/T2/T4): доказательство того, что правка ЧИНИТ. Тест из коммита прогоняется
-    # на БАЗОВОЙ ревизии и обязан там упасть — иначе он не покрывает исправление. Считаем только
-    # когда есть что сравнивать (коммит на git-дереве); сбой самой проверки не роняет прогон, а
-    # честно уходит в unverifiable.
+    
+    
+    
+    
     regression_proof = None
     if commit and is_git and committed_sha:
         try:
@@ -391,15 +405,15 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
     for _gid, _ev in (authored_ev or {}).items():
         gate_ev.setdefault(_gid, _ev)
 
-    # v3.8.3 reevaluate-only: SHA НЕ менялся -> артефакт-гейты (requirements/specification/plan_readiness)
-    # пере-выводим ДЕТЕРМИНИРОВАННО из существующих на диске артефактов (без модели, без чтения
-    # клоббер-подверженного run-report). code_review переподтверждается ревью на том же SHA (--review).
-    # security НЕ сеем — переоценим ниже с человеко-approval. setdefault -> не перетираем свежий
-    # impl_verification из evidence_collector.
+    
+    
+    
+    
+    
     if reevaluate_only:
-        # (1) primary: персистированное build-evidence по committed_sha (включая model-вердикт code_review) —
-        # НЕ ре-ревьюим (недетерминизм) и не зависим от клоббер-подверженного run-report;
-        # (2) fallback: детерминированный re-derive артефакт-гейтов из существующих на диске артефактов.
+        
+        
+        
         try:
             import json as _json
             _rep = Path(child_root) / ".ai" / f"reevaluate-evidence-{wid}.json"
@@ -409,18 +423,18 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
                     for _gid, _ev in (_rj.get("gate_ev") or {}).items():
                         if _gid != "security":
                             gate_ev.setdefault(_gid, _ev)
-        # Решение о подавлении ЗАПИСАНО (ревизия 2026-08-11): это ЧТЕНИЕ кеша переоценки, чистая
-        # оптимизация. Его утрата безвредна по построению — гейты просто пересчитаются заново, и
-        # ни одно утверждение о них не станет менее доказанным. Поэтому здесь `pass` уместен, в
-        # отличие от учёта usage и lifecycle-журнала, где терялась АУДИТ-запись.
+        
+        
+        
+        
         except Exception:  # noqa: BLE001,S110 — потеря кеша не меняет вердикт, пересчитаем
             pass
         for _gid, _ev in _reevaluate_artifact_evidence(work_root, wid, plan["gates"]).items():
             gate_ev.setdefault(_gid, _ev)
 
-    # 6c. «умное ослабление» (v2.61): инструмента нет в подтверждённом стеке -> флаг освобождается
-    #     (build/lint/typecheck). tests — особый случай: по умолчанию тоже освобождаем + громкий
-    #     warn; policy allow_missing_tests=False эскалирует до блока (untested -> not ready).
+    
+    
+    
     exempt = set(coll.get("not_applicable") or [])
     tests_warn = None
     if coll.get("tests_absent"):
@@ -431,8 +445,8 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
             exempt.discard("tests_passed")   # тесты обязательны -> гейт заблокирует
             tests_warn = "нет тестов, а require_tests -> implementation_verification блокирует"
     not_applicable = {"implementation_verification": exempt}
-    # Причина освобождения едет ВМЕСТЕ с ним (B2-08): без неё отчёт называет «нет инструмента в
-    # стеке» даже там, где инструмент есть и просто не нужен — изменение только документации.
+    
+    
     exempt_reason = {"implementation_verification": coll.get("not_applicable_reason")}
 
     # 6d. v2.83 Full RunPlan: постадийный НЕЗАВИСИМЫЙ ревью для ai-review гейтов плана
@@ -449,22 +463,22 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
     if calibrated_enforcement and ui_evidence is None and committed_sha:
         try:
             _changed = _committed_changed_files(work_root, committed_sha)
-            # v3.11.0 UI Evidence Readiness: UI-CI ТОЛЬКО при изменении UI-файлов ИЛИ VISUAL-задаче.
-            # Иначе — skip (не применимо; НЕ маскируем — просто не гоняем UI-CI зря на не-UI изменении).
+            
+            
             from ai_ops_kit.ui import ui_readiness as _uir
             _ui_run, _ui_reason = _uir.should_run_ui_evidence(_changed, signals)
             if not _ui_run:
                 ui_evidence, ui_evidence_bundle = None, None
             else:
-                # v3.7 UI-CI: собрать РЕАЛЬНЫЙ UI-evidence на committed_sha (vitest interaction + axe a11y +
-                # storybook visual). Не-UI child / нет артефактов -> build_bundle честно вернёт not_run/absent.
+                
+                
                 try:
                     from ai_ops_kit.ui import ui_evidence_collect
                     ui_evidence_collect.collect(work_root, committed_sha)
-                # Причина подавления ЗАПИСАНА (срез engine ратчета 2026-08-12): сбор UI-evidence не
-                # выдаёт вердикт — вердикт выдаёт `evidence_for_gate` ниже, и он fail-closed:
-                # не собрали -> `ui_evidence=None` -> гейт НЕ освобождён. Пропущенный сбор не может
-                # превратиться в зелёное, он превращается в незакрытый гейт.
+                
+                
+                
+                
                 except Exception:   # noqa: BLE001,S110 — не собрали -> гейт не освобождён (fail-closed ниже)
                     pass
                 ui_evidence_bundle = storybook_adapter.build_bundle(work_root, changed_files=_changed)
@@ -473,10 +487,10 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
         except Exception:   # noqa: BLE001 — сбой сбора evidence не освобождает гейт (ui_evidence=None)
             ui_evidence, ui_evidence_bundle = None, None
 
-    # v3.7.4 SEAM-SCAN (ADVISORY, non-blocking до обкатки): детектор «дефекта шва» по дифу base..committed.
-    # Surfaces тихие швы (запись без round-trip / catch без happy-path / stub без real-run / optional-поле
-    # в контракте / смена предусловия без аудита вызывающих). НЕ блокирует (advisory); станет gate после
-    # обкатки на child. Экономия/скорость НЕ ослабляют проверку (ADR-004).
+    
+    
+    
+    
     seam_advisory = _seam_scan_advisory(work_root, base_sha, committed_sha)
 
     reviews = None
@@ -486,21 +500,21 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
                                         calibrated_enforcement=calibrated_enforcement,
                                         ui_evidence=ui_evidence, child_root=child_root)
     elif committed_sha:
-        # #570 follow-up (живой прогон 07.09): без `--review` (штатный resume/reevaluate, 0
-        # model-вызовов) записанный оркестратором вердикт всё равно ПОТРЕБЛЯЕТСЯ. artifact-first не
-        # должен жить только внутри провайдерного пути `_run_reviews` — иначе валидный вердикт-артефакт
-        # не закрывал code_review на reevaluate, хотя load_verdict его принимает. Провайдер здесь НЕ
-        # вызывается; заземление и writer≠judge — те же (0 false-green).
+        
+        
+        
+        
+        
         gate_ev, reviews = _consume_handoff_verdicts(
             work_root, plan["gates"], gate_ev, signals, committed_sha, child_root=child_root,
             calibrated_enforcement=calibrated_enforcement, ui_evidence=ui_evidence)
-        # Контракт `reviews`: None = ревью не проводилось. Пустой потреблённый список (вердикта-
-        # артефакта не было) == ревью не было -> None, иначе `report.reviews is None`-инвариант без
-        # ревьюера валится, а гейты при этом и так остаются как есть (потребления не случилось).
+        
+        
+        
         reviews = reviews or None
 
-    # 6e. v2.95 -> v2.101 Security Pack: доменный security-вердикт -> gate_ev['security'].
-    #     v3.38 (K6): тело вынесено в _evaluate_security (модуль pipeline_readiness, реэкспорт выше).
+    
+    
     gate_ev, security_pack_result, effective_approval_signals = _evaluate_security(
         work_root, child_root, wid, committed_sha, is_git, gate_ev, signals,
         review=review, strict_judge_qualified=strict_judge_qualified,

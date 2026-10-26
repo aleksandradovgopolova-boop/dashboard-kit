@@ -20,7 +20,7 @@ def _review_fix_context(rep):
     if not isinstance(rep, dict) or rep.get("ready_for_pr"):
         return None
     ov, err = rep.get("overall_status"), (rep.get("error") or "").lower()
-    # НЕ-фиксируемые классы: не зацикливаем
+    
     if ov == "blocked-preflight" or any(w in err for w in
             ("human", "approval", "переписан", "fast-forward", "lifecycle", "повреждён", "replan", "base-")):
         return None
@@ -44,17 +44,17 @@ def _review_fix_context(rep):
                 if tail:
                     break
             parts.append(f"[проверка {name}] упала:\n{tail}".rstrip())
-    # NO-VERDICT vs КОД (issue #577, поле 07.09.2026): тот же класс, что env-скип выше. Ревью, закрытое
-    # `closed_as="refused"` (независимый ревьюер не вынес разбираемого вердикта / провайдер судьи отказал —
-    # см. pipeline_evidence._run_reviews через evidence_from_no_verdict/evidence_from_judge_refusal), несёт
-    # status fail/warn, но перезапуск ПИСАТЕЛЯ его починить НЕ может: refused — сигнал «ревьюер молчит/
-    # недоступен», а не «код плохой». Прежде такая запись шла писателю как обычный блокер, и fix-loop
-    # (ai_ops_run_exec) перезапускал пайплайн → снова _run_reviews → снова спавн `claude -p` (ревьюера):
-    # (fix_attempts+1)×гейты×reads×медленный subprocess = часы, PR не открывался (живой заезд wow-repo).
-    # Пропускаем refused: если он ОСТАЛСЯ единственным блокером, parts пуст → None → fix-loop делает break
-    # → прогон честно завершается NOT_READY с уже названной причиной, БЕЗ повторного спавна ревьюера.
-    # Содержательный fail/warn с реальными блокерами (closed_as "blocked"/"advisory") писателя ретраит как
-    # раньше — фильтр по closed_as, а не по status, именно чтобы не убить полезный ретрай.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     for rv in (rep.get("reviews") or []):
         if rv.get("closed_as") == "refused":
             continue   # ревьюер не вынес вердикт — писатель это не чинит, не зацикливаем
@@ -75,10 +75,10 @@ def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, mod
                                context_hybrid, base_binding, task_text):
     """Артефакты контекста (bundle/payload/hybrid/spec/work-package); ошибки не гаснут —
     копятся в lifecycle_errors. K6: вынесено из run() без изменения поведения."""
-    # v2.107 (finding аудита): ошибки слоя контекста больше НЕ гаснут молча — фиксируем в
-    # lifecycle_errors и в отчёт (критический слой не должен исчезать без следа).
+    
+    
     lifecycle_errors = []
-    # v2.97 Context Compiler: минимальный релевантный ContextBundle для WorkItem (детерминированно).
+    
     from ai_ops_kit.context import context_compiler
     try:
         bundle = context_compiler.compile_bundle(signals, child_root, plan=plan)
@@ -86,7 +86,7 @@ def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, mod
             yaml.safe_dump(bundle, allow_unicode=True, sort_keys=False), encoding="utf-8")
     except Exception as e:  # noqa: BLE001 — не роняем прогон, но и не молчим
         bundle = None; lifecycle_errors.append(f"context_compiler: {type(e).__name__}: {e}")
-    # v2.108 Operational Context: compiled payload -> реально в prompt модели (context_prelude).
+    
     payload = None
     try:
         payload = context_compiler.build_payload(signals, child_root, plan=plan, bundle=bundle, model=model)
@@ -95,10 +95,10 @@ def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, mod
                            allow_unicode=True, sort_keys=False), encoding="utf-8")
     except Exception as e:  # noqa: BLE001
         payload = None; lifecycle_errors.append(f"context_payload: {type(e).__name__}: {e}")
-    # v3.7.16 Live Context Hybrid FED_TO_MODEL: при --context-hybrid собираем hybrid (mandatory v1 +
-    # разрешённые v2-additions через promotion gate) ДО прогона и РЕАЛЬНО подаём модели (читаем контент
-    # additions из base-состояния child и дописываем к payload). v1 НИКОГДА не теряется; gate не готов
-    # -> v1-only (fail-safe, additions=[]). Раньше hybrid только фиксировался в отчёте post-hoc.
+    
+    
+    
+    
     _hybrid_prelude = (payload or {}).get("text")
     _hybrid_fed = None
     if context_hybrid and payload:
@@ -114,20 +114,20 @@ def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, mod
             _pol_refs = [p.get("id") for p in (_afp, _dcp) if isinstance(p, dict) and p.get("id")]
             _budget = _ce.budget_tokens_from(_bud)
             _base_sha = base_binding.get("base_sha")
-            # v3.7.1 (#3) EXACT-SNAPSHOT: require_snapshot=True -> content читается ТОЛЬКО если child
-            # РОВНО на base_sha и дерево чисто; иначе view invalid -> hybrid v1-only (не подаём
-            # возможно-несоответствующий base_sha контент). Ровно exact-SHA дисциплина.
+            
+            
+            
             _hyb = _chyb.build_hybrid_from_child(
                 child_root, task_text, "executor", sha=_base_sha, afp=_afp, dcp=_dcp,
                 v1_mandatory=_mand, rule_refs=_rule_refs, policy_refs=_pol_refs,
                 budget=_budget, require_snapshot=True)
             _adds = _hyb.get("v2_additions") or []
-            # не кормим модель служебными артефактами кита (features/lifecycle, .ai/) — только реальный код/доки
+            
             _adds = [f for f in _adds if not (f.startswith("features/") or f.startswith(".ai/"))]
             _fed, _dropped = [], []
             if _hyb.get("mode") == "hybrid" and _adds:
-                # v3.7.1 (#3) ПОЛНЫЙ token budget: считаем весь prompt (v1 payload + additions) против
-                # hard-window; additions, не влезающие в бюджет, ДРОПАЕМ (не раздуваем hard-window).
+                
+                
                 _base_txt = (payload or {}).get("text") or ""
                 _used = len(_base_txt) // 4
                 _hard = _budget if isinstance(_budget, int) and _budget > 0 else 20000
@@ -153,11 +153,11 @@ def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, mod
         except Exception as _e:  # noqa: BLE001 — hybrid feed не должен ронять прогон
             _hybrid_fed = {"kind": "ContextHybrid", "error": f"hybrid feed failed: {type(_e).__name__}: {_e}"[:300],
                            "fed_to_model": False}
-    # v2.98 Adaptive Spec-First: уровень спецификации (L0..L3) по сигналам + эскалация по риску.
+    
     from ai_ops_kit.gates import spec_levels
     try:
-        # v2.110 Real Spec-First: coverage из РЕАЛЬНЫХ артефактов (features/<fid>/spec.yaml +
-        # засчёт requirements/plan/openspec), а не из сигналов с пустым provided.
+        
+        
         _wt_pre = child_root / ".ai" / "worktrees" / fid
         spec_cov = spec_levels.assess_from_artifacts(
             signals, child_root, fid, work_root=(_wt_pre if _wt_pre.is_dir() else None))
@@ -165,7 +165,7 @@ def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, mod
             yaml.safe_dump(spec_cov, allow_unicode=True, sort_keys=False), encoding="utf-8")
     except Exception as e:  # noqa: BLE001
         spec_cov = None; lifecycle_errors.append(f"spec_levels: {type(e).__name__}: {e}")
-    # v2.100 Atomic Planning: оценка размера пакета + нужна ли декомпозиция по контекстному бюджету.
+    
     from ai_ops_kit.engine import atomic_planner
     try:
         # v2.111: decompose — при необходимости строит КОНКРЕТНЫЕ WorkPackages (не только оси).
@@ -189,9 +189,9 @@ def _add_context_reports(rep, *, bundle, payload, spec_cov, work_pkg, context_sh
                                  "agents": bundle["included"]["agents"],
                                  "rules": bundle["included"]["rules"],
                                  "excluded_count": len(bundle["excluded"])}
-    # v3.6.4 SHADOW-wiring (по умолчанию OFF): Context Engine v2 shadow-view РЯДОМ с боевым v1.
-    # Execution по-прежнему на v1 (context_compiler); shadow — чистая наблюдаемость перед
-    # промоушеном retrieval в runtime. Полностью guarded: сбой shadow не влияет на прогон.
+    
+    
+    
     if context_shadow:
         try:
             from ai_ops_kit.context import context_shadow as _cshadow
@@ -211,7 +211,7 @@ def _add_context_reports(rep, *, bundle, payload, spec_cov, work_pkg, context_sh
                 _content_root, task_text, role="executor", sha=_csha,
                 policy_root=child_root, v1_mandatory=_mandatory, require_snapshot=True)
         except Exception as _e:  # noqa: BLE001 — shadow не должен ронять прогон
-            # честно фиксируем реальную причину (не влияет на execution=v1) — иначе баг wiring немой
+            
             rep["context_shadow"] = {"error": f"shadow build failed: {type(_e).__name__}: {_e}"[:300]}
     # v3.7.16: hybrid собран ДО прогона и РЕАЛЬНО подан модели (см. hybrid_fed выше). Записываем что
     # именно было fed_to_model (mode/additions/references), а не пересобираем post-hoc. v1 не теряется.
@@ -249,8 +249,8 @@ def _enrich_run_report(rep, *, runtime, provider_name, provider_resolution, chil
                        preflight):
     """Provenance-поля отчёта (runtime/provider/model/base/preflight/resume/lifecycle-dict).
     K6: вынесено из run() без изменения поведения; мутирует rep на месте."""
-    # _profile_for_report остаётся в ai_ops_run (используется и forbidden-функциями/тестами) —
-    # тянем лениво, чтобы не замкнуть импорт ai_ops_run <-> ai_ops_run_reporting.
+    
+    
     from ai_ops_kit.engine.ai_ops_run import _profile_for_report
     rep["runtime"] = runtime
     rep["engine"] = "pipeline"
@@ -259,8 +259,8 @@ def _enrich_run_report(rep, *, runtime, provider_name, provider_resolution, chil
     # (синтетические отчёты тестов и минимальные отчёты честно видят полную стену).
     rep["child_root"] = str(child_root)
     rep["provider"] = provider_name
-    # P0-1 side-effect proof: КАК выбран провайдер — в отчёте (и в run-report.json на диске),
-    # а не только в stdout: иначе решение резолва невозможно проверить постфактум.
+    
+    
     if provider_resolution:
         rep["provider_resolution"] = dict(provider_resolution)
     # P1-3: обогащаем профиль движка (там stacks — только языки) человекочитаемым display
@@ -277,7 +277,7 @@ def _enrich_run_report(rep, *, runtime, provider_name, provider_resolution, chil
             _last["outcome"] = ("verified" if rep.get("ready_for_pr")
                                 else "not_ready:" + ",".join((rep.get("gates") or {}).get("unmet") or []))
     _eff = model_resolution.get("effective_model") if isinstance(model_resolution, dict) else None
-    # v3.7.12/rc3: model = РЕАЛЬНО завершившая модель (effective), не только первоначальная.
+    
     rep["model"] = _eff or (writer_model if (isinstance(model_resolution, dict) and model_resolution.get("applied")) else model)
     if isinstance(model_resolution, dict) and model_resolution.get("applied"):
         rep["initial_model"] = model_resolution.get("initial_model")
@@ -297,8 +297,8 @@ def _enrich_run_report(rep, *, runtime, provider_name, provider_resolution, chil
     # на живом провайдере она вводит в заблуждение (предложитель УЖЕ живой). Честный отчёт.
     if provider_name and provider_name != "mock" and isinstance(rep.get("not_yet"), list):
         rep["not_yet"] = [n for n in rep["not_yet"] if "живой предложитель" not in n]
-    # v2.109 Real Resume: если продолжали — честно фиксируем в отчёте preflight-контекст (в т.ч.
-    # что ревалидация требовалась и была осознанно переопределена --force), не только факт reuse.
+    
+    
     if resume and isinstance(rep.get("resume"), dict):
         rep["resume"]["preflight_reasons"] = pf["reasons"]
         rep["resume"]["revalidation_needed"] = pf["revalidation_needed"]

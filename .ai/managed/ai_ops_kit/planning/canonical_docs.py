@@ -14,10 +14,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-# Частые места архитектурного документа. Канонический — корневой `ARCHITECTURE.md` (стандарт кита);
-# остальные — где дочки реально его держат (ii-среда: `docs/architecture/ARCHITECTURE.md`, 842 строки,
-# «единственный источник правды»). Порядок: канонический корень первым — потребители, берущие
-# «первый существующий», предпочтут его. Все пути литеральные (без glob).
+
+
+
+
 ARCHITECTURE_PATHS = (
     "ARCHITECTURE.md",
     "docs/ARCHITECTURE.md",
@@ -29,10 +29,10 @@ ARCHITECTURE_PATHS = (
     "context/system/RepositoryMap.md",
 )
 
-# Частые места документа безопасности. Канонический — корневой `SECURITY.md`; остальные — где дочки
-# реально держат политику/архитектуру безопасности (ii-среда: `docs/security/security-policy.md`,
-# `docs/security/security-architecture.md`, `docs/quality/SECURITY_CHECKLIST.md`). Записи с `*` —
-# glob по дереву дочки.
+
+
+
+
 SECURITY_PATHS = (
     "SECURITY.md",
     "docs/SECURITY.md",
@@ -42,8 +42,8 @@ SECURITY_PATHS = (
     "docs/quality/SECURITY*",
 )
 
-# Маркеры кит-черновика: back-fill ставит `status: draft` и текст «Это заготовка». Документ дочки с
-# такими маркерами — не «существующий реальный», а прежний посев кита; его наличие не отменяет посева.
+
+
 _DRAFT_MARKERS = ("status: draft", "Это заготовка")
 
 
@@ -79,7 +79,7 @@ def find_existing(root, patterns) -> str | None:
     return None
 
 
-# Артефакт стандарта (basename корневого канонического файла) -> частые места того же смысла.
+
 _PATHS_BY_ARTIFACT = {
     "ARCHITECTURE.md": ARCHITECTURE_PATHS,
     "SECURITY.md": SECURITY_PATHS,

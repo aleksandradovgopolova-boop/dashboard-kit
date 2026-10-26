@@ -25,8 +25,8 @@ from pathlib import Path
 
 import yaml
 
-# Кандидаты в порядке приоритета; первый существующий и управляемый выигрывает.
-# Явный `living_status.doc` из .ai-ops.yaml добавляется перед ними.
+
+
 _DEFAULT_CANDIDATES = ("context/product/ProductStatus.md", "PROJECT_STATUS.md")
 
 _DELIVERY_HEADING = "## Журнал доставки (AI Ops)"
@@ -68,7 +68,7 @@ def _is_managed(md: str) -> bool:
     fm = _frontmatter(md)
     if fm.get("template") is True:
         return False
-    # Конвенция свежести: документ размечен reviewed_at или stability (иначе freshness к нему неприменим).
+    
     return ("reviewed_at" in fm) or ("stability" in fm)
 
 
@@ -105,7 +105,7 @@ def _bump_reviewed_at(md: str, today: str) -> str:
     if _REVIEWED_RE.search(fm_block):
         new_fm = _REVIEWED_RE.sub(lambda mm: f"{mm.group(1)}reviewed_at: {today}", fm_block, count=1)
     else:
-        # добавить строку в конец frontmatter (перед закрывающим ---)
+        
         new_fm = fm_block.rstrip("\n") + f"\nreviewed_at: {today}\n"
     return md[:m.start(2)] + new_fm + md[m.end(2):]
 
@@ -115,7 +115,7 @@ def _append_entry(md: str, entry: str) -> str:
     line = f"- {entry}"
     idx = md.find(_DELIVERY_HEADING)
     if idx != -1:
-        # вставить сразу после строки заголовка (свежие записи сверху)
+        
         eol = md.find("\n", idx)
         if eol == -1:
             return md + f"\n{line}\n"

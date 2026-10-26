@@ -63,7 +63,7 @@ def extract_python_cli_argparse(parsed: ParsedFile) -> list:
     return out
 
 
-# Атрибуты-декораторы click, объявляющие команду: @click.command/@click.group, @cli.command и т.п.
+
 _CLICK_COMMAND_ATTRS = frozenset({"command", "group"})
 
 
@@ -95,10 +95,10 @@ def _click_command_name(dec: ast.expr, func_name: str) -> str | None:
         return name_kw.value.value
     if explicit:
         return None  # явное имя задано, но не литерал — доказать нельзя, пропускаем (симметрия с argparse)
-    # Без явного имени click образует имя из имени функции ДЕТЕРМИНИРОВАННО (проверено на click 8.5.0):
-    # `name.lower().replace("_","-")`, затем срезает хвостовой суффикс command/cmd/group/grp по `-`.
-    # Хвостовой `_` при этом НЕ срезается (list_ -> "list-"). Воспроизводим точно, чтобы symbol под
-    # verified совпадал с реальной командой click.
+    
+    
+    
+    
     name = func_name.lower().replace("_", "-")
     left, sep, suffix = name.rpartition("-")
     if sep and suffix in {"command", "cmd", "group", "grp"}:
@@ -129,12 +129,12 @@ def extract_python_cli_click(parsed: ParsedFile) -> list:
     return out
 
 
-# ─── console_scripts (объявленные точки входа) ───────────────────────────────────────────────────
-# Имя команды в [project.scripts]/[project.gui-scripts]/[tool.poetry.scripts] (pyproject.toml) или
-# в console_scripts/gui_scripts секции [options.entry_points] (setup.cfg) — ОБЪЯВЛЕННАЯ точка входа
-# дистрибутива, доказуемо verified. Текстовый разбор, БЕЗ `tomllib` (он 3.11+, а пол кита — 3.9;
-# собственный validate_python_compat этот импорт отклоняет): один построчный сканер, один ответ на
-# всех версиях. Битый файл — пропуск (см. изоляцию в extract_surfaces).
+
+
+
+
+
+
 
 _SECTION_RE = re.compile(r"^\s*\[\s*([^\]]+?)\s*\]\s*$")
 _TOML_SCRIPT_SECTIONS = frozenset({"project.scripts", "project.gui-scripts", "tool.poetry.scripts"})

@@ -5,7 +5,7 @@
 schema_version: 1
 registry_type: release-claims
 
-version: 4.3.2
+version: 4.11.4
 # Поле `phase` УБРАНО (04.09.2026, лента release-metadata). Это была свободная проза релиза, которая
 # дублировала заголовок раздела CHANGELOG. `release_bump` бампает ЧИСЛО версии по всем поверхностям и
 # пишет заголовок CHANGELOG из `--title`, но `phase` не трогал, а `validate_release_claims` проверяет
@@ -22,7 +22,13 @@ version: 4.3.2
 # Теперь `stable` требует ПОЛЕВЫХ доказательств на этой самой версии, и это проверяет
 # `validate_release_claims`. Критерии ниже машиночитаемы; менять их — осознанное решение владельца,
 # а не правка строки.
-channel: stable
+#
+# 2026-09-16 (v4.4.0): свежий минор 4.4 (P0-кампания продуктового ревью) в поле НЕ обкатан —
+# field_evidence для минора 4.4 пусто, поэтому честный канал тега v4.4.0 — `qualification` (свой CI
+# зелёный, в дочки не обкатан). Минор 4.3 остаётся заработанным stable по своим тегам (cockpit +
+# live-587, ниже), и дочки на stable-политике продолжают резолвиться на 4.3.x. Промоут 4.4 в stable —
+# после живого внешнего прогона (P0 №7 направления one-feature-end-to-end), который и даст field_evidence.
+channel: qualification
 channels:
   edge:
     what: "то, что влито в main; лучший известный код, но без гарантий"
@@ -144,6 +150,49 @@ field_evidence:
       которого требует только что установленный `ai-ops-codeql.yml`. Это включаемая настройка
       репозитория владельцем, к обновлению отношения не имеет; защиты веток нет, красный CodeQL
       слияние не блокировал.
+  # 16.09.2026. ПЕРВОЕ полевое доказательство минора 4.4 (ии-среда). Для промоута 4.4 в stable нужен
+  # ВТОРОЙ живой репо на 4.4 — пока только один, поэтому канал остаётся qualification.
+  - repo: ii-sreda
+    version: 4.4.2
+    date: '2026-09-16'
+    outcome: ok
+    how: >-
+      Обновление до 4.4.2 приехало ПО ПОЛИТИКЕ дочки (`update_policy: pr`, канал `qualification`): PR
+      #877 (update AI Ops Kit → 4.4.2), managed-слой целостен. На этой установке (тег, не PYTHONPATH)
+      владелец провёл живой прогон — несколько реальных фич через кит, кит нигде не показал технику;
+      проверка `storybook-preview` (падавшая на старом шаблоне) зелёная. Полевые фиксы v4.4.1/v4.4.2
+      (Storybook-имя скрипта, отмена устаревших CI-прогонов + кэш) подтверждены в поле.
+    caveat: >-
+      Прогон owner-led (владелец, не «человек совсем со стороны»); засчёт направления
+      one-feature-end-to-end сделан владельцем. Отчёт: qualification/ONE-FEATURE-EXTERNAL-RUN-ii-sreda-2026-09-16.md.
+  - repo: ii-sreda
+    version: 4.10.0
+    date: '2026-10-06'
+    outcome: ok
+    how: >-
+      Обновление 4.9.3 -> 4.10.0 из тега v4.10.0 (593acf28c802) доставлено PR #1103;
+      все 15 PR checks успешны, merge f28f0c4d675c. На main 682 managed-файла без
+      расхождений SHA256; doctor/validate/next exit 0. Сохранены qualification/pr,
+      auto_update=false, диапазон и self-hosted раннеры. Подробности:
+      qualification/FIELD-UPDATES-4.10.0-2026-10-06.md.
+    caveat: >-
+      Обкатка установки, не доказательство качества модели или продуктовой пользы.
+      Замечания kit-doctor о документации и старом долге поставки не скрыты.
+      main CodeQL, secret-scan и продуктовый CI успешны; advisory OpenSSF Scorecard
+      не выполнен: контейнер linux/amd64 несовместим с ARM64-раннером (run 37438141493).
+  - repo: personal-cosmic-book
+    version: 4.10.0
+    date: '2026-10-06'
+    outcome: ok
+    how: >-
+      Обновление 4.9.3 -> 4.10.0 из того же релизного тега доставлено PR #17;
+      все PR checks и девять main workflow успешны, merge f0d5eb487851.
+      На main 682 managed-файла без расхождений SHA256; doctor/validate/next exit 0;
+      продуктовые тесты 33 passed, 1 skipped. Политика qualification/pr и контекст
+      сохранены. Подробности: qualification/FIELD-UPDATES-4.10.0-2026-10-06.md.
+    caveat: >-
+      Живые книги, внешние провайдеры, платежи и бизнес-эффект не проверялись.
+      Старые заготовки архитектуры/безопасности остаются ограничениями.
 # patch_note ПЕРЕЕХАЛ в `registry/release-notes.yaml` (20.08.2026, работа
 # `release-claims-stays-in-the-kit`): 61 336 Б релизной прозы — 75% этого файла — ехали в
 # каждую дочку, где их не читает ни одна строка кода. Здесь остался тот, кого дочка
@@ -269,11 +318,21 @@ evidence_scopes:
   full-current-python:
     obtained_by: "./scripts/check-full.sh"
     covers: >
-      весь pytest на ОДНОМ интерпретаторе — том, что стоит у запускающего. Это охват разработчика:
+      весь pytest, кроме release_gate, на ОДНОМ интерпретаторе — том, что стоит у запускающего.
+      Включает nightly; release_gate исполняется только CI выпуска. Это охват разработчика:
       быстрый, локальный, и он ничего не знает о версиях, кроме своей.
     does_not_cover: >
       объявленный пол requires-python, установку в чистое окружение, другие ОС. Ни один дефект
       совместимости здесь не виден в принципе — не потому что их нет, а потому что не с чем сравнить.
+  pr-current-python:
+    obtained_by: "./scripts/check-full.sh --pr"
+    covers: >
+      все обычные fast/slow/contracts на ОДНОМ локальном интерпретаторе; ruff и pytest.
+      Явный PR-профиль без пользовательских selectors; не заменяет обязательный CI.
+    does_not_cover: >
+      nightly (весь мутационный корпус и агрегатный bench), release_gate, compatibility-matrix.
+      Выпуск требует actual mutation CI на точном release SHA до тега и все release gates;
+      обычный зелёный PR или локальный профиль не подтверждают готовность выпуска.
   compatibility-matrix:
     obtained_by: "CI: джобы python39-compat, pipeline-e2e (3.9/3.12), clean-install"
     covers: >

@@ -31,12 +31,12 @@ PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is
 MODEL_REL = "registry/decision-boundary.yaml"
 
 AUTONOMOUS, COLLABORATIVE, ASSISTED = "AUTONOMOUS", "COLLABORATIVE", "ASSISTED"
-# Ранг автономии: выше = больше автономии кита. Нужен для правила «нельзя понизить строгость молча».
+
 _RANK = {ASSISTED: 0, COLLABORATIVE: 1, AUTONOMOUS: 2}
 
-# Fail-closed маппинг на уровни policy_engine, ЕСЛИ реестр недоступен. В норме берётся из реестра
-# (classes[].maps_to_autonomy_level) — единый источник истины; это лишь запасной, чтобы классификатор
-# не падал, а деградировал в более строгую сторону.
+
+
+
 _FALLBACK_LEVEL = {AUTONOMOUS: "execute", COLLABORATIVE: "require_approval", ASSISTED: "suggest"}
 
 

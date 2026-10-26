@@ -27,7 +27,7 @@ from ai_ops_kit.shared import _bootstrap  # noqa: F401
 ISSUE_TYPES = ("feature", "bug", "research", "improvement", "tech-debt", "experiment", "infrastructure")
 _WORD = re.compile(r"[a-zA-Zа-яА-Я0-9_-]+")
 
-# Метки — сильнейший сигнал типа. Ключ — подстрока имени метки в нижнем регистре.
+
 _LABEL_TYPE = {
     "bug": "bug", "defect": "bug", "regression": "bug",
     "feature": "feature", "enhancement": "feature", "feat": "feature",
@@ -38,9 +38,9 @@ _LABEL_TYPE = {
     "infra": "infrastructure", "infrastructure": "infrastructure", "ci": "infrastructure",
     "build": "infrastructure", "ops": "infrastructure", "deployment": "infrastructure",
 }
-# Слабее меток — слова в заголовке. Сопоставляем по СЛОВАМ: stems — совпадение по префиксу
-# ("падает" ← "пад"), exact — целиком (короткие/омонимичные "ci", "add"). Порядок = приоритет.
-# (stems, exact, тип, человекочитаемый сигнал).
+
+
+
 _TITLE_TYPE = [
     # NB: генерик-«починить/fix» намеренно НЕ в bug-стемах — «починить CI» это инфраструктура,
     # а не баг. Bug-сигнал — конкретный сбой (падение, краш, ошибка, регрессия), не любое «чинить».
@@ -62,7 +62,7 @@ _TITLE_TYPE = [
 _PRIORITY_LABEL = re.compile(r"\b(p[0-4]|priority[:\-/ ]?(high|medium|low|critical)|"
                              r"critical|urgent|blocker|high|medium|low)\b", re.I)
 _AREA_LABEL = re.compile(r"^(area|component|module|scope)[:/\-](.+)$", re.I)
-# Ссылки-зависимости в теле: «depends on #12», «blocked by #7», «см. #3».
+
 _DEP_RE = re.compile(r"\b(depends on|blocked by|requires|зависит от|блокируется|after|нужен[оа]?)\b"
                      r"[^#\n]{0,20}#(\d+)", re.I)
 _ANY_REF = re.compile(r"(?<![\w/])#(\d+)\b")
@@ -112,7 +112,7 @@ def infer_area(issue: dict) -> "tuple[str, str]":
         m = _AREA_LABEL.match(str(lb))
         if m:
             return m.group(2).strip(), f"метка области '{lb}'"
-    # Путь в теле как слабый сигнал области (первый упомянутый каталог).
+    
     body = issue.get("body") or ""
     m = re.search(r"`?([a-z_][a-z0-9_]*/[a-z0-9_./]+)`?", body)
     if m:
@@ -176,7 +176,7 @@ def classify_issue(issue: dict) -> Classification:
     impact, impact_why = _level_from_labels(labels, ("impact", "critical", "major"), "impact")
     urgency, urg_why = _level_from_labels(labels, ("urgent", "blocker", "critical"), "urgency")
     effort, eff_why = _level_from_labels(labels, ("epic", "large", "xl"), "effort")
-    # confidence — уверенность классификатора в ТИПЕ: метка = высокая, заголовок = средняя, дефолт = низкая.
+    
     if "метка" in typ_why:
         confidence = "high"
     elif "дефолт" in typ_why:
@@ -243,7 +243,7 @@ def classify_backlog(repo_or_root: str = ".", state: str = "open", client=None) 
                          len(classes), by_type, classes)
 
 
-# ── CLI ───────────────────────────────────────────────────────────────────────────────────────
+
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="backlog_classify.py")

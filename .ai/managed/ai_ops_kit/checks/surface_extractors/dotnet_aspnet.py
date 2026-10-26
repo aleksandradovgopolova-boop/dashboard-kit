@@ -40,50 +40,50 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface
 
-# ─── индикатор ASP.NET Core ───────────────────────────────────────────────────────────────────────
-# Файл считается ASP.NET-бэкендом только при явном индикаторе — иначе одноимённый чужой `[HttpGet]`
-# или `.MapGet(` другого фреймворка/своего кода дал бы ложный маршрут. Индикатор: квалификатор
-# Microsoft.AspNetCore (using/тип), аннотация контроллера/маршрута, либо вызов Minimal-API Map*.
+
+
+
+
 _INDICATOR_RE = re.compile(
     r"Microsoft\.AspNetCore"
     r"|\[ApiController\b"
     r"|\[Http(?:Get|Post|Put|Delete|Patch|Head|Options)\b"
     r"|\bMap(?:Get|Post|Put|Delete|Patch)\s*\(")
 
-# method-атрибуты маршрутов ASP.NET: HTTP-глаголы + `[Route]`. Скобки либо ЗАКРЫТЫ (`(…)`), либо их
-# нет вовсе (атрибут без аргументов); аргументы НЕ пересекают перевод строки (`[^)\n]*`), чтобы обрыв
-# файла (незакрытая `(`) не «дотянулся» до `)` следующего метода и не породил фантомный маршрут.
-# group(1) — HTTP-глагол (или None для `[Route]`); group(2) — тело скобок (или None).
+
+
+
+
 _METHOD_ATTR_RE = re.compile(
     r"\[(?:Http(Get|Post|Put|Delete|Patch|Head|Options)|Route)\b"
     r"(?:\s*\(([^)\n]*)\))?\s*\]")
 
-# class-уровневый `[Route("literal")]`: атрибут с ЛИТЕРАЛЬНЫМ путём, за которым до `class` нет ни `{`,
-# ни `}`, ни `;` (мы всё ещё в блоке атрибутов объявления типа, где допустимы иные атрибуты и
-# модификаторы). group(1) — необязательный verbatim-`@`; group(2) — литерал пути (может нести
-# `[controller]`); group(3) — имя класса (для разрешения токена `[controller]`).
+
+
+
+
 _CLASS_LEVEL_ROUTE_RE = re.compile(
     r'\[Route\(\s*(@?)"([^"\n]*)"\s*\)\][^{};]*?\bclass\s+(\w+)')
 
-# объявление класса (для привязки метода к ближайшему предшествующему классу). group(1) — имя, его
-# start совпадает со start(3) в _CLASS_LEVEL_ROUTE_RE, что даёт общий ключ по позиции имени класса.
+
+
 _CLASS_DECL_RE = re.compile(r"\bclass\s+(\w+)")
 
-# Minimal API: `.MapGet("/p", …)` и семейство. Приёмник не важен (индикатор файла уже проверен).
-# Путь — строковый литерал ("…" или verbatim @"…") ПЕРВЫМ аргументом; переменная/интерполяция `$"…"`
-# после `(` под этот паттерн не подходят → пропуск.
+
+
+
 _MINIMAL_MAP_RE = re.compile(
     r'\bMap(?:Get|Post|Put|Delete|Patch)\s*\(\s*(@?)"([^"\n]*)"')
 
-# позиционный строковый литерал В НАЧАЛЕ аргументов атрибута (positional `"…"` / verbatim `@"…"`).
+
 _POS_STR_RE = re.compile(r'^\s*@?"([^"\n]*)"')
-# интерполяция `$"…"` / `$@"…"` — начинается с `$` → НЕ литерал.
+
 _INTERP_HEAD_RE = re.compile(r'^\s*\$')
-# именованное свойство атрибута первым (`Name = "…"`, `Order = 1`) — позиционного пути НЕТ → префикс.
+
 _NAMED_ARG_HEAD_RE = re.compile(r'^\s*\w+\s*=')
 
-# Результаты разбора аргументов метод-атрибута: "lit" — доказанный литеральный путь; "prefix" — пути
-# нет, маршрут сводится к префиксу класса / корню; "skip" — путь есть, но НЕ литерал → пропуск.
+
+
 _PREFIX = ("prefix", "")
 _CONTROLLER_SUFFIX = "Controller"
 _CONTROLLER_TOKEN_RE = re.compile(r"\[controller\]", re.IGNORECASE)
@@ -163,8 +163,8 @@ def extract_aspnet_routes(parsed: ParsedFile) -> list:
     if _INDICATOR_RE.search(src) is None:
         return []
 
-    # Позиции имён всех классов (для привязки метода к ближайшему предшествующему) и литеральные
-    # class-префиксы, привязанные к позиции имени класса.
+    
+    
     class_starts = sorted((m.start(1), m.group(1)) for m in _CLASS_DECL_RE.finditer(src))
     class_prefix: dict = {}
     class_route_positions: set = set()
@@ -174,8 +174,8 @@ def extract_aspnet_routes(parsed: ParsedFile) -> list:
 
     out: list = []
 
-    # 1) Attribute routing: method-атрибуты (+ class-префикс). class-уровневый `[Route(...)]` пропускаем
-    #    (его start в class_route_positions) — он основа для методов, а не эндпоинт.
+    
+    
     for m in _METHOD_ATTR_RE.finditer(src):
         if m.start() in class_route_positions:
             continue
@@ -189,7 +189,7 @@ def extract_aspnet_routes(parsed: ParsedFile) -> list:
             kind="route", ref=f"{parsed.rel_path}:{_lineno(src, m.start())}|{path_value}",
             confidence="inferred", extractor="aspnet-routes"))
 
-    # 2) Minimal APIs: `MapGet("/p", …)` и семейство — литеральный путь первого аргумента как route.
+    
     for m in _MINIMAL_MAP_RE.finditer(src):
         path_value = _join("", m.group(2))
         out.append(Surface(

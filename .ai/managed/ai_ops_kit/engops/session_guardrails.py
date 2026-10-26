@@ -34,39 +34,39 @@ SESSION_ECONOMY_DEFAULTS = {
     "new_session_recommended_at": 400000,
     "one_task_per_session": True,
     "allow_cross_task_session": False,
-    # ПОТОЛОК СЕССИИ, а не одного прогона (2026-08-13). `engine/budget.py` ограничивает прогон
-    # (max_model_calls/max_cost), `gates/economic_preflight` и ledger — вызовы моделей кита. Ни один
-    # из них не видел главный источник расхода: сессию, которая живёт неделями и на КАЖДОМ ходе
-    # заново оплачивает перечитывание истории. Считается по суммарным токенам всех ходов сессии,
-    # включая кэш-чтения — именно они и есть плата за перечитывание.
-    #
-    # Число стартовое и калибруется, как и пороги контекста. Замер по двум настоящим транскриптам:
-    # рабочая сессия на 45 ходов — 3.5M токенов; сессия, прожившая с 18.07 по 04.08 с девятью
-    # компакциями — 2.9 МЛРД токенов при контексте 405k. Второй случай — ровно тот, который пороги
-    # контекста не ловят: контекст «нормальный» после компакции, а перечитывание уже оплачено.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     "session_token_budget": 20000000,
-    # ПОТОЛОК ПРОЦЕССНОЙ ФАЗЫ (решение владельца 2026-08-17). Отдельный предмет измерения: не
-    # «сколько сессия прочитала всего», а «сколько ушло на ОПИСАНИЕ работы до первой правки кода».
-    # Замер поля (ИИ-Среда, 15.08.2026): две сессии из пяти сожгли по 200 000+ токенов на
-    # `onboard -> specify -> plan` и встали без кода — в потолок сессии (20M) это умещается целиком,
-    # поэтому он такое залипание не видел и увидеть не мог. Механизм — `engops/process_spend.py`.
+    
+    
+    
+    
+    
     "process_spend_ceiling_before_code": 50000,
 }
 
 CONTEXT_STATES = ("normal", "attention", "compact_recommended", "new_session_recommended", "unknown")
 SPEND_STATES = ("normal", "attention", "over_budget", "unknown")
-# отношение следующей задачи к текущей (словарь WP2; здесь принимается как вход)
+
 CONTINUE_RELATIONS = ("same_task", "continuation")
 NEW_RELATIONS = ("new_independent_task", "new_product")
 
 
-# Виды артефактов модуля. Объявлены КОНСТАНТАМИ, потому что по ним идёт разводка проверки:
-# строковый литерал в двух местах — ровно то, чем ошибка «kind должен быть CompletionRitual»
-# и жила.
+
+
+
 RITUAL_KIND = "CompletionRitual"
 RECOMMENDATION_KIND = "SessionRecommendation"
 OUTCOMES = ("continue", "compact", "clear", "new_session", "defer")
-# Исходы, которые велят человеку уйти отсюда: они обязаны нести точную команду.
+
 COMMANDED_OUTCOMES = ("compact", "clear", "new_session")
 
 
@@ -176,15 +176,15 @@ def recommend(snapshot, policy=None, next_relation="new_independent_task",
     ctx_txt = "н/д" if ctx is None else f"{ctx/1000:.0f}k [{snapshot.get('context_status')}]"
     spend_txt = ("н/д" if spent is None
                  else f"{_tok(spent)} из {_tok(p.get('session_token_budget'))} [{spend_state}]")
-    # Каждый исход несёт оба числа: рекомендация, показывающая только контекст, скрывала бы ровно
-    # тот случай, ради которого потолок сессии и появился (контекст после компакции нормальный).
+    
+    
     handoff_txt, handoff_path = _handoff_note(repo_path, snapshot.get("session_id"))
     base = {"kind": RECOMMENDATION_KIND, "schema_version": 1,
             "context_state": state, "context": ctx_txt,
             "spend_state": spend_state, "session_spend": spend_txt,
             "measurement": snapshot.get("context_source") or snapshot.get("context_status"),
-            # Состояние handoff несут ВСЕ исходы, а не только те, что советуют уйти: на `continue`
-            # оно тоже правда о сессии, и молчание о нём читалось бы как «всё записано».
+            
+            
             "handoff": handoff_txt, "handoff_path": handoff_path}
 
     def out(outcome, reason, command=None):
@@ -197,7 +197,7 @@ def recommend(snapshot, policy=None, next_relation="new_independent_task",
 
     same = next_relation in CONTINUE_RELATIONS
 
-    # слишком тяжёлая сессия -> новая сессия ВНЕ зависимости от новизны (гигиена важнее)
+    
     if state == "new_session_recommended" or spend_state == "over_budget":
         why = (f"контекст {ctx_txt} превысил порог новой сессии" if state == "new_session_recommended"
                else f"сессия прочитала {spend_txt} — потолок расхода сессии исчерпан")
@@ -211,7 +211,7 @@ def recommend(snapshot, policy=None, next_relation="new_independent_task",
                    _new_session_cmds(repo_path, next_task))
 
     if same:
-        # продолжение того же WorkItem
+        
         if not task_done and state in ("compact_recommended",):
             return out("compact",
                        f"тот же WorkItem не завершён, контекст {ctx_txt} уже дорогой, логическая "
@@ -221,7 +221,7 @@ def recommend(snapshot, policy=None, next_relation="new_independent_task",
                    f"следующий шаг — тот же WorkItem {wid or ''}, контекст {ctx_txt}; "
                    "собранные знания переиспользуются, повторное исследование не нужно.")
 
-    # новая независимая задача / новый продукт
+    
     if not task_done:
         return out("continue",
                    "текущий WorkItem ещё не завершён — сначала закрыть его, потом переключаться.")
@@ -300,8 +300,8 @@ def check_recommendation(rec):
         e.append(f"исход {outcome!r} без причины — совет, который нельзя ни принять, ни отвергнуть")
     if outcome in COMMANDED_OUTCOMES and not rec.get("command"):
         e.append(f"исход {outcome} обязан нести точную команду (NextCommand)")
-    # Оба числа — часть контракта: рекомендация, показывающая только контекст, скрывала бы ровно
-    # тот случай, ради которого потолок сессии и появился (контекст после компакции нормальный).
+    
+    
     for field in ("context_state", "spend_state"):
         if not str(rec.get(field) or "").strip():
             e.append(f"нет поля {field}: рекомендация обязана называть оба состояния, а не одно")
@@ -353,8 +353,8 @@ def render_block(ritual):
          f"Контекст сессии: {ctx_txt}, ходов: {us['turns']}",
          f"Расход сессии всего: {rec.get('session_spend', 'н/д')}",
          f"Что сохранено: {', '.join(saved) or '—'}",
-         # Состояние handoff названо ОТДЕЛЬНОЙ строкой, а не только галочкой в списке: галочку
-         # читают как формальность, а потеря контекста сессии — это потеря труда.
+         
+         
          f"Handoff сессии: {rec.get('handoff') or 'н/д'}",
          f"Рекомендация: {rec['outcome'].upper()} — {rec['reason']}"]
     if rec.get("command"):
@@ -387,7 +387,7 @@ def main(argv):
     root = args[0] if args else "."
     pol = load_policy(root)
     snap = session_telemetry.snapshot(root, workitem_id=wid, context_current=ctx)
-    # v3.17.0 WP2: если отношение не задано явно, но есть текст следующей задачи — классифицируем.
+    
     if not nrel and nxt:
         try:
             from ai_ops_kit.engops import session_boundary
@@ -397,11 +397,11 @@ def main(argv):
     rit = completion_ritual(snap, pol, workitem_id=wid, pr=pr, checks=checks,
                             next_relation=nrel or "new_independent_task", next_task=nxt,
                             at_safe_boundary=not unsafe, repo_path=str(Path(root).resolve()))
-    # ПРОВЕРКА НА СОБСТВЕННОМ ПУТИ, а не только в тестах. Работа `session-ritual-validators-are-dead`
-    # объявила «check() зовётся на каждом produced-артефакте», и это была правда для тестов и
-    # неправда для команды: `./ai-ops session` идёт СЮДА (через установщик), и здесь ритуал печатался
-    # непроверенным. Ошибка — предупреждение, а не отказ: команда read-only, и владелец должен
-    # увидеть проблему, а не потерять ответ.
+    
+    
+    
+    
+    
     for err in check(rit) + check_recommendation(rit.get("session_recommendation")):
         print(f"session-check: {err}", file=sys.stderr)
     print(json.dumps(rit, ensure_ascii=False, indent=2) if "--json" in argv else render_block(rit))

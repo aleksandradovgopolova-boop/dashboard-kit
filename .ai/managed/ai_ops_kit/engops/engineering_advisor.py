@@ -33,7 +33,7 @@ def _env_recommendation(child_root):
         maturity = deploy.get("deploy_maturity", "absent")
         envs = env_map.get("environments", [])
         kinds = {e.get("kind") for e in envs if e.get("kind")}
-        # Рекомендация progression
+        
         if maturity == "absent":
             recs.append({
                 "priority": 1, "category": "environment",
@@ -73,7 +73,7 @@ def _env_recommendation(child_root):
                           "Текущая конфигурация безопасна.",
                 "source": "deploy_readiness",
             })
-        # Findings
+        
         for f in env_map.get("findings", []):
             recs.append({
                 "priority": 1, "category": "environment",
@@ -96,17 +96,17 @@ def _delivery_plan(child_root, task_type=None):
     from ai_ops_kit.engops import branch_policy
     recs = []
     try:
-        # единая точка детекции: свежий кеш профиля или пере-детект при изменившихся манифестах
+        
         profile = project_detector.load_or_detect(child_root)
         stacks = profile.get("stacks", [])
-        # Branch strategy
+        
         recs.append({
             "priority": 2, "category": "delivery_plan",
             "advice": "Branch strategy: создавайте ветку `ai-ops/<workitem-id>` от свежей main. "
                       "Один WorkItem на ветку. Доставка только через PR (не direct commit).",
             "source": "branch_policy",
         })
-        # Commit boundaries
+        
         recs.append({
             "priority": 2, "category": "delivery_plan",
             "advice": "Commit boundaries: один коммит = один revertible шаг. Не смешивайте зоны "
@@ -114,7 +114,7 @@ def _delivery_plan(child_root, task_type=None):
                       "Не коммитьте .env, ключи, runtime artifacts.",
             "source": "commit_policy",
         })
-        # Affected tests
+        
         for stack in stacks:
             lang = stack.get("language", "unknown")
             cmds = stack.get("commands", {})
@@ -133,7 +133,7 @@ def _delivery_plan(child_root, task_type=None):
                               "Рассмотрите добавление тестов для критичного кода.",
                     "source": "project_detector",
                 })
-        # Deploy/rollback
+        
         from ai_ops_kit.gates import deploy_readiness
         deploy = deploy_readiness.assess(child_root)
         maturity = deploy.get("deploy_maturity", "absent")
@@ -152,7 +152,7 @@ def _delivery_plan(child_root, task_type=None):
                               "Без отката verified недостижим.",
                     "source": "deploy_readiness",
                 })
-        # Feature flag
+        
         tt = (task_type or "").upper()
         if tt in ("PRODUCT", "CRITICAL"):
             recs.append({
@@ -204,7 +204,7 @@ def _economic_alternatives(child_root, task_type=None):
                           "Начните с QUICK-задачи для калибровки.",
                 "source": "economic_preflight",
             })
-        # Verdict-based advice
+        
         v = verdict.get("verdict", "proceed")
         if v == "confirm_required":
             recs.append({
@@ -254,8 +254,8 @@ def _experience_options(child_root, task_type=None):
     try:
         options = offer_design_options(contract)
     except ValueError as e:
-        # Вариант без осознанного компромисса — дефект, а не мелочь: называем его человеку,
-        # а не показываем псевдовыбор (fail-closed уже сработал в offer_design_options).
+        
+        
         recs.append({
             "priority": 1, "category": "experience_options",
             "advice": f"Варианты опыта не предложены — {e}. "
@@ -281,9 +281,9 @@ def advise(child_root, task_type=None):
     recs.extend(_delivery_plan(child_root, task_type))
     recs.extend(_economic_alternatives(child_root, task_type))
     recs.extend(_experience_options(child_root, task_type))
-    # Sort by priority
+    
     recs.sort(key=lambda r: r.get("priority", 3))
-    # Summary
+    
     p1 = sum(1 for r in recs if r.get("priority") == 1)
     p2 = sum(1 for r in recs if r.get("priority") == 2)
     summary = f"{len(recs)} рекомендаций"
@@ -320,9 +320,9 @@ def check(data):
 
 
 if __name__ == "__main__":
-    # Ветки `--selftest` здесь нет (ревизия 2026-08-11): функция удалена в v3.30 вместе с
-    # переносом селфтестов в pytest, а вызов остался и мог только упасть с `NameError`.
-    # CLI
+    
+    
+    
     child_root = Path(sys.argv[1]) if len(sys.argv) > 1 and not sys.argv[1].startswith("-") else Path.cwd()
     task_type = None
     as_json = "--json" in sys.argv

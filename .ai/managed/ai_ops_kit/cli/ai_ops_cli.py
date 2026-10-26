@@ -32,11 +32,11 @@ from pathlib import Path
 
 from ai_ops_kit.shared import _bootstrap  # noqa: E402
 from ai_ops_kit.cli import human_help  # noqa: E402 — человеческая «дверь» (#675 Human API)
-# intent -> (описание, какое действие, нужен ли текст задачи)
+
 INTENTS = {
-    # Третье поле — нужен ли текст задачи. `new` и `resume` его ИСПОЛЬЗУЮТ (заголовок работы,
-    # выбор фичи), поэтому объявлены честно: расхождение объявления с использованием и было тем,
-    # из-за чего `new` принимал текст задачи за каталог репозитория.
+    
+    
+    
     "new":     ("создать новую фичу/каркас", "scaffold", True),
     "onboard": ("определить стек и команды репозитория", "onboard", False),
     "discuss": ("обсудить идею до спецификации (discovery)", "discuss", True),
@@ -49,15 +49,15 @@ INTENTS = {
     "review":  ("независимый ревью произведённого", "review", True),
     "status":  ("статус активной работы", "status", False),
     "health":  ("здоровье продукта", "health", False),
-    # v3.36.13 (session-command-reaches-the-child): команда session перенесена из установщика в CLI,
-    # чтобы работала из установленной дочки. Показывает снимок телеметрии сессии и рекомендацию.
+    
+    
     "session": ("снимок телеметрии сессии + рекомендация (continue/compact/clear/new_session)",
                 "session", False),
-    # 19.08.2026 (аудит): диагностика установки СИЛАМИ ДОЧКИ. Полный `doctor` живёт в установщике,
-    # а он в поставку не едет — значит в дочке без клона кита команда отвечала «исходник рядом не
-    # найден». Этот интент покрывает то, что видно изнутри репозитория, и НАЗЫВАЕТ, чего не видно.
+    
+    
+    
     "doctor":  ("проверить установку изнутри репозитория (полная проверка — у кита)", "doctor", False),
-    # v3.35 Product Operating Model: план продукта и его связность.
+    
     "next":    ("что взять следующим: где мы, что идёт, что блокирует, что можно параллельно", "next", False),
     # #539: владельческая карточка одной задачи — что с ней прямо сейчас: стадия, что готово, что
     # мешает и ПОЧЕМУ (последствием, простыми словами), следующий шаг и оценка стоимости. Read-only.
@@ -74,32 +74,33 @@ INTENTS = {
     "work":    ("проекция одной работы по id: work show <id> — стадия, кто ведёт, области, "
                 "зависимости, артефакты, решения из четырёх источников", "work", True),
     "model":   ("модель продуктового репозитория: классификация, контуры, пробелы, вопросы", "model", False),
-    # Product Contract (единый объект продукта): агрегирует идентичность, стандарт, артефакты слоя,
-    # источники истины контуров и здоровье в ОДИН объект с одним вердиктом. Ничего не пишет.
+    
+    
     "contract": ("единый контракт продукта: идентичность/стандарт/артефакты/контуры/здоровье + вердикт",
                  "contract", False),
-    # Claude-native онбординг для ОБНОВЛЁННОЙ дочки: после `update` кит одним брифингом предлагает
-    # «фундамент» — что нового в ките, ревью фундамента + вердикт, что рекомендую, состояние
-    # Storybook. Оркестрация готовых кирпичей (contract/next/ui_readiness) через presenter. Read-only.
-    "propose": ("предложение по фундаменту одним брифингом: что нового + ревью фундамента + вердикт "
-                "+ что рекомендую + Storybook", "propose", False),
-    # Product Registry (флот): сводный вердикт по ВСЕМ продуктам из реестра флота (products.yaml /
-    # $AI_OPS_PRODUCTS). «Увидеть состояние всех продуктов разом». Только чтение.
+    
+    
+    
+    "propose": ("что продукту нужно дальше: рекомендации человеческим языком (что важно, где ценность "
+                "и риск) + можно ли двигаться; настройка кита и детали — по запросу", "propose", False),
+    
+    
     "products": ("флот продуктов: (без арг.) сводный вердикт по всем | register — добавить текущий репозиторий",
                  "products", False),
-    # Подробная карточка ОДНОГО продукта флота по id (контракт+вердикт+здоровье+риски) — без cd в его
-    # репозиторий. id — единственный аргумент. Только чтение.
+    
+    
     "inspect": ("карточка одного продукта флота по id: контракт, вердикт, здоровье, риски", "inspect", True),
-    # Team status (Фаза 4): здоровье×3 + топ-риски + блокеры + следующие задачи + milestone одним
-    # снимком. Только чтение.
+    
+    
     "team":    ("статус команды: здоровье, риски, блокеры, следующие задачи, milestone", "team", False),
-    # Governance (Фаза 4): активная политика автономии + журнал решений AI + человеческие
-    # переопределения. Только чтение (enforcement не трогаем — это отдельное решение).
+    
+    
     "governance": ("governance продукта: политика автономии, журнал решений AI, переопределения человека",
                    "governance", False),
-    # Фаза 3 (лента 4): roadmap Now/Next/Later и delivery-план из backlog.
+    
     "roadmap": ("roadmap Now/Next/Later из плана + отклонение от авторского ROADMAP.md", "roadmap", False),
-    "delivery": ("delivery-план из backlog под milestone: порядок, прогноз-оценка, риски, блокеры",
+    "delivery": ("delivery-план из backlog под milestone: порядок, прогноз-оценка, риски, блокеры; "
+                 "record <feature-id> --pr <n> — подтверждённая расписка для вручную влитого PR",
                  "delivery", False),
     # v3.35.2 (тир 4): BOOTSTRAP существовал СТРОКОЙ в реестре — кит не создавал ни направления, ни
     # плана, и владелец после онбординга оставался с пониманием и без работы. Сухой прогон по
@@ -120,37 +121,84 @@ INTENTS = {
     # словом: classify | dedup | prioritize | graph. Без доступа к GitHub отвечает «не проверено»
     # с причиной, а не пустотой. Форма ещё меняется — интент experimental.
     "backlog": ("backlog из GitHub Issues: classify | dedup | prioritize | graph", "backlog", True),
-    # Knowledge Graph как ЗАПРАШИВАЕМАЯ технология (тонкий слой поверх registry/entities.yaml +
-    # validate_knowledge_graph). Подкоманда первым словом (как backlog): собирает один граф из
-    # plan.yaml + FL-*.yaml + feature blueprints и отвечает на вопрос, который иначе требует ручного
-    # чтения трёх файлов. `build` — собрать/показать (--apply — записать knowledge/graph.yaml);
-    # `trace <feature>` — цепочка goal→…→feature→outcome + вердикт + пробелы; `gaps` — что не
-    # покрыто измеримым результатом. Только чтение (кроме `build --apply`).
+    
+    
+    
+    
+    
+    
     "graph":   ("knowledge graph: build | trace <feature> | gaps — зачем функция существует и "
                 "измерен ли её исход, из плана+обучения+blueprint одним графом", "graph", True),
-    # Autonomous Replanning (Фаза 5, капстоун): цикл сам сводит приоритеты плана к реальности. Без
-    # флага — отчёт (read-only превью: что переупорядочено и почему + структурные ПРЕДЛОЖЕНИЯ).
-    # С `--apply` — записывает переприоритизацию (класс A, обратимо, состав работ не меняет) в
-    # машинный артефакт дочки; авторский plan.yaml и main не трогает. Структурные правки — только
-    # предложением, автоматически не применяются.
+    
+    
+    
+    
+    
     "replan":  ("перепланирование: сам переприоритизирует план под реальность (--apply — записать), "
                 "структурные изменения — предложением", "replan", False),
-    # #545 outcome-loop: ЕДИНЫЙ пост-релизный путь одним вызовом — PRR -> проверка прихода событий в
-    # аналитику -> проекция исхода -> один вердикт. Только чтение. Честный дефолт при отсутствии
-    # выгрузки аналитики -> «выпуск рекомендовать не могу», а не «healthy». Реальный флип исхода цели
-    # ждёт реального выпуска дочки.
+    
+    
+    
+    
     "readout": ("пост-релизная петля: доставили -> дошли ли события в аналитику -> исход -> один "
                 "вердикт (без выгрузки аналитики — честно «ещё нечем проверить»)", "readout", False),
+    # kit-product-scorecard: ЕДИНАЯ карта продукта кита из 5 метрик — кит мерит СЕБЯ как продукт, а
+    # не числом возможностей. Метрики 1 (доля фич идея->релиз) и 3 (доля фич с полной историей жизни)
+    # считаются из графа знаний; метрика 2 (доля утверждений с evidence) — доля поверх реестра
+    # честности; метрики 4 (результат после релиза) и 5 (уроки->решения) стоят честным каркасом «не
+    # измерено» (у самого кита живой аналитики нет). Только чтение. Форма карты ещё устаканивается.
+    "scorecard": ("карта продукта кита: 5 метрик, которыми кит мерит себя как продукт (а не числом "
+                  "возможностей); нет данных — честно «не измерено»", "scorecard", True),
+    # auto-slice-candidates: кит НАРЕЗАЕТ задачи-кандидаты из двух источников (непокрытые направления
+    # роадмапа + наблюдения дочек), владелец ПРИНИМАЕТ пачкой одной командой. Предохранитель: кит сам
+    # не дописывает активную работу — без глагола `accept` план не меняется. `candidates`/`list` —
+    # только чтение; `accept <id..>`/`accept --all` — пишет plan.yaml (явное действие владельца).
+    "candidates": ("задачи-кандидаты (непокрытые направления роадмапа + наблюдения дочек): без "
+                   "аргумента — список; accept <id..>|--all — принять пачкой в план", "candidates", True),
+    
+    
+    
+    "portfolio": ("портфель отказов дочек обезличенно: какие классы повторяются по всем дочкам "
+                  "(только паттерны и числа, без кода и путей)", "portfolio", False),
+    # #1183: стиль кода держит машина — профиль линтеров поверх конфига дочки + заморозка существующего.
+    "lint-profile": ("единый стиль кода: имена латиницей и границы слоёв поверх ваших линтеров; "
+                     "--apply — включить, check — новое расхождение краснеет", "lint-profile", False),
+    
+    
+    
+    
+    
+    "verify-scope": ("какой объём проверки нужен текущему изменению: tier/стадия (docs-only / "
+                     "затронутые / полный) + причина + точечные тесты, когда осмысленно", "verify-scope", True),
 }
 
 
-# Интенты, которые ИСПОЛНЯЮТСЯ, а не показывают превью. Список обязан совпадать с тем, что умеет
-# `_run_intent`: расхождение означает «обработчик есть, до него не доходит» — молчаливый no-op с
-# кодом 0, самый дорогой вид отказа, потому что выглядит успехом. Сверяется тестом.
+
+
+
 DIRECT_INTENTS = ("onboard", "status", "health", "plan", "new", "discuss", "review", "advise",
                   "next", "explain", "model", "bootstrap", "feedback", "session", "doctor",
                   "roadmap", "delivery", "backlog", "contract", "propose", "products", "team",
-                  "governance", "inspect", "replan", "inbox", "work", "readout", "graph", "reach")
+                  "governance", "inspect", "replan", "inbox", "work", "readout", "graph", "reach",
+                  "scorecard", "candidates", "portfolio", "lint-profile", "verify-scope")
+
+
+
+
+
+
+
+
+from ai_ops_kit.cli.human_facade import (  # noqa: E402,F401 — ре-экспорт фасада для вызывающих/тестов
+    HUMAN_ACTIONS,
+    facade_plan,
+    _dispatch_human_action,
+    _review_all,
+    _inject_task_type,
+    _first_nondir,
+    _child_root_from,
+    _is_dir_safe,
+)
 
 
 def resolve_flags(signals):
@@ -177,19 +225,9 @@ def resolve_flags(signals):
     return flags
 
 
-def _is_dir_safe(p):
-    """#161: Path.is_dir() кидает OSError (ENAMETOOLONG и др.) вместо False, когда первый позиционный
-    аргумент — не путь, а длинный текст задачи (>255 байт). На 3.11/3.12 это роняло main(); на 3.14
-    stdlib глотает сам, и баг маскируется. Не-путь (в т.ч. слишком длинный) = не каталог."""
-    try:
-        return Path(p).is_dir()
-    except OSError:
-        return False
 
 
-# Шаги, которые ПОДХВАТЫВАЮТ сохранённые на specify сигналы (полевой замер cockpit, 06.09.2026):
-# `specify` их пишет, эти шаги их читают. Перенос идёт только сюда, чтобы не менять поведение
-# команд, которые к сигналам уровня отношения не имеют (status/next/health/…).
+
 _SIGNAL_CARRY_INTENTS = ("specify", "plan", "run", "do")
 
 
@@ -243,8 +281,8 @@ def _build_signals(intent, task, child_root, a):
         signals["feature"] = a.feature
     if intent in _SIGNAL_CARRY_INTENTS:
         signals = _carry_stored_signals(task, child_root, signals, a.feature)
-    # #543 shadow->live: owner-флаг risk_calibrated_enforcement из .ai-ops.yaml -> в сигналы (если не
-    # задан явным --signals). По умолчанию ключа нет -> флаг OFF -> строгость гейтов не меняется.
+    
+    
     from ai_ops_kit.gates import gate_executor as _ge
     _rc = _ge.risk_calibrated_config(child_root)
     if _rc is not None and "risk_calibrated_enforcement" not in (signals.get("gates") or {}):
@@ -252,11 +290,11 @@ def _build_signals(intent, task, child_root, a):
     return signals
 
 
-# --- Реестр обработчиков команд (v3.38). Прежде диспетч был цепочкой `if intent == …` в
-# `_run_intent` (файл ~1377 строк): добавить команду значило править монолит, и цена этой
-# проводки — корень того, что модули продуктовых операций написаны, но не заведены. Теперь
-# команда подключается регистрацией обработчика; список ключей реестра сверяется с DIRECT_INTENTS
-# тестом (tests/contracts/test_direct_intents_match_handler.py).
+
+
+
+
+
 _INTENT_HANDLERS = {}
 
 
@@ -270,26 +308,26 @@ def _intent(name):
     return _register
 
 
-# --- Перенесённые проб-свободные обработчики и хелперы (ai_ops_cli_intents). Ре-экспорт именами
-# этого модуля держит резолвинг у вызывающих/тестов и диспетча; спутник НЕ импортирует ai_ops_cli на
-# верхнем уровне (обратные обращения — ленивым импортом), поэтому цикла нет.
+
+
+
 from ai_ops_kit.cli.ai_ops_cli_intents import (  # noqa: E402,F401 — ре-экспорт для вызывающих/тестов
     build_preview, _print_preview,
     _run_backlog, _BACKLOG_SUBS,
     _product_health_report, _product_risks,
-    _intent_products, _intent_delivery, _intent_model, _intent_contract, _intent_propose,
+    _intent_products, _intent_model, _intent_contract, _intent_propose,
     _intent_inspect, _intent_plan, _intent_session,
     _intent_roadmap, _intent_replan, _intent_new, _intent_governance,
     _intent_bootstrap, _intent_discuss, _intent_health, _intent_team,
     _intent_onboard, _intent_doctor, _copy_affects_from_plan,
     _intent_explain, _intent_inbox, _intent_work, _intent_readout, _intent_graph,
-    _intent_reach,
+    _intent_reach, _intent_scorecard, _WORK_SUBS,
 )
 
-# --- Слой реализации команд (ai_ops_cli_commands): проб-несущие обработчики намерений и путь
-# исполнения run/do с сессионными стражами. Общие хелперы вывода/идентификации переехали туда же и
-# ре-экспортируются отсюда — вызывающие и тесты резолвят их прежними именами ai_ops_cli.<name>.
-# Ребро импорта одностороннее: сосед НЕ импортирует ai_ops_cli, поэтому цикла нет.
+
+
+
+
 from ai_ops_kit.cli.ai_ops_cli_commands import (  # noqa: E402,F401 — ре-экспорт + диспетч/регистрация
     _wid_for, _intake_command_carrying_task_type, _say, _audience,
     _intent_backlog, _intent_feedback, _intent_status, _enrich_running_with_work_view,
@@ -298,13 +336,23 @@ from ai_ops_kit.cli.ai_ops_cli_commands import (  # noqa: E402,F401 — ре-э�
     _process_gate, _main_run_execute,
 )
 
-# Регистрация перенесённых обработчиков в общий реестр интентов (декоратор и реестр живут здесь).
+# auto-slice-candidates: команда `candidates` живёт в собственном спутнике (ратчет module-size).
+from ai_ops_kit.cli.candidates_cli import _intent_candidates  # noqa: E402,F401 — ре-экспорт/регистрация
+# delivery-record: интент `delivery` вынесен спутником из product-хаба (ратчет размера модуля).
+from ai_ops_kit.cli.ai_ops_cli_delivery import _intent_delivery  # noqa: E402,F401 — ре-экспорт/регистрация
+
+from ai_ops_kit.cli.portfolio_cli import _intent_portfolio  # noqa: E402,F401 — ре-экспорт/регистрация
+from ai_ops_kit.cli.lint_profile_cli import _intent_lint_profile  # noqa: E402,F401 — регистрация
+# #1321: `verify-scope` — доставляемый ответ об объёме проверки для текущего diff (отдельный спутник).
+from ai_ops_kit.cli.verify_scope_cli import _intent_verify_scope  # noqa: E402,F401 — регистрация
+
+
 for _name, _fn in (("products", _intent_products), ("delivery", _intent_delivery),
                    ("model", _intent_model), ("contract", _intent_contract),
                    ("propose", _intent_propose),
                    ("inspect", _intent_inspect), ("plan", _intent_plan),
                    ("session", _intent_session),
-                   # вторая волна выноса (deepcut, глубже):
+                   
                    ("roadmap", _intent_roadmap), ("replan", _intent_replan),
                    ("new", _intent_new), ("governance", _intent_governance),
                    ("bootstrap", _intent_bootstrap), ("discuss", _intent_discuss),
@@ -313,10 +361,14 @@ for _name, _fn in (("products", _intent_products), ("delivery", _intent_delivery
                    ("explain", _intent_explain), ("inbox", _intent_inbox),
                    ("work", _intent_work), ("readout", _intent_readout),
                    ("graph", _intent_graph), ("reach", _intent_reach),
-                   # проб-несущие обработчики из ai_ops_cli_commands:
+                   ("scorecard", _intent_scorecard),
+                   
                    ("backlog", _intent_backlog), ("feedback", _intent_feedback),
                    ("status", _intent_status), ("next", _intent_next),
-                   ("review", _intent_review), ("advise", _intent_advise)):
+                   ("review", _intent_review), ("advise", _intent_advise),
+                   ("candidates", _intent_candidates),
+                   ("portfolio", _intent_portfolio), ("lint-profile", _intent_lint_profile),
+                   ("verify-scope", _intent_verify_scope)):
     _intent(_name)(_fn)
 del _name, _fn
 
@@ -344,15 +396,15 @@ def _build_cli_arg_parser():
     ap.add_argument("--why", action="append", default=None,
                     help="model --answer: основание ответа (источник) — ляжет комментарием; "
                          "повторяем, по одному на ответ в том же порядке (лишние ответы — без основания)")
-    # #863 (живой zero-touch прогон): `specify --answers "зачем=...; как-поймём=..."` записывает
-    # ответы обычными словами в features/<wid>/spec.yaml БЕЗ ручной правки YAML. Разбор — в
-    # ai_ops_kit.shared.spec_answers (те же короткие слова, что называет сообщение presenter'а).
+    
+    
+    
     ap.add_argument("--answers", default=None,
                     help='specify: ответить на вопросы описания задачи словами, не открывая файл '
                          '— например --answers "зачем=нужно клиентам X; как-поймём=тест зелёный"')
-    # #647 (первый час): `model --flow` сшивает понимание → вопросы → (если ответы есть) направление
-    # и план → следующую работу ОДНИМ нарративом. `--apply` записывает направление/план (иначе сухой
-    # предпросмотр). Не новый интент — режим `model`, чтобы не плодить top-level команды (#632).
+    
+    
+    
     ap.add_argument("--flow", action="store_true",
                     help="model: первый час одним нарративом (понял → знаю/не знаю → направление и "
                          "план → следующая работа); с --apply записывает направление и план")
@@ -365,9 +417,9 @@ def _build_cli_arg_parser():
     ap.add_argument("--takeover-reason", default=None,
                     help="run --takeover: причина переятия (для атрибуции)")
     ap.add_argument("--base", default=None, help="resume/review: base-ветка (по умолчанию auto: upstream/remote-default/текущая)")
-    # v3.28.x (P0-1): дефолта `mock` больше НЕТ. Для `run --execute`/`do` провайдера выбирает резолв
-    # (.ai-ops.yaml + ключ в env -> claude в PATH -> mock с громким предупреждением); явный --provider
-    # (в т.ч. mock) всегда побеждает. Для `review`/`resume` остаётся прежний офлайн-дефолт mock.
+    
+    
+    
     ap.add_argument("--provider", default=None,
                     help="провайдер (mock|anthropic|openai|claude-cli|qwen|deepseek|kimi). "
                          "run --execute без флага — авторезолв (AI_OPS_PROVIDER_AUTORESOLVE=0 выключает); "
@@ -408,7 +460,15 @@ def _build_cli_arg_parser():
                          "по умолчанию .ai-ops/backlog.yaml")
     ap.add_argument("--milestone", default=None,
                     help="delivery: id milestone, под который строить delivery-план и прогноз")
-    # #545 readout (пост-релизная петля): PRR-файл и опциональные OutcomeContract/OutcomeReadout.
+    ap.add_argument("--pr", default=None,
+                    help="delivery record: номер вручную влитого PR (или его URL) — по нему кит "
+                         "сверяет слияние с GitHub и записывает подтверждённую расписку о поставке")
+    # auto-slice-candidates: `candidates accept <id> --goal <goal-id>` — направление, к которому
+    # отнести кандидата без своего source_goal (у находок его нет). В многоцелевом плане без него
+    # такой кандидат не принимается (иначе work item без goal — ошибка валидатора).
+    ap.add_argument("--goal", default=None,
+                    help="candidates accept: id направления (goal) для кандидата без своего source_goal")
+    
     ap.add_argument("--prr", default=None,
                     help="readout: путь к PRR-файлу (PostReleaseReadout); без него — поиск в дочке")
     ap.add_argument("--outcome-contract", default=None, dest="outcome_contract",
@@ -418,16 +478,16 @@ def _build_cli_arg_parser():
     ap.add_argument("--apply", action="store_true",
                     help="bootstrap: РЕАЛЬНО создать отсутствующие направление и план "
                          "(без флага — сухой прогон: показать, что будет создано)")
-    # Решение владельца 2026-08-17: короткий путь для уже описанной работы + потолок траты на
-    # описание. Оба флага — осознанный выход из автоматики, а не режим по умолчанию.
+    
+    
     ap.add_argument("--full-process", action="store_true",
                     help="discuss/specify/plan: пройти полный путь даже на уже описанной работе "
                          "(короткий путь не применять)")
     ap.add_argument("--spend-ok", action="store_true",
                     help="discuss/specify/plan: продолжить разбор, зная что потолок траты на "
                          "описание до первой правки кода уже пробит")
-    # Улики для `feedback`: наблюдение класса «дефект» без улики не записывается — иначе канал
-    # производил бы дефекты из впечатлений.
+    
+    
     ap.add_argument("--evidence-file", action="append", metavar="ПУТЬ=ЦИТАТА",
                     help="feedback: файл и строка из него как основание наблюдения")
     ap.add_argument("--evidence-command", action="append", metavar="КОМАНДА=ВЫВОД",
@@ -469,14 +529,14 @@ def _parse_task_and_root(intent, rest):
 
     Порядок правил важен: сначала абсолютный путь в НАЧАЛЕ (так делает только обёртка), потом хвост
     (так пишет человек), потом относительный путь в начале (`./ai-ops specify . "текст"`).
-    Абсолютность в первом правиле отличает подстановку обёртки от текста задачи, случайно совпавшего
-    с именем каталога.
+    Абсолютный путь отличает подстановку обёртки от текста задачи с именем каталога.
     """
     needs_task = INTENTS.get(intent, ("", "", False))[2]
     task, child_root = None, "."
     if len(rest) >= 2 and _is_dir_safe(rest[0]) and Path(rest[0]).is_absolute():
         child_root = rest.pop(0)
-    elif rest and _is_dir_safe(rest[-1]):
+    elif rest and _is_dir_safe(rest[-1]) and not (
+            intent == "graph" and len(rest) == 1 and rest[0] in ("build", "trace", "gaps", "questions")):
         child_root = rest.pop()
     elif len(rest) >= 2 and _is_dir_safe(rest[0]):
         child_root = rest.pop(0)
@@ -488,11 +548,17 @@ def _parse_task_and_root(intent, rest):
 
 
 def main(argv):
-    # #675 Human API: пустой вызов и `help` показывают человеческую дверь (короткий набор команд
-    # владельца), а не argparse-стену из 36 интентов и 30 флагов. `help --all` — весь список.
-    _door = human_help.handle(argv, INTENTS)
+    
+    
+    _door = human_help.handle(argv, INTENTS, HUMAN_ACTIONS)
     if _door is not None:
         return _door
+    
+    
+    
+    _facade = _dispatch_human_action(argv, main)
+    if _facade is not None:
+        return _facade
     ap = _build_cli_arg_parser()
     a = ap.parse_args(argv)
 
@@ -501,11 +567,11 @@ def main(argv):
     preview_mode = intent == "preview"
     if preview_mode:
         intent = rest.pop(0) if rest else "run"
-    # разбор [задача] child_root (вынесен из main: ратчет func-size). rest мутируется на месте (pop),
-    # поэтому остаток позиционных виден вызывающему (ветка resume ниже его дочитывает).
+    
+    
     task, child_root = _parse_task_and_root(intent, rest)
-    # Сигналы вызова + перенос сохранённого со specify (в _build_signals: ратчет func-size). ДО
-    # процессного гейта и диспетча — одни и те же сигналы видят и short_path/потолок, и план, и движок.
+    
+    
     signals = _build_signals(intent, task, child_root, a)
 
     # ЗАДАЧА ИЗ СПЕКИ, когда `run`/`do` вызваны без текста (только `--feature`). Движок строит задачу
@@ -527,17 +593,17 @@ def main(argv):
 
     if intent == "resume":
         from ai_ops_kit.engine import ai_ops_run
-        # `ai-ops resume . <feature>` — путь репозитория ПЕРВЫМ позиционным (живой прогон на child,
-        # 2026-08-14). Разбор каталога в хвосте эту форму не ловит: "." уезжал в task, оттуда в
-        # workitem_id -> ValueError со стеком. Здесь она разбирается явно, и только когда за
-        # каталогом реально стоит второй позиционный — обычный `resume "текст задачи"` не задет.
+        
+        
+        
+        
         if task and rest and Path(task).is_dir():
             child_root, task = task, rest.pop(0)
-        # v2.109 Real Resume: --execute реально продолжает прогон (не рестарт); без флага — preflight.
+        
         argv2 = ["resume", child_root, a.feature or (task or ""), "--base", a.base]
         argv2 += ["--session", _session_identity(child_root)]   # #695: та же личность, что у `run`
-        # v3.0-rc2 (P0.1): intent CLI ПРОВОДИТ provider/model/signals в низкоуровневый resume (иначе
-        # `--provider X` молча уходил в mock). F-026: провайдера НЕ подставляем — решает та же логика run.
+        
+        
         argv2 += ["--signals", a.signals]
         if a.provider:
             argv2 += ["--provider", a.provider]
@@ -564,8 +630,8 @@ def main(argv):
             argv2.append("--json")
         return ai_ops_run.main(argv2)
 
-    # v2.110 Real Spec-First: `specify` РЕАЛЬНО создаёт spec-артефакт нужной глубины (не только
-    # превью). Тело — в спутнике _intent_specify (ратчет func-size main); Исход 3 #768 — там же.
+    
+    
     if intent == "specify":
         from ai_ops_kit.cli.ai_ops_cli_lifecycle import _intent_specify
         _intent_specify(task, Path(child_root), signals, a)
@@ -584,10 +650,10 @@ def main(argv):
             return rc
 
     pv = build_preview(intent, task, Path(child_root), signals)
-    # v3.28.x (F-015): роутер классифицировал тип задачи ВНУТРИ build_preview — но там он работает
-    # с копией signals, и наружу классификация не выходила. Движок получал сигналы без task_type,
-    # терял evidence `classified_type` и валил блокирующий intake_completeness у пользователя,
-    # который всё указал правильно. Материализуем решение роутера в сигналы прогона.
+    
+    
+    
+    
     _understood_type = (pv.get("understood") or {}).get("task_type")
     if _understood_type and not signals.get("task_type"):
         signals["task_type"] = _understood_type
@@ -604,14 +670,14 @@ def main(argv):
     if a.json:
         print(json.dumps(pv, ensure_ascii=False, indent=2))
     elif not _blocked_on_intake:
-        # Смысл — всегда; внутренний разбор превью (стадии, флаги, бюджет) — на technical/debug,
-        # как у `next` и `model`. Разбор не выброшен: без него не отладить неверный подбор режима.
+        
+        
         _say(Path(child_root), "from_execution_preview", pv)
         if _audience(Path(child_root)) != "product":
             print()
             _print_preview(pv)
 
-    # только `run --execute` и `do` реально запускают движок; остальное — превью/делегация
+    
     return _main_run_execute(intent, task, child_root, signals, a, pv)
 
 

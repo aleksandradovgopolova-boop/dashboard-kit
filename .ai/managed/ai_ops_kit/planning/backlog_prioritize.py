@@ -29,9 +29,9 @@ from pathlib import Path
 
 from ai_ops_kit.shared import _bootstrap  # noqa: F401
 
-# Уровень атрибута → вес. `unknown` — нейтральный, НЕ равен medium: он же понижает confidence.
+
 _LEVEL = {"high": 1.0, "medium": 0.6, "low": 0.2, "unknown": 0.4, "unset": 0.4}
-# Вклад факторов в пользу (benefit). Стоимость (effort) и зависимости учитываются отдельно.
+
 _W_IMPACT, _W_URGENCY, _W_STRATEGIC = 0.45, 0.35, 0.20
 _CONF_FACTOR = {"high": 1.0, "medium": 0.8, "low": 0.6, "unknown": 0.6, "unset": 0.6}
 DEFAULT_OVERRIDES_REL = ".ai/backlog-overrides.yaml"
@@ -82,7 +82,7 @@ def score_issue(item, dependents: int = 0, blocked_by_open: int = 0) -> Priority
     raw = benefit * conf - cost_penalty + block_boost - blocked_penalty
     score = round(max(0.0, min(1.0, raw)), 3)
 
-    # confidence рекомендации: сколько ключевых атрибутов неизвестны.
+    
     unknown_attrs = [k for k in ("impact", "urgency", "strategic_alignment")
                      if get(k) in ("unknown", "unset")]
     if len(unknown_attrs) >= 2:
@@ -118,7 +118,7 @@ def score_issue(item, dependents: int = 0, blocked_by_open: int = 0) -> Priority
                     factors=factors, explanation=explanation)
 
 
-# ── overrides (PR-20) ─────────────────────────────────────────────────────────────────────────
+
 
 def _overrides_path(repo_or_root: str, overrides: str) -> Path:
     if overrides:
@@ -232,7 +232,7 @@ def prioritize_backlog(repo_or_root: str = ".", state: str = "open", overrides: 
     return PriorityReport(True, rep.repo, "", scored)
 
 
-# ── CLI ───────────────────────────────────────────────────────────────────────────────────────
+
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="backlog_prioritize.py")

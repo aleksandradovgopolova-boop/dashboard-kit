@@ -31,7 +31,7 @@ def _durable(path: str | Path, data: dict, serialize: Callable, parse: Callable,
     -> {ok} | {ok: False, error}."""
     import tempfile
     path = Path(path)
-    # 1. валидируем ВХОД до любого касания целевого файла
+    
     if not isinstance(data, dict):
         return {"ok": False, "error": "данные для записи не dict"}
     missing = [k for k in require_keys if k not in data]
@@ -41,7 +41,7 @@ def _durable(path: str | Path, data: dict, serialize: Callable, parse: Callable,
         text = serialize(data)
     except Exception as e:  # noqa: BLE001
         return {"ok": False, "error": f"сериализация не удалась: {type(e).__name__}: {e}"}
-    # 2. проспективная валидация: сериализованное перечитывается в валидный dict — ДО замены старого файла
+    
     try:
         prospective = parse(text)
     except Exception as e:  # noqa: BLE001
@@ -51,25 +51,25 @@ def _durable(path: str | Path, data: dict, serialize: Callable, parse: Callable,
     tmp = None
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        # 3. УНИКАЛЬНЫЙ temp (mkstemp) — конкурентные писатели не бьются об общий .tmp
+        
         fd, tmp_name = tempfile.mkstemp(dir=str(path.parent), prefix=path.name + ".", suffix=".tmp")
         tmp = Path(tmp_name)
         with os.fdopen(fd, "w", encoding="utf-8") as f:
             f.write(text)
             f.flush()
             os.fsync(f.fileno())
-        # 4. backup прежнего валидного состояния (opt-in, для критических артефактов)
+        
         if keep_backup and path.exists():
             try:
                 path.with_suffix(path.suffix + ".bak").write_text(
                     path.read_text(encoding="utf-8"), encoding="utf-8")
             except OSError:
                 pass
-        # 5. атомарная замена + fsync каталога
+        
         os.replace(str(tmp), str(path))
         tmp = None
         _fsync_dir(path.parent)
-        # 6. повторная валидация ПОСЛЕ замены (defense-in-depth)
+        
         back = parse(path.read_text(encoding="utf-8"))
         if not isinstance(back, dict) or [k for k in require_keys if k not in back]:
             return {"ok": False, "error": "перечитанный после замены документ невалиден"}
@@ -82,6 +82,96 @@ def _durable(path: str | Path, data: dict, serialize: Callable, parse: Callable,
                 Path(tmp).unlink()
             except OSError:
                 pass
+
+
+def durable_create_batch(root: str | Path, documents: dict[str, str]) -> dict:
+    """Create-only plan barrier. Existing exact bytes reused; conflicting/unknown files never replaced.
+
+    Preflight all documents before creating any; graph can be last in insertion order.
+    A partial failed batch remains explicit evidence, reusable only when its bytes match.
+    POSIX dirfds/O_NOFOLLOW prohibit traversal through symlink ancestors, including races.
+    """
+    import contextlib
+    import stat
+    from collections.abc import Iterator
+    created = []
+    try:
+        if not documents or any(not isinstance(k, str) or not isinstance(v, str)
+                                or Path(k).is_absolute() or Path(k).as_posix() != k
+                                or any(p in ('.', '..') for p in k.split('/')) for k, v in documents.items()):
+            raise ValueError('invalid create-only documents')
+        flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+        with contextlib.ExitStack() as roots:
+            rootfd = os.open(root, flags)
+            roots.callback(os.close, rootfd)
+
+            @contextlib.contextmanager
+            def parent(name: str, create: bool) -> Iterator[int | None]:
+                with contextlib.ExitStack() as dirs:
+                    fd = rootfd
+                    for part in name.split('/')[:-1]:
+                        try:
+                            child = os.open(part, flags, dir_fd=fd)
+                        except FileNotFoundError:
+                            if not create:
+                                yield None
+                                return
+                            try:
+                                os.mkdir(part, dir_fd=fd)
+                            except FileExistsError:
+                                if not stat.S_ISDIR(os.stat(part, dir_fd=fd, follow_symlinks=False).st_mode):
+                                    raise ValueError('create-only directory collision is not a directory') from None
+                            child = os.open(part, flags, dir_fd=fd)
+                        dirs.callback(os.close, child)
+                        if create:
+                            os.fsync(fd)  # also confirm a directory left by an uncertain prior mkdir/sync
+                        fd = child
+                    yield fd
+
+            def read(fd: int, name: str, size: int, durable: bool = False) -> bytes | None:
+                try:
+                    opened = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=fd)
+                except FileNotFoundError:
+                    return None
+                with os.fdopen(opened, 'rb') as stream:
+                    st = os.fstat(stream.fileno())
+                    if not stat.S_ISREG(st.st_mode) or st.st_nlink != 1:
+                        raise ValueError('unsafe create-only artifact type/links')
+                    data = stream.read(size + 1)
+                    current = os.stat(name, dir_fd=fd, follow_symlinks=False)
+                    if (st.st_dev, st.st_ino) != (current.st_dev, current.st_ino):
+                        raise ValueError('create-only artifact replaced during readback')
+                    if durable:
+                        os.fsync(stream.fileno())
+                    return data
+
+            payloads = {k: v.encode('utf-8') for k, v in documents.items()}
+            for name, payload in payloads.items():
+                with parent(name, False) as fd:
+                    old = read(fd, name.split('/')[-1], len(payload)) if fd is not None else None
+                    if old is not None and old != payload:
+                        raise ValueError(f'conflicting saved goal artifact: {name}')
+            for name, payload in payloads.items():
+                with parent(name, True) as fd:
+                    if fd is None:
+                        raise ValueError('create-only parent unavailable')
+                    leaf = name.split('/')[-1]
+                    try:
+                        opened = os.open(leaf, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=fd)
+                    except FileExistsError:
+                        opened = None
+                    if opened is not None:
+                        created.append(name)
+                        with os.fdopen(opened, 'wb') as stream:
+                            stream.write(payload)
+                            stream.flush()
+                            os.fsync(stream.fileno())
+                    if read(fd, leaf, len(payload), durable=opened is None) != payload:
+                        raise ValueError(f'create-only artifact readback mismatch: {name}')
+                    os.fsync(fd)
+        return {'ok': True, 'created': created}
+    except (OSError, ValueError, TypeError, AttributeError) as exc:
+        return {'ok': False, 'created': created, 'error': str(exc)}
 
 
 def durable_write(path: str | Path, data: dict, require_keys: tuple = (), keep_backup: bool = False) -> dict:
@@ -101,6 +191,18 @@ def durable_write_json(path: str | Path, data: dict, require_keys: tuple = (), k
                     _json.loads, require_keys, keep_backup)
 
 
+def durable_write_jsonl(path: str | Path, records: list[dict]) -> dict:
+    """JSONL по тому же atomic/fsync/readback-контракту; неполная запись не разрешает cleanup."""
+    import json
+    if not isinstance(records, list) or any(not isinstance(row, dict) for row in records):
+        return {"ok": False, "error": "JSONL records должны быть списком объектов"}
+    return _durable(path, {"records": records},
+                    lambda d: "".join(json.dumps(r, ensure_ascii=False, allow_nan=False) + "\n"
+                                      for r in d["records"]),
+                    lambda text: {"records": [json.loads(s) for s in text.splitlines() if s.strip()]},
+                    ("records",), False)
+
+
 def _event_checksum(payload_str: str) -> str:
     import hashlib
     return hashlib.sha256(payload_str.encode("utf-8")).hexdigest()[:16]
@@ -111,14 +213,16 @@ from typing import Callable, Iterator
 
 
 @contextlib.contextmanager
-def _journal_lock(journal_path: Path) -> Iterator[None]:
+def _journal_lock(journal_path: Path, required: bool = False) -> Iterator[None]:
     """v3.1 (trace v0.2): межпроцессная блокировка вокруг append — конкурентные писатели не получают
     одинаковые seq/prev_checksum (устранён v0.1-разрыв). best-effort: без fcntl (Windows) — no-op."""
     lock_path = Path(str(journal_path) + ".lock")
     try:
         lock_path.parent.mkdir(parents=True, exist_ok=True)
         import fcntl
-    except (ImportError, OSError):
+    except (ImportError, OSError) as exc:
+        if required:
+            raise ValueError("обязательная блокировка ledger недоступна") from exc
         yield
         return
     f = open(lock_path, "w", encoding="utf-8")
@@ -154,22 +258,22 @@ def _journal_scan(journal_path: Path) -> tuple:
     return events, True, None, None
 
 
-# ─── УТРАЧЕННЫЕ СЛУЖЕБНЫЕ ЗАПИСИ (срез engine ратчета, 2026-08-12) ──────────────────────────────
-#
-# НАХОДКА, из-за которой это появилось. Ревизия 2026-08-11 верно решила: «служебная запись не
-# роняет прогон, но её утрата обязана быть ВИДНОЙ» — и поставила `_note_bookkeeping_error` на
-# `usage_ledger.append` и `lifecycle_journal.fix_attempt`. Но поставила её на путь ИСКЛЮЧЕНИЯ, а
-# `journal_append` при сбое НЕ бросает: он возвращает `{"ok": False, "error": ...}` (так и написано
-# в его докстроке: «вызывающий пусть логирует, но не падает»). Замер 2026-08-12: НИ ОДИН из 11
-# вызовов `journal_append` в пакете возврат не читает. То есть исправление закрыло путь, которого
-# почти не бывает, а основной путь сбоя — диск полон, лок не взялся, битая checksum-цепочка —
-# проходил молча. Для журнала это хуже, чем для ledger: пропуск рвёт checksum-ЦЕПОЧКУ, и
-# `journal_read` позже сообщит «broken_at» в другом месте и другому человеку.
-#
-# ПОЧЕМУ ЦЕНТРАЛЬНО, А НЕ ПО ВЫЗОВАМ. Правка 11 мест «проверь ok» — это 11 шансов забыть, и
-# двенадцатый вызов приедет без проверки. Здесь регистрируется САМ факт утраты, у источника; отчёт
-# потом сливает накопленное (`drain_bookkeeping_losses`). Образец взят в этом же репозитории:
-# `orchestrator_usage.drain_call_stats` — та же форма «накопили у источника, слили в отчёт».
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _BOOKKEEPING_LOSSES: list[dict] = []
 _BOOKKEEPING_LIMIT = 50
 
@@ -183,10 +287,10 @@ def _note_journal_loss(journal_path: Path, event: dict, error: str) -> dict:
     """
     ev = event if isinstance(event, dict) else {}
     ref = {k: ev.get(k) for k in ("run_id", "workitem_id", "package_id") if ev.get(k) is not None}
-    # ПОТОЛОК. Накопитель сливается на путях возврата отчёта, но процесс может и не дойти до них
-    # (команда, которая только пишет в журнал). Утрат при исправном диске не бывает вовсе, а при
-    # неисправном они пойдут пачкой — и тогда сотая запись не добавляет знания к первым. Потолок
-    # ЗАМЕТЕН, а не молчалив: последняя запись говорит, сколько ещё было.
+    
+    
+    
+    
     if len(_BOOKKEEPING_LOSSES) >= _BOOKKEEPING_LIMIT:
         tail = _BOOKKEEPING_LOSSES[-1]
         if tail.get("what") == "lifecycle_journal.__overflow__":
@@ -277,7 +381,7 @@ def journal_append(journal_path: Path, event: dict) -> dict:
                 f.write(_json.dumps(rec, ensure_ascii=False) + "\n")
                 f.flush()
                 os.fsync(f.fileno())
-            # head-marker (durable): фиксирует ожидаемый хвост -> усечение последней строки детектируемо
+            
             durable_write_json(Path(str(journal_path) + ".head"),
                                {"kind": "journal-head", "seq": seq, "checksum": rec["checksum"]},
                                require_keys=("seq", "checksum"))
@@ -392,6 +496,13 @@ def load_guarded(path: str | Path, required_keys: tuple = (), kind: str | None =
     if missing:
         return {"state": "corrupt", "reason": f"нет обязательных полей: {', '.join(missing)}"}
     return {"state": "ok", "data": data}
+
+
+
+from ai_ops_kit.shared.claim_provenance import (  # noqa: F401
+    STATUSES, PYTEST_OUTPUTS, digest, file_digest, environment_digest, tree_digest,
+    fingerprint, load, state_root, reusable, run, atomic_json, python_context,
+)
 
 
 def main(argv: list[str]) -> int:

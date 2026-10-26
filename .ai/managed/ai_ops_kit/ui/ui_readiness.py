@@ -87,7 +87,7 @@ def assess(child_root):
     build_script = _build_script(pkg)
     static_build = _static_build(root)
 
-    # per-artifact честные статусы через storybook_adapter (build/interaction/a11y/visual)
+    
     per_status = {"story_index": "absent", "interaction": "not_run", "a11y": "not_run", "visual": "not_run"}
     evidence_present = False
     try:
@@ -101,10 +101,10 @@ def assess(child_root):
             "visual": (bundle.get("visual") or {}).get("status", "not_run"),
         }
         evidence_present = any(per_status[k] in ("pass", "fail") for k in ("interaction", "a11y", "visual"))
-    # Причина подавления (срез ратчета, 2026-08-12): это ПРАВИЛЬНЫЙ образец. Отказ не прячется —
-    # он превращается в объявленное состояние `absent`/`not_run`, которое doctor печатает словами
-    # «не UI-продукт? тогда норма (не маскируем)». Тип широк намеренно: сюда попадает всё, чем
-    # может ответить чужой адаптер, и любой такой отказ обязан дать честное «не проверено».
+    
+    
+    
+    
     except Exception:   # noqa: BLE001,S110 — адаптер недоступен -> объявленное absent/not_run, не тишина
         pass
 
@@ -127,10 +127,10 @@ def assess(child_root):
             "signals": {"config_dir": config_dir, "storybook_dep": dep, "build_script": build_script,
                         "static_build": static_build, "evidence_present": evidence_present},
             "evidence_status": per_status, "recommendation": rec,
-            # health углублён ИЗ Конституции: покрытие правил проверками кита, каждое — по constitution_id
+            
             "constitution_coverage": _constitution_coverage(),
-            # Доставлено ли превью Storybook в PR (CI-артефакт статической сборки) — честный факт из
-            # рабочего дерева дочки, не обещание. Ставит его контур доставки только UI-продукту.
+            
+            
             "preview_workflow": (root / ".github" / "workflows" / "ai-ops-storybook-preview.yml").is_file(),
             "installs_dependencies": False}   # кит НИКОГДА не ставит deps сам
 
@@ -190,9 +190,9 @@ def _fmt(a):
     L.append("  evidence (честно): story_index=%s interaction=%s a11y=%s visual=%s" %
              (es["story_index"], es["interaction"], es["a11y"], es["visual"]))
     L.append("  → " + a["recommendation"])
-    # Превью Storybook в PR (CI-артефакт статической сборки, без внешнего хостинга/секретов): честно
-    # называем, доставлен ли workflow. Не доставлен -> называем условие (UI-продукт со сборкой), а не
-    # обещание. Авто-подъём Storybook и внешний хостинг за владельцем остаются — их кит не делает.
+    
+    
+    
     if a.get("preview_workflow"):
         L.append("  превью в PR: ВКЛЮЧЕНО (workflow ai-ops-storybook-preview доставлен) — на PR с "
                  "UI-изменениями CI соберёт Storybook и выложит артефакт `storybook-static`.")

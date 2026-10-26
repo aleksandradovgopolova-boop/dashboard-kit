@@ -28,9 +28,9 @@ templates/ по blueprint.yaml; СОДЕРЖАНИЕ пишут агенты с�
 """
 from __future__ import annotations
 
-# PEP 563: ленивые аннотации — `str | None` (PEP 604) не вычисляется при импорте,
-# поэтому модуль грузится и на Python 3.9 (дефолт macOS CommandLineTools). finding
-# квалификационного прогона: без этого импорт падал TypeError на 3.9.
+
+
+
 
 import hashlib
 import json

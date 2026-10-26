@@ -69,8 +69,8 @@ PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is
 TESTS_DIR = PKG / "tests"
 BASELINE_FILE = PKG / "packages" / "test-taxonomy-baseline.yaml"
 
-# Корни продуктового кода кита. Импорт/загрузка из них = подключение продукта.
-# `installer` и `tools` — точки входа и уходящий слой алиасов (AGENTS.md), тоже продукт.
+
+
 PRODUCT_IMPORT_ROOTS = ("ai_ops_kit", "tools", "installer")
 
 
@@ -93,13 +93,13 @@ def _flat_product_modules(pkg_root: Path = PKG) -> frozenset[str]:
 
 
 PRODUCT_FLAT_MODULES = _flat_product_modules()
-# Токены путей, по которым узнаём динамическую загрузку кода кита (в аргументе spec_from_file_location
-# / import_module / run_path / subprocess). Ищутся в развёрнутом исходнике выражения-аргумента.
+
+
 PRODUCT_PATH_TOKENS = ("ai_ops_kit", "installer", "validation", "tools", "ai_ops.py")
-# Динамические загрузчики продукта: их вызов с аргументом-путём кита = импорт продукта.
+
 DYNAMIC_LOADERS = ("spec_from_file_location", "import_module", "run_path", "load_module",
                    "run_module")
-# Запуск кода кита процессом = исполнение поведения.
+
 SUBPROCESS_RUNNERS = ("run", "check_output", "check_call", "Popen", "call")
 
 
@@ -147,8 +147,8 @@ def _collect_product_bindings(tree: ast.AST) -> tuple[set[str], set[str], bool]:
         callee = value.func
         cname = callee.attr if isinstance(callee, ast.Attribute) else \
             (callee.id if isinstance(callee, ast.Name) else "")
-        # module_from_spec(spec) — продукт, если рядом был spec к пути кита (проверяем по всему файлу
-        # через imports_product ниже); import_module/run_path — по аргументу.
+        
+        
         is_loader = cname in ("module_from_spec", *DYNAMIC_LOADERS)
         if not is_loader:
             return False
@@ -160,16 +160,16 @@ def _collect_product_bindings(tree: ast.AST) -> tuple[set[str], set[str], bool]:
         return False
 
     for node in ast.walk(tree):
-        # --- статические импорты ---
+        
         if isinstance(node, ast.ImportFrom):
             mod = node.module or ""
             top = mod.split(".")[0]
             if top in PRODUCT_IMPORT_ROOTS or top in PRODUCT_FLAT_MODULES:
                 imports_product = True
                 for a in node.names:
-                    # Имя может оказаться и функцией (вызов `f(...)`), и подмодулем/классом (вызов
-                    # атрибута `mod.f(...)`) — например `from ai_ops_kit.engine import acceptance_verify
-                    # as av` с последующим `av.run(...)`. Кладём в оба множества.
+                    
+                    
+                    
                     bound = a.asname or a.name
                     product_funcs.add(bound)
                     product_aliases.add(bound)
@@ -179,7 +179,7 @@ def _collect_product_bindings(tree: ast.AST) -> tuple[set[str], set[str], bool]:
                 if top in PRODUCT_IMPORT_ROOTS or top in PRODUCT_FLAT_MODULES:
                     imports_product = True
                     product_aliases.add(a.asname or top)
-        # --- динамические загрузчики (spec_from_file_location / import_module / run_path) ---
+        
         elif isinstance(node, ast.Call):
             callee = node.func
             cname = callee.attr if isinstance(callee, ast.Attribute) else \
@@ -188,13 +188,13 @@ def _collect_product_bindings(tree: ast.AST) -> tuple[set[str], set[str], bool]:
                 imports_product = True
             if cname == "import_module" and _refs_product_path(node):
                 imports_product = True
-        # --- присваивания от динамической загрузки ---
+        
         elif isinstance(node, ast.Assign):
             note_dynamic_assign(node.targets, node.value)
         elif isinstance(node, ast.AnnAssign) and node.value is not None:
             note_dynamic_assign([node.target], node.value)
 
-    # --- фикстуры, грузящие продукт: имя фикстуры = продуктовый алиас для атрибутных вызовов ---
+    
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and _is_fixture(node):
             if _fixture_loads_product(node):
@@ -232,17 +232,17 @@ def _calls_product(tree: ast.AST, product_funcs: set[str], product_aliases: set[
         if not isinstance(node, ast.Call):
             continue
         func = node.func
-        # прямой вызов импортированного продуктового имени
+        
         if isinstance(func, ast.Name) and func.id in product_funcs:
             return True
-        # вызов атрибута на продуктовом алиасе: alias.method(...)
+        
         if isinstance(func, ast.Attribute):
             root = func.value
             while isinstance(root, ast.Attribute):
                 root = root.value
             if isinstance(root, ast.Name) and root.id in product_aliases:
                 return True
-            # запуск кода кита процессом: subprocess.run([..., <путь кита>, ...])
+            
             if func.attr in SUBPROCESS_RUNNERS and _refs_product_path(node):
                 return True
     return False
@@ -355,7 +355,7 @@ def check(current: dict, baseline: dict) -> list[str]:
                 "порога не существует"]
     c_beh = current["behavioral_count"]
     c_tot = current["total_count"]
-    # доля упала: c_beh/c_tot < b_beh/b_tot  <=>  c_beh*b_tot < b_beh*c_tot
+    
     if c_beh * b_tot < b_beh * c_tot:
         c_share = current["behavioral_share_pct"]
         b_share = round(100.0 * b_beh / b_tot, 2)

@@ -125,8 +125,8 @@ def resolve_base(root: str | Path, base_ref: str | None) -> dict:
             br = dref.strip().split("refs/remotes/origin/", 1)[-1]
             return {"base_ref": br, "base_sha": sha.strip(), "source": "remote-default",
                     "mode": "auto", "resolved": True}
-    # сюда попадаем только при detached HEAD без upstream и без origin/HEAD. Честный отказ:
-    # 'HEAD' не ветка, а контракт резолвера требует именно ветку.
+    
+    
     if cur == "HEAD":
         return {"base_ref": None, "resolved": False, "mode": "auto",
                 "reason": "detached HEAD без upstream и origin/HEAD — база не ветка; "

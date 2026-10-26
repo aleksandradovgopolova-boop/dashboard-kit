@@ -21,6 +21,7 @@ CLI: parallel_planner.py [examples/work-graph-demo] [--json] | --selftest
 from __future__ import annotations
 
 import json
+import posixpath
 import sys
 from pathlib import Path
 
@@ -36,8 +37,17 @@ def _prefix(glob):
     """Нормализованный каталог-префикс write-scope глоба. ПУСТАЯ строка означает ГЛОБАЛЬНЫЙ scope
     (`**`, `*`, `.`, `/`) — покрывает ВЕСЬ репозиторий. Раньше `**` давал prefix '' -> 'aa=/',
     и `'src/b/'.startswith('/')` == False -> глобальный scope НЕ ловился как пересечение (баг v3.6.5)."""
-    p = (glob or "").split("*")[0].strip().rstrip("/")
-    return "" if p in ("", ".") else p
+    if not isinstance(glob, str):
+        return ""
+    p = glob.replace("\\", "/").strip()
+    if ".." in p.split("/"):
+        return ""
+    head = p[:min((p.index(c) for c in "*?[" if c in p), default=len(p))]
+    if len(head) < len(p) and not head.endswith("/"):
+        head = head.rsplit("/", 1)[0] if "/" in head else ""
+    p = head
+    p = posixpath.normpath(p)
+    return "" if p in ("", ".", "..") or p.startswith(("/", "../")) or ":" in p else p
 
 
 def _overlap(a_scopes, b_scopes):
@@ -85,7 +95,7 @@ def plan(wg: dict) -> dict:
             contract_count[c] = contract_count.get(c, 0) + 1
     contract_first = sorted([c for c, n in contract_count.items() if n >= 2])
 
-    # bounded parallel-2 группы среди независимых с непересекающимися scope
+    
     groups, used = [], set()
     for i, pa in enumerate(independent):
         if pa["id"] in used:
@@ -111,7 +121,7 @@ def plan(wg: dict) -> dict:
     else:
         mode = "sequential"
 
-    # integration_order — топологический (пакет после depends_on)
+    
     order, placed = [], set()
     guard = 0
     remaining = list(ids)
@@ -163,7 +173,7 @@ def integration_decision(package_results: dict, conflicts=0, base_moved=False, a
     if base_moved:
         return {"proceed": False, "integration_sha_required": True, "open_pr": False,
                 "revalidation_required": True, "reason": "base сдвинулась -> integration revalidation"}
-    # все pass, нет конфликта, база стабильна
+    
     return {"proceed": True, "integration_sha_required": True, "open_pr": bool(aggregate_ok),
             "reason": ("aggregate green -> новый integration-SHA + один draft PR" if aggregate_ok
                        else "aggregate FAIL -> integration-SHA есть, но PR НЕ открывается")}
@@ -204,13 +214,13 @@ def integration_gate(expected_packages, package_results, shared_contracts=None, 
         errors.append(f"неполный набор результатов: нет пакетов {sorted(missing)}")
     if extra:
         errors.append(f"лишние результаты вне WorkGraph: {sorted(extra)}")
-    # каждый результат должен быть доказательным (SHA + gate_report, привязанный к ревизии пакета)
+    
     for pid, r in got.items():
         if not isinstance(r, dict):
             errors.append(f"{pid}: результат не доказательный (нет SHA/gate_report, голое '{r}')")
             continue
-        if not r.get("sha"):
-            errors.append(f"{pid}: нет package SHA")
+        if not _sha_like(r.get("sha")):
+            errors.append(f"{pid}: нет настоящего package SHA (нужен hex SHA длиной не меньше 7)")
         gr = r.get("gate_report")
         if not (isinstance(gr, dict) and "all_pass" in gr):
             errors.append(f"{pid}: нет gate_report(all_pass)")
@@ -219,7 +229,7 @@ def integration_gate(expected_packages, package_results, shared_contracts=None, 
                 errors.append(f"{pid}: status=pass, но gate_report.all_pass != true")
             if r.get("sha") and gr.get("tested_revision") != r.get("sha"):
                 errors.append(f"{pid}: gate_report.tested_revision != package sha (evidence не на ревизии пакета)")
-    # общий контракт обязан быть зафиксирован реальным contract SHA
+    
     for c in shared_contracts or []:
         cs = (contract_shas or {}).get(c)
         if not cs:
@@ -229,7 +239,7 @@ def integration_gate(expected_packages, package_results, shared_contracts=None, 
     if errors:
         return _block(errors)
 
-    # ниже — набор полон, доказателен, контракты зафиксированы
+    
     not_pass = [pid for pid, r in got.items() if r.get("status") != "pass"]
     if not_pass:
         return _block([f"пакет(ы) не pass {sorted(not_pass)} -> fan-in НЕ начинается"])
@@ -242,10 +252,10 @@ def integration_gate(expected_packages, package_results, shared_contracts=None, 
     if not isinstance(aggregate, dict):
         return {"proceed": True, "integration_sha_required": True, "open_pr": False, "errors": [],
                 "reason": "aggregate не РЕАЛЬНЫЙ GateReport (голый bool/None) -> integration-SHA есть, PR НЕ открывается"}
-    # aggregate evidence обязан относиться к integration-SHA. Легаси-путь без aggregate ушёл выше
-    # (bare bool/None), так что здесь aggregate — РЕАЛЬНЫЙ dict: отсутствующий integration_sha больше
-    # НЕ короткозамыкается в rev_ok=True (это была fail-open дыра — evidence могло быть привязано к
-    # не-интеграционной ревизии). Требуем и реальный SHA, и совпадение tested_revision.
+    
+    
+    
+    
     rev_ok = integration_sha is not None and aggregate.get("tested_revision") == integration_sha
     agg_ok = aggregate.get("all_pass") is True and rev_ok
     if not rev_ok:

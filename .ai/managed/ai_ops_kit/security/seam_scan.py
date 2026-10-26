@@ -40,8 +40,8 @@ _READBACK = re.compile(r"\b(read_text|readFile|\.get\(|SELECT\s|requests\.get|as
 _PRECOND = re.compile(r"(require[_-]?auth|@login_required|@requires?_|raise\s+\w*(Permission|Unauthorized|Forbidden)|"
                       r"if\s+not\s+\w*(authorized|allowed|permitted)|required\s*=\s*True|"
                       r"status_code\s*=\s*40[13]|abort\(40[13]|blocking\s*[:=]\s*true|gate.*enabled)", re.I)
-# широкий/проглатывающий catch: bare except, except Exception/BaseException, JS catch(...){ / catch{
-# (тело pass/return часто на СЛЕДУЮЩЕЙ строке дифа — ловим саму широкую ветку; happy-path тест = контр-довод)
+
+
 _CATCH = re.compile(r"(\bexcept\s*:|\bexcept\s+(Exception|BaseException)\b|"
                     r"(\}\s*)?\bcatch\s*(\([^)]*\))?\s*\{)")
 _OPT_TS = re.compile(r"^\s*[\w'\"]+\?\s*:")                       # TS optional field:  foo?: T
@@ -53,8 +53,8 @@ _REALRUN = re.compile(r"(integration|live|e2e|@pytest\.mark\.(integration|live|e
 _TESTFILE = re.compile(r"(^|/)(tests?|__tests__|spec)/|(_test\.|\.test\.|\.spec\.|test_.*\.py$)", re.I)
 _HAPPY = re.compile(r"\b(def test_|it\(|test\(|describe\(|assert|expect\()", re.I)
 _SHARED_CONTRACT = re.compile(r"(schema.*\.json$|\.schema\.|contract|interface\s|\btypes?\.(ts|py)$|\.proto$|openapi|dto)", re.I)
-# #6 surface wiring: объявление маршрута в ядре и вызов клиента к пути. Полная сверка (core⊆обёртки,
-# client⊆обёртки) — в validate_surface_wiring; здесь diff-эвристика двух твоих триггеров.
+
+
 _ROUTE = re.compile(r"((@(app|router|blueprint|api)\.(get|post|put|delete|patch|route))\s*\(\s*['\"]/|"
                     r"\b(app|router|api|server)\.(get|post|put|delete|patch|use|add_route)\s*\(\s*['\"]/|"
                     r"\b(path|url|re_path|route)\s*\(\s*r?['\"]/|@(get|post|put|delete|patch)\s*\(\s*['\"]/)", re.I)
@@ -130,8 +130,8 @@ def gate_decision(scan):
                 blockers.append(f"{sig}: шов без доказательства перехода ({fnd['file']})")
         else:
             advisories.append(f"{sig}: {fnd['file']}")
-    # #6 подсказка: новый маршрут/вызов клиента, а файл-реестр маршрутов НЕ менялся -> сильный признак
-    # wiring drift (ядро умеет, обёртка не знает). Триггер #1 из «дефектов одной сессии».
+    
+    
     if any(f["signal"] == "surface_wiring_drift" for f in scan["findings"]) and not ev.get("routes_registry_changed"):
         advisories.append("surface_wiring_drift: маршрут/вызов добавлен, но реестр маршрутов не менялся "
                           "-> проверь core⊆обёртки⊆client (validate_surface_wiring)")
@@ -145,7 +145,7 @@ def main(argv):
     if not args:
         print(__doc__)
         return 1
-    # Ревизия 2026-08-11: было `open(...).read()` — дескриптор не закрывался.
+    
     diff_text = sys.stdin.read() if args[0] == "-" else Path(args[0]).read_text(encoding="utf-8")
     scan = scan_diff(diff_text)
     dec = gate_decision(scan)

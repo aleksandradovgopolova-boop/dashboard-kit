@@ -68,12 +68,12 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
                 if rule.get("escalate_reason"):
                     reasons.append(rule["escalate_reason"])
                 break
-            # объявленный, но незарегистрированный контракт -> эскалация, не workflow
+            
             if rule.get("escalate_reason"):
                 escalations.append(
                     f"{rule['escalate_reason']} (контракт {target} ещё не зарегистрирован — "
                     f"эскалация применена к базовому workflow, требуется ручное одобрение)")
-            # НЕ break: продолжаем искать реальный базовый workflow ниже
+            
     if workflow is None:
         tt = inp.get("task_type")
         if tt in workflows:
@@ -86,12 +86,12 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
                     reasons.append(f"task_type '{tt}' -> {wid} (selection_criteria)")
                     break
     if workflow is None:
-        # v2.123 калибровка классификатора (finding обкатки: тривиальные задачи слепо уходили в
-        # тяжёлый ENGINEERING -> Spec-First блок). Тяжёлый ENGINEERING — ТОЛЬКО при ЯВНОМ сигнале
-        # тяжести (size medium+/risk medium+). При неопределённости (size/risk неизвестны ИЛИ низкие)
-        # НЕ эскалируем автоматически: уходим в QUICK и помечаем low-confidence (движок предлагает
-        # подтвердить/уточнить через preview, а не молча блокировать Spec-First). Риск critical уже
-        # переопределён в CRITICAL выше.
+        
+        
+        
+        
+        
+        
         size, risk = inp.get("size"), inp.get("risk")
         heavy = size in ("medium", "large", "xl") or risk in ("medium", "high", "critical")
         if heavy and "ENGINEERING" in workflows:
@@ -107,7 +107,7 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
             workflow = "ENGINEERING"
             reasons.append(f"unknown task_type '{inp.get('task_type')}' -> ENGINEERING (QUICK недоступен)")
 
-    # 2. provider prefer/forbid + model_class (из provider_rules)
+    
     prefer_provider, forbid_provider, model_class = [], [], None
     for rule in policy.get("provider_rules", []):
         applies = ("default" in rule) or _match(rule.get("when", {}), inp)
@@ -127,7 +127,7 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
             model_class = rule["prefer_model_class"]
     model_class = model_class or "balanced"
 
-    # выбор провайдера: prefer ∩ available, не forbidden; иначе первый available не forbidden
+    
     def pick_provider() -> str | None:
         for p in prefer_provider:
             if p in available_providers and p not in forbid_provider:
@@ -140,11 +140,11 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
     if selected_provider is None:
         reasons.append("no allowed provider available")
 
-    # 3. runtime
+    
     prefer_runtime = []
     for rule in policy.get("runtime_rules", []):
         ctx = dict(inp)
-        # спец-ключ available_runtime: применимо, если рантайм доступен
+        
         if "when" in rule and "available_runtime" in rule["when"]:
             ar = rule["when"]["available_runtime"]
             if ar in available_runtimes:
@@ -155,7 +155,7 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
     selected_runtime = next((r for r in prefer_runtime if r in available_runtimes),
                             (available_runtimes[0] if available_runtimes else None))
 
-    # 4. execution_mode из возможностей выбранного рантайма
+    
     rt = runtimes.get(selected_runtime, {})
     caps = rt.get("capabilities", {})
     def cap_true(name: str) -> bool:
@@ -166,7 +166,7 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
     else:
         execution_mode = rt.get("preferred_mode", "sequential")
 
-    # 5. approval
+    
     human_approval = "conditional"
     for rule in policy.get("approval_rules", []):
         if ("default" in rule) or _match(rule.get("when", {}), inp):
@@ -174,12 +174,12 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
                 human_approval = rule["human_approval_required"]
                 break
     human_approval_required = (human_approval is True)
-    # эскалация в незарегистрированный контракт (напр. critical->CRITICAL, post-MVP)
-    # всегда требует ручного одобрения, даже если approval_rules сказали иначе
+    
+    
     if escalations:
         human_approval_required = True
 
-    # 6. required/missing capabilities (из workflow-контракта)
+    
     required = workflows.get(workflow, {}).get("required_capabilities", [])
     prov_caps = providers.get(selected_provider, {}).get("capabilities", {}) if selected_provider else {}
     def provider_supports(capname: str) -> bool:
@@ -188,11 +188,11 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
             return True
         if isinstance(c, dict):
             return c.get("value") is True or c.get("status") in ("documented", "verified")
-        # file_read/write/web_access часто на стороне runtime
+        
         return cap_true(capname) or capname in ("file_read", "file_write")
     missing = [c for c in required if not provider_supports(c)]
 
-    # 7. fallbacks
+    
     fallbacks = []
     for p in prefer_provider:
         if p != selected_provider and p in available_providers and p not in forbid_provider:
@@ -284,7 +284,7 @@ SCENARIOS = [
      "inp": {"task_type": None, "confidentiality": "internal",
              "available_providers": ["anthropic"], "available_runtimes": ["claude-code"]},
      "expect": {"workflow": "QUICK", "classification_confidence": "low"}},
-    # finding обкатки 4: неизвестный task_type + мелкий размер -> QUICK, не тяжёлый ENGINEERING
+    
     {"name": "unknown task_type + size small/low risk -> QUICK (finding 4)",
      "inp": {"task_type": None, "size": "small", "risk": "low", "ui_changed": True,
              "confidentiality": "internal",
@@ -294,7 +294,7 @@ SCENARIOS = [
      "inp": {"task_type": None, "size": "large", "risk": "low", "confidentiality": "internal",
              "available_providers": ["anthropic"], "available_runtimes": ["claude-code"]},
      "expect": {"workflow": "ENGINEERING"}},
-    # critical risk переопределяет task_type -> зарегистрированный контракт CRITICAL (v2.15)
+    
     {"name": "critical PRODUCT -> CRITICAL (override) + ручное одобрение",
      "inp": {"task_type": "PRODUCT", "risk": "critical", "confidentiality": "internal",
              "available_providers": ["anthropic"], "available_runtimes": ["claude-code"]},

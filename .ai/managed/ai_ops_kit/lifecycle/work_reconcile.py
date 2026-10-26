@@ -28,10 +28,31 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-# session-заявка старше этого (в часах) без finish считается БРОШЕННОЙ. Замер поля 01.09.2026:
-# вчерашняя `session:*`-заявка держала доставку сутки — liveness по session-id не проверить, но
-# возраст в полсуток не догадка: прогон длиной 12ч нереален, перезапуск сессии/машины — обычен.
+
+
+
 _CLAIM_STALE_HOURS = 12
+
+
+
+
+
+
+
+
+_CLAIM_HARD_TTL_DAYS = 14
+
+
+def _hard_ttl_hours() -> float:
+    """Жёсткий потолок возраста заявки в часах. Env `AI_OPS_CLAIM_HARD_TTL_DAYS` переопределяет дни;
+    непарсируемое/непозитивное значение -> дефолт (не отключаем защиту по битой настройке)."""
+    try:
+        days = float(os.environ.get("AI_OPS_CLAIM_HARD_TTL_DAYS", _CLAIM_HARD_TTL_DAYS))
+    except (ValueError, TypeError):
+        days = _CLAIM_HARD_TTL_DAYS
+    if days <= 0:
+        days = _CLAIM_HARD_TTL_DAYS
+    return days * 24.0
 
 
 def _claim_age_hours(started_iso) -> float:
@@ -86,7 +107,16 @@ def holder_is_gone(entry, machine=None) -> bool:
          записан (старые заявки) или процесс формально ещё жив.
     Без этого честный отказ второй сессии становился помехой: одиночный повторный прогон получал
     «её держит другой» от процесса, которого нет, или от сессии, которой уже нет.
+
+    ЖЁСТКИЙ ПОТОЛОК (#1048). Сверх двух доказательств выше есть безусловный: заявка старше
+    `_hard_ttl_hours()` (по умолчанию 14 дней) держать некому НИ НА КАКОЙ машине. До него чужая
+    session-заявка не снималась вовсе — и мёртвая висела вечно, блокируя `next`. СВЕЖИЕ чужие заявки
+    (моложе потолка) по-прежнему уважаются как авторитет координации; меняется судьба только ОЧЕНЬ
+    старых.
     """
+    started = entry.get("started_at") or entry.get("since")
+    if started and _claim_age_hours(started) >= _hard_ttl_hours():
+        return True                # жёсткий потолок: очень старую заявку снимаем даже с чужой машины
     holder = str(entry.get("owner_session") or "")
     if holder.startswith("pid:"):
         if (entry.get("machine") or "") != (machine or _machine()):
@@ -103,8 +133,8 @@ def holder_is_gone(entry, machine=None) -> bool:
     claim_machine = entry.get("machine") or ""
     if claim_machine and claim_machine != (machine or _machine()):
         return False
-    # Признак смерти сессии, не дожидаясь возрастного порога: pid процесса прогона на нашей машине
-    # уже мёртв. Поля нет (старая заявка) -> `_pid_is_dead` вернёт False, и решает возраст.
+    
+    
     if _pid_is_dead(entry.get("owner_pid")):
         return True
     started = entry.get("started_at") or entry.get("since")
@@ -117,7 +147,7 @@ def _divergence(child_root, branch, base):
     ПОЛЕ 17.08.2026: в дочке нашлась ветка ВПЕРЕДИ base на 1 коммит и ПОЗАДИ на 241 — проверка
     «содержится в base» по ОДНОМУ направлению давала «не влито» на давно закрытой задаче. Поэтому
     оба числа считаются и оба показываются: одно из них без другого вводит в заблуждение."""
-    # Единый вход к git с таймаутом (см. shared/gitio).
+    
     rc, out, _ = gitio.git(child_root, "rev-list", "--left-right", "--count", f"{base}...{branch}")
     if rc != 0:
         return None, None
@@ -133,7 +163,7 @@ def _divergence(child_root, branch, base):
 
 def _same_ref(child_root, a, b) -> bool:
     """Указывают ли два имени на ОДНУ И ТУ ЖЕ ветку. -> bool (не разобрали — False, не угадываем)."""
-    # Единый вход к git с таймаутом (см. shared/gitio).
+    
     if not a or not b:
         return False
     if str(a) == str(b):
@@ -163,7 +193,7 @@ def reconcile_with_base(entries, child_root, base=None):
     расхождения; если коммиты ветки уже содержатся в базе (`merge-base --is-ancestor`), запись
     помечается `superseded` с названной причиной и ДАТОЙ замера. Не измерили — говорим `None` и
     называем почему; отсутствие сверки не выдаётся за «не влито»."""
-    # Единый вход к git с таймаутом (см. shared/gitio).
+    
     out = []
     src = list(entries or [])
     if not src:
@@ -185,12 +215,12 @@ def reconcile_with_base(entries, child_root, base=None):
             out.append(e)
             continue
         e["base_ref"] = base_ref
-        # БАЗА, СОВПАДАЮЩАЯ С САМОЙ ВЕТКОЙ, НИЧЕГО НЕ ДОКАЗЫВАЕТ (замер 20.08.2026). В рабочей копии
-        # прогона HEAD — это и есть заявленная ветка, и `_resolve_base` отдаёт её же: сверка
-        # получалась `ai-ops/w` против `ai-ops/w` («впереди 0, позади 0»), любая заявка объявлялась
-        # влитой, отказ второй сессии не срабатывал, а `status` говорил, что работа не идёт. Кит сам
-        # ставит дочку в такую копию (`worktree.add` -> `.ai/worktrees/<работа>`), так что место
-        # штатное. Третье состояние: это «не измерили», а не «не влито» и не «влито».
+        
+        
+        
+        
+        
+        
         if _same_ref(child_root, branch, base_ref):
             e["merged_into_base"] = None
             e["reconcile_note"] = (f"база совпадает с самой веткой '{branch}' (рабочая копия этой "
@@ -198,7 +228,7 @@ def reconcile_with_base(entries, child_root, base=None):
             out.append(e)
             continue
         if gitio.git(child_root, "rev-parse", "--verify", "--quiet", branch)[0] != 0:
-            # ветки нет локально: сказать это, а не молча считать работу идущей
+            
             e["merged_into_base"] = None
             e["reconcile_note"] = f"ветки '{branch}' нет в этом репозитории — сверка невозможна"
             out.append(e)
