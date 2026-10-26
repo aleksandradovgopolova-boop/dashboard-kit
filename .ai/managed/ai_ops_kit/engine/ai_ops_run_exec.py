@@ -32,10 +32,10 @@ import yaml
 from ai_ops_kit.engine.ai_ops_run_reporting import _review_fix_context   # noqa: E402
 from ai_ops_kit.lifecycle import active_work   # noqa: E402
 from ai_ops_kit.shared import lifecycle_store as _ls   # noqa: E402
-# Ре-экспорт вынесенного кластера (резолв провайдера + скан intents + resume-контекст + профиль):
-# фасадные функции зовут `_profile_for_report`, а `_execute_with_fix_loop` — `_provider_trust`/
-# `_with_provider_fallback` через модуль `ai_ops_run`; вызовы `ai_ops_run_exec.<name>` (и через
-# него `ai_ops_run.<name>`) остаются на прежних именах. Сателлит фасад НЕ импортирует — цикла нет.
+
+
+
+
 from ai_ops_kit.engine.run_exec_context import (   # noqa: E402,F401
     _outbox_dir,
     resolve_provider_for_run,
@@ -78,7 +78,7 @@ def _note_bookkeeping_error(rep, what, exc):
 def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, install_deps,
                            hybrid_prelude, calib, ui_evidence, reevaluate_only, resume,
                            resume_ctx, attempt_id, fid, aw_path, review_fix_attempts,
-                           reviewer_proposer, author_proposer):
+                           reviewer_proposer, author_proposer, budget=None):
     """Исполнение прогона движком + fix-loop с quality-эскалацией writer'а.
 
     K6: вынесено из run() без изменения поведения. Читает/мутирует `ctx` (prop/rev_prop/auth_prop,
@@ -94,13 +94,15 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
     from ai_ops_kit.engine import execution_pipeline
     from ai_ops_kit.engine import tool_loop
     from ai_ops_kit.providers import orchestrator
-    # _provider_trust/_with_provider_fallback берём через модуль ai_ops_run (ленивый импорт): тесты
-    # подменяют их как `ai_ops_run.<name>`, и без обращения через модуль подмена бы сюда не дошла.
+    
+    
     from ai_ops_kit.engine import ai_ops_run as _ar
+    from ai_ops_kit.shared.budget import resolve_budget
+    budget = resolve_budget(budget, plan.get("execution_budget"))
 
     def _pipe(_resume, _rctx):
         return execution_pipeline.run_pipeline(
-            ctx.task_text, ctx.signals, ctx.child_root, ctx.prop, feature=ctx.feature, plan=plan,
+            ctx.task_text, ctx.signals, ctx.child_root, ctx.prop, feature=ctx.feature, plan=plan, budget=budget,
             commit=execute, isolate=execute, open_pr=ctx.open_pr, baseline_diff=ctx.baseline_diff,
             require_fix=ctx.require_fix, max_steps=ctx.max_steps, discard_previous=discard_previous,
             sandbox=ctx.sandbox, review=ctx.review, reviewer_proposer=ctx.rev_prop,
@@ -110,12 +112,13 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
             base=ctx.base,   # v3.0.1/v3.0.7 (P0): base сквозной; None -> auto-резолв (не хардкод main)
             defer_delivery=True,   # v3.0.15 (P0): PR открывает КОНТРОЛЛЕР после durable-фиксации lifecycle
             calibrated_enforcement=calib, ui_evidence=ui_evidence,
+            verification_intent=ctx.verification_intent,
             reevaluate_only=reevaluate_only,   # v3.8.3-rc: переоценка гейтов после человеко-approval БЕЗ переавторинга
             strict_judge_qualified=ctx.sec_qualified)   # v3.7.1: нет qualified судьи -> security pending_human
     try:
         rep = _pipe(resume, resume_ctx)
         _fix_left = int(review_fix_attempts or 0)
-        # v3.8.3 WRITER QUALITY-ESCALATION: ладдер по success_rate (impl из model_resolution).
+        
         _esc_ladder = (((ctx.model_resolution or {}).get("plan") or {}).get("implementation") or {}).get("escalation_ladder") or []
         _esc_idx = 0
         _QUALITY_GATES = {"implementation_verification", "code_review"}
@@ -124,7 +127,7 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
             _fx = _review_fix_context(rep)
             if not _fx:
                 break   # блок не модель-фиксируем (human/base/lifecycle) -> не зацикливаем
-            # эскалация writer'а, если провалены КАЧЕСТВЕННЫЕ гейты и ладдер не исчерпан (model=None -> router-путь)
+            
             _unmet = set((rep.get("gates") or {}).get("unmet") or [])
             if ctx.model is None and (_unmet & _QUALITY_GATES) and _esc_idx < len(_esc_ladder):
                 if ctx.model_resolution.get("model_attempts"):
@@ -137,7 +140,7 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                     _ct = _ar._provider_trust(c["provider"], _pe2.endpoint_for(c["provider"])["key_env"],
                                               ctx.klp_by_env, ctx.trust_env, ctx.trust_now, ctx.trust_cache)
                     return _ct["ready"], _ct.get("reason")
-                # найти СЛЕДУЮЩЕГО кандидата ладдера, прошедшего JIT-trust; не готов -> исключить+записать
+                
                 _esc = None
                 while _esc_idx < len(_esc_ladder):
                     _cand = _esc_ladder[_esc_idx]; _esc_idx += 1
@@ -153,7 +156,7 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                     try:
                         _eep = _pe2.endpoint_for(_esc["provider"])
                         _eprov = orchestrator.make_openai_provider(_esc["model_id"], _eep["base_url"], _eep["key_env"])
-                        # #6-fallback на СЛЕДУЮЩЕГО TRUSTED кандидата (если эскалированный сам жёстко 429-ится)
+                        
                         _nxt = next((n for n in _esc_ladder[_esc_idx:] if _cand_trusted(n)[0]), None)
                         if _nxt:
                             _nep = _pe2.endpoint_for(_nxt["provider"])
@@ -185,8 +188,8 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                                     "attempt_id": attempt_id, "remaining": _fix_left,
                                     "unmet": (rep.get("gates") or {}).get("unmet")})
             except Exception as _je:  # noqa: BLE001 — журнал не роняет fix-loop...
-                # ...но пробел в аудит-цепочке обязан быть видимым: цепочка checksum'ов
-                # lifecycle-журнала после пропущенной записи уже не полна.
+                
+                
                 _note_bookkeeping_error(rep, "lifecycle_journal.fix_attempt", _je)
             rep = _pipe(True, _fx + (("\n\n" + resume_ctx) if resume_ctx else ""))
             _fix_left -= 1
@@ -198,9 +201,9 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                                    audience=_run_start_audience(ctx.child_root))
         raise
     except Exception as _e:  # noqa: BLE001
-        # v3.0-rc17 (finding живого прогона): исключение провайдера/инфры (напр. HTTP 429 kimi ПОСЛЕ
-        # исчерпания ретраев) НЕ должно ронять CLI traceback'ом — как в sequential (rc12/rc16), одиночный
-        # прогон обязан вернуть ЧЕСТНЫЙ error-отчёт (exit 2), а не падать. Типизируем сбой ниже.
+        
+        
+        
         from ai_ops_kit.engine.ai_ops_run_lifecycle import _run_start_audience
         with contextlib.redirect_stdout(sys.stderr):
             active_work.finish_cmd(aw_path, fid, status="blocked", child_root=ctx.child_root,  # #695
@@ -227,9 +230,9 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                    "initial_model": (ctx.model_resolution.get("initial_model") if isinstance(ctx.model_resolution, dict) else None),
                    "effective_model": _eff_e,
                    "model_resolution": ctx.model_resolution if isinstance(ctx.model_resolution, dict) else None}
-        # v3.0-rc20 (finding аудита P1): DURABLE failure evidence — не только вернуть отчёт, но и
-        # ЗАПИСАТЬ свежий run-report.json + failure-handoff, иначе на диске остаётся старый отчёт/
-        # handoff прошлого прогона (пользователь думает, что evidence свежее). next_action — безопасный.
+        
+        
+        
         try:
             _safe = ("retry прогон (сбой транзиентный: провайдер/сеть)"
                      if _fail.get("retryable") else
@@ -244,12 +247,12 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                               require_keys=("kind", "workitem_id"))
             err_rep["run_report"] = f"features/{fid}/run-report.json"
             err_rep["handoff"] = {"next_action": _safe}
-        # СРЕЗ engine РАТЧЕТА 2026-08-12. Решение «запись evidence не маскирует исходный сбой»
-        # остаётся верным: подменять причину падения ошибкой записи нельзя. Но у него не было
-        # второй половины. Комментарий ВЫШЕ сам называет цену: не записали свежий отчёт/handoff
-        # — «на диске остаётся старый отчёт прошлого прогона, пользователь думает, что evidence
-        # свежее». При `pass` происходило ровно это, и МОЛЧА: `err_rep` даже не упоминал, что
-        # обещанные им `run_report`/`handoff` на диск не легли. Теперь упоминает.
+        
+        
+        
+        
+        
+        
         except Exception as _we:  # noqa: BLE001 — исходный сбой важнее сбоя записи, но утрата видна
             _note_bookkeeping_error(err_rep, "failure_evidence.write", _we)
         _ls.merge_bookkeeping_losses(err_rep)
@@ -300,15 +303,15 @@ def _build_run_proposers(ctx, proposer, reviewer_proposer, author_proposer):
     _rname = ((_model_resolution or {}).get("reviewer") or {}).get("provider") or provider_name
     prop = proposer or tool_loop.make_model_proposer(
         _uctx(_writer_prov or orchestrator.make_provider(provider_name, _writer_model), "implementation", "initial", _wname))
-    # v2.83/v3.7.12: независимый ревьюер — ОТДЕЛЬНЫЙ провайдер (writer ≠ judge на уровне вызова).
+    
     rev_prop = reviewer_proposer
     if rev_prop is None and provider_name != "mock":
         if ctx.review:
-            # путь ревью гейтов: недоступный провайдер судьи — ошибка прогона, как и было
+            
             rev_prop = _uctx(_rev_prov or orchestrator.make_provider(provider_name, _rev_model),
                              "code_review", "review", _rname)
         else:
-            # путь сверки критериев: отсутствие судьи не роняет прогон (сверка скажет «недоступен»)
+            
             try:
                 rev_prop = _uctx(_rev_prov or orchestrator.make_provider(provider_name, _rev_model),
                                  "code_review", "review", _rname)
@@ -378,9 +381,9 @@ def exit_code(r):
             return 2
         if r.get("status") == "blocked":   # v2.115: preflight не пройден — не ready, но не ошибка исполнения
             return 1
-        # v3.0.11 (finding аудита P1): завершённый прогон несёт overall_status (delivered|delivery-failed|
-        # error), НЕ top-level status. Прежде exit_code читал только status -> None -> падал на
-        # ready_for_pr=True -> код 0 даже при delivery-failed (--open-pr не доставил PR, а CI видел успех).
+        
+        
+        
         _ov = r.get("overall_status")
         if _ov == "error":
             return 2
@@ -399,9 +402,9 @@ def _build_run_arg_parser():
     rp.add_argument("--signals", default="{}")
     rp.add_argument("--features-dir")
     rp.add_argument("--runtime", default="claude-code")
-    # v3.28.x (P0-1): дефолта `mock` больше НЕТ — без явного флага провайдера выбирает резолв
-    # (orchestrator_providers.resolve_provider) и печатает решение до прогона. Явный --provider
-    # (в т.ч. `mock`) всегда побеждает; автовыбор работает только при --execute.
+    
+    
+    
     rp.add_argument("--provider", default=None,
                     help="провайдер (mock|anthropic|openai|openai-compatible|claude-cli|qwen|"
                          "deepseek|kimi). Без флага при --execute — авторезолв: .ai-ops.yaml + ключ "
@@ -480,8 +483,8 @@ def _build_run_arg_parser():
     rs.add_argument("--force", action="store_true",
                     help="продолжить, даже если нужна ревалидация (база/состояние изменились) — "
                          "осознанное решение человека")
-    # resume НЕ автовыбирает провайдера (продолжение прогона не должно менять исполнителя молча):
-    # без флага — прежний офлайн-дефолт mock.
+    
+    
     rs.add_argument("--provider", default=None)
     rs.add_argument("--model", help="ID модели для провайдера (напр. deepseek-chat)")
     # #695: resume доводит готовую-на-ветке работу до ОТКРЫТОГО PR и снимает брошенную заявку.
@@ -493,10 +496,10 @@ def _build_run_arg_parser():
     rs.add_argument("--replan", action="store_true",
                     help="осознанно сменить классификацию/policy при продолжении (не resume, а replan "
                          "с ревалидацией) — иначе смена task_type/risk/write_scope блокируется")
-    # #403/deliver-only: intent-CLI прокидывает `--reevaluate-only` в resume, когда владелец зовёт
-    # `ai-ops resume --deliver-only` (доставить готовый READY-коммит без переавторинга). Подкоманда
-    # resume этот флаг НЕ объявляла — argparse падал «unrecognized arguments: --reevaluate-only», и
-    # весь deliver-only-путь resume был мёртв (объявлен CLI, не исполнялся движком). Объявляем здесь.
+    
+    
+    
+    
     rs.add_argument("--reevaluate-only", action="store_true", dest="reevaluate_only",
                     help="доставить готовый READY-коммит фичи БЕЗ переавторинга (0 model-вызовов, "
                          "HEAD как committed_sha): переоценить гейты и открыть/обновить PR. "

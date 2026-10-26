@@ -35,9 +35,9 @@ import subprocess
 import sys
 from dataclasses import dataclass
 
-# Маркер элемента списка верхнего уровня: два пробела, дефис, пробел.
+
 _ITEM_MARKER = re.compile(r"^  - ")
-# Ключ id внутри элемента: `  - id: <slug>`.
+
 _ITEM_ID = re.compile(r"^  - id:\s*(.+?)\s*$")
 
 

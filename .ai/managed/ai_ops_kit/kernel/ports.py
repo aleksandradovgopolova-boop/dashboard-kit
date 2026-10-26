@@ -45,12 +45,12 @@ from ai_ops_kit.shared.contracts import (
 )
 
 
-# ============================================================================
-# TypedDict-контракты для входов/выходов портов (не Protocol, просто данные)
-# ============================================================================
 
-# ExecutionSpec — что исполнять (вход ExecutorPort).
-# Поля намеренно широкие (total=False): конкретный набор зависит от workflow.
+
+
+
+
+
 class ExecutionSpec(TypedDict, total=False):
     """Спецификация исполнения — вход ExecutorPort.
 
@@ -73,7 +73,7 @@ class ExecutionSpec(TypedDict, total=False):
     base: str
 
 
-# ExecutionResult — результат исполнения (выход ExecutorPort).
+
 class ExecutionResult(TypedDict, total=False):
     """Результат исполнения — выход ExecutorPort.
 
@@ -88,7 +88,7 @@ class ExecutionResult(TypedDict, total=False):
     cost_usd: float | None
 
 
-# Evidence — результат сбора доказательств.
+
 class Evidence(TypedDict, total=False):
     """Evidence — набор проверок для оценки гейтов.
 
@@ -102,7 +102,7 @@ class Evidence(TypedDict, total=False):
     tested_revision: str | None
 
 
-# Change — описание изменения (вход EvidenceProvider).
+
 class Change(TypedDict, total=False):
     """Описание изменения — вход EvidenceProvider.
 
@@ -113,8 +113,8 @@ class Change(TypedDict, total=False):
     profile: dict[str, Any]
 
 
-# PolicyContext — контекст РЕШЕНИЯ о допустимости действия (вход PolicyPort).
-# Не путать с engine.run_context.RunContext (dataclass, источник истины прогона).
+
+
 class PolicyContext(TypedDict, total=False):
     """Контекст принятия решения о допустимости действия.
 
@@ -129,7 +129,7 @@ class PolicyContext(TypedDict, total=False):
     child_root: str
 
 
-# Action — действие, запрашивающее разрешение (вход PolicyPort).
+
 class Action(TypedDict, total=False):
     """Действие, которое исполнитель хочет совершить.
 
@@ -141,7 +141,7 @@ class Action(TypedDict, total=False):
     content: str
 
 
-# Autonomy — решение о допустимости (выход PolicyPort).
+
 class Autonomy(TypedDict, total=False):
     """Решение политики: разрешено/запрещено/требует подтверждения.
 
@@ -153,7 +153,7 @@ class Autonomy(TypedDict, total=False):
     write_scope: list[str]
 
 
-# Classification — результат классификации задачи.
+
 class Classification(TypedDict, total=False):
     """Результат классификации задачи (роль/workflow/риск).
 
@@ -169,9 +169,9 @@ class Classification(TypedDict, total=False):
     fallbacks: list[str]
 
 
-# ============================================================================
-# Protocol'ы портов
-# ============================================================================
+
+
+
 
 @runtime_checkable
 class ExecutorPort(Protocol):

@@ -46,11 +46,11 @@ def _collect_base_checks_at(child_root, base_sha, sandbox):
     except Exception:  # noqa: BLE001
         return None
     finally:
-        # Причина подавления ЗАПИСАНА (срез engine ратчета 2026-08-12): это УБОРКА в `finally`, и её
-        # отказ не участвует ни в одном утверждении — baseline уже либо доказан, либо нет (`return`
-        # выше). Ронять здесь означало бы подменить результат baseline ошибкой удаления временного
-        # worktree. Цена отказа — оставленный каталог в `.ai/worktrees/`, видимый и в `git worktree
-        # list`, и в дереве; это мусор, а не ложный green.
+        
+        
+        
+        
+        
         try:
             _git(child_root, "worktree", "remove", "--force", str(tmp))
         except Exception:  # noqa: BLE001,S110 — уборка после уже вынесенного вердикта: отказ не меняет baseline
@@ -58,10 +58,10 @@ def _collect_base_checks_at(child_root, base_sha, sandbox):
 
 
 def _collect_baseline(child_root, sequence_base_sha, sandbox):
-    # v3.0-rc16/rc20 (finding аудита P0): baseline СТРОГО на sequence_base_sha (detached worktree с
-    # проверкой HEAD). rc20: БЕЗ fallback на child_root — если baseline не доказан на точной базе,
-    # aggregate НЕДОСТУПЕН (baseline_proven=False) -> PR не открывается. Иначе sequence от develop мог
-    # сравниться с baseline от main -> false green.
+    
+    
+    
+    
     _base_res = _collect_base_checks_at(child_root, sequence_base_sha, sandbox)
     base_checks = (_base_res or {}).get("checks") if _base_res else None
     baseline_proven = bool(_base_res and _base_res.get("proven"))
@@ -82,7 +82,7 @@ def _aggregate_close_security(agg_sec, vroot, base_sha, final_sha, signals, revi
     if agg_sec.get("overall") != "needs_review":
         return agg_sec, None
 
-    # (a) QUALIFIED security-судья (writer≠judge, read-only) — только он, не общий reviewer
+    
     if strict_judge_qualified and security_reviewer_proposer is not None:
         try:
             from ai_ops_kit.engine import execution_pipeline as _ep
@@ -101,9 +101,9 @@ def _aggregate_close_security(agg_sec, vroot, base_sha, final_sha, signals, revi
             agg_sec["review_error"] = str(e)
             return agg_sec, None
 
-    # (b) человеко-ApprovalRecord на ИНТЕГРАЦИОННОМ SHA (#4b): КАЖДЫЙ needs_review-домен обязан иметь валидную
-    # strict-запись, привязанную к integration-SHA (plan_hash=final_sha -> binds_to обязан == final_sha).
-    # Проверяем напрямую по доменам aggregate (не через signals — needs_review уже перечислен).
+    
+    
+    
     _root = child_root or vroot
     _nr = list(agg_sec.get("needs_review") or [])
     if wid and _root and _nr:
@@ -126,7 +126,7 @@ def _aggregate_close_security(agg_sec, vroot, base_sha, final_sha, signals, revi
             agg_sec["review_error"] = str(e)
             return agg_sec, None
 
-    # ни qualified-судьи, ни человека на integration-SHA -> awaiting (общий reviewer НЕ закрывает security)
+    
     agg_sec.setdefault("closed_by", None)
     return agg_sec, None
 
@@ -144,11 +144,11 @@ def _aggregate_code_review(vroot, base_sha, final_sha, signals, reviewer_propose
         gev, revs = _ep._run_reviews(reviewer_proposer, vroot, ["code_review"], {},
                                      dict(signals or {}), final_sha, {"max_model_calls": 16},
                                      change_context=ctx)
-        # v3.0-rc20 (finding аудита P0): ТОЛЬКО явный валидный pass закрывает aggregate code_review.
-        # Раньше `return (not blocked)` был fail-OPEN: no-verdict/невалидная структура/timeout/budget
-        # оставляли blocked=False -> ok=True -> aggregate_ready БЕЗ подтверждённого вердикта. Теперь
-        # source of truth — gate_ev['code_review'].status=='pass' (ставится _run_reviews только при
-        # валидном НЕ-fail вердикте); всё остальное -> ok=False (как per-package).
+        
+        
+        
+        
+        
         ok = (gev.get("code_review") or {}).get("status") == "pass"
         return ok, revs
     except Exception:  # noqa: BLE001 — сбой aggregate-ревью = fail-closed
@@ -170,17 +170,18 @@ def _aggregate_verify(child_root, wid, sandbox, final_sha, base_checks, sequence
     try:
         wt = Path(child_root) / ".ai" / "worktrees" / wid
         vroot = wt if wt.is_dir() else Path(child_root)
-        # v3.0-rc2 (P0.4): проверяем ИМЕННО финальный SHA — HEAD worktree обязан == final_sha.
+        
         head_sha = _git(vroot, "rev-parse", "HEAD")[1]
         revision_ok = (head_sha == final_sha)
         _vpol = (_tb2.sandbox_policy(child_root=str(vroot)) if sandbox
                  else _tb2.Policy(level="execution", child_root=str(vroot), block_push=True))
-        coll = _ec2.collect(_pd2.detect(vroot), vroot, _vpol, broker=_tb2)
+        coll = _ec2.collect(_pd2.detect(vroot), vroot, _vpol, broker=_tb2,
+                            lifecycle_intent="merge_candidate")
         final_checks = coll["checks"]
         _is_git = _git(vroot, "rev-parse", "--is-inside-work-tree")[0] == 0
         tree_clean = _ep._tree_clean_after_checks(vroot) if _is_git else True
         agg_reg, _agg_fix = _ep._diff_checks(base_checks, final_checks) if base_checks else ([], [])
-        # v3.0-rc13 (P0): база security = sequence_base_sha (HEAD ДО пакета 1); деградация -> первый родитель
+        
         _base_sha = sequence_base_sha
         if not _base_sha and final_sha:
             _fp = _git(vroot, "rev-list", "--max-parents=0", final_sha)[1].split("\n")[0]
@@ -190,13 +191,13 @@ def _aggregate_verify(child_root, wid, sandbox, final_sha, base_checks, sequence
             agg_sec = _sp2.run_pack(vroot, base=(_base_sha or None), signals=(signals or {}))
         except Exception:  # noqa: BLE001
             agg_sec = {"overall": "error"}
-        # needs_review != провал — awaiting: закрываем независимым security-reviewer на aggregate-диффе
+        
         agg_sec, agg_sec_review = _aggregate_close_security(
             agg_sec, vroot, _base_sha, final_sha, signals, reviewer_proposer, review,
             security_reviewer_proposer=security_reviewer_proposer,
             strict_judge_qualified=strict_judge_qualified, wid=wid, child_root=child_root)
-        # `advisory` наравне с `clear`: домены, поднятые только совпадением по содержимому и без
-        # находок, не держат агрегат — тот же выбор, что и на гейте (`security_pack._content_only`).
+        
+        
         agg_sec_ok = (agg_sec or {}).get("overall") in ("clear", "advisory")
         agg_code_ok, agg_code_reviews = _aggregate_code_review(
             vroot, _base_sha, final_sha, signals, reviewer_proposer, review)
@@ -208,10 +209,10 @@ def _aggregate_verify(child_root, wid, sandbox, final_sha, base_checks, sequence
                 "evidence_revision_ok": (coll.get("revision") == final_sha),
                 "security_overall": (agg_sec or {}).get("overall"), "security_ok": agg_sec_ok,
                 "security_reviewer_status": (agg_sec or {}).get("reviewer_status"),
-                # ТА ЖЕ БОЛЕЗНЬ НА ПОСЛЕДОВАТЕЛЬНОМ ПУТИ (заявка #139): наружу уходил только
-                # `overall`, и человек, которому гейт назвал блокирующие домены, не мог увидеть ни
-                # одной находки. Проекция та же, что у одиночного прогона — одна правда об охвате и
-                # находках, а не два разных ответа на один вопрос.
+                
+                
+                
+                
                 "security_scan": _sp2.for_report(agg_sec),
                 "code_review_ok": agg_code_ok, "code_reviews": agg_code_reviews,
                 "checks": {k: (v or {}).get("status") for k, v in (final_checks or {}).items()}}
@@ -237,11 +238,11 @@ def _compute_aggregate_verdict(completed, ordered, stopped_at, results, final_sh
                                       sequence_base_sha, signals, reviewer_proposer, review, baseline_proven,
                                       security_reviewer_proposer=security_reviewer_proposer,
                                       strict_judge_qualified=strict_judge_qualified)
-    # v3.0-rc2/rc4 (P0.4/P1.1): FAIL-CLOSED. aggregate_ready ТОЛЬКО если верификация РЕАЛЬНО выполнена
-    # И чиста: verified, нет регрессий, HEAD==final_sha, evidence на final_sha, дерево чистое, агрегатный
-    # security clear на полном диффе. Сбой/недоступность -> НЕ ready.
-    # v3.0-rc20 (finding аудита P0): + baseline ДОКАЗАН на точной sequence_base_sha (нет fallback-базы),
-    # + НЕТ base_drift (base-ветка не сдвинулась с начала цепочки) — иначе evidence против не той базы.
+    
+    
+    
+    
+    
     agg_ok = bool(aggregate.get("verified") and aggregate.get("no_regressions")
                   and aggregate.get("baseline_proven")
                   and aggregate.get("revision_ok") and aggregate.get("tree_clean")
@@ -254,8 +255,8 @@ def _compute_aggregate_verdict(completed, ordered, stopped_at, results, final_sh
 def _deliver_pr(open_pr, aggregate_ready, final_sha, child_root, wid, base, sequence_base_sha,
                 task, ordered):
     from ai_ops_kit.engine import execution_pipeline as _ep
-    # v2.124 (P0.4): доставка draft PR — ОТДЕЛЬНЫЙ шаг ПОСЛЕ агрегатного вердикта, на финальном
-    # интегрированном SHA. PR открывается ТОЛЬКО при aggregate_ready — не по готовности отдельного пакета.
+    
+    
     pr, delivery = None, {"requested": bool(open_pr), "status": "not-requested" if not open_pr else None}
     if open_pr:
         if aggregate_ready and final_sha:
@@ -308,11 +309,11 @@ def _finalize_sequence_report(wid, results, completed, stopped_at, executed_all,
            "sequence_base_sha": sequence_base_sha, "base_drift": base_drift,   # rc16 (P0/P1)
            "aggregate": aggregate, "delivery": delivery, "draft_pr": pr,
            "resumed_from": resume_from}
-    # v3.0.14 (finding аудита #2): sequence-report — durable (атомарно); сбой фиксируем в отчёте, не молчим
+    
     from ai_ops_kit.shared import lifecycle_store as _ls2
-    # Срез engine ратчета 2026-08-12: пропущенные записи журнала называются в ОТЧЁТЕ, а не только в
-    # возврате, который никто не читал. Слив ДО durable_write — иначе на диске лёг бы отчёт, из
-    # которого утрата исчезла. Слив обнуляет накопитель: та же утрата не приедет во второй отчёт.
+    
+    
+    
     _ls2.merge_bookkeeping_losses(seq)
     _sr = _ls2.durable_write(features_dir / wid / "sequence-report.yaml", seq)
     if not _sr.get("ok"):

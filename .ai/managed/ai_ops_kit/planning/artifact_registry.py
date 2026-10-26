@@ -154,7 +154,7 @@ def check(reg: dict, model_path: Path = MODEL_PATH) -> list:
     if not arts:
         return ["в реестре нет артефактов — слой не описан, bootstrap и валидация беззубы"]
 
-    # Уровни автономии и состояния жизненного цикла — замкнутые словари.
+    
     levels = list(reg.get("autonomy_levels") or [])
     if sorted(levels) != sorted(AUTONOMY):
         e.append(f"autonomy_levels обязаны быть ровно {list(AUTONOMY)} (PR-19), объявлено {levels}")
@@ -202,7 +202,7 @@ def check(reg: dict, model_path: Path = MODEL_PATH) -> list:
             else:
                 seen_paths[path] = aid
 
-        # Ссылочная целостность — расхождение реестра с реальностью модели контуров.
+        
         if roles and a.get("owner_role") not in roles:
             e.append(f"артефакт '{aid}': owner_role '{a.get('owner_role')}' нет в "
                      f"product-operating-model.yaml roles")
@@ -210,7 +210,7 @@ def check(reg: dict, model_path: Path = MODEL_PATH) -> list:
             e.append(f"артефакт '{aid}': source_contour '{a.get('source_contour')}' нет в "
                      f"product-operating-model.yaml contours")
 
-        # Шаблон обязателен у document/config и запрещён у directory.
+        
         tpl = a.get("template")
         if kind in ("document", "config"):
             if not isinstance(tpl, dict) or not tpl.get("path") or not isinstance(tpl.get("version"), int):
@@ -249,7 +249,7 @@ def _check_tiers(reg: dict, artifact_ids: list, contours: set) -> list:
     tier_defs = reg.get("obligation_tiers")
     prof_defs = reg.get("profiles")
     catalog = reg.get("standard_catalog")
-    # Если таксономии нет вовсе — молчим (её ввели #609; синтетический реестр без неё легитимен).
+    
     if not any([tier_defs, prof_defs, catalog]):
         return e
 
@@ -286,7 +286,7 @@ def _check_tiers(reg: dict, artifact_ids: list, contours: set) -> list:
             e.append(f"каталог '{cid}': tier '{c.get('tier')}' вне объявленных ярусов (#609)")
         if not (c.get("ai_check") or "").strip():
             e.append(f"каталог '{cid}': пустой ai_check — не объявлено, что проверяет AI-агент (#609)")
-        # Локатор — ровно один из трёх, и ссылка целостна.
+        
         locators = [k for k in ("ref", "contour", "path") if (c.get(k) or "").strip()]
         if len(locators) != 1:
             e.append(f"каталог '{cid}': нужен РОВНО один локатор из ref/contour/path, "

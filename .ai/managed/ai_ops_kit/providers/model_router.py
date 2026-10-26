@@ -28,9 +28,9 @@ import yaml
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
 _COST_RANK = {"low": 0, "medium": 1, "high": 2, None: 1}
-# ADR-004 (уточнено измеренной квалификацией 2026-07-28): роль ПИСАТЕЛЯ/эконом-ревью допускает
-# conditional-модель (дешёвый пишет, гейты страхуют); строгий СУДЬЯ — только qualified (safety-first,
-# судья не может быть «условным»). false_green>0 -> не допускается НИКОГДА и ни к какой роли.
+
+
+
 WRITER_ROLES = {"implementation", "code_review"}
 STRICT_JUDGE_ROLES = {"security_review", "integration_judge"}
 
@@ -69,9 +69,9 @@ def resolve(role, roles_cfg=None, quals=None, models=None, exclude_models=None):
              and q.get("model_id") not in exclude_models
              and (not allowed_classes or (m_classes(q.get("model_id")) & allowed_classes))]
 
-    # v3.7.10 экономика В ДЕНЬГАХ: если у ВСЕХ кандидатов роли есть total_cost_per_verified_change
-    # (деньги), сортируем по деньгам; иначе честный tokens-fallback + warning (ранжирование может не
-    # совпасть с деньгами). Токен-прокси врёт при разнице тарифов — деньги основной критерий.
+    
+    
+    
     def _money(q):
         v = (q.get("economics") or {}).get("total_cost_per_verified_change")
         return v if isinstance(v, (int, float)) else None
@@ -116,10 +116,10 @@ def resolve(role, roles_cfg=None, quals=None, models=None, exclude_models=None):
     if not money_mode:
         res["cost_warning"] = ("ранжирование в ТОКЕНАХ, не деньгах: не у всех кандидатов роли задан "
                                "total_cost_per_verified_change (нет тарифа) — порядок может не совпасть с деньгами")
-    # v3.8.3 WRITER QUALITY-ESCALATION: money-mode берёт дешёвого (top), но при КАЧЕСТВЕННОМ провале
-    # (impl_verification/code_review) fix-loop эскалирует writer'а на кандидата с ВЫШЕ observed success rate.
-    # ЧЕСТНО (owner-review): это НАБЛЮДАЕМАЯ успешность на конкретном (малом) корпусе, НЕ универсальная «сила»
-    # модели. Ладдер = кандидаты с higher_observed_success_rate, чем у top (сильнейший-по-наблюдению первым).
+    
+    
+    
+    
     def _succ(q):
         v = (q.get("metrics") or {}).get("success_rate")
         return v if isinstance(v, (int, float)) else 0.0
@@ -137,8 +137,8 @@ def resolve(role, roles_cfg=None, quals=None, models=None, exclude_models=None):
 ALL_ROLES = ("implementation", "code_review", "security_review", "integration_judge")
 
 
-# v3.9.0 complexity-aware routing: классы задач, где дешёвый writer доказанно не тянет green одним проходом
-# -> сразу сильный executor (Claude Code adapter), НЕ cheap-then-fix-loop.
+
+
 _HEAVY_CLASSES = {"ENGINEERING", "PRODUCT", "AI_FEATURE", "CRITICAL", "RESEARCH"}
 
 
@@ -158,19 +158,25 @@ def writer_tier(signals=None):
             "reason": f"task_type={tt or 'QUICK'} -> дешёвый qualified writer (money-mode)"}
 
 
-def plan_run(roles_cfg=None, quals=None, models=None, signals=None):
+def plan_run(roles_cfg=None, quals=None, models=None, signals=None, available_providers=None):
     """v3.7.12: резолв ВСЕХ рантайм-ролей одним вызовом -> bundle для RunReport.model_resolution.
     Делает решение роутера ВИДИМЫМ в отчёте прогона (writer/reviewer/security/integration независимо).
     writer≠judge по МОДЕЛИ: если code_review резолвится в модель != implementation — это разные identity.
-    v3.9.0: + preferred_writer_tier (complexity-aware) — по классу задачи, если переданы signals."""
+    v3.9.0: + preferred_writer_tier (complexity-aware) — по классу задачи, если переданы signals.
+    available_providers — optional allowset вызывающего; не online health/новый допуск роли."""
     if roles_cfg is None:
         roles_cfg, quals, models = _load()
+    
+    
+    if available_providers is not None:
+        available_providers = set(available_providers)
+        quals = [q for q in quals if q.get("provider") in available_providers]
     plan = {role: resolve(role, roles_cfg, quals, models) for role in ALL_ROLES}
     plan["preferred_writer_tier"] = writer_tier(signals)
-    # v3.8.3 CONFLICT-AWARE writer≠judge: role_constraints (model-roles.yaml) вида
-    # {security_review: {must_differ_from: implementation}} — если судья и writer сошлись в одной модели,
-    # СУДЬЯ фиксирован (qualified), а WRITER перерезолвливается, ИСКЛЮЧАЯ модель судьи (дешёвый из оставшихся).
-    # Так квалифицированный судья не судит собственное изменение, даже если он же — money-mode writer.
+    
+    
+    
+    
     _constraints = (roles_cfg.get("role_constraints") or {})
     plan["role_constraints_applied"] = []
     for _judge_role, _c in _constraints.items():
@@ -189,11 +195,11 @@ def plan_run(roles_cfg=None, quals=None, models=None, signals=None):
     rev = plan["code_review"]
     plan["writer_ne_judge_by_model"] = bool(impl.get("resolved") and rev.get("resolved")
                                             and impl.get("model_id") != rev.get("model_id"))
-    # v3.8.3 обеспечивал writer≠judge ПРИ ПЛАНИРОВАНИИ. Но судья эскалируется на fallback-класс
-    # во время прогона (escalation_decision), а писатель — по escalation_ladder; заново это не
-    # сверялось = инвариант объявлен, но на пути эскалации не сторожится. Фиксируем исход проверки
-    # независимости в плане (планировочное время), а вызывающий обязан перепроверить её после
-    # КАЖДОЙ применённой эскалации через check_independence(plan, escalations=...) — fail-closed.
+    
+    
+    
+    
+    
     plan["independence"] = check_independence(plan)
     return plan
 

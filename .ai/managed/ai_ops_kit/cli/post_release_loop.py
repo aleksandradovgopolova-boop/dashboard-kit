@@ -51,8 +51,8 @@ Producer есть ТОЛЬКО у первого (`event_arrival`). Осталь
 """
 from __future__ import annotations
 
-# Самодостаточный вход: положить корень пакета (маркер VERSION) в sys.path ДО пакетных импортов,
-# чтобы файл можно было запустить и напрямую (как это делает ai_ops_cli).
+
+
 import sys as _sys
 from pathlib import Path as _P_bootstrap
 
@@ -66,15 +66,15 @@ from pathlib import Path  # noqa: E402
 
 import yaml  # noqa: E402
 
-# Гейт, который замыкает пост-релизная петля, и его четыре required_evidence (quality/gates.yaml).
+
 GATE_ID = "analytics_runtime_verification"
-# Единственное доказательство С producer'ом — его производит event_arrival.
+
 EVIDENCE_WITH_PRODUCER = "events_verified_live"
-# Три доказательства БЕЗ producer'а: честно `not_measured`, producer'ов им не выдумываем.
+
 EVIDENCE_WITHOUT_PRODUCER = ("no_pii_in_events", "cohort_identification_works",
                              "dashboard_receives_data")
 
-# Куда смотреть за PRR-файлом внутри дочки, если ref не указывает на конкретный файл.
+
 _PRR_SEARCH_GLOBS = ("PRR-*.yaml", "PRR-*.yml",
                      ".ai/project/readout/PRR-*.yaml",
                      "features/*/PRR-*.yaml", "readout/PRR-*.yaml")
@@ -183,11 +183,17 @@ def _assess_outcome(contract, readout, feature) -> dict | None:
         trace = vpo.trace_feature_rationale(graph, feature)
     node = (graph.get("nodes") or [{}])[0]
     measured = vpo.evaluate_outcome(contract, readout)   # ФЛИП: met/failed/unknown ИЗ ЧИСЕЛ
+    
+    
+    
+    from ai_ops_kit.intelligence import outcome_insight
+    human_readout = outcome_insight.build_outcome_readout(contract, readout, measured)
     return {
         "projected": True,
         "verdict": node.get("verdict", "pending"),
         "measured_verdict": measured["verdict"],
         "measured_evaluation": measured,
+        "human_readout": human_readout,
         "flip_ready": measured["verdict"] in ("met", "failed"),
         "outcome_id": node.get("id"),
         "graph": graph,
@@ -208,10 +214,10 @@ def _assess_outcome(contract, readout, feature) -> dict | None:
 # Поэтому решение — ПОДКЛЮЧИТЬ (не снять): двух параллельных outcome-вердиктов не заводим (вердикт по
 # исходу остаётся за #566), а стоимость/эффект честно живут рядом как аналитика, а не как второй итог.
 
-# Где искать в дочке отчёт product-health (product_health.compute) для evolution_triggers.
+
 _HEALTH_REPORT_GLOBS = ("product-health-report.json", ".ai/project/product-health-report.json",
                         ".ai/project/health/product-health-*.json")
-# Где искать реестр ADR дочки (evolution_triggers сверяет обещания ADR с реальностью health).
+
 _ADR_SEARCH_DIRS = ("decisions/adr", ".ai/project/decisions/adr")
 
 
@@ -357,36 +363,39 @@ def run_post_release(prr_ref, child_root, *, contract=None, readout=None,
     """
     child_root = Path(child_root)
 
-    # (a) PRR: загрузить и провалидировать (только по ВЕРИФИЦИРОВАННОЙ доставке).
+    
     prr = _assess_prr(prr_ref, child_root)
-    # (b)+(c) verify_analytics_runtime: машинный events_verified_live + разбор гейта 1-из-4.
+    
     analytics = _assess_analytics(child_root)
-    # (d) outcome-проекция + трассировка (если дан контракт).
+    
     outcome = _assess_outcome(contract, readout, feature)
-    # (e) единый вердикт (аналитика/готовность выпуска) с честным дефолтом.
+    
     synth = _synthesize_verdict(prr, analytics, outcome)
 
-    # (f) ВЕРДИКТ ПО ПРОДУКТОВОМУ ИТОГУ, посчитанный из реального замера, и явный продуктовый статус.
-    #     Доставка подтверждена = валидный PRR (валидатор PRR читает только верифицированную доставку,
-    #     delivery_receipt.sha_verified=true), поэтому «PRR валиден» — честный прокси «доставка зелёная».
+    
+    
+    
     delivery_verified = bool(prr.get("found") and prr.get("valid"))
     outcome_verdict = (outcome or {}).get("measured_verdict", "unknown")
     product_status = classify_product_status(delivery_verified, outcome_verdict)
-    # ФЛИП ГОТОВ, когда реальный замер дал met/failed. САМ ФЛИП goal.outcome — отдельный
-    # координационный PR (код петли ≠ правка данных плана); здесь по-прежнему ничего не пишется.
+    
+    
     outcome_flip_ready = bool(outcome and outcome.get("flip_ready"))
 
-    # (g) ОБРАТНАЯ ПЕТЛЯ Outcome → Insight → кандидат-работа (#567). Замыкается ЗДЕСЬ по той же
-    #     причине, что и вердикт из чисел: только слой entrypoints вправе звать И intelligence, И
-    #     validation. Инсайт строится на РЕАЛЬНОМ замере (measured_evaluation): на `unknown` петля
-    #     возвращает None (нет данных — инсайт не фабрикуется). Кандидат — DRAFT (writer ≠ judge),
-    #     в дочку ничего не пишется. `no_insight_reason` честно называет, почему инсайта нет.
+    
+    
+    
+    
+    
     from ai_ops_kit.intelligence import outcome_insight
     measured_eval = (outcome or {}).get("measured_evaluation")
     loop = outcome_insight.from_outcome(contract, readout, measured_eval) if measured_eval else None
     insight = (loop or {}).get("insight")
     candidate_work = (loop or {}).get("candidate_work")
     recommendation = (loop or {}).get("recommendation")
+    
+    
+    next_action = (loop or {}).get("next_action")
     insight_gap = None if insight else outcome_insight.no_insight_reason(measured_eval)
 
     # (h)+(i) #584: провести кластер обучения в контур — стоимостная аналитика прогонов и триггеры
@@ -415,7 +424,11 @@ def run_post_release(prr_ref, child_root, *, contract=None, readout=None,
     elif outcome_verdict != "unknown":
         notes.append(f"итог по релизу измерен: {outcome_verdict} "
                      "(" + (outcome.get("measured_evaluation") or {}).get("reason", "") + ")")
-    if candidate_work:
+    if next_action:
+        notes.append(f"что делать дальше: {next_action.get('action')} — "
+                     f"потому что {next_action.get('because')} "
+                     f"(черновик, активной не станет без твоего решения)")
+    elif candidate_work:
         notes.append(f"обратная петля: из измеренного итога родился инсайт (уверенность "
                      f"{insight.get('confidence')}) и кандидат-работа «{candidate_work.get('title')}» "
                      f"— черновик, активной не станет без твоего решения")
@@ -435,22 +448,28 @@ def run_post_release(prr_ref, child_root, *, contract=None, readout=None,
         "prr": prr,
         "analytics_runtime": analytics,
         "outcome": outcome,
-        # `verdict` — вердикт ГОТОВНОСТИ ВЫПУСКА (приход аналитики), как и был.
+        
         "verdict": synth["verdict"],
         "readout_decision": synth["readout_decision"],
-        # `outcome_verdict` — вердикт по ПРОДУКТОВОМУ ИТОГУ из реального замера: unknown -> met/failed.
+        
         "outcome_verdict": outcome_verdict,
-        # `product_status` — явный статус, в т.ч. «технически done, продуктово нет».
+        
         "product_status": product_status,
-        # ФЛИП ГОТОВ, когда пришёл реальный замер (met/failed). Без замера — False (честный дефолт).
-        # Сам флип goal.outcome не делается здесь: это отдельный координационный PR (см. #566).
+        
+        
+        "outcome_readout": (outcome or {}).get("human_readout"),
+        
+        
         "outcome_flip_ready": outcome_flip_ready,
-        # ОБРАТНАЯ ПЕТЛЯ (#567): инсайт из измеренного итога, кандидат-работа (DRAFT) и рекомендация
-        # с evidence. None, если итог не измерен (`insight_gap` называет почему). Ничего не пишется:
-        # кандидат виден в inbox/next, активной работой станет только по решению человека.
+        
+        
+        
         "insight": insight,
         "candidate_work": candidate_work,
         "recommendation": recommendation,
+        
+        
+        "next_action": next_action,
         "insight_gap": insight_gap,
         # #584: кластер обучения проведён в контур — стоимостная аналитика и триггеры развития.
         "cost_analytics": cost_analytics,
@@ -463,7 +482,7 @@ def run_post_release(prr_ref, child_root, *, contract=None, readout=None,
     }
 
 
-# Где искать OutcomeContract/OutcomeReadout в дочке (те же места, что читают explain/inbox/next).
+
 _OUTCOME_CONTRACT_GLOBS = ("outcome-contract.yaml", ".ai/project/readout/outcome-contract.yaml",
                            "features/*/outcome-contract.yaml")
 _OUTCOME_READOUT_GLOBS = ("outcome-readout.yaml", ".ai/project/readout/outcome-readout.yaml",
@@ -505,7 +524,7 @@ def discover_and_run(child_root) -> dict | None:
     return run_post_release(None, root, contract=contract, readout=readout)
 
 
-# ── Человекочитаемый разбор (для --json=off из CLI используется presenter; здесь — технический) ──
+
 def render(result: dict) -> str:
     L = [f"Пост-релизная петля ({result['verdict']}): решение — {result['readout_decision']}"]
     a = result["analytics_runtime"]
@@ -553,6 +572,9 @@ def render(result: dict) -> str:
         if cand:
             L.append(f"    кандидат-работа {cand.get('id')} [{cand.get('status')}, требует решения "
                      f"человека]: {cand.get('title')} (роль {cand.get('owner_role')})")
+        na = result.get("next_action")
+        if na:
+            L.append(f"    что делать дальше: {na.get('action')} — потому что {na.get('because')}")
     elif result.get("insight_gap"):
         L.append(f"  инсайт не строю: {result['insight_gap']}")
     for n in result.get("notes") or []:
@@ -585,8 +607,8 @@ def main(argv):
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
         print(render(result))
-    # Код возврата — ГОТОВНОСТЬ ОТВЕТИТЬ, а не «всё зелено»: аналитика unknown -> честный 1
-    # (рекомендовать выпуск нечем), негативный сигнал -> 1, частичное подтверждение -> 0.
+    
+    
     return 0 if result["verdict"] == "partially_verified" else 1
 
 

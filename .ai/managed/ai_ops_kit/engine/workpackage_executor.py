@@ -28,10 +28,10 @@ from pathlib import Path
 
 from ai_ops_kit.shared import _bootstrap  # noqa: E402
 
-# Ре-экспорт вынесенных когезивных кластеров (чистый рефакторинг, поведение байт-в-байт):
-# модель SequencePlan -> sequence_plan; aggregate-верификация/доставка -> sequence_aggregate.
-# Имена остаются в неймспейсе workpackage_executor, поэтому внешние импортёры и мутационные пробы
-# продолжают работать без изменений; execute_sequence зовёт их как прежде.
+
+
+
+
 from ai_ops_kit.engine.sequence_plan import (  # noqa: E402
     _SUPPORTED_PLAN_SCHEMA,
     _ordered,
@@ -95,28 +95,28 @@ def _hard_stop(rep):
         return "no-commit"
     if (rep.get("baseline") or {}).get("regressions"):
         return "regression"
-    # v3.0-rc2 (P0.2): security pack возвращает blocked/needs_review/clear — НИКОГДА "fail". Старое условие
-    # overall=="fail" было недостижимо -> security-заблокированный пакет проходил как «awaiting evidence».
-    # СТОП на НАСТОЯЩЕМ блокере: (1) блокирующая находка (overall=blocked: secrets/critical); (2) security-
-    # гейт fail из-за ОТСУТСТВУЮЩЕГО человеко-approval (ApprovalRecord). НЕ стоп: needs_review без
-    # поданного ревьюера — это awaiting evidence (как артефакт-гейты без author), цепочка продолжается.
+    
+    
+    
+    
+    
     if (rep.get("security_scan") or {}).get("overall") in ("blocked", "fail"):
         return "security-fail"
-    # v3.0-rc4 (P0.2): security-ГЕЙТ fail останавливает цепочку в ЛЮБОМ случае, КРОМE «awaiting» —
-    # когда нужен независимый security-reviewer/человек, а он НЕ подан (аналог артефакт-гейтов без
-    # author). Всё остальное = настоящий блокер: сбой сканера (fail-closed), блокирующая находка,
-    # security-reviewer вынес НЕ pass, отсутствующий ApprovalRecord.
+    
+    
+    
+    
     for g in ((rep.get("gates") or {}).get("gate_results") or []):
         if g.get("gate") == "security" and g.get("status") == "fail":
             _blk = " ".join(g.get("blockers") or [])
             _awaiting = ("нужен независимый security-reviewer" in _blk) and "ApprovalRecord" not in _blk
             if not _awaiting:
                 return "security-gate-fail"
-    # v3.0-rc13 (finding аудита P0): источник истины — ИТОГОВЫЙ блокирующий вердикт ревью, НЕ сырой
-    # status вызова. `warn` на БЛОКИРУЮЩЕМ гейте _run_reviews превращает в gate=fail и помечает
-    # entry.closed_as="blocked" (v2.85) — но старое условие ловило только status=="fail" -> живой rc11-
-    # результат (code_review=warn -> gate fail -> ready_for_pr=false) НЕ останавливал цепочку, и пакет
-    # N+1 мог строиться поверх изменения, которое независимый ревьюер ЗАБЛОКИРОВАЛ. Ловим оба.
+    
+    
+    
+    
+    
     for rv in (rep.get("reviews") or []):
         if (rv or {}).get("status") == "fail" or (rv or {}).get("closed_as") == "blocked":
             return "reviewer-blocked"
@@ -128,8 +128,8 @@ def _hard_stop(rep):
             ev = " ".join(g.get("evidence") or [])
             if "reviewer verdict" in ev:      # вердикт РЕАЛЬНО вынесен (не пустой artifact-гейт)
                 return "reviewer-blocked"
-    # нарушение package scope: модель пыталась ПИСАТЬ вне write_scope пакета -> брокер отклонил.
-    # Матчим именно scope-отказ (не любой denied — напр. блокировка git push НЕ является scope-violation).
+    
+    
     for reason in ((rep.get("loop") or {}).get("denied_reasons") or []):
         if "вне write_scope" in (reason or ""):
             return "scope-violation"
@@ -143,8 +143,8 @@ def _classify_failure(exc):
     import traceback
     et = type(exc).__name__
     msg = str(exc)
-    # сеть/провайдер — транзиентно, retryable; budget — не retryable без изменения лимита; парсер/валидация —
-    # проблема данных; прочее -> engine (вероятный дефект, НЕ маскировать под провайдер).
+    
+    
     if isinstance(exc, (ConnectionError, TimeoutError)) or "Connection reset" in msg or "timed out" in msg:
         fclass, retryable = ("network", True)
     elif et in ("URLError", "HTTPError", "IncompleteRead", "RemoteDisconnected"):
@@ -183,7 +183,7 @@ def retry_package(child_root, wid, pid, features_dir=None):
     if pid not in ids:
         return {"ok": False, "error": f"пакет '{pid}' не в плане последовательности {ids}"}
     idx = ids.index(pid)
-    # checkpoint = коммит предшественника (его снимок) либо база последовательности для первого пакета
+    
     if idx == 0:
         checkpoint = plan.get("sequence_base_sha")
         predecessor = None
@@ -200,12 +200,12 @@ def retry_package(child_root, wid, pid, features_dir=None):
         return {"ok": False, "error": (f"не найден checkpoint предшественника для '{pid}' "
                                        f"(предшественник={predecessor or 'база'}) — снимок отсутствует")}
 
-    # v3.0-rc16 (finding аудита P0): retry НИКОГДА не трогает основной checkout. Все preconditions
-    # проверяются ДО любой git-операции; любая ошибка -> fail-closed (git-состояние не меняется):
-    #   (1) выделенный worktree ОБЯЗАН существовать (нет fallback на child_root!);
-    #   (2) vroot — НЕ основной checkout (toplevel worktree совпадает с ним и != child_root);
-    #   (3) checkout ветки ai-ops/<wid> ОБЯЗАН пройти; после — HEAD реально на этой ветке;
-    #   (4) checkpoint существует как commit И достижим из ветки (принадлежит этой цепочке).
+    
+    
+    
+    
+    
+    
     wt = child_root / ".ai" / "worktrees" / wid
     branch = f"ai-ops/{wid}"
     if not wt.is_dir():
@@ -213,15 +213,15 @@ def retry_package(child_root, wid, pid, features_dir=None):
                                        f".ai/worktrees/{wid} не существует — восстановление в основном "
                                        f"checkout запрещено. Пересоберите worktree/прогон.")}
     vroot = wt
-    # (2) vroot — не основной checkout
+    
     _rc_top, _top, _ = _git(vroot, "rev-parse", "--show-toplevel")
     _rc_mtop, _mtop, _ = _git(child_root, "rev-parse", "--show-toplevel")
     if _rc_top != 0 or Path((_top or "").strip() or ".").resolve() == Path((_mtop or "").strip() or "/x").resolve():
         return {"ok": False, "error": "retry отказан (fail-closed): worktree резолвится в основной checkout"}
-    # (4) checkpoint — реальный commit
+    
     if _git(vroot, "cat-file", "-e", f"{checkpoint}^{{commit}}")[0] != 0:
         return {"ok": False, "error": f"retry отказан (fail-closed): checkpoint {checkpoint[:8]} не найден в репозитории"}
-    # (3) checkout ветки цепочки ОБЯЗАН пройти; проверяем результат ЯВНО (не полагаемся на reset)
+    
     rc_co, _, err_co = _git(vroot, "checkout", "-q", branch)
     if rc_co != 0:
         return {"ok": False, "error": f"retry отказан (fail-closed): checkout {branch} не удался: {err_co}"}
@@ -229,12 +229,12 @@ def retry_package(child_root, wid, pid, features_dir=None):
     if _rc_hb != 0 or (_hb or "").strip() != branch:
         return {"ok": False, "error": (f"retry отказан (fail-closed): HEAD worktree не на {branch} "
                                        f"(факт: {(_hb or '?').strip()})")}
-    # (4b) checkpoint достижим из ветки (принадлежит этой цепочке, а не чужой ревизии)
+    
     if _git(vroot, "merge-base", "--is-ancestor", checkpoint, "HEAD")[0] != 0:
         return {"ok": False, "error": (f"retry отказан (fail-closed): checkpoint {checkpoint[:8]} не "
                                        f"является предком {branch} — не принадлежит этой цепочке")}
 
-    # ВСЕ preconditions пройдены -> архивируем попытку, затем reset (git-состояние меняем только теперь)
+    
     pkg_dir = fdir / "work-packages" / pid
     archived = None
     if pkg_dir.is_dir():
@@ -262,7 +262,7 @@ def _resolve_start_index(ordered, resume_from, wid):
     start_index = 0
     if resume_from:
         _ids = [p.get("id") for p in ordered]
-        # v3.0-rc2 (P0.3): неизвестный resume_from -> ОШИБКА, а не тихий старт с нуля.
+        
         if resume_from not in _ids:
             return None, _seq_err(wid, ordered,
                     f"resume_from='{resume_from}' нет в SequencePlan (пакеты: {_ids})")
@@ -275,16 +275,16 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
     Возвращает (base, sequence_base_sha, base_drift, err): err != None -> последовательность не
     запускается (lifecycle-corrupted / plan-drift / base-contract-drift / base-preflight / fail-closed
     записи плана). Поведение идентично прежнему инлайну execute_sequence."""
-    # v2.124/v3.0-rc4 (P0.3): IMMUTABLE parent SequencePlan С ХЭШАМИ. Фиксируем порядок/зависимости
-    # ОДИН раз; при повторном вызове план мог быть перестроен planner'ом (тот же id — другой scope).
-    # Если сохранённый план существует и его hash РАСХОДИТСЯ с текущим -> дрейф: resume запрещён
-    # (нужен явный replan). Не перетираем родительский план локальным планом последнего пакета.
+    
+    
+    
+    
     cur_plan_hash = _plan_hash(ordered)
     pdir = features_dir / wid
     _sp = pdir / "sequence-plan.yaml"
     saved_plan = None
-    # v3.0.8 (finding аудита P0.3): ФАЙЛ ОТСУТСТВУЕТ -> fresh; ЕСТЬ и валиден -> resume/existing; ЕСТЬ, но
-    # НЕЧИТАЕМ/невалиден -> lifecycle-corrupted, ОСТАНОВКА (не молчаливая перезапись повреждённого источника).
+    
+    
     import yaml as _y
     # Причина подавления ЗАПИСАНА (срез engine ратчета 2026-08-12): отказ создания каталога НЕ
     # теряется — он проявляется ниже, на записи SequencePlan через `_durable_write_yaml`, и там путь
@@ -308,10 +308,10 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
         if _corrupt_reason is not None or _schema_err is not None:
             import hashlib as _h
             _raw = b""
-            # Причина подавления ЗАПИСАНА (срез engine ратчета 2026-08-12): байты читаются ТОЛЬКО
-            # чтобы приложить sha256 повреждённого файла к сообщению. Сам вердикт уже вынесен —
-            # ниже безусловный `return _seq_err(... lifecycle-corrupted ...)`. Не прочитали ->
-            # `corrupt_sha256=None`, то есть отчёт теряет подробность, но не меняет решение.
+            
+            
+            
+            
             try:
                 _raw = _sp.read_bytes()
             except Exception:  # noqa: BLE001,S110 — только для sha256 в сообщении; вердикт уже fail-closed
@@ -335,8 +335,8 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
                  "resume по старым отчётам небезопасен. Нужен явный replan (пересобрать план "
                  "и переисполнить с нуля), а не resume_from."),
                 plan_hash=cur_plan_hash, saved_plan_hash=saved_plan["plan_hash"])
-    # v3.0.2/v3.0.7 (finding аудита P0): base_ref из СОХРАНЁННОГО плана — источник истины на resume/retry;
-    # для fresh — строгий резолв (auto/explicit). Явная другая base на resume -> base-contract-drift.
+    
+    
     from ai_ops_kit.engine import execution_pipeline as _ep
     if saved_plan and saved_plan.get("base_ref"):
         if resume_from and base and base != saved_plan["base_ref"]:
@@ -353,9 +353,9 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
                      f"({_br.get('reason')}) — последовательность не запущена (ноль пакетов)"))
         base = _br.get("base_ref") or base
 
-    # v3.0.8 (finding аудита P0.2): SEQUENCE BASE SHA разрешается ДО записи плана и входит в тот же
-    # АТОМАРНЫЙ _durable_write_yaml — никакого последующего best-effort дописывания. sequence_base_sha
-    # связывает baseline/aggregate/resume/base-drift/verdict, поэтому обязан быть durable сразу.
+    
+    
+    
     _cur_base = None
     try:
         _rc, _bs, _ = _git(child_root, "rev-parse", base or "HEAD")
@@ -365,7 +365,7 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
         _cur_base = None
     base_drift = None
     if saved_plan is not None:
-        # existing/resume: base_sha из сохранённого плана — источник истины; дрейф не молчим
+        
         sequence_base_sha = saved_plan.get("sequence_base_sha")
         if _cur_base and sequence_base_sha and _cur_base != sequence_base_sha:
             base_drift = {"saved": sequence_base_sha, "current_base": _cur_base}
@@ -530,7 +530,7 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
         if i < start_index:
             rep_ok, why = _verify_resumed_package(pid, features_dir, wid, _rev_root, _branch)
             if rep_ok is None:
-                # неподтверждённый пропуск -> НЕ добавляем в completed, останавливаем resume честной ошибкой
+                
                 return _seq_err(wid, ordered,
                         f"resume: пакет '{pid}' до resume_from не подтверждён — {why}",
                         packages=results, completed=sorted(completed), stopped_at=pid)
@@ -540,9 +540,9 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
             results.append({"id": pid, "sha": psha, "ready": bool(rep_ok.get("ready_for_pr")),
                             "executed": True, "status": "resumed-skip", "resume_point": psha})
             continue
-        # v3.0-rc4 (P0.4): ТОЧНЫЙ checkpoint — перед исполнением resume_from-пакета HEAD sequence-ветки
-        # обязан быть РОВНО на коммите предшественника (prev_sha), а не «где-то потомком». Иначе ветка
-        # могла уже содержать попытки package N+1, и новый прогон строился бы поверх чужого HEAD.
+        
+        
+        
         if start_index > 0 and i == start_index and prev_sha:
             _head = _git(_rev_root, "rev-parse", _branch)[1]
             if _head != prev_sha:
@@ -560,10 +560,10 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
 
         sig_pkg, pkg_task = _build_package_signals_and_task(
             pkg, pid, task, signals, signals_for, ordered)
-        # v3.0-rc12 (finding живого sequential): исключение провайдера/инфры (напр. ConnectionReset
-        # от kimi ПОСЛЕ исчерпания ретраев _http_post_json) НЕ должно ронять всю транзакцию traceback'ом
-        # и терять per-package lifecycle. Ловим -> пакет честно фейлится (infra-error) -> цепочка
-        # hard-stop с ясной причиной; прежние пакеты/план/снимки сохранены (durable/resumable).
+        
+        
+        
+        
         infra_error = None
         try:
             rep = ai_ops_run.run(pkg_task, sig_pkg, child_root, features_dir=str(features_dir),
@@ -572,10 +572,10 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
                                  model=model, author=author, author_proposer=author_proposer,
                                  review=review, reviewer_proposer=reviewer_proposer,
                                  baseline_diff=baseline_diff, install_deps=install_deps,
-                                 # v2.124 (P0.4): пакеты НИКОГДА не открывают PR — доставка отдельным шагом
-                                 # ПОСЛЕ агрегатного вердикта (ready_all). Иначе готовый финальный пакет открыл
-                                 # бы PR, пока ранний пакет awaiting-evidence -> PR при ready_all=false.
-                                 sandbox=sandbox, max_steps=max_steps, open_pr=False,
+                                 
+                                 
+                                 
+                                 sandbox=sandbox, max_steps=max_steps, open_pr=False, verification_intent="draft",
                                  write_scope=(write_scope_for(pkg) if write_scope_for else None))
         except (KeyboardInterrupt, SystemExit):
             raise                                       # намеренное прерывание/честный fail ключа — не глотаем
@@ -590,41 +590,41 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
             infra_error = rep.get("failure")
 
         sha = (rep.get("commit") or {}).get("sha")
-        # v2.120 (P0.3): ОСТАНОВ цепочки на НАСТОЯЩЕМ блокере — нельзя строить зависимый пакет поверх.
-        # Отличаем «awaiting evidence» (нет author/review -> исполнен, но не ready, цепочка идёт) от
-        # deterministic/security/reviewer FAIL и регрессии (обязаны остановить).
+        
+        
+        
         stop_reason = (f"{infra_error['failure_class']}-error: {infra_error['exception_type']}"
                        if infra_error else _hard_stop(rep))
-        # v2.123 (P0.3): ПОСТ-ДИФФ проверка write_scope — пакет не должен был изменить НИЧЕГО вне своего
-        # каталога (belt-and-suspenders поверх брокера, который отклоняет out-of-scope записи в петле).
-        # Escape = scope-violation -> останавливает последовательность (нельзя строить поверх «уехавшего»).
+        
+        
+        
         pkg_scope = write_scope_for(pkg) if write_scope_for else None
         if stop_reason is None and sha and pkg_scope:
             from ai_ops_kit.gates import approvals as _appr
             wt = child_root / ".ai" / "worktrees" / wid
             changed = _changed_files(wt if wt.is_dir() else child_root, sha)
-            # v2.124.1 (finding живого прогона): write_scope ограничивает КОД модели, а НЕ артефакты,
-            # которые пишет сам движок (pre-authoring: .ai/runplan/, openspec/, features/, .ai/). Иначе
-            # authored requirements/openspec ложно ловятся как scope-violation и убивают цепочку на п.1.
+            
+            
+            
             outside = [f for f in changed
                        if not f.startswith((".ai/", "openspec/", "features/"))
                        and not _appr.covers_paths({"scope": " ".join(pkg_scope)}, [f])]
             if outside:
                 stop_reason = f"scope-violation: пакет изменил пути вне write_scope: {', '.join(outside[:5])}"
-        # `hard_blocked` снят ревизией 2026-08-11: это дубль. Тот же признак уже проверяет
-        # `_hard_stop(rep)` выше (строка ~782) и ставит `stop_reason` — блокировка НЕ терялась.
+        
+        
         executed = bool(sha) and stop_reason is None
         ready = bool(rep.get("ready_for_pr"))
         blocked = stop_reason is not None
 
-        # сохранить per-package отчёт + СНИМОК lifecycle-артефактов (v2.124): родительские
-        # features/<wid>/{run-plan,run-handoff,...} перетираются следующим пакетом -> у каждого пакета
-        # свой неизменный lifecycle-каталог work-packages/<pid>/ (P1 аудита).
+        
+        
+        
         pkg_dir = features_dir / wid / "work-packages" / pid
         _persist_err = _persist_package_report(pkg_dir, features_dir, wid, rep)
         if _persist_err is not None:
-            # v3.0.12 (finding аудита блок B): чекпоинт resume/retry не сохранён durable -> нельзя
-            # строить следующий пакет поверх коммита без durable-чекпоинта -> HARD-STOP цепочки.
+            
+            
             blocked = True
             if not stop_reason:
                 stop_reason = f"checkpoint-persist-failed: {_persist_err}"
@@ -645,8 +645,8 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
                         "handoff": (rep.get("handoff") or {}).get("next_action"),
                         "failure": infra_error,   # v3.0-rc13 (P1): типизированный envelope (None если не исключение)
                         "status": status})
-        # v3.0.14 (#3): event journal — package_end (Run->Package->Gate). Накопленное сливается в
-        # отчёт последовательности ниже.
+        
+        
         _journal_package_end(features_dir, wid, pid, pkg, sha, ready, status,
                              (rep.get("gates") or {}).get("unmet"))
 

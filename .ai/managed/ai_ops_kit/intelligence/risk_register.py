@@ -49,7 +49,7 @@ _SIGNAL_RISK = {
     ("delivery", "milestone"): ("delivery", "пересобрать план milestone или сдвинуть срок осознанно"),
 }
 
-# drift-пара -> категория риска + действие
+
 _DRIFT_RISK = {
     "документация↔код": ("technical", "привести документацию в соответствие коду (или наоборот)"),
     "roadmap↔backlog": ("strategic", "свести roadmap с backlog"),

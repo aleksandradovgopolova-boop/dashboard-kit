@@ -62,23 +62,23 @@ import yaml
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
            Path(__file__).resolve().parents[2])
 
-# Где дочка кладёт выгрузку. Первый существующий побеждает — те же конвенции, что у UI-evidence.
+
 EVIDENCE_PATHS = (".ai/analytics/events-seen.json",
                   "analytics/events-seen.json",
                   "test-results/events-seen.json")
 
-# Где лежит каталог объявленных событий.
+
 CATALOG_PATHS = ("analytics/events.yaml", ".ai/project/analytics/events.yaml")
 
 # Событие, объявленное для аналитики, ОБЯЗАНО доезжать. `domain` и `audit` — внутренние записи
 # продукта: они могут не уходить во внешнюю аналитику вовсе, и требовать этого было бы придиркой.
 ARRIVAL_REQUIRED_KINDS = ("analytics",)
 
-# Имя машинного доказательства гейта analytics_runtime_verification, которое производит
-# events_verified_live() (объявлено в quality/gate-machinability.yaml как mechanizable).
+
+
 EVIDENCE_NAME = "events_verified_live"
 
-# Гейт, чьё доказательство `events_verified_live` производит этот модуль.
+
 GATE_ID = "analytics_runtime_verification"
 
 
@@ -223,7 +223,7 @@ def gate_evidence_entry(child_root, base_entry: dict = None) -> dict:
     """
     live = events_verified_live(child_root)
     entry = dict(base_entry or {})
-    # снять слово судьи о НАШЕМ факте: его подтверждает/опровергает только машина
+    
     provided = [p for p in (entry.get("provided") or []) if p != EVIDENCE_NAME]
     evid = list(entry.get("evidence") or [])
     src = f"{EVIDENCE_NAME} @ intelligence/event_arrival: {live.get('detail') or live['reason']}"

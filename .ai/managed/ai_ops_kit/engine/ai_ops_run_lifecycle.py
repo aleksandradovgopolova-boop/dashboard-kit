@@ -35,10 +35,10 @@ def _run_start_audience(child_root):
         return "technical"
 
 
-# Стадии прогона (пробо-свободная передняя половина) вынесены в сателлит для снятия god-модуля
-# с потолка module-size. Ре-экспорт держит публичную поверхность: `ai_ops_run` и тесты
-# резолвят эти имена из ЭТОГО модуля (`ai_ops_run_lifecycle.<name>`) как раньше. Это
-# ЕДИНСТВЕННОЕ module-level ребро фасад->сателлит; обратно сателлит тянет только лениво.
+
+
+
+
 from ai_ops_kit.engine.ai_ops_run_lifecycle_stages import (   # noqa: F401,E402
     _commit_barrier, _start_lifecycle, _resume_gate, _finalize_run_cost, _finalize_run,
     _deliver)
@@ -68,16 +68,20 @@ def live_provider_refusal(res, explicit):
               "`--provider mock`.")
 
 
-def _reconcile_pending_delivery(features_dir, fid, child_root):
+def _reconcile_pending_delivery(features_dir, fid, child_root, *, delivery_guard=None):
     """v3.0.16/v3.0.17 (finding аудита #2/P0): сверить с remote КАЖДУЮ незавершённую доставку (Intent без
     Receipt) и дописать DeliveryReceipt — но ТОЛЬКО при СТРОГОМ совпадении идентичности PR с Intent
     (repository + head.sha == commit_sha + base.ref). PR той же ветки, но с ДРУГИМ коммитом НЕ
     засчитывается за подтверждение старой доставки. Все записи — обязательные барьеры (реконсиляция НЕ
     рапортует успех, если Receipt фактически не сохранился). Идемпотентно, ничего не создаёт на remote.
     -> список исходов по delivery_id | None (нечего сверять)."""
+    from contextlib import nullcontext
+    from types import SimpleNamespace
+    from ai_ops_kit.engine.ai_ops_run_lifecycle_stages import _delivery_write
+    owned = SimpleNamespace(delivery_guard=delivery_guard or nullcontext)
     from pathlib import Path as _P
-    # _outbox_dir/_unresolved_intents/_nonfinal_receipt_intents остаются в ai_ops_run (первые два
-    # нужны и forbidden-функции/тестам) — ленивый импорт, чтобы не замкнуть импорт-граф.
+    
+    
     from ai_ops_kit.engine.ai_ops_run import (
         _outbox_dir, _unresolved_intents, _nonfinal_receipt_intents)
     # незавершённые (Intent без Receipt) + #400: не-финальные receipt (sha_verified != True) —
@@ -105,18 +109,18 @@ def _reconcile_pending_delivery(features_dir, fid, child_root):
             results.append({"delivery_id": did, "status": "unavailable"})   # оставляем на следующий прогон
             continue
         if rc.get("status") == "absent":
-            _w = _ls.durable_write(rp, {**_base, "status": "not-delivered", "remote_sha": None},
+            _w = _delivery_write(owned, "durable_write", rp, {**_base, "status": "not-delivered", "remote_sha": None},
                                    require_keys=("kind", "delivery_id", "status"))
             results.append({"delivery_id": did, "status": "reconciled-absent" if _w.get("ok")
                             else "receipt-write-failed"})
             continue
-        # rc.status == found: СТРОГАЯ сверка идентичности (не доверяем имени ветки)
+        
         _idn = (rc.get("repository") == intent.get("repository")
                 and rc.get("head_sha") == intent.get("commit_sha")
                 and rc.get("base_ref") == intent.get("base_ref"))
         if not _idn:
-            # PR ветки есть, но это НЕ та доставка (другой SHA/base/repo) -> НЕ подтверждаем старую.
-            _w = _ls.durable_write(rp, {**_base, "status": "mismatch", "remote_sha": rc.get("head_sha"),
+            
+            _w = _delivery_write(owned, "durable_write", rp, {**_base, "status": "mismatch", "remote_sha": rc.get("head_sha"),
                                         "remote_base_ref": rc.get("base_ref"),
                                         "remote_repository": rc.get("repository"), "sha_verified": False,
                                         "pr_url": rc.get("url"), "pr_number": rc.get("number")},
@@ -129,7 +133,7 @@ def _reconcile_pending_delivery(features_dir, fid, child_root):
         # Поля-факты (`checks_status`/`total`/`failed`) и поле-вердикт (`checks_verified`) пишутся из
         # одного источника — `pr_open.checks_verified()`, чтобы вердикт нельзя было проставить мимо фактов.
         _chk = rc.get("checks") or {"status": "unavailable"}
-        _w = _ls.durable_write(rp, {**_base, "status": "reconciled", "remote_sha": rc.get("head_sha"),
+        _w = _delivery_write(owned, "durable_write", rp, {**_base, "status": "reconciled", "remote_sha": rc.get("head_sha"),
                                     "sha_verified": True, "pr_url": rc.get("url"),
                                     "pr_number": rc.get("number"), "pr_state": rc.get("pr_state"),
                                     "merged": rc.get("merged"),
@@ -141,7 +145,7 @@ def _reconcile_pending_delivery(features_dir, fid, child_root):
         if not _w.get("ok"):
             results.append({"delivery_id": did, "status": "receipt-write-failed"})   # НЕ рапортуем успех
             continue
-        _ls.journal_append(jn, {"kind": "delivery_reconciled", "run_id": fid, "workitem_id": fid,
+        _delivery_write(owned, "journal_append", jn, {"kind": "delivery_reconciled", "run_id": fid, "workitem_id": fid,
                                 "delivery_id": did, "pr_url": rc.get("url"), "remote_sha": rc.get("head_sha")})
         results.append({"delivery_id": did, "status": "reconciled", "pr_url": rc.get("url")})
     return results
@@ -152,6 +156,8 @@ def _register_active_work(child_root, signals, write_scope, fid, session, lifecy
     """Регистрация active-work + concurrency-preflight (координация параллельных сессий).
     K6: вынесено из run() без изменения поведения. -> (aw_path, preflight, error|None)."""
     aw_path = child_root / ".ai" / "runtime" / "active-work.yaml"
+    if active_work._git_common_dir(child_root):
+        aw_path = active_work.shared_registry_path(child_root)
     # v3.0.12 (finding аудита блок B): общий реестр координации повреждён -> FAIL-CLOSED (не стартуем
     # вслепую: пустая карта скрыла бы чужую активную работу и две сессии столкнулись бы). Проверяем
     # ДО preflight/register, чтобы register не наткнулся на corrupt-raise без обработки.
@@ -167,8 +173,8 @@ def _register_active_work(child_root, signals, write_scope, fid, session, lifecy
     # сразу (неизвестность считалась совпадением). Зоны выводятся из `write_scope` тем же
     # правилом, что на пакетном пути (`work_areas` — одна формула на оба пути).
     areas = _work_areas.areas_for(signals, write_scope)
-    # concurrency preflight ДО регистрации/изменения файлов: пересечения по областям с ДРУГОЙ
-    # активной работой (тихо, через classify — без печати и без себя). Advisory в отчёт.
+    
+    
     try:
         _aw = active_work.load(aw_path)
         _conf = active_work.classify(
@@ -176,9 +182,9 @@ def _register_active_work(child_root, signals, write_scope, fid, session, lifecy
             {"id": fid, "affected_areas": list(areas), "depends_on": [], "shared_contracts": []})
         preflight = {"conflicts": _conf}
     except Exception as _pe:  # noqa: BLE001 — preflight не должен ронять прогон...
-        # ...но и выглядеть пройденным не должен: при preflight=None отчёт печатал
-        # «preflight-конфликтов: 0», то есть заявлял «конфликтов нет» там, где проверки
-        # вообще не было. Записываем сбой явно.
+        
+        
+        
         preflight = {"error": f"{type(_pe).__name__}: {_pe}"[:200], "conflicts": None}
     # #661: сигнал «писатель занят + работа независима → годится параллельный субагентный путь».
     # Момент выбран потому, что здесь у нас ОБА факта: неблокирующая проба замка писателя говорит,
@@ -194,15 +200,15 @@ def _register_active_work(child_root, signals, write_scope, fid, session, lifecy
         if _decision["parallel_viable"]:
             _wc.record(child_root, fid, _decision, areas=list(areas), work_id=fid)
     except Exception as _wce:  # noqa: BLE001 — сигнал advisory: его сбой не роняет прогон...
-        # ...но и молча не исчезает: named в lifecycle_errors (как preflight-сбой выше).
+        
         lifecycle_errors.append(f"writer-contention signal: {type(_wce).__name__}: {_wce}"[:200])
-    # регистрация активной работы (координация) — человекочитаемые строки в stderr, чтобы
-    # stdout оставался чистым для --json.
-    # КОД ВОЗВРАТА РЕГИСТРАЦИИ ЧИТАЕТСЯ (замер 18.08.2026). Прежде он отбрасывался в обеих
-    # точках вызова: `register` мог отказать (цикл зависимостей, работа в main, нет зон) — и
-    # прогон всё равно продолжался. С отказом второй сессии на ту же работу/ветку цена этого
-    # молчания стала прямой: заявка потребителя #150 — два PR на одну ветку и выброшенная
-    # половина работы. Отказ обязан останавливать прогон ДО правок, а не после.
+    
+    
+    
+    
+    
+    
+    
     _reg_rc = 1
     with contextlib.redirect_stdout(sys.stderr):
         try:
@@ -214,7 +220,7 @@ def _register_active_work(child_root, signals, write_scope, fid, session, lifecy
                                            audience=_run_start_audience(child_root))
         except active_work.ActiveWorkCorrupt as _e:   # v3.0.12: сбой durable-записи реестра не молчит
             lifecycle_errors.append(f"active-work register: {_e}")
-            _reg_rc = 0        # сбой записи реестра уже назван выше — не путать его с отказом
+            _reg_rc = 1        # lost claim never authorizes a writer
     if _reg_rc:
         return None, None, {"schema_version": 1, "kind": "run-report", "workitem_id": fid,
                 "status": "blocked",
@@ -240,16 +246,16 @@ def _restore_resume_policy(ctx, resume):
     ветки) НЕ является сменой классификации: executor сам управляет policy пакета. Помечен
     _sequence_internal -> пропускаем drift-проверку и restore run-settings.
     """
-    # is_service_text/product_task_for_resume остаются в ai_ops_run (используются тестами и CLI) —
-    # ленивый импорт, чтобы не замкнуть импорт-граф и сохранить патчабельность.
+    
+    
     from ai_ops_kit.engine.ai_ops_run import is_service_text, product_task_for_resume
     ctx.saved_task = None    # F-027: продуктовая задача исходного прогона (переживает продолжение)
     if resume and ctx.feature and not ctx.signals.get("_sequence_internal"):
         _sp = ctx.features_dir / ctx.feature / "run-settings.yaml"
-        # v3.0.12 (finding аудита блок B): FAIL-CLOSED чтение. Прежде safe_load(...) or {} трактовал
-        # битый/пустой run-settings как «отсутствует» -> resume тихо откатывался к дефолтам вызова
-        # (терял классификацию/policy/BaseBinding) И перезаписывал файл дефолтами (контракт исходного
-        # прогона уничтожался навсегда). Теперь: повреждён -> явный отказ (не дефолт, не перезапись).
+        
+        
+        
+        
         _g = _ls.load_guarded(_sp, required_keys=("kind", "policy"), kind="run-settings")
         if _g["state"] == "corrupt":
             return {"schema_version": 1, "kind": "execution-pipeline", "workitem_id": ctx.feature,
@@ -263,10 +269,10 @@ def _restore_resume_policy(ctx, resume):
             _ss, _pp = (_saved.get("signals") or {}), (_saved.get("policy") or {})
             if isinstance(_saved.get("task"), str) and _saved["task"].strip():
                 ctx.saved_task = _saved["task"]
-            # v3.0-rc4 (P0.1) IMMUTABLE resume: resume НЕ меняет классификацию/policy. Если новый
-            # вызов пытается переопределить routing-сигнал (task_type/risk/size/affected_areas) или
-            # write_scope значением, отличным от сохранённого — это НЕ resume, а replan: требуется
-            # явный replan=True (+ ревалидация). Иначе можно было бы тихо продолжить ENGINEERING как QUICK.
+            
+            
+            
+            
             _POLICY_KEYS = ("task_type", "risk", "size", "affected_areas")
             _drift = [k for k in _POLICY_KEYS
                       if k in ctx.signals and k in _ss and ctx.signals[k] != _ss[k]]
@@ -280,8 +286,8 @@ def _restore_resume_policy(ctx, resume):
                                   f"(drift: {', '.join(_drift)}). Это replan — запусти с replan=True "
                                   "(ревалидация + новый план), а не resume."),
                         "resume": {"requested": True, "resumed": False, "drift": _drift}}
-            # восстанавливаем СОХРАНЁННУЮ policy как источник истины (не «or», а точное значение),
-            # кроме случая replan, где новый вызов осознанно задаёт новую policy.
+            
+            
             if not ctx.replan:
                 ctx.signals = {**ctx.signals, **_ss}          # saved policy побеждает
                 ctx.sandbox = bool(_pp.get("sandbox", ctx.sandbox))
@@ -293,8 +299,8 @@ def _restore_resume_policy(ctx, resume):
                 ctx.write_scope = _pp.get("write_scope") if ctx.write_scope is None else ctx.write_scope
                 if ctx.max_steps == 40 and _pp.get("max_steps"):
                     ctx.max_steps = _pp["max_steps"]
-                # v3.0.2/v3.0.9 (P0): base восстанавливается из saved BaseBinding (точная база исходного
-                # запуска), с фолбэком на плоское поле base (совместимость со старыми run-settings).
+                
+                
                 ctx.base = ((_pp.get("base_binding") or {}).get("base_ref")) or _pp.get("base", ctx.base)
         # F-027: задача исполнителя на продолжении обязана остаться ПРОДУКТОВОЙ. Служебный
         # next_action кита («закрыть незакрытые гейты: …») сюда доезжал как task_text — и автор
@@ -324,25 +330,33 @@ def _resolve_models(ctx):
 
     K6: вынесено из run() без изменения поведения. Мутирует `ctx` (writer/reviewer model+prov,
     model_resolution, sec_qualified, klp_by_env/trust_cache/trust_now/trust_env). Явный --model =
-    override (записывается). Всё под fail-safe: нет резолва/ключа/endpoint -> прежнее поведение
-    (passthrough --model) + честная запись в отчёт. JIT provider-preflight PRIMARY не пройден ->
+    override (записывается). Без явного model в API-пути нет допущенного доступного кандидата/сбой назначения ->
+    blocked-preflight; явный override и остальные providers сохраняют прежний путь. JIT provider-preflight PRIMARY не пройден ->
     возвращает blocked-preflight-отчёт (fail-closed, provider не строится). -> error-dict | None.
     """
     from ai_ops_kit.providers import orchestrator
-    # _load_klp_by_env/_provider_trust/_with_provider_fallback остаются в ai_ops_run (patched тестами,
-    # нужны и _execute_with_fix_loop) — ленивый импорт сохраняет патчабельность (`ai_ops_run.<name>`).
+    
+    
     from ai_ops_kit.engine.ai_ops_run import (
         _load_klp_by_env, _provider_trust, _with_provider_fallback)
     ctx.writer_model, ctx.writer_prov, ctx.rev_model, ctx.rev_prov = ctx.model, None, ctx.model, None
     try:
         from ai_ops_kit.providers import model_router as _mr
         from ai_ops_kit.providers import provider_endpoints as _pe
-        _plan = _mr.plan_run(signals=ctx.signals)   # v3.9.0-rc3: signals -> preferred_writer_tier
+        available = None
+        if ctx.model is None and ctx.provider_name == "openai-compatible":
+            available = {p for p in _pe.PROVIDER_ENDPOINTS if _pe.key_available(p)}
+        _plan = (_mr.plan_run(signals=ctx.signals, available_providers=available) if available is not None
+                 else _mr.plan_run(signals=ctx.signals))
         ctx.model_resolution = {"kind": "ModelResolution", "plan": _plan, "applied": False,
                                 "mode": "explicit-override" if ctx.model else "router", "notes": []}
-        # v3.8.3-rc3 Dynamic Model Trust: JIT provider-preflight для КАЖДОЙ реально вызываемой модели
-        # (primary/reviewer/fallback/escalation), а не только primary+reviewer. Trust-переменные видны
-        # и в fix-loop (эскалация проверяет trust там).
+        if available is not None:
+            ctx.model_resolution["provider_availability"] = {
+                "basis": "local-api-key-presence", "available_providers": sorted(available),
+                "unavailable_providers": sorted(set(_pe.PROVIDER_ENDPOINTS) - available), "online_health": None}
+        
+        
+        
         import os as _os
         import datetime as _dt
         ctx.trust_cache = {}
@@ -353,7 +367,7 @@ def _resolve_models(ctx):
             impl, rev = _plan.get("implementation") or {}, _plan.get("code_review") or {}
             if impl.get("resolved") and _pe.key_available(impl.get("provider")):
                 ep = _pe.endpoint_for(impl["provider"])
-                # JIT trust PRIMARY: не готов -> blocked-preflight (fail-closed, как раньше)
+                
                 _pt = _provider_trust(impl["provider"], ep["key_env"], ctx.klp_by_env, ctx.trust_env, ctx.trust_now, ctx.trust_cache)
                 ctx.model_resolution["key_preflight"] = _pt.get("preflight") or {"ready": _pt["ready"], "blocks": ([] if _pt["ready"] else [_pt.get("reason")])}
                 if not _pt["ready"]:
@@ -368,20 +382,20 @@ def _resolve_models(ctx):
                 ctx.model_resolution["model_attempts"] = [
                     {"attempt": 1, "model": impl["model_id"], "provider": impl["provider"],
                      "trigger": "initial", "outcome": "pending"}]
-                # v3.9.0-rc3 COMPLEXITY-AWARE ROUTING: сложный класс задачи -> сильный executor (Claude
-                # Code adapter, claude-cli) СРАЗУ, не cheap-then-fix-loop. Честный fallback: нет локального
-                # claude CLI -> остаёмся на дешёвом money-mode writer + пишем причину. Реестр/ключи не нужны
-                # (локальная сессия). Escalation-ladder чистим: некуда «эскалировать» сильного вниз на kimi/qwen.
+                
+                
+                
+                
                 _tier = _plan.get("preferred_writer_tier") or {}
                 if _tier.get("tier") == "strong-executor":
-                    # СПРАШИВАЕМ ТЕМ ЖЕ, ЧЕМ ЗАПУСТИМ (замер 18.08.2026). Здесь стоял голый
-                    # `shutil.which("claude")`, а `make_claude_cli_provider()` запускает то, что
-                    # найдёт `claude_lookup` — то есть путь, названный владельцем в
-                    # AI_OPS_CLAUDE_BIN, сильнее PATH. Расхождение давало ровно тот класс, из-за
-                    # которого функция и заводилась: рабочий исполнитель назван, но не в PATH ->
-                    # «strong executor недоступен» и тихий откат на дешёвого writer'а; битый
-                    # названный путь при claude в PATH -> writer выбран, а первый же вызов модели
-                    # отказывается работать посреди начатого прогона.
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     if orchestrator.claude_binary():
                         ctx.writer_model = "claude-code-local"
                         ctx.writer_prov = orchestrator.make_claude_cli_provider()
@@ -418,9 +432,9 @@ def _resolve_models(ctx):
                     ctx.model_resolution["reviewer"] = {"model_id": rev["model_id"], "provider": rev["provider"], "independent_by_model": True}
                 elif (ctx.writer_model == "claude-code-local" and impl.get("resolved")
                       and _pe.key_available(impl.get("provider"))):
-                    # v3.9.0-rc3 complexity-routing: writer=claude-cli (сильный executor) -> ревьюер =
-                    # ДЕШЁВЫЙ qualified impl-судья (deepseek), независим от claude-cli по модели, даже если
-                    # отдельная code_review-роль не резолвится в реестре. Это и есть owner-план review->deepseek.
+                    
+                    
+                    
                     _iep = _pe.endpoint_for(impl["provider"])
                     ctx.rev_model = impl["model_id"]
                     ctx.rev_prov = orchestrator.make_openai_provider(impl["model_id"], _iep["base_url"], _iep["key_env"])
@@ -460,17 +474,22 @@ def _resolve_models(ctx):
                             "reason": _fpt.get("reason"),
                             "note": "необязательный fallback ИСКЛЮЧЁН по JIT-trust (не блокирует primary)"}
             else:
-                ctx.model_resolution["notes"].append("router не применён (implementation не резолвится/нет ключа) -> passthrough --model")
+                ctx.model_resolution["preflight_blocked"] = True
+                ctx.model_resolution["key_preflight"] = {"ready": False, "blocks": [
+                    "нет допущенной API-модели с локальным ключом (или ключ исчез до применения)"]}
     except Exception as _e:  # noqa: BLE001
         ctx.model_resolution = {"kind": "ModelResolution", "error": str(_e)[:200], "applied": False,
                                 "mode": "explicit-override" if ctx.model else "router"}
-    # v3.7.3 (#5 flip): security needs_review закрывает ТОЛЬКО КВАЛИФИЦИРОВАННЫЙ security-судья
-    # (security_review.resolved в plan_run) ЛИБО человек (ApprovalRecord). Общий code reviewer — НЕТ.
-    # Пока qualified security-судьи нет (до Bench v2) -> security needs_review -> pending_human до
-    # человеческого ApprovalRecord (реальный human-fallback). Отдельный security_reviewer_proposer.
+        if ctx.model is None and ctx.provider_name == "openai-compatible":
+            ctx.model_resolution.update(preflight_blocked=True, key_preflight={"ready": False,
+                "blocks": [f"назначение API-модели недостоверно: {type(_e).__name__}"]})
+    
+    
+    
+    
     ctx.sec_qualified = bool(((ctx.model_resolution.get("plan") or {}).get("security_review") or {}).get("resolved"))
-    # v3.7.1 (#4) РЕАЛЬНЫЙ security-барьер: key preflight не пройден (ключ/ротация) -> блок ПРОГОНА
-    # (не строим proposer, не зовём провайдера). Честный blocked-preflight-отчёт, ready_for_pr=false.
+    
+    
     if isinstance(ctx.model_resolution, dict) and ctx.model_resolution.get("preflight_blocked"):
         _kpf = ctx.model_resolution.get("key_preflight", {})
         # #633: provider/key preflight не пройден до вызова модели — вызов человека, живший только в

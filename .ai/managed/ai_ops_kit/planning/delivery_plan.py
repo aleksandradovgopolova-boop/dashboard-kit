@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import posixpath
 import re
 import sys
 from pathlib import Path
@@ -41,18 +42,20 @@ import yaml
 from ai_ops_kit.shared.gitio import git
 from ai_ops_kit.planning import contours as _contours
 
-# Кластеры плана вынесены в модули-соседи (чистый рефакторинг, поведение байт-в-байт). Имена
-# ре-экспортируются, чтобы `delivery_plan.<name>` продолжал работать у прежних импортёров
-# (движок, gates, cli, тесты) и у кода этого модуля ниже. Соседи `delivery_plan` не импортируют —
-# цикла нет.
+
+
+
+
 from ai_ops_kit.planning.plan_model import (
     PLAN_REL, KIND, HISTORY_REL, HISTORY_KIND, DECLARABLE, DERIVED, VALUE,
     OWNER_WAIT_STATUS, OWNER_WAIT_KEY, ACTIVE_DECLARABLE, CLOSED_DECLARABLE,
     LINK_KEYS, FORBIDDEN_ITEM_KEYS, GOAL_STATUSES, _GOAL_LIVENESS,
+    MILESTONE_KEY, MILESTONE_STATUSES,
     FREEZE_DECISION, FREEZE_GOAL, FREEZE_OUTCOME, FREEZE_RELATIONS, FREEZE_LIFT_FIELD,
-    is_template, items, goals, goal_priority, goal_is_live,
+    is_template, items, goals, current_milestone, goal_priority, goal_is_live,
     freeze_state, _field_evidence_present, _freeze_lift_errors,
     goal_freeze_relation, frozen_work,
+    PLACEHOLDER_GOAL_IDS, UNNAMED_GOAL_LABEL, is_placeholder_goal, goal_display_name,
 )
 from ai_ops_kit.planning.plan_validate import (
     validate, validate_history, _workitem_status_errors, _cycles,
@@ -75,8 +78,8 @@ def plan_rel(child_root) -> str:
     try:
         return _contours.declared_path(child_root, "plan", PLAN_REL)
     except _contours.ConfigInvalid as e:
-        # Недостоверное объявление пути — fail-closed: взять дефолт значило бы читать НЕ ТОТ файл и
-        # уверенно отвечать по нему.
+        
+        
         raise PlanCorrupt(str(e)) from e
 
 
@@ -134,25 +137,25 @@ def load_history(child_root):
     return [w for w in out if isinstance(w, dict)]
 
 
-# ─── план против того, что говорит git ──────────────────────────────────────────────────────────
-#
-# ЗАЧЕМ. Цель `plan-as-control-plane` требует, чтобы план и состояние работы показывали ОДНО. До сих
-# проверялась только ФОРМА записи, и это было решением: «объявленное состояние чужой системы стареет
-# молча». Но git — не чужая система: он лежит рядом, отвечает мгновенно и не требует сети.
-#
-# ЗАМЕР 20.08.2026, до правки, на плане самого кита: 8 активных работ, ОДНО расхождение, которого не
-# видела ни одна проверка — `audit-public-surface-and-guards` объявлена идущей, а её ветка целиком в
-# базе (впереди 0). Работа была сделана и слита, план об этом не знал. Ровно класс аудита 19.08
-# («тридцать работ объявили закрытыми, настоящими были 23»), только в другую сторону, и заметил его
-# снова не механизм.
-#
-# ВТОРАЯ ПОЛОВИНА ЗАМЕРА: правило «открытый PR не сосуществует с `todo`» существует с 14.08 и
-# СРАБОТАТЬ НЕ МОЖЕТ — оно смотрит поле `pr`, а в плане кита это поле встречается НОЛЬ раз (работы
-# объявляют `branch`). Проверка без входных данных — то же «объявлено, но не исполняется».
-#
-# ТРЕТЬЕ СОСТОЯНИЕ НЕ СВОРАЧИВАЕТСЯ ВО ВТОРОЕ. Ошибкой называется только то, что ИЗМЕРЕНО: ссылка на
-# ветку найдена и git ответил. Ветка удалена после слияния или просто не выкачана — это «не знаю», и
-# оно говорится словами, а не выдаётся за согласованность.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def _trunk_ref(root):
@@ -162,7 +165,7 @@ def _trunk_ref(root):
     и в рабочей копии работы возвращает саму эту ветку. Замер 20.08.2026: из копии прогона сверка
     получалась `ai-ops/w` против `ai-ops/w` и объявляла любую заявку влитой. Здесь нужен ствол, и он
     берётся списком явных кандидатов — без догадок."""
-    # Единый вход к git с таймаутом (см. shared/gitio): зависший git не вешает сверку с базой.
+    
     for cand in ("origin/main", "main", "origin/master", "master"):
         if git(root, "rev-parse", "--verify", "--quiet", cand)[0] == 0:
             return cand
@@ -175,7 +178,7 @@ def _branch_state(root, branch, trunk):
     Состояния: `in-base` — коммиты ветки уже в стволе; `ahead` — ветка впереди; `absent` — ссылки нет
     ни локально, ни на origin (удалена после слияния либо не выкачана — РАЗЛИЧИТЬ НЕЛЬЗЯ, и мы не
     угадываем)."""
-    # Единый вход к git с таймаутом (см. shared/gitio).
+    
     ref = None
     for cand in (branch, f"origin/{branch}"):
         if git(root, "rev-parse", "--verify", "--quiet", cand)[0] == 0:
@@ -232,7 +235,7 @@ def git_disagreements(plan, root):
     return out
 
 
-# ── Вывод статуса ─────────────────────────────────────────────────────────────────────────────
+
 
 GLOBAL_SCOPE = "*"          # маркер «пишет всюду»: конфликтует с любой областью
 
@@ -284,11 +287,16 @@ def scope_prefix(glob) -> str:
     «пересечений нет». Этот же fail-closed уже был потерян и починен в
     `engine/parallel_planner.py` (баг v3.6.5) — здесь он повторился в новом коде.
     """
-    s = str(glob or "").replace("\\", "/").strip()
-    while s.startswith("./"):
-        s = s[2:]
-    head = s.split("*")[0].strip("/")
-    if not head:
+    if not isinstance(glob, str):
+        return GLOBAL_SCOPE
+    s = glob.replace("\\", "/").strip()
+    if ".." in s.split("/"):
+        return GLOBAL_SCOPE
+    head = s[:min((s.index(c) for c in "*?[" if c in s), default=len(s))]
+    if len(head) < len(s) and not head.endswith("/"):
+        head = head.rsplit("/", 1)[0] if "/" in head else ""
+    head = posixpath.normpath(head)
+    if head in ("", ".", "..") or head.startswith(("/", "../")) or ":" in head:
         return GLOBAL_SCOPE
     return head
 
@@ -344,16 +352,16 @@ def _active_map(child_root):
     data = active_work.load(p)
     out = {}
     for a in data.get("active") or []:
-        # Мёртвый процесс работу не держит — иначе `next` прятал бы её от всех, а `status` уже
-        # научился такую заявку отпускать (18.08.2026). Две правды об одном тут недопустимы.
+        
+        
         if active_work.holder_is_gone(a):
             continue
-        # `workitem` движок пишет ПУТЁМ (`features/<id>/workitem.yaml`), а не id: см.
-        # `engine/ai_ops_run.py` -> active_work.register(..., workitem=f"features/{fid}/…").
-        # Прежде здесь ждали id, поэтому карта активных работ индексировалась путями и НИКОГДА не
-        # совпадала с id элемента плана: вопрос «что делаем прямо сейчас» был всегда пуст, а
-        # проверка конфликта записи не срабатывала ни разу. Тесты этого не ловили, потому что
-        # фикстуры писали форму, которой движок не производит.
+        
+        
+        
+        
+        
+        
         out[_workitem_key(a)] = a
     out.pop("", None)
     return out
@@ -374,8 +382,8 @@ def _scope_conflict(scope, active, exclude_id=None):
             continue
         if (a.get("status") or "") == "done":
             continue
-        # `affected_areas` — РЕАЛЬНОЕ имя поля (`lifecycle/active_work.py`); `areas` оставлен для
-        # записей, сделанных вручную и в старых версиях.
+        
+        
         theirs = [scope_prefix(x) for x in (a.get("affected_areas") or a.get("areas") or [])]
         if any(scopes_overlap(m, o) for m in mine for o in theirs):
             hits.append(wid)
@@ -398,7 +406,7 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
     ws = items(plan)
     by_id = {w["id"]: w for w in ws if w.get("id")}
 
-    # Транзитивные потомки: сколько работ ждёт каждую (ranking читает это как «снятие ожидания»).
+    
     children = {k: [] for k in by_id}
     for wid, w in by_id.items():
         for d in w.get("depends_on") or []:
@@ -415,17 +423,17 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
             stack.extend(children.get(n) or [])
         return seen
 
-    # ЗАКРЫТАЯ РАБОТА ПОДАЁТСЯ В ВЫВОД ПЕРВОЙ. Ниже зависимость, которой нет в `out`, считается
-    # блокирующей — и это верно («неизвестную зависимость закрытой считать нельзя»). Но после
-    # разноса плана на активное и закрытое каждая зависимость от завершённой работы стала бы
-    # неизвестной, и весь план оказался бы заблокирован с невнятной причиной. История — это факт
-    # закрытия, и она обязана доехать до вывода, иначе разнос ломает `next`.
+    
+    
+    
+    
+    
     if closed is None:
         try:
             closed = load_history(child_root)
         except PlanCorrupt:
-            # Битая история НЕ превращается в «зависимостей нет»: пусть блокирует честно, а причину
-            # назовёт валидатор истории. Молча пустой список здесь был бы ложным green.
+            
+            
             closed = []
     out = {}
     for w in closed or []:
@@ -442,7 +450,7 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
         source, status = "declared", declared if declared in DECLARABLE else "todo"
 
         if wi:
-            # Факт из гейтов сильнее объявленного: `done` в файле при провале гейта — не done.
+            
             if wi == "done":
                 status, source = "done", "workitem"
                 reasons.append("WorkItem закрыт: блокирующих гейтов нет")
@@ -457,10 +465,10 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
             reasons.append(f"работа идёт сейчас: ветка {a.get('branch') or '?'}, "
                            f"сессия {a.get('session') or '?'}")
 
-        # WAITING-ON-OWNER — ОБЪЯВЛЕННОЕ, НЕ ВЫВОДИМОЕ. Ждём названного шага владельца, а не
-        # снятия графовой блокировки, поэтому статус не пересчитывается из зависимостей: иначе
-        # `waiting_on_owner` затёрся бы на `ready`/`waiting`/`blocked` и снова читался бы как
-        # «работа идёт/встала». Причину показываем ту, что назвал человек.
+        
+        
+        
+        
         if status == OWNER_WAIT_STATUS and source == "declared":
             reasons.append(f"механизм готов, ждёт названного действия владельца: "
                            f"{str(w.get(OWNER_WAIT_KEY) or '').strip() or '?'}")
@@ -473,13 +481,13 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
                                   if declared in DECLARABLE and declared != status else None)}
             continue
 
-        # Ниже — вывод из графа. Всё, что здесь считается, объявлять в файле нельзя.
+        
         blocked_by, waiting_for = [], []
         for d in w.get("depends_on") or []:
             dep = out.get(d)
             if dep is None:
-                # Зависимости нет в плане (это ошибка validate) либо она осталась в цикле — обе
-                # ситуации блокируют: считать неизвестную зависимость закрытой нельзя.
+                
+                
                 blocked_by.append(d)
             elif dep["status"] == "done":
                 continue
@@ -562,17 +570,17 @@ def main(argv=None):
         return 1
 
     if ns.cmd == "validate":
-        # История проверяется ВМЕСТЕ с планом: они одно состояние работы, разнесённое по двум
-        # файлам. Отдельная команда означала бы, что одну половину можно не проверить.
+        
+        
         try:
             closed = load_history(root)
             hrep = validate_history(closed, plan)
         except PlanCorrupt as e:
             closed, hrep = [], {"errors": [str(e)], "warnings": []}
         rep = validate(plan, closed=closed, root=root)
-        # ГИТ — ЧАСТЬ ТОГО ЖЕ ОТВЕТА, а не отдельная команда: план и состояние работы это одно
-        # состояние, разнесённое по файлу и по ветке. Отдельная команда означала бы, что одну
-        # половину можно не проверить, — тем же соображением история проверяется здесь же.
+        
+        
+        
         grep_ = git_disagreements(plan, root)
         rep = {"errors": rep["errors"] + hrep["errors"] + grep_["errors"],
                "warnings": rep["warnings"] + hrep["warnings"] + grep_["warnings"]}

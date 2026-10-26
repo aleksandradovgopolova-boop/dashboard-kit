@@ -81,7 +81,7 @@ def link(roadmap: _rm.Roadmap, milestones, tasks) -> dict:
     goal_ids = {d.goal_id for d in roadmap.directions}
     ms_by_id = {m.get("id"): m for m in milestones if m.get("id")}
 
-    # milestone -> набор направлений, которым он служит (из m.roadmap и из задач в нём).
+    
     ms_goals: dict = {mid: set() for mid in ms_by_id}
     for mid, m in ms_by_id.items():
         if m.get("roadmap") in goal_ids:
@@ -110,13 +110,13 @@ def link(roadmap: _rm.Roadmap, milestones, tasks) -> dict:
         tset = [t.get("id") for t in tasks
                 if t.get("roadmap") == g or (t.get("milestone") in ms)]
         breaks = []
-        # milestone под направление, но без задач — разрыв в середине цепочки.
+        
         for mid in ms:
             if not any(t.get("milestone") == mid for t in tasks):
                 breaks.append(f"milestone '{mid}' привязан к направлению, но без задач")
         dl = DirectionLink(goal_id=g, horizon=d.horizon, milestones=ms,
                            task_ids=tset, breaks=breaks)
-        # Now-направление обязано иметь прослеживаемую цепочку. Обрыв — на направлении.
+        
         if d.horizon == _rm.NOW and not ms and not tset:
             dl.breaks.append("направление в Now без milestone и задач — цепочка рвётся на направлении")
             unlinked_now.append(g)

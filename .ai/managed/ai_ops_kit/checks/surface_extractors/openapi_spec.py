@@ -48,12 +48,12 @@ except ImportError:  # pragma: no cover — PyYAML в поставке кита 
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface
 
-# HTTP-методы операций OpenAPI, которые берём как эндпоинты (по одному route на пару путь+метод).
-# head/options/trace осознанно опущены (см. honest_limits) — редко несут отдельную продуктовую
-# операцию, чаще служебные.
+
+
+
 _HTTP_METHODS = ("get", "post", "put", "delete", "patch")
 
-# Расширения JSON — грузятся json.loads; всё прочее (.yaml/.yml) — yaml.safe_load.
+
 _JSON_SUFFIXES = (".json",)
 
 

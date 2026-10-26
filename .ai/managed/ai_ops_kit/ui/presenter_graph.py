@@ -51,18 +51,131 @@ def from_graph_trace(result: dict) -> dict:
     if result.get("goal"):
         summary = (f"Функция «{titles[-1]}» служит цели «{titles[0]}»: {chain_line}. "
                    f"{phrase.capitalize()}.")
+    elif result.get("unresolved_goal"):
+        
+        
+        summary = (f"Функция «{feature}» ссылается на цель «{result['unresolved_goal']}», которой "
+                   f"нет в плане продукта, — до цели нить не доходит.")
     else:
         summary = f"Функция «{feature}»: {chain_line}. {phrase.capitalize()}."
-    headline = "Результат не достигнут" if verdict == "refuted" else None
+    
+    
+    decision = result.get("decision")
+    if decision:
+        summary += f" Появилась из решения: «{decision.get('title')}»."
+    
+    
+    built_by = result.get("built_by") or []
+    if built_by:
+        first = built_by[0]
+        pr = f" (PR #{first['pr']})" if first.get("pr") else ""
+        more = f" и ещё {len(built_by) - 1}" if len(built_by) > 1 else ""
+        summary += f" Построена работой: «{first.get('title')}»{pr}{more}."
+    
+    
+    
+    review = result.get("review")
+    if review:
+        title = review.get("title") or "проверено"
+        title = title[:1].upper() + title[1:]
+        note = "" if review.get("verified") else " (держится на суждении, без машинной опоры)"
+        summary += f" {title}{note}."
+    
+    
+    
+    mo = result.get("measured_outcome") or {}
+    measured_verdict = None
+    if mo.get("measured"):
+        measured_verdict = mo.get("verdict")
+        took = "цель взята" if measured_verdict == "met" else "цель пока не взята"
+        summary += (f" Результат по релизу: было {mo.get('baseline')} → стало {mo.get('value')} "
+                    f"при цели {mo.get('target')} — {took}.")
+        hyp = mo.get("hypothesis")
+        if hyp == "confirmed":
+            summary += " Гипотеза подтвердилась."
+        elif hyp == "refuted":
+            summary += " Гипотеза не подтвердилась."
+        for br in (mo.get("guardrail_breaches") or []):
+            summary += f" Защитная метрика просела: {br}."
+    elif mo:
+        
+        reason = mo.get("not_accumulated_reason") or "итог по релизу ещё не измерен"
+        need = mo.get("needed_to_measure")
+        summary += f" Результат ещё не накоплен: {reason}."
+        if need:
+            summary += f" Чтобы измерить: {need}."
+    
+    
+    na = result.get("next_action") or {}
+    if na.get("because"):
+        summary += f" Дальше по этому уроку: {na.get('action')} — потому что {na.get('because')}."
+    headline = ("Результат не достигнут" if verdict == "refuted" or measured_verdict == "failed"
+                else None)
+    ok = verdict == "confirmed" or measured_verdict == "met"
     return message(
-        status=("ok" if verdict == "confirmed" else "degraded"),
+        status=("ok" if ok else "degraded"),
         headline=headline,
         summary=summary,
-        why_it_matters="Раньше этот ответ собирали вручную из трёх файлов — плана, обучения и "
-                       "паспорта функции; теперь он читается по одному графу.",
+        why_it_matters="Раньше этот ответ собирали вручную из плана, обучения, паспорта функции, "
+                       "журнала решений и истории работ; теперь и «зачем» (решение), и «что построили» "
+                       "(работа/PR), и «кто проверил» (вердикт), и «подтвердилось ли» (результат) "
+                       "читаются по одному графу.",
         next_steps=(list(result.get("gaps") or []) or None),
-        technical={"verdict": verdict, "chain": [c.get("id") for c in chain],
-                   "outcome": result.get("outcome")})
+        technical={"verdict": verdict, "measured_verdict": measured_verdict,
+                   "chain": [c.get("id") for c in chain],
+                   "outcome": result.get("outcome"), "measured_outcome": mo or None,
+                   "next_action": na or None, "decision": decision,
+                   "built_by": built_by, "review": review})
+
+
+def _scorecard_line(m: dict) -> str:
+    """Одна строка карты для человека: измеренная — долей в процентах, неизмеренная — причиной.
+
+    Инвариант карты «честность превыше полноты»: неизмеренное печатается «не измерено — причина», а не
+    нулём и не выдуманным числом. Един для пяти метрик и для показателя «ценность для дочки»."""
+    if m.get("measured"):
+        pct = round((m.get("value") or 0) * 100)
+        return f"• {m.get('title')}: {pct}% ({m.get('numerator')}/{m.get('denominator')})"
+    return f"• {m.get('title')}: не измерено — {m.get('reason')}"
+
+
+def from_scorecard(scorecard: dict) -> dict:
+    """`product_scorecard.build_scorecard()` -> UserMessage. Карта продукта кита из 5 метрик.
+
+    Мерит кит КАК ПРОДУКТ, а не числом возможностей. Измеренная метрика печатается долей в
+    процентах, неизмеренная — честным «не измерено» с причиной (а не нулём и не выдуманным числом):
+    инвариант карты «честность превыше полноты» обязан быть виден и человеку."""
+    metrics = scorecard.get("metrics") or []
+    measured = scorecard.get("measured_count") or 0
+    total = len(metrics)
+    lines = [_scorecard_line(m) for m in metrics]
+    summary = ("Мерю себя как продукт, а не числом возможностей — карта из 5 метрик:\n"
+               + "\n".join(lines))
+    
+    
+    cv = scorecard.get("child_value")
+    if isinstance(cv, dict) and cv.get("title"):
+        summary += ("\nСтрелка «работа кита → исход дочки» (доказана ли ценность для дочек):\n"
+                    + _scorecard_line(cv))
+    if scorecard.get("unmeasured_count"):
+        status = "degraded"
+        headline = f"Карта продукта: измерено честно {measured} из {total} метрик"
+        
+        
+        
+        
+        
+        unmeasured = [m.get("title") for m in metrics if not m.get("measured")]
+        сколько = "Одна мера" if len(unmeasured) == 1 else f"{len(unmeasured)} меры"
+        why = (f"{сколько} честно стоит «не измерено», и рядом сказано почему: "
+               f"{'; '.join(t for t in unmeasured if t)}. "
+               "Выдуманное число на этом месте было бы враньём.")
+    else:
+        status = "ok"
+        headline = "Карта продукта: все метрики измерены"
+        why = "Кит меряет себя как продукт единой картой, а не числом возможностей."
+    return message(status=status, headline=headline, summary=summary,
+                   why_it_matters=why, technical=scorecard)
 
 
 def from_graph_gaps(result: dict) -> dict:
@@ -92,6 +205,50 @@ def from_graph_gaps(result: dict) -> dict:
         technical=result)
 
 
+def from_graph_questions(result: dict) -> dict:
+    """`feature_life_history.answer_ten_questions()` -> UserMessage. Десять вопросов жизни фичи.
+
+    Каждый вопрос — с ответом из связанной улики ИЛИ честным «неизвестно: <чего не хватает>». Итог —
+    сколько из десяти отвечено; полная история (10/10) читается как один связный ответ «почему мы
+    вообще сделали эту функцию и что с ней стало».
+    """
+    feature = result.get("feature")
+    if result.get("verdict") == "unknown":
+        return message(
+            status="blocked",
+            summary=f"Функции «{feature}» в графе нет — историю её жизни строить не из чего.",
+            why_it_matters="Отвечаю только из объявленного в плане, обучении и паспортах; выдумывать "
+                           "историю не буду.",
+            next_steps=["проверь id функции", "или собери граф: ./ai-ops graph build"])
+    qs = result.get("questions") or []
+    answered = result.get("answered_count") or 0
+    total = result.get("total") or len(qs)
+    lines = []
+    for q in qs:
+        if q.get("answered"):
+            lines.append(f"✓ {q['question']} {q['answer']}")
+        else:
+            lines.append(f"✗ {q['question']} неизвестно: {q.get('unknown_reason')}")
+    complete = result.get("complete")
+    if complete:
+        summary = (f"На все десять вопросов жизни функции «{feature}» есть ответ из связанной "
+                   f"истории — почему возникла, для кого, какая гипотеза, что построили, что "
+                   f"доказано и что дальше.")
+    else:
+        summary = (f"Из десяти вопросов жизни функции «{feature}» из связанной истории отвечено "
+                   f"{answered} — остальные честно «неизвестно» с указанием, какого звена не хватает.")
+    return message(
+        status="ok" if complete else "degraded",
+        headline=None if complete else "История фичи собрана не целиком",
+        summary=summary,
+        why_it_matters="Раньше «зачем мы вообще сделали эту функцию и что с ней стало» собиралось "
+                       "вручную из плана, решений, обучения, паспорта и истории работ; теперь это "
+                       "один связный ответ, и у каждого пункта видно, чем он подтверждён.",
+        next_steps=lines,
+        technical={"answered": answered, "total": total, "complete": complete,
+                   "questions": qs, "verdict": result.get("verdict")})
+
+
 def from_kit_feedback_status(rep: dict) -> dict:
     """Судьба наблюдений этой дочки -> UserMessage. Ответ обязан быть виден, иначе канал умрёт."""
     total = rep.get("total") or 0
@@ -102,14 +259,14 @@ def from_kit_feedback_status(rep: dict) -> dict:
             summary="Ты ещё ничего мне не говорила о моей работе в этом проекте.",
             next_steps=['сказать так: ./ai-ops feedback "что было не так"'])
     if rep.get("errors"):
-        # ДВЕ ПРАВКИ ПО ПРОБЕ КАНАЛА НА ЖИВОЙ ДОЧКЕ (18.08.2026), и обе про честность ответа.
-        # ПЕРВАЯ — АРИФМЕТИКА: `total` считает только ЧИТАЕМЫЕ записи, поэтому «записано 1, но 1 из
-        # них не разбираются» на одной хорошей и одной битой читалось как «единственная запись
-        # сломана». Числа теперь названы раздельно, а сумма — сумма.
-        # ВТОРАЯ — ОДНА БИТАЯ ЗАПИСЬ ГЛУШИЛА ВЕСЬ ОТВЕТ: судьба читаемых замечаний не показывалась
-        # вовсе. Это ровно тот отказ, от которого канал и умирает: человек перестаёт видеть ответ и
-        # перестаёт писать. Деградация остаётся деградацией — но она про непрочитанные записи, а не
-        # про все.
+        
+        
+        
+        
+        
+        
+        
+        
         bad = len(rep["errors"])
         fates = [f"«{d.get('statement') or d['id']}» — {d.get('state_name') or d['state']}"
                  for d in decided[:2]]

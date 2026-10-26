@@ -50,13 +50,13 @@ def load_history(hist_dir: Path):
     """
     features = {}
     dropped = {}
-    # Сырые строки собираются по фиче из ДВУХ источников (#148, шардирование по прогону):
-    #   - шарды `report-history/<feature>/<run-id>.jsonl` — новый формат, файл на прогон:
-    #     параллельные прогоны пишут в разные файлы, поэтому git-merge-конфликта нет;
-    #   - плоский `report-history/<feature>.jsonl` — старый формат, ещё встречается в
-    #     дочках; читаем и его, чтобы не потерять уже накопленную историю.
-    # Дедуп ниже — по ФИЧЕ (через все её источники), а не по файлу: срез, пришедший с двух
-    # сторон слияния плоского файла, всё так же снимается и НАЗЫВАЕТСЯ в `dropped`.
+    
+    
+    
+    
+    
+    
+    
     raw: dict[str, list[str]] = {}
     for f in sorted(hist_dir.glob("*.jsonl")):
         raw.setdefault(f.stem, []).extend(f.read_text(encoding="utf-8").splitlines())
@@ -130,8 +130,8 @@ def build(hist_dir: Path):
                          if total_runs else None),
         "median_days_to_retrospective": (round(median(flights), 1) if flights else None),
         "baseline_ready": len(sufficient) >= MIN_FEATURES,
-        # Снятые дубли НАЗВАНЫ, а не проглочены: 0 — это «дублей не было», а не «мы не смотрели».
-        # Непустое значение читается как след слияния журналов (`merge=union`), а не как ошибка.
+        
+        
         "duplicate_slices_dropped": sum(dropped.values()),
     }
     return {"schema_version": 1, "kind": "effect-metrics-report",

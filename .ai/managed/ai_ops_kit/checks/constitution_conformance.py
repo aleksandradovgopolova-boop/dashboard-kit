@@ -24,13 +24,13 @@ from pathlib import Path
 
 import yaml
 
-# Разумные дефолты для advisory-рекомендаций (НЕ per-repo ратчет — просто «стоит присмотреться»).
+
 LONG_FUNCTION_LINES = 60
 DEEP_NESTING = 5
 LONG_MODULE_LINES = 500
 DUP_MIN_STMTS = 10
 
-# Каталоги, которые не считаются исходным кодом продукта.
+
 _SKIP_DIRS = {".git", ".ai", ".ai-ops", "node_modules", "venv", ".venv", "__pycache__",
               "build", "dist", ".mypy_cache", ".pytest_cache", "tests", "test"}
 _SKIP_FUNC_NAMES = {"main", "__init__", "__repr__", "__eq__", "__hash__", "__str__"}
@@ -49,8 +49,8 @@ def load_rules(rules_path: Path) -> dict:
     return out
 
 
-# Каталог конституций кита: у каждой свой реестр `standards/<area>/rules.yaml` (тот же путь едет в
-# дочку под `.ai/managed`). Продуктовая стоит наравне с арх и UI/UX — механизм резолвит статьи любой.
+
+
 CONSTITUTIONS = ("architecture", "uiux", "product")
 
 
@@ -79,10 +79,10 @@ def load_all_rules(root: Path) -> dict:
     return merged
 
 
-# ── локальные правила ДОЧКИ из её собственных уроков (#849) ──────────────────────
-# Живут в protected-зоне (`.ai/project/**`) — кит их при update НЕ затирает и не навязывает другим
-# дочкам. Это advisory-напоминания: выстраданное правило проекта, которое conformance-отчёт держит
-# на виду рядом с находками. Пополняются из уроков дочки (руками владельца или помощником ниже).
+
+
+
+
 LOCAL_RULES_REL = ".ai/project/architecture-rules.local.yaml"
 
 
@@ -185,7 +185,7 @@ def _functions(root: Path, files=None):
                 yield p, node
 
 
-# ── эвристики: article_id -> находки. files=None => всё дерево (онбординг); список => ревью по diff ─
+
 
 def _long_functions(root, files=None):
     hits = []
@@ -235,9 +235,9 @@ def _duplicates(root, files=None):
     return hits
 
 
-# ── продуктовые эвристики: читают АРТЕФАКТЫ дочки (не .py), советуют по Продуктовой конституции ────
-# Инвариант честности: флагуем только то, что реально ВИДИМ. Артефакта нет — молчим (unknown ≠
-# нарушение). Детерминированно, без сети и модели. Всё — advisory-рекомендации, как CODE-*.
+
+
+
 
 _PLACEHOLDER_MARKERS = ("todo", "tbd", "xxx", "<", "???", "n/a")
 
@@ -381,7 +381,7 @@ def _released_features_without_readout(root, files=None):
     return hits
 
 
-# article_id -> (эвристика, шаблон рекомендации владельцу)
+
 _HEURISTICS = {
     "CODE-001": (_long_functions,
                  "Длинные функции трудно читать и тестировать. Рассмотрите разбиение на меньшие "
@@ -432,14 +432,14 @@ def conform(root: Path, rules_path: Path | None = None) -> list[dict]:
             "details": hits,
             "recommendation": advice,
         })
-    # серьёзные статьи выше
+    
     order = {"critical": 0, "high": 1, "medium": 2, "low": 3}
     findings.sort(key=lambda f: (order.get(f["severity"], 9), f["article_id"]))
     return findings
 
 
-# Пофайловые статьи (атрибутируются одному файлу) — годятся для ревью по diff. Дубли — кросс-файловые
-# (нужно всё дерево), поэтому в ревью по изменённым файлам не входят: их место в онбординг-скане.
+
+
 _PER_FILE_ARTICLES = ("CODE-001", "CODE-002", "ARCH-006")
 
 
@@ -454,7 +454,7 @@ def conform_paths(root: Path, rel_paths, rules_path: Path | None = None) -> list
     if not wanted:
         return []
     rules = load_rules(rules_path) if rules_path else load_all_rules(root)
-    # ограничиваем обход целевыми файлами
+    
     targets = [root / rp for rp in wanted if (root / rp).is_file()]
     findings = []
     for article_id in _PER_FILE_ARTICLES:

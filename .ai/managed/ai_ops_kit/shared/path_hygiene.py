@@ -62,12 +62,12 @@ from pathlib import Path
 # идентификация: файл с таким именем в site-packages создавал только кит.
 BELT_FILENAME = "ai_ops_kit.pth"
 
-# `__editable__.ai_ops_kit-3.27.7.pth` / `__editable__.ai-ops-kit-*.pth` — след `pip install -e`.
+
 _EDITABLE_RE = re.compile(r"^__editable__[._-]ai[_-]ops[_-]kit[._-]", re.I)
 
-# ОБЩИЕ `.pth`, которые нельзя удалять НИ ПРИ КАКИХ УСЛОВИЯХ: в них пишут все editable-установки
-# окружения сразу (старый стиль setuptools — по строке на проект). Удаление такого файла из-за кита
-# сломало бы чужие пакеты. Если кит там упомянут — это запись editable-установки, и снимает её pip.
+
+
+
 _SHARED_PTH = frozenset({"easy-install.pth"})
 
 
@@ -102,8 +102,8 @@ def _pip_owned_pth(site_dir: Path) -> frozenset:
 # скрывающий дефект, подкладывает именно его.
 _KIT_DIRS = ("ai_ops_kit/validation",)
 
-# Из пути пользовательского site достаём версию Python — чтобы подсказка называла ТОТ интерпретатор,
-# которому файл принадлежит, а не тот, которым запущен doctor.
+
+
 _PYVER_RE = re.compile(r"(?:Python|python)[/\\]?(3\.\d+)")
 
 
@@ -155,13 +155,13 @@ def _env_site_dirs() -> list:
     if getter is not None:
         try:
             found.extend(str(x) for x in getter())
-        # Причина подавления (срез ратчета, 2026-08-12): `getsitepackages()` отсутствует или
-        # падает в нестандартных venv — ровно для этого ниже стоит добор из `sys.path`, который
-        # покрывает тот же материал другим путём. Пропуск здесь не теряет данных: он их не
-        # получает раньше срока.
+        
+        
+        
+        
         except Exception:  # noqa: BLE001,S110 — есть равноценный путь ниже (добор из sys.path)
             pass
-    # Добор из sys.path: покрывает нестандартные схемы раскладки, где getsitepackages() молчит.
+    
     for entry in sys.path:
         if entry and os.path.basename(_norm(entry)) in ("site-packages", "dist-packages"):
             found.append(entry)
@@ -199,7 +199,7 @@ def _injected_kit_paths(text: str, site_dir: Path) -> list:
         if not line or line.startswith("#"):
             continue
         if line.startswith("import ") or line.startswith("import\t"):
-            # Исполняемая строка. Опасна, если правит sys.path и называет родовые каталоги кита.
+            
             if "sys.path" not in line:
                 continue
             quoted = re.findall(r"""['"]([^'"]+)['"]""", line)
@@ -207,13 +207,13 @@ def _injected_kit_paths(text: str, site_dir: Path) -> list:
             names = [q for q in quoted if q in _KIT_DIRS]
             if not names:
                 continue
-            # Пояс подкладывает корень И названные подкаталоги (`os.path.join(root, d)`).
-            # Разворачиваем ровно это, чтобы отчёт показывал все три пути, а не только корень.
+            
+            
             for root in roots:
                 hits.append(root)
                 hits.extend(os.path.join(root, n) for n in names)
             continue
-        # Обычная строка .pth — это готовая запись sys.path, относительная к site-каталогу.
+        
         p = Path(line) if os.path.isabs(line) else site_dir / line
         if _looks_like_kit_tree(p) or (p.name in _KIT_DIRS and _looks_like_kit_tree(p.parent)):
             hits.append(_norm(p))
@@ -337,10 +337,10 @@ def assess(user_site_dirs: list | None = None, env_site_dirs: list | None = None
         path = Path(d)
         if not path.is_dir():
             continue
-        # Дедупликация по РЕАЛЬНОМУ пути: один и тот же каталог виден и через симлинк (на macOS
-        # /tmp -> /private/tmp, симлинк ~/.local, venv по ссылке). Иначе файл попадал в findings
-        # дважды, второе удаление падало с ENOENT — и doctor печатал «пояс НЕ удалён» про файл,
-        # которого он же только что не стало.
+        
+        
+        
+        
         try:
             real = os.path.realpath(d)
         except OSError:
@@ -356,9 +356,9 @@ def assess(user_site_dirs: list | None = None, env_site_dirs: list | None = None
                 findings.append(found)
 
     blocking = [f for f in findings if f["severity"] == "blocking"]
-    # «Ни одного каталога не просмотрено» — это НЕ «чисто». Отдельный статус: проверка, выдающая
-    # «не знаю» за «в порядке», хуже отсутствующей (окружения старого virtualenv, где
-    # getusersitepackages() бросает, getsitepackages() нет, а в sys.path нет site-packages).
+    
+    
+    
     if not scanned:
         status = "unknown"
     elif blocking:
@@ -373,7 +373,7 @@ def assess(user_site_dirs: list | None = None, env_site_dirs: list | None = None
         "findings": findings,
         "counts": {"scanned_dirs": len(scanned), "findings": len(findings),
                    "blocking": len(blocking)},
-        # Честная граница: «clean» означает «в просмотренных каталогах чисто», не «на машине чисто».
+        
         "scan_limits": ("просмотрены site-каталоги текущего интерпретатора и пользовательские "
                         "site-каталоги других версий Python в домашнем каталоге; venv'ы в "
                         "произвольных местах машины этой проверке не видны"),
@@ -390,8 +390,8 @@ def remove_belts(report: dict | None = None, dry_run: bool = False) -> list:
         if f["rule"] != "path_belt":
             continue
         p = Path(f["path"])
-        # Второй замок на разрушительном исходе. Классификация файл с хозяином сюда не пускает, но
-        # цена ошибки — сломанная чужая установка, а стоимость проверки — одна строка.
+        
+        
         if is_pip_owned(p, _pip_owned_pth(p.parent)):
             results.append({"path": str(p), "removed": False,
                             "error": "файл принадлежит установке (RECORD/editable) — снимает pip"})
@@ -403,7 +403,7 @@ def remove_belts(report: dict | None = None, dry_run: bool = False) -> list:
             p.unlink()
             results.append({"path": str(p), "removed": True, "error": None})
         except FileNotFoundError:
-            # Файла уже нет — цель достигнута, а не отказ.
+            
             results.append({"path": str(p), "removed": True, "error": None})
         except OSError as e:
             results.append({"path": str(p), "removed": False, "error": str(e)})
@@ -461,8 +461,8 @@ def _fmt(rep: dict) -> str:
 
 def main(argv: list[str]) -> int:
     if "--help" in argv or "-h" in argv:
-        # У этой команды есть флаг, который УДАЛЯЕТ файлы. Справка, вместо которой выполняется скан
-        # машины, — плохая справка: пользователь просил объяснить, а не сделать.
+        
+        
         print(__doc__.strip())
         return 0
     rep = assess()

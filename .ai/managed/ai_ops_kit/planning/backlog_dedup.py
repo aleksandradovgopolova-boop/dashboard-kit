@@ -30,7 +30,7 @@ from pathlib import Path
 
 from ai_ops_kit.shared import _bootstrap  # noqa: F401
 
-# Стоп-слова (RU+EN), которые не несут смысла для сравнения заголовков backlog.
+
 _STOP = {
     "the", "a", "an", "to", "of", "in", "on", "for", "and", "or", "is", "are", "be", "not", "no",
     "при", "не", "и", "в", "на", "по", "для", "с", "к", "от", "до", "из", "что", "как", "это",
@@ -179,21 +179,21 @@ def dedup_backlog(repo_or_root: str = ".", state: str = "open", threshold: float
                        len(res.items), dups, stale)
 
 
-# ── СЛИЯНИЕ ДУБЛЕЙ: approval-gated execute (PR-19/20 «Execute → Require approval») ───────────────
-#
-# Детектор ПРЕДЛАГАЕТ (find_duplicates, action=suggest_merge). Здесь — вторая половина исхода
-# `duplicates_detected_and_merged`, ПОСТРОЕННАЯ ПО РЕШЕНИЮ ВЛАДЕЛЬЦА (2026-08-31, вариант «одобряемое
-# слияние»): кит выполняет слияние ТОЛЬКО по явно одобренным человеком парам, и никогда сам.
-#
-# GitHub не умеет «слить» два Issue — конвенция: закрыть ДУБЛЬ с кросс-ссылкой на канонический,
-# канонический оставить открытым. Операция ОБРАТИМА (закрытый issue переоткрывается).
-#
-# ГРАНИЦЫ (механизмами, не на словах):
-#   · approved — ЯВНЫЙ вход человека; из детектора он НЕ выводится (принцип «предлагать, не сливать»);
-#   · dry_run по умолчанию True — что закроется, человек видит ДО того, как это произошло;
-#   · канонический НИКОГДА не трогается (закрывается только дубль);
-#   · пустой approved / duplicate==canonical / не-int — отказ с причиной, не «слил на всякий случай»;
-#   · при провале комментария дубль НЕ закрывается (пара пропущена с причиной) — нет «тихого» закрытия.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @dataclass
 class MergeExecution:
@@ -269,7 +269,7 @@ def execute_merge(repo_or_root: str = ".", approved=None, *, dry_run: bool = Tru
                           reason="" if ok else "часть пар не слита — см. skipped/close_reason")
 
 
-# ── CLI ───────────────────────────────────────────────────────────────────────────────────────
+
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="backlog_dedup.py")

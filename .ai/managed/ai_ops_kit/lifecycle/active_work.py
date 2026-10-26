@@ -32,6 +32,8 @@ import argparse
 import os
 import contextlib
 import json
+import hashlib
+import logging
 import sys
 from pathlib import Path
 
@@ -39,17 +41,17 @@ import yaml
 
 from ai_ops_kit.shared import lifecycle_store as _ls   # v3.0.12: durable запись + fail-closed чтение общего реестра
 from ai_ops_kit.lifecycle import role_handoff as _handoff  # #639: named-переход owner_role роль->роль
-# Соседи-сателлиты этого пакета (вынесены из монолита без изменения поведения): носитель заявок
-# (публикация/копии/team_view) и измерение git (личность держателя, его живость, сверка с базой).
-# active_work остаётся тонким: локальный реестр, команды CLI и классификация пересечений. Имена
-# ре-экспортируются, поэтому `active_work.<имя>` и прежние импорты продолжают работать — внешних
-# потребителей на новый путь переводить не нужно.
+
+
+
+
+
 from ai_ops_kit.lifecycle.work_claims import (          # noqa: F401 — ре-экспорт для совместимости
     CLAIMS_DIR_REL, PUBLISHED_FIELDS, COPIES_CLAIMS_REL, COPY_CLAIM_FIELDS,
     _claim_slug, publish_claim, unpublish_claim, load_published_claims,
     _git_common_dir, copies_claims_dir, working_copies, copies_reach_note,
     _copies_line, claim_to_copies, withdraw_claim_from_copies, load_copy_claims,
-    team_view,
+    team_view, shared_registry_path, ActiveWorkCorrupt, load, _locked, _canonical_path, _require_attempt, claimed_attempt, _budget_origin, _budget_binding,
 )
 from ai_ops_kit.lifecycle.work_reconcile import (        # noqa: F401 — ре-экспорт для совместимости
     _machine, _now_iso, _CLAIM_STALE_HOURS, _claim_age_hours, _pid_is_dead,
@@ -57,9 +59,9 @@ from ai_ops_kit.lifecycle.work_reconcile import (        # noqa: F401 — ре-�
 )
 
 STATUS = {"in-progress", "review", "blocked", "done", "superseded"}
-# `superseded` (18.08.2026, заявка #137): работа, изменения которой УЖЕ В БАЗЕ. Это не «done»
-# (никто её не закрывал) и не «brought» — это запись, которую сняла СВЕРКА, и её причина
-# названа замером, а не догадкой (`reconcile_with_base`).
+
+
+
 
 CONFIG_REL = ".ai-ops.yaml"
 
@@ -101,54 +103,6 @@ def reach_note(published: bool) -> str:
             "про параллельные сессии на этой машине, а не про команду.")
 
 
-def shared_registry_path(start=None):
-    """Путь к реестру, ОБЩЕМУ для всех worktree одного репозитория. -> Path.
-
-    ЗАЧЕМ ЭТО ПОЯВИЛОСЬ (замер 12.08.2026). Протокол параллельной работы
-    (`docs/parallel-sessions.md`) требует двух вещей одновременно: сессия работает в своём
-    `git worktree` (иначе чужой `checkout` уводит незакоммиченные правки) И заявляет область записи
-    в общем реестре (иначе две сессии берут одну работу). В таком виде правила ПРОТИВОРЕЧИЛИ друг
-    другу: `.ai/runtime/active-work.yaml` лежит внутри рабочего дерева, то есть у каждого worktree
-    свой — проверено, файл, созданный в одном, из другого не виден вовсе. Реестр, невидимый другой
-    сессии, — это не координация, а её видимость.
-
-    Поэтому путь берётся из `git rev-parse --git-common-dir`: этот каталог ОДИН на репозиторий и
-    все его worktree (у worktree свой `--git-dir`, но общий `--git-common-dir`). Реестр там же не
-    попадает в историю — он состояние машины, а не факт о продукте.
-
-    ЧТО НЕ МЕНЯЕТСЯ: путь дочки `.ai/runtime/active-work.yaml` объявлен в манифесте
-    (`ai-ops-manifest.yaml`) и остаётся контрактом — в дочке сессии обычно делят один checkout, и
-    там он работает. Эта функция — для случая «несколько worktree одного репозитория».
-    """
-    common = _git_common_dir(start)
-    if common is None:
-        raise ActiveWorkCorrupt(
-            f"не git-репозиторий или git недоступен ({start or Path.cwd()}): "
-            f"общий реестр сессий разместить негде")
-    return common / "ai-ops" / "active-work.yaml"
-
-
-class ActiveWorkCorrupt(Exception):
-    """Реестр active-work недостоверен (повреждён/не сохранён) — координация сессий небезопасна."""
-
-
-def load(path: Path):
-    """v3.0.12 (finding аудита блок B): FAIL-CLOSED. Прежде safe_load(...) or {} на битом/пустом реестре
-    возвращал ПУСТУЮ карту -> concurrency forecast «пересечений нет» на потерянных записях (две сессии
-    сталкивались). Теперь: отсутствует -> fresh; повреждён -> raise (не тихая пустая карта)."""
-    g = _ls.load_guarded(Path(path), kind="active-work")
-    if g["state"] == "absent":
-        return {"schema_version": 1, "kind": "active-work", "active": []}
-    if g["state"] == "corrupt":
-        raise ActiveWorkCorrupt(f"active-work реестр повреждён ({g['reason']}) — координация "
-                                "параллельных сессий недостоверна; нужна явная recovery")
-    data = g["data"]
-    data.setdefault("schema_version", 1)
-    data.setdefault("kind", "active-work")
-    data.setdefault("active", [])
-    return data
-
-
 def save(path: Path, data: dict):
     """v3.0.12: АТОМАРНАЯ durable-запись общего реестра (tmp+fsync+rename+fsync-dir+перечитывание).
     Сбой -> raise (registration потеряна — не молчим)."""
@@ -157,32 +111,44 @@ def save(path: Path, data: dict):
         raise ActiveWorkCorrupt(f"не удалось надёжно сохранить active-work: {r.get('error')}")
 
 
-@contextlib.contextmanager
-def _locked(path: Path):
-    """v3.0.12 (finding аудита блок B): межпроцессная блокировка вокруг read-modify-write общего реестра,
-    чтобы конкурентные register/finish не теряли записи друг друга (last-writer-wins TOCTOU). best-effort:
-    на платформах без fcntl (Windows) деградирует до no-op — не хуже прежнего поведения."""
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    lock_path = path.with_suffix(path.suffix + ".lock")
-    try:
-        import fcntl
-    except ImportError:
-        yield
-        return
-    f = open(lock_path, "w", encoding="utf-8")
-    try:
-        fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-        yield
-    finally:
-        try:
-            fcntl.flock(f.fileno(), fcntl.LOCK_UN)
-        except OSError:
-            pass
-        f.close()
-
-
 _CLOSED_STATUSES = ("done", "superseded")   # #137: снятое сверкой — не идущая работа
+
+def validate_admission(root, admission):
+    """Frozen automatic input binding; called under the shared claim lock and before delivery."""
+    from ai_ops_kit.shared import gitio
+    root = Path(root).resolve()
+    if not isinstance(admission, dict) or not admission.get("identity") or not admission.get("inputs"):
+        raise ActiveWorkCorrupt("automatic admission requires identity and saved inputs")
+    rc, head, _ = gitio.git(root, "rev-parse", "HEAD")
+    if rc or head != admission.get("base_sha"):
+        raise ActiveWorkCorrupt("automatic admission: stale base SHA")
+    for name, digest in admission["inputs"].items():
+        p = root / name
+        if (not isinstance(name, str) or Path(name).is_absolute() or ".." in Path(name).parts
+                or p.resolve().is_relative_to(root) is False
+                or any(q.is_symlink() for q in (p, *p.parents) if q.is_relative_to(root))
+                or not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest() != digest):
+            raise ActiveWorkCorrupt("automatic admission: changed/unsafe saved input")
+
+
+@contextlib.contextmanager
+def _claim_lock(path, child_root):
+    """Canonical writer + old runtime writer serialize in one order; runtime remains a projection."""
+    path = Path(path)
+    legacy = Path(child_root) / ".ai/runtime/active-work.yaml" if child_root else path
+    with _locked(path):
+        if child_root and path != legacy and _git_common_dir(child_root) and path == shared_registry_path(child_root):
+            with _locked(legacy):
+                yield legacy
+        else:
+            yield None
+
+
+def _project_claim(legacy, entry):
+    if legacy is not None:
+        data = load(legacy)
+        data["active"] = [w for w in data["active"] if w.get("id") != entry["id"]] + [dict(entry)]
+        save(legacy, data)
 
 
 def _active_others(active, exclude_id):
@@ -236,21 +202,21 @@ def classify(active, entry):
     contracts = set(entry.get("shared_contracts") or [])
     my_branch = entry.get("branch")
     my_holder = (entry.get("machine"), entry.get("owner_session"))
-    # Ветку и дубль работы флагуем ТОЛЬКО когда у пробы есть личность (машина или сессия): проба без
-    # личности — это самопроверка/форкаст без актора, и объявлять её «другим держателем» нельзя
-    # (иначе classify считал бы работу саму против себя — селфтест это и стережёт).
+    
+    
+    
     probe_has_identity = bool(entry.get("machine") or entry.get("owner_session"))
     out = []
     if probe_has_identity:
-        # «Та же работа у другого держателя» — считаем ДО фильтра по id (иначе своя id спрячет чужую).
+        
         for w in active:
             if w.get("status") in _CLOSED_STATUSES:
                 continue
             if w.get("id") == wid and (w.get("machine"), w.get("owner_session")) != my_holder:
                 out.append({"kind": "same-work", "id": w.get("id"), "branch": w.get("branch"),
                             "owner_session": w.get("owner_session"), "machine": w.get("machine"),
-                            # «с какого момента» решает «ждать или перенимать»; `worktree` — «где
-                            # именно», потому что имя хоста у всех копий одной машины общее.
+                            
+                            
                             "since": w.get("started_at"), "worktree": w.get("worktree"),
                             "detail": wid})
     others = _active_others(active, wid)
@@ -283,9 +249,9 @@ def find_cycle(active, entry):
     graph = {w.get("id"): list(w.get("depends_on") or []) for w in active}
     graph[entry.get("id")] = list(entry.get("depends_on") or [])
     start = entry.get("id")
-    # `stack`/`seen_paths` убраны ревизией 2026-08-11: остались от итеративной версии обхода,
-    # текущий DFS ниже рекурсивный и ими не пользуется.
-    # DFS с поиском возврата к уже посещённому в текущем пути
+    
+    
+    
     def dfs(node, path):
         for nxt in graph.get(node, []):
             if nxt == start and len(path) >= 1:
@@ -330,9 +296,48 @@ def _forecast_lines(confs):
     return lines
 
 
+def _automatic_claim_refusal(path, root, admission, session, takeover, wid, branch, areas, active, published):
+    try:
+        import fcntl  # noqa: F401 — automatic claims require an actual interprocess lock
+        if root is None or Path(path) != shared_registry_path(root) or takeover:
+            raise ActiveWorkCorrupt("automatic admission requires canonical claim without takeover")
+        validate_admission(root, admission)
+        if admission["identity"] != session:
+            raise ActiveWorkCorrupt("automatic admission identity mismatch")
+        probe = {"id": wid, "branch": branch, "affected_areas": areas,
+                 "owner_session": session, "machine": _machine()}
+        against = team_view(root, active, published)
+        if (any(w.get("id") == wid and w.get("status") not in _CLOSED_STATUSES for w in against)
+                or classify(against, probe)):
+            raise ActiveWorkCorrupt("automatic admission: active claim conflicts; no takeover")
+    except (ImportError, ActiveWorkCorrupt, OSError) as exc:
+        return str(exc)
+    return None
+
+
+def _refuse_busy(blocking, published, child_root):
+    for c in blocking:
+        what = ("ту же работу" if c["kind"] == "same-work" else f"ту же область/ветку {c.get('detail')}")
+        
+        since = c.get("since") or "время начала не записано"
+        where = f", рабочая копия {c['worktree']}" if c.get("worktree") else ""
+        print(f"ОТКАЗ: не начинаю — {what} уже держит другой: сессия "
+              f"{c.get('owner_session') or '?'} на машине {c.get('machine') or '?'}{where} "
+              f"с {since} (работа {c.get('id')}, ветка {c.get('branch')}).")
+    print("  " + reach_note(published))
+    _cl = _copies_line(child_root)
+    if _cl:
+        print("  " + _cl)
+    print("  что можно сделать: дождаться держателя; взять другую работу "
+          "(`ai-ops next` предложит незанятую); или ПЕРЕНЯТЬ заявку осознанно — "
+          "`active_work.py register … --takeover --takeover-reason \"почему\"`, "
+          "прежний держатель останется записан.")
+
+
 def register(path, wid, branch, areas, session, workitem=None, status="in-progress",
              depends=None, contracts=None, at=None, published=False, child_root=None,
-             takeover=False, takeover_reason=None, owner_role=None, audience="technical"):
+             takeover=False, takeover_reason=None, owner_role=None, audience="technical", admission=None):
+    path = _canonical_path(path, child_root)
     if branch in (None, "", "main", "master"):
         print("ОШИБКА: работа не должна вестись в main/master — задайте ветку/worktree.")
         return 1
@@ -350,8 +355,15 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
             return 1
     # v3.0.12: весь read-modify-write под межпроцессной блокировкой (иначе конкурентная сессия могла
     # перезаписать нашу регистрацию — last-writer-wins — и concurrency-forecast увидел бы неполную карту).
-    with _locked(path):
+    with _claim_lock(path, child_root) as legacy:
         data = load(path)
+        old = load(legacy)["active"] if legacy is not None else []
+        if admission is not None:
+            reason = _automatic_claim_refusal(path, child_root, admission, session, takeover,
+                                              wid, branch, areas, data["active"] + old, published)
+            if reason:
+                logging.warning("ОТКАЗ: %s", reason)
+                return 1
         # Заявка = кто (сессия) + где (машина) + когда (время) + что (ветка/зоны). Машина и время
         # добавлены 18.08.2026: без «где» и «когда» инцидент параллельных сессий не разобрать
         # (заявка #150: атрибуция была невозможна). Поля аддитивны — прежние записи без них валидны.
@@ -363,8 +375,10 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
                  "affected_areas": list(areas), "owner_session": session,
                  "machine": _machine(), "started_at": at or _now_iso(),
                  "owner_pid": os.getpid()}
-        # В КАКОЙ копии сидит держатель: без этого отказ называл бы «машину», то есть саму себя.
-        # Наружу поле НЕ уезжает — `PUBLISHED_FIELDS` его не содержит.
+        if admission is not None:
+            entry.update(auto_admission=admission, budget_origin=_budget_origin(data["active"], wid), budget_binding=_budget_binding(data["active"], wid))
+        
+        
         if child_root is not None:
             entry["worktree"] = str(Path(child_root).resolve())
         # #639: роль-владелец на записи Work (закрывает дрейф модель↔код — domain_model заявляет,
@@ -377,57 +391,45 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
             entry["depends_on"] = list(depends)
         if contracts:
             entry["shared_contracts"] = list(contracts)
-        # цикл зависимостей — это ошибка, а не предупреждение
+        
         cycle = find_cycle(data["active"], entry)
         if cycle:
             print(f"ОШИБКА: циклическая зависимость задач: {' -> '.join(cycle)}. "
                   f"Разорвите цикл (одна задача не может транзитивно зависеть от себя).")
             return 1
-        # Пересечения ищем по ОБЩЕЙ карте: локальные + опубликованные заявки других машин. При
-        # выключенной публикации team_view вернёт только локальные — чужих неоткуда взять, и честно.
-        against = team_view(child_root, data["active"], published)
+        
+        
+        against = team_view(child_root, data["active"] + old, published)
         # #137: сверяем карту с базой ДО прогноза — иначе влитая работа предупреждает о себе, и
         # человек либо переделывает готовое, либо перестаёт верить реестру (и тогда он не нужен).
         if child_root:
-            against = reconcile_with_base(against, child_root)
-        confs = classify(against, entry)
-        # ОТКАЗ, А НЕ ПРЕДУПРЕЖДЕНИЕ (замер 18.08.2026, заявка потребителя #150). Прежде на «ту же
-        # работу» и «ту же ветку» кит печатал `⚠ это ДУБЛЬ, не начинайте второй раз`, ВОЗВРАЩАЛ 0 и
-        # ЗАТИРАЛ чужую заявку своей: держателя больше нет ни в реестре, ни в предупреждении, и
-        # разобрать инцидент нечем. В поле это дало два PR на одну ветку, закрытый пустой дубль и
-        # выброшенную половину работы по описанию.
-        # Перенять заявку можно — но ЯВНО и с причиной: тогда прежний держатель остаётся записан в
-        # `taken_over_from`, то есть атрибуция не теряется (заявка #150, следствие 3).
+            protected = [w for w in against if w.get("auto_admission")]
+            against = reconcile_with_base([w for w in against if not w.get("auto_admission")], child_root) + protected
+        confs = classify(against, entry) + classify([w for w in against if w.get("auto_admission")], dict(entry, owner_session=None))
+        
+        
+        
+        
+        
+        
+        
         blocking = [c for c in confs if c.get("kind") in ("same-work", "branch")]
-        # Мёртвый процесс заявку не держит. Отпускаем НАЗЫВАЯ это: тихое снятие чужой заявки — то же
-        # затирание, от которого работа и заводилась.
+        automatic_ids = {w.get("id") for w in protected} if child_root else set()
+        blocking += [c for c in confs if c.get("id") in automatic_ids and c not in blocking]
+        
+        
         _by_id = {w.get("id"): w for w in data["active"]}
         released = []
         for c in list(blocking):
             w = _by_id.get(c.get("id")) or {}
-            if holder_is_gone(w, entry.get("machine")):
+            if not (w.get("auto_admission") or w.get("worktree")) and holder_is_gone(w, entry.get("machine")):
                 blocking.remove(c)
                 released.append(c)
         for c in released:
             print(f"ЗАЯВКА ОСВОБОЖДЕНА: держатель {c.get('owner_session')} на этой машине уже не "
                   f"существует (работа {c.get('id')}, ветка {c.get('branch')}) — заявка не держит.")
         if blocking and not takeover:
-            for c in blocking:
-                what = ("ту же работу" if c["kind"] == "same-work" else f"ту же ветку {c.get('detail')}")
-                # «С какого момента» — часть отказа: по нему решают, ждать или перенимать.
-                since = c.get("since") or "время начала не записано"
-                where = f", рабочая копия {c['worktree']}" if c.get("worktree") else ""
-                print(f"ОТКАЗ: не начинаю — {what} уже держит другой: сессия "
-                      f"{c.get('owner_session') or '?'} на машине {c.get('machine') or '?'}{where} "
-                      f"с {since} (работа {c.get('id')}, ветка {c.get('branch')}).")
-            print("  " + reach_note(published))
-            _cl = _copies_line(child_root)
-            if _cl:
-                print("  " + _cl)
-            print("  что можно сделать: дождаться держателя; взять другую работу "
-                  "(`ai-ops next` предложит незанятую); или ПЕРЕНЯТЬ заявку осознанно — "
-                  "`active_work.py register … --takeover --takeover-reason \"почему\"`, "
-                  "прежний держатель останется записан.")
+            _refuse_busy(blocking, published, child_root)
             return 1
         if takeover and blocking:
             prev = blocking[0]
@@ -437,11 +439,12 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
                                         "reason": (takeover_reason or "причина не названа")}
         data["active"] = [w for w in data["active"] if w.get("id") != wid] + [entry]
         save(path, data)
-        # Опубликованная копия — отдельным файлом на работу, только при включённой публикации.
+        _project_claim(legacy, entry)
+        
         if published:
             publish_claim(child_root, entry)
-        # Носитель копий — ВСЕГДА, когда его есть где разместить: он не отправляет данные с машины,
-        # поэтому флагом публикации не гатится (замер 20.08.2026).
+        
+        
         claim_to_copies(child_root, entry)
     # #708: на product-аудитории человеку не нужны wi-…/сессия/машина/ветка — это внутренние
     # идентификаторы координации. Суть одна: работа началась в отдельной копии, main не тронут.
@@ -457,15 +460,15 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
     for line in _forecast_lines(confs):
         print(line)
     if audience != "product":
-        # Честная фраза о досягаемости — ВСЕГДА, а не только при пересечениях: иначе «пересечений нет»
-        # на локальном реестре читается как «команда свободна», хотя других машин кит не видит.
+        
+        
         print("  " + reach_note(published))
         _cl = _copies_line(child_root)
         if _cl:
             print("  " + _cl)
     if published:
-        # Условие 4 гибридного решения: включённая публикация ОТПРАВЛЯЕТ данные — назвать какие,
-        # в момент отправки, а не только в общем пояснении.
+        
+        
         print("  опубликовано в .ai/claims/: " + ", ".join(PUBLISHED_FIELDS)
               + " — содержимое файлов не уходит.")
     return 0
@@ -534,19 +537,26 @@ def check_cmd(path, areas, depends=None, contracts=None, exclude_id=None, as_jso
 
 
 def finish_cmd(path, wid, status="done", reason=None, child_root=None, published=False,
-               audience="technical"):
+               audience="technical", expected_admission=None):
     """Снять работу с учёта. status — из STATUS; 'done' ТОЛЬКО когда работа действительно закончена.
 
     v3.28.x (F-012, находка живой квалификации на niti): прогон помечал работу `done` независимо
     от исхода — при NOT_READY, при исключении провайдера и даже при Ctrl-C. `ai-ops status` после
     этого показывал пустоту, хотя работа не сделана: реестр активной работы врал ровно там, где
     он единственный источник правды о незавершённом."""
+    path = _canonical_path(path, child_root)
     if status not in STATUS:
         print(f"ОШИБКА: status '{status}' не в {sorted(STATUS)}")
         return 1
     # v3.0.12: read-modify-write под блокировкой (симметрично register — без гонки на общем реестре)
-    with _locked(path):
+    with _claim_lock(path, child_root) as legacy:
         data = load(path)
+        if expected_admission is not None:
+            try:
+                _require_attempt(data, wid, expected_admission, child_root)
+            except ActiveWorkCorrupt as exc:
+                logging.warning("ОТКАЗ: %s", exc)
+                return 1
         found = False
         for w in data["active"]:
             if w.get("id") == wid:
@@ -563,6 +573,7 @@ def finish_cmd(path, wid, status="done", reason=None, child_root=None, published
         entry = next((w for w in data["active"] if w.get("id") == wid), None)
         save(path, data)
         if entry is not None:
+            _project_claim(legacy, entry)
             _m = entry.get("machine") or _machine()
             # #695: носитель копий координирует ТОЛЬКО идущий прогон — снимаем на ВЫХОДЕ любым исходом
             # (done/blocked/прерван). Заявка там без `owner_pid` → `holder_is_gone` судила её лишь по
@@ -627,8 +638,8 @@ def main(argv):
     r.add_argument("--contracts", help="пути общих контрактов через запятую")
     r.add_argument("--at")
     r.add_argument("--repo", help="корень репозитория для чтения team_coordination (по умолчанию cwd)")
-    # Перенять чужую заявку можно только СЛОВАМИ, а не молчанием: флаг + причина. Прежний держатель
-    # записывается в заявку, иначе перенос выглядел бы как «работу никто не держал».
+    
+    
     r.add_argument("--owner-role", help="начальная роль-владелец из словаря модели (#639)")
     r.add_argument("--takeover", action="store_true",
                    help="перенять заявку, которую держит другая сессия (осознанно)")

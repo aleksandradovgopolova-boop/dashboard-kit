@@ -136,7 +136,7 @@ def build_view(root, query: str, role: str, allowed_classes, budget_tokens: int,
         except OSError:
             continue
         dc = classify(content, path=r["file"], policy=policy, strict=strict)
-        # access-filter ДО включения: секрет — никогда; класс вне allowed — исключить
+        
         if dc == "secret" or dc not in allowed:
             excl_access.append({"file": r["file"], "data_class": dc})
             continue

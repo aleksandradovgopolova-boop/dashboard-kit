@@ -39,31 +39,31 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface
 
-# ─── индикатор Rails-роутинга ─────────────────────────────────────────────────────────────────────
-# Файл считается таблицей маршрутов Rails только при явном индикаторе: вызов `Rails.application.
-# routes.draw` в тексте ИЛИ конвенциональное имя файла config/routes.rb. Симметрия с import-сужением
-# питон-/go-/java-экстракторов: без этого чужой `.get(...)`/`resources ...` в обычном .rb дал бы ложь.
+
+
+
+
 _DRAW_INDICATOR = "routes.draw"
 
-# HTTP-глаголы Rails-DSL: `get "/x"` и т.д. Глагол — В НАЧАЛЕ логической строки (после отступа), путь —
-# строковый литерал сразу за ним. `\b` не даёт совпасть на `delete_all`/`gets`.
+
+
 _VERB_RE = re.compile(r'^\s*(get|post|put|patch|delete)\s+(["\'])([^"\'\n]*)\2')
 
-# `root "home#index"` / `root to: "..."` → корневой GET-маршрут `/`.
+
 _ROOT_RE = re.compile(r'^\s*root\b')
 
-# `resources :orders` / `resource :profile` [, only: …] — имя ресурса из символа. group(1)=='s' → мн.ч.
+
 _RESOURCE_RE = re.compile(r'^\s*resource(s)?\s+:(\w+)')
 
-# `namespace :admin do` — сегмент префикса пути = имя namespace.
+
 _NAMESPACE_RE = re.compile(r'^\s*namespace\s+:?(["\']?)(\w+)\1')
 
-# `scope "/api" do` (позиционный литерал) или `scope path: "/api" do`. Иные scope (module:/as:/symbol) —
-# без сегмента пути.
+
+
 _SCOPE_POS_RE = re.compile(r'^\s*scope\s+(["\'])([^"\'\n]*)\1')
 _SCOPE_PATH_KW_RE = re.compile(r'^\s*scope\b[^\n]*\bpath:\s*(["\'])([^"\'\n]*)\1')
 
-# Строка ОТКРЫВАЕТ блок, если заканчивается на `do` или `do |args|`.
+
 _BLOCK_OPEN_RE = re.compile(r'\bdo\b(?:\s*\|[^|]*\|)?\s*$')
 
 
@@ -180,9 +180,9 @@ def extract_rails_routes(parsed: ParsedFile) -> list:
         return []
 
     out: list = []
-    # Стек фреймов блоков: [(kind, prefix_segment)]. Префикс пути = сегменты namespace/scope в стеке;
-    # флаг in_resource = находимся ли внутри `resources`/`resource`-блока (там member/collection и
-    # вложенные ресурсы честно НЕ разбираем — declared limit).
+    
+    
+    
     stack: list = []
     for idx, raw in enumerate(src.split("\n")):
         line = _strip_comment(raw)
@@ -192,8 +192,8 @@ def extract_rails_routes(parsed: ParsedFile) -> list:
         in_resource = any(kind == "resource" for kind, _ in stack)
         prefix_segs = [seg for kind, seg in stack if kind in ("namespace", "scope") and seg]
 
-        # 1) Эмиссия маршрутов текущей строки (вне resource-блока: его нутро — member/collection/
-        #    вложенные ресурсы — declared not supported).
+        
+        
         if not in_resource:
             mv = _VERB_RE.match(line)
             if mv is not None and _is_literal_path(mv.group(3)) \
@@ -214,7 +214,7 @@ def extract_rails_routes(parsed: ParsedFile) -> list:
                             kind="route", ref=f"{parsed.rel_path}:{lineno}|{method} {path}",
                             confidence="inferred", extractor="rails-routes"))
 
-        # 2) Обновление стека блоков для последующих строк.
+        
         if _BLOCK_OPEN_RE.search(line) is not None:
             stack.append(_block_prefix_segment(line))
         elif stripped == "end" and stack:

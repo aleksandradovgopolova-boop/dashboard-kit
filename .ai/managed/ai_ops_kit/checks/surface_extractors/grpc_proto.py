@@ -38,11 +38,11 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface, _matching_brace
 
-# Заголовок блока сервиса: `service OrderService { … }`. Имя сервиса — идентификатор proto.
+
 _SERVICE_HEAD_RE = re.compile(r"\bservice\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{")
 
-# Объявление RPC внутри сервиса: `rpc <Name> (` — имя метода перед списком запроса. `stream` в
-# скобках/после returns на детекцию имени не влияет (оно идёт ПОСЛЕ этой позиции).
+
+
 _RPC_RE = re.compile(r"\brpc\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(")
 
 

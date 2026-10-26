@@ -9,9 +9,9 @@ from __future__ import annotations
 
 from ai_ops_kit.ui.presenter_core import _q, message
 
-# ── Переводчики внутренних отчётов ────────────────────────────────────────────────────────────
-# Каждая функция берёт СЫРОЙ внутренний отчёт и возвращает UserMessage. Это и есть шов: внутренние
-# имена остаются внутри, наружу выходит смысл.
+
+
+
 
 
 def from_next_work(rep: dict) -> dict:
@@ -35,10 +35,10 @@ def from_next_work(rep: dict) -> dict:
                        next_steps=["собери план: ./ai-ops model (ответь на вопросы) → ./ai-ops bootstrap --apply"],
                        technical={"gap": rep.get("gap")})
 
-    # ПЕРЕВОД НЕ ПРЯЧЕТ ДЕФЕКТ. Если сам план недостоверен (цикл зависимостей, поле исполнителя,
-    # отсутствующее направление), ответ «что взять следующим» построен на неверных данных, и
-    # сообщить об этом обязательно — иначе слой простого языка становится способом скрыть ошибку,
-    # а не объяснить её. Проверка стоит ПЕРВОЙ: она сильнее любого другого исхода.
+    
+    
+    
+    
     plan_errors = list(rep.get("plan_errors") or [])
     rm_errors = list((rep.get("roadmap") or {}).get("errors") or [])
     if plan_errors or rm_errors:
@@ -59,10 +59,10 @@ def from_next_work(rep: dict) -> dict:
     active = rep.get("in_progress") or []
     blocked = rep.get("blocked") or []
     if not nb:
-        # Ведро `not_ready` — работа, ГОТОВАЯ по графу, но не прошедшая допуск (бюджет, capability,
-        # конфликт записи). Прежде оно терялось, и продакту сообщался ложный факт «работа не
-        # объявлена», хотя работа объявлена и всего лишь не допущена. Перевод менял не язык, а
-        # факты — то, что политика запрещает прямо.
+        
+        
+        
+        
         not_ready = rep.get("not_ready") or []
         _ADMISSION_RU = {
             "within_budget": "не укладывается в остаток бюджета",
@@ -91,11 +91,11 @@ def from_next_work(rep: dict) -> dict:
                            "держу я": ", ".join(h["id"] for h in (rep.get("held_by_me") or [])) or "—",
                            "досягаемость": (rep.get("holders_reach") or {})})
         elif held_owner:
-            # МОЛЧАНИЕ ЗДЕСЬ БЫЛО ДЕФЕКТОМ, А НЕ ОСОБЕННОСТЬЮ. Пока `next_work.compute()` терял
-            # `waiting_on_owner`-работы, эта ветка никогда не срабатывала — и когда ВСЁ оставшееся
-            # было именно таким, разговор падал в generic «работа не объявлена», хотя работа
-            # объявлена и известно, чего именно она ждёт. Владелец обязан услышать СВОЙ шаг, а не
-            # догадку кита.
+            
+            
+            
+            
+            
             k = len(held_owner)
             who = "; ".join(f"«{h.get('title') or h['id']}» — {h.get('waiting_on') or '?'}"
                             for h in held_owner[:3])
@@ -116,21 +116,21 @@ def from_next_work(rep: dict) -> dict:
         elif blocked:
             why = f"Это не значит, что всё сделано: {len(blocked)} задач ждут снятия блокировки."
         elif active:
-            # РАБОТА ОБЪЯВЛЕНА И ИДЁТ — и это ФАКТ, который сообщение обязано назвать. Прежде эта
-            # ветка сливалась со следующей, и `next` на самом ките печатал человеку «работа пока не
-            # объявлена», тогда как `--json` рядом показывал её в `in_progress`. Перевод менял не
-            # язык, а факты: отрицал объявленную работу — тот же класс, что потерянное ведро
-            # `not_ready` строкой выше и `unknown`, выброшенный в `from_contour_consistency`.
-            # Статус здесь `ok`, а не `blocked`: продолжение НЕ невозможно (blocked означает именно
-            # это) — работа идёт, от человека ничего не нужно. Ярлык задаёт `headline`.
+            
+            
+            
+            
+            
+            
+            
             n = len(active)
             titles = "; ".join(f"«{a.get('title') or a['id']}»" for a in active)
             return message(
                 status="ok", headline="Работа идёт",
                 summary=f"Свободной задачи сейчас нет: {n} "
                         f"{_q(n, 'работа', 'работы', 'работ')} уже в работе — {titles}.",
-                # Формулировка НЕ повторяет ложное утверждение даже в опровержении: тест стережёт
-                # именно строку «работа не объявлена», и цитата в отрицании обошла бы стража.
+                
+                
                 why_it_matters="Это не «всё сделано»: начатая работа не закончена. Взять "
                                "параллельно тоже нечего — ни готовых, ни заблокированных задач в "
                                "плане не осталось.",
@@ -161,10 +161,10 @@ def from_next_work(rep: dict) -> dict:
         status="ok", headline="Что взять следующим",
         summary=f"Следующей имеет смысл взять «{nb['title']}».",
         why_it_matters="Потому что " + "; ".join(nb["why"]) + "."
-                       # ЗАМОРОЗКА НАЗЫВАЕТСЯ, А НЕ ПРЯЧЕТСЯ. Работы, которых кит больше не
-                       # предлагает, не исчезают из плана — и человек обязан знать, что они не
-                       # предложены по ЕГО решению, а не потерялись. Молчание здесь читалось бы как
-                       # «в плане их нет».
+                       
+                       
+                       
+                       
                        + (f" Ещё {len(frozen)} "
                           + _q(len(frozen), "работа", "работы", "работ")
                           + " не предлагаю: они помечены как расширение умений, а твоё решение "
@@ -177,6 +177,48 @@ def from_next_work(rep: dict) -> dict:
                    "blocked_count": len(blocked),
                    "заморожено": ", ".join(f["id"] for f in frozen) or "—",
                    "решение о заморозке": (rep.get("freeze") or {}).get("decision") or "—"})
+
+
+
+
+
+
+_HYPOTHESIS_RU = {
+    "confirmed": "гипотеза подтвердилась",
+    "refuted": "гипотеза не подтвердилась",
+    "inconclusive": "гипотеза пока не разрешилась — вывод по одному замеру",
+}
+
+
+def _fmt_num(v):
+    """Показать число без хвоста .0, сохранив единицы-строки («42%»). None/прочее — как есть."""
+    if v is None or isinstance(v, bool):
+        return str(v)
+    if isinstance(v, float) and v.is_integer():
+        return str(int(v))
+    return str(v)
+
+
+def _outcome_shift_sentence(oro: dict) -> str:
+    """«Целевая метрика: было X → стало Y (цель Z)» — только числа, без внутреннего имени метрики."""
+    return (f"Целевая метрика: было {_fmt_num(oro.get('baseline'))} → "
+            f"стало {_fmt_num(oro.get('value'))} (цель {_fmt_num(oro.get('target'))})")
+
+
+def _outcome_hypothesis_phrase(oro: dict) -> str:
+    return _HYPOTHESIS_RU.get(oro.get("hypothesis") or "", "")
+
+
+def _outcome_guardrail_phrase(oro: dict) -> str:
+    br = oro.get("guardrail_breaches") or []
+    return ("просела защитная метрика: " + ", ".join(f"«{n}»" for n in br)) if br else ""
+
+
+def _outcome_tech(tech: dict, oro: dict | None) -> dict:
+    """Внутреннее имя метрики — в технические детали, а не в продуктовый текст."""
+    if oro and oro.get("metric_key"):
+        tech = {**tech, "целевая метрика (ключ)": oro["metric_key"]}
+    return tech
 
 
 def from_post_release_loop(result: dict) -> dict:
@@ -213,16 +255,28 @@ def from_post_release_loop(result: dict) -> dict:
     if ps.get("label"):
         tech["продуктовый статус"] = ps["label"]
 
-    # ПРОДУКТОВЫЙ ИТОГ СИЛЬНЕЕ ГОТОВНОСТИ ВЫПУСКА: если итог ИЗМЕРЕН (met/failed), говорим о нём
-    # первым — «технически done, продуктово нет» отличает хорошо сделанное от правильного (#566).
+    
+    
+    
     me = (result.get("outcome") or {}).get("measured_evaluation") or {}
+    oro = result.get("outcome_readout")
     if outcome_verdict == "failed":
         done_green = ps.get("delivery_verified")
         head = ("Сделано технически, но продукт цель не взял" if done_green
                 else "Продуктовый результат не достигнут")
-        summ = ("Доставка зелёная — изменение внедрено, тесты и проверки пройдены. Но измеренный "
-                "результат цель не берёт." if done_green
-                else "Измеренный результат по релизу цель не берёт.")
+        parts = []
+        if done_green:
+            parts.append("Доставка зелёная — изменение внедрено, тесты и проверки пройдены.")
+        if oro:
+            
+            
+            suffix = "" if oro.get("guardrail_breaches") else " — цель не взята"
+            parts.append(_outcome_shift_sentence(oro) + suffix + ".")
+        else:
+            parts.append("Измеренный результат по релизу цель не берёт.")
+        tail = ". ".join(p for p in (_outcome_guardrail_phrase(oro) if oro else "",
+                                     _outcome_hypothesis_phrase(oro) if oro else "") if p)
+        summ = " ".join(parts) + ((" " + tail + ".") if tail else "")
         return message(
             status="degraded", headline=head,
             summary=summ,
@@ -230,21 +284,45 @@ def from_post_release_loop(result: dict) -> dict:
                            "изменение». " + (me.get("reason") or ""),
             next_steps=["вернуть вывод в discovery: цель не достигнута — решать, менять подход или "
                         "откатывать по правилу решения из контракта"],
-            technical=tech)
+            technical=_outcome_tech(tech, oro))
     if outcome_verdict == "met":
+        summ = ((_outcome_shift_sentence(oro) + " — цель взята, защитные метрики удержаны.") if oro
+                else "Измеренный результат по релизу берёт цель, защитные метрики удержаны.")
+        why = me.get("reason") or ("Изменение оказалось правильным по измерению, а не только "
+                                   "доставленным.")
+        hyp = _outcome_hypothesis_phrase(oro) if oro else ""
+        if hyp:
+            why = why + " " + hyp[0].upper() + hyp[1:] + "."
         return message(
             status="ok", headline="Продуктовый результат достигнут",
-            summary="Измеренный результат по релизу берёт цель, защитные метрики удержаны.",
-            why_it_matters=me.get("reason") or "Изменение оказалось правильным по измерению, а не "
-                                               "только доставленным.",
+            summary=summ,
+            why_it_matters=why,
             next_steps=["зафиксировать исход достигнутым по правилу решения из контракта"],
-            technical=tech)
+            technical=_outcome_tech(tech, oro))
 
-    # Общая для всех веток оговорка: гейт закрывается одним доказательством из четырёх, потому что у
-    # остальных трёх пока нет источника данных. Это НАЗЫВАЕТСЯ, а не прячется за «проверено».
+    
+    
     gate_note = (f"Полную проверку аналитики после выпуска пока не закрыть: из четырёх её частей "
                  f"измеримую основу имеет только одна, у остальных ({_human_evidence(not_measured)}) "
                  f"ещё нет источника данных.")
+
+    
+    
+    
+    if oro is not None and not oro.get("measured") and events != "not_verified":
+        goal_ctx = f"По цели «{oro['goal']}»: " if oro.get("goal") else ""
+        if oro.get("baseline") is not None and oro.get("target") is not None:
+            shift_ctx = (f"целевая метрика была {_fmt_num(oro.get('baseline'))} "
+                         f"(цель {_fmt_num(oro.get('target'))}), замера после выпуска пока нет")
+        else:
+            shift_ctx = "целевую метрику пока не с чем сравнить"
+        return message(
+            status="degraded", headline="Продуктовый результат ещё не накоплен",
+            summary=f"{goal_ctx}{shift_ctx}.",
+            why_it_matters="«Не знаю» — это не «плохо»: пока итог не измерен, я не выдаю его за "
+                           "достигнутый и не выдумываю числа. " + gate_note,
+            next_steps=[f"чтобы измерить: {oro.get('needed_to_measure')}"],
+            technical=_outcome_tech(tech, oro))
 
     if events == "unknown":
         return message(
@@ -265,7 +343,7 @@ def from_post_release_loop(result: dict) -> dict:
             next_steps=["разобраться, почему объявленные события не доезжают, и перепроверить"],
             technical=tech)
 
-    # events == "verified": приход подтверждён, но гейт закрыт одним доказательством из четырёх.
+    
     return message(
         status="degraded", headline="События доходят, но проверка выпуска ещё неполная",
         summary="События в аналитику приходят — это подтверждено выгрузкой.",
@@ -302,27 +380,28 @@ def from_active_work(rep: dict, published: bool = False, reconciled: int = 0,
     # влитая работа считалась идущей и человеку советовали не трогать те же файлы.
     active = [a for a in (rep or {}).get("active") or []
               if (a.get("status") or "") not in ("done", "superseded")]
-    # Снятое сверкой НАЗЫВАЕТСЯ, а не исчезает молча: человек должен видеть, почему список короче.
+    
     recon_note = (f"Снято сверкой с базой: {reconciled} "
                   f"{_q(reconciled, 'запись', 'записи', 'записей')} — изменения уже влиты."
                   if reconciled else None)
-    # Одна фраза человеку, без слов `.ai-ops.yaml` и `team_coordination` — их место в technical.
-    reach_h = ("вижу заявки всех машин команды (публикация включена)" if published
-               else "вижу только ЭТУ машину — заявки других участников сюда не попадают")
+    
+    
+    reach_h = ("вижу, что идёт на всех машинах команды" if published
+               else "вижу только ЭТУ машину — что идёт у других участников, сюда не попадает")
     reach_cap = reach_h[0].upper() + reach_h[1:]   # для начала предложения, без рассинхрона лица
-    # СВЕРКА С ПЛАНОМ (замер 18.08.2026 на самом ките). Ответ строился ТОЛЬКО по реестру рантайма, и
-    # при семи работах со статусом `in_progress` в плане печатал «Сейчас ничего не идёт. Работа не
-    # начата.» — утвердительно, без оговорки. Отсутствие реестра — это «не знаю, что идёт», а не
-    # «ничего не идёт»; для ИСПОРЧЕННОГО реестра тот же код уже отвечает `blocked`, а для
-    # отсутствующего вывод не был сделан. Расхождение теперь НАЗЫВАЕТСЯ, а не сглаживается.
+    
+    
+    
+    
+    
     stale = (crosscheck or {}).get("only_in_plan") or []
     stale_names = "; ".join((w.get("title") or w.get("id") or "работа") for w in stale[:3])
     if not active:
         if stale:
             k = len(stale)
             return message(
-                status="degraded", headline="План и заявки расходятся",
-                summary=(f"Заявок на работу нет, но в плане {k} "
+                status="degraded", headline="План расходится с тем, что идёт на самом деле",
+                summary=(f"Начатых работ нет, но в плане {k} "
                          + _q(k, "работа объявлена идущей", "работы объявлены идущими",
                               "работ объявлено идущими") + "."),
                 why_it_matters="Значит одно из двух, и оба требуют решения: работа брошена или она "
@@ -336,11 +415,11 @@ def from_active_work(rep: dict, published: bool = False, reconciled: int = 0,
         return message(
             status="ok", headline="Сейчас ничего не идёт",
             summary="Работа не начата." if not recon_note else recon_note,
-            # Основание ответа названо: это не «я всё осмотрел», а «заявок нет и в плане идущей
-            # работы не объявлено» — два конкретных факта, которые человек может перепроверить.
-            why_it_matters=("Сужу по двум вещам: заявок на работу нет и в плане идущей работы не "
+            
+            
+            why_it_matters=("Сужу по двум вещам: начатых работ нет и в плане идущей работы не "
                             "объявлено. " + reach_cap + "." if not published else
-                            "Сужу по двум вещам: заявок на работу нет и в плане идущей работы не "
+                            "Сужу по двум вещам: начатых работ нет и в плане идущей работы не "
                             "объявлено."),
             next_steps=["скажи, что взять, или спроси «что дальше» — предложу с обоснованием"],
             technical={"active": 0, "объявлено идущими в плане": 0,
@@ -348,14 +427,12 @@ def from_active_work(rep: dict, published: bool = False, reconciled: int = 0,
                        "досягаемость": "команда" if published else "эта машина"})
 
     n = len(active)
-    # РАБОЧИЕ КОПИИ НАЗЫВАЮТСЯ, А НЕ ТОЛЬКО МАШИНЫ. Параллельные ленты живут каждая в своём git
-    # worktree/ветке; ответ, называющий лишь «эту машину», не говорит, ГДЕ идёт работа — а на одной
-    # машине копий несколько. Ветка (она же лента) есть у каждой заявки, включая опубликованную
-    # чужую (PUBLISHED_FIELDS её несёт); worktree-путь — только у локальных, поэтому в человеческий
-    # текст идёт ветка, а путь остаётся в technical. Заявка без ветки просто не называется — сводка
-    # тогда прежняя, без рассинхрона.
-    copies = [a.get("branch") for a in active if a.get("branch")]
-    copies_h = ("; ".join(copies[:3]) + ("…" if len(copies) > 3 else "")) if copies else ""
+    
+    
+    
+    
+    
+    product_titles = "; ".join(t for a in active[:3] if (t := a.get("title")))
     what = "; ".join(
         (a.get("title") or a.get("workitem") or a.get("id") or "работа")
         for a in active[:3])
@@ -363,21 +440,22 @@ def from_active_work(rep: dict, published: bool = False, reconciled: int = 0,
     if recon_note:
         why = recon_note + " " + why
     if not published:
-        why += (" Пересечения по файлам ниже — про параллельные сессии здесь, не про команду; "
-                "координация команды включается публикацией отдельно.")
+        why += (" Совпадения по файлам ниже — про параллельную работу на этой машине, не про "
+                "команду; командная координация включается отдельной настройкой.")
     else:
-        why += " Работу, трогающую те же файлы, лучше не начинать — иначе две сессии перепишут одно место."
+        why += (" Задачу, которая трогает те же файлы, лучше не вести одновременно с этими — "
+                "иначе они заденут одни и те же места.")
     if stale:
-        # Половина расхождения видна и при живой работе: заявки есть на одно, а план объявляет
-        # идущим ещё что-то. Молчать об этом значит показывать половину картины.
+        
+        
         why += (f" В плане объявлено идущими ещё {len(stale)} "
-                f"{_q(len(stale), 'работа', 'работы', 'работ')} без заявки: {stale_names} — "
+                f"{_q(len(stale), 'работа', 'работы', 'работ')} без начатой работы: {stale_names} — "
                 "либо брошено, либо закончено и не отмечено.")
     return message(
         status="degraded" if stale else "ok",
-        headline="Работа идёт" if not stale else "Работа идёт, но план расходится с заявками",
+        headline="Работа идёт" if not stale else "Работа идёт, но план расходится с реальной работой",
         summary=(f"Сейчас в работе {n} {_q(n, 'задача', 'задачи', 'задач')}"
-                 + (f" — в рабочих копиях {copies_h}." if copies_h else ".")),
+                 + (f": {product_titles}." if product_titles else ".")),
         why_it_matters=why,
         next_steps=["спроси «что дальше», если нужно чем-то заняться параллельно"],
         technical={"работ": n, "детали": what,
@@ -399,17 +477,17 @@ _WORK_VIEW_STATUS = {
     "done": "ok", "in-progress": "ok", "in_progress": "ok", "review": "ok",
     "draft": "ok", "todo": "ok",
 }
-# Человеческие имена четырёх источников проекции — для честной фразы «сведено из…», без внутренних
-# слов workitem/active-work/work-graph/plan.
+
+
 _WORK_VIEW_SOURCE_RU = {
     "workitem": "заявка на работу", "active_work": "реестр идущих работ",
     "work_graph": "граф пакетов работы", "plan": "план продукта",
     # #565: приёмники хребта — попадают в «сведено из…», когда реально прочитаны.
     "runs": "прогоны", "delivery": "доставка", "outcome": "исход",
 }
-# «Обязательные» источники идентичности работы — их отсутствие называется как пробел («не нашёл…»).
-# runs/delivery/outcome сюда НЕ входят намеренно: у ранней работы их ещё нет, и это не пробел, а
-# стадия жизни. Их присутствие видно из самих полей, а провенанс — из `sources`.
+
+
+
 _WORK_VIEW_ALL_SOURCES = ("workitem", "active_work", "work_graph", "plan")
 
 
@@ -425,8 +503,8 @@ def from_work_view(view: dict) -> dict:
     title = view.get("title") or view.get("id") or "работа"
     sources = view.get("sources") or []
     if not sources:
-        # Работа не нашлась ни в одном источнике — честное «не знаю такой», а не пустая карточка,
-        # выданная за факт.
+        
+        
         return message(
             status="degraded", headline="Такой работы я не вижу",
             summary=f"Ни в одном источнике нет работы с идентификатором «{view.get('id')}».",
@@ -437,12 +515,12 @@ def from_work_view(view: dict) -> dict:
 
     st = view.get("status")
     status = _WORK_VIEW_STATUS.get(st, "ok")
-    # Чего НЕ хватает — называется, а не замалчивается: проекция честна о том, что сведено, а что нет.
+    
     missing = [s for s in _WORK_VIEW_ALL_SOURCES if s not in sources]
     have_ru = ", ".join(_WORK_VIEW_SOURCE_RU[s] for s in sources)
     miss_ru = ", ".join(_WORK_VIEW_SOURCE_RU[s] for s in missing)
 
-    # Кто ведёт — фактом, но без сырого идентификатора сессии: он в технических деталях.
+    
     agent_line = ("Сейчас работу кто-то ведёт." if view.get("current_agent")
                   else "Активной сессии за работой сейчас нет.")
     dcount = len(view.get("decisions") or [])

@@ -36,16 +36,16 @@ DRIFT = "drift"
 CLEAN = "clean"
 UNKNOWN = "unknown"
 
-# документы, которые сканируем на ссылки в код (существующие из списка)
+
 DOC_CANDIDATES = ("README.md", "AGENTS.md", "CLAUDE.md")
 DOC_DIRS = ("docs",)
-# drift сверяет ТЕКУЩИЕ документы с кодом; исторические записи (changelog, change-brief) законно
-# ссылаются на старые и примерные пути — их из сверки исключаем, иначе это стена ложного дрейфа.
+
+
 DOC_SKIP_SUBSTRINGS = ("changelog", "change-brief")
-# ссылка на код-путь внутри `обратных кавычек`, оканчивающаяся расширением кода
+
 _CODE_REF = re.compile(r"`([A-Za-z0-9_][A-Za-z0-9_./-]*\.(?:py|js|ts|tsx|jsx))`")
 
-# где лежат стороны пар, которые поставят соседние ленты
+
 PASSPORT_REL = ".ai-ops/PRODUCT_PASSPORT.md"
 
 
@@ -103,7 +103,7 @@ def docs_vs_code(root: Path) -> DriftResult:
         rel_doc = str(doc.relative_to(root))
         for m in _CODE_REF.finditer(text):
             ref = m.group(1)
-            # «висячая» = ни полный путь (инвентарь/диск), ни basename не совпали ни с чем в коде
+            
             if (ref in paths or (root / ref).exists()
                     or Path(ref).name in basenames):
                 continue
@@ -127,12 +127,12 @@ def _pending_pair(pair: str, sides: str) -> DriftResult:
 
 
 def roadmap_vs_backlog(root: Path) -> DriftResult:
-    # Единый резолвер направления (SR-2): путь решает одно место, общее с planning/health/passport,
-    # а не захардкоженный `.ai-ops/ROADMAP.md`.
+    
+    
     from ai_ops_kit.planning import roadmap as _roadmap
     if not _roadmap.resolve_roadmap_path(root).is_file():
         return _pending_pair("roadmap↔backlog", "roadmap — лента 2, backlog — лента 3")
-    # roadmap появился (лента 2), но компаратор с backlog (лента 3) ещё не построен — честно unknown
+    
     return DriftResult("roadmap↔backlog", UNKNOWN,
                        "roadmap есть, но сверка с backlog (лента 3) ещё не реализована — не проверено")
 

@@ -13,7 +13,7 @@ from __future__ import annotations
 import os
 import sys
 
-# base_url — реально проверенные рабочие эндпоинты (2026-07-28). key_env — ИМЯ переменной окружения.
+
 PROVIDER_ENDPOINTS = {
     "deepseek": {"base_url": "https://api.deepseek.com/chat/completions",
                  "key_env": "DEEPSEEK_API_KEY", "key_env_fallback": "OPENAI_COMPATIBLE_API_KEY"},

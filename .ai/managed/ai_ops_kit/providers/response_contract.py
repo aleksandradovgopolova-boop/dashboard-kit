@@ -40,10 +40,10 @@ from pathlib import Path
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
            Path(__file__).resolve().parents[2])
 
-# --- отказ -----------------------------------------------------------------
 
-# Причины отказа перечислены, а не собираются строкой на месте: человек читает их в отчёте, и
-# «ответ пуст» отличается от «ответ обрезан» ровно тем, что чинится по-разному.
+
+
+
 REFUSAL_REASONS = {
     "empty_answer": "модель вернула пустой ответ",
     "truncated": "ответ обрезан на потолке max_tokens — вердикта в нём нет целиком",
@@ -75,7 +75,7 @@ class ProviderRefusal(Exception):
                 "detail": self.detail, "provider": self.provider, "model": self.model}
 
 
-# --- контракт --------------------------------------------------------------
+
 
 class ResponseContract:
     """Имя формы + схема для провайдера + постфактум-проверка того же."""
@@ -147,9 +147,9 @@ REVIEWER_RESULT = ResponseContract(
     name="reviewer-result",
     wire_schema=_reviewer_result_wire_schema(),
     required=("schema_version", "kind", "gate", "status", "checks"),
-    # `summary` в required проекции есть, а в постфактум-проверке нет намеренно: реестровая схема
-    # его не требует, и старый артефакт без него остаётся валидным. Проекция требует его от НОВЫХ
-    # ответов, реестр судит уже записанные — ужесточать задним числом нечестно.
+    
+    
+    
 )
 
 
@@ -158,16 +158,16 @@ def registry_schema(name: str = "reviewer-result") -> dict:
     return json.loads((PKG / "schemas" / f"{name}.schema.json").read_text(encoding="utf-8"))
 
 
-# --- карта поддержки -------------------------------------------------------
+
 
 ENFORCED = "enforced"        # схема гарантирована механизмом провайдера
 JSON_ONLY = "json_only"      # гарантирован валидный JSON, схема — нет
 UNSUPPORTED = "unsupported"  # механизма нет; проза плюс разбор, как раньше
 
-# КАРТА ЧЕСТНАЯ, А НЕ ОПТИМИСТИЧНАЯ. Здесь перечислено только то, что реализовано адаптером в
-# `orchestrator_providers`; вендор, чей режим не проверен нами, объявлен `unsupported`, а не
-# «наверное умеет». Завышенная декларация здесь дала бы гейту право сказать «форма обеспечена» там,
-# где она не обеспечена, — то есть ровно ту ложь, которую весь этот срез убирает.
+
+
+
+
 SHAPE_SUPPORT = {
     "anthropic": {"mode": ENFORCED, "mechanism": "output_config.format (json_schema)",
                   "note": "ответ приходит одним текстовым блоком с валидным по схеме JSON"},

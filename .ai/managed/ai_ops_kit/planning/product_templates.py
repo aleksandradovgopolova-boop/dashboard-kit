@@ -202,9 +202,9 @@ def state_of(repo_root: Path, artifact: dict, reg: dict | None = None) -> dict:
             return {"state": INVALID, "reason": f"нет обязательных разделов: {', '.join(missing_sec[:4])}"}
         if isinstance(declared, int) and version < declared:
             return {"state": OUTDATED, "reason": f"версия шаблона {version} < {declared} — нужна миграция"}
-        # СОДЕРЖИМОЕ, а не только структура: если реестр требует непустых разделов, пустой раздел —
-        # Invalid, а НЕ Valid. Это и есть «пустая секция != отсутствующая, но и != заполненная»
-        # (F-018/F-027): файл на месте, заголовок на месте, а под ним ничего.
+        
+        
+        
         if "non_empty_sections" in (artifact.get("validation") or []):
             empty = _empty_sections(text, struct.get("required_sections") or [])
             if empty:

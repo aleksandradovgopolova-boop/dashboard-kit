@@ -31,8 +31,8 @@ def check_promotion_readiness(view, allowed_classes, model_window=None):
     allowed = set(allowed_classes or [])
     contracts = {}
 
-    # 1. access-filter ДО retrieval: (а) included без secret/класса вне allowed; (б) РЕАЛЬНЫЙ pre-filter —
-    # ни один pre_filtered_denied путь не попал в прочитанное (read_paths) или в payload (included).
+    
+    
     bad = [f"{i.get('file')}({i.get('data_class')})" for i in included
            if i.get("data_class") == "secret" or (allowed and i.get("data_class") not in allowed)]
     denied = set(view.get("pre_filtered_denied") or [])
@@ -48,20 +48,20 @@ def check_promotion_readiness(view, allowed_classes, model_window=None):
     contracts["access_filter_before_retrieval"] = {"pass": not (bad or leaked_read or leaked_payload),
                                                     "detail": detail}
 
-    # 2. запрещённые имена не в payload: included ∩ denied = ∅
+    
     denied = {e.get("file") for e in excl_access}
     leaked = sorted({i.get("file") for i in included} & denied)
     contracts["no_denied_filenames_in_payload"] = {
         "pass": not leaked, "detail": (f"и в included, и в excluded_access: {leaked}" if leaked else "ok")}
 
-    # 3. обязательные rules/policy/spec/decisions в mandatory (не потеряны)
+    
     miss = list(view.get("mandatory_missing") or [])
     mexc = list(view.get("mandatory_excluded_access") or [])
     contracts["applicable_rules_in_mandatory"] = {
         "pass": not (miss or mexc),
         "detail": (f"missing={miss} excluded_access={mexc}" if (miss or mexc) else "ok")}
 
-    # 4. policy hash + sha зафиксированы на run
+    
     ck = view.get("cache_key") or ""
     missing_pin = [t for t in ("afp:", "dcp:", "sha:") if t not in ck]
     if not view.get("sha"):
@@ -69,7 +69,7 @@ def check_promotion_readiness(view, allowed_classes, model_window=None):
     contracts["policy_hash_pinned_per_run"] = {
         "pass": not missing_pin, "detail": (f"cache_key/sha без пинов: {missing_pin}" if missing_pin else "ok")}
 
-    # 5. hard model-window: total не превышает окно; иначе декомпозиция/блок (не тихое усечение)
+    
     total = int(view.get("total_tokens") or 0)
     if model_window and total > model_window:
         contracts["hard_window_decompose_or_block"] = {

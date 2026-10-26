@@ -42,22 +42,22 @@ from pathlib import Path
 from ai_ops_kit.planning import delivery_plan as _plan
 from ai_ops_kit.planning import roadmap as _authored
 
-# Горизонты, которые ПОКАЗЫВАЕТ roadmap. `shipped` горизонтом не является — это причина не
-# показывать направление среди Now/Next/Later, но её видно в отчёте.
+
+
 NOW, NEXT, LATER, SHIPPED = "now", "next", "later", "shipped"
 HORIZONS = (NOW, NEXT, LATER)
 
-# Ранг горизонта для сравнения авторского и выведенного. shipped ниже всех: завершённому направлению
-# не место в будущих горизонтах.
+
+
 _RANK = {SHIPPED: -1, NOW: 0, NEXT: 1, LATER: 2}
 
-# Соответствие горизонтов `roadmap.py` (авторская сторона) нашим трём. `roadmap.py` различает
-# «Дальше» и «Later»; для сверки горизонта оба — это «не сейчас», ранг 2.
+
+
 _AUTHORED_TO_RANK = {"now": 0, "next_outcome": 1, "later_major": 2, "someday": 2}
 
-# Человеческие имена горизонтов. Для не-разработчика слаги now/next/later ничего не значат, поэтому
-# в тексте для человека горизонт называется словами. Слаг остаётся техническим ключом в данных
-# (as_dict, --json), словами он подаётся только в печати.
+
+
+
 HORIZON_HUMAN = {
     NOW: "в работе сейчас",
     NEXT: "запланировано следующим",
@@ -165,8 +165,8 @@ def _direction(goal: dict, works: list, closed: set) -> Direction:
         horizon = NEXT
         note = "работа под направление есть, но вся ждёт закрытия зависимостей"
     elif works:
-        # Работы есть, но все закрыты, а исходы достигнуты не все — направление между «сделано» и
-        # «в работе»: результат ещё не подтверждён исходами, держим в Now, чтобы не потерять.
+        
+        
         horizon = NOW
         note = "работы закрыты, но не все исходы достигнуты — результат ещё не подтверждён"
     elif reached:
@@ -219,14 +219,14 @@ def deviations(roadmap: Roadmap, authored) -> list:
     """
     if authored is None:
         return []
-    # Куда авторский файл поместил каждую цель (по backtick-ссылке под заголовком горизонта).
+    
     authored_rank: dict = {}
     for key, block in authored.items():
         rank = _AUTHORED_TO_RANK.get(key)
         if rank is None:
             continue
         for gid in block.get("goals") or []:
-            # Первое (самое раннее) упоминание задаёт горизонт: цель не должна стоять в двух.
+            
             authored_rank.setdefault(gid, rank)
 
     out = []
@@ -242,8 +242,8 @@ def deviations(roadmap: Roadmap, authored) -> list:
                 )
             continue
         if a_rank is None:
-            # Цель не размещена в горизонтах now/next roadmap.py — уже покрыто roadmap.check как
-            # «работа без направления»; здесь не дублируем.
+            
+            
             continue
         if d_rank < a_rank:
             out.append(
@@ -366,7 +366,7 @@ def main(argv=None):
             _print_build(rm)
         return 0
 
-    # check
+    
     rep = check(root, plan)
     if ns.json:
         print(json.dumps(rep, ensure_ascii=False, indent=2))
