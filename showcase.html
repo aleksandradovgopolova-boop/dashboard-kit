@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
 <!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
      и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
-<script src="js/dk-util.js"></script>
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
-<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
-<script src="js/docs.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261026-editorial" defer></script>
 <!-- defer, а не блокирующая загрузка. Три файла графиков весят 1148 КБ, и
      без defer разбор страницы вставал на них целиком: до первой отрисовки
      человек ждал движок, который нужен ниже первого экрана. Порядок при defer
@@ -32,16 +32,17 @@
 <script src="js/dk-select.js" defer></script>
 <script src="vendor/air-datepicker.js" defer></script>
 <script src="js/dk-period.js" defer></script>
-<script src="js/dk-calendar.js" defer></script>
+<script src="js/dk-calendar.js?v=20261028-stable-size" defer></script>
 <script src="js/dk-pager.js" defer></script>
 <script src="js/dk-table.js" defer></script>
 <script src="js/dk-form.js" defer></script>
-<script src="js/dk-map.js" defer></script>
+<script src="js/dk-map.js?v=20261028-stable-size" defer></script>
 <script src="js/dk-notify.js" defer></script>
 <script src="js/dk-uptime.js" defer></script>
-<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
+<link rel="stylesheet" href="css/docs.css?v=20261026-editorial">
+<link rel="stylesheet" href="css/glass.css?v=20261026-readable-menu">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
   <a class="sc-brand" href="#top">
@@ -49,10 +50,7 @@
   </a>
 
   <div class="sc-ctl">
-  <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-    <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-    <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-  </div>
+  <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
 
   </div>
 </header>
@@ -67,28 +65,10 @@
     <p class="sc-hero__lead">Для аналитических и операционных дашбордов. Помогает отслеживать показатели, анализировать изменения и управлять рабочими процессами.
       Компоненты и рекомендации задают единый подход к представлению данных — от ключевых показателей
       до подробных отчётов.</p>
-    <div class="sc-audiences" aria-label="Материалы по роли">
-      <div class="sc-audience">
-        <h2>Дизайнеру</h2>
-        <a href="#tri-principa">Визуальный язык</a>
-        <a href="#tipografika">Типографика</a>
-        <a href="#smyslovye">Палитра</a>
-        <a href="#ikonki">Иконографика</a>
-      </div>
-      <div class="sc-audience">
-        <h2>Менеджеру</h2>
-        <a href="#sborka-po-zadache">Сборка по задаче</a>
-        <a href="#redpolitika">Редполитика</a>
-        <a href="#dostupnost">Доступность</a>
-        <a href="#glossariy">Глоссарий</a>
-      </div>
-      <div class="sc-audience">
-        <h2>Разработчику</h2>
-        <a href="#komponenty">Компоненты и код</a>
-        <a href="#karkas">Поверхности</a>
-        <a href="#setka-i-ustroystva">Структура и сетка</a>
-        <a href="#animacii">Анимации</a>
-      </div>
+    <div class="sc-audiences" aria-label="Материалы по задаче">
+      <div class="sc-audience"><h2>Собрать дашборд</h2><p>Задача и данные — достаточно, чтобы начать работу с ИИ.</p><a href="index.html#start">Готовый запрос помощнику</a><a href="#sborka-po-zadache">От вопроса к экрану</a></div>
+      <div class="sc-audience"><h2>Настроить представление</h2><p>Иерархия, цвет и текст помогают прочитать результат.</p><a href="#tri-principa">Визуальные принципы</a><a href="#tipografika">Типографика</a><a href="#smyslovye">Палитра</a></div>
+      <div class="sc-audience"><h2>Проверить результат</h2><p>Понятность данных и работа интерфейса в реальных сценариях.</p><a href="#dostupnost">Доступность</a><a href="#redpolitika">Текст и подписи</a><a href="index.html#development">Подключение и ограничения</a></div>
     </div>
     <a class="sc-example" href="dashboard.html">Посмотреть пример рабочего экрана <svg class="dk-i" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg></a>
   </header>
@@ -302,11 +282,9 @@
     <h3 id="akcent">Акцент и управление</h3>
     <p>Акцентный цвет выделяет основное действие, ссылки и фокус клавиатуры. Цвета наведения и мягких заливок рассчитываются от общего акцента продукта. Выбранные фильтры и другие элементы управления используют отдельные нейтральные токены.</p>
     <div class="sc-note">
-      <b>Один акцент на продукт.</b> Акцент ставится один раз в разметке:
-      <code>&lt;html data-accent="blue"&gt;</code>, варианты — <code>blue</code>,
-      <code>violet</code>, <code>indigo</code>. Переключателя в интерфейсе нет и в
-      хранилище он не запоминается: это узнаваемость продукта, а не удобство
-      человека, как тема. Витрина показана в синем.
+      <b>Единый синий акцент.</b> <code>&lt;html data-accent="blue"&gt;</code>.
+      Два режима — Dark и Light; оба сохраняют стеклянные поверхности.
+      Цвета статусов и шкал данных не зависят от темы.
     </div>
     <div class="sc-sw">
       <div><i style="background:var(--brand)"></i><span>--brand</span></div>
@@ -1215,7 +1193,7 @@
     <div class="dk-grid--even" style="margin-top:var(--space-6)">
       <div class="dk-widget">
         <div class="dk-widget__head">
-          <h3 class="dk-widget__title">Кто больше жжёт</h3>
+          <h3 class="dk-widget__title">Объём по категориям</h3>
           <span class="dk-widget__hint" title="Полоса — доля от самого крупного в списке"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
         </div>
         <div class="dk-bars">
@@ -1311,7 +1289,7 @@
         <div class="dk-form__alarm" hidden></div>
 
         <div class="dk-ff dk-ff--wide">
-          <label class="dk-label" for="f-name">Что за работа <span class="dk-label__req">обязательно</span></label>
+          <label class="dk-label" for="f-name">Название работы <span class="dk-label__req">обязательно</span></label>
           <div class="dk-field"><input id="f-name" name="name" placeholder="Замена задвижки на вводе" required minlength="5"></div>
           <div class="dk-hint">Так её увидят диспетчеры смены в календаре</div>
         </div>
@@ -1645,7 +1623,7 @@
       </div>
       <div class="dk-widget">
         <div class="dk-widget__head">
-          <h3 class="dk-widget__title">Доли тиров</h3>
+          <h3 class="dk-widget__title">Доли уровней риска</h3>
           <span class="dk-widget__hint" title="Сколько регионов в каждом тире"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span>
         </div>
         <div id="ch-donut" class="dk-chart"></div>
@@ -1835,7 +1813,7 @@
     </div>
   </section>
 
-<section class="sc-section" id="sdk-extensions"><h2 class="sc-h2">Рабочие сценарии дашборда</h2><p>Контекст, сравнение данных и персонализация. Интерактивные примеры и ограничения — на страницах компонентов.</p><div class="dk-tablewrap"><table class="dk-table" aria-label="Расширения SDK"><thead><tr><th scope="col">Компонент</th><th scope="col">Задача</th></tr></thead><tbody><tr><td><a class="dk-btn dk-btn--ghost" href="component-breadcrumbs.html">Навигационный путь</a></td><td>Показывает место объекта в иерархии и путь к родителю.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-tooltip.html">Подсказка</a></td><td>Короткое дополнительное объяснение показателя без перекрытия рабочего потока.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-details-sidebar.html">Боковые детали</a></td><td>Детали выбранного объекта без перехода с текущего среза.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-heatmap.html">Тепловая карта</a></td><td>Сравнение интенсивности по объектам и интервалам с доступными числами.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-bullet-chart.html">Значение и цель</a></td><td>Компактно показывает факт, целевой уровень и контекст диапазонов.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-period-comparison.html">Сравнение периодов</a></td><td>Показывает текущий и предыдущий показатель, абсолютную и относительную дельту.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-timeline-annotations.html">События на шкале</a></td><td>Объясняет пики и интервалы изменениями, работами и инцидентами.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-fullscreen.html">Полный экран</a></td><td>Временное увеличение виджета для чтения деталей.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-export.html">Экспорт среза</a></td><td>Локально сохраняет текущие строки таблицы или изображение графика.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-density-controls.html">Плотность данных</a></td><td>Уменьшает отступы для сравнения большего числа строк.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-tree-select.html">Выбор в иерархии</a></td><td>Выбирает группы и дочерние объекты в небольшом справочнике.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-saved-views.html">Сохранённые виды</a></td><td>Возвращает локальный рабочий срез со всеми согласованными параметрами.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-layout-editor.html">Раскладка виджетов</a></td><td>Меняет порядок, ширину и видимость зарегистрированных виджетов.</td></tr></tbody></table></div></section>
+<section class="sc-sec" id="sdk-extensions"><h2 class="sc-h2">Рабочие сценарии дашборда</h2><p>Контекст, сравнение данных и персонализация. Интерактивные примеры и ограничения — на страницах компонентов.</p><div class="dk-tablewrap"><table class="dk-table" aria-label="Расширения SDK"><thead><tr><th scope="col">Компонент</th><th scope="col">Задача</th></tr></thead><tbody><tr><td><a class="dk-btn dk-btn--ghost" href="component-breadcrumbs.html">Навигационный путь</a></td><td>Показывает место объекта в иерархии и путь к родителю.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-tooltip.html">Подсказка</a></td><td>Короткое дополнительное объяснение показателя без перекрытия рабочего потока.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-details-sidebar.html">Боковые детали</a></td><td>Детали выбранного объекта без перехода с текущего среза.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-heatmap.html">Тепловая карта</a></td><td>Сравнение интенсивности по объектам и интервалам с доступными числами.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-bullet-chart.html">Значение и цель</a></td><td>Компактно показывает факт, целевой уровень и контекст диапазонов.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-period-comparison.html">Сравнение периодов</a></td><td>Показывает текущий и предыдущий показатель, абсолютную и относительную дельту.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-timeline-annotations.html">События на шкале</a></td><td>Объясняет пики и интервалы изменениями, работами и инцидентами.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-fullscreen.html">Полный экран</a></td><td>Временное увеличение виджета для чтения деталей.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-export.html">Экспорт среза</a></td><td>Локально сохраняет текущие строки таблицы или изображение графика.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-density-controls.html">Плотность данных</a></td><td>Уменьшает отступы для сравнения большего числа строк.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-tree-select.html">Выбор в иерархии</a></td><td>Выбирает группы и дочерние объекты в небольшом справочнике.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-saved-views.html">Сохранённые виды</a></td><td>Возвращает локальный рабочий срез со всеми согласованными параметрами.</td></tr><tr><td><a class="dk-btn dk-btn--ghost" href="component-layout-editor.html">Раскладка виджетов</a></td><td>Меняет порядок, ширину и видимость зарегистрированных виджетов.</td></tr></tbody></table></div></section>
   <p style="color:var(--ink-3);font-size:var(--text-caption);padding:var(--space-9) 0">
 
   </p>

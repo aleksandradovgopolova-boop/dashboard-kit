@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Варианты экрана · Dashboard Kit</title>
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/kit2-preview.css">
+<script src="js/dk-util.js"></script>
+<script src="js/kit2-preview.js" defer></script>
+</head>
+<body class="dk-page">
+<main class="kit2-workshop">
+  <h1>Сравнение на экране ипотеки</h1>
+  <p class="kit2-intro">Предложения для выбора. Те же данные, фильтры, легенда и детали региона. Основная страница сохранена.</p>
+  <form id="kit2-controls" class="kit2-controls" aria-label="Условия сравнения">
+    <label>Экран<select name="device"><option value="1280">Десктоп · 1280 × 900</option><option value="900">Планшет · 900 × 900</option><option value="390">Телефон · 390 × 900</option></select></label>
+    <label>Плотность<select name="density"><option value="spacious">Просторная · предложение</option><option value="comfortable" selected>Обычная · текущая</option><option value="compact">Компактная · текущая</option></select></label>
+    <label>Тема<select name="theme"><option value="dark">Dark</option><option value="light">Light</option></select></label>
+    <label hidden>Материал<select name="material"><option value="current">Графит Dark/Light</option><option value="refined">Графит Dark/Light</option></select></label>
+    <label id="kit2-geo-field" hidden>География<select name="geo"><option value="panorama">Панорама · движение по горизонтали</option><option value="pages">Три географические страницы</option><option value="overview">Обзор → читаемый фрагмент</option></select></label>
+  </form>
+  <p id="kit2-description" class="kit2-description" aria-live="polite"></p>
+  <nav class="kit2-actions" aria-label="Переход к части экрана">
+    <button type="button" id="kit2-top" class="dk-btn">Начало дашборда</button>
+    <button type="button" id="kit2-map" class="dk-btn">Карта</button>
+    <button type="button" id="kit2-table" class="dk-btn">Таблица</button>
+    <a class="dk-btn" href="family-mortgage.html?theme=dark">Основная страница</a>
+  </nav>
+  <div class="kit2-stage" tabindex="0" aria-label="Область просмотра. Если экран шире окна, прокрутите по горизонтали.">
+    <iframe id="kit2-frame" title="Живой экран семейной ипотеки — сравнение вариантов" src="family-mortgage.html?v=20261026-kit2-preview&amp;theme=dark" width="1280" height="900"></iframe>
+  </div>
+  <p class="kit2-intro">Плотность меняет интервалы, сохраняя текст и показатели. Географические страницы — полосы исходной сетки, а не федеральные округа. Это браузерный просмотр, не проверка физического телефона.</p>
+</main>
+</body>
+</html>

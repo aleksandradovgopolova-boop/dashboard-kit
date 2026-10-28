@@ -14,27 +14,25 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
-<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/docs.css?v=20261026-editorial">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="vendor/echarts.min.js" defer></script>
 <script src="js/dk-chart-theme.js" defer></script>
 <script src="js/dk-charts.js" defer></script>
-<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
-<script src="js/docs.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261026-editorial" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
-  <a class="sc-brand" href="showcase.html">
+  <a class="sc-brand" href="index.html">
     <span class="sc-brand__t">dashboard-kit</span>
   </a>
   <div class="sc-ctl">
-    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-    </div>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -57,36 +55,36 @@
       </details>
     </div><p class="sc-share-status" role="status"></p>
     <h1>KPI-плитка</h1>
-    <p class="sc-hero__lead">Одно главное число с трендом и формой: сколько сейчас и куда идёт. Размер S — четверть колонки; здесь число и спарклайн, а не график с осями.</p>
+    <p class="sc-hero__lead">Показывает один ключевой показатель, его единицу и изменение за период.</p>
     <div class="sc-meta">
-      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-charts.js"><code>js/dk-charts.js</code></a></span>
+      <span class="sc-meta__i">Статус: стабильный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
-  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
-    <h2>Живой пример</h2>
-    <p>Четыре плитки в ряд. Цвет тренда — смысл (рост аварий красный, падение времени реакции зелёный), а не направление стрелки.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-grid">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Сравните компактный показатель и вариант с динамикой. Название и единица объясняют число.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-grid">
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent" style="--accent:var(--crit-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label">Аварии за сутки</span></div><div class="dk-tile__row"><span class="dk-metric-lg">23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div></div></div>
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg></span><span class="dk-tile__label">Обращений</span></div><div class="dk-tile__row"><span class="dk-metric-lg">1 284</span><span class="dk-trend" style="--accent:var(--calm-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg> −6%</span></div></div></div>
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent" style="--accent:var(--high-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span><span class="dk-tile__label">Среднее время реакции</span></div><div class="dk-tile__row"><span class="dk-metric-lg">42 <span class="dk-tile__unit">мин</span></span></div></div></div>
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent" style="--accent:var(--calm-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span><span class="dk-tile__label">Бригад в работе</span></div><div class="dk-tile__row"><span class="dk-metric-lg">17</span><span class="dk-trend">без изменений</span></div></div></div>
-    </div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+    </div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Одно текущее значение, которое смотрят первым: аварий сейчас, время реакции.</li><li>Важно направление: тренд к прошлому периоду.</li><li>Плиток две–шесть в ряд; больше — уже таблица.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Сравнение многих значений — <a href="component-chart.html">График</a> в размере L.</li><li>Значение с планом и дельтой к нему — пока нет компонента; открыто в REVIEW.md («KPI с планом»).</li><li>Один показатель по многим объектам — <a href="component-rank.html">Рейтинг</a>.</li></ul></div></div><div class="sc-note"><h3>Масштаб и пропорции</h3><ul class="sc-list"><li>Визуальный вес соответствует важности вопроса; размеры сопоставимых KPI одинаковы.</li><li>График получает площадь для читаемых подписей, карточки — достаточные поля.</li><li>Пропорции выбираются по данным и задаче; золотое сечение не является обязательной сеткой дашборда.</li></ul><p>Пример: Основной вопрос выделен, четыре KPI стоят равным рядом перед подробными графиками.</p><p>Проверка: Проверить иерархию без декоративных эффектов и чтение реальных значений.</p><p><a href="https://www.uprock.ru/education/masshtab-i-proporcii-v-kompozicii">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Пространство</h3><ul class="sc-list"><li>Близость группирует связанные данные; между независимыми блоками расстояние больше. Использовать шкалу токенов.</li><li>В мониторинге между виджетами 10px, внутренние поля 20px на десктопе и 16px на телефоне; соседние виджеты одного ряда одной высоты.</li><li>Не обрезать содержание и не сжимать поля ради окна. Основная картина должна помещаться, детали распределяются по утверждённым правилам.</li><li>Соседние ряды одной композиции имеют общие границы колонок и одинаковые внутренние направляющие заголовков и содержимого.</li></ul><p>Пример: Ровная сетка, простор внутри, длинный список прокручивается в своём виджете.</p><p>Проверка: Проверить внутренние поля, крайние строки, длинные названия, одинаковую высоту соседей и совпадение направляющих между рядами.</p><p><a href="https://www.uprock.ru/education/organizaciya-prostranstva-v-dizayne">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Дашборд по вопросу пользователя</h3><ul class="sc-list"><li>Сначала определить аудиторию и решение, которому помогает экран: мониторинг текущей ситуации, анализ причин или работа с объектами. Состав виджетов следует этим вопросам.</li><li>Обзор показывает основную картину без открытия деталей: 5 ± 2 главных KPI, максимум семь, затем объясняющие графики. Главная карточка нужна только для дополнительного контекста или состава.</li><li>Период, единицы и актуальность делают показатели сопоставимыми. Разные задачи можно разделить вкладками; данные для одновременной сверки остаются рядом.</li></ul><p>Пример: «Ситуация страны»: KPI и обзор динамики, округов и событий; рабочая таблица заявок — в отдельной вкладке той же задачи.</p><p>Проверка: По первому виду назвать ситуацию, изменение и зону внимания; затем найти объект и вернуться. Проверить 1366×768 без уменьшения текста и полей.</p><p><a href="https://www.uprock.ru/education/kak-sdelat-horoshiy-dashbord">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Иерархия без декоративного шума</h3><ul class="sc-list"><li>Важность выражается порядком, типографикой и группировкой. Сопоставимые показатели имеют один визуальный вес; вторичные действия не спорят с основным ответом.</li><li>Цвет дополняет смысл статуса текстом или значком. Акцент продукта и цвета риска имеют разные роли; текстуры, штрихи и пунктир не добавляются ради выразительности.</li><li>Иерархия сохраняется между экранами и в узком окне: не удалять заголовки групп и единицы только ради компактности. Пропорции и уровни берутся из токенов и задачи.</li></ul><p>Пример: Спокойные поверхности, ровный ряд KPI, читаемые заголовки и текстовый статус рядом с цветом риска.</p><p>Проверка: Проверить порядок чтения без цвета и декоративных эффектов; затем сравнить одинаковые показатели на соседних экранах и при увеличенном тексте.</p><p><a href="https://www.uprock.ru/education/vizualnaya-ierarhiya-zachem-nuzhna-na-sayte-i-kak-ee-sozdat">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Одно текущее значение, которое смотрят первым: аварий сейчас, время реакции.</li><li>Важно направление: тренд к прошлому периоду.</li><li>Плиток две–шесть в ряд; больше — уже таблица.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Сравнение многих значений — <a href="component-chart.html">График</a> в размере L.</li><li>Значение с планом и дельтой к нему — пока нет компонента; открыто в REVIEW.md («KPI с планом»).</li><li>Один показатель по многим объектам — <a href="component-rank.html">Рейтинг</a>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-scale">Масштаб и пропорции</a></li><li><a href="index.html#pattern-space">Пространство</a></li><li><a href="index.html#pattern-dashboard">Дашборд по вопросу пользователя</a></li><li><a href="index.html#pattern-visual-hierarchy">Иерархия без декоративного шума</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-grid"><div class="dk-col--half"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
+    <div class="sc-anatomy"><div class="dk-grid"><div class="dk-col--half"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
       <div class="dk-tile__head"><span class="dk-tile__icon"><b class="sc-callout">1</b><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label"><b class="sc-callout">2</b>Аварии за сутки</span></div>
       <div class="dk-tile__row"><span class="dk-metric-lg"><b class="sc-callout">3</b>23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><b class="sc-callout">4</b><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div>
       <div class="dk-chart dk-chart--spark" id="x-an" style="position:relative"><b class="sc-callout" style="position:absolute;z-index:1">5</b></div></div></div></div></div><ol class="sc-anatomy__list"><li><b>Значок</b> — <code>dk-tile__icon</code>: тон плитки через <code>--accent</code> — только смысл, не украшение.</li><li><b>Подпись</b> — что за число и объект учёта. Период добавляйте, если он отличается от общего периода экрана или общий период не указан.</li><li><b>Число</b> — <code>dk-metric-lg</code>, Golos 600, пропорциональные цифры: число одно и в колонку не встаёт, а табличная единица в «17» дала бы зазор.</li><li><b>Тренд</b> — <code>dk-trend</code>: стрелка и дельта со знаком; цвет — смысл изменения.</li><li><b>Спарклайн</b> — <code>type: 'spark'</code>: форма без осей; шкала не от нуля — единственное место, где это правильно.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Компактный вариант без спарклайна: поля 20 px на десктопе и 16 px на телефоне, число 28 px, нейтральный значок 14 px; дельта рядом с числом и может переноситься при крупном тексте. Подписи полностью видны. Обычная плитка — это виджет размера S (<code>dk-widget--s</code>): поле в 14 вместо 18, потому что в четверти колонки поле в 18 съедает пятую часть ширины. В M и L та же разметка, но там уже график с осями. На месте шире 320 px (телефон, половина колонки) плитка перестраивается сама: число с трендом слева, спарклайн справа — иначе она растягивается в пустую полосу.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-tile--overview</code></td><td>Значение 40 px на широком экране и 28 px на планшете; полные подписи.</td><td>Пять KPI в dk-grid dk-grid--five; телефон — две колонки и последняя карточка во всю ширину.</td></tr><tr><td><code>dk-tile--prominent</code></td><td>Крупное число в обзорной карточке; обычный размер в узком контейнере.</td><td>Вместе с dk-tile--compact, для первого ряда сводки.</td></tr><tr><td><code>dk-tile--compact</code></td><td>Нейтральный значок, полная подпись, число и прямоугольная дельта в одной строке; без спарклайна.</td><td>Компактный ряд основных KPI.</td></tr><tr><td><code>dk-tile__spark</code></td><td>Обёртка миниграфика рядом с числом обзорной плитки; на узком экране отдельная строка.</td><td>Только существующая история: dkChart type: spark, sparkStyle: bar и семантический tone.</td></tr><tr><td><code>dk-tile__unit</code></td><td>Небольшая единица рядом с числом.</td><td>Минуты, рубли и другие меры, когда они нужны.</td></tr><tr><td><code>dk-widget dk-widget--s dk-tile</code></td><td>Плитка в четверть колонки.</td><td>Ряд KPI сверху дашборда.</td></tr><tr><td><code>--accent</code></td><td>Тон значка и тренда.</td><td>Смысл: crit-ink, high-ink, calm-ink; без него нейтральный.</td></tr><tr><td><code>dk-trend</code></td><td>Дельта к прошлому периоду.</td><td>Если сравнивать есть с чем.</td></tr><tr><td><code>dk-chart--spark</code></td><td>Спарклайн 48 px высотой (64 на широком месте), точка на последнем значении.</td><td>Если есть ряд за период.</td></tr></tbody></table></div>
+    <p>Поля задаёт --pad-widget: сверху, снизу и по бокам одинаково. Компактный KPI не резервирует место под отсутствующий график. Подпись — Regular 14/20, число — Medium; в ряду из пяти компактных KPI число 28/32.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-tile--overview</code></td><td>Значение 40 px на широком экране и 28 px на планшете; полные подписи.</td><td>Пять KPI в dk-grid dk-grid--five; телефон — две колонки и последняя карточка во всю ширину.</td></tr><tr><td><code>dk-tile--prominent</code></td><td>Крупное число в обзорной карточке; обычный размер в узком контейнере.</td><td>Вместе с dk-tile--compact, для первого ряда сводки.</td></tr><tr><td><code>dk-tile--compact</code></td><td>Нейтральный значок, полная подпись, число и прямоугольная дельта в одной строке; без спарклайна.</td><td>Компактный ряд основных KPI.</td></tr><tr><td><code>dk-tile__spark</code></td><td>Обёртка миниграфика рядом с числом обзорной плитки; на узком экране отдельная строка.</td><td>Только существующая история: dkChart type: spark, sparkStyle: bar и семантический tone.</td></tr><tr><td><code>dk-tile__unit</code></td><td>Небольшая единица рядом с числом.</td><td>Минуты, рубли и другие меры, когда они нужны.</td></tr><tr><td><code>dk-widget dk-widget--s dk-tile</code></td><td>Плитка в четверть колонки.</td><td>Ряд KPI сверху дашборда.</td></tr><tr><td><code>--accent</code></td><td>Тон значка и тренда.</td><td>Смысл: crit-ink, high-ink, calm-ink; без него нейтральный.</td></tr><tr><td><code>dk-trend</code></td><td>Дельта к прошлому периоду.</td><td>Если сравнивать есть с чем.</td></tr><tr><td><code>dk-chart--spark</code></td><td>Спарклайн 48 px высотой (64 на широком месте), точка на последнем значении.</td><td>Если есть ряд за период.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
@@ -98,8 +96,8 @@
     </div>
   </section>
   <section class="sc-sec" id="kontent">
-    <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Подпись называет показатель. Общий период указан один раз; отличающийся интервал — в подписи: «Аварии за сутки».</li><li>Тренд со знаком и словами, если нет числа: «без изменений».</li><li>Единица рядом с числом только когда без неё непонятно: «42 мин».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Период не указан ни на экране, ни у показателя: «Аварии: 23» — за час? за год?</li><li>Красная стрелка вниз у «времени реакции» — падение здесь хорошо.</li><li>Спарклайн с осями и подписями — в четверти колонки они мельче десяти пикселей.</li></ul></div></div>
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Подпись называет показатель. Общий период указан один раз; отличающийся интервал — в подписи: «Аварии за сутки».</li><li>Тренд со знаком и словами, если нет числа: «без изменений».</li><li>Единица рядом с числом только когда без неё непонятно: «42 мин».</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Период не указан ни на экране, ни у показателя: «Аварии: 23» — за час? за год?</li><li>Красная стрелка вниз у «времени реакции» — падение здесь хорошо.</li><li>Спарклайн с осями и подписями — в четверти колонки они мельче десяти пикселей.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
@@ -107,11 +105,11 @@
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
-    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-tile,dk-trend,dk-metric,dk-metric-lg,dk-metric-xl,dk-widget"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-tile,dk-trend,dk-metric,dk-metric-lg,dk-metric-xl,dk-widget"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код</h2>
-    <p>Плитка — разметка; спарклайн рисует <code>dkChart</code> типом <code>spark</code>.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-widget dk-widget--s dk-tile&quot; style=&quot;--accent:var(--crit-ink)&quot;&gt;
+    <p>Плитка — разметка; спарклайн рисует <code>dkChart</code> типом <code>spark</code>.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-charts.js"><code>js/dk-charts.js</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-widget dk-widget--s dk-tile&quot; style=&quot;--accent:var(--crit-ink)&quot;&gt;
   &lt;div class=&quot;dk-tile__head&quot;&gt;
     &lt;span class=&quot;dk-tile__icon&quot;&gt;&lt;svg class=&quot;dk-i dk-i--sm&quot;&gt;&lt;use href=&quot;#ti-alert-triangle&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
     &lt;span class=&quot;dk-tile__label&quot;&gt;Аварии за сутки&lt;/span&gt;
@@ -131,7 +129,7 @@ dkChart(document.getElementById(&#x27;sp&#x27;), {
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-tile--overview</code></td><td>класс</td><td>Обзорная плитка с полными подписями; значение 40 px на широком экране и 28 px на планшете. Используется с dk-tile--compact.</td></tr><tr><td><code>dk-tile--prominent</code></td><td>класс</td><td>Опциональный акцент: метрика 40 px при внутренней ширине от 210 px, иначе 28 px. Полные подписи и перенос дельты сохраняются.</td></tr><tr><td><code>dk-tile--compact</code></td><td>класс</td><td>По умолчанию без спарклайна; число и дельта рядом. В обзорной композиции история явно добавляется через dk-tile__spark.</td></tr><tr><td><code>dk-tile__spark</code></td><td>класс</td><td>Обёртка непосредственного потомка dk-tile--overview; внутри dk-chart--spark. Резервирует место рядом с числом, на узком экране переносится.</td></tr><tr><td><code>dk-tile__unit</code></td><td>класс</td><td>Единица меньшего размера внутри dk-metric-lg, остаётся частью доступного числа.</td></tr><tr><td><code>--accent</code></td><td>переменная в style</td><td>Тон значка и тренда; смысловые -ink токены.</td></tr><tr><td><code>dk-metric-lg / dk-metric-xl</code></td><td>класс</td><td>Кегль числа 28 или 40.</td></tr><tr><td><code>type: &#x27;spark&#x27;</code></td><td>dkChart</td><td>Спарклайн; <code>area: false</code> убирает заливку.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
-    <h2>Связанное</h2>
+    <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-chart.html">График</a> — когда нужны оси</li><li><a href="component-rank.html">Рейтинг и сводка</a> — главное число страны с рейтингом</li><li><a href="dashboard.html">Сводка</a> — плитки в живом дашборде</li></ul>
   </section>
 

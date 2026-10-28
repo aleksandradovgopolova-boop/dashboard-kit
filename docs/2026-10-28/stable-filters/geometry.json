@@ -1,0 +1,4938 @@
+[
+  {
+    "theme": "dark",
+    "width": 320,
+    "initial": {
+      "doc": 320,
+      "rects": [
+        [
+          ".fm-topbar",
+          0,
+          0,
+          320,
+          168
+        ],
+        [
+          ".fm-brand",
+          14,
+          22,
+          210,
+          24
+        ],
+        [
+          ".fm-filters",
+          14,
+          64,
+          292,
+          90
+        ],
+        [
+          "#fm-region-filter .dk-select__trigger",
+          20,
+          64,
+          144,
+          40
+        ],
+        [
+          "#fm-district-filter .dk-select__trigger",
+          174,
+          64,
+          132,
+          40
+        ],
+        [
+          "#fm-month-filter .dk-select__trigger",
+          24,
+          114,
+          144,
+          40
+        ],
+        [
+          ".fm-filter-actions",
+          178,
+          114,
+          128,
+          40
+        ],
+        [
+          "#fm-export",
+          222,
+          114,
+          40,
+          40
+        ],
+        [
+          ".fm-filter-actions a",
+          266,
+          114,
+          40,
+          40
+        ],
+        [
+          ".fm-topbar__tools",
+          234,
+          14,
+          72,
+          40
+        ],
+        [
+          ".fm-overview",
+          14,
+          178,
+          292,
+          130
+        ]
+      ],
+      "viewport": [
+        320,
+        900
+      ]
+    },
+    "cases": [
+      {
+        "name": "Алтай",
+        "selected": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Луганская Народная Республика",
+        "selected": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Ханты-Мансийский АО — Югра",
+        "selected": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "theme": "dark",
+    "width": 390,
+    "initial": {
+      "doc": 390,
+      "rects": [
+        [
+          ".fm-topbar",
+          0,
+          0,
+          390,
+          168
+        ],
+        [
+          ".fm-brand",
+          14,
+          22,
+          280,
+          24
+        ],
+        [
+          ".fm-filters",
+          14,
+          64,
+          362,
+          90
+        ],
+        [
+          "#fm-region-filter .dk-select__trigger",
+          90,
+          64,
+          144,
+          40
+        ],
+        [
+          "#fm-district-filter .dk-select__trigger",
+          244,
+          64,
+          132,
+          40
+        ],
+        [
+          "#fm-month-filter .dk-select__trigger",
+          94,
+          114,
+          144,
+          40
+        ],
+        [
+          ".fm-filter-actions",
+          248,
+          114,
+          128,
+          40
+        ],
+        [
+          "#fm-export",
+          292,
+          114,
+          40,
+          40
+        ],
+        [
+          ".fm-filter-actions a",
+          336,
+          114,
+          40,
+          40
+        ],
+        [
+          ".fm-topbar__tools",
+          304,
+          14,
+          72,
+          40
+        ],
+        [
+          ".fm-overview",
+          14,
+          178,
+          362,
+          130
+        ]
+      ],
+      "viewport": [
+        390,
+        900
+      ]
+    },
+    "cases": [
+      {
+        "name": "Алтай",
+        "selected": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Луганская Народная Республика",
+        "selected": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Ханты-Мансийский АО — Югра",
+        "selected": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "theme": "dark",
+    "width": 768,
+    "initial": {
+      "doc": 768,
+      "rects": [
+        [
+          ".fm-topbar",
+          0,
+          0,
+          768,
+          118
+        ],
+        [
+          ".fm-brand",
+          24,
+          22,
+          638,
+          24
+        ],
+        [
+          ".fm-filters",
+          122,
+          64,
+          622,
+          40
+        ],
+        [
+          "#fm-region-filter .dk-select__trigger",
+          122,
+          64,
+          176,
+          40
+        ],
+        [
+          "#fm-district-filter .dk-select__trigger",
+          308,
+          64,
+          144,
+          40
+        ],
+        [
+          "#fm-month-filter .dk-select__trigger",
+          462,
+          64,
+          144,
+          40
+        ],
+        [
+          ".fm-filter-actions",
+          616,
+          64,
+          128,
+          40
+        ],
+        [
+          "#fm-export",
+          660,
+          64,
+          40,
+          40
+        ],
+        [
+          ".fm-filter-actions a",
+          704,
+          64,
+          40,
+          40
+        ],
+        [
+          ".fm-topbar__tools",
+          672,
+          14,
+          72,
+          40
+        ],
+        [
+          ".fm-overview",
+          24,
+          128,
+          720,
+          122
+        ]
+      ],
+      "viewport": [
+        768,
+        900
+      ]
+    },
+    "cases": [
+      {
+        "name": "Алтай",
+        "selected": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Луганская Народная Республика",
+        "selected": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Ханты-Мансийский АО — Югра",
+        "selected": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "theme": "dark",
+    "width": 1280,
+    "initial": {
+      "doc": 1280,
+      "rects": [
+        [
+          ".fm-topbar",
+          0,
+          0,
+          1280,
+          68
+        ],
+        [
+          ".fm-brand",
+          34.5546875,
+          22,
+          181.265625,
+          24
+        ],
+        [
+          ".fm-filters",
+          541.4453125,
+          14,
+          622,
+          40
+        ],
+        [
+          "#fm-region-filter .dk-select__trigger",
+          541.4453125,
+          14,
+          176,
+          40
+        ],
+        [
+          "#fm-district-filter .dk-select__trigger",
+          727.4453125,
+          14,
+          144,
+          40
+        ],
+        [
+          "#fm-month-filter .dk-select__trigger",
+          881.4453125,
+          14,
+          144,
+          40
+        ],
+        [
+          ".fm-filter-actions",
+          1035.4453125,
+          14,
+          128,
+          40
+        ],
+        [
+          "#fm-export",
+          1079.4453125,
+          14,
+          40,
+          40
+        ],
+        [
+          ".fm-filter-actions a",
+          1123.4453125,
+          14,
+          40,
+          40
+        ],
+        [
+          ".fm-topbar__tools",
+          1173.4453125,
+          14,
+          72,
+          40
+        ],
+        [
+          ".fm-overview",
+          34.5546875,
+          78,
+          1210.890625,
+          118
+        ]
+      ],
+      "viewport": [
+        1280,
+        900
+      ]
+    },
+    "cases": [
+      {
+        "name": "Алтай",
+        "selected": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Луганская Народная Республика",
+        "selected": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Ханты-Мансийский АО — Югра",
+        "selected": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "theme": "light",
+    "width": 320,
+    "initial": {
+      "doc": 320,
+      "rects": [
+        [
+          ".fm-topbar",
+          0,
+          0,
+          320,
+          168
+        ],
+        [
+          ".fm-brand",
+          14,
+          22,
+          210,
+          24
+        ],
+        [
+          ".fm-filters",
+          14,
+          64,
+          292,
+          90
+        ],
+        [
+          "#fm-region-filter .dk-select__trigger",
+          20,
+          64,
+          144,
+          40
+        ],
+        [
+          "#fm-district-filter .dk-select__trigger",
+          174,
+          64,
+          132,
+          40
+        ],
+        [
+          "#fm-month-filter .dk-select__trigger",
+          24,
+          114,
+          144,
+          40
+        ],
+        [
+          ".fm-filter-actions",
+          178,
+          114,
+          128,
+          40
+        ],
+        [
+          "#fm-export",
+          222,
+          114,
+          40,
+          40
+        ],
+        [
+          ".fm-filter-actions a",
+          266,
+          114,
+          40,
+          40
+        ],
+        [
+          ".fm-topbar__tools",
+          234,
+          14,
+          72,
+          40
+        ],
+        [
+          ".fm-overview",
+          14,
+          178,
+          292,
+          130
+        ]
+      ],
+      "viewport": [
+        320,
+        900
+      ]
+    },
+    "cases": [
+      {
+        "name": "Алтай",
+        "selected": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Луганская Народная Республика",
+        "selected": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Ханты-Мансийский АО — Югра",
+        "selected": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 320,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              320,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              210,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              292,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              20,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              174,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              24,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              178,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              222,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              266,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              234,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              292,
+              130
+            ]
+          ],
+          "viewport": [
+            320,
+            900
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "theme": "light",
+    "width": 390,
+    "initial": {
+      "doc": 390,
+      "rects": [
+        [
+          ".fm-topbar",
+          0,
+          0,
+          390,
+          168
+        ],
+        [
+          ".fm-brand",
+          14,
+          22,
+          280,
+          24
+        ],
+        [
+          ".fm-filters",
+          14,
+          64,
+          362,
+          90
+        ],
+        [
+          "#fm-region-filter .dk-select__trigger",
+          90,
+          64,
+          144,
+          40
+        ],
+        [
+          "#fm-district-filter .dk-select__trigger",
+          244,
+          64,
+          132,
+          40
+        ],
+        [
+          "#fm-month-filter .dk-select__trigger",
+          94,
+          114,
+          144,
+          40
+        ],
+        [
+          ".fm-filter-actions",
+          248,
+          114,
+          128,
+          40
+        ],
+        [
+          "#fm-export",
+          292,
+          114,
+          40,
+          40
+        ],
+        [
+          ".fm-filter-actions a",
+          336,
+          114,
+          40,
+          40
+        ],
+        [
+          ".fm-topbar__tools",
+          304,
+          14,
+          72,
+          40
+        ],
+        [
+          ".fm-overview",
+          14,
+          178,
+          362,
+          130
+        ]
+      ],
+      "viewport": [
+        390,
+        900
+      ]
+    },
+    "cases": [
+      {
+        "name": "Алтай",
+        "selected": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Луганская Народная Республика",
+        "selected": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Ханты-Мансийский АО — Югра",
+        "selected": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 390,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              390,
+              168
+            ],
+            [
+              ".fm-brand",
+              14,
+              22,
+              280,
+              24
+            ],
+            [
+              ".fm-filters",
+              14,
+              64,
+              362,
+              90
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              90,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              244,
+              64,
+              132,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              94,
+              114,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              248,
+              114,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              292,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              336,
+              114,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              304,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              14,
+              178,
+              362,
+              130
+            ]
+          ],
+          "viewport": [
+            390,
+            900
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "theme": "light",
+    "width": 768,
+    "initial": {
+      "doc": 768,
+      "rects": [
+        [
+          ".fm-topbar",
+          0,
+          0,
+          768,
+          118
+        ],
+        [
+          ".fm-brand",
+          24,
+          22,
+          638,
+          24
+        ],
+        [
+          ".fm-filters",
+          122,
+          64,
+          622,
+          40
+        ],
+        [
+          "#fm-region-filter .dk-select__trigger",
+          122,
+          64,
+          176,
+          40
+        ],
+        [
+          "#fm-district-filter .dk-select__trigger",
+          308,
+          64,
+          144,
+          40
+        ],
+        [
+          "#fm-month-filter .dk-select__trigger",
+          462,
+          64,
+          144,
+          40
+        ],
+        [
+          ".fm-filter-actions",
+          616,
+          64,
+          128,
+          40
+        ],
+        [
+          "#fm-export",
+          660,
+          64,
+          40,
+          40
+        ],
+        [
+          ".fm-filter-actions a",
+          704,
+          64,
+          40,
+          40
+        ],
+        [
+          ".fm-topbar__tools",
+          672,
+          14,
+          72,
+          40
+        ],
+        [
+          ".fm-overview",
+          24,
+          128,
+          720,
+          122
+        ]
+      ],
+      "viewport": [
+        768,
+        900
+      ]
+    },
+    "cases": [
+      {
+        "name": "Алтай",
+        "selected": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Луганская Народная Республика",
+        "selected": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Ханты-Мансийский АО — Югра",
+        "selected": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 768,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              768,
+              118
+            ],
+            [
+              ".fm-brand",
+              24,
+              22,
+              638,
+              24
+            ],
+            [
+              ".fm-filters",
+              122,
+              64,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              122,
+              64,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              308,
+              64,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              462,
+              64,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              616,
+              64,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              660,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              704,
+              64,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              672,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              24,
+              128,
+              720,
+              122
+            ]
+          ],
+          "viewport": [
+            768,
+            900
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "theme": "light",
+    "width": 1280,
+    "initial": {
+      "doc": 1280,
+      "rects": [
+        [
+          ".fm-topbar",
+          0,
+          0,
+          1280,
+          68
+        ],
+        [
+          ".fm-brand",
+          34.5546875,
+          22,
+          181.265625,
+          24
+        ],
+        [
+          ".fm-filters",
+          541.4453125,
+          14,
+          622,
+          40
+        ],
+        [
+          "#fm-region-filter .dk-select__trigger",
+          541.4453125,
+          14,
+          176,
+          40
+        ],
+        [
+          "#fm-district-filter .dk-select__trigger",
+          727.4453125,
+          14,
+          144,
+          40
+        ],
+        [
+          "#fm-month-filter .dk-select__trigger",
+          881.4453125,
+          14,
+          144,
+          40
+        ],
+        [
+          ".fm-filter-actions",
+          1035.4453125,
+          14,
+          128,
+          40
+        ],
+        [
+          "#fm-export",
+          1079.4453125,
+          14,
+          40,
+          40
+        ],
+        [
+          ".fm-filter-actions a",
+          1123.4453125,
+          14,
+          40,
+          40
+        ],
+        [
+          ".fm-topbar__tools",
+          1173.4453125,
+          14,
+          72,
+          40
+        ],
+        [
+          ".fm-overview",
+          34.5546875,
+          78,
+          1210.890625,
+          118
+        ]
+      ],
+      "viewport": [
+        1280,
+        900
+      ]
+    },
+    "cases": [
+      {
+        "name": "Алтай",
+        "selected": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Луганская Народная Республика",
+        "selected": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        }
+      },
+      {
+        "name": "Ханты-Мансийский АО — Югра",
+        "selected": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        },
+        "reset": {
+          "doc": 1280,
+          "rects": [
+            [
+              ".fm-topbar",
+              0,
+              0,
+              1280,
+              68
+            ],
+            [
+              ".fm-brand",
+              34.5546875,
+              22,
+              181.265625,
+              24
+            ],
+            [
+              ".fm-filters",
+              541.4453125,
+              14,
+              622,
+              40
+            ],
+            [
+              "#fm-region-filter .dk-select__trigger",
+              541.4453125,
+              14,
+              176,
+              40
+            ],
+            [
+              "#fm-district-filter .dk-select__trigger",
+              727.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              "#fm-month-filter .dk-select__trigger",
+              881.4453125,
+              14,
+              144,
+              40
+            ],
+            [
+              ".fm-filter-actions",
+              1035.4453125,
+              14,
+              128,
+              40
+            ],
+            [
+              "#fm-export",
+              1079.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-filter-actions a",
+              1123.4453125,
+              14,
+              40,
+              40
+            ],
+            [
+              ".fm-topbar__tools",
+              1173.4453125,
+              14,
+              72,
+              40
+            ],
+            [
+              ".fm-overview",
+              34.5546875,
+              78,
+              1210.890625,
+              118
+            ]
+          ],
+          "viewport": [
+            1280,
+            900
+          ]
+        }
+      }
+    ]
+  }
+]

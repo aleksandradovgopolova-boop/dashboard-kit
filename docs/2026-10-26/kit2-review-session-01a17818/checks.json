@@ -1,0 +1,114 @@
+{
+  "baseline": [
+    {
+      "clippedLabels": 89,
+      "height": 900,
+      "legendBottom": 910.2109375,
+      "mapBottom": 965,
+      "mapTop": 495,
+      "overflow": false,
+      "tileCount": 89,
+      "tileMin": 18,
+      "width": 900
+    },
+    {
+      "clippedLabels": 89,
+      "height": 844,
+      "legendBottom": 1045.5234375,
+      "mapBottom": 1060.5234375,
+      "mapTop": 669,
+      "overflow": false,
+      "tileCount": 89,
+      "tileMin": 10,
+      "width": 390
+    }
+  ],
+  "after": [
+    {
+      "charts": true,
+      "clippedLabels": 89,
+      "mapBottom": 1060.5234375,
+      "mapTop": 669,
+      "overflow": false,
+      "statusMaxHeight": 20,
+      "tileMin": 10,
+      "width": 390
+    },
+    {
+      "charts": true,
+      "clippedLabels": 0,
+      "mapBottom": 1082.8359375,
+      "mapTop": 495,
+      "overflow": false,
+      "statusMaxHeight": 40,
+      "tileMin": 37,
+      "width": 900
+    },
+    {
+      "charts": true,
+      "clippedLabels": 2,
+      "mapBottom": 915.2109375,
+      "mapTop": 395,
+      "overflow": false,
+      "statusMaxHeight": 40,
+      "tileMin": 30,
+      "width": 1280
+    }
+  ],
+  "colors": [
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "background": "rgb(229, 151, 8)",
+          "id": "spb",
+          "text": "rgb(11, 13, 18)",
+          "contrast": 8.108727960527315
+        },
+        {
+          "background": "rgb(222, 71, 63)",
+          "id": "moscow",
+          "text": "rgb(11, 13, 18)",
+          "contrast": 4.700447016096098
+        },
+        {
+          "background": "color(srgb 0.189804 0.406274 0.308)",
+          "id": "sakha",
+          "text": "rgb(251, 251, 251)",
+          "contrast": 6.335355109960881
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "background": "rgb(247, 195, 74)",
+          "id": "spb",
+          "text": "rgb(11, 13, 18)",
+          "contrast": 11.901302550960969
+        },
+        {
+          "background": "rgb(239, 77, 104)",
+          "id": "moscow",
+          "text": "rgb(11, 13, 18)",
+          "contrast": 5.489501622756291
+        },
+        {
+          "background": "color(srgb 0.746667 0.898667 0.839059)",
+          "id": "sakha",
+          "text": "rgb(16, 32, 77)",
+          "contrast": 11.525518995306795
+        }
+      ]
+    }
+  ],
+  "stableCoordinates": true,
+  "legendHighlighted": 8,
+  "emptyRecovery": {
+    "emptyHidden": true,
+    "ready": "ready",
+    "regions": 89,
+    "url": "http://127.0.0.1:8772/family-mortgage.html?theme=light&kit2-audit=empty"
+  }
+}

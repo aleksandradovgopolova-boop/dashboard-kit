@@ -1,0 +1,150 @@
+{
+  "bands": [
+    {
+      "band": "west",
+      "ids": [
+        "spb",
+        "murmansk",
+        "moscow",
+        "karelia",
+        "leningrad",
+        "novgorod",
+        "vologda",
+        "kaliningrad",
+        "pskov",
+        "tver",
+        "yaroslavl",
+        "ivanovo",
+        "kostroma",
+        "smolensk",
+        "kaluga",
+        "moscow-oblast",
+        "vladimir",
+        "nizhny-novgorod",
+        "bryansk",
+        "oryol",
+        "tula",
+        "ryazan",
+        "mordovia",
+        "kursk",
+        "lipetsk",
+        "tambov",
+        "penza",
+        "dnr",
+        "belgorod",
+        "voronezh",
+        "volgograd",
+        "lnr",
+        "crimea",
+        "adygea",
+        "krasnodar",
+        "rostov",
+        "kalmykia",
+        "zaporozhye",
+        "sevastopol",
+        "karachay-cherkessia",
+        "stavropol",
+        "chechnya",
+        "kherson",
+        "kabardino-balkaria",
+        "north-ossetia",
+        "ingushetia"
+      ],
+      "overflow": false
+    },
+    {
+      "band": "center",
+      "ids": [
+        "nenets",
+        "arkhangelsk",
+        "komi",
+        "yamalo-nenets",
+        "mari-el",
+        "kirov",
+        "perm",
+        "khmao",
+        "tyumen",
+        "tomsk",
+        "chuvashia",
+        "tatarstan",
+        "udmurtia",
+        "sverdlovsk",
+        "kurgan",
+        "novosibirsk",
+        "ulyanovsk",
+        "samara",
+        "bashkortostan",
+        "chelyabinsk",
+        "omsk",
+        "altai-rep",
+        "saratov",
+        "orenburg",
+        "altai-kray",
+        "astrakhan",
+        "dagestan"
+      ],
+      "overflow": false
+    },
+    {
+      "band": "east",
+      "ids": [
+        "chukotka",
+        "krasnoyarsk",
+        "sakha",
+        "magadan",
+        "kamchatka",
+        "kemerovo",
+        "irkutsk",
+        "amur",
+        "khakassia",
+        "buryatia",
+        "jewish-ao",
+        "khabarovsk",
+        "sakhalin",
+        "tuva",
+        "zabaykalsky",
+        "primorsky"
+      ],
+      "overflow": false
+    }
+  ],
+  "densities": [
+    {
+      "name": "spacious",
+      "rowHeight": 76,
+      "textSize": "14px"
+    },
+    {
+      "name": "comfortable",
+      "rowHeight": 68,
+      "textSize": "14px"
+    },
+    {
+      "name": "compact",
+      "rowHeight": 56,
+      "textSize": "14px"
+    }
+  ],
+  "legend": {
+    "highlighted": 8,
+    "coordinatesUnchanged": true,
+    "selectionPreservedOnPage": true
+  },
+  "panorama": {
+    "tiles": 89,
+    "pageWidth": 390,
+    "viewport": 390,
+    "contentWidth": 912,
+    "scrollLeftAfterEast": 576
+  },
+  "overview": {
+    "smallInteractiveTargets": 0,
+    "detailEastTiles": 16,
+    "clippedLabels": 0
+  },
+  "initialConsole": {
+    "message": "Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.",
+    "reproducedInMinimalIframeWithoutPreviewCode": true,
+    "sourceNotEstablished": true
+  }
+}

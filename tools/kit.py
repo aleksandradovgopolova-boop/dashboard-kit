@@ -179,10 +179,10 @@ def cmd_head(m: dict, args: list[str]) -> str:
     if data:
         r.append(f"<!-- данные рядом с китом: {', '.join(data)}; страница открывается по http -->")
     if embed:
-        r.append('<!-- встроенный кит: обёртка <div class="dk-root" data-theme="dark|light" data-accent="…"> '
+        r.append('<!-- встроенный кит: обёртка <div class="dk-root" data-theme="dark|light" data-accent="blue"> '
                  'вокруг блоков; dk-page и каркас не ставить -->')
     else:
-        r.append('<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" '
+        r.append('<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue" '
                  'на одном элементе — <html> своей страницы или обёртка внутри чужой; '
                  'dk-page на body — только если кит владеет всей страницей -->')
     return "\n".join(r)

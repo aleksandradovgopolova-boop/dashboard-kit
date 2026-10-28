@@ -126,6 +126,7 @@
   }
 
   function paint(spec, i) {
+    if (spec.palette === 'graphite' && i < 2) return inkColor(i === 0 ? '--chart-primary' : '--chart-secondary');
     if (spec.palette === 'status-area' && i < 3) return inkColor('--risk-area-' + ['high', 'medium', 'low'][i]);
     return spec.palette === 'status' || spec.palette === 'status-area' ? statusColor(i) : null;
   }
@@ -152,10 +153,10 @@
     return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + alpha + ')';
   }
 
-  function areaFill(i, multi) {
+  function areaFill(i, multi, color) {
     if (multi) return { opacity: 0.16 };    // несколько серий — плоско и тихо
-    var top = rgba(seriesColor(i), 0.38);
-    var bottom = rgba(seriesColor(i), 0.02);
+    var top = rgba(color || seriesColor(i), color ? 0.26 : 0.38);
+    var bottom = rgba(color || seriesColor(i), color ? 0 : 0.02);
     if (!top) return { opacity: 0.24 };     // цвет не разобрали — как раньше
     return {
       opacity: 1,
@@ -276,38 +277,28 @@
       option.yAxis = { type: 'value', name: spec.unit || '', nameTextStyle: { color: inkColor('--ink-3') } };
       if (целые) option.yAxis.minInterval = 1;
 
-      /* ЗНАЧЕНИЕ НА СТОЛБЦЕ, КОГДА ОНО КОРОТКОЕ.
-
-         Столбец высотой в одну-две единицы человек всё равно читает не по
-         высоте, а по числу: чтобы узнать, одна там авария или две, он ведёт
-         глаз вниз к оси и обратно. Подпись прямо на столбце снимает этот путь.
-
-         И тогда ось становится лишней: она нужна, чтобы переводить высоту в
-         число, а число уже написано. Две записи одной величины на одном
-         графике — это не «надёжнее», это шум. Поэтому вместе с подписями ось
-         значений и её сетка убираются.
-
-         Условия проверяются, а не задаются флагом снаружи:
-           · подпись короткая — не длиннее трёх знаков, то есть до 999;
-           · на категорию хватает ширины (24 пикселя), иначе подписи столкнутся
-             и станут хуже оси;
-           · серия одна: у нескольких серий подписи наезжают друг на друга.
-
-         Если хоть одно не выполнено — остаётся ось, как было. */
+      /* Подписи выбираем по реальной ширине числа и места у каждого
+         столбца, включая сгруппированные серии. Точные числа остаются
+         в tooltip; при нехватке места используется компактная шкала. */
       var подписатьСтолбцы = false;
       var плотныйРяд = (spec.categories || []).length > 8;
-      if (type === 'bar' && !multi) {
-        var зн = (series[0] && series[0].data) || [];
-        var коротко = зн.every(function (v) {
-          return v == null || String(v).length <= 3;
-        });
-        var наКатегорию = Math.max(0, (el.clientWidth - 48)) / Math.max(1, (spec.categories || []).length);
-        if (зн.length && коротко && наКатегорию >= 24) {
-          option.yAxis.show = false;
+      if (type === 'bar') {
+        measureCtx = measureCtx || document.createElement('canvas').getContext('2d');
+        measureCtx.font = '12px ' + getComputedStyle(cur).getPropertyValue('--font-sans');
+        var widestLabel = 0, valueCount = 0;
+        series.forEach(function (s) { (s.data || []).forEach(function (v) {
+          if (typeof v !== 'number' || !Number.isFinite(v)) return;
+          valueCount++;
+          widestLabel = Math.max(widestLabel, measureCtx.measureText(num(v)).width);
+        }); });
+        var labelSlot = Math.max(0, el.clientWidth - 64) /
+          Math.max(1, (spec.categories || []).length) / Math.max(1, series.length);
+        if (valueCount && labelSlot >= widestLabel + 16) {
+          option.yAxis.axisLabel = { show: false };
+          option.yAxis.axisLine = { show: false };
+          option.yAxis.axisTick = { show: false };
           option.yAxis.splitLine = { show: false };
-          option.grid.left = 0;
-          option.grid.right = 0;
-          option.grid.top = 28;      // место под подпись самого высокого столбца
+          option.grid.top = 32;
           подписатьСтолбцы = true;
         }
       }
@@ -325,7 +316,8 @@
             base.step = 'end';
           }
           if (type === 'area') {
-            base.areaStyle = areaFill(i, multi);
+            var filledMulti = series.filter(function (item) { return item.reference !== true; }).length > 1;
+            base.areaStyle = areaFill(i, filledMulti, spec.palette === 'graphite' ? paint(spec,i) : null);
           }
         } else {
           base.type = 'bar';
@@ -383,6 +375,13 @@
         if (tone) {
           base.itemStyle = Object.assign({}, base.itemStyle, { color: tone, decal: spec.palette === 'status' && i === 3 ? window.dkMeaning.decal(cur) : null });
           if (base.type === 'line') base.lineStyle = { color: tone };
+        }
+        // A reference is observed as context: dash and hollow symbols keep
+        // fact/plan distinguishable without relying only on hue.
+        if (s.reference === true && base.type === 'line') {
+          delete base.areaStyle;
+          base.lineStyle = Object.assign({},base.lineStyle,{type:'dashed',width:2});
+          base.symbol = 'emptyCircle';
         }
         return base;
       });
@@ -665,6 +664,27 @@
       return null;
     }
 
+    // Graphite cartesian presentation uses the same data grammar and scales.
+    if (spec.palette === 'graphite' && ['line','area','step','bar','bar-stacked'].indexOf(type) !== -1) {
+      var topLegend = multi || option.legend.show === true;
+      if (topLegend) {
+        delete option.legend.bottom; delete option.legend.right;
+        Object.assign(option.legend,{top:0,left:0,padding:0,itemGap:18,itemWidth:8,itemHeight:8,icon:'circle'});
+      }
+      option.grid.top = topLegend ? 40 : 16; option.grid.bottom = 8;
+      option.xAxis.axisLine = {show:false}; option.xAxis.axisTick = {show:false};
+      option.xAxis.axisLabel = Object.assign({},option.xAxis.axisLabel,{margin:12});
+      var monthLabels = (spec.categories || []).length > 0 && spec.categories.length <= 6 && spec.categories.every(function (label) { return typeof label === 'string' && /^[А-Яа-яЁё]{3}\s+\d{4}$/.test(label); });
+      if (el.clientWidth < 400 && monthLabels) {
+        Object.assign(option.xAxis.axisLabel,{interval:0,showMinLabel:true,showMaxLabel:true,lineHeight:16,formatter:function (label) { return label.replace(/\s+/, '\n'); }});
+      }
+      option.yAxis.axisLine = {show:false}; option.yAxis.axisTick = {show:false};
+      if (!option.yAxis.splitLine || option.yAxis.splitLine.show !== false) {
+        option.yAxis.splitLine = {show:true,lineStyle:{color:inkColor('--chart-grid'),type:'dashed',opacity:0.7}};
+      }
+      Object.assign(option.tooltip,{backgroundColor:inkColor('--surface-2'),borderColor:inkColor('--glass-edge'),borderWidth:1,padding:[12,16],extraCssText:'border-radius:'+inkColor('--radius-lg')+';box-shadow:none;'});
+    }
+
     /* ЛИНИЯ ПОРОГА ИЛИ ЦЕЛИ. target: 60 или { value: 60, label: 'норма' }.
 
        Столбец в 74 аварии сам по себе ничего не значит — значение появляется
@@ -716,7 +736,13 @@
        запятой, не так, как все числа кита (проверочная задача скилла). */
     [].concat(option.xAxis || [], option.yAxis || []).forEach(function (ax, k, all) {
       if (!ax || 'value' !== ax.type) return;
-      ax.axisLabel = Object.assign({ formatter: function (v) { return num(v); } }, ax.axisLabel || {});
+      ax.axisLabel = Object.assign({ formatter: axisNumber, margin: 12, fontSize: 12 }, ax.axisLabel || {});
+      ax.axisLine = Object.assign({ show: false }, ax.axisLine || {});
+      ax.axisTick = { show: false };
+      ax.splitLine = Object.assign({ show: true, lineStyle: { color: inkColor('--chart-grid'), width: 1 } }, ax.splitLine || {});
+      if (ax === option.yAxis) {
+        ax.splitNumber = Math.max(2, Math.min(4, Math.floor((el.clientHeight - 64) / 56)));
+      }
       /* С разрядами «12 000» шире «12000», и на узком графике подписи
          горизонтальной оси значений налезали друг на друга — «3 0006 0009
          000» (замер 29.09). Делений — по одному на 80 px ширины, не больше
@@ -882,6 +908,13 @@
       if (!rows.length) return '';
       return esc(list[0].axisValueLabel) + '<br>' + rows.join('<br>');
     };
+  }
+
+  function axisNumber(value) {
+    var n = Number(value), magnitude = Math.abs(n);
+    var scale = magnitude >= 1e12 ? [1e12, ' трлн'] : magnitude >= 1e9 ? [1e9, ' млрд'] :
+      magnitude >= 1e6 ? [1e6, ' млн'] : magnitude >= 1e3 ? [1e3, ' тыс.'] : [1, ''];
+    return new Intl.NumberFormat('ru-RU', (magnitude > 0 && magnitude < 1 ? { maximumSignificantDigits: 3 } : { maximumFractionDigits: 2 })).format(n / scale[0]) + scale[1];
   }
 
   function num(v) { return window.dkFmt ? window.dkFmt.num(v) : String(v); }

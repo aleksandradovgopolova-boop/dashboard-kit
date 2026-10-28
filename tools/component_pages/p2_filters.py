@@ -8,11 +8,9 @@ OKRUGA = ("[{ value: 'cfo', name: 'Центральный', count: 18 }, { value
 PAGES = [
 {
     "slug": "select", "title": "Фильтр", "group": "Фильтры", "status": "стабильный",
-    "purpose": "Ограничить срез данных одним или несколькими значениями из известного списка. Главное правило: "
-               "выбранное видно, не открывая меню, — иначе человек смотрит на срез и уверен, что видит всё.",
+    "purpose": 'Ограничивает данные выбранными значениями из списка. Текущий выбор виден в закрытом фильтре.',
     "files": ["css/components.css", "js/dk-select.js"], "scripts": ["dk-select.js"],
-    "live_intro": "Три вида на одной основе: короткий список, множественный выбор, длинный список с поиском. "
-                  "Выбор пишется в адрес страницы — ссылку на срез можно прислать коллеге.",
+    "live_intro": 'Откройте список, выберите значение и сбросьте выбор. Сравните одиночный и множественный выбор.',
     "live": """<div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group">
       <div id="x-okrug"></div><div id="x-tier"></div><div id="x-region"></div>
     </div><div class="dk-result" id="x-result"><b>89</b> регионов</div></div></div>""",
@@ -58,12 +56,12 @@ PAGES = [
                 ("Поиск", "появляется сам, когда значений больше восьми."),
                 ("Пункт", "<code>role=\"option\"</code>; выбранный отмечен галочкой, а не только цветом."),
                 ("Число записей", "за каждым значением; ноль показывается приглушённым, а не прячется.")],
-    "sizes": "Высота как у контролов: M по умолчанию, <code>size: 'sm'</code> для шапки виджета. Ширина по подписи; "
+    "sizes": "Высота и радиус из общей шкалы контролов; в стеклянной теме обычный контрол — 44 px, <code>size: 'sm'</code> для шапки виджета. Ширина по подписи; "
              "длинная подпись переносится и остаётся видимой целиком.",
     "variants": [("mode: 'single'", "Один вариант; выбор применяется и закрывает меню.", "По умолчанию."),
                  ("mode: 'multi'", "Несколько; меню остаётся открытым, есть «Выбрать все».", "Уровни, виды работ."),
                  ("search: true | false", "Поле поиска в меню.", "Само включается от 9 значений."),
-                 ("size: 'sm'", "Высота 28 вместо 32.", "Шапка виджета."),
+                 ("size: 'sm'", "Компактная высота через <code>--control-sm</code>; на таче цель не меньше 44 px.", "Шапка виджета."),
                  ("url: 'ключ'", "Значение пишется в адрес и читается при открытии.", "Всегда на дашбордах — ссылка на срез.")],
     "states": """<div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group">
       <div class="dk-select"><button type="button" class="dk-select__trigger" aria-haspopup="listbox" aria-expanded="false"><span class="dk-select__label">Пусто: Округ</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
@@ -74,18 +72,18 @@ PAGES = [
     <div class="sc-note"><b>Пустой список — не пустое меню.</b> Если под текущий срез не осталось значений, меню говорит «Ничего не найдено» и предлагает снять поиск; молча пустой список читается как поломка.</div>""",
     "content_ok": ["Подпись — название измерения: «Округ», «Уровень риска»; после выбора — «Округ: Сибирский».",
                    "Число записей рядом с каждым значением.",
-                   "Строка применённых фильтров под панелью со «Сбросить всё» (<code>dk-chipbar</code>)."],
+                   "Выбранное значение внутри самого фильтра; общий сброс-иконка появляется только при изменённом срезе."],
     "content_bad": ["«Все округа» после выбора — самая дорогая ошибка дашборда.",
                     "«Выбрано несколько» вместо числа.",
                     "Фильтр без счётчика результата: человек выбирает вслепую и попадает в пустой экран."],
     "a11y": ["<b>Роли.</b> Кнопка с <code>aria-haspopup=\"listbox\"</code> и <code>aria-expanded</code>; меню — <code>listbox</code> с <code>option</code> и <code>aria-selected</code>.",
              "<b>Клавиатура.</b> Стрелки, Home, End, Enter, Escape с возвратом фокуса на фильтр. Поиск получает фокус при открытии.",
              "<b>Не только цветом.</b> Выбранное отмечено галочкой; активный фильтр — ещё и текстом подписи.",
-             "<b>Контраст.</b> Серая заливка активного фильтра поверх поля — 1,19–1,28:1, как у прежней синей (проверка ТИШИНА)."],
+             "<b>Контраст.</b> Активный фильтр различим по подписи и мягкому тону поверхности; клавиатурный фокус виден отдельно."],
     "tokens": ["dk-select", "dk-menu", "dk-toolbar", "dk-result", "dk-chipbar", "dk-fchip"],
     "code_intro": "Контейнер пустой, разметку строит скрипт. Значения приходят списком объектов.",
     "code": """<!-- Строка фильтров — прямо на странице, над содержимым. На телефоне она
-     становится строкой пилюль, которая листается вбок. -->
+     переносится по доступной ширине. -->
 <div class="dk-toolbar">
   <div class="dk-toolbar__group">
     <div id="period"></div>
@@ -108,6 +106,7 @@ f.set('sfo'); f.clear(); f.setOptions(list);
             ("options[]", "массив {value, name, count}", "Значения; count — записей за значением, ноль не прячется."),
             ("mode", "'single' | 'multi'", "Одиночный закрывает меню, множественный — нет."),
             ("value", "строка | массив", "Начальное значение; адрес (url) главнее."),
+            ("defaultValue", "строка", "Исходное значение одиночного фильтра, например all. Без активной заливки и крестика; clear() возвращает его."),
             ("search", "boolean", "Поле поиска; по умолчанию от 9 значений."),
             ("url", "строка", "Ключ в строке запроса; пусто — не пишется."),
             ("onChange(v)", "функция", "При каждой смене выбора."),
@@ -119,11 +118,9 @@ f.set('sfo'); f.clear(); f.setOptions(list);
 },
 {
     "slug": "period", "title": "Период", "group": "Фильтры", "status": "стабильный",
-    "purpose": "Ограничить срез по времени: готовые пресеты или свой диапазон. Стоит первым среди фильтров, "
-               "потому что ограничивает всё остальное.",
+    "purpose": 'Задаёт временной диапазон для связанных показателей, графиков и таблиц.',
     "files": ["css/components.css", "js/dk-period.js", "vendor/air-datepicker.js"], "scripts": ["dk-select.js", "vendor/air-datepicker.js", "dk-period.js"],
-    "live_intro": "Пресеты слева, календарь справа. Выбранный период пишется в адрес: <code>?period=14d</code> "
-                  "или <code>?period=2026-09-11..2026-09-24</code>.",
+    "live_intro": 'Откройте календарь: выберите готовый период или задайте собственный диапазон.',
     "live": """<div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group"><div id="x-period"></div></div>
       <div class="dk-result" id="x-period-out"></div></div></div>""",
     "live_script": """  window.addEventListener('DOMContentLoaded', function () {
@@ -142,7 +139,7 @@ f.set('sfo'); f.clear(); f.setOptions(list);
                 "Показ работ по дням — <a href=\"component-calendar.html\">Календарь</a>: это не фильтр, а представление.",
                 "Два–три фиксированных интервала без календаря — <a href=\"component-segment.html\">Сегмент</a> «7 дней / 30 дней»."],
     "anatomy_html": """<div class="dk-select dk-period" data-active="true"><button type="button" class="dk-select__trigger" aria-haspopup="dialog" aria-expanded="true"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-calendar"/></svg><span class="dk-select__label">Последние 7 дней</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
-    <div class="dk-menu dk-period__menu" style="position:static;margin-top:var(--space-5);max-width:520px;display:flex;gap:var(--space-7)">
+    <div class="dk-menu dk-period__menu sc-period-anatomy" style="position:static;margin-top:var(--space-5);display:flex;gap:var(--space-7)">
       <ul class="dk-menu__list dk-period__presets" role="list" style="min-width:180px"><b class="sc-callout">2</b>
         <li><button type="button" class="dk-menu__item" aria-pressed="false"><span class="dk-menu__name">Сегодня</span></button></li>
         <li><button type="button" class="dk-menu__item" aria-pressed="true"><span class="dk-menu__name">Последние 7 дней</span></button></li>
@@ -151,7 +148,7 @@ f.set('sfo'); f.clear(); f.setOptions(list);
     "anatomy": [("Поле", "как у фильтра, со значком календаря; подпись — название пресета или «11–24 сен»."),
                 ("Пресеты", "список слева; выбранный отмечен. Пресет — это «последние N дней» от сегодня."),
                 ("Календарь", "справа; клик по двум датам задаёт свой диапазон, дни внутри залиты серым <code>--control-soft</code>.")],
-    "sizes": "Высота как у фильтра: M по умолчанию, <code>size: 'sm'</code>. Календарь всегда 280 px шириной.",
+    "sizes": 'Высота согласована с фильтром; size: sm задаёт компактный вариант. Календарь должен помещаться в доступную ширину и оставаться внутри окна.',
     "variants": [("presets", "Свой список пресетов {name, days}.", "Когда стандартные не подходят."),
                  ("minDate / maxDate", "Границы выбора.", "Нет данных раньше или позже."),
                  ("size", "'sm'.", "Шапка виджета."),
@@ -204,11 +201,9 @@ p.set({ preset: 30 }); p.clear();
 },
 {
     "slug": "search", "title": "Поиск", "group": "Фильтры", "status": "стабильный",
-    "purpose": "Найти объект по имени: «Регион или округ». Первое, что видит человек на телефоне, поэтому крупнее "
-               "поля формы и лежит на доске пилюлей. Справа — дата, на которую данные; пока ищут, её место занимает крестик.",
+    "purpose": 'Находит объекты по названию и позволяет быстро очистить запрос.',
     "files": ["css/components.css", "js/dk-util.js"], "scripts": [],
-    "live_intro": "Наберите что-нибудь: дата уступит место крестику, крестик очистит поле и вернёт фокус. Скрипта у "
-                  "поиска нет — очистку делает <code>dk-util.js</code>, который стоит на каждой странице.",
+    "live_intro": 'Введите название и очистите поле. Пример показывает ввод; поиск по данным подключает приложение.',
     "live": """<div class="dk-grid">
       <div class="dk-col--half"><div class="dk-search">
         <svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg>
@@ -240,7 +235,7 @@ p.set({ preset: 30 }); p.clear();
                  ("внутри dk-panel / dk-widget", "Та же строка, плоская.", "Поиск по списку внутри блока."),
                  ("dk-search__at", "Дата, на которую данные.", "Если данные не «сейчас», а на день."),
                  ("dk-search__clear", "Крестик очистки.", "Всегда: появляется сам, когда в поле есть текст.")],
-    "sizes": "Размер один: 56 px высотой — крупнее поля формы, потому что это главный вход в экран, и под пальцем. Ширина — вся строка.",
+    "sizes": 'В стеклянной теме высота согласована с фильтрами и кнопками через --control-lg. Ширина определяется строкой управления; поиск не должен вытеснять другие действия за экран.',
     "states": """<div class="dk-grid--even">
       <div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" type="search" placeholder="Пусто: видна дата" aria-label="Пустой поиск" autocomplete="off"><button type="button" class="dk-search__clear" aria-label="Очистить поиск"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><span class="dk-search__at">29.09</span></div>
       <div class="dk-search"><svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg><input class="dk-search__input" type="search" value="Новосибирская" aria-label="Поиск с запросом" autocomplete="off"><button type="button" class="dk-search__clear" aria-label="Очистить поиск"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button><span class="dk-search__at">29.09</span></div>
@@ -280,10 +275,9 @@ document.querySelector('.dk-search__input').addEventListener('input', function (
 },
 {
     "slug": "legend", "title": "Фильтры-легенда", "group": "Фильтры", "status": "стабильный",
-    "purpose": "Один ряд, который и объясняет цвета, и фильтрует по ним. Цвет приходит снаружи через "
-               "<code>--swatch</code>: компонент не знает, что такое «риск».",
+    "purpose": 'Объясняет цвета категорий и позволяет включать или исключать их из среза.',
     "files": ["css/components.css"], "scripts": [],
-    "live_intro": "Нажмите на чип — он включится заливкой своего цвета. «Все» без цвета включается серым, как любое управление.",
+    "live_intro": 'Переключите категорию. Состояние выбора различается и без опоры только на цвет.',
     "live": """<div class="dk-legend">
       <button class="dk-lg is-on" aria-pressed="true"><i class="dk-lg__sw"></i>Все<b class="dk-lg__n">89</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--crit)"><i class="dk-lg__sw"></i>Высокий<b class="dk-lg__n">23</b></button>
@@ -360,9 +354,9 @@ legend.addEventListener('click', function (e) {
 },
 {
     "slug": "pager", "title": "Пагинация", "group": "Фильтры", "status": "стабильный",
-    "purpose": "Листать длинный список по страницам, называя, что и сколько показано: «21–40 из 89 регионов».",
+    "purpose": 'Показывает текущую часть набора данных и позволяет перейти к следующей странице.',
     "files": ["css/components.css", "js/dk-pager.js"], "scripts": ["dk-pager.js"],
-    "live_intro": "Счётчик слева отвечает «что я вижу», кнопки справа — «куда дальше». Текущая страница — серым, как любое выбранное управление.",
+    "live_intro": 'Перейдите вперёд и назад. Сверьте номер страницы и диапазон показанных записей.',
     "live": """<div class="dk-panel"><div id="x-pager"></div></div>""",
     "live_script": """  window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkPager !== 'function') return;
@@ -383,7 +377,7 @@ legend.addEventListener('click', function (e) {
                 ("Стрелки", "назад и вперёд; на краях недоступны, но не исчезают."),
                 ("Страницы", "первая, последняя и соседи текущей; между ними «…». Текущая — <code>aria-current=\"page\"</code>, серая."),
                 ("Размер страницы", "необязательный выбор «по 10 / 20 / 50»; при смене счётчик пересчитывается.")],
-    "sizes": "Размер один; на узком экране номера страниц сворачиваются в «3 из 5» между стрелками — "
+    "sizes": "Размер один; на узком экране номера страниц сворачиваются в «3/5» между стрелками — "
              "счётчик и стрелки остаются всегда.",
     "variants": [("sizes: [10, 20, 50]", "Выбор размера страницы.", "Длинные журналы."),
                  ("sizes: null", "Размер не меняется.", "По умолчанию."),
@@ -461,8 +455,8 @@ PAGES.extend([
 {
     **_CHIPS_COMMON,
     "slug": "chips-input", "title": "Ввод нескольких значений · ChipsInput",
-    "purpose": "Ввести несколько произвольных значений и сохранить каждое как отдельную метку. Набор остаётся видимым; ненужное значение можно удалить отдельно.",
-    "live_intro": "Введите метку и нажмите Enter. Удаление одной метки не меняет остальные.",
+    "purpose": 'Принимает несколько произвольных значений и показывает их отдельными метками.',
+    "live_intro": 'Добавьте значение и удалите одну из меток. Остальная часть набора должна сохраниться.',
     "live": '<div class="dk-panel"><div id="x-chips-input"></div><p class="dk-hint" id="x-chips-result" role="status"></p></div>',
     "live_script": """window.addEventListener('DOMContentLoaded', function () {
   var out = document.getElementById('x-chips-result');
@@ -491,8 +485,8 @@ tags.value(['Проверено']);
 {
     **_CHIPS_COMMON,
     "slug": "chips-select", "title": "Выбор нескольких значений · ChipsSelect",
-    "purpose": "Выбрать несколько значений из готового списка. Выбранные значения показаны отдельными метками и доступны для удаления без повторного открытия списка.",
-    "live_intro": "Выберите службы из списка. Поле возвращает идентификаторы значений, а метки показывают понятные названия.",
+    "purpose": 'Выбирает несколько значений из справочника и сохраняет выбранный набор на виду.',
+    "live_intro": 'Выберите несколько пунктов, затем удалите один через его метку.',
     "live": '<div class="dk-panel"><div id="x-chips-select"></div><p class="dk-hint" id="x-chips-result" role="status"></p></div>',
     "live_script": """window.addEventListener('DOMContentLoaded', function () {
   var out = document.getElementById('x-chips-result');

@@ -26,6 +26,17 @@ stacks:
   - tools/check-advanced.mjs
   - tools/check-runtime.mjs
   - tools/check-filter-context.mjs
+  - tools/check-docs.mjs
+  - tools/check-react.py
+  - integrations/react/index.tsx
+  - tools/check-dashboard-data.mjs
+  - tools/check-family-mortgage-data.mjs
+  - tools/check-family-mortgage.mjs
+  - tools/check-reference-server.py
+  - tools/check-reference-contract.mjs
+  - tools/check-reference-dashboard.mjs
+  - tools/check-release.py
+  - tools/kit-release.py
   - tools/check-dashboard-overview.mjs
   - data/monitor-demo.json
   - tools/check-sdk-snippets.mjs
@@ -37,7 +48,8 @@ undetermined:
 - MCP — отдельный необязательный Python-инструмент (tools/mcp-requirements.txt),
   не сборка продукта. Проверка протокола — Python окружения с MCP запускает
   tools/check-mcp.py; установка и запуск описаны в docs/mcp.md.
-- Статический HTML/CSS/JavaScript; сборка и TypeScript неприменимы. Профиль задан
+- Необязательный React-адаптер проверяется python3 tools/check-react.py --dependencies /path/to/app/node_modules; использует TypeScript и React приложения, без установки в ядро.
+- Статический HTML/CSS/JavaScript; сборка и TypeScript неприменимы к ядру. Профиль задан
   при интеграции по существующим файлам; автоматический детектор Kit не распознаёт
   этот стек без манифеста. Браузерные проверки требуют Node.js 22+ и Chrome.
 manifest_hash: 5f06d2dd9dc3c5a443f085e71053fe0c50053170abbf7668b25bb0c3464bcc6a

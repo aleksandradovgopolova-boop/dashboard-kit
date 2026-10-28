@@ -76,6 +76,12 @@
     var options = opts.options || [];
     var label = opts.label || 'Фильтр';
     var onChange = opts.onChange || function () {};
+    // Explicit unfiltered value: it keeps its label but is not an active filter.
+    var defaultValue = mode === 'single' ? opts.defaultValue : null;
+    function selection(value) {
+      if (value == null) value = defaultValue;
+      return new Set(value != null && value !== '' ? [].concat(value) : []);
+    }
 
     // Поиск включается по длине списка, а не по настроению: короткий список
     // с полем поиска выглядит недоверчиво, длинный без поиска — беспомощно.
@@ -84,8 +90,7 @@
     // Значение из адреса главнее значения из настроек: ссылка на срез
     // обязана открыть именно этот срез (см. dk-util.js, «состояние в адресе»).
     var изАдреса = opts.url && window.dkUrl ? window.dkUrl.get(opts.url) : null;
-    var selected = new Set(изАдреса != null ? изАдреса.split(',').filter(Boolean)
-                                            : (opts.value ? [].concat(opts.value) : []));
+    var selected = selection(изАдреса != null ? изАдреса.split(',').filter(Boolean) : opts.value);
     var query = '';
     var cursor = -1;
     var uid = 'dk-sel-' + (++SEQ);
@@ -108,7 +113,8 @@
 
     function renderTrigger() {
       var n = selected.size;
-      host.setAttribute('data-active', n ? 'true' : 'false');
+      var active = n > 0 && !(mode === 'single' && n === 1 && selected.has(defaultValue));
+      host.setAttribute('data-active', active ? 'true' : 'false');
 
       var text = label;
       if (n === 1) {
@@ -121,7 +127,7 @@
       trigger.innerHTML =
         '<span class="dk-select__label">' + esc(text) + '</span>' +
         (n > 1 ? '<span class="dk-select__count">' + n + '</span>' : '') +
-        (n ? '<span class="dk-select__clear" role="button" tabindex="0" aria-label="Сбросить фильтр «' +
+        (active ? '<span class="dk-select__clear" role="button" tabindex="0" aria-label="Сбросить фильтр «' +
              esc(label) + '»">' + ICON_X + '</span>' : ICON_CARET);
 
       // Скринридеру подпись сообщается целиком: «Округ: Центральный».
@@ -229,7 +235,7 @@
     function clear() {
       if (stopped) return;
       if (!selected.size) return;
-      selected.clear();
+      selected = selection(null);
       renderTrigger();
       if (open) renderMenu();
       emit();
@@ -364,13 +370,13 @@
 
     return {
       get value() { return mode === 'multi' ? Array.from(selected) : (Array.from(selected)[0] || null); },
-      set: function (v) { if (stopped) return; selected = new Set(v ? [].concat(v) : []); renderTrigger(); if (open) renderMenu(); },
+      set: function (v) { if (stopped) return; selected = selection(v); renderTrigger(); if (open) renderMenu(); },
       destroy: destroy,
       update: function (next) {
         if (stopped) return;
         next = next || {};
         if (next.options) options = next.options;
-        if (Object.prototype.hasOwnProperty.call(next, 'value')) selected = new Set(next.value ? [].concat(next.value) : []);
+        if (Object.prototype.hasOwnProperty.call(next, 'value')) selected = selection(next.value);
         renderTrigger(); if (open) renderMenu();
       },
       clear: clear,

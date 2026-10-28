@@ -14,25 +14,23 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
-<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/docs.css?v=20261026-editorial">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-card-scroll.js" defer></script>
-<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
-<script src="js/docs.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261026-editorial" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
-  <a class="sc-brand" href="showcase.html">
+  <a class="sc-brand" href="index.html">
     <span class="sc-brand__t">dashboard-kit</span>
   </a>
   <div class="sc-ctl">
-    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-    </div>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -55,16 +53,16 @@
       </details>
     </div><p class="sc-share-status" role="status"></p>
     <h1>Лента карточек</h1>
-    <p class="sc-hero__lead">Горизонтальный список карточек с нативной прокруткой и кнопками навигации.</p>
+    <p class="sc-hero__lead">Показывает горизонтальную ленту карточек с прокруткой и навигацией.</p>
     <div class="sc-meta">
-      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-card-scroll.js"><code>js/dk-card-scroll.js</code></a></span>
+      <span class="sc-meta__i">Статус: стабильный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
-  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
-    <h2>Живой пример</h2>
-    <p>Рабочий пример в контексте: попробуйте изменение ширины и клавиатуру.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-card-scroll" id="demo-cards"><div class="dk-card-scroll__actions"><button class="dk-iconbtn dk-iconbtn--sm dk-scroll-arrow" data-scroll-prev aria-label="Предыдущие отчёты"><svg class="dk-i dk-i--adaptive" aria-hidden="true"><use href="#ti-chevron-left"/></svg></button><button class="dk-iconbtn dk-iconbtn--sm dk-scroll-arrow" data-scroll-next aria-label="Следующие отчёты"><svg class="dk-i dk-i--adaptive" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button></div><ul class="dk-card-scroll__list" tabindex="0" aria-label="Отчёты"><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 1</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 2</h3><p>Продажи по каналам и категориям товаров.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 3</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 4</h3><p>Продажи по каналам и категориям товаров.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 5</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 6</h3><p>Продажи по каналам и категориям товаров.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li></ul></div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Прокрутите ленту и используйте стрелки. Последняя карточка должна быть полностью доступна.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-card-scroll" id="demo-cards"><div class="dk-card-scroll__actions"><button class="dk-iconbtn dk-iconbtn--sm dk-scroll-arrow" data-scroll-prev aria-label="Предыдущие отчёты"><svg class="dk-i dk-i--adaptive" aria-hidden="true"><use href="#ti-chevron-left"/></svg></button><button class="dk-iconbtn dk-iconbtn--sm dk-scroll-arrow" data-scroll-next aria-label="Следующие отчёты"><svg class="dk-i dk-i--adaptive" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button></div><ul class="dk-card-scroll__list" tabindex="0" aria-label="Отчёты"><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 1</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 2</h3><p>Продажи по каналам и категориям товаров.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 3</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 4</h3><p>Продажи по каналам и категориям товаров.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 5</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 6</h3><p>Продажи по каналам и категориям товаров.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li></ul></div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
@@ -72,19 +70,19 @@
   </section>
   <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-panel"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> Содержимое и управление</div></div><ol class="sc-anatomy__list"><li><b>Контейнер</b> — Задаёт раскладку или поведение.</li><li><b>Содержимое</b> — Названия, данные и доступные действия задаёт приложение.</li></ol>
+    <div class="sc-anatomy"><div class="dk-panel"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> Содержимое и управление</div></div><ol class="sc-anatomy__list"><li><b>Контейнер</b> — Задаёт раскладку или поведение.</li><li><b>Содержимое</b> — Названия, данные и доступные действия задаёт приложение.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Используются общие токены интервалов и размеров контролов. Соседние карточки растягиваются до одинаковой высоты; текст не обрезается.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-card-scroll__list</code></td><td>Горизонтальный список одинаковой высоты.</td><td>ul/li сохраняют семантику.</td></tr><tr><td><code>dk-card-scroll__actions</code></td><td>Кнопки предыдущего и следующего фрагмента.</td><td>Над списком, без наложения на контент.</td></tr></tbody></table></div>
+    <p>Карточки идут в один ряд с горизонтальной прокруткой. Ширина карточки должна позволять прочитать её целиком на узком экране.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-card-scroll__list</code></td><td>Горизонтальный список одинаковой высоты.</td><td>ul/li сохраняют семантику.</td></tr><tr><td><code>dk-card-scroll__actions</code></td><td>Кнопки предыдущего и следующего фрагмента.</td><td>Над списком, без наложения на контент.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
-    <div class="dk-panel">Основные состояния доступны в живом примере и описаны в таблице вариантов.</div>
+    <p>В начале недоступно движение назад, в конце — вперёд. Если все карточки помещаются, прокрутка не нужна.</p>
   </section>
   <section class="sc-sec" id="kontent">
-    <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Полные названия объектов и конкретные действия.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Непонятные подписи «Далее» для перехода к объектам без контекста.</li></ul></div></div>
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Полные названия объектов и конкретные действия.</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Непонятные подписи «Далее» для перехода к объектам без контекста.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
@@ -92,17 +90,17 @@
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
-    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-card-scroll"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-card-scroll"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код</h2>
-    <p>Используйте общую основу и подключите скрипты в порядке описи кита.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-card-scroll&quot; id=&quot;demo-cards&quot;&gt;&lt;div class=&quot;dk-card-scroll__actions&quot;&gt;&lt;button class=&quot;dk-iconbtn dk-iconbtn--sm dk-scroll-arrow&quot; data-scroll-prev aria-label=&quot;Предыдущие отчёты&quot;&gt;&lt;svg class=&quot;dk-i dk-i--adaptive&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ti-chevron-left&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;button class=&quot;dk-iconbtn dk-iconbtn--sm dk-scroll-arrow&quot; data-scroll-next aria-label=&quot;Следующие отчёты&quot;&gt;&lt;svg class=&quot;dk-i dk-i--adaptive&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ti-chevron-right&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;&lt;ul class=&quot;dk-card-scroll__list&quot; tabindex=&quot;0&quot; aria-label=&quot;Отчёты&quot;&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 1&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 2&lt;/h3&gt;&lt;p&gt;Продажи по каналам и категориям товаров.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 3&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 4&lt;/h3&gt;&lt;p&gt;Продажи по каналам и категориям товаров.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 5&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 6&lt;/h3&gt;&lt;p&gt;Продажи по каналам и категориям товаров.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+    <p>Используйте общую основу и подключите скрипты в порядке описи кита.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-card-scroll.js"><code>js/dk-card-scroll.js</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-card-scroll&quot; id=&quot;demo-cards&quot;&gt;&lt;div class=&quot;dk-card-scroll__actions&quot;&gt;&lt;button class=&quot;dk-iconbtn dk-iconbtn--sm dk-scroll-arrow&quot; data-scroll-prev aria-label=&quot;Предыдущие отчёты&quot;&gt;&lt;svg class=&quot;dk-i dk-i--adaptive&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ti-chevron-left&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;button class=&quot;dk-iconbtn dk-iconbtn--sm dk-scroll-arrow&quot; data-scroll-next aria-label=&quot;Следующие отчёты&quot;&gt;&lt;svg class=&quot;dk-i dk-i--adaptive&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ti-chevron-right&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;&lt;ul class=&quot;dk-card-scroll__list&quot; tabindex=&quot;0&quot; aria-label=&quot;Отчёты&quot;&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 1&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 2&lt;/h3&gt;&lt;p&gt;Продажи по каналам и категориям товаров.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 3&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 4&lt;/h3&gt;&lt;p&gt;Продажи по каналам и категориям товаров.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 5&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 6&lt;/h3&gt;&lt;p&gt;Продажи по каналам и категориям товаров.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
 &lt;script&gt;
 window.addEventListener(&#x27;DOMContentLoaded&#x27;,function(){dkCardScroll(&#x27;#demo-cards&#x27;);});
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkCardScroll(root)</code></td><td>функция</td><td>Подключает стрелки и обновляет доступность на границах.</td></tr><tr><td><code>refresh() / destroy()</code></td><td>методы</td><td>Обновить границы / удалить обработчики и наблюдателей.</td></tr><tr><td><code>--card-width</code></td><td>переменная в style</td><td>Ширина карточки, по умолчанию 260 px; ограничена 80% списка.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
-    <h2>Связанное</h2>
+    <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="https://vkui.io/components/card-scroll/">Референс VKUI</a> — Структура и поведение</li></ul>
   </section>
 

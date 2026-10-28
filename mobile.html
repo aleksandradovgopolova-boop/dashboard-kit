@@ -12,10 +12,10 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
 <link rel="stylesheet" href="css/chrome.css">
-<link rel="stylesheet" href="css/glass.css">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/glass.css?v=20261026-readable-menu">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js" defer></script>
 <script src="vendor/echarts.min.js" defer></script>
 <script src="js/dk-chart-theme.js" defer></script>
@@ -25,7 +25,7 @@
 <script src="js/dk-period.js" defer></script>
 <script src="js/dk-chrome.js" defer></script>
 <script src="js/dk-table.js" defer></script>
-<script src="js/dk-map.js" defer></script>
+<script src="js/dk-map.js?v=20261028-stable-size" defer></script>
 <script src="js/dk-notify.js" defer></script>
 <script src="js/dk-car.js" defer></script>
 <!-- данные рядом с китом: data/regions.topojson, data/regions-tiles.json; страница открывается по http -->
@@ -33,6 +33,7 @@
 </head>
 <body class="dk-page dk-glass">
 <main class="dk-wrap" id="main" tabindex="-1">
+<div class="dk-seg" role="group" aria-label="Стиль оформления"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   <h1 class="dk-vh">Сводка аварийности</h1>
   <div class="dk-search">
     <svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg>
@@ -67,7 +68,7 @@
         <span class="dk-car__nav"><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="prev" aria-label="Предыдущая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-left"/></svg></button><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="next" aria-label="Следующая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button></span></div>
       <ul class="dk-car__track" role="list">
         <li class="dk-car__item" style="--accent:var(--crit)">
-          <span class="dk-car__tags"><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg>+27 за день</span><span class="dk-trend" style="--accent:var(--crit-ink)">средний → высокий</span></span>
+          <span class="dk-car__tags"><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg>+27 за день</span><span class="dk-trend" style="--accent:var(--crit-ink)">балл риска</span></span>
           <span class="dk-car__row"><span class="dk-car__who"><span class="dk-car__name">Санкт-Петербург</span><span class="dk-car__sub">СЗФО</span></span>
             <span class="dk-car__change" aria-label="было 30, стало 57"><span class="dk-car__from" style="--from:var(--high-ink)">30</span><span class="dk-car__arrow" aria-hidden="true">→</span><span class="dk-car__to" style="--to:var(--crit-ink)">57</span></span></span>
           <p class="dk-car__text">Авария теплосети; отключения ГВС и отопления в трёх районах.</p>

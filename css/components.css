@@ -239,6 +239,26 @@
 .dk-grid--equal > .dk-widget { height: 100%; box-sizing: border-box; }
 .dk-grid--equal > [class*="dk-col--"] > .dk-widget { height: 100%; box-sizing: border-box; }
 
+/* Равноправные виджеты: каждая строка заполняется по фактическому составу.
+   Не использовать dense/order: визуальный порядок совпадает с чтением и Tab. */
+.dk-grid--balanced {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--grid-gap);
+  align-items: stretch;
+}
+.dk-grid--balanced > * {
+  flex: 1 1 min(100%, 320px);
+  min-width: 0;
+  box-sizing: border-box;
+}
+.dk-grid--balanced > [class*="dk-col--"] { display: flex; flex-direction: column; }
+/* Сохранять естественную высоту содержимого: flex-basis: 0 схлопывает
+   пустой контейнер графика до инициализации ECharts до одного заголовка. */
+.dk-grid--balanced > [class*="dk-col--"] > .dk-widget { flex: 1 1 auto; }
+.dk-grid--balanced .dk-widget__body { flex: 1 1 auto; }
+.dk-grid--balanced .dk-widget__body > .dk-chart:only-child { flex: 1 0 auto; }
+
 /* --- типографика ----------------------------------------------------------
    Готовые классы под именованные стили. Имена совпадают с названиями стилей
    в фигме: H1 там — dk-h1 здесь, спорить не о чем.                           */
@@ -320,7 +340,13 @@
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  vertical-align: -0.2em;
+  vertical-align: middle;
+}
+
+/* Центрирование значков в строках текста, включая многострочные названия. */
+:where(.dk-widget__title, .dk-widget__hint, .dk-tile__icon, .dk-btn, .dk-seg button, .dk-select__trigger) > .dk-i {
+  display: block;
+  align-self: center;
 }
 
 .dk-i--sm { width: 1em; height: 1em; }
@@ -498,8 +524,7 @@
   gap: var(--space-3);
   height: var(--control-md);
   padding: 0 var(--control-pad-md);
-  font: inherit;
-  font-size: var(--text-caption);
+  font: var(--type-caption);
   font-weight: var(--weight-ui);
   color: var(--ink-2);
   background: var(--surface-2);
@@ -639,8 +664,7 @@
   gap: var(--space-2);
   height: calc(var(--control-md) - 2 * var(--track-pad));
   padding: 0 var(--space-6);
-  font: inherit;
-  font-size: var(--text-caption);
+  font: var(--type-caption);
   color: var(--ink-2);
   background: transparent;
   border: 0;
@@ -1070,8 +1094,10 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  height: var(--control-md);
-  padding: 0 var(--space-5);
+  min-height: var(--control-md);
+  height: auto;
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-5);
   font: inherit;
   font-size: var(--text-body);
   color: var(--ink-2);
@@ -1137,7 +1163,7 @@
    решает dkAnchor: он держит его под кнопкой и внутри экрана. */
 @media (max-width: 767px) {
   .dk-menu { max-width: calc(100vw - var(--page-pad) * 2); }
-  .dk-menu__item { height: var(--control-md); }
+  .dk-menu__item { min-height: var(--control-md); height: auto; }
 }
 
 /* --- строка применённых фильтров -----------------------------------------
@@ -1346,7 +1372,7 @@
   border-radius: var(--radius-full);
   font-size: var(--text-caption);
   font-weight: var(--weight-ui-strong);
-  color: var(--accent, var(--ink-2));
+  color: var(--ink-2);
   background: color-mix(in srgb, var(--accent, var(--ink-2)) 12%, transparent);
   white-space: nowrap;
 }
@@ -1366,7 +1392,7 @@
   min-width: 0;
 }
 
-.dk-hero__label { font-size: var(--text-body); color: var(--ink-2); }
+.dk-hero__label { font: var(--type-widget-title); color: var(--ink-2); }
 
 /* Число и метка на одной строке: метка прижата вправо и стоит по низу числа,
    а не по центру — рядом с числом в 56 центр метки висел бы в воздухе. На
@@ -1922,29 +1948,26 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
   min-width: 0;
 }
 
-/* Хедер: заголовок и действия выровнены по центру строки. Минимальная
-   высота равна компактному контролу, но длинный текст может увеличивать её.
-   Обзорный вариант разрешает перенос действий, не обрезая заголовок. */
+/* Заголовок начинается у верхнего поля карточки. Высокие контролы справа
+   не сдвигают его вниз; текст и иконки внутри контролов центрируются отдельно. */
 .dk-widget__head {
   display: flex;
-  /* По ВЕРХУ, а не по центру: шапка держит общую высоту (min-height под ряд
-     кнопок действий), и при центрировании короткий капс-заголовок уезжал вниз —
-     сверху над текстом получалось больше, чем слева. Верхнее выравнивание
-     ставит заголовок ровно на линию внутреннего отступа: сверху = слева. */
   align-items: flex-start;
   gap: var(--gap-inline);
-  min-height: var(--control-sm);
+  min-height: 0;
   min-width: 0;
 }
 
+/* Высоту шапки задаёт её содержимое; пустого резерва под кнопки нет. */
+
 /* Название помогает найти блок. Полный текст переносится без усечения;
    обзорная типографика задаётся dk-widget--overview. */
-/* ЕДИНЫЙ ЗАГОЛОВОК ВИДЖЕТА — аккуратный капс, НЕ жирный. Один стиль на все
-   виджеты во всём ките (решение владельца): верхний регистр, разрядка,
-   обычный вес (не semibold), приглушённый тон. Раньше заголовки расходились —
-   где белый h3 полужирным, где серый капс; сведено к одному. */
+/* Общая типографика названий; метрики сохраняют собственный акцент. */
 .dk-widget__title {
-  font: var(--type-overline-regular);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-inline);
+  font: var(--type-panel-title);
   letter-spacing: var(--type-overline-track);
   text-transform: uppercase;
   color: var(--ink-2);
@@ -2463,7 +2486,7 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
   align-items: center;
   gap: var(--space-3);
   font-size: var(--text-caption);
-  color: var(--ink-2);
+  color: var(--status-color, var(--ink-2));
   white-space: nowrap;
 }
 
@@ -2472,9 +2495,9 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
 /* Значок обязателен: он и есть тот второй признак, по которому состояние
    читается без цвета. */
 .dk-status .dk-i { width: 14px; height: 14px; flex: none; color: var(--accent, var(--ink-3)); }
-.dk-status--crit { --accent: var(--crit-ink); }
-.dk-status--high { --accent: var(--high-ink); }
-.dk-status--calm { --accent: var(--calm-ink); }
+.dk-status--crit { --accent: var(--crit-ink); --status-color: var(--crit-ink); }
+.dk-status--high { --accent: var(--high-ink); --status-color: var(--high-ink); }
+.dk-status--calm { --accent: var(--calm-ink); --status-color: var(--calm-ink); }
 
 /* --- прогресс -------------------------------------------------------------
    Полоса без числа — украшение: «примерно две трети» нельзя ни записать,
@@ -2821,14 +2844,9 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
    Третья строка уже не нужна: подпись длиннее двух строк — это описание, а
    не подпись. */
 .dk-tile__label {
-  /* Тот же единый заголовок, что у .dk-widget__title: аккуратный капс, не
-     жирный. KPI-плитки — это те же виджеты, их подпись не должна отличаться
-     регистром. Капс задаём без смены line-height (не полным font-токеном):
-     иначе двустрочная подпись выходит за зарезервированную высоту шапки и
-     числа KPI разъезжаются по базовой линии (тест check-filter-context). */
-  font-size: var(--text-caption);
-  font-weight: var(--weight-ui);
-  text-transform: uppercase;
+  font: var(--type-widget-title);
+  letter-spacing: var(--type-widget-title-track);
+  text-transform: none;
   color: var(--ink-2);
   overflow: hidden;
   display: -webkit-box;
@@ -3031,6 +3049,9 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 /* Заголовок модалки — единственное место в интерфейсе, где вопрос уместен:
    решение принимает человек, и вопрос задан ему. Заголовок виджета вопросом
    быть не может — виджет ничего не спрашивает. */
+.dk-modal__close { flex: none; margin-inline-start: auto; }
+.dk-modal__body:last-child { padding-bottom: var(--pad-widget); }
+
 .dk-modal__title {
   margin: 0;
   flex: 1;
@@ -4386,10 +4407,13 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 /* Прокрутка внутри блока не должна утягивать за собой страницу: дочитал
    список до конца — и вместо остановки уехал весь дашборд. */
 .dk-menu__list,
-.dk-tablewrap,
 .dk-cal__hours,
 .dk-side__nav,
 .dk-modal__body { overscroll-behavior: contain; }
+
+/* Горизонтальная таблица не перехватывает вертикальную прокрутку страницы.
+   Ограниченная по высоте таблица тоже передаёт её странице у края. */
+.dk-tablewrap { overscroll-behavior-x: contain; overscroll-behavior-y: auto; }
 
 /* --- служебное ------------------------------------------------------------ */
 
@@ -4745,8 +4769,8 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 
 /* Равные KPI: подпись, число и изменение стоят на общих линиях ряда. */
 .dk-wrap--monitor .dk-tile--compact { display: flex; }
-.dk-wrap--monitor .dk-tile--compact .dk-tile__head { min-height: calc(var(--text-caption) * 3); }
-.dk-wrap--monitor .dk-tile--compact .dk-tile__row { flex: 1; justify-content: flex-start; }
+.dk-wrap--monitor .dk-tile--compact .dk-tile__head { min-height: 0; }
+.dk-wrap--monitor .dk-tile--compact .dk-tile__row { flex: none; justify-content: flex-start; }
 @media (min-width: 1200px) {
   .dk-grid--overview .dk-hero {
     display: grid;
@@ -4765,9 +4789,9 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
    grows with text; labels remain complete and sparklines share the bottom. */
 .dk-wrap--monitor .dk-tile { display: flex; flex-direction: column; align-items: stretch; }
 .dk-wrap--monitor .dk-tile__head {
-  font: var(--type-caption);
+  font: var(--type-widget-title);
   min-height: 3lh;
-  align-items: flex-start;
+  align-items: center;
 }
 .dk-wrap--monitor .dk-tile__row {
   flex: none;
@@ -4795,17 +4819,17 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   flex-direction: column;
   align-items: stretch;
   grid-template-columns: none;
-  padding: calc(var(--space-4) * 2);
-  gap: var(--space-5);
+  padding: var(--pad-widget);
+  gap: var(--gap-tight);
   border-radius: var(--radius-md);
 }
 .dk-root .dk-tile--compact > .dk-tile__head {
   grid-column: auto;
   align-self: stretch;
-  align-items: flex-start;
-  min-height: 3lh;
-  gap: var(--space-3);
-  font: var(--type-caption);
+  align-items: center;
+  min-height: 0;
+  gap: var(--space-4);
+  font: var(--type-widget-title);
 }
 .dk-root .dk-tile--compact .dk-tile__label {
   display: block;
@@ -4815,15 +4839,16 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 }
 .dk-root .dk-tile--compact .dk-tile__icon {
   display: inline-flex;
-  width: var(--space-6);
-  height: var(--space-6);
-  margin-top: var(--space-1);
+  width: var(--icon-size-compact);
+  height: var(--icon-size-compact);
+  margin-top: 0;
   background: transparent;
   color: var(--ink-2);
 }
 .dk-root .dk-tile--compact .dk-tile__icon .dk-i {
-  width: var(--space-6);
-  height: var(--space-6);
+  display: block;
+  width: var(--icon-size-compact);
+  height: var(--icon-size-compact);
 }
 .dk-root .dk-tile--compact > .dk-tile__row {
   grid-column: auto;
@@ -4845,14 +4870,14 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 }
 .dk-root .dk-tile--compact .dk-trend .dk-i { width: var(--space-6); height: var(--space-6); }
 @media (min-width: 768px) {
-  .dk-root .dk-tile--compact { padding: calc(var(--space-5) * 2); }
+  .dk-root .dk-tile--compact { padding: var(--pad-widget); }
   .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile--compact) { grid-column: span 2; }
 }
 @media (min-width: 1200px) {
   .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile--compact) { grid-column: span 3; }
 }
 @media (min-width: 1024px) {
-  .dk-root .dk-tile--compact > .dk-tile__head { min-height: 2lh; }
+  .dk-root .dk-tile--compact > .dk-tile__head { min-height: 0; }
 }
 
 /* Приоритетное состояние: число и следующее действие читаются первыми.
@@ -4888,10 +4913,17 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 
 /* Обзор по референсу: пять равноправных KPI и два ряда деталей.
    Отдельный вариант сетки, не меняет четырёхкарточные экраны. */
-.dk-grid--five { grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: stretch; }
+/* Flex distributes each actual row, including an incomplete last row.
+   DOM order is preserved; hidden children do not reserve a slot. */
+.dk-grid--five { display: flex; flex-wrap: wrap; align-items: stretch; --kpi-columns: 5; }
+.dk-grid--five > * {
+  flex: 1 1 calc((100% - (var(--kpi-columns) - 1) * var(--grid-gap)) / var(--kpi-columns));
+  min-width: 0;
+  box-sizing: border-box;
+}
 .dk-grid--overview-panels { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1.05fr) minmax(0, 1fr); align-items: stretch; }
-.dk-root .dk-tile--overview { padding: var(--pad-widget); gap: var(--gap-group); }
-.dk-root .dk-tile--overview > .dk-tile__head { min-height: 2lh; flex: 1; }
+.dk-root .dk-tile--overview { padding: var(--pad-widget); gap: var(--gap-tight); }
+.dk-root .dk-tile--overview > .dk-tile__head { min-height: 0; flex: none; }
 .dk-root .dk-tile--overview .dk-metric-lg { font: var(--type-metric-xl); }
 .dk-root .dk-tile--overview .dk-hero__of { font: var(--type-body); }
 @media (max-width: 1199px) {
@@ -4903,13 +4935,26 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   .dk-root .dk-tile--overview .dk-metric-lg { font: var(--type-metric-lg); }
 }
 @media (max-width: 767px) {
-  .dk-grid--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .dk-grid--five > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .dk-grid--five { --kpi-columns: 2; }
   .dk-grid--overview-panels { grid-template-columns: minmax(0, 1fr); }
 }
-/* Подписи и значения соседей делят строки даже при переносе дельты. */
-.dk-grid--five > .dk-tile--overview { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
-.dk-grid--five > .dk-tile--overview > .dk-tile__row { align-self: start; }
+/* Каждая КПЭ — самостоятельная колонка: строки соседей не дробят её содержимое. */
+.dk-grid--five > .dk-tile--overview {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  grid-row: auto;
+}
+.dk-grid--five > .dk-tile--overview .dk-metric-lg {
+  font: var(--type-metric-lg);
+  white-space: nowrap;
+}
+.dk-grid--five > .dk-tile--overview .dk-tile__label {
+  overflow-wrap: normal;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .dk-grid--five { --kpi-columns: 3; }
+}
 
 /* Обзорная карточка с компактной историей из того же набора данных.
    Спарклайн — компактный угловой слой (absolute) на ВСЕХ ширинах: он не
@@ -4927,7 +4972,6 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
    а на телефоне плитки и так идут по две и читаются как цельные. */
 @media (max-width: 767px) {
   .dk-tile--overview > .dk-tile__spark { position: static; right: auto; bottom: auto; width: 100%; height: 32px; grid-column: 1; }
-  .dk-grid--five > .dk-tile--overview { grid-row: span 3; }
   .dk-tile--overview:has(> .dk-tile__spark) > .dk-tile__row { padding-right: 0; }
 }
 
@@ -4949,7 +4993,16 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-table--events tr:has(.dk-status--high) { --accent: var(--high-ink); }
 .dk-table--events tr:has(.dk-status--calm) { --accent: var(--calm-ink); }
 .dk-table--events .dk-status { font: inherit; color: var(--accent, var(--ink)); background: color-mix(in srgb, var(--accent, var(--ink)) 9%, var(--surface)); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); }
-.dk-table--events .dk-status .dk-i { display: none; }
+/* Статус таблицы читается как метка: цвет + значок + текст. */
+.dk-table .dk-status {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--status-color, var(--ink-3)) 9%, transparent);
+  flex-wrap: nowrap;
+}
+/* Короткий статус переносится по словам, сохраняя значок рядом с текстом. */
+.dk-table .dk-status { min-width: min-content; }
+.dk-table .dk-status > span { min-width: min-content; overflow-wrap: normal; word-break: normal; }
 .dk-table--events td.dk-td-num { color: var(--accent, var(--ink)); white-space: nowrap; }
 .dk-table--events td:first-child, .dk-table--events td:nth-child(3) { color: var(--ink-2); }
 
@@ -4967,14 +5020,11 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-head__actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--gap-tight); min-width: 0; }
 .dk-widget--overview { gap: var(--space-5); }
 .dk-widget--overview > .dk-widget__head { flex-wrap: wrap; }
-/* Заголовок обзорного виджета — прописными вразрядку, приглушённо-серый
+/* История: заголовок обзорного виджета — прописными вразрядку, приглушённо-серый
    (overline-стиль), как на продакшн-референсе «РАСХОД НА МОДЕЛИ / КТО ЖЖЁТ /
    ТОП МОДЕЛЕЙ»: шапка — тихий ярлык секции, а не крупный заголовок (решение
    владельца 14.10). */
-/* Заголовок обзорного виджета — тот же, что у всех: один стиль заголовка на
-   весь кит. Раньше здесь был капс-оверлайн серым (--ink-3); рядом с обычными
-   белыми заголовками это читалось как два разных вида. Единообразие важнее
-   отдельной «обзорной» типографики — владелец кита свёл их к одному. */
+/* Актуальный стиль всех заголовков — капс Regular, общий type-panel-title. */
 /* Графики обзорных панелей — одной высоты, чтобы низ ряда не был рваным. */
 .dk-grid--overview-panels .dk-chart { min-height: 200px; }
 .dk-widget__heading { flex: 1 1 10rem; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
@@ -5001,43 +5051,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   .dk-region-tools__primary .dk-search { grid-column: 1 / -1; }
 }
 
-/* === СТЕКЛО: общие компоненты ============================================
-   Нейтральные управляющие поверхности переведены на стеклянный материал:
-   полупрозрачная заливка, тонкая светящаяся кромка (часть стекла, не плоская
-   обводка), размытие-vibrancy и ховер-подсветка стекла вместо плоской заливки.
-   НЕ трогаем якоря смысла: основную кнопку (--brand), кольцо фокуса и выбранный
-   сегмент (--control-on), заполненный фильтр (--control-soft) — они остаются
-   плотными и ведут глаз. Секция отключаемая: убрать её — компоненты вернутся к
-   плоским поверхностям. Стекло читается на разноцветной подложке дашборда; на
-   плоской странице деградирует мягко — чуть более светлая полупрозрачная
-   поверхность с кромкой. */
-
-.dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost),
-.dk-iconbtn {
-  background: var(--glass-sheen), var(--glass-surface);
-  border: 1px solid var(--glass-edge-soft);
-  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-}
-.dk-seg,
-.dk-search,
-.dk-select__trigger {
-  background: var(--glass-chip);
-  border: 1px solid var(--glass-edge-soft);
-  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-}
-.dk-chip {
-  background: var(--glass-surface);
-  border: 1px solid var(--glass-edge-soft);
-}
-@media (hover: hover) and (pointer: fine) {
-  .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost):hover,
-  .dk-iconbtn:hover { background: var(--glass-sheen), var(--glass-hover); color: var(--ink); }
-  .dk-btn--ghost:hover { background: var(--glass-hover); }
-  .dk-seg button:not([aria-pressed="true"]):not(.is-on):hover { background: var(--glass-hover); }
-  .dk-select__trigger:hover { background: var(--glass-hover); }
-}
+/* Стеклянный материал нейтральных контролов задаёт общий css/glass.css. */
 
 /* ЦВЕТ НА СТЕКЛЕ. Два разных случая, и путать их нельзя:
 
@@ -5063,3 +5077,112 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy));
   backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy));
 }
+
+/* Единое раскрытие: без нативных залитых треугольников. Уже размеченные
+   Tabler-шевроны сохраняются; summary без шеврона получает контурный CSS-знак.
+   Правило ограничено корнем кита и не меняет details чужого приложения. */
+.dk-root summary { list-style: none; }
+.dk-root summary::-webkit-details-marker { display: none; }
+.dk-root summary::marker { content: ""; }
+.dk-root summary:not(:has(use[href*="chevron"])):not(.dk-side__profile > summary) {
+  display: flex; align-items: center; gap: var(--space-4);
+}
+.dk-root summary:not(:has(use[href*="chevron"])):not(.dk-side__profile > summary)::after {
+  content: ""; display: inline-block; flex: none; margin-inline-start: auto;
+  width: var(--space-3); height: var(--space-3);
+  border: solid currentColor; border-width: 0 var(--hairline) var(--hairline) 0;
+  background: none; transform: rotate(45deg);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.dk-root details[open] > summary:not(:has(use[href*="chevron"])):not(.dk-side__profile > summary)::after {
+  transform: rotate(225deg);
+}
+
+/* One control scale for dashboard filter toolbars. */
+.dk-toolbar :is(.dk-field, .dk-select__trigger, .dk-iconbtn) {
+  height: var(--control-lg);
+  border-radius: var(--radius-md);
+  border: 0;
+  box-shadow: none;
+}
+.dk-toolbar .dk-iconbtn { width: var(--control-lg); flex: none; background: var(--surface-2); }
+.dk-toolbar .dk-select__trigger { justify-content: space-between; }
+
+/* Shared overview composition: one material plane, one primary number and
+   five related KPI. The inner metrics are not nested cards. */
+.dk-metric-band { display:grid; grid-template-columns:minmax(220px,1.35fr) minmax(0,5fr); align-items:center; gap:var(--space-8); }
+.dk-metric-band > .dk-hero { padding:0; border:0; background:none; box-shadow:none; gap:var(--space-3); }
+.dk-metric-band .dk-hero__n { font:var(--type-metric-band-hero); }
+.dk-metric-band .dk-hero__of { font:var(--type-overview-title); }
+.dk-metric-band .dk-hero__label { font:var(--type-body-lg); color:var(--ink-2); }
+.dk-metric-band > .dk-grid--five { display:flex; flex-wrap:nowrap; gap:0; align-items:stretch; }
+.dk-metric-band .dk-tile { flex:1 1 0; min-width:0; padding:var(--space-3) var(--space-7); border:0; border-left:1px solid var(--rule); border-radius:0; background:none; box-shadow:none; }
+.dk-metric-band .dk-metric-lg { font:var(--type-metric-xl); }
+.dk-metric-band .dk-tile__head { align-items:flex-start; min-height:0; }
+.dk-metric-band .dk-tile__label { font:var(--type-caption); color:var(--ink-2); }
+.dk-metric-band .dk-tile__icon { background:var(--glass-chip); color:var(--ink-2); border-radius:var(--radius-full); }
+@media(max-width:1350px) { .dk-metric-band .dk-metric-lg { font:var(--type-overview-title); } }
+@media(max-width:1199px) {
+ .dk-metric-band { grid-template-columns:minmax(0,1fr); }
+ .dk-metric-band > .dk-grid--five { flex-wrap:wrap; gap:var(--space-6); }
+ .dk-metric-band .dk-tile { flex:1 1 calc((100% - 2 * var(--space-6))/3); padding:var(--space-6) 0 0; border-left:0; border-top:1px solid var(--rule); }
+}
+@media(max-width:767px) { .dk-metric-band .dk-tile { flex-basis:calc((100% - var(--space-6))/2); } }
+
+/* Neutral glass tiles with semantic fills. Coordinates and risk thresholds
+   remain data-owned; this is an optional map appearance, not a new scale. */
+.dk-map[data-appearance="glass"] .dk-map__tile { position:relative; padding-top:0; background:color-mix(in srgb,var(--fill,var(--nodata)) 16%,var(--surface)); border:1px solid color-mix(in srgb,var(--fill,var(--nodata)) 36%,var(--rule)); box-shadow:inset 0 1px 0 var(--glass-rim); }
+.dk-map[data-appearance="glass"] .dk-map__abbr { color:inherit; opacity:1; }
+
+/* Optional rank comparison: track is normalized to one explicit shared scale. */
+.dk-rank__meter { --value:0%; flex:0 1 30%; min-width:var(--space-9); height:var(--space-4); background:var(--surface-3); border-radius:var(--radius-full); overflow:hidden; }
+.dk-rank__meter > span { display:block; height:100%; width:var(--value,0%); background:var(--fill,var(--ink-3)); border-radius:inherit; }
+@media(max-width:767px) { .dk-rank__meter { flex-basis:20%; } .dk-rank__row { min-height:44px; } }
+
+
+/* View controls change contents, never the widget's configured frame. */
+.dk-widget--stable-view { --view-frame-height:auto; height:var(--view-frame-height); box-sizing:border-box; min-width:0; min-height:0; }
+.dk-widget--stable-view > :not(.dk-widget__viewport) { flex:0 0 auto; }
+.dk-widget--stable-view > .dk-widget__viewport { flex:1 1 0; min-width:0; min-height:0; overflow:auto; overscroll-behavior:contain; }
+.dk-map.dk-widget--stable-view .dk-map__canvas { height:100%; min-height:0; max-height:none; aspect-ratio:auto; }
+.dk-map.dk-widget--stable-view .dk-map__list { max-height:none; overflow:visible; }
+.dk-map.dk-widget--stable-view .dk-map__pan { height:100%; max-height:none; }
+
+/* Brief region detail: context, four key metrics, one table, real actions. */
+.dk-modal--detail { --pad-widget:var(--space-8); width:min(800px,calc(100vw - var(--space-6) * 2)); max-height:90dvh; }
+.dk-modal--detail.dk-modal--wide { width:min(960px,calc(100vw - var(--space-6) * 2)); }
+.dk-modal--detail .dk-modal__head > .dk-stack { flex:1; min-width:0; gap:var(--space-2); }
+.dk-modal--detail .dk-modal__title { font:var(--type-panel-title); font-weight:var(--weight-ui-strong); }
+.dk-modal--detail p { margin:0; }
+.dk-modal--detail .dk-modal__metrics { grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--space-5); }
+.dk-modal--detail .dk-modal__metrics > .dk-tile { padding:var(--space-6); background:var(--glass-chip); border:1px solid var(--glass-edge); border-radius:var(--radius-md); }
+.dk-modal--detail .dk-modal__metrics .dk-tile__label { font:var(--type-body); color:var(--ink-2); }
+.dk-modal--detail .dk-modal__metrics .dk-metric-lg { font:var(--type-metric-lg); color:var(--ink); }
+.dk-modal--detail .dk-table caption { text-align:left; padding-block:var(--space-5); color:var(--ink); font:var(--type-body-bold); }
+.dk-modal--detail .dk-table { min-width:640px; }
+.dk-modal--detail .dk-banner { display:flex; align-items:flex-start; gap:var(--space-4); padding:var(--space-6); font:var(--type-caption); }
+.dk-modal--detail .dk-banner > .dk-i { flex:none; }
+.dk-modal--detail .dk-modal__foot { border-top:1px solid var(--glass-edge); }
+@media(max-width:767px) { .dk-modal--detail .dk-modal__metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:359px) { .dk-modal--detail .dk-modal__metrics { grid-template-columns:minmax(0,1fr); } }
+
+/* DASHBOARD-DETAIL-MODAL-001: chrome stays available while details scroll. */
+.dk-modal--detail .dk-modal__head, .dk-modal--detail .dk-modal__foot { flex:none; }
+.dk-modal--detail .dk-modal__body { flex:1 1 auto; min-height:0; gap:calc(var(--space-3) * 2); }
+.dk-modal--detail .dk-modal__metrics { gap:calc(var(--space-3) * 2); align-items:stretch; }
+.dk-modal--detail .dk-modal__metrics > .dk-tile { padding:calc(var(--space-4) * 2); }
+.dk-modal--detail .dk-tile__row { display:flex; align-items:baseline; gap:var(--space-2); white-space:nowrap; }
+.dk-modal--detail .dk-tile__unit { white-space:nowrap; color:var(--ink-2); }
+.dk-modal--detail .dk-progress { min-width:120px; }
+.dk-modal--detail .dk-progress__track { height:var(--space-3); }
+@supports (grid-template-rows:subgrid) {
+ .dk-modal--detail .dk-modal__metrics > .dk-tile { display:grid; grid-row:span 3; grid-template-rows:subgrid; gap:var(--space-4); }
+}
+@media(max-width:767px) {
+ .dk-modal--detail { --pad-widget:calc(var(--space-4) * 2); width:100vw; max-width:100vw; height:100dvh; max-height:100dvh; margin:0; border-radius:0; }
+ .dk-modal--detail .dk-modal__form { height:100%; min-height:0; }
+}
+
+/* Detail text/status roles are calibrated to surface, not raised control grey. */
+.dk-glass .dk-modal.dk-modal--detail { background:var(--surface); }
+.dk-modal--detail .dk-modal__metrics > .dk-tile { background:var(--surface); }

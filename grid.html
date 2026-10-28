@@ -8,17 +8,17 @@
      кита (dk-grid + dk-col--*), значения берутся из токенов, не выдуманы.
      Собрано: python3 tools/kit.py head base -->
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
-<script>try{if(localStorage.getItem('dk-theme')==null)localStorage.setItem('dk-theme','dark');}catch(e){}</script>
 <script src="js/dk-theme.js"></script>
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/components.css?v=20261026-readable-menu">
 <link rel="stylesheet" href="css/page.grid.css">
 <script src="js/dk-util.js"></script>
 <script src="js/dk-icons.js" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261026-readable-menu">
 </head>
 
-<body class="dk-page" id="grid-ref">
+<body class="dk-page dk-glass" id="grid-ref">
 
 <header class="gr-topbar">
   <div class="gr-topbar__inner">
@@ -26,7 +26,7 @@
       <span class="gr-brand__mark" aria-hidden="true"><svg class="dk-i"><use href="#ti-layout-grid"/></svg></span>
       <h1 class="gr-brand__name">Сетка кита</h1>
     </div>
-    <span class="dk-caption gr-topbar__sub">Размеры виджетов, отступы, радиусы и кнопки</span>
+    <div class="dk-seg" role="group" aria-label="Стиль оформления"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -159,10 +159,10 @@
         <div class="dk-widget__head"><h2 class="dk-widget__title">Радиусы скругления</h2></div>
         <div class="dk-widget__body">
           <ul class="gr-radii">
-            <li><span class="gr-swatch" style="border-radius:var(--radius-lg)"></span><span>Виджет, панель, блок — <b id="gr-r-widget">—</b></span></li>
-            <li><span class="gr-swatch" style="border-radius:var(--radius-md)"></span><span>Кнопки, чипы, поля — <b id="gr-r-control">—</b></span></li>
-            <li><span class="gr-swatch" style="border-radius:var(--radius-sm)"></span><span>Сегмент — <b id="gr-r-seg">—</b></span></li>
-            <li><span class="gr-swatch" style="border-radius:var(--radius-xs)"></span><span>Бейдж, метка — <b id="gr-r-badge">—</b></span></li>
+            <li><span class="gr-swatch" style="border-radius:var(--radius-lg)"></span><span>Образец radius-lg — <b id="gr-r-widget">—</b></span></li>
+            <li><span class="gr-swatch" style="border-radius:var(--radius-md)"></span><span>Контролы · radius-md — <b id="gr-r-control">—</b></span></li>
+            <li><span class="gr-swatch" style="border-radius:var(--radius-sm)"></span><span>Образец radius-sm — <b id="gr-r-seg">—</b></span></li>
+            <li><span class="gr-swatch" style="border-radius:var(--radius-xs)"></span><span>Образец radius-xs — <b id="gr-r-badge">—</b></span></li>
           </ul>
         </div>
       </section>
@@ -171,9 +171,9 @@
       <section class="dk-widget dk-col--half">
         <div class="dk-widget__head"><h2 class="dk-widget__title">Высоты кнопок</h2></div>
         <div class="dk-widget__body gr-btns">
-          <div class="gr-btn-row"><button type="button" class="dk-btn dk-btn--primary">Кнопка M</button><span class="dk-caption" id="gr-h-md">—</span></div>
-          <div class="gr-btn-row"><button type="button" class="dk-btn">Кнопка M</button><span class="dk-caption">обычная</span></div>
-          <div class="gr-btn-row"><button type="button" class="dk-btn dk-btn--sm">Кнопка S</button><span class="dk-caption" id="gr-h-sm">—</span></div>
+          <div class="gr-btn-row"><button type="button" class="dk-btn dk-btn--primary">Обычная кнопка</button><span class="dk-caption" id="gr-h-md">—</span></div>
+          <div class="gr-btn-row"><button type="button" class="dk-btn">Обычная кнопка</button><span class="dk-caption">обычная</span></div>
+          <div class="gr-btn-row"><button type="button" class="dk-btn dk-btn--sm">Компактная кнопка</button><span class="dk-caption" id="gr-h-sm">—</span></div>
           <p class="dk-caption">На сенсоре кит поднимает цель до 44px.</p>
         </div>
       </section>
@@ -213,8 +213,8 @@
     set('gr-r-badge', rpx('--radius-xs'));
 
     function hpx(name) { var probe = document.createElement('div'); probe.style.height = 'var(' + name + ')'; document.body.appendChild(probe); var h = getComputedStyle(probe).height; probe.remove(); return h; }
-    set('gr-h-md', hpx('--control-md'));
-    set('gr-h-sm', hpx('--control-sm'));
+    set('gr-h-md', getComputedStyle(document.querySelector('.gr-btn-row .dk-btn')).height);
+    set('gr-h-sm', getComputedStyle(document.querySelector('.gr-btn-row .dk-btn--sm')).height);
   });
 </script>
 </body>

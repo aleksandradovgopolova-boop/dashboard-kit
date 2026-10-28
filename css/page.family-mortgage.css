@@ -18,7 +18,8 @@
 #fm-dashboard #fm-top { grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: stretch; }
 #fm-dashboard #fm-map-widget { grid-column: span 3; }
 #fm-dashboard #fm-rank-widget { grid-column: span 2; }
-@media (max-width: 899px) {
+/* На планшете карта получает ширину строки: узкая колонка обрезает подписи. */
+@media (max-width: 1199px) {
   #fm-dashboard #fm-top { grid-template-columns: minmax(0, 1fr); }
   #fm-dashboard #fm-map-widget, #fm-dashboard #fm-rank-widget { grid-column: auto; }
 }
@@ -31,29 +32,49 @@
 #fm-dashboard #fm-rank { flex: 1; justify-content: flex-start; overflow: visible; }
 #fm-dashboard #fm-rank .dk-rank__row { flex: 1 0 auto; }
 
-/* Ряд «почему отстаём» — спрос и бюджет, две равные колонки. */
-#fm-dashboard #fm-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-@media (max-width: 767px) { #fm-dashboard #fm-panels { grid-template-columns: minmax(0, 1fr); } }
+/* Пары виджетов используют общую dk-grid--balanced без локальных колонок. */
 
 /* Хедер-бар как на референсе: полноширокая тёмная полоса; слева бренд-марка и
-   компактный заголовок, справа актуальность данных и переключатель темы.
+   компактный заголовок, справа переключатель темы.
    Внутренняя ширина и поля совпадают с контентом. */
 #fm-dashboard .fm-topbar { background: var(--surface-2); border-bottom: 1px solid var(--rule); }
 #fm-dashboard .fm-topbar__inner {
-  display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
-  height: 52px; max-width: var(--page-max); margin-inline: auto; padding-inline: var(--page-pad);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-6);
+  min-height: 52px; max-width: var(--page-max); margin-inline: auto; padding: var(--space-3) var(--page-pad);
 }
 #fm-dashboard .fm-brand { display: flex; align-items: center; gap: var(--space-5); min-width: 0; }
 #fm-dashboard .fm-brand__mark {
   display: inline-flex; align-items: center; justify-content: center; flex: none;
   width: 30px; height: 30px; border-radius: var(--radius-full);
-  background: var(--surface-3); color: var(--ink);
+  background: var(--glass-control-sheen), var(--glass-control); color: var(--ink);
+  border: 1px solid var(--glass-edge-soft); box-shadow: var(--glass-control-shadow);
 }
 #fm-dashboard .fm-brand__mark .dk-i { width: 18px; height: 18px; }
 #fm-dashboard .fm-brand__name { margin: 0; font: var(--type-h2); letter-spacing: var(--type-h2-track); color: var(--ink); overflow-wrap: anywhere; }
 #fm-dashboard .fm-topbar__tools { display: flex; align-items: center; gap: var(--space-6); flex: none; }
-#fm-dashboard .fm-topbar__asof { white-space: nowrap; }
-#fm-dashboard .fm-topbar__asof b { color: var(--ink); }
+
+/* The consumer owns filter arrangement; controls and text use kit styles. */
+#fm-dashboard [hidden] { display: none !important; }
+#fm-dashboard .fm-filters { display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; margin-bottom: 0; }
+#fm-dashboard .fm-search { flex: 2 1 260px; min-width: 0; }
+#fm-dashboard .fm-search input { min-width: 0; }
+#fm-dashboard .fm-filter { flex: 1 1 180px; min-width: 0; }
+#fm-dashboard .fm-filter .dk-select,
+#fm-dashboard .fm-filter .dk-select__trigger { width: 100%; }
+#fm-dashboard .fm-filter-actions { display: flex; align-items: center; gap: var(--space-3); flex: 0 0 auto; }
+#fm-dashboard .fm-status,
+#fm-dashboard .fm-pagination { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-5); }
+#fm-dashboard .fm-pagination { justify-content: center; margin-top: var(--space-6); }
+#fm-dashboard .fm-region-link { font: inherit; text-align: start; padding: var(--space-2) 0; border: 0; background: none; cursor: pointer; min-height: var(--control-md); }
+#fm-dashboard .dk-hero__label { margin: 0; }
+#fm-dashboard .fm-budget__scale { flex-wrap: wrap; }
+@media (max-width: 767px) {
+  #fm-dashboard .fm-topbar__inner { padding-block: var(--space-4); gap: var(--space-4); }
+  #fm-dashboard .fm-topbar__tools { gap: var(--space-4); }
+  #fm-dashboard .fm-search { flex-basis: 100%; }
+  #fm-dashboard .fm-filter { flex-basis: 160px; }
+  #fm-dashboard .fm-region-link { min-height: 44px; }
+}
 
 /* Бюджет — чистый виджет вместо сырого bullet: крупное число освоено + % плана,
    полоса освоено→цель→лимит с маркером цели, без мусорной подписи «шкала». */
@@ -70,73 +91,16 @@
 
 /* Контент под баром — небольшой отступ сверху. Внутреннее поле виджета —
    единое для всех карточек (14px), чтобы отступы не разъезжались. */
-#fm-dashboard .dk-wrap--monitor { padding-top: var(--space-6); --pad-widget: var(--space-6); }
+#fm-dashboard .dk-wrap--monitor { padding-top: var(--space-8); }
 
-/* ПРОТОТИП: глассморфизм — полупрозрачные стеклянные карточки с размытием.
-   Фон даёт мягкую нейтральную подложку (без акцентных цветов), чтобы стекло
-   читалось; кромка стекла — тонкая светлая (часть материала, не плоская
-   обводка). Эксперимент на показ; на всю систему — только по решению. */
-/* Эпловская подложка: насыщенные разноцветные «обои» — сочные раздельные
-   пятна (не мутный смыв), чтобы стекло их фростило в текстуру с vibrancy. */
-#fm-dashboard.dk-page {
-  background:
-    radial-gradient(64% 66% at 22% 10%, var(--glass-glow-1), transparent 78%),
-    radial-gradient(66% 66% at 80% 16%, var(--glass-glow-2), transparent 78%),
-    radial-gradient(68% 68% at 74% 88%, var(--glass-glow-3), transparent 78%),
-    radial-gradient(64% 66% at 20% 90%, var(--glass-glow-4), transparent 78%),
-    radial-gradient(90% 85% at 50% 50%, var(--glass-glow-c), transparent 92%),
-    var(--bg);
-  background-attachment: fixed;
-}
-/* Эпловское стекло: прозрачнее + сильный blur и saturate (vibrancy), тонкая
-   СВЕТЯЩАЯСЯ кромка (часть материала стекла Apple — без неё не читается). */
-#fm-dashboard .dk-widget,
-#fm-dashboard .dk-hero,
+/* Материал всех панелей и контролов — общий css/glass.css. */
 #fm-dashboard .fm-topbar {
   background: var(--glass-sheen), var(--glass-surface);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
-  border: 1px solid var(--glass-edge);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom: 1px solid var(--glass-edge);
 }
-#fm-dashboard .fm-topbar {
-  background: var(--glass-sheen), var(--glass-surface-2);
-  border-width: 0 0 1px;
-}
-
-/* Компоненты под стекло: сегменты, кнопки масштаба, чипы — полупрозрачные с
-   тонкой светящейся кромкой и размытием, в едином стеклянном языке. */
-#fm-dashboard .dk-seg {
-  background: var(--glass-chip);
-  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  border: 1px solid var(--glass-edge-soft);
-}
-#fm-dashboard .dk-map__zoom {
-  background: var(--glass-surface);
-  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  border: 1px solid var(--glass-edge-soft);
-}
-#fm-dashboard .fm-topbar__tools .dk-seg button[aria-pressed="true"] {
-  background: var(--glass-surface-2);
-}
-/* Стеклянные ховеры: при наведении стекло «подсвечивается» — чуть плотнее и
-   светлее, а не заливается плоским цветом. */
-@media (hover: hover) and (pointer: fine) {
-  #fm-dashboard .dk-seg button:not([aria-pressed="true"]):hover {
-    background: var(--glass-hover);
-    color: var(--ink);
-  }
-  #fm-dashboard .dk-map__zoom button:not(:disabled):hover {
-    background: var(--glass-hover-strong);
-  }
-  #fm-dashboard .dk-rank__row:hover {
-    background: var(--glass-hover);
-  }
-  #fm-dashboard .dk-map__tile:hover {
-    filter: brightness(1.12);
-  }
-}
+#fm-dashboard .fm-topbar__tools { flex-wrap: nowrap; }
 
 /* KPI без спарклайна — чистая плитка (иконка+подпись, крупное число, тренд).
    Спарклайн-«кучка» в углу читался дёшево; историю показателя лучше дать
@@ -145,12 +109,11 @@
 
 /* Плотнее, чтобы ключевые виджеты влезали в один экран. */
 /* Герой: число меньше (56→40), поля и зазоры плотнее. */
-#fm-dashboard .dk-hero { padding: var(--space-6); gap: var(--gap-inline); }
+#fm-dashboard .dk-hero { gap: var(--gap-inline); }
 #fm-dashboard .dk-hero__n { font: var(--type-metric-xl); }
 #fm-dashboard .dk-hero .dk-trend { margin-bottom: 0; }
 /* KPI: шапка без принудительных трёх строк; поле — то же единое 14px. */
-#fm-dashboard .dk-tile--compact { padding: var(--space-6); }
-#fm-dashboard .dk-tile--compact > .dk-tile__head { min-height: 2lh; }
+#fm-dashboard .dk-tile--compact > .dk-tile__head { min-height: 0; }
 
 /* Карта: легенду даёт сама dkMap, приписку сбоку убрали. Карта заполняет свою
    колонку целиком (без центрирования — иначе пустоты по бокам), кнопки
@@ -161,7 +124,7 @@
 #fm-dashboard #fm-map .dk-map__canvas { max-height: none; }
 /* Карта вмещается целиком — внутренний скролл не нужен и не должен перехватывать
    прокрутку страницы (из-за этого экран скроллился тяжело). */
-#fm-dashboard #fm-map .dk-map__pan { max-height: none; overflow: visible; }
+#fm-dashboard #fm-map .dk-map__pan { max-height: none; overflow: auto; }
 /* Больше воздуха у плиток слева и справа. */
 #fm-dashboard #fm-map .dk-map__pan { padding-inline: var(--space-5); }
 /* Плитки симпатичнее — больше воздуха между ними и скругление крупнее (под
@@ -172,20 +135,265 @@
    умолчанию прячет сокращение и показывает число — разворачиваем. */
 #fm-dashboard #fm-map .dk-map__val { display: none; }
 #fm-dashboard #fm-map .dk-map__tiles[data-zoom="1"] .dk-map__abbr { display: block; }
-#fm-dashboard #fm-map .dk-map__abbr { font-size: var(--text-caption); opacity: 1; font-weight: var(--weight-ui-strong); color: var(--ink); }
+#fm-dashboard #fm-map .dk-map__abbr { font-size: var(--text-caption); opacity: 1; font-weight: var(--weight-ui-strong); color: inherit; }
 #fm-dashboard #fm-map-controls .dk-seg { font: var(--type-caption); }
-/* Кнопки масштаба меньше — были слишком крупные (48px). Только для мыши: на
-   сенсоре кит держит цель 44px. */
-@media (hover: hover) and (pointer: fine) {
-  #fm-dashboard .dk-map__zoom { width: 34px; }
-  #fm-dashboard .dk-map__zoom button { width: 34px; height: 34px; }
-  #fm-dashboard .dk-map__zoom button .dk-i { width: 16px; height: 16px; }
+/* Успешная загрузка не оставляет поясняющую строку и пустой отступ. */
+#fm-dashboard .fm-status:has(#fm-status:empty):has(#fm-retry[hidden]),
+#fm-dashboard #fm-coverage:empty { display: none; }
+
+/* Статический каркас до данных: без мерцания и активных пустых фильтров. */
+#fm-dashboard .fm-loading__hero { display: grid; gap: var(--gap-group); min-height: 120px; }
+#fm-dashboard .fm-loading__kpi { display: grid; gap: var(--gap-group); }
+#fm-dashboard .fm-loading__panel { height: 320px; }
+#fm-dashboard #fm-loading .dk-skel { animation: none; }
+#fm-dashboard #fm-loading .dk-skel--text { width: 60%; }
+#fm-dashboard #fm-loading .dk-skel--title { width: 40%; }
+#fm-dashboard[data-status="loading"] .fm-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+/* Сокращения округов сохраняют подсказки без декоративного подчёркивания. */
+#fm-dashboard #fm-table abbr[title] { text-decoration: none; }
+
+/* 27.10: mobile widgets need a real inner margin even in compact density.
+   24 px inside / 8 px outside keeps a 320 px map area at a 390 px viewport. */
+@media (max-width: 767px) {
+  #fm-dashboard .dk-wrap--monitor { padding-inline: var(--space-4); --pad-widget: var(--space-8); }
+  #fm-dashboard .dk-widget,
+  #fm-dashboard .dk-hero { padding: var(--space-8); }
 }
-/* Переключатели вида карты крупнее — на десктопе 16px-иконки в тесных кнопках
-   читались мелко. Только для мыши: на сенсоре кит держит цель 44px (иначе
-   палец не попадёт — это ловит проверка ТЕЛЕФОН). Сегмент-контейнер (подложка)
-   кит даёт сам. */
+
+
+/* Graphite consumer composition; colors/material live in shared tokens. */
+#fm-dashboard .fm-topbar { background:none; border:0; }
+#fm-dashboard .fm-topbar__inner { padding-block:var(--space-8); }
+#fm-dashboard .fm-brand__name { font:var(--type-overview-title); }
+#fm-dashboard .fm-brand__mark { display:none; }
+#fm-dashboard #fm-top { grid-template-columns:minmax(0,1.7fr) minmax(0,1fr); }
+#fm-dashboard #fm-map-widget,#fm-dashboard #fm-rank-widget { grid-column:auto; }
+#fm-dashboard #fm-map-widget .dk-widget__head { flex-wrap:wrap; align-items:center; }
+#fm-dashboard #fm-rank-widget .dk-widget__body { flex:1; }
+#fm-dashboard #fm-rank .dk-rank__row { padding-block:var(--space-4); }
+#fm-dashboard #fm-map .dk-map__pan { padding:var(--space-2); }
+#fm-dashboard #fm-map .dk-map__tiles { gap:var(--space-2); }
+#fm-dashboard #fm-map .dk-map__abbr { font:var(--type-caption); }
+#fm-dashboard .fm-overview .dk-hero__row { flex-wrap:nowrap; }
+#fm-dashboard .fm-overview .dk-hero__of { white-space:nowrap; }
+#fm-dashboard .fm-overview .dk-tile__unit { display:block; white-space:nowrap; }
+@media(max-width:1199px) { #fm-dashboard #fm-top { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:767px) {
+ #fm-dashboard .fm-brand__name { font:var(--type-h2); }
+ #fm-dashboard .fm-topbar__inner { padding-block:var(--space-6); }
+ #fm-dashboard #fm-map .dk-map__pan { overflow:auto; scrollbar-width:thin; padding:var(--space-2); }
+ #fm-dashboard #fm-map .dk-map__pan::-webkit-scrollbar { display:block; height:8px; }
+ #fm-dashboard #fm-map .dk-map__tiles { min-width:908px; grid-template-columns:repeat(19,44px); grid-template-rows:repeat(11,44px); width:max-content; }
+ #fm-dashboard #fm-map .dk-map__tile { width:44px; height:44px; transform:none; }
+ #fm-dashboard #fm-map .dk-map__abbr { display:block; }
+ #fm-dashboard #fm-map .dk-map__key { min-height:44px; }
+}
+
+#fm-dashboard .fm-overview > .dk-hero { padding:0; }
+#fm-dashboard .fm-overview .dk-hero__n { font:var(--type-metric-band-hero); }
+
+/* Match the chosen composition without shrinking region labels. */
+#fm-dashboard .dk-wrap--monitor { padding-top:0; --pad-widget:var(--space-8); }
+#fm-dashboard .fm-filters { margin:0; }
+@media (min-width:1200px) {
+ #fm-dashboard #fm-map .dk-map__pan { max-width:680px; margin-inline:auto; }
+}
+
+@media(max-width:767px) { #fm-dashboard #fm-map .dk-map__zoom { display:none; } }
+
+/* One compact rhythm between dashboard objects. Section spacing uses margins. */
+#fm-dashboard .dk-wrap--monitor { --grid-gap:var(--space-5); --pad-widget:var(--space-7); }
+#fm-dashboard .dk-widget { gap:var(--space-5); }
+#fm-dashboard .fm-topbar__inner { padding-block:var(--space-6); }
+#fm-dashboard #fm-map { gap:var(--space-5); }
+@media(max-width:767px) {
+ #fm-dashboard .dk-wrap--monitor { --pad-widget:var(--space-8); }
+}
+
+#fm-dashboard .fm-budget__fill { background:var(--chart-primary); }
+#fm-dashboard .fm-budget__bar { background:color-mix(in srgb,var(--ink) 8%,transparent); }
+
+
+
+
+/* Six independent mini widgets; a single strip, never stacked KPI rows. */
+#fm-dashboard .fm-overview {
+ display:grid; grid-template-columns:repeat(6,minmax(192px,1fr)); grid-auto-flow:column;
+ gap:var(--space-5); overflow-x:auto; padding-bottom:0;
+ scroll-snap-type:x proximity; scrollbar-width:thin;
+}
+#fm-dashboard #fm-kpis { display:contents; }
+#fm-dashboard .fm-overview .dk-tile {
+ display:flex; flex-direction:column; justify-content:space-between;
+ margin:0; padding:var(--space-7); min-width:0; height:auto;
+ gap:var(--space-6); scroll-snap-align:start;
+}
+#fm-dashboard .fm-overview .dk-tile__head { align-items:flex-start; flex:none; min-height:0; }
+#fm-dashboard .fm-overview .dk-tile__label { margin:0; font:var(--type-body); color:var(--ink-2); }
+#fm-dashboard .fm-overview .dk-tile__icon { display:none; }
+#fm-dashboard .fm-overview .dk-tile__row { display:flex; flex-direction:row; align-items:baseline; justify-content:flex-start; gap:var(--space-2); flex:none; }
+#fm-dashboard .fm-overview .dk-metric-lg { font:var(--type-metric-lg); white-space:nowrap; }
+#fm-dashboard .fm-overview .dk-hero__of { font:var(--type-caption); color:var(--ink-2); }
+#fm-dashboard .fm-overview:focus-visible { outline:var(--focus-width) solid var(--brand); outline-offset:calc(-1 * var(--focus-width)); border-radius:var(--radius-xl); }
+@supports (grid-template-rows:subgrid) {
+ #fm-dashboard .fm-overview { grid-template-rows:auto auto; row-gap:var(--space-4); }
+ #fm-dashboard .fm-overview .dk-tile { display:grid; grid-row:span 2; grid-template-rows:subgrid; gap:var(--space-4); }
+ #fm-dashboard .fm-overview .dk-tile__row { align-self:start; }
+}
+
+@media(min-width:768px) and (max-width:1199px) {
+ #fm-dashboard .fm-overview { grid-template-columns:repeat(6,minmax(160px,1fr)); }
+ #fm-dashboard .fm-overview .dk-tile { padding:var(--space-6); }
+ #fm-dashboard .fm-overview .dk-metric-lg { font:var(--type-metric); }
+}
+
+@media(max-width:767px) {
+ #fm-dashboard .fm-overview .dk-tile { padding:var(--space-8); }
+}
+
+
+/* Refined mini metrics: one baseline for value and unit, no stacked unit. */
+#fm-dashboard .fm-overview .dk-tile { border-radius:var(--radius-lg); }
+#fm-dashboard .fm-overview .dk-metric-lg:has(> #fm-volume) { display:inline-flex; align-items:baseline; gap:var(--space-2); }
+#fm-dashboard .fm-overview .dk-tile__unit { display:inline; font:var(--type-caption); letter-spacing:var(--type-caption-track); color:var(--ink-2); }
+#fm-dashboard .fm-overview .dk-tile__row { min-width:0; }
+
+/* Legends are selectable chips, with a quiet separate count, not nested pills. */
+#fm-dashboard .dk-map__legend { gap:var(--space-4); }
+#fm-dashboard .dk-map__key {
+ border-radius:var(--radius-md); padding-inline:var(--space-5);
+ min-height:var(--control-md); height:auto;
+ background:var(--glass-control-sheen),var(--glass-chip);
+ border-color:var(--glass-edge); color:var(--ink-2);
+}
+#fm-dashboard .dk-map__key b {
+ min-width:0; padding:0 0 0 var(--space-3); margin-left:var(--space-1);
+ border-left:1px solid var(--glass-edge); border-radius:0; background:none;
+ color:var(--ink); font-weight:var(--weight-ui);
+}
+#fm-dashboard .dk-map__key[aria-pressed="true"] {
+ background:var(--glass-control-sheen),color-mix(in srgb,var(--swatch,var(--ink)) 16%,var(--surface-2));
+ border-color:color-mix(in srgb,var(--swatch,var(--ink)) 42%,var(--glass-edge)); color:var(--ink);
+ box-shadow:inset 0 1px 0 var(--glass-edge-top);
+}
+#fm-dashboard :is(.dk-fchip, .dk-chips__item) { font-weight:var(--weight-ui); border-color:var(--glass-edge-top); }
+#fm-dashboard :is(.dk-fchip__x, .dk-chips__item > .dk-iconbtn) { background:var(--glass-chip); }
+
+/* Quiet tile map: status is a tint, not a wall of coloured buttons. */
+#fm-dashboard .dk-map[data-appearance="glass"] .dk-map__tile {
+ background:color-mix(in srgb,var(--fill,var(--nodata)) 10%,var(--surface));
+ border-color:var(--glass-edge); box-shadow:none;
+}
+#fm-dashboard .dk-map[data-appearance="glass"] .dk-map__tile[data-map-status="2"] {
+ background:color-mix(in srgb,var(--fill,var(--nodata)) 20%,var(--surface));
+ border-color:color-mix(in srgb,var(--fill,var(--nodata)) 25%,var(--glass-edge));
+}
+#fm-dashboard #fm-map .dk-map__abbr { font-weight:var(--weight-ui); }
 @media (hover: hover) and (pointer: fine) {
-  #fm-dashboard #fm-map-controls .dk-seg button { height: 30px; border-radius: var(--radius-sm); }
-  #fm-dashboard #fm-map-controls .dk-seg button .dk-i { width: 16px; height: 16px; }
+ #fm-dashboard .dk-map[data-appearance="glass"] .dk-map__tile:hover {
+  transform:none; background:color-mix(in srgb,var(--fill,var(--nodata)) 34%,var(--surface-2));
+  border-color:color-mix(in srgb,var(--fill,var(--nodata)) 65%,var(--ink-2));
+ }
+ #fm-dashboard .dk-map__key:not([aria-pressed="true"]):hover { background:var(--glass-hover); border-color:var(--glass-edge-top); color:var(--ink); }
+}
+@media(max-width:767px), (pointer:coarse) {
+ #fm-dashboard .dk-map__key { min-height:44px; }
+}
+
+/* Light uses the existing area palette over a clean surface, not grey metal. */
+.dk-root[data-theme="light"] #fm-dashboard .dk-map[data-appearance="glass"] .dk-map__tile {
+ background:color-mix(in srgb,var(--fill,var(--nodata)) 12%,var(--surface));
+}
+#fm-dashboard .dk-map__key i { box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent); }
+
+/* Equal mini-widget dimensions, including the volume metric. */
+@media(max-width:767px) {
+ #fm-dashboard .fm-overview { grid-template-columns:repeat(6,minmax(208px,1fr)); }
+}
+
+.dk-root[data-theme="light"] #fm-dashboard .dk-map[data-appearance="glass"] .dk-map__tile[data-map-status="2"] { background:color-mix(in srgb,var(--fill,var(--nodata)) 20%,var(--surface)); }
+
+/* Filters belong to the top command area, alongside the theme control. */
+#fm-dashboard .fm-topbar__inner { grid-template-columns:auto minmax(0,1fr) auto; gap:var(--space-5); }
+#fm-dashboard .fm-brand__name { font:var(--type-h2); }
+#fm-dashboard .fm-topbar .fm-filters { min-width:0; margin:0; flex-wrap:nowrap; }
+#fm-dashboard .fm-topbar .fm-filter { flex:1 1 0; min-width:0; }
+#fm-dashboard .fm-topbar .fm-filter-actions { gap:var(--space-2); }
+@media(max-width:1199px) {
+ #fm-dashboard .fm-topbar__inner { grid-template-columns:minmax(0,1fr) auto; }
+ #fm-dashboard .fm-topbar .fm-filters { grid-column:1 / -1; grid-row:2; flex-wrap:wrap; }
+ #fm-dashboard .fm-topbar__tools { grid-column:2; grid-row:1; }
+ #fm-dashboard .fm-topbar .fm-filter { flex:1 1 160px; }
+}
+
+
+/* Responsive composition — 28.10. A stable view has a device-specific
+   baseline; switching representations preserves that frame, resizing does not. */
+@media(max-width:1023px) {
+ #fm-dashboard #fm-panels { flex-direction:column; }
+ #fm-dashboard #fm-panels > * { flex-basis:auto; width:100%; }
+}
+@media(max-width:767px) {
+ #fm-dashboard { --page-pad:var(--space-6); }
+ #fm-dashboard .dk-wrap--monitor { padding-inline:var(--page-pad); }
+ #fm-dashboard .fm-topbar__inner { padding-inline:var(--page-pad); }
+ #fm-dashboard .fm-topbar .fm-filter { flex-basis:calc(50% - var(--space-5)); }
+ #fm-dashboard .fm-topbar .fm-filter:last-of-type { flex-grow:1; }
+ #fm-dashboard .fm-topbar .fm-filter-actions { flex:none; }
+ #fm-dashboard .fm-overview { scroll-padding-inline:0; }
+ #fm-dashboard #fm-map-widget .dk-widget__head { align-items:flex-start; }
+ #fm-dashboard #fm-map .dk-map__legend {
+  flex-wrap:wrap; overflow:visible; max-width:100%; padding-bottom:var(--space-2);
+ }
+ #fm-dashboard #fm-map .dk-map__key { flex:none; scroll-snap-align:start; }
+ #fm-dashboard #fm-map .dk-map__body {
+  height:clamp(240px,30svh,300px); min-height:0; overflow:hidden;
+ }
+ #fm-dashboard #fm-map[data-view="list"] .dk-map__body { overflow:auto; }
+ #fm-dashboard #fm-map .dk-map__pan {
+  height:100%; max-height:100%; overflow:auto; scrollbar-width:thin;
+  overscroll-behavior:contain;
+ }
+ #fm-dashboard #fm-map .dk-map__pan::-webkit-scrollbar { display:block; width:8px; height:8px; }
+ #fm-dashboard #fm-map .dk-map__li-name { white-space:normal; overflow-wrap:anywhere; }
+ #fm-dashboard .fm-map-help { display:block; margin:0; }
+ #fm-dashboard #fm-rank-widget .dk-widget__body { max-height:280px; overflow:auto; overscroll-behavior-y:auto; }
+ #fm-dashboard #fm-rank .dk-rank__row { flex:none; min-height:44px; }
+ #fm-dashboard #fm-table-widget > .dk-widget__head { align-items:flex-start; }
+ #fm-dashboard #fm-table-widget .dk-widget__actions { width:100%; }
+ #fm-dashboard #fm-sort, #fm-dashboard #fm-sort .dk-select__trigger { width:100%; }
+ /* Keep every field, but group the four numeric comparisons into two columns. */
+ #fm-dashboard #fm-table.dk-table--cards > tbody > tr {
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-5) var(--space-6);
+ }
+ #fm-dashboard #fm-table.dk-table--cards > tbody > tr > td:nth-child(n) {
+  display:flex; flex-direction:column; align-items:flex-start; text-align:start; gap:var(--space-2);
+ }
+ #fm-dashboard #fm-table.dk-table--cards > tbody > tr > td[data-label]::before { margin:0; }
+ #fm-dashboard #fm-table.dk-table--cards > tbody > tr > td:is(:first-child,:nth-child(2),:last-child) { grid-column:1 / -1; }
+ #fm-dashboard #fm-table.dk-table--cards > tbody > tr > td:nth-child(2) { flex-direction:row; justify-content:flex-start; align-items:baseline; gap:var(--space-4); }
+}
+@media(min-width:768px) { #fm-dashboard .fm-map-help { display:none; } }
+
+/* Keep the geographic overview at its readable scale on portrait tablets too. */
+@media(min-width:768px) { #fm-dashboard #fm-map .dk-map__pan { max-width:680px; margin-inline:auto; } }
+@media(max-width:359px) {
+ #fm-dashboard #fm-map .dk-map__legend { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:stretch; }
+ #fm-dashboard #fm-map .dk-map__key { min-width:0; white-space:normal; padding-inline:var(--space-4); gap:var(--space-2); }
+ #fm-dashboard #fm-map .dk-map__key b { margin-left:auto; flex:none; }
+}
+
+/* Compact, stable controls: values and reset visibility never move neighbours. */
+#fm-dashboard .fm-topbar .fm-filters { width:fit-content; max-width:100%; justify-self:end; justify-content:flex-end; }
+#fm-dashboard .fm-topbar .fm-filter { flex:0 0 144px; width:144px; max-width:100%; }
+#fm-dashboard .fm-topbar .fm-filter:first-child { flex-basis:176px; width:176px; }
+#fm-dashboard .fm-topbar .fm-filter .dk-select,
+#fm-dashboard .fm-topbar .fm-filter .dk-select__trigger { width:100%; max-width:100%; }
+#fm-dashboard .fm-topbar .fm-filter .dk-select__trigger { height:var(--control-lg); padding-block:0; }
+#fm-dashboard .fm-topbar .fm-filter .dk-select__label { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:start; }
+#fm-dashboard .fm-topbar .fm-filter-actions { width:calc(var(--control-lg) * 3 + var(--space-2) * 2); justify-content:flex-end; }
+@media(max-width:767px) {
+ #fm-dashboard .fm-topbar .fm-filter:first-child { flex-basis:144px; width:144px; }
+ #fm-dashboard .fm-topbar .fm-filter:nth-child(2) { flex-basis:132px; width:132px; }
 }

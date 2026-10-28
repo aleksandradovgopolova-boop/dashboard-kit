@@ -28,9 +28,9 @@
   var shell = nav.parentElement;
   var bar = document.querySelector('.sc-bar');
   var main = shell.querySelector('.dk-wrap');
-  var narrow = window.matchMedia('(max-width:1279px)');
+  var narrow = window.matchMedia('(max-width:1023px)');
   var toggle = document.createElement('button');
-  toggle.type = 'button'; toggle.className = 'dk-btn dk-btn--sm';
+  toggle.type = 'button'; toggle.className = 'dk-iconbtn';
   toggle.appendChild(dkIcon.el('menu-2')); toggle.title = 'Навигация по киту'; toggle.setAttribute('aria-controls', nav.id);
   bar.insertBefore(toggle, bar.firstChild);
   var shade = document.createElement('div');
@@ -66,11 +66,12 @@
   nav.addEventListener('click', function (e) {
     if (narrow.matches && e.target.closest('a')) setMenu(false, true);
   });
-  var sections = Array.prototype.slice.call(document.querySelectorAll('section.sc-sec'));
+  var sections = Array.prototype.slice.call(main.querySelectorAll(':scope > section'));
   var group = '';
   var links = [];
 
   sections.forEach(function (sec, i) {
+    sec.classList.add('sc-sec');
     var h = sec.querySelector('h2');
     if (!h) return;
     var title = h.textContent.trim();
@@ -80,7 +81,7 @@
     var eb = document.createElement('p');
     eb.className = 'sc-eyebrow';
     eb.textContent = group;
-    sec.insertBefore(eb, h);
+    if (sec.dataset.group) sec.insertBefore(eb, h);
 
     var a = document.createElement('a');
     a.className = 'sc-anchor';
@@ -98,8 +99,11 @@
 
   /* Навигация по задачам: обзор и компоненты рядом, без дублирующего
      плоского списка. Названия компонентов приходят из общего указателя. */
-  var here = location.pathname.split('/').pop();
+  var here = location.pathname.split('/').pop() || 'index.html';
   var showcase = here === 'showcase.html';
+  var overview = here === 'index.html';
+  var articleRouter = showcase || overview;
+  bar.querySelector('.sc-brand').href = 'index.html';
   var sectionLinks = links.slice();
   nav.classList.add('dk-scrollview','dk-scrollview--contain');
   nav.replaceChildren();
@@ -128,78 +132,104 @@
   document.body.appendChild(searchDialog);
   var catalog = document.createElement('div'); catalog.className = 'sc-nav__catalog'; nav.appendChild(catalog);
   var entries = [];
-  function heading(text) {
+  function emojiLabel(parent, text, emoji) {
+    if (emoji) { var icon = document.createElement('span'); icon.className = 'sc-nav__emoji'; icon.setAttribute('aria-hidden','true'); icon.textContent = emoji; parent.appendChild(icon); }
+    var label = document.createElement('span'); label.className = 'sc-nav__text'; label.textContent = text; parent.appendChild(label);
+  }
+  function heading(text, emoji) {
     var summary = document.createElement('summary');
-    var label = document.createElement('span'); label.textContent = text;
-    summary.appendChild(label); summary.appendChild(dkIcon.el('chevron-right')); return summary;
+    emojiLabel(summary, text, emoji);
+    summary.appendChild(dkIcon.el('chevron-right')); return summary;
   }
   function addLink(parent, text, href, kind, groupName) {
-    var existing = showcase && href.charAt(0) === '#' ? sectionLinks.find(function (x) { return x.sec.id === href.slice(1); }) : null;
+    var address = new URL(href, location.href);
+    var samePage = address.pathname === location.pathname || (overview && address.pathname.endsWith('/index.html'));
+    var existing = articleRouter && samePage && address.hash ? sectionLinks.find(function (x) { return x.sec.id === address.hash.slice(1); }) : null;
     var a = existing ? existing.link : document.createElement('a'); a.href = href; a.textContent = text;
     if (here === href) a.setAttribute('aria-current', 'page'); parent.appendChild(a);
+    if (here === href) openParents(a);
     entries.push({text:text,href:href,kind:kind,group:groupName}); return a;
   }
+  function openParents(link) {
+    for (var parent = link.parentElement; parent && parent !== nav; parent = parent.parentElement) {
+      if (parent.tagName === 'DETAILS') parent.open = true;
+    }
+  }
   function sectionHref(id) { return (showcase ? '' : 'showcase.html') + '#' + id; }
-  function addGroup(name, items, open) {
+  function addGroup(name, items, open, emoji) {
     var box = document.createElement('details'); box.className = 'sc-nav__category'; box.open = open;
-    box.appendChild(heading(name));
+    box.appendChild(heading(name, emoji));
     var body = document.createElement('div'); body.className = 'sc-nav__items'; box.appendChild(body);
-    items.forEach(function (item) { addLink(body, item[0], sectionHref(item[1]), 'Руководство', name); });
+    items.forEach(function (item) { addLink(body, item[0], item[1].includes('.html') ? item[1] : sectionHref(item[1]), 'Руководство', name); });
     catalog.appendChild(box); return body;
   }
-  addLink(catalog, 'Правила и компоненты', 'index.html', 'Руководство', 'Начало работы');
-  var home = document.createElement('a'); home.className = 'sc-nav__home'; home.href = 'showcase.html';
-  home.appendChild(document.createTextNode('Обзор')); catalog.appendChild(home);
+  var home = addLink(catalog, 'Обзор', 'index.html', 'Руководство', 'Начало работы');
+  home.className = 'sc-nav__home';
+  home.replaceChildren(); emojiLabel(home, 'Обзор', '🏠');
+  addGroup('Начало работы', [['Собрать дашборд','index.html#start'], ['Как работать с ИИ','index.html#workflow'], ['Сборка по задаче','sborka-po-zadache'], ['Правила сборки','index.html#rules'], ['Рабочие сценарии','sdk-extensions']], false, '🧭');
   var visual = [
     ['Основы визуального языка','tri-principa'], ['Палитра','smyslovye'], ['Типографика','tipografika'],
     ['Иконографика','ikonki'], ['Структура и сетка','setka-i-ustroystva'],
     ['Эффекты','effekty'], ['Анимации','animacii']
   ];
-  addGroup('Визуальный язык', visual, false);
-  var componentBox = addGroup('Компоненты', [['Все компоненты','komponenty']], !showcase);
-  ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты','Композиция'].forEach(function (name) {
-    var subgroup = document.createElement('div'); subgroup.className = 'sc-nav__component-group'; var groupLabel = document.createElement('p'); groupLabel.className = 'sc-nav__label'; groupLabel.textContent = name; subgroup.appendChild(groupLabel);
-    var body = document.createElement('div'); body.className = 'sc-nav__items'; subgroup.appendChild(body); componentBox.appendChild(subgroup);
+  addGroup('Визуальный язык', visual, false, '🎨');
+  var componentHeading = document.createElement('p'); componentHeading.className = 'sc-nav__label'; componentHeading.textContent = 'Компоненты'; catalog.appendChild(componentHeading);
+  addLink(catalog, 'Все компоненты', 'index.html#catalog', 'Каталог', 'Компоненты');
+  var componentEmojis = {'Композиция':'🧱','Управление':'🎛️','Фильтры':'🔎','Данные':'📋','Визуализация':'📊','Обратная связь':'💬','Утилиты':'🛠️'};
+  ['Композиция','Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты'].forEach(function (name) {
+    var body = addGroup(name, [], false, componentEmojis[name]);
+    body.parentElement.classList.add('sc-nav__component-group');
     (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
       var navNames = {'check':'Флажок, радио, тумблер','chips-input':'Ввод меток','chips-select':'Выбор меток','badge':'Бейдж и статус','list':'Список','banner':'Баннеры и уведомления','empty':'Состояния','legend':'Легенда','uptime':'Доступность служб'};
       var href = 'component-' + c.slug + '.html'; var link = addLink(body,navNames[c.slug] || c.title,href,'Компонент',name); link.title = c.title;
 
     });
   });
+  var guideHeading = document.createElement('p'); guideHeading.className = 'sc-nav__label'; guideHeading.textContent = 'Применение'; catalog.appendChild(guideHeading);
   addGroup('Редполитика', [
     ['Принципы текста','principy-teksta'],
     ['Интерфейсные тексты','yazyk-interfeysa'], ['Глоссарий','glossariy']
-  ], false);
-  addGroup('Качество интерфейса', [['Удобство использования','usability'], ['Доступность','dostupnost']], false);
-  addGroup('Сборка дашборда', [['Сборка по задаче','sborka-po-zadache']], false);
-  var exampleBox = addGroup('Примеры дашбордов', [], false);
-  [['Мониторинг показателей','dashboard.html'], ['Аварии и события','accidents.html'], ['Планирование работ','calendar.html'], ['Польза AI · тестовые данные','ai-value.html']].forEach(function (item) {
+  ], false, '✍️');
+  addGroup('Качество интерфейса', [['Удобство использования','usability'], ['Доступность','dostupnost'], ['UI/UX и эвристики','index.html#uiux'], ['Выбор компонентов','index.html#patterns'], ['Визуальные принципы','index.html#design-guidance']], false, '✅');
+  addGroup('Разработка', [['Стек и библиотеки','index.html#development'], ['Контракт и тиражирование','index.html#development--scale'], ['Основа и каркас','index.html#foundations'], ['Подключение и проверка','index.html#development--connect']], false, '💻');
+  var exampleBox = addGroup('Примеры дашбордов', [], false, '🖥️');
+  [['Эталон · данные и действия','reference-dashboard.html'], ['Мониторинг показателей','dashboard.html'], ['Регионы','regions.html'], ['Аварии и события','accidents.html'], ['Планирование работ','calendar.html'], ['Семейная ипотека','family-mortgage.html'], ['Польза AI · тестовые данные','ai-value.html']].forEach(function (item) {
     addLink(exampleBox,item[0],item[1],'Рабочий экран','Примеры дашбордов');
   });
   var local = null;
-  var toc = document.createElement('details'); toc.className = 'sc-toc'; toc.open = true;
+  var toc = document.createElement('details'); toc.className = 'sc-toc'; toc.open = window.innerWidth >= 640;
   var tocTitle = document.createElement('summary'); tocTitle.textContent = 'На этой странице'; toc.appendChild(tocTitle);
   var tocLinks = document.createElement('nav'); tocLinks.setAttribute('aria-label','Содержание страницы'); toc.appendChild(tocLinks);
   function buildToc(selected, panel) {
     tocLinks.replaceChildren();
-    var headings = panel ? Array.from(panel.querySelectorAll('h3')) : (showcase ? (selected && selected.id !== 'komponenty' ? Array.from(selected.querySelectorAll(':scope > h3')) : []) : sections.map(function (sec) { return sec.querySelector('h2'); }).filter(Boolean));
+    var headings = panel ? Array.from(panel.querySelectorAll('h3')) : (articleRouter ? (selected && selected.id !== 'komponenty' ? Array.from(selected.querySelectorAll('h3')).filter(function (h) { return !h.closest('details:not([open])'); }) : []) : sections.map(function (sec) { return sec.querySelector('h2'); }).filter(Boolean));
     headings.forEach(function (h, i) {
       if (!h.id) h.id = 'topic-' + (selected ? selected.id : here.replace('.html','')) + '-' + i;
+      var section = h.closest('.sc-sec');
+      if (!articleRouter && section && section.dataset.group) {
+        var groupLabel = document.createElement('p'); groupLabel.className = 'sc-toc__group';
+        groupLabel.textContent = section.dataset.group; tocLinks.appendChild(groupLabel);
+      }
       var a = document.createElement('a'); a.href = '#' + h.id;
       a.textContent = h.textContent.replace(/#$/, '').trim(); tocLinks.appendChild(a);
       h.style.scrollMarginTop = '72px';
+      if (!articleRouter && section) section.querySelectorAll(':scope > h3').forEach(function (sub) {
+        var sublink = document.createElement('a'); sublink.href = '#' + sub.id;
+        sublink.className = 'sc-toc__sub'; sublink.textContent = sub.textContent;
+        tocLinks.appendChild(sublink);
+      });
     });
     toc.hidden = !headings.length;
     shell.classList.toggle('sc-shell--toc', !!headings.length);
     if (selected) selected.insertBefore(toc, selected.querySelector(':scope > h3'));
-    else if (!showcase) main.insertBefore(toc, main.querySelector('.sc-sec'));
+    else if (!articleRouter) main.insertBefore(toc, main.querySelector('.sc-sec'));
   }
   tocLinks.addEventListener('click', function (e) {
     var a = e.target.closest('a'); if (!a) return;
     var target = document.getElementById(a.hash.slice(1));
     if (target) { target.setAttribute('tabindex','-1'); target.focus({preventScroll:true}); }
   });
-  if (!showcase) buildToc(null);
+  if (!articleRouter) buildToc(null);
   function renderSearch() {
     var query = search.value.trim().toLocaleLowerCase('ru');
     results.replaceChildren(); status.textContent = '';
@@ -286,7 +316,7 @@
 
   var componentIndex = document.querySelector('.sc-component-index');
   if (componentIndex) {
-    ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты','Композиция'].forEach(function (name) {
+    ['Композиция','Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты'].forEach(function (name) {
       var block = document.createElement('div'); var h = document.createElement('h3'); h.textContent = name; block.appendChild(h);
       (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
         var a = document.createElement('a'); a.href = 'component-' + c.slug + '.html'; var text = document.createElement('span'); text.className = 'sc-component-index__text';
@@ -299,11 +329,14 @@
   /* Витрина читается как документация: один выбранный раздел, а не
      непрерывная лента всех образцов. Существующие адреса разделов сохранены. */
   function showArticle() {
-    if (!showcase) return;
+    if (!articleRouter) return;
     var id = location.hash.slice(1);
     if (['redpolitika','pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka'].includes(id)) id = 'principy-teksta';
     var target = document.getElementById(id);
     var selected = sections.find(function (sec) { return sec.id === id; }) || (target && target.closest('section.sc-sec'));
+    for (var owner = target; owner && owner !== main; owner = owner.parentElement) {
+      if (owner.tagName === 'DETAILS') owner.open = true;
+    }
     var guidePanels = selected ? Array.from(selected.querySelectorAll('.sc-guide__panel')) : [];
     var activePanel = guidePanels.find(function (panel) { return panel === target || panel.contains(target); }) || guidePanels[0];
     guidePanels.forEach(function (panel) { panel.hidden = panel !== activePanel; });
@@ -321,15 +354,16 @@
       if (heading) { var title = document.createElement('h1'); while (heading.firstChild) title.appendChild(heading.firstChild); heading.replaceWith(title); }
     });
     sectionLinks.forEach(function (x) {
-      if (x.sec === selected) { x.link.setAttribute('aria-current','location'); var owner = x.link.closest('details'); if (owner) owner.open = true; }
+      if (x.sec === selected) { x.link.setAttribute('aria-current','location'); openParents(x.link); }
       else x.link.removeAttribute('aria-current');
     });
-    nav.querySelectorAll('.sc-nav__home').forEach(function (a) { if (selected) a.removeAttribute('aria-current'); else a.setAttribute('aria-current','page'); });
+    nav.querySelectorAll('.sc-nav__home').forEach(function (a) { if (selected || !overview) a.removeAttribute('aria-current'); else a.setAttribute('aria-current','page'); });
     main.classList.toggle('sc-article', !!selected);
-    document.title = (selected ? selected.querySelector('h1').textContent.replace(/#$/, '').trim() + ' · ' : '') + 'dashboard-kit';
+    document.title = (selected ? selected.querySelector('h1').textContent.replace(/#$/, '').trim() : 'Обзор') + ' · dashboard-kit';
     if (selected) { var destination = guidePanels.length ? selected.querySelector('h1') : (target && target !== selected ? target : selected.querySelector('h1')); destination.scrollIntoView({block:'start'}); destination.setAttribute('tabindex','-1'); destination.focus({preventScroll:true}); }
+    else window.scrollTo(0, 0);
   }
-  if (showcase) { window.addEventListener('hashchange', showArticle); showArticle(); }
+  if (articleRouter) { window.addEventListener('hashchange', showArticle); showArticle(); }
 
   /* Текущий раздел — тот, чей заголовок последним прошёл под шапку. Считается
      по положению, а не по «виден ли раздел»: длинный раздел виден долго, и
@@ -339,7 +373,7 @@
     var active = tocEntries[0];
     tocEntries.forEach(function (a) { var h = document.getElementById(a.hash.slice(1)); if (h && h.getBoundingClientRect().top <= 112) active = a; });
     tocEntries.forEach(function (a) { if (a === active) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current'); });
-    if (showcase) return;
+    if (articleRouter) return;
     var line = 56 + 40;
     var cur = links[0];
     links.forEach(function (x) { if (x.sec.getBoundingClientRect().top <= line) cur = x; });
@@ -357,6 +391,47 @@
     requestAnimationFrame(function () { ticking = false; current(); });
   }, { passive: true });
   current();
+
+  /* Нативная прокрутка, без перехвата колеса. В фокус попадают только
+     действительно прокручиваемые таблицы; авторские атрибуты сохраняются. */
+  var scrollWrappers = new Map();
+  function watchTables() {
+    scrollWrappers.forEach(function (state, wrap) {
+      if (main.contains(wrap)) return;
+      state.observer.disconnect(); state.hint.remove(); scrollWrappers.delete(wrap);
+    });
+    main.querySelectorAll('.dk-tablewrap').forEach(function (wrap) {
+    var table = wrap.querySelector('table');
+    if (!table) return;
+    var state = scrollWrappers.get(wrap);
+    if (state) {
+      if (state.table !== table) { state.observer.unobserve(state.table); state.observer.observe(table); state.table = table; }
+      state.update(); return;
+    }
+    var original = {};
+    ['tabindex','role','aria-label'].forEach(function (name) { original[name] = wrap.getAttribute(name); });
+    var hint = document.createElement('p'); hint.className = 'sc-scroll-hint';
+    hint.textContent = 'Таблица прокручивается по горизонтали'; hint.hidden = true;
+    wrap.after(hint);
+    function updateScroll() {
+      var horizontal = wrap.clientWidth > 0 && wrap.scrollWidth > wrap.clientWidth + 1;
+      var scrollable = horizontal || (wrap.clientHeight > 0 && wrap.scrollHeight > wrap.clientHeight + 1);
+      hint.hidden = !horizontal;
+      var section = wrap.closest('.sc-sec');
+      var title = section && section.querySelector('h1,h2');
+      var values = {'tabindex':'0','role':'region','aria-label':'Прокручиваемая таблица' + (title ? ': ' + title.textContent.replace(/#$/, '').trim() : '')};
+      Object.keys(original).forEach(function (name) {
+        if (original[name] !== null) return;
+        if (scrollable) wrap.setAttribute(name, values[name]); else wrap.removeAttribute(name);
+      });
+    }
+    var observer = new ResizeObserver(updateScroll); observer.observe(wrap); observer.observe(table);
+    scrollWrappers.set(wrap, {table:table, observer:observer, hint:hint, update:updateScroll});
+    updateScroll();
+    });
+  }
+  watchTables();
+  new MutationObserver(watchTables).observe(main, {childList:true, subtree:true});
 
   /* Значение под каждым образцом цвета. Берётся с экрана, а не из файла:
      половина токенов собрана color-mix, и в файле у них формула, а не цвет. */
@@ -475,4 +550,19 @@
     tokBox.textContent = ''; tokBox.appendChild(li);
   }
 
+})();
+
+// Task entry works with any assistant; copying does not open an external service.
+(function () {
+  var button = document.querySelector('[data-copy-task]');
+  if (!button) return;
+  button.addEventListener('click', async function () {
+    var status = document.querySelector('[data-copy-task-status]');
+    try {
+      await navigator.clipboard.writeText(document.getElementById('dashboard-task-prompt').textContent);
+      status.textContent = 'Запрос скопирован. Вставьте его помощнику и добавьте свои данные.';
+    } catch (_) {
+      status.textContent = 'Не удалось скопировать автоматически. Выделите текст запроса и скопируйте вручную.';
+    }
+  });
 })();

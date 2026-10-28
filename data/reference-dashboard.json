@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "reference-demo",
+    "label": "Учебный набор работ служб",
+    "kind": "demo",
+    "updatedAt": "2026-10-20T09:00:00Z"
+  },
+  "period": {
+    "to": "2026-10-20",
+    "from": "2026-10-01"
+  },
+  "dimensions": [
+    {
+      "id": "region",
+      "label": "Город"
+    },
+    {
+      "id": "service",
+      "label": "Служба"
+    }
+  ],
+  "metrics": [
+    {
+      "id": "received",
+      "label": "Поступило",
+      "unit": "работ",
+      "aggregation": "sum",
+      "description": "Сумма поступивших работ в выбранных наблюдениях. Каждая работа учитывается один раз по дате поступления."
+    },
+    {
+      "id": "completed",
+      "label": "Выполнено",
+      "unit": "работ",
+      "aggregation": "sum",
+      "description": "Из поступивших в этом наблюдении работ выполнено к моменту обновления источника. null означает отсутствие сведений, а не ноль."
+    }
+  ],
+  "rows": [
+    {
+      "id": "observation-1",
+      "label": "Москва · Водоснабжение",
+      "date": "2026-10-05",
+      "dimensions": {
+        "region": "Москва",
+        "service": "Водоснабжение"
+      },
+      "values": {
+        "received": 12,
+        "completed": 9
+      }
+    },
+    {
+      "id": "observation-2",
+      "label": "Казань · Теплоснабжение",
+      "date": "2026-10-05",
+      "dimensions": {
+        "region": "Казань",
+        "service": "Теплоснабжение"
+      },
+      "values": {
+        "received": 8,
+        "completed": 8
+      }
+    },
+    {
+      "id": "observation-3",
+      "label": "Пермь · Водоснабжение",
+      "date": "2026-10-05",
+      "dimensions": {
+        "region": "Пермь",
+        "service": "Водоснабжение"
+      },
+      "values": {
+        "received": 0,
+        "completed": 0
+      }
+    },
+    {
+      "id": "observation-4",
+      "label": "Москва · Теплоснабжение",
+      "date": "2026-10-12",
+      "dimensions": {
+        "region": "Москва",
+        "service": "Теплоснабжение"
+      },
+      "values": {
+        "received": 18,
+        "completed": 11
+      }
+    },
+    {
+      "id": "observation-5",
+      "label": "Казань · Водоснабжение",
+      "date": "2026-10-12",
+      "dimensions": {
+        "region": "Казань",
+        "service": "Водоснабжение"
+      },
+      "values": {
+        "received": 10,
+        "completed": 7
+      }
+    },
+    {
+      "id": "observation-6",
+      "label": "Пермь · Теплоснабжение",
+      "date": "2026-10-12",
+      "dimensions": {
+        "region": "Пермь",
+        "service": "Теплоснабжение"
+      },
+      "values": {
+        "received": 6,
+        "completed": null
+      }
+    },
+    {
+      "id": "observation-7",
+      "label": "Москва · Водоснабжение",
+      "date": "2026-10-19",
+      "dimensions": {
+        "region": "Москва",
+        "service": "Водоснабжение"
+      },
+      "values": {
+        "received": 15,
+        "completed": 12
+      }
+    },
+    {
+      "id": "observation-8",
+      "label": "Казань · Теплоснабжение",
+      "date": "2026-10-19",
+      "dimensions": {
+        "region": "Казань",
+        "service": "Теплоснабжение"
+      },
+      "values": {
+        "received": 9,
+        "completed": 6
+      }
+    },
+    {
+      "id": "observation-9",
+      "label": "Пермь · Водоснабжение",
+      "date": "2026-10-19",
+      "dimensions": {
+        "region": "Пермь",
+        "service": "Водоснабжение"
+      },
+      "values": {
+        "received": 7,
+        "completed": 7
+      }
+    }
+  ]
+}

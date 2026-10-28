@@ -1,207 +1,403 @@
-/* ===========================================================================
-   СТЕКЛО: слой дашборда (отключаемый)
-
-   Один класс — dk-glass на .dk-page — переводит дашборд на стеклянный язык:
-   цветная подложка-vibrancy под страницей и матовые панели поверх неё. Это
-   ОТКЛЮЧАЕМЫЙ слой: нет класса — нет стекла, страница остаётся на плоских
-   поверхностях. Поэтому документация кита (index, showcase, страницы
-   компонентов) класс не носит и выглядит нейтрально, а стекло живёт только
-   там, где его включили — на дашбордах.
-
-   Материал собран из токенов стекла (tokens.semantic → *.primitives). Данные
-   (плитки карты, полосы, серии, крупные числа) остаются плотным цветом —
-   разводка «данные плотные / обвязка статуса стеклянная» живёт в components.css.
-   =========================================================================== */
-
-/* Подложка: насыщенные разноцветные «обои» — сочные раздельные пятна, которые
-   стекло фростит в текстуру с vibrancy (не мутный смыв). attachment: fixed —
-   чтобы при прокрутке стекло «проявляло» разные части подложки. */
+/* Общий материал Dark / Light. Геометрия — в components.css,
+   плотность и цвет — в tokens.semantic.css, свет и поверхности — здесь. */
+/* Shared raster background and native fade. Widget frost is isolated on an
+   empty surface layer; content and controls do not receive a filter. */
 .dk-glass {
-  background:
-    radial-gradient(64% 66% at 22% 10%, var(--glass-glow-1), transparent 78%),
-    radial-gradient(66% 66% at 80% 16%, var(--glass-glow-2), transparent 78%),
-    radial-gradient(68% 68% at 74% 88%, var(--glass-glow-3), transparent 78%),
-    radial-gradient(64% 66% at 20% 90%, var(--glass-glow-4), transparent 78%),
-    radial-gradient(90% 85% at 50% 50%, var(--glass-glow-c), transparent 92%),
-    var(--bg);
-  background-attachment: fixed;
+  background-color: var(--bg);
+  background-image: linear-gradient(to bottom, transparent 64%, var(--bg) 100%), var(--glass-background-image);
+  background-size: 100% var(--glass-scene-height);
+  background-repeat: no-repeat;
+  background-attachment: scroll;
 }
-
-/* Панели: полупрозрачное стекло, сильный blur + saturate (vibrancy), тонкая
-   светящаяся кромка (часть материала, не плоская обводка). */
-.dk-glass .dk-widget,
-.dk-glass .dk-hero,
-.dk-glass .dk-panel {
-  background: var(--glass-sheen), var(--glass-surface);
-  border: 1px solid var(--glass-edge);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
-}
-
-/* Оболочка каркаса кита красит фон непрозрачно (--bg) и перекрыла бы подложку.
-   В стеклянном дашборде делаем её прозрачной — подложка-vibrancy с body
-   проступает сквозь весь каркас и «фростится» панелями поверх неё. */
 .dk-glass .dk-app,
 .dk-glass .dk-main,
 .dk-glass .dk-content { background: transparent; }
 
-/* Каркас (боковое меню, липкая шапка, нижний таб-бар телефона) — тоже стекло,
-   на полтона плотнее панелей: он держит навигацию и не должен растворяться.
-   Шапка .dk-head у кита прозрачная — отдельной заливки ей не нужно. */
-.dk-glass .dk-side,
-.dk-glass .dk-top,
-.dk-glass .dk-tabbar {
-  background: var(--glass-sheen), var(--glass-surface-2);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
-}
-.dk-glass .dk-side { border-right: 1px solid var(--glass-edge-soft); }
+/* Базовые поверхности без фильтра. Только общий виджет получает отдельный
+   пустой слой стекла ниже; скроллеры и контролы не размываются. */
 
-/* Вложенная панель внутри панели размывать фон дважды не должна — стекло поверх
-   стекла мутит картинку. Внутренняя поверхность становится лёгким чипом без
-   собственного blur: она лежит на уже матовом стекле родителя. */
-.dk-glass .dk-widget .dk-panel,
-.dk-glass .dk-hero .dk-panel,
-.dk-glass .dk-panel .dk-panel {
-  background: var(--glass-chip);
+/* Панели: один мягкий блик и тонкая кромка вместо белого диагонального пятна. */
+.dk-glass .dk-hero,
+.dk-glass .dk-panel {
+  background: var(--glass-sheen), var(--glass-surface);
+  border: 1px solid var(--glass-edge);
+  border-top-color: var(--glass-edge-top);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* Frost lives on an empty layer; content/canvas keeps its own paint. */
+.dk-glass .dk-widget {
+  position:relative; isolation:isolate; background:none; box-shadow:none;
+  border:1px solid var(--glass-edge); border-top-color:var(--glass-edge-top);
+}
+.dk-glass .dk-widget::before {
+  content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  border-radius:inherit; background:var(--glass-sheen),var(--glass-surface);
+  box-shadow:var(--glass-shadow);
+  -webkit-backdrop-filter:blur(var(--glass-blur)); backdrop-filter:blur(var(--glass-blur));
+}
+.dk-glass :is(.dk-widget, .dk-hero, .dk-panel) .dk-panel {
+  background: var(--glass-control-sheen), var(--glass-chip);
+  box-shadow: var(--glass-control-shadow);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
 
-/* Коробочные поверхности, которые были нарисованы под старый плотный фон:
-   баннер-уведомление и «колодец»-вставка. На стекле их плотная заливка
-   смотрелась чужеродной — переводим в тот же материал. Баннер сохраняет свой
-   смысловой тон (--accent), но становится цветным стеклом. */
-.dk-glass .dk-banner {
-  background:
-    var(--glass-sheen),
-    color-mix(in srgb, var(--accent, var(--event)) 16%, var(--glass-surface));
+/* Шапки продолжают тот же материал; всплывающие слои плотнее ради текста. */
+.dk-glass :is(.dk-side, .dk-top, .dk-tabbar, .sc-bar, .sc-nav, .gr-topbar) {
+  background: var(--glass-sheen), var(--glass-surface);
+  border-color: var(--glass-edge-soft);
+  box-shadow: var(--glass-control-shadow);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.dk-glass .dk-side { border-right: 1px solid var(--glass-edge-soft); }
+.dk-glass :is(.dk-menu, .dk-pop, .dk-modal, .dk-tooltip) {
+  /* Читаемый верхний слой: содержимое страницы не просвечивает. */
+  background: var(--surface-2);
+  border: 1px solid var(--glass-edge);
+  border-top-color: var(--glass-edge-top);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Поиск, поля, селекты, кнопки и дорожка сегмента — одна поверхность.
+   Размеры остаются компонентными; круглых исключений для иконок нет. */
+.dk-glass :is(.dk-field, .dk-search, .dk-select__trigger, .dk-iconbtn, .dk-seg),
+.dk-glass .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost) {
+  background: var(--glass-control-sheen), var(--glass-control);
   border: 1px solid var(--glass-edge-soft);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
+  border-top-color: var(--glass-edge-top);
+  border-radius: var(--radius-md);
+  /* Малые контролы используют прозрачную заливку без собственного слоя
+     размытия и нижней тени. Это убирает отдельный слой композитинга на их кромке. */
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
-.dk-glass .dk-well { background: var(--glass-chip); }
+/* Свет меняется мягко, геометрия контролов при наведении остаётся стабильной. */
+.dk-glass :is(.dk-btn, .dk-iconbtn, .dk-select__trigger, .dk-seg button, .dk-field, .dk-search) {
+  transition: color var(--duration-fast), border-color var(--duration-fast), box-shadow var(--duration-fast), background-color var(--duration-fast);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dk-glass :is(.dk-btn, .dk-iconbtn, .dk-select__trigger, .dk-seg button, .dk-field, .dk-search) { transition: none; }
+}
 
-/* Шапка таблицы была залита плотным серым (--surface-2) — на стекле это
-   тяжёлая серая плашка поперёк панели. Делаем её лёгким стеклянным чипом с
-   размытием: читается как шапка, но не спорит со стеклом. Зебра-строки уже
-   полупрозрачные, их не трогаем. */
-.dk-glass .dk-table th {
-  background: var(--glass-chip);
-  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
+/* Одинаковый размер по умолчанию. S/M/L остаются только явными вариантами. */
+.dk-glass :is(.dk-btn, .dk-iconbtn, .dk-select, .dk-field, .dk-search, .dk-seg) {
+  --glass-control-size: var(--control-lg);
+  --glass-control-icon: var(--icon-size-control);
+}
+.dk-glass :is(.dk-btn--sm, .dk-iconbtn--sm, .dk-select--sm, .dk-seg--sm) {
+  --glass-control-size: var(--control-sm);
+  --glass-control-icon: var(--icon-size-compact);
+}
+.dk-glass :is(.dk-field--md, .dk-select--md) { --glass-control-size: var(--control-md); }
+.dk-glass :is(.dk-btn, .dk-field, .dk-search, .dk-select__trigger, .dk-iconbtn) {
+  height: var(--glass-control-size);
+}
+.dk-glass .dk-iconbtn { width: var(--glass-control-size); }
+/* Дорожка и выбранная стеклянная линза читаются как два уровня глубины. */
+.dk-glass .dk-seg {
+  padding: var(--track-pad);
+  background: var(--glass-control-sheen), var(--glass-segment-track);
+}
+.dk-glass .dk-seg button {
+  height: calc(var(--glass-control-size) - 2 * var(--track-pad) - 2px);
+  border-radius: calc(var(--radius-md) - var(--track-pad));
+}
+/* Одна шкала SVG для обычных контролов; явно адаптивные значки имеют свой API. */
+.dk-root .dk-glass :is(.dk-btn, .dk-iconbtn, .dk-seg button, .dk-select__trigger, .dk-search, .dk-field) > .dk-i:not(.dk-i--adaptive) {
+  display: block;
+  flex: none;
+  align-self: center;
+  width: var(--glass-control-icon, var(--icon-size-control));
+  height: var(--glass-control-icon, var(--icon-size-control));
+  margin: 0;
+  vertical-align: middle;
+}
+.dk-root .dk-glass .dk-iconbtn {
+  padding: 0;
+  border-radius: var(--radius-md);
+}
+.dk-root .dk-glass .dk-btn:not(.dk-btn--sm):not(.dk-btn--lg),
+.dk-root .dk-glass .dk-select:not(.dk-select--sm) > .dk-select__trigger {
+  padding-inline: var(--control-pad-md);
+  gap: var(--gap-tight);
+}
+.dk-glass :is(.dk-btn, .dk-iconbtn):disabled,
+.dk-glass :is(.dk-btn, .dk-iconbtn)[aria-disabled="true"] {
+  opacity: .5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+@media (pointer: coarse) {
+  .dk-glass .dk-seg { --track-pad: 0px; }
+  .dk-glass .dk-seg button { min-width: var(--control-md); min-height: var(--control-md); }
 }
 
-/* === СТЕКЛО: светящийся ореол на фокусе/активном =========================
-   «Подсвеченное стекло» из рефов Google/Gemini. Свечение — мягкий цветной
-   bloom, только там, где акцент разрешён (ТИШИНА): фокус поиска, основная
-   кнопка, выбранный сегмент. Кольцо фокуса (outline) не трогаем — ореол
-   поверх него, доступность сохранена. */
-.dk-glass .dk-search:focus-within {
-  /* Только мягкое свечение, без жёсткого синего кольца: outline убран, его роль
-     берёт на себя box-shadow-ореол (a11y-проверка засчитывает его как видимый
-     фокус). */
-  box-shadow: var(--glass-focus-glow);
-  outline: none;
-  border-color: transparent;
-}
-.dk-glass .dk-btn--primary {
-  box-shadow: var(--glass-primary-glow);
-}
+/* У сегмента — свет и глубина; синий контур остаётся только фокусу с клавиатуры. */
 .dk-glass .dk-seg button[aria-pressed="true"],
 .dk-glass .dk-seg button.is-on {
+  background: var(--glass-segment-sheen), var(--glass-segment-lens);
+  color: var(--ink);
+  box-shadow: var(--glass-segment-shadow);
+}
+.dk-glass .dk-select[data-active="true"] .dk-select__trigger {
+  background: var(--glass-control-sheen), var(--glass-selected);
+  color: var(--ink);
   box-shadow: var(--glass-active-glow);
 }
-
-/* Карточки карусели и заполненный фильтр были на плотном surface — на стекле
-   читались тёмными плашками рядом с полупрозрачными соседями. Переводим в тот
-   же материал. Карточка карусели — вложенный чип без своего размытия (frost даёт
-   родитель); заполненный фильтр сохраняет свой тон (--control-soft), но на
-   полупрозрачной основе. */
-.dk-glass .dk-car__item { background: var(--glass-chip); }
-.dk-glass .dk-select[data-active="true"] .dk-select__trigger,
-.dk-glass :where(.dk-panel, .dk-widget, .dk-modal, .dk-menu) .dk-select[data-active="true"] .dk-select__trigger {
-  background: linear-gradient(var(--control-soft), var(--control-soft)), var(--glass-chip);
+.dk-glass .dk-select__trigger[aria-expanded="true"] {
+  background: var(--glass-control-sheen), var(--glass-hover-strong);
 }
-
-/* Кнопки зума карты были почти плотными (0.9) без размытия — тёмная плашка
-   поверх стекла. Переводим в тот же стеклянный чип с размытием и кромкой. */
-.dk-glass .dk-map__zoom {
-  background: var(--glass-chip);
-  border: 1px solid var(--glass-edge-soft);
-  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-vibrancy-sm));
-}
-
-/* === СТЕКЛО: оверлеи и все оставшиеся компоненты =========================
-   Выпадающие меню, поповеры, модалки/шиты, подсказки, аккордеон — всё, что
-   всплывает над контентом, тоже стекло. Оверлеи плотнее панелей (surface-2) и
-   с сильным размытием: они парят над произвольным контентом и должны читаться.
-   Данные внутри не трогаем. */
-.dk-glass .dk-menu,
-.dk-glass .dk-pop,
-.dk-glass .dk-modal,
-.dk-glass .dk-tooltip {
-  background: var(--glass-sheen), var(--glass-surface-2);
-  border: 1px solid var(--glass-edge);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-vibrancy));
-}
-.dk-glass .dk-fold { background: var(--glass-chip); }
-.dk-glass .dk-menu__item[data-cursor="true"] { background: var(--glass-hover); }
 @media (hover: hover) and (pointer: fine) {
+  .dk-glass :is(.dk-field, .dk-search, .dk-select__trigger, .dk-iconbtn):hover,
+  .dk-glass .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost):hover {
+    background: var(--glass-control-sheen), var(--glass-hover);
+    color: var(--ink);
+  }
+  .dk-glass .dk-seg button:not([aria-pressed="true"]):not(.is-on):hover,
+  .dk-glass .dk-btn--ghost:hover,
   .dk-glass .dk-menu__item:hover,
   .dk-glass .dk-fold__head:hover { background: var(--glass-hover); }
+  .dk-glass .dk-seg button[aria-pressed="true"]:hover,
+  .dk-glass .dk-seg button.is-on:hover {
+    background: var(--glass-segment-sheen), var(--glass-segment-lens);
+  }
+  .dk-glass .dk-select[data-active="true"] .dk-select__trigger:hover {
+    background: var(--glass-control-sheen), var(--glass-selected);
+  }
 }
+.dk-glass .dk-menu__item[data-cursor="true"] { background: var(--glass-selected); }
 
-/* Единый фокус — мягкое свечение, без жёсткого синего кольца (как у поиска).
-   a11y-проверка засчитывает box-shadow как видимый фокус. */
+/* Фокус виден отдельным контуром. Мягкий ореол дополняет, не заменяет его. */
 .dk-glass .dk-select__trigger:focus-visible,
 .dk-glass .dk-btn:focus-visible,
 .dk-glass .dk-iconbtn:focus-visible,
 .dk-glass .dk-seg button:focus-visible,
-.dk-glass .dk-tab:focus-visible {
+.dk-glass .dk-tab:focus-visible,
+.dk-glass .dk-field:focus-within,
+.dk-glass .dk-search:focus-within {
+  outline: var(--focus-width) solid var(--brand);
+  outline-offset: var(--focus-offset-tight);
   box-shadow: var(--glass-focus-glow);
-  outline: none;
 }
 
-/* Клетки календаря — плотные тёмные плашки на стекле. Переводим в стеклянный
-   чип (без своего размытия: клеток в сетке много). Полоски событий — данные,
-   остаются плотным цветом. Выбранный день сохраняет тон --control-soft. */
+/* Данные остаются плотными: стекло используется только для подложек. */
+.dk-glass .dk-banner {
+  background: var(--glass-sheen), color-mix(in srgb, var(--accent, var(--event)) 12%, var(--glass-surface));
+  border: 1px solid var(--glass-edge-soft);
+  box-shadow: var(--glass-control-shadow);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.dk-glass :is(.dk-well, .dk-car__item, .dk-fold, .dk-chip, .dk-region-tools__period, .dk-lg) {
+  background: var(--glass-chip);
+}
+.dk-glass .dk-map__zoom {
+  width: var(--control-lg);
+  border-radius: var(--radius-md);
+  background: var(--glass-control-sheen), var(--glass-control);
+  border: 1px solid var(--glass-edge-soft);
+  box-shadow: var(--glass-control-shadow);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.dk-glass .dk-map__zoom button { width: 100%; height: var(--control-lg); }
+.dk-glass .dk-map__zoom button .dk-i { width: 18px; height: 18px; }
 .dk-glass .dk-cal__day { background: var(--glass-chip); }
 .dk-glass .dk-cal__day[aria-selected="true"] {
-  background: linear-gradient(var(--control-soft), var(--control-soft)), var(--glass-chip);
+  background: var(--glass-selected);
+  box-shadow: var(--glass-active-glow);
 }
 .dk-glass .dk-cal__day[data-other="true"] { background: none; }
 @media (hover: hover) and (pointer: fine) {
   .dk-glass .dk-cal__day:hover { background: var(--glass-hover); }
 }
-
-/* Одиночные иконки-кнопки — круглые фростовые кружки (рефы Google/Gemini).
-   Сегментные иконки в дорожке это не трогает: там свой радиус. */
-.dk-glass .dk-iconbtn { border-radius: var(--radius-full); }
-
-/* Компонентные поверхности, которые ещё оставались плотными на стекле: поиск
-   внутри панели фильтров, метка периода и кнопки-легенды карты. Переводим в
-   стеклянный чип. Активная легенда сохраняет свой смысловой тон. */
-.dk-glass .dk-region-tools .dk-search,
-.dk-glass .dk-region-tools__period,
-.dk-glass .dk-lg {
-  background: var(--glass-chip);
-}
-
-/* Таблицы: в карточном режиме строки превращаются в карточки (были плотными),
-   а у липких колонок — своя заливка. Переводим в стеклянный чип. Зебра уже
-   полупрозрачная. */
+.dk-glass .dk-table th { background: var(--glass-chip); }
 .dk-glass .dk-table--cards > tbody > tr { background: var(--glass-chip); }
-/* Сорт-пилюли-заголовки карточного режима были плотными (--surface-2): у
-   правила в components.css тройная специфичность, поэтому перебиваем его
-   под .dk-glass тем же тройным селектором + .dk-glass. Чип без своего blur —
-   мелкий элемент не мутим. */
 .dk-glass .dk-table--cards.dk-table--cards.dk-table--cards > thead > tr > th:is([aria-sort], .dk-th-pick) {
   background: var(--glass-chip);
 }
 .dk-glass .dk-table--sticky-col thead th:first-child,
 .dk-glass .dk-table--sticky-col thead .dk-th-pick + th,
 .dk-glass .dk-table--sticky-col td:first-child,
-.dk-glass .dk-table--sticky-col .dk-td-pick + td { background: var(--glass-chip); }
+.dk-glass .dk-table--sticky-col .dk-th-pick + td { background: var(--glass-surface-2); }
+.dk-glass :is(.sc-ctl, .dk-head__actions, .dk-side__profile-themes) { flex-wrap: wrap; }
+
+/* Отключённое размытие сохраняет читаемые непрозрачные поверхности. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .dk-glass {
+    --glass-surface: var(--surface);
+    --glass-surface-2: var(--surface-2);
+    --glass-control: var(--surface-2);
+    --glass-segment-track: var(--surface-2);
+    --glass-segment-lens: var(--surface-3);
+    --glass-chip: var(--surface-3);
+  }
+}
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  .dk-glass {
+    background: var(--bg);
+    --glass-surface: var(--surface);
+    --glass-surface-2: var(--surface-2);
+    --glass-control: var(--surface-2);
+    --glass-segment-track: var(--surface-2);
+    --glass-segment-lens: var(--surface-3);
+    --glass-chip: var(--surface-3);
+    --glass-sheen: linear-gradient(transparent, transparent);
+    --glass-control-sheen: linear-gradient(transparent, transparent);
+    --glass-blur: 0px;
+    --glass-blur-sm: 0px;
+    --glass-shadow: none;
+    --glass-control-shadow: none;
+  }
+}
+@media (forced-colors: active) {
+  .dk-glass .dk-seg button[aria-pressed="true"],
+  .dk-glass .dk-seg button.is-on { outline: 1px solid Highlight; outline-offset: -1px; }
+}
+
+.dk-glass .dk-widget__title { text-transform: none; letter-spacing: var(--type-body-track); }
+.dk-glass .dk-map__key { border: 1px solid var(--glass-edge-soft); border-radius: var(--radius-full); }
+.dk-glass .dk-map__key[aria-pressed="true"] { background: var(--glass-selected); box-shadow: inset 0 1px 0 var(--glass-edge-top); }
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  .dk-glass { background-image: none; }
+}
+
+/* A metric band is one surface: its summary never becomes a nested card. */
+.dk-glass .dk-metric-band > .dk-hero { background:none; border:0; box-shadow:none; padding:0; }
+
+.dk-glass .dk-widget__title { color:var(--ink); }
+.dk-glass .dk-metric-band .dk-metric-lg { font:var(--type-metric-xl); }
+@media(max-width:1350px) { .dk-glass .dk-metric-band .dk-metric-lg { font:var(--type-overview-title); } }
+
+@media(max-width:359px) { .dk-glass .dk-metric-band .dk-metric-lg { font:var(--type-metric-lg); } }
+
+/* Graphite widget refinement: quiet edges and one uninterrupted surface. */
+.dk-glass .dk-widget { gap:var(--space-7); }
+.dk-glass .dk-rank__head { padding-inline:0; }
+.dk-glass .dk-rank__head .dk-overline { font:var(--type-caption); letter-spacing:var(--type-body-track); text-transform:none; }
+.dk-glass .dk-rank__row { padding-inline:0; }
+.dk-glass .dk-rank__meter { height:var(--space-3); background:color-mix(in srgb,var(--ink) 7%,transparent); }
+.dk-glass .dk-map[data-appearance="glass"] .dk-map__tile { background:color-mix(in srgb,var(--fill,var(--nodata)) 7%,var(--glass-chip)); border-color:color-mix(in srgb,var(--fill,var(--nodata)) 16%,var(--glass-edge-soft)); box-shadow:inset 0 1px 0 var(--glass-rim); }
+
+
+@media(prefers-reduced-transparency:reduce),(forced-colors:active) { .dk-glass .dk-widget::before { -webkit-backdrop-filter:none; backdrop-filter:none; } }
+
+/* Graphite tables: quieter scaffolding, aligned numbers, explicit statuses. */
+.dk-glass .dk-table th { font:var(--type-caption); font-weight:var(--weight-ui); text-transform:none; letter-spacing:var(--type-body-track); color:var(--ink-2); padding-block:var(--space-6); }
+.dk-glass .dk-table:not(.dk-table--sticky-head):not(.dk-table--sticky-col) th { background:none; border-bottom:1px solid var(--glass-edge); }
+.dk-glass .dk-table td { padding-block:var(--space-4); }
+.dk-glass .dk-table--ruled tbody td { border-bottom-color:color-mix(in srgb,var(--ink) 6%,transparent); }
+.dk-glass .dk-table .dk-td-num { font-weight:var(--weight-ui); }
+.dk-glass .dk-table .dk-status { background:none; padding:0; }
+.dk-glass .dk-table .dk-link { color:var(--ink); font-weight:var(--weight-ui); }
+@media (hover: hover) and (pointer: fine) {
+ .dk-glass .dk-table:not(.dk-table--sticky-col) tbody tr:not([aria-selected="true"]):hover > td { background:color-mix(in srgb,var(--ink) 4%,transparent); }
+ .dk-glass .dk-table .dk-link:hover { color:var(--link); }
+}
+@media(max-width:767px) {
+ .dk-glass .dk-table--cards > thead:not(:has([aria-sort], .dk-th-pick)) { display:none; }
+ .dk-glass .dk-table--cards > tbody > tr { padding:var(--space-6) 0; margin-bottom:var(--space-5); border-bottom:1px solid var(--glass-edge-soft); gap:var(--space-4); }
+ .dk-glass .dk-table--cards.dk-table--cards.dk-table--cards tbody tr > td:nth-child(n) { border-bottom:0; }
+ .dk-glass .dk-table--cards.dk-table--cards.dk-table--cards tbody tr:not(:has(.dk-td-pick)) > td:first-child { padding-right:0; }
+ .dk-glass .dk-table--cards tbody td[data-label]::before { font:var(--type-caption); color:var(--ink-2); }
+}
+
+.dk-glass .dk-table--cards > tbody > tr:not([aria-selected="true"]) { background:none; }
+
+
+/* Graphite: shared details for tables, removable values and KPIs. */
+.dk-glass .dk-th-sort {
+ min-height:var(--control-sm); padding-inline:var(--space-4);
+ margin-inline:calc(-1 * var(--space-4)); border-radius:var(--radius-sm);
+}
+.dk-glass :is([aria-sort="ascending"], [aria-sort="descending"]) .dk-th-sort { background:var(--glass-chip); }
+.dk-glass .dk-table--sticky-head thead th,
+.dk-glass .dk-table--sticky-col thead th,
+.dk-glass .dk-table tfoot :is(td, th) { background:var(--surface-2); }
+.dk-glass .dk-table tfoot :is(td, th) { padding-block:var(--space-6); border-top:1px solid var(--glass-edge); font-weight:var(--weight-ui-strong); }
+.dk-glass .dk-table .dk-tr-group :is(td, th) {
+ font:var(--type-caption); font-weight:var(--weight-ui-strong);
+ text-transform:none; letter-spacing:var(--type-body-track); color:var(--ink-2);
+}
+.dk-glass .dk-table:not(.dk-table--sticky-col) tbody tr:not([aria-selected="true"]):focus-within > td { background:var(--glass-chip); }
+.dk-glass .dk-table--sticky-col tbody tr:not([aria-selected="true"]):focus-within > td { background:var(--surface-2); }
+.dk-glass .dk-check__box { box-sizing:border-box; border:1px solid var(--ink-3); box-shadow:inset 0 1px 0 var(--glass-rim); }
+.dk-glass .dk-check:not(.dk-check--radio) .dk-check__box { border-radius:var(--radius-sm); }
+.dk-glass .dk-check input:checked + .dk-check__box,
+.dk-glass .dk-check .dk-check__box--mixed { border-color:var(--control-on); }
+.dk-glass .dk-check__box--mixed .dk-i { display:none; }
+.dk-glass .dk-check__box--mixed::after { content:""; width:var(--space-5); height:var(--space-1); border-radius:var(--radius-full); background:var(--control-on-ink); }
+.dk-glass .dk-pager { padding-top:var(--space-7); }
+.dk-glass .dk-pager__p { border-radius:var(--radius-sm); font-weight:var(--weight-ui); }
+.dk-glass .dk-pager__p[aria-current] { box-shadow:inset 0 1px 0 var(--glass-edge-top); }
+.dk-glass .dk-pager__size select { border:1px solid var(--glass-edge); border-radius:var(--radius-sm); background:var(--glass-control); }
+@media (hover: hover) and (pointer: fine) {
+ .dk-glass .dk-th-sort:hover { background:var(--glass-hover); }
+ .dk-glass .dk-pager__p:not([aria-current]):hover { background:var(--glass-hover); }
+}
+
+.dk-glass :is(.dk-fchip, .dk-chips__item) {
+ box-sizing:border-box; min-height:var(--control-sm); height:auto; max-width:100%;
+ padding:var(--space-1) var(--space-2) var(--space-1) var(--control-pad-sm);
+ font:var(--type-body); overflow-wrap:anywhere;
+ background:var(--glass-control-sheen),var(--glass-chip);
+ border:1px solid var(--glass-edge); border-radius:var(--radius-md);
+ box-shadow:inset 0 1px 0 var(--glass-rim);
+}
+.dk-glass .dk-fchip--secondary { color:var(--ink-2); background:var(--glass-chip); }
+.dk-glass :is(.dk-fchip__x, .dk-chips__item > .dk-iconbtn) {
+ width:var(--space-8); height:var(--space-8); min-width:var(--space-8);
+ border-radius:var(--radius-sm); flex:none;
+}
+.dk-glass .dk-chips__item > .dk-iconbtn .dk-i { width:var(--icon-sm); height:var(--icon-sm); }
+.dk-glass .dk-lg { border:1px solid var(--glass-edge); font-weight:var(--weight-ui); }
+.dk-glass .dk-badge:not(.dk-badge--pill) { border-radius:var(--radius-sm); }
+.dk-glass .dk-counter { font-weight:var(--weight-ui); }
+
+/* The same legend rhythm as charts. Position changes actual DOM order. */
+.dk-glass .dk-map[data-legend-position="top"] .dk-map__legend { justify-content:flex-start; }
+.dk-glass .dk-map__key { gap:var(--space-4); }
+.dk-glass .dk-map__key i { width:var(--space-4); height:var(--space-4); border-radius:var(--radius-full); }
+.dk-glass .dk-map__key b, .dk-glass .dk-lg__n {
+ display:inline-flex; align-items:center; justify-content:center;
+ min-width:var(--space-7); padding-inline:var(--space-2);
+ border-radius:var(--radius-xs); background:color-mix(in srgb,var(--ink) 6%,transparent);
+ font-weight:var(--weight-ui); color:var(--ink);
+}
+
+.dk-glass .dk-widget.dk-tile { border-radius:var(--radius-xl); }
+.dk-glass .dk-tile--compact .dk-tile__head { gap:var(--space-4); }
+.dk-glass .dk-tile--compact .dk-tile__icon {
+ width:var(--space-8); height:var(--space-8); flex:none;
+ border:1px solid var(--glass-edge); border-radius:var(--radius-sm);
+ background:var(--glass-chip); color:var(--ink-2);
+}
+.dk-glass .dk-metric-band .dk-tile__label { font:var(--type-body); color:var(--ink-2); }
+.dk-glass .dk-metric-band .dk-tile { border-color:var(--glass-edge); }
+/* Intrinsic shared rows align values even when one label wraps. Flex fallback above. */
+@supports (grid-template-rows:subgrid) {
+ .dk-glass .dk-metric-band > .dk-grid--five { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); align-items:stretch; row-gap:var(--space-4); }
+ .dk-glass .dk-metric-band .dk-tile { display:grid; grid-row:span 2; grid-template-rows:subgrid; gap:var(--space-4); padding-block:var(--space-2); }
+ .dk-glass .dk-metric-band .dk-tile__head { align-items:flex-start; }
+ .dk-glass .dk-metric-band .dk-tile__row { align-self:start; }
+ @media(max-width:1199px) {
+  .dk-glass .dk-metric-band > .dk-grid--five { grid-template-columns:repeat(6,minmax(0,1fr)); gap:var(--space-6); }
+  .dk-glass .dk-metric-band .dk-tile { grid-column:span 2; padding-top:var(--space-6); }
+  .dk-glass .dk-metric-band .dk-tile:nth-last-child(-n+2) { grid-column:span 3; }
+ }
+ @media(max-width:767px) {
+  .dk-glass .dk-metric-band > .dk-grid--five { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .dk-glass .dk-metric-band .dk-tile:nth-child(n) { grid-column:span 1; }
+  .dk-glass .dk-metric-band .dk-tile:last-child:nth-child(odd) { grid-column:1 / -1; }
+ }
+}
+@media(max-width:767px), (pointer:coarse) {
+ .dk-glass :is(.dk-fchip, .dk-chips__item) { min-height:44px; }
+ .dk-glass :is(.dk-fchip__x, .dk-chips__item > .dk-iconbtn) { width:var(--control-sm); height:var(--control-sm); min-width:var(--control-sm); }
+}

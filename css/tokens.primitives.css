@@ -230,11 +230,11 @@
      темы. Цвета подложки-vibrancy — декоративные пятна, которые стекло фростит
      в текстуру; прозрачность для подложки задаёт семантика через color-mix. */
   --c-glass-hi: #FFFFFF;
-  --c-glass-glow-1: #7C5CFF;   /* сине-фиолетовый */
-  --c-glass-glow-2: #28BEE8;   /* бирюзовый       */
-  --c-glass-glow-3: #FF6CB0;   /* розовый         */
-  --c-glass-glow-4: #34D6B0;   /* зелёно-мятный   */
-  --c-glass-glow-c: #6074FF;   /* центральный тон */
+  --c-glass-glow-1: #7183A0;   /* приглушённый синий */
+  --c-glass-glow-2: #6E8E9C;   /* стальной голубой   */
+  --c-glass-glow-3: #778397;   /* сланцевый          */
+  --c-glass-glow-4: #758C94;   /* холодный серый     */
+  --c-glass-glow-c: #687D9C;   /* центральный тон    */
 
   /* Читаемые варианты тех же цветов — для случая, когда состояние попадает
      НА ТЕКСТ (крупная цифра балла, значение в таблице). Исходные статусные
@@ -290,6 +290,10 @@
   --c-accent-blue:   #2569EF;  /* референс 09.10; проверяется tools/check.py */
   --c-accent-violet: #7757F5;
   --c-accent-indigo: #5A61E1;
+  --c-accent-mint:   #86B69C;
+  --c-accent-mint-light: #325E67;
+  --c-accent-olive:  #A9B95B;
+  --c-accent-olive-light: #3D3D29;
 
   /* =========================================================================
      СЛОЙ СОБЫТИЙ
@@ -592,3 +596,28 @@
 :root { --size-18: 18px; --size-32: 32px; --lh-36: 36px; }
 
 :root { --c-risk-area-high: #EF4D68; --c-risk-area-medium: #F7C34A; --c-risk-area-low: #55BB93; }
+
+/* Нейтральный тёмный текст на ярких заливках данных. */
+:root { --c-neutral-950: #0B0D12; }
+
+/* Selected Graphite system · 27.10.2026. Existing categorical palette retained. */
+:root {
+  --c-graphite-bg: #121419;
+  --c-graphite-surface: #22262E;
+  --c-graphite-raised: #303640;
+  --c-graphite-ink: #F5F6FA;
+  --c-graphite-muted: #B8C0CF;
+  --c-graphite-soft: #A3ADBF;
+  --c-pearl-bg: #E8EBF2;
+  --c-pearl-surface: #FFFFFF;
+  --c-pearl-raised: #DCE2ED;
+  --c-pearl-ink: #202633;
+  --c-pearl-muted: #4C586E;
+  --c-pearl-soft: #5C687C;
+  --c-graphite-cyan: #27D7E7;
+  --c-graphite-violet: #AC86FA;
+  --c-pearl-cyan: #007C91;
+  --c-pearl-violet: #7350AF;
+  --size-64: 64px;
+  --lh-64: 64px;
+}

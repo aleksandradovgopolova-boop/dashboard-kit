@@ -432,7 +432,7 @@ def theme_tables(primitives: str, semantic: str) -> dict[str, dict[str, str]]:
         if 'data-theme="light"' in sel:
             target = [light]
         elif ('data-theme="dark"' in sel
-              or sel.strip().startswith(".dk-root,") or sel.strip() == ".dk-root"):
+              or re.search(r"(^|,)\s*(?:\.dk-root|:root)\s*(?:,|$)", sel)):
             target = [dark] if 'data-theme="dark"' in sel else [dark, light]
         for name, value in declarations(body):
             for t in target:
@@ -444,7 +444,10 @@ def check_contrast(primitives: str, semantic: str) -> None:
     # Требования: основной и вторичный текст — 4.5:1, третичный и штрихи — 3:1.
     pairs = [("--ink", "--surface", 4.5), ("--ink-2", "--surface", 4.5),
              ("--ink-3", "--surface", 3.0), ("--ink", "--bg", 4.5),
-             ("--ink-2", "--surface-2", 4.5)]
+             ("--ink-2", "--surface-2", 4.5),
+             ("--risk-label-low", "--risk-area-low", 4.5),
+             ("--risk-label-medium", "--risk-area-medium", 4.5),
+             ("--risk-label-high", "--risk-area-high", 4.5)]
     ok = True
     for theme, table in theme_tables(primitives, semantic).items():
         for fg, bg, need in pairs:

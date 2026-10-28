@@ -14,24 +14,22 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261006-layout-tools">
-<link rel="stylesheet" href="css/docs.css?v=20261006-layout-tools">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/docs.css?v=20261026-editorial">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
-<script src="js/docs-index.js?v=20261006-layout-tools" defer></script>
-<script src="js/docs.js?v=20261006-layout-tools" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261026-editorial" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
-  <a class="sc-brand" href="showcase.html">
+  <a class="sc-brand" href="index.html">
     <span class="sc-brand__t">dashboard-kit</span>
   </a>
   <div class="sc-ctl">
-    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-    </div>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -54,23 +52,23 @@
       </details>
     </div><p class="sc-share-status" role="status"></p>
     <h1>Фильтры-легенда</h1>
-    <p class="sc-hero__lead">Один ряд, который и объясняет цвета, и фильтрует по ним. Цвет приходит снаружи через <code>--swatch</code>: компонент не знает, что такое «риск».</p>
+    <p class="sc-hero__lead">Объясняет цвета категорий и позволяет включать или исключать их из среза.</p>
     <div class="sc-meta">
-      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a></span>
+      <span class="sc-meta__i">Статус: стабильный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
-  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
-    <h2>Живой пример</h2>
-    <p>Нажмите на чип — он включится заливкой своего цвета. «Все» без цвета включается серым, как любое управление.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-legend">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Переключите категорию. Состояние выбора различается и без опоры только на цвет.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-legend">
       <button class="dk-lg is-on" aria-pressed="true"><i class="dk-lg__sw"></i>Все<b class="dk-lg__n">89</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--crit)"><i class="dk-lg__sw"></i>Высокий<b class="dk-lg__n">23</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--high)"><i class="dk-lg__sw"></i>Средний<b class="dk-lg__n">27</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--calm)"><i class="dk-lg__sw"></i>Низкий<b class="dk-lg__n">38</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--nodata)"><i class="dk-lg__sw"></i>Мало данных<b class="dk-lg__n">1</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--event)"><i class="dk-lg__sw"></i>Событие<b class="dk-lg__n">15</b></button>
-    </div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+    </div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
@@ -78,7 +76,7 @@
   </section>
   <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-legend">
+    <div class="sc-anatomy"><div class="dk-legend">
       <button class="dk-lg is-on" aria-pressed="true" style="--swatch:var(--crit)"><b class="sc-callout">1</b><i class="dk-lg__sw"></i><b class="sc-callout">2</b>Высокий<b class="dk-lg__n"><b class="sc-callout">3</b>23</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--calm)"><i class="dk-lg__sw"></i>Низкий<b class="dk-lg__n">38</b></button>
     </div></div><ol class="sc-anatomy__list"><li><b>Чип</b> — кнопка с <code>aria-pressed</code>; включённый залит своим цветом на 22 %, чтобы не спорить с данными.</li><li><b>Метка цвета</b> — <code>dk-lg__sw</code> берёт <code>--swatch</code>; без него — серый.</li><li><b>Число</b> — сколько записей за категорией; ноль показывается приглушённым.</li></ol>
@@ -98,8 +96,8 @@
     <div class="sc-note" style="margin-top:var(--space-6)"><b>Выключенные категории не исчезают.</b> Чип остаётся на месте с приглушённой меткой: человек видит, что именно он отключил, и может вернуть.</div>
   </section>
   <section class="sc-sec" id="kontent">
-    <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Название категории — как в легенде графика рядом, слово в слово.</li><li>Первым — «Все» с общим числом.</li><li>Порядок — по смыслу (от худшего к лучшему), а не по алфавиту.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Разные названия на чипе и в легенде графика: «Высокий» и «Крит.».</li><li>Чип без числа: выбор вслепую.</li><li>Цвет, розданный по кругу, а не по смыслу.</li></ul></div></div>
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Название категории — как в легенде графика рядом, слово в слово.</li><li>Первым — «Все» с общим числом.</li><li>Порядок — по смыслу (от худшего к лучшему), а не по алфавиту.</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Разные названия на чипе и в легенде графика: «Высокий» и «Крит.».</li><li>Чип без числа: выбор вслепую.</li><li>Цвет, розданный по кругу, а не по смыслу.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
@@ -107,11 +105,11 @@
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
-    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-legend,dk-lg"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-legend,dk-lg"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код</h2>
-    <p>Поведение задаёт страница: компонент не знает, что делать с данными при выключении категории.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-legend&quot;&gt;
+    <p>Поведение задаёт страница: компонент не знает, что делать с данными при выключении категории.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-legend&quot;&gt;
   &lt;button class=&quot;dk-lg is-on&quot; aria-pressed=&quot;true&quot;&gt;&lt;i class=&quot;dk-lg__sw&quot;&gt;&lt;/i&gt;Все&lt;b class=&quot;dk-lg__n&quot;&gt;89&lt;/b&gt;&lt;/button&gt;
   &lt;button class=&quot;dk-lg&quot; aria-pressed=&quot;false&quot; style=&quot;--swatch:var(--crit)&quot;&gt;&lt;i class=&quot;dk-lg__sw&quot;&gt;&lt;/i&gt;Высокий&lt;b class=&quot;dk-lg__n&quot;&gt;23&lt;/b&gt;&lt;/button&gt;
 &lt;/div&gt;
@@ -128,7 +126,7 @@ legend.addEventListener(&#x27;click&#x27;, function (e) {
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--swatch</code></td><td>переменная в style</td><td>Цвет категории; без него серый.</td></tr><tr><td><code>aria-pressed + is-on</code></td><td>атрибут и класс</td><td>Включён; оба ставятся вместе.</td></tr><tr><td><code>dk-lg__n</code></td><td>элемент</td><td>Число записей.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
-    <h2>Связанное</h2>
+    <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-select.html">Фильтр</a> — когда категорий больше шести</li><li><a href="component-chart.html">График</a> — легенду самого графика рисует обёртка</li><li><a href="component-map.html">Регионы</a> — легенда шкалы под картой</li></ul>
   </section>
 

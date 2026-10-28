@@ -1,0 +1,222 @@
+--- /dev/null
++++ b/src/shared/lib/dashboard-kit/react.tsx
+@@ -0,0 +1,69 @@
++import { useEffect, useLayoutEffect, useRef, useState } from 'react';
++import type { HTMLAttributes } from 'react';
++
++/** The application supplies React; the static kit has no React dependency. */
++export interface KitController<Options> {
++  update(options: Options): void;
++  destroy(): void;
++}
++export type KitFactory<Options> = (node: HTMLElement, options: Options) => KitController<Options>;
++const useClientLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
++
++/** React owns the empty wrapper, the kit owns its disposable child. Memoize create. */
++export function useKitComponent<Options>(create: KitFactory<Options>, options: Options) {
++  const host = useRef<HTMLDivElement>(null);
++  const controller = useRef<KitController<Options> | null>(null);
++  const latest = useRef(options);
++  useClientLayoutEffect(() => { latest.current = options; }, [options]);
++  useClientLayoutEffect(() => {
++    if (!host.current) return;
++    const node = document.createElement('div');
++    host.current.append(node);
++    let instance: KitController<Options>;
++    try { instance = create(node, latest.current); }
++    catch (error) { node.remove(); throw error; }
++    controller.current = instance;
++    return () => {
++      controller.current = null;
++      try { instance.destroy(); } finally { node.remove(); }
++    };
++  }, [create]);
++  useClientLayoutEffect(() => { controller.current?.update(options); }, [create, options]);
++  return host;
++}
++
++export function KitRoot({ theme, className = '', ...props }: HTMLAttributes<HTMLDivElement> & {
++  theme: 'dark' | 'light';
++}) {
++  return <div {...props} className={`dk-root ${className}`} data-theme={theme} data-accent="blue" />;
++}
++
++export interface DashboardSession<Query, Snapshot> {
++  subscribe(listener: (snapshot: Snapshot) => void): () => void;
++  getSnapshot(): Snapshot;
++  load(query: Query): Promise<Snapshot | null>;
++  retry(): Promise<Snapshot | null>;
++  destroy(): void;
++}
++
++/** Factory runs in an effect, never during render; StrictMode creates fresh sessions. */
++export function useDashboardSession<Query, Snapshot>(
++  create: () => DashboardSession<Query, Snapshot>, query: Query,
++) {
++  const session = useRef<DashboardSession<Query, Snapshot> | null>(null);
++  const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
++  useEffect(() => {
++    const instance = create();
++    session.current = instance;
++    let active = true;
++    setSnapshot(instance.getSnapshot());
++    const unsubscribe = instance.subscribe(value => { if (active) setSnapshot(value); });
++    return () => {
++      active = false;
++      session.current = null;
++      try { unsubscribe(); } finally { instance.destroy(); }
++    };
++  }, [create]);
++  useEffect(() => { void session.current?.load(query); }, [create, query]);
++  return { snapshot, retry: () => session.current?.retry() ?? Promise.resolve(null) };
++}
+--- a/src/shared/lib/dashboard-kit/runtime.ts
++++ b/src/shared/lib/dashboard-kit/runtime.ts
+@@ -9,12 +9,12 @@
+   data?: { name: string; value: number }[];
+ }
+ export interface KitRuntime {
+-  dkChart: (element: HTMLElement, spec: KitChartSpec) => { destroy(): void };
++  dkChart: (element: HTMLElement, spec: KitChartSpec) => { update(spec: KitChartSpec): void; destroy(): void };
+   dkSelect: (element: HTMLElement, options: {
+     label: string; mode: "single"; value?: string;
+     options: { name: string; value: string }[];
+     onChange: (value: string | null) => void;
+-  }) => { set(value: string): void };
++  }) => { set(value: string): void; update(options: {value: string; options: {name: string; value: string}[]}): void; destroy(): void };
+ }
+ 
+ const base = `${import.meta.env.BASE_URL}vendor/dashboard-kit/`;
+--- a/src/features/dashboard-management/kit/DashboardKitView.tsx
++++ b/src/features/dashboard-management/kit/DashboardKitView.tsx
+@@ -8,6 +8,7 @@
+ import { dashboardPages, pageWidgets } from "../pages";
+ import { DashboardDataView } from "../DashboardDataView";
+ import "./dashboard-kit.css";
++import { KitRoot, useKitComponent } from "../../../shared/lib/dashboard-kit/react";
+ 
+ export interface DashboardKitViewProps {
+   content: DashboardContent;
+@@ -32,21 +33,13 @@
+ function KitFilter({ runtime, label, options, value, onChange }: {
+   runtime: KitRuntime; label: string; options: string[]; value: string; onChange: (value: string) => void;
+ }) {
+-  const host = useRef<HTMLDivElement>(null);
+-  const control = useRef<ReturnType<KitRuntime["dkSelect"]> | null>(null);
+   const callback = useRef(onChange);
+   useEffect(() => { callback.current = onChange; }, [onChange]);
+-  useEffect(() => {
+-    const node = document.createElement("div");
+-    host.current!.append(node);
+-    control.current = runtime.dkSelect(node, {
+-      label, mode: "single", options: options.map(v => ({ name: v, value: v })),
+-      onChange: v => callback.current(v ?? ""),
+-    });
+-    // dkOwn disposes document listeners when the owned node leaves the DOM.
+-    return () => { control.current = null; node.remove(); };
+-  }, [runtime, label, options]);
+-  useEffect(() => { control.current?.set(value); }, [value, runtime, label, options]);
++  const create = useMemo(() => (node: HTMLElement, initial: {value: string; options: {name: string; value: string}[]}) =>
++    runtime.dkSelect(node, { ...initial, label, mode: "single", onChange: v => callback.current(v ?? "") }),
++    [runtime, label]);
++  const settings = useMemo(() => ({value, options: options.map(v => ({name: v, value: v}))}), [value, options]);
++  const host = useKitComponent(create, settings);
+   return <div ref={host} />;
+ }
+ 
+@@ -127,7 +120,7 @@
+   }, []);
+   if (error) return <><p role="status">Новое оформление недоступно. Показан стандартный дашборд.</p><DashboardDataView {...props} /></>;
+   if (!runtime) return <p role="status" aria-busy="true">Загружаем дашборд…</p>;
+-  return <div className="dk-root sreda-kit" data-theme={theme} data-accent="blue">
++  return <KitRoot className="sreda-kit" theme={theme === "dark" ? "dark" : "light"}>
+     {content.filters.length > 0 && <div className="dk-toolbar"><div className="dk-toolbar__group">
+       {content.filters.map((f, i) => <KitFilter key={f.id} runtime={runtime} label={f.label} options={options[i]} value={selection[f.field] ?? ""} onChange={v => select({ ...selection, [f.field]: v })} />)}
+       {isFiltered && <button type="button" className="dk-btn dk-btn--ghost dk-btn--icon" aria-label="Сбросить фильтры" title="Сбросить фильтры" onClick={() => select({})}><svg className="dk-i" aria-hidden="true"><use href="#ti-x" /></svg></button>}
+@@ -154,5 +147,5 @@
+             <p className="sreda-kit-status">Показано {computeTable(dataset, w.binding, rows).length} из {rows.length} записей среза.</p></>}
+     </Widget>)}</div>
+     {widgets.length === 0 && <p className="sreda-kit-status">На этой странице нет виджетов.</p>}
+-  </div>;
++  </KitRoot>;
+ }
+--- a/src/features/dashboard-management/kit/DashboardKitView.test.tsx
++++ b/src/features/dashboard-management/kit/DashboardKitView.test.tsx
+@@ -1,7 +1,7 @@
+ import "@testing-library/jest-dom/vitest";
+ import { describe, expect, it, vi } from "vitest";
+-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+-import { useState } from "react";
++import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
++import { StrictMode, useState } from "react";
+ import { buildPromptDashboard, datasetFromPrompt } from "../../../entities/dashboard-data";
+ import type { FilterSelection } from "../../../entities/dashboard-data";
+ import { DashboardKitView } from "./DashboardKitView";
+@@ -13,7 +13,8 @@
+ Element.prototype.scrollIntoView = vi.fn();
+ 
+ const destroy = vi.fn();
+-const chart = vi.fn(() => ({ destroy }));
++const chart = vi.fn(() => ({ destroy, update: vi.fn() }));
++const filterCleanups: ReturnType<typeof vi.fn>[] = [];
+ const runtime: KitRuntime = {
+   dkChart: chart,
+   dkSelect: (host, options) => {
+@@ -23,7 +24,9 @@
+     options.options.forEach(o => select.append(new Option(o.name, o.value)));
+     select.addEventListener("change", () => options.onChange(select.value));
+     host.append(select);
+-    return { set: value => { select.value = value; } };
++    const dispose = vi.fn(() => select.remove());
++    filterCleanups.push(dispose);
++    return { set: value => { select.value = value; }, update: next => { select.value = next.value; }, destroy: dispose };
+   },
+ };
+ const dataset = datasetFromPrompt("Объект А — экспертиза да, РНС да\nОбъект Б — экспертиза да, РНС нет\nОбъект В — экспертиза нет, РНС нет")!;
+@@ -72,4 +75,28 @@
+     await screen.findByText(/Показан стандартный дашборд/);
+     expect(screen.getByRole("combobox", { name: "Этап" })).toBeInTheDocument();
+   });
++  it("cleans every filter exactly once through StrictMode and unmount", async () => {
++    vi.mocked(loadDashboardKit).mockResolvedValue(runtime);
++    const start = filterCleanups.length;
++    const view = render(<StrictMode><ControlledView /></StrictMode>);
++    await screen.findByText("Записей в срезе: 3 из 3");
++    const filter = screen.getByRole("combobox", { name: "Этап" });
++    fireEvent.change(filter, {target: {value: "Экспертиза"}});
++    expect(screen.getByRole("combobox", { name: "Этап" })).toBe(filter);
++    view.unmount();
++    const created = filterCleanups.slice(start);
++    expect(created.length).toBeGreaterThan(1);
++    expect(created.every(dispose => dispose.mock.calls.length === 1)).toBe(true);
++  });
++
++  it("ignores runtime loading after the preview has unmounted", async () => {
++    let finish!: (runtime: KitRuntime) => void;
++    vi.mocked(loadDashboardKit).mockReturnValue(new Promise(resolve => {finish = resolve;}));
++    const before = chart.mock.calls.length;
++    const view = render(<ControlledView />);
++    view.unmount();
++    await act(async () => finish(runtime));
++    expect(chart.mock.calls.length).toBe(before);
++  });
++
+ });
+--- a/docs/architecture/decisions/ADR-152-DASHBOARD-KIT-RENDERER.md
++++ b/docs/architecture/decisions/ADR-152-DASHBOARD-KIT-RENDERER.md
+@@ -54,3 +54,15 @@
+ Браузерный стенд `e2e/fixtures/dashboard-kit` использует учебные записи и настоящее
+ превью/вычисления/экспорт. Сохранение на стенде — сериализация существующего
+ snapshot в localStorage; это не проверка PostgreSQL или доступа пользователя.
++
++## 26.10.2026 — явный React lifecycle
++
++Фильтры используют общий useKitComponent: React владеет пустой обёрткой,
++компонент кита — отдельным дочерним узлом. Значение и варианты обновляются
++через update без пересоздания. Cleanup вызывает destroy до удаления узла;
++StrictMode получает новый экземпляр после очистки. KitRoot получает тему
++приложения локально. Формат данных, вычисления и экспорт не меняются.
++
++Пять компонентных тестов рендера и отдельная TypeScript-проверка изменённых
++модулей прошли в изолированной копии. Это jsdom-проверка, не повторная
++браузерная приёмка. Флаг остаётся выключенным; снимок ресурсов не обновлён.
