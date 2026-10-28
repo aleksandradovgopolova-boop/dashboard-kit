@@ -1,0 +1,32 @@
+/* Only the reference consumer layout; component appearance stays in the kit. */
+.ref-page{ max-width:1280px; }
+.ref-top{ display:flex; justify-content:space-between; gap:var(--space-5); align-items:center; margin-bottom:var(--space-8); }
+.ref-top a{ color:var(--ink-2); min-height:44px; display:inline-flex; align-items:center; }
+.ref-context{ margin:var(--space-6) 0; color:var(--ink-2); font:var(--type-body); }
+.ref-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-6); }
+.ref-grid > *{ min-width:0; }
+.ref-wide{ grid-column:1 / -1; }
+.ref-metrics{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-6); margin-bottom:var(--space-6); }
+.ref-metrics .dk-tile__row{ margin-block:var(--space-4); }
+.ref-metrics p{ margin:0; }
+.ref-status{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-4); min-height:44px; margin-bottom:var(--space-6); }
+.ref-status p{ margin:0; }
+.ref-chart{ min-height:280px; }
+.ref-page .dk-tablewrap{ max-height:420px; overflow:auto; }
+.ref-page :is(th,td){ white-space:normal; }
+.ref-page th{ text-align:left; }
+.ref-page [hidden]{ display:none!important; }
+.ref-page .ref-detail-link{ text-align:left; height:auto; min-height:44px; white-space:normal; }
+.ref-page .dk-widget__body > p{ color:var(--ink-2); }
+.ref-page :is(h1,h2,h3,p){ overflow-wrap:anywhere; }
+.ref-page .dk-toolbar{ flex-wrap:wrap; }
+.ref-page .dk-toolbar__group{ flex-wrap:wrap; }
+.ref-page :focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset); }
+.ref-pagination{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-5); margin-top:var(--space-6); }
+.ref-page .dk-modal__foot{ flex-wrap:wrap; }
+.ref-page .dk-modal__foot p{ width:100%; margin:0; }
+@media(max-width:760px){
+  .ref-grid{ grid-template-columns:minmax(0,1fr); }
+  .ref-metrics{ grid-template-columns:minmax(0,1fr); }
+  .ref-page .dk-toolbar__group{ width:100%; }
+}

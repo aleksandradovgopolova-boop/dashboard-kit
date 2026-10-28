@@ -5,7 +5,7 @@
 <title>dashboard-kit · кит внутри чужой страницы</title>
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/components.css?v=20261026-readable-menu">
 <script src="js/dk-util.js"></script>
 <script src="js/dk-icons.js" defer></script>
 <!-- График внутри чужой страницы: тему и токены он обязан брать с обёртки
@@ -38,11 +38,10 @@
 </style>
 </head>
 <body>
-  <h1>Страница хозяина</h1>
-  <p class="host-note">Этот текст и заголовок — хозяйские: Georgia, охра, свои переменные
-     <code>--bg</code>, <code>--ink</code>, <code>--surface</code>, <code>--brand</code>,
-     <code>--space-4</code>. Ниже в рамке живёт кит. Он не должен ни испортиться сам,
-     ни испортить хозяина.</p>
+  <h1>Пример встраивания дашборда</h1>
+  <p class="host-note">Страница приложения использует свой шрифт, цвета и отступы.
+     В рамке — дашборд с локальной темой dashboard-kit. Стили приложения и кита
+     должны оставаться независимыми.</p>
 
   <div class="host-box">
     <!-- Граница кита. Класс и тема — на одном элементе, .dk-page здесь нет:

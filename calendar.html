@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
 <link rel="stylesheet" href="css/chrome.css">
-<link rel="stylesheet" href="css/glass.css">
+<link rel="stylesheet" href="css/glass.css?v=20261026-readable-menu">
 
 <!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
      и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
-<script src="js/dk-util.js"></script>
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js" defer></script>
 <!-- Движка графиков здесь нет намеренно: на этой странице не рисуется ни
      одного графика и ни одной карты, а стоил он 1148 КБ — и стоил их до
@@ -32,7 +32,7 @@
 <script src="js/dk-period.js" defer></script>
 <script src="js/dk-chrome.js" defer></script>
 <script src="js/dk-modal.js" defer></script>
-<script src="js/dk-calendar.js" defer></script>
+<script src="js/dk-calendar.js?v=20261028-stable-size" defer></script>
 <script src="js/dk-form.js" defer></script>
 </head>
 
@@ -90,7 +90,7 @@
         <div class="dk-side__profile-menu">
           <a class="dk-menu__item" href="index.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg>Помощь</a>
           <details><summary class="dk-menu__item"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg>Настройки</summary>
-            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button class="dk-btn dk-btn--sm" type="button" data-theme-set="light">Светлая</button><button class="dk-btn dk-btn--sm" type="button" data-theme-set="dark">Тёмная</button></div>
+            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
           </details>
           <div class="dk-side__profile-rule"></div>
           <button class="dk-menu__item" type="button" disabled title="Гостевой просмотр"><svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg>Выйти</button>
@@ -111,10 +111,7 @@
       </div>
 
       <div class="dk-top__tools">
-        <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg></button>
-          <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-moon"/></svg></button>
-        </div>
+        <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
         <button class="dk-btn dk-btn--primary dk-btn--sm" data-modal="#m-add">Добавить работу</button>
       </div>
     </header>
@@ -149,8 +146,7 @@
                 <div class="dk-status"><span class="dk-dot" style="--accent:var(--high)"></span> Работа на сети — с ограничением</div>
                 <div class="dk-status"><span class="dk-dot" style="--accent:var(--brand)"></span> Плановое отключение</div>
                 <div class="dk-status"><span class="dk-dot" style="--accent:var(--calm)"></span> Завершено</div>
-                <p class="dk-caption" style="margin:var(--space-4) 0 0">Цвет события — это его вид, а не украшение.
-                   Календарь, где цвета розданы по кругу, врёт так же, как график с произвольной палитрой.</p>
+                <p class="dk-caption" style="margin:var(--space-4) 0 0">Цвет обозначает вид работы или завершение. Название и подпись сохраняют смысл без опоры на цвет.</p>
               </div>
             </div>
           </div>
@@ -182,7 +178,7 @@
         <div class="dk-form__alarm" hidden></div>
 
         <div class="dk-ff dk-ff--wide">
-          <label class="dk-label" for="a-name">Что за работа</label>
+          <label class="dk-label" for="a-name">Название работы</label>
           <div class="dk-field"><input id="a-name" name="name" placeholder="Замена задвижки на вводе" required minlength="5"></div>
           <div class="dk-hint">Так её увидят диспетчеры смены в календаре</div>
         </div>

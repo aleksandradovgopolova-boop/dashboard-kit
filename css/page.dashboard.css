@@ -16,8 +16,7 @@
 #d-dashboard .d-country-status strong { font: var(--type-h3); }
 #d-dashboard #d-country-charts { margin-top: var(--grid-gap); }
 #d-dashboard #d-country-charts > .dk-widget { min-width: 0; }
-#d-dashboard #d-country-charts .dk-widget__head { align-items: center; min-height: var(--control-sm); }
-#d-dashboard #d-country-charts .dk-widget__actions .dk-iconbtn { background: transparent; color: var(--ink-2); }
+#d-dashboard #d-country-charts .dk-widget__head { align-items: flex-start; min-height: 0; }
 #d-dashboard #d-country-charts .dk-chart { height: 200px; min-height: 200px; }
 #d-dashboard #d-country-charts .dk-caption { margin: 0; }
 #d-dashboard .d-map-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--gap-inline); flex: 1; }
@@ -45,7 +44,6 @@
 #d-dashboard #d-view-causes .dk-uptime > .dk-caption { margin: 0; }
 @media (hover: hover) and (pointer: fine) {
   #d-dashboard .d-country-status:hover { background: var(--glass-sheen), var(--glass-surface-2); }
-  #d-dashboard #d-country-charts .dk-widget__actions .dk-iconbtn:hover { background: var(--glass-sheen), var(--glass-hover); }
 }
 @media (min-width: 1200px) {
   #d-dashboard #d-view-causes .dk-car__track { max-height: 8lh; overflow: auto; overscroll-behavior: contain; align-items: stretch; scrollbar-width: thin; }
@@ -98,7 +96,6 @@
 #d-dashboard .dk-wrap--monitor { --grid-gap: var(--space-6); }
 #d-dashboard .d-status-row { min-height: 90px; }
 #d-dashboard #d-kpis > .dk-tile { min-height: 142px; }
-#d-dashboard #d-kpis .dk-tile__head { min-height: 2lh; }
 #d-dashboard #d-map .dk-map__canvas { height: 180px; }
 #d-dashboard #d-risk-keys { gap: var(--space-5); }
 #d-dashboard #d-risk-keys .dk-key { grid-template-columns: auto minmax(0, 1fr) auto; }
@@ -132,5 +129,5 @@
 /* Ширина холста от прошлого viewport не расширяет внутреннюю колонку KPI. */
 #d-dashboard #d-kpis > .dk-tile--overview { grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 1200px) {
-  #d-dashboard #d-country-charts .dk-widget__head { min-height: 28px; }
+  #d-dashboard #d-country-charts .dk-widget__head { min-height: 0; }
 }

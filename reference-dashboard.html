@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Работа служб · эталон dashboard-kit</title>
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css?v=20261026-readable-menu">
+<link rel="stylesheet" href="css/reference-dashboard.css">
+<script src="js/dk-util.js"></script>
+<script src="js/dk-icons.js" defer></script>
+<script src="vendor/echarts.min.js" defer></script>
+<script src="js/dk-chart-theme.js" defer></script>
+<script src="js/dk-charts.js" defer></script>
+<script src="js/dk-select.js" defer></script>
+<script src="js/dk-modal.js" defer></script>
+<script src="js/dk-workspace.js" defer></script>
+<script src="js/dk-dashboard.js" defer></script>
+<script src="js/reference-dashboard.js" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261026-readable-menu">
+</head>
+<body class="dk-page dk-glass">
+<main class="dk-wrap ref-page" id="reference-dashboard">
+  <div class="ref-top"><a href="docs/dashboard-data.md">Контракт данных и подключение</a><div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div></div>
+  <header class="dk-head"><div class="dk-head__titles"><h1 class="dk-head__title">Работа служб</h1><p class="dk-head__subtitle">Поступившие и выполненные работы по городам и службам</p></div></header>
+  <p class="dk-caption" id="ref-source">Демонстрационные данные · вымышленные наблюдения для проверки кита</p>
+  <div class="dk-toolbar" aria-label="Фильтры работ">
+    <div class="dk-toolbar__group"><div id="ref-region"></div><div id="ref-service"></div><div id="ref-period"></div></div>
+    <button type="button" class="dk-iconbtn" id="ref-reset" title="Сбросить фильтры" aria-label="Сбросить фильтры" hidden><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button>
+    <button type="button" class="dk-btn" id="ref-refresh">Обновить</button>
+    <button type="button" class="dk-btn" id="ref-export" disabled title="Экспорт текущей страницы таблицы">CSV этой страницы</button>
+  </div>
+  <p class="ref-context" id="ref-context">Все города · все службы · 01–20 октября 2026</p>
+  <div class="ref-status"><p id="ref-status" role="status" aria-live="polite">Загрузка данных…</p><button type="button" class="dk-btn" id="ref-retry" hidden>Повторить</button></div>
+  <div id="ref-content" aria-busy="true" hidden>
+    <div class="ref-metrics" id="ref-metrics" aria-label="Показатели выбранного среза"></div>
+    <div class="ref-grid">
+      <section class="dk-widget ref-wide"><header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title">Работы по дате поступления</h2><p class="dk-widget__meta">Поступило и выполнено из поступивших · работ</p></div></header><div class="dk-widget__body"><div class="dk-chart ref-chart" id="ref-chart"></div><p class="dk-caption" id="ref-chart-note"></p></div></section>
+      <section class="dk-widget ref-wide"><header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title">Наблюдения по городам и службам</h2><p class="dk-widget__meta" id="ref-count"></p></div></header><div class="dk-widget__body"><div class="dk-tablewrap" tabindex="0" role="region" aria-label="Таблица работ с горизонтальной прокруткой"><table class="dk-table"><caption class="dk-vh">Данные выбранного среза; название открывает подробности</caption><thead><tr><th scope="col">Город и служба</th><th scope="col">Дата поступления</th><th scope="col" class="dk-td-num">Поступило, работ</th><th scope="col" class="dk-td-num">Выполнено, работ</th></tr></thead><tbody id="ref-rows"></tbody></table></div><nav class="ref-pagination" aria-label="Страницы наблюдений"><button type="button" class="dk-btn" id="ref-prev">Назад</button><span class="dk-caption" id="ref-page-number"></span><button type="button" class="dk-btn" id="ref-next">Далее</button><button type="button" class="dk-btn" id="ref-first" hidden>На первую страницу</button></nav></div></section>
+    </div>
+  </div>
+  <section class="dk-empty" id="ref-empty" hidden><h2 class="dk-empty__t">Нет наблюдений по выбранным условиям</h2><p>Измените город, службу или период.</p><button type="button" class="dk-btn" id="ref-empty-reset">Сбросить фильтры</button></section>
+  <dialog class="dk-modal" id="ref-detail" aria-labelledby="ref-detail-title"><form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="ref-detail-title">Наблюдение</h2></div><div class="dk-modal__body" id="ref-detail-body"></div><div class="dk-modal__foot"><p id="ref-action-status" role="status"></p><button type="button" class="dk-btn" id="ref-action">Создать демо-поручение</button><button class="dk-btn" value="close">Закрыть</button></div></form></dialog>
+  <noscript><p>Для обновления данных и фильтров нужен JavaScript.</p></noscript>
+</main>
+</body>
+</html>

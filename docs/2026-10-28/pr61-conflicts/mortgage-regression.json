@@ -1,0 +1,254 @@
+[
+  {
+    "theme": "dark",
+    "width": 390,
+    "headerMovement": 0,
+    "modal": {
+      "exportEnabled": true,
+      "footer": 899,
+      "header": 1,
+      "months": [
+        "2025-09",
+        "2025-04",
+        "2025-08",
+        "2025-07",
+        "2025-06",
+        "2025-05"
+      ],
+      "open": true,
+      "progress": 6,
+      "rect": {
+        "bottom": 900,
+        "height": 900,
+        "left": 0,
+        "right": 390,
+        "top": 0,
+        "width": 390,
+        "x": 0,
+        "y": 0
+      },
+      "title": "Ханты-Мансийский АО — Югра"
+    },
+    "trap": [
+      "Закрыть",
+      "Закрыть окно"
+    ],
+    "focusReturned": true,
+    "queryPreserved": true,
+    "mapFrames": [
+      [
+        362,
+        598
+      ],
+      [
+        362,
+        598
+      ],
+      [
+        362,
+        598
+      ],
+      [
+        362,
+        598
+      ]
+    ],
+    "legend": [
+      8,
+      89
+    ],
+    "page": {
+      "doc": 390,
+      "viewport": 390
+    }
+  },
+  {
+    "theme": "dark",
+    "width": 1280,
+    "headerMovement": 0,
+    "modal": {
+      "exportEnabled": true,
+      "footer": 805,
+      "header": 11,
+      "months": [
+        "2025-09",
+        "2025-04",
+        "2025-08",
+        "2025-07",
+        "2025-06",
+        "2025-05"
+      ],
+      "open": true,
+      "progress": 6,
+      "rect": {
+        "bottom": 806,
+        "height": 796,
+        "left": 240,
+        "right": 1040,
+        "top": 10,
+        "width": 800,
+        "x": 240,
+        "y": 10
+      },
+      "title": "Ханты-Мансийский АО — Югра"
+    },
+    "trap": [
+      "Закрыть",
+      "Закрыть окно"
+    ],
+    "focusReturned": true,
+    "queryPreserved": true,
+    "mapFrames": [
+      [
+        756.109375,
+        525.3984375
+      ],
+      [
+        756.109375,
+        525.3984375
+      ],
+      [
+        756.109375,
+        525.3984375
+      ],
+      [
+        756.109375,
+        525.3984375
+      ]
+    ],
+    "legend": [
+      8,
+      89
+    ],
+    "page": {
+      "doc": 1280,
+      "viewport": 1280
+    }
+  },
+  {
+    "theme": "light",
+    "width": 390,
+    "headerMovement": 0,
+    "modal": {
+      "exportEnabled": true,
+      "footer": 899,
+      "header": 1,
+      "months": [
+        "2025-09",
+        "2025-04",
+        "2025-08",
+        "2025-07",
+        "2025-06",
+        "2025-05"
+      ],
+      "open": true,
+      "progress": 6,
+      "rect": {
+        "bottom": 900,
+        "height": 900,
+        "left": 0,
+        "right": 390,
+        "top": 0,
+        "width": 390,
+        "x": 0,
+        "y": 0
+      },
+      "title": "Ханты-Мансийский АО — Югра"
+    },
+    "trap": [
+      "Закрыть",
+      "Закрыть окно"
+    ],
+    "focusReturned": true,
+    "queryPreserved": true,
+    "mapFrames": [
+      [
+        362,
+        598
+      ],
+      [
+        362,
+        598
+      ],
+      [
+        362,
+        598
+      ],
+      [
+        362,
+        598
+      ]
+    ],
+    "legend": [
+      8,
+      89
+    ],
+    "page": {
+      "doc": 390,
+      "viewport": 390
+    }
+  },
+  {
+    "theme": "light",
+    "width": 1280,
+    "headerMovement": 0,
+    "modal": {
+      "exportEnabled": true,
+      "footer": 805,
+      "header": 11,
+      "months": [
+        "2025-09",
+        "2025-04",
+        "2025-08",
+        "2025-07",
+        "2025-06",
+        "2025-05"
+      ],
+      "open": true,
+      "progress": 6,
+      "rect": {
+        "bottom": 806,
+        "height": 796,
+        "left": 240,
+        "right": 1040,
+        "top": 10,
+        "width": 800,
+        "x": 240,
+        "y": 10
+      },
+      "title": "Ханты-Мансийский АО — Югра"
+    },
+    "trap": [
+      "Закрыть",
+      "Закрыть окно"
+    ],
+    "focusReturned": true,
+    "queryPreserved": true,
+    "mapFrames": [
+      [
+        756.109375,
+        525.3984375
+      ],
+      [
+        756.109375,
+        525.3984375
+      ],
+      [
+        756.109375,
+        525.3984375
+      ],
+      [
+        756.109375,
+        525.3984375
+      ]
+    ],
+    "legend": [
+      8,
+      89
+    ],
+    "page": {
+      "doc": 1280,
+      "viewport": 1280
+    }
+  }
+]

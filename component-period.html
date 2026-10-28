@@ -14,27 +14,25 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261021-docs">
-<link rel="stylesheet" href="css/docs.css?v=20261021-docs">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-select.js" defer></script>
 <script src="vendor/air-datepicker.js" defer></script>
 <script src="js/dk-period.js" defer></script>
-<script src="js/docs-index.js?v=20261021-docs" defer></script>
-<script src="js/docs.js?v=20261021-docs" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
   <a class="sc-brand" href="index.html">
     <span class="sc-brand__t">dashboard-kit</span>
   </a>
   <div class="sc-ctl">
-    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-    </div>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -57,25 +55,25 @@
       </details>
     </div><p class="sc-share-status" role="status"></p>
     <h1>Период</h1>
-    <p class="sc-hero__lead">Ограничить срез по времени: готовые пресеты или свой диапазон. Стоит первым среди фильтров, потому что ограничивает всё остальное.</p>
+    <p class="sc-hero__lead">Задаёт временной диапазон для связанных показателей, графиков и таблиц.</p>
     <div class="sc-meta">
-      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-period.js"><code>js/dk-period.js</code></a> · <a href="vendor/air-datepicker.js"><code>vendor/air-datepicker.js</code></a></span>
+      <span class="sc-meta__i">Статус: стабильный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
-  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
-    <h2>Живой пример</h2>
-    <p>Пресеты слева, календарь справа. Выбранный период пишется в адрес: <code>?period=14d</code> или <code>?period=2026-09-11..2026-09-24</code>.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group"><div id="x-period"></div></div>
-      <div class="dk-result" id="x-period-out"></div></div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Откройте календарь: выберите готовый период или задайте собственный диапазон.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group"><div id="x-period"></div></div>
+      <div class="dk-result" id="x-period-out"></div></div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Данные на странице зависят от интервала времени.</li><li>Обычно хватает пресетов, но иногда нужен произвольный диапазон.</li><li>Период должен переноситься ссылкой.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Одна дата в форме (начало работы) — <a href="component-field.html">Поле</a> с <code>type="datetime-local"</code>.</li><li>Показ работ по дням — <a href="component-calendar.html">Календарь</a>: это не фильтр, а представление.</li><li>Два–три фиксированных интервала без календаря — <a href="component-segment.html">Сегмент</a> «7 дней / 30 дней».</li></ul></div></div><div class="sc-note"><h3>Фильтрация</h3><ul class="sc-list"><li>Область фильтра понятна; применённые значения видны. Все затронутые виджеты используют один срез.</li><li>Поиск, фильтрация и сортировка имеют разные роли. После изменения набора страница результатов остаётся допустимой.</li><li>Нет результатов — честное состояние с возможностью снять ограничение; не подменять его похожими данными молча. Сброс — компактный крестик.</li><li>Модель применения понятна: сразу либо черновик с явным «Применить». Черновик не выдаётся за текущий срез; отмена сохраняет предыдущий срез.</li></ul><p>Пример: KPI, карта и таблица обновлены из одного среза; возврат сохраняет фильтры.</p><p>Проверка: Проверить совместные фильтры, пустую выдачу, сброс, пагинацию и возвращение из деталей.</p><p><a href="https://www.uprock.ru/education/filtraciya-na-saytah">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Дашборд по вопросу пользователя</h3><ul class="sc-list"><li>Сначала определить аудиторию и решение, которому помогает экран: мониторинг текущей ситуации, анализ причин или работа с объектами. Состав виджетов следует этим вопросам.</li><li>Обзор показывает основную картину без открытия деталей: 5 ± 2 главных KPI, максимум семь, затем объясняющие графики. Главная карточка нужна только для дополнительного контекста или состава.</li><li>Период, единицы и актуальность делают показатели сопоставимыми. Разные задачи можно разделить вкладками; данные для одновременной сверки остаются рядом.</li></ul><p>Пример: «Ситуация страны»: KPI и обзор динамики, округов и событий; рабочая таблица заявок — в отдельной вкладке той же задачи.</p><p>Проверка: По первому виду назвать ситуацию, изменение и зону внимания; затем найти объект и вернуться. Проверить 1366×768 без уменьшения текста и полей.</p><p><a href="https://www.uprock.ru/education/kak-sdelat-horoshiy-dashbord">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Данные на странице зависят от интервала времени.</li><li>Обычно хватает пресетов, но иногда нужен произвольный диапазон.</li><li>Период должен переноситься ссылкой.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Одна дата в форме (начало работы) — <a href="component-field.html">Поле</a> с <code>type="datetime-local"</code>.</li><li>Показ работ по дням — <a href="component-calendar.html">Календарь</a>: это не фильтр, а представление.</li><li>Два–три фиксированных интервала без календаря — <a href="component-segment.html">Сегмент</a> «7 дней / 30 дней».</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-filters">Фильтрация</a></li><li><a href="index.html#pattern-dashboard">Дашборд по вопросу пользователя</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-select dk-period" data-active="true"><button type="button" class="dk-select__trigger" aria-haspopup="dialog" aria-expanded="true"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-calendar"/></svg><span class="dk-select__label">Последние 7 дней</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
+    <div class="sc-anatomy"><div class="dk-select dk-period" data-active="true"><button type="button" class="dk-select__trigger" aria-haspopup="dialog" aria-expanded="true"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-calendar"/></svg><span class="dk-select__label">Последние 7 дней</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
     <div class="dk-menu dk-period__menu sc-period-anatomy" style="position:static;margin-top:var(--space-5);display:flex;gap:var(--space-7)">
       <ul class="dk-menu__list dk-period__presets" role="list" style="min-width:180px"><b class="sc-callout">2</b>
         <li><button type="button" class="dk-menu__item" aria-pressed="false"><span class="dk-menu__name">Сегодня</span></button></li>
@@ -85,7 +83,7 @@
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Высота как у фильтра: M по умолчанию, <code>size: 'sm'</code>. Календарь всегда 280 px шириной.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>presets</code></td><td>Свой список пресетов {name, days}.</td><td>Когда стандартные не подходят.</td></tr><tr><td><code>minDate / maxDate</code></td><td>Границы выбора.</td><td>Нет данных раньше или позже.</td></tr><tr><td><code>size</code></td><td>'sm'.</td><td>Шапка виджета.</td></tr><tr><td><code>url: &#x27;period&#x27;</code></td><td>Значение в адресе.</td><td>Всегда на дашбордах.</td></tr></tbody></table></div>
+    <p>Высота согласована с фильтром; size: sm задаёт компактный вариант. Календарь должен помещаться в доступную ширину и оставаться внутри окна.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>presets</code></td><td>Свой список пресетов {name, days}.</td><td>Когда стандартные не подходят.</td></tr><tr><td><code>minDate / maxDate</code></td><td>Границы выбора.</td><td>Нет данных раньше или позже.</td></tr><tr><td><code>size</code></td><td>'sm'.</td><td>Шапка виджета.</td></tr><tr><td><code>url: &#x27;period&#x27;</code></td><td>Значение в адресе.</td><td>Всегда на дашбордах.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
@@ -97,8 +95,8 @@
     <div class="sc-note"><b>Незаконченный выбор не применяется.</b> Одна выбранная дата в календаре — черновик; период меняется только после второй. Закрытие меню черновик отбрасывает.</div>
   </section>
   <section class="sc-sec" id="kontent">
-    <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Пресет назван словами: «Последние 14 дней», «Сегодня».</li><li>Свой диапазон — «11–24 сен», без года, если он текущий.</li><li>Строка применённых фильтров называет период так же, как поле.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>«14д» в поле — это сокращение для сегмента, не для фильтра.</li><li>«11.09.2026 – 24.09.2026» — восемь лишних знаков.</li><li>Период по умолчанию не выбран: данные «за всё время» на дашборде — почти всегда ошибка.</li></ul></div></div>
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Пресет назван словами: «Последние 14 дней», «Сегодня».</li><li>Свой диапазон — «11–24 сен», без года, если он текущий.</li><li>Строка применённых фильтров называет период так же, как поле.</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>«14д» в поле — это сокращение для сегмента, не для фильтра.</li><li>«11.09.2026 – 24.09.2026» — восемь лишних знаков.</li><li>Период по умолчанию не выбран: данные «за всё время» на дашборде — почти всегда ошибка.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
@@ -106,11 +104,11 @@
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
-    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-period,dk-select,dk-menu"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-period,dk-select,dk-menu"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код</h2>
-    <p>Нужны dk-select.js (стили меню общие), vendor/air-datepicker.js и dk-period.js.</p><pre class="sc-code"><code>&lt;!-- Период — первым в строке фильтров: он ограничивает всё остальное. --&gt;
+    <p>Нужны dk-select.js (стили меню общие), vendor/air-datepicker.js и dk-period.js.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-period.js"><code>js/dk-period.js</code></a> · <a href="vendor/air-datepicker.js"><code>vendor/air-datepicker.js</code></a></p><pre class="sc-code"><code>&lt;!-- Период — первым в строке фильтров: он ограничивает всё остальное. --&gt;
 &lt;div class=&quot;dk-toolbar&quot;&gt;
   &lt;div class=&quot;dk-toolbar__group&quot;&gt;
     &lt;div id=&quot;period&quot;&gt;&lt;/div&gt;
@@ -130,7 +128,7 @@ p.set({ preset: 30 }); p.clear();
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>value</code></td><td>{preset} | {from, to}</td><td>Начальное значение; адрес главнее.</td></tr><tr><td><code>presets[]</code></td><td>массив {name, days}</td><td>Свой список пресетов.</td></tr><tr><td><code>minDate / maxDate</code></td><td>дата</td><td>Границы календаря; по умолчанию до сегодня.</td></tr><tr><td><code>url</code></td><td>строка</td><td>Ключ в адресе.</td></tr><tr><td><code>onChange(v)</code></td><td>функция</td><td>После применения; черновик не считается.</td></tr><tr><td><code>value / text / set(v) / clear()</code></td><td>API</td><td>Читать и менять снаружи.</td></tr><tr><td><code>update({value}) / destroy()</code></td><td>API</td><td>Тихое восстановление периода. Старые set/clear сохранены; destroy освобождает календарь и подписки.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
-    <h2>Связанное</h2>
+    <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-select.html">Фильтр</a> — та же основа и то же меню</li><li><a href="component-calendar.html">Календарь</a> — представление работ по дням, не фильтр</li><li><a href="accidents.html">Страница «Аварии»</a> — период в живом дашборде</li></ul>
   </section>
 

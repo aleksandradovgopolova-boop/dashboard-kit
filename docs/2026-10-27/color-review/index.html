@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Цвета и типографика — просмотр вариантов</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#111318;color:#f4f5f8;font:15px/1.4 system-ui,-apple-system,sans-serif}header{padding:16px 20px 12px}h1{font-size:20px;line-height:1.25;margin:0 0 12px;font-weight:650}.toolbar,.variants,.zoom{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.toolbar{justify-content:space-between}button,a{font:inherit}button,.original{min-height:44px;padding:10px 14px;border-radius:10px;border:1px solid #4c5261;color:inherit;background:#242831;text-decoration:none;cursor:pointer}button[aria-pressed=true]{background:#f0f2f7;color:#171a21;border-color:#f0f2f7}button:focus-visible,a:focus-visible,.viewer:focus-visible{outline:3px solid #9dbbff;outline-offset:2px}.caption{margin:12px 0 4px;color:#d4d8e2}.note{margin:4px 0 0;color:#b0b7c5;font-size:13px}.viewer{height:calc(100dvh - 210px);min-height:320px;margin:0 16px 12px;overflow:auto;border:1px solid #444b5a;border-radius:12px;background:#1b1e25;cursor:grab;scrollbar-gutter:stable;touch-action:pan-x pan-y}.viewer.dragging{cursor:grabbing}.viewer img{display:block;max-width:none;height:auto;margin:0 auto;user-select:none;-webkit-user-drag:none}.error{padding:24px;color:#ffd5d5}#status{font-size:13px;color:#b0b7c5;min-width:95px}footer{padding:0 20px 12px;font-size:13px;color:#b0b7c5}@media(max-width:700px){header{padding:12px}h1{font-size:18px}.variants button{font-size:13px;padding:8px 10px}.viewer{margin-inline:8px;height:calc(100dvh - 265px)}.caption{font-size:14px}}
+</style>
+</head>
+<body>
+<header>
+<h1>Цвета и типографика · три эскиза</h1>
+<div class="toolbar">
+  <div class="variants" role="group" aria-label="Вариант оформления">
+    <button type="button" data-variant="1" aria-pressed="true">1 · Графит</button>
+    <button type="button" data-variant="2" aria-pressed="false">2 · Перламутр</button>
+    <button type="button" data-variant="3" aria-pressed="false">3 · Сливовый</button>
+  </div>
+  <div class="zoom" role="group" aria-label="Масштаб изображения">
+    <button type="button" data-zoom="fit" aria-pressed="false">Весь экран</button>
+    <button type="button" data-zoom="1" aria-pressed="true">100%</button>
+    <button type="button" data-zoom="1.5" aria-pressed="false">150%</button>
+    <span id="status" role="status"></span>
+    <a id="original" class="original" href="01-graphite.png" target="_blank" rel="noopener">Открыть оригинал ↗</a>
+  </div>
+</div>
+<p id="caption" class="caption"></p>
+<p class="note">На 100% текст показан в исходном размере. Изображение можно прокручивать или перетаскивать мышью. «Весь экран» показывает композицию целиком.</p>
+</header>
+<main id="viewer" class="viewer" tabindex="0" aria-label="Изображение варианта. Прокручиваемая область">
+<img id="design" src="01-graphite.png" alt="Вариант 1: дымчатый графит" draggable="false">
+<p id="error" class="error" hidden>Изображение не загрузилось. Откройте оригинал по ссылке сверху.</p>
+</main>
+<footer>Это визуальные эскизы для выбора стиля. Данные и текст на них могут отличаться от работающей ипотеки; новый стиль ещё не внедрён.</footer>
+<script>
+(() => {
+  const variants={
+    '1':{file:'01-graphite.png',title:'Вариант 1 · Дымчатый графит',description:'Тёмно-серые поверхности, серебристые кромки, бирюзовые и сиреневые акценты.'},
+    '2':{file:'02-pearl.png',title:'Вариант 2 · Светлый перламутр',description:'Светлое стекло, голубые и лавандовые переливы, тёмный текст.'},
+    '3':{file:'03-plum.png',title:'Вариант 3 · Сливовый',description:'Глубокий сливовый фон, фиолетовые отражения и светлый текст.'}
+  };
+  const img=document.getElementById('design'),viewer=document.getElementById('viewer');
+  let selected='1',zoom='1',drag=null;
+  function resize(){
+    if(!img.naturalWidth)return;
+    const scale=zoom==='fit'?Math.min((viewer.clientWidth-4)/img.naturalWidth,(viewer.clientHeight-4)/img.naturalHeight,1):Number(zoom);
+    img.style.width=Math.round(img.naturalWidth*scale)+'px';
+    document.getElementById('status').textContent=Math.round(scale*100)+'% · '+img.naturalWidth+'×'+img.naturalHeight;
+    viewer.scrollTo(0,0);
+  }
+  function select(value){
+    if(!variants[value])value='1';
+    selected=value;
+    const variant=variants[value];
+    img.alt=variant.title+'. '+variant.description;
+    document.getElementById('caption').textContent=variant.title+' — '+variant.description;
+    document.getElementById('original').href=variant.file;
+    document.getElementById('error').hidden=true;
+    document.querySelectorAll('[data-variant]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.variant===value)));
+    if(img.getAttribute('src')!==variant.file)img.src=variant.file;
+    const url=new URL(location.href);url.searchParams.set('variant',value);history.replaceState(null,'',url);
+    resize();
+  }
+  img.addEventListener('load',resize);
+  img.addEventListener('error',()=>{document.getElementById('error').hidden=false;document.getElementById('status').textContent='Ошибка загрузки';});
+  document.querySelectorAll('[data-variant]').forEach(button=>button.addEventListener('click',()=>select(button.dataset.variant)));
+  document.querySelectorAll('[data-zoom]').forEach(button=>button.addEventListener('click',()=>{zoom=button.dataset.zoom;document.querySelectorAll('[data-zoom]').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));resize();}));
+  viewer.addEventListener('pointerdown',event=>{if(event.pointerType!=='mouse'||event.button!==0)return;drag={x:event.clientX,y:event.clientY,left:viewer.scrollLeft,top:viewer.scrollTop};viewer.setPointerCapture(event.pointerId);viewer.classList.add('dragging');event.preventDefault();});
+  viewer.addEventListener('pointermove',event=>{if(!drag)return;viewer.scrollLeft=drag.left+drag.x-event.clientX;viewer.scrollTop=drag.top+drag.y-event.clientY;});
+  function release(){drag=null;viewer.classList.remove('dragging');}
+  viewer.addEventListener('pointerup',release);viewer.addEventListener('pointercancel',release);
+  window.addEventListener('resize',resize);
+  select(new URLSearchParams(location.search).get('variant')||'1');
+})();
+</script>
+</body>
+</html>

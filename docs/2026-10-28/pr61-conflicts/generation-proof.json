@@ -1,0 +1,401 @@
+[
+  {
+    "path": "component-button.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "cf98f5db2c20027569f62e9dfa9bc5905afc4ec757b55591e0fe0a450c4f75f7",
+    "final_sha256": "1fd7bf2ba536eef020f338354fe5fa51c52df843db4c61cc70add0b3cf4fd0df",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-segment.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "7eda046b1acfc91b5cdcd909fc1247ab02bdcca67b47361f09f7d797710aeb1e",
+    "final_sha256": "a9709f28505d53378742757c17be182fe2247b8f4d15c34ba6f700bab81d8a72",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-tabs.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "bb515d2714eb89c0e3c1867d8b06d0d62925cf1bece8736ea25442525b5b9df0",
+    "final_sha256": "73591e6f84aab8eed260e22e74c520ecb47b3cbd80310b9183db076f3f90ceaa",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-check.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "39ca8ec397db7e225e01776cfc75732cc7ac930fd90ad9c2c45575a2b7e0f0c4",
+    "final_sha256": "e3621a39200f98a922fa4e481a05065f14d02c80af5aae51dcf427bcf019598b",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-field.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "d2769f4f0edec79a378fdf66136410956f2222f8b1ecd1c65ed179daae41e7eb",
+    "final_sha256": "e648cbe188420f2d8d8eddd175990cf19353f6dc656fc15fc10b82a6d13b9466",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-select.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "627cd1856d25d2aaff3ae93a7c086567a1a6cab6146c114677c266804b4fd8b5",
+    "final_sha256": "4dbabc7eb307336f4f7dc08cc2670abfe1b51d0e94cc9d1c3dfdad56c344f150",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-period.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "15d1398be5660d7fa1bc1faa66b1e64f64a047212bf0a0c88ea39865c13c11d7",
+    "final_sha256": "2db805a18de732a535cdfd1869610936c7bffce30e54a14dca38dc26513d1ac8",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-search.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "607740c9e0449f21ccc5bf1836e27f549cad518c629949eb1fc513766c5e7b1c",
+    "final_sha256": "baa2f8f6564514c65065ec78b3053b4bd05d1d048bc506b0344a592f9cfb3f51",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-legend.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "10a5ba6186d68a4918d86bb3697b2ac3665ca72aa03d006c4c55909173f48834",
+    "final_sha256": "822c17e3adcc803e4e04cecf9a00b6179a09d1c6864e052abcb207af15dcbabe",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-pager.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "c67ffbdf469a40f3ef1b957297c2356ad478714870bcb8bafbcb943f44699452",
+    "final_sha256": "a669796aa8effcbff9e176756f02a78a0d4ffb7baf29519d189ff1ca1f2537da",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-chips-input.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "6ff6f301a8c46a42a71c61600d4feaf92aee7f496687201027c5c736bedc3741",
+    "final_sha256": "bb012237d5287b4f4eaaf07f93ae47ca24e4bff5b1ab45aefaababbfa148bf27",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-chips-select.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "ff9192f36b1012b720c6b4f75c23c5a2d2d7fdb462c6bc8b831bd9f92e4ca609",
+    "final_sha256": "23ae4e2c1c0a544324f448855ee282cfb080f0eb7edd16f5be3c34efe6eaa706",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-table.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "3bc11b94d45ff93e3b5e6e8dc87e2888f05dd37314207b814bfb94302470e0de",
+    "final_sha256": "5120426478e8975bd1d3ced716e320aa87fb168c92e26972657587f99a0b00a3",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-badge.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "bfc7c02fde177c7da352014b8e260b2f97b18e5be4bb86a601c8a3526dd62539",
+    "final_sha256": "39accb467d225a30cdbdcdca27eab2a2ef211c061a42f0bbc107c4e2beff1a71",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-tile.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "cd76d2b7344456f4b642ce30f95c81104d2086456591bef9b32befa0655f07cf",
+    "final_sha256": "52b8a961a1c37abf358e50b991aea8a28284b3849ee7fa8b43b1341af92cdc5b",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-hero.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "f0b598d48480d01211e591f01f6ad04415d47469966f271968119737a39c27f2",
+    "final_sha256": "7053b74e3fd47b654e58d424011cdf5fb3136b2e1ed55ec47abb90a5a9ab3110",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-car.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "0d7d2bd44829b11160ada83a0efa83ff0c52b973562493f0205079d4ee525b81",
+    "final_sha256": "eaeab961844494c168ce8ac323b886c45502cd17d454b470da4af46e2394a3c2",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-rank.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "048ab0c86dc3750607083d1d4a9edec40ce57e979b587ccf369510a1b184a6f8",
+    "final_sha256": "76996a5f402c3210e6a87c41b44b97cf26dd767c6662c863dee291927a61f94e",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-list.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "3c5d3aeb2d47d8209e116cea9818b9f0819881fddb7f78b339f2a64311f691d0",
+    "final_sha256": "f61c1f27ce8385cb191ee9242f7e555fc66debd8ff8468f2415a0b3c12a274a1",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-uptime.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "f334c760edf00ef0af5e21ae789fd01846befabffb48d8d2dcf68b53e2fcc5f2",
+    "final_sha256": "fb1cca52ea672b88671e900dcda8501bf4fab0b501e8104af7d76bf200423d9b",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-avatar.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "db851b2bf8cc827d926942c27683d5e63e4b7dfa8a38d72c0ca916792151fd15",
+    "final_sha256": "0e5dee63899aa3ba47ff710f9386c8724c164ed38d47c6fd0bb5301abde766b5",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-counter.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "3c0b1c553b2fae8581f9607d6a356cc709e0b513a0df5830ab2e855dcba87025",
+    "final_sha256": "b69495b1aa6ce44685b206dc8da7714260c085275227ddbe9a4dcc2400cc1004",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-chip.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "009571be8dc25f4509008ac90491da2e1a3518c1c7cd5351e011d618cc6f6101",
+    "final_sha256": "e4c7fcf995617ee4972401e74cb3ec8a884b4f5dede48ba18a8b4e47062d6a24",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-accordion.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "743cb1ccc9b3d8cf55b01c62f678584267e4b4534fe84dfe825219bb59b8a123",
+    "final_sha256": "add153f0db44d4570c55486a85ef296a45f0ef9ac73040add3013b7521b21603",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-chart.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "b71a42a58e3778b6f9af966f219f455c6e3d94a5b2bfabd84960f765159a4f45",
+    "final_sha256": "66cfa35d0179200b8a83f6073bf1c2181715b52acbf67ca6ea4e5a8b5c97c744",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-map.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "d511493358216103b780cee6c0a54343a3ccfe3b709835c651cad1c4bb6c738f",
+    "final_sha256": "455f144594caafd57c2c000f9dd1389fc3f9f6dd7de6ad3df4c418cd4b7c4e1a",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-calendar.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "3ba8088a15afd7526c5457cec298b069c3af4a2f674a4827432208e6a96e4d67",
+    "final_sha256": "f122de9653cdcd6a205bcec95a6d49d654f7b02f5f04d96af98c1c2281de4e6d",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-banner.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "9b44ddce1003ac64d90852ee5529bd520474e4158d79a066666c39cd72140394",
+    "final_sha256": "ed006acc9f0ec384e6793862dff29ff8be013cf09332e9b887d63c3621f0c3b4",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-modal.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "c1d2bf86a6442ebcb3df7baf120b8120ae67053370d0d8e00d70c44a4cf6b8e3",
+    "final_sha256": "a8a4120b7b780f101548ea17f36cd8b577335e21938b7b1441abe601fbb6cd4d",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-empty.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "e688262e124da6916870ed15ac1780677f25820c52d111f9c362d112ff31155b",
+    "final_sha256": "b0c0fb70e92e4f19e93f98c9fbe43243a2e52454dcbcdefa1a042fd67b3c7b68",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-adaptive-icons.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "7ed16b26b106f4ea290754c9e2f471b8634e4b79c00fb3e3e1deddf393a44315",
+    "final_sha256": "0e1274790e0562a980dbc24e5f40444fdbfab876175bace7497e497960c107df",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-scrollview.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "24b820fedfc7275c4b651ee325dc4dab9691437be929fb5ef1d92dbf2240d756",
+    "final_sha256": "581aa0e1ac03ff50472f3f3dddc39708c14994fc5e082cc8da7a5d3eca421c9e",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-onboarding.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "f36bdc1843046ffd89a0bda5698cb372058b5506f1856c8f97e7432abaca613a",
+    "final_sha256": "4b1a88467f8a6288d09b62b1ba90323fb5554f3a64bdf942711c97521e7e1ea1",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-flex.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "7af6add0c1541da65cc54526e0d455c40600d54f787ece0ae1ddf90f0e976792",
+    "final_sha256": "3978e5de8bcb77f3b1d71c325171e61ed922e6268afcd1da1e04aa0ab6693882",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-card-grid.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "33a03618234a03eda8cdf881a8804423d42c41de34b928659a13e54c152f1f15",
+    "final_sha256": "626982f72091d7d89554433e7ef484d89cb547eb34cb071f92c28414cb86e7e3",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-card-scroll.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "206cd97ab1f6ecdea7262e30b63fe600313b48b114e2288a538ed986d2292ac4",
+    "final_sha256": "94f88680ef982be51b606b9125a23984a8f5ae143cbed4ff5f1074e43b21000b",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-scroll-arrow.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "fa37e95add3d35cf2506c23889cc0414bb89e3e10c4054a301dbfa605f68a1ea",
+    "final_sha256": "8be5eb051552c2d72e51447f726e35a0472cd10ad4bd326b211c07faecd21b0a",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-popout.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "48267ba1c75e219e178dfd3c116c0efe6ad5edf156c8ab1fd235eba6792d07fe",
+    "final_sha256": "149e0d52f031cb84d33a09f0ea1935e906cf5dd1582c9f4eb0244d11d4848c92",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-focus-trap.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "171580212c1b7cd9612550b9f38ec3e5b6967572f72c45823524490545f373fb",
+    "final_sha256": "b1c19fbc6d6c9137883fdd71d09d1a18c43e79674666c06567a56fcccf38777c",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-touch.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "67f2033d7a78376f2866dfa00d5fd3680805ffa9c5605223f1b35f263dd093d1",
+    "final_sha256": "d2fad7e3fecfc099b63021e26aa0cedb42af00d009cabc98eeb820224f49bd67",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-breadcrumbs.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "77858846823222e4b60ff084e82d65864424a7660574771b80d69969406be378",
+    "final_sha256": "cf36adae8a354f3a806d035cb88e13d5d94e05f12834a8aceddb00b309c09cc5",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-tooltip.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "535060bdac0c8c6b445e0a2d104c77549cbb43fbd9564413978db7fc6a107edc",
+    "final_sha256": "87726bae174a2e8cdd87a4cd62e5c0bff190dcf1b388acd15cca424e956d8153",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-details-sidebar.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "ea05e913b0d15c6ab68b022bb85a8d0c8202c94a75d4a30b721eba91cef56451",
+    "final_sha256": "05ac822ee8b9267d7825f9fc5dbf2989bf0528478b2b1fea64abe78b89810a8d",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-heatmap.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "125f13816ca8a7f21b5676f4eb42682ddeafae729a1a22a7bd0f5d37a4d342ca",
+    "final_sha256": "23ce45fb6f0a591ce1299694c8450db40551108951d2e1f8c92b464b88ef09f7",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-bullet-chart.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "b5c074c344a094ed3a3602631f3722d3dd86e786a54c351fa03b7fedafa2a333",
+    "final_sha256": "1bb11e58b5555516e775c3774986aa36aa4eed41d79731d08f0961dfb2bd7aad",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-period-comparison.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "cfb29b96d54f1457b5b9aef5810dd8fb6d0247484ef3a909ca7749cd42187caf",
+    "final_sha256": "193b0fa9823938836dbd648200409bdad337ae4fec89dc15757fa1a2944d2e7d",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-timeline-annotations.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "759269bc77941d7107b8521d0415047786189a7bfb01f19cad3de7db3368c881",
+    "final_sha256": "a9a569d7ebc3bcf50900423d67b151983b91569d7954f05ee539e9df95717b1e",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-fullscreen.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "4536040b3f0c2e25e038f96419abe98ab40c852fad3e462650ac4e9837bd8f7c",
+    "final_sha256": "a6b6c10c3545be143e33b3fc5df1ae4059efaa9af952807edbda64577c3f8acf",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-export.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "16940b4528441718484d024465a114b96762a55170ccc3ab55d98132183db735",
+    "final_sha256": "eb4802841fc97b63e180e50bde2cc670fce3397e8d7f69872ca8bc8d9ede6b62",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-density-controls.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "279240b28e6ff4da2a273a5b8daa15b92e74edddc5965bbc67cbac8238e680e7",
+    "final_sha256": "065d00999a58a5bf895624d07bcf178a09015e1d3e0376db6fa3263f129e236d",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-tree-select.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "cd9a4bd387da9e8640d2495385f6a2b0d6a50c5592dd9a94ebebf4f3a9dfc5eb",
+    "final_sha256": "3a4fc5685079ced6e7f599dea6cd060b7c8a4bddce60fc6c677dc4061f20e1fa",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-saved-views.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "d53f449549c5673afbd4fc0a8e2fd019184bd3cabca8efe9a961d7df734f1795",
+    "final_sha256": "84f3f398e66c29939d4b41a2c0b9b7f4a21c88d5d551637f8fae94586c0a118f",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-layout-editor.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "fa9f2ed89851682e14600a79c392d183dbcdb5f422d68ffda166af7b3d36ba02",
+    "final_sha256": "88d01da0d58db41789230f6643f4fc9637ae947de487b8c4fb5bd65ca313003b",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-page-header.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "8ff17ffd9e8a9c74ec657f7d50d2b9bb5a7bef1a1ad2df687cc16ae6cea3076a",
+    "final_sha256": "45e2058f1e8d46c6b62c098524770667888855b7c4a2fa8a1d6509f9c0ff96da",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-widget-header.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "84dc7fb39b8b73b9c7be812c3e166ffa17211558f21230bd1910169bd4c0c5e9",
+    "final_sha256": "5df6895047b0264c54c7f018bd6449b06b88f11c42c6ba673cc9311dc401eef4",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "component-widget.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "7b95fa742c4fff284b0958fa5466be8e612855aca126b60a25b1714259dbce87",
+    "final_sha256": "3562f22c234df2b1b89e94e9bc0b8247af6bb6014e27851fad6defd1a7381516",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  },
+  {
+    "path": "index.html",
+    "only_docs_cache_urls_vs_pr": true,
+    "new_sha256": "d79bcfad2ecd9c6a9a542b5fd5168ddd0f6177f5bef4279d7f7592e69ba6c7e4",
+    "final_sha256": "3300b486e3a7071a7837a3f1d64731c8453316f97322f9c964db2a5f257ec242",
+    "provenance": "Merged canonical generator; final docs.js cache version follows repeated-heading fix."
+  }
+]

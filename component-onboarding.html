@@ -14,26 +14,24 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261021-docs">
-<link rel="stylesheet" href="css/docs.css?v=20261021-docs">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-focus-trap.js" defer></script>
 <script src="js/dk-onboarding.js" defer></script>
-<script src="js/docs-index.js?v=20261021-docs" defer></script>
-<script src="js/docs.js?v=20261021-docs" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
   <a class="sc-brand" href="index.html">
     <span class="sc-brand__t">dashboard-kit</span>
   </a>
   <div class="sc-ctl">
-    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-    </div>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -56,16 +54,16 @@
       </details>
     </div><p class="sc-share-status" role="status"></p>
     <h1>Онбординг-подсказка</h1>
-    <p class="sc-hero__lead">Короткое знакомство с новым действием: одна подсказка рядом с нужным элементом за раз.</p>
+    <p class="sc-hero__lead">Знакомит с новым действием короткой подсказкой рядом с нужным элементом.</p>
     <div class="sc-meta">
-      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-onboarding.js"><code>js/dk-onboarding.js</code></a></span>
+      <span class="sc-meta__i">Статус: стабильный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
-  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
-    <h2>Живой пример</h2>
-    <p>Запустите два шага. Можно пройти, пропустить или закрыть Escape.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-inline"><button class="dk-btn dk-btn--sm" id="onboard-period">30 дней</button><button class="dk-btn dk-btn--sm" id="onboard-export">Экспорт</button><button class="dk-btn dk-btn--sm dk-btn--primary" id="onboard-start">Показать подсказки</button></div><p class="dk-hint" id="onboard-status" role="status"></p></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Запустите знакомство, пройдите шаги или пропустите их. Escape закрывает подсказку.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-inline"><button class="dk-btn dk-btn--sm" id="onboard-period">30 дней</button><button class="dk-btn dk-btn--sm" id="onboard-export">Экспорт</button><button class="dk-btn dk-btn--sm dk-btn--primary" id="onboard-start">Показать подсказки</button></div><p class="dk-hint" id="onboard-status" role="status"></p></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
@@ -73,7 +71,7 @@
   </section>
   <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-panel"><b class="sc-callout">1</b> Целевой элемент<br><b class="sc-callout">2</b> Заголовок и объяснение<br><b class="sc-callout">3</b> Шаг и кнопки перехода</div></div><ol class="sc-anatomy__list"><li><b>Цель</b> — Элемент выделен контуром; подсказка располагается рядом.</li><li><b>Объяснение</b> — Короткое название и одно предложение о действии.</li><li><b>Управление</b> — Назад, Далее / Готово и Пропустить.</li></ol>
+    <div class="sc-anatomy"><div class="dk-panel"><b class="sc-callout">1</b> Целевой элемент<br><b class="sc-callout">2</b> Заголовок и объяснение<br><b class="sc-callout">3</b> Шаг и кнопки перехода</div></div><ol class="sc-anatomy__list"><li><b>Цель</b> — Элемент выделен контуром; подсказка располагается рядом.</li><li><b>Объяснение</b> — Короткое название и одно предложение о действии.</li><li><b>Управление</b> — Назад, Далее / Готово и Пропустить.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
@@ -84,8 +82,8 @@
     <div class="dk-panel">До запуска ничего не показано. В живом примере доступны раскрытие, следующий шаг, возврат, завершение и пропуск.</div>
   </section>
   <section class="sc-sec" id="kontent">
-    <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>«Выберите период» — объясняет конкретное действие.</li><li>Не более одного короткого объяснения на шаг.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Несколько подсказок одновременно.</li><li>Онбординг запускается при каждом посещении без возможности пропуска.</li></ul></div></div>
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>«Выберите период» — объясняет конкретное действие.</li><li>Не более одного короткого объяснения на шаг.</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Несколько подсказок одновременно.</li><li>Онбординг запускается при каждом посещении без возможности пропуска.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
@@ -93,11 +91,11 @@
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
-    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-onboarding"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-onboarding"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код</h2>
-    <p>Подключите dk-focus-trap.js и dk-onboarding.js после основы. Сценарий запускается явно и не открывается поверх другого диалога.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-panel&quot;&gt;&lt;div class=&quot;dk-inline&quot;&gt;&lt;button class=&quot;dk-btn dk-btn--sm&quot; id=&quot;onboard-period&quot;&gt;30 дней&lt;/button&gt;&lt;button class=&quot;dk-btn dk-btn--sm&quot; id=&quot;onboard-export&quot;&gt;Экспорт&lt;/button&gt;&lt;button class=&quot;dk-btn dk-btn--sm dk-btn--primary&quot; id=&quot;onboard-start&quot;&gt;Показать подсказки&lt;/button&gt;&lt;/div&gt;&lt;p class=&quot;dk-hint&quot; id=&quot;onboard-status&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+    <p>Подключите dk-focus-trap.js и dk-onboarding.js после основы. Сценарий запускается явно и не открывается поверх другого диалога.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-onboarding.js"><code>js/dk-onboarding.js</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-panel&quot;&gt;&lt;div class=&quot;dk-inline&quot;&gt;&lt;button class=&quot;dk-btn dk-btn--sm&quot; id=&quot;onboard-period&quot;&gt;30 дней&lt;/button&gt;&lt;button class=&quot;dk-btn dk-btn--sm&quot; id=&quot;onboard-export&quot;&gt;Экспорт&lt;/button&gt;&lt;button class=&quot;dk-btn dk-btn--sm dk-btn--primary&quot; id=&quot;onboard-start&quot;&gt;Показать подсказки&lt;/button&gt;&lt;/div&gt;&lt;p class=&quot;dk-hint&quot; id=&quot;onboard-status&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&lt;/div&gt;
 &lt;script&gt;
 window.addEventListener(&#x27;DOMContentLoaded&#x27;, function () {
   var tour = dkOnboarding({steps:[
@@ -109,7 +107,7 @@ window.addEventListener(&#x27;DOMContentLoaded&#x27;, function () {
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkOnboarding(options)</code></td><td>функция</td><td>Создаёт контроллер; steps — target (селектор или элемент), title, text.</td></tr><tr><td><code>start(force)</code></td><td>метод</td><td>Показывает первый шаг. force=true позволяет повторить завершённый сценарий.</td></tr><tr><td><code>close() / destroy()</code></td><td>методы</td><td>Закрывает / закрывает и освобождает контроллер.</td></tr><tr><td><code>storageKey</code></td><td>строка</td><td>Необязательный ключ localStorage; завершение и пропуск отмечаются done.</td></tr><tr><td><code>onClose(reason)</code></td><td>функция</td><td>complete, skip, escape, outside, close, destroy или missing-target.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
-    <h2>Связанное</h2>
+    <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-modal.html">Модальное окно</a> — Задача с обязательным действием</li><li><a href="https://vkui.io/components/onboarding-tooltip/">Референс VKUI</a> — Последовательность и доступность</li></ul>
   </section>
 

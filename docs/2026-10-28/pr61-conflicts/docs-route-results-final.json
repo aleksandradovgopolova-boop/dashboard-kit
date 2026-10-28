@@ -1,0 +1,1762 @@
+[
+  {
+    "doc": 320,
+    "hash": "#start",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "start"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#development",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "development"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#rules",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "rules"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#uiux",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "uiux"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#patterns",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "patterns"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#design-guidance",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "design-guidance"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#catalog",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "catalog"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#foundations",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "foundations"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#workflow",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "workflow"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 1280,
+    "hash": "#start",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "start"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#development",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "development"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#rules",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "rules"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#uiux",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "uiux"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#patterns",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "patterns"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#design-guidance",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "design-guidance"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#catalog",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "catalog"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#foundations",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "foundations"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#workflow",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "dark",
+    "visible": [
+      "workflow"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 320,
+    "hash": "#start",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "start"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#development",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "development"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#rules",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "rules"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#uiux",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "uiux"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#patterns",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "patterns"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#design-guidance",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "design-guidance"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#catalog",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "catalog"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#foundations",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "foundations"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#workflow",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "workflow"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 1280,
+    "hash": "#start",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "start"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#development",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "development"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#rules",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "rules"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#uiux",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "uiux"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#patterns",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "patterns"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#design-guidance",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "design-guidance"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#catalog",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "catalog"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#foundations",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "foundations"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#workflow",
+    "headings": 1,
+    "page": "/index.html",
+    "theme": "light",
+    "visible": [
+      "workflow"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 320,
+    "hash": "#sborka-po-zadache",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "sborka-po-zadache"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#komponenty",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "komponenty"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#effekty",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "effekty"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#animacii",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "animacii"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#redpolitika",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "principy-teksta"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#principy-teksta",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "principy-teksta"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#glossariy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "glossariy"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#usability",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "usability"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#dostupnost",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "dostupnost"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#tri-principa",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "tri-principa"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#smyslovye",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "smyslovye"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#setka-i-ustroystva",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "setka-i-ustroystva"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#ikonki",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "ikonki"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#tipografika",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "tipografika"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#yazyk-interfeysa",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "yazyk-interfeysa"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#upravlenie",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "upravlenie"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#filtry-legenda",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "filtry-legenda"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#filtry",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "filtry"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#atomy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "atomy"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#svodka-i-reyting",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "svodka-i-reyting"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#razmer-vidzheta",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "razmer-vidzheta"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#kalendar",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "kalendar"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#sostoyanie-stranicy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "sostoyanie-stranicy"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#dostupnost-i-spiski",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "dostupnost-i-spiski"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#regiony",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "regiony"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#formy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "formy"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#tablica",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "tablica"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#grafiki",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "grafiki"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#stranicy-oshibok",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "stranicy-oshibok"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#sostoyaniya",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "sostoyaniya"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#sdk-extensions",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "sdk-extensions"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 1280,
+    "hash": "#sborka-po-zadache",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "sborka-po-zadache"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#komponenty",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "komponenty"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#effekty",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "effekty"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#animacii",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "animacii"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#redpolitika",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "principy-teksta"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#principy-teksta",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "principy-teksta"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#glossariy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "glossariy"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#usability",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "usability"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#dostupnost",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "dostupnost"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#tri-principa",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "tri-principa"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#smyslovye",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "smyslovye"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#setka-i-ustroystva",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "setka-i-ustroystva"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#ikonki",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "ikonki"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#tipografika",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "tipografika"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#yazyk-interfeysa",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "yazyk-interfeysa"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#upravlenie",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "upravlenie"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#filtry-legenda",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "filtry-legenda"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#filtry",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "filtry"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#atomy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "atomy"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#svodka-i-reyting",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "svodka-i-reyting"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#razmer-vidzheta",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "razmer-vidzheta"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#kalendar",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "kalendar"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#sostoyanie-stranicy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "sostoyanie-stranicy"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#dostupnost-i-spiski",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "dostupnost-i-spiski"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#regiony",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "regiony"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#formy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "formy"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#tablica",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "tablica"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#grafiki",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "grafiki"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#stranicy-oshibok",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "stranicy-oshibok"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#sostoyaniya",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "sostoyaniya"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#sdk-extensions",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "dark",
+    "visible": [
+      "sdk-extensions"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 320,
+    "hash": "#sborka-po-zadache",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "sborka-po-zadache"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#komponenty",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "komponenty"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#effekty",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "effekty"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#animacii",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "animacii"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#redpolitika",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "principy-teksta"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#principy-teksta",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "principy-teksta"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#glossariy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "glossariy"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#usability",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "usability"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#dostupnost",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "dostupnost"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#tri-principa",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "tri-principa"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#smyslovye",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "smyslovye"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#setka-i-ustroystva",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "setka-i-ustroystva"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#ikonki",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "ikonki"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#tipografika",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "tipografika"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#yazyk-interfeysa",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "yazyk-interfeysa"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#upravlenie",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "upravlenie"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#filtry-legenda",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "filtry-legenda"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#filtry",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "filtry"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#atomy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "atomy"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#svodka-i-reyting",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "svodka-i-reyting"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#razmer-vidzheta",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "razmer-vidzheta"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#kalendar",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "kalendar"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#sostoyanie-stranicy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "sostoyanie-stranicy"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#dostupnost-i-spiski",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "dostupnost-i-spiski"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#regiony",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "regiony"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#formy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "formy"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#tablica",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "tablica"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#grafiki",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "grafiki"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#stranicy-oshibok",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "stranicy-oshibok"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#sostoyaniya",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "sostoyaniya"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 320,
+    "hash": "#sdk-extensions",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "sdk-extensions"
+    ],
+    "width": 320
+  },
+  {
+    "doc": 1280,
+    "hash": "#sborka-po-zadache",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "sborka-po-zadache"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#komponenty",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "komponenty"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#effekty",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "effekty"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#animacii",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "animacii"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#redpolitika",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "principy-teksta"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#principy-teksta",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "principy-teksta"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#glossariy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "glossariy"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#usability",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "usability"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#dostupnost",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "dostupnost"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#tri-principa",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "tri-principa"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#smyslovye",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "smyslovye"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#setka-i-ustroystva",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "setka-i-ustroystva"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#ikonki",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "ikonki"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#tipografika",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "tipografika"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#yazyk-interfeysa",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "yazyk-interfeysa"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#upravlenie",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "upravlenie"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#filtry-legenda",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "filtry-legenda"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#filtry",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "filtry"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#atomy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "atomy"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#svodka-i-reyting",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "svodka-i-reyting"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#razmer-vidzheta",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "razmer-vidzheta"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#kalendar",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "kalendar"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#sostoyanie-stranicy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "sostoyanie-stranicy"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#dostupnost-i-spiski",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "dostupnost-i-spiski"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#regiony",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "regiony"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#formy",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "formy"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#tablica",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "tablica"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#grafiki",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "grafiki"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#stranicy-oshibok",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "stranicy-oshibok"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#sostoyaniya",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "sostoyaniya"
+    ],
+    "width": 1280
+  },
+  {
+    "doc": 1280,
+    "hash": "#sdk-extensions",
+    "headings": 1,
+    "page": "/showcase.html",
+    "theme": "light",
+    "visible": [
+      "sdk-extensions"
+    ],
+    "width": 1280
+  }
+]

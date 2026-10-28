@@ -14,25 +14,23 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261021-docs">
-<link rel="stylesheet" href="css/docs.css?v=20261021-docs">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-analysis.js" defer></script>
-<script src="js/docs-index.js?v=20261021-docs" defer></script>
-<script src="js/docs.js?v=20261021-docs" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
   <a class="sc-brand" href="index.html">
     <span class="sc-brand__t">dashboard-kit</span>
   </a>
   <div class="sc-ctl">
-    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-    </div>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -55,16 +53,16 @@
       </details>
     </div><p class="sc-share-status" role="status"></p>
     <h1>Сравнение периодов</h1>
-    <p class="sc-hero__lead">Показывает текущий и предыдущий показатель, абсолютную и относительную дельту.</p>
+    <p class="sc-hero__lead">Сравнивает показатель за два периода и показывает абсолютное и относительное изменение.</p>
     <div class="sc-meta">
-      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>экспериментальный</span>
-      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-analysis.js"><code>js/dk-analysis.js</code></a></span>
+      <span class="sc-meta__i">Статус: экспериментальный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
-  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
-    <h2>Живой пример</h2>
-    <div class="sc-playground"><div class="sc-playground__canvas"><div id="advanced-comparison"></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Сверьте оба значения и изменение. Рост сам по себе не означает улучшение.</p><div class="sc-playground"><div class="sc-playground__canvas"><div id="advanced-comparison"></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
@@ -72,19 +70,19 @@
   </section>
   <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div inert aria-hidden="true"><div id="anatomy-comparison"></div></div></div><ol class="sc-anatomy__list"><li><b>Контекст</b> — Показывает текущий и предыдущий показатель, абсолютную и относительную дельту.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
+    <ol class="sc-anatomy__list"><li><b>Контекст</b> — Показывает текущий и предыдущий показатель, абсолютную и относительную дельту.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Компонент следует ширине контейнера и системным токенам. Рост/снижение названы словами, смысл дельты не определяется только знаком. Текст переносится и подходит для компактного KPI. Скринридер получает оба числа.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkComparison(current, previous, better)</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+    <p>Компактный блок помещается в KPI. Значения с единицами сохраняются, пояснения переносятся.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkComparison(current, previous, better)</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <p>При previous=0 процент не определён. Нет данных не превращается в ноль. По умолчанию направление нейтрально. Процент считается по модулю предыдущего значения; отрицательная база требует объяснения.</p>
   </section>
   <section class="sc-sec" id="kontent">
-    <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Нужно объяснить изменение KPI или сопровождать временной график.</li><li>Показывайте полные названия, единицы и источник данных.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Несопоставимые периоды или разные единицы: сначала приведите данные к общей базе.</li><li>Не выдавайте отсутствие наблюдений за ноль и не используйте цвет как единственное объяснение.</li></ul></div></div>
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>«Март: 120; февраль: 100; изменение: +20%».</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Сравнение полного месяца с текущим неполным без пояснения.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
@@ -92,11 +90,11 @@
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
-    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-comparison"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-comparison"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код</h2>
-    <p></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-comparison&quot;&gt;&lt;/div&gt;
+    <p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-analysis.js"><code>js/dk-analysis.js</code></a></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-comparison&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
 document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkPeriodComparison(document.getElementById(&#x27;advanced-comparison&#x27;), {label:&#x27;Аварии за сутки&#x27;,current:23,previous:19,better:&#x27;decrease&#x27;});
@@ -104,7 +102,7 @@ dkPeriodComparison(document.getElementById(&#x27;advanced-comparison&#x27;), {la
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkComparison(current, previous, better)</code></td><td>чистая функция</td><td>Возвращает delta, percent, direction, meaning. better: increase/decrease/neutral.</td></tr><tr><td><code>dkPeriodComparison(el, opts)</code></td><td>API</td><td>current, previous, better, label, unit; update(opts), destroy().</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
-    <h2>Связанное</h2>
+    <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — точные числа</li><li><a href="README.md">Подключение</a> — dk-theme первым, dk-util до компонента</li></ul>
   </section>
 

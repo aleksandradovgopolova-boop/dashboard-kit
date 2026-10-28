@@ -14,24 +14,22 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261021-docs">
-<link rel="stylesheet" href="css/docs.css?v=20261021-docs">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
-<script src="js/docs-index.js?v=20261021-docs" defer></script>
-<script src="js/docs.js?v=20261021-docs" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
   <a class="sc-brand" href="index.html">
     <span class="sc-brand__t">dashboard-kit</span>
   </a>
   <div class="sc-ctl">
-    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-    </div>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -54,30 +52,30 @@
       </details>
     </div><p class="sc-share-status" role="status"></p>
     <h1>Вкладки</h1>
-    <p class="sc-hero__lead">Перевести человека в другой раздел: у вкладки свой адрес и своя загрузка. Счётчик рядом с названием говорит, сколько там ждёт внимания.</p>
+    <p class="sc-hero__lead">Помогают перейти между разделами одного уровня и показывают текущий раздел.</p>
     <div class="sc-meta">
-      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a></span>
+      <span class="sc-meta__i">Статус: стабильный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
-  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
-    <h2>Живой пример</h2>
-    <p>Пять разделов мониторинга; текущий отмечен чертой и цветом.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><nav class="dk-tabs" aria-label="Разделы мониторинга">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Сравните активную вкладку, обычную ссылку и вкладку со счётчиком.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><nav class="dk-tabs" aria-label="Разделы мониторинга">
       <a class="dk-tab" href="#" aria-current="page">Инфраструктура</a>
       <a class="dk-tab" href="#">Аварии <span class="dk-tab__n">23</span></a>
       <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
       <a class="dk-tab" href="#">Отчёты</a>
       <a class="dk-tab" href="#">Отчёты</a>
-    </nav></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+    </nav></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Разделы одного уровня, у каждого свой адрес: «Обзор», «Записи», «Отчёты».</li><li>При переходе меняется вся страница или её основная часть.</li><li>Разделов от двух до шести — больше не помещается в строку на узком экране.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Переключение вида одних данных внутри виджета — <a href="component-segment.html">Сегмент</a>.</li><li>Больше шести разделов — боковое меню каркаса (<code>css/chrome.css</code>).</li><li>Действие, а не переход — <a href="component-button.html">Кнопка</a>.</li></ul></div></div><div class="sc-note"><h3>Шапка и завершение страницы</h3><ul class="sc-list"><li>Шапка показывает текущий раздел и общий контекст; локальные действия остаются у своего виджета.</li><li>Каркас добавляется только собственной странице; встраиваемый блок не дублирует меню хозяина.</li><li>Подвал нужен для полезных вторичных ссылок; на рабочем дашборде не добавлять большой промоблок автоматически.</li></ul><p>Пример: Раздел и актуальность сверху; помощь в утверждённом меню профиля.</p><p>Проверка: Проверить, что закреплённые панели не закрывают фокус и полезное содержимое.</p><p><a href="https://www.uprock.ru/education/header-and-footer-zachem-nuzhny-i-kak-sozdat">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Информационная архитектура</h3><ul class="sc-list"><li>Начинать с вопросов пользователя и карты данных/действий, затем выбирать навигацию.</li><li>Вкладки объединяют связанные картины задачи; отдельный экран отвечает на самостоятельный вопрос.</li><li>Для мониторинга меню остаётся плоским. Иерархия данных не требует вложенного меню продукта.</li><li>Основной ответ виден сразу; вкладки не прячут данные, необходимые для одновременного сравнения.</li></ul><p>Пример: Плоские разделы; подробности объекта открываются из нужной строки.</p><p>Проверка: Посчитать действия до ответа и проверить возврат без потери контекста.</p><p><a href="https://www.uprock.ru/education/informacionnaya-arhitektura">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Консистентность</h3><ul class="sc-list"><li>Одинаковые значения, действия и состояния имеют одинаковые имена, стили и поведение между экранами.</li><li>Переиспользовать компоненты и токены; отклонение объяснять задачей и согласовывать новое правило.</li><li>Консистентность не требует одинакового состава экранов с разными вопросами.</li></ul><p>Пример: Единые названия, управление и статусы; содержание выбрано по вопросу экрана.</p><p>Проверка: Сравнить соседние экраны по одинаковому действию, а не только по цветам.</p><p><a href="https://www.uprock.ru/education/konsistentnost-v-ux-ui">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Переходы и непрерывность работы</h3><ul class="sc-list"><li>Для перехода описать начальное и конечное состояние: куда переместились данные и где продолжить работу. Движение не заменяет название и состояние контрола.</li><li>Не задерживать доступ к новому представлению ради вступления: контроли доступны сразу, фокус и ввод сохраняются. Скорость задаётся токенами, а не универсальными числами из статьи.</li><li>Повторный клик и уменьшенное движение дают тот же результат. Прерывание перехода не оставляет невидимых слоёв, блокирующих действия.</li></ul><p>Пример: Вкладка меняется сразу; активный выбор и новое содержимое понятны без анимации.</p><p>Проверка: Повторить переключение во время перехода, пройти клавиатурой и включить уменьшенное движение; проверить конечное состояние и доступность действий.</p><p><a href="https://www.uprock.ru/education/animaciya-interfeysov">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Дашборд по вопросу пользователя</h3><ul class="sc-list"><li>Сначала определить аудиторию и решение, которому помогает экран: мониторинг текущей ситуации, анализ причин или работа с объектами. Состав виджетов следует этим вопросам.</li><li>Обзор показывает основную картину без открытия деталей: 5 ± 2 главных KPI, максимум семь, затем объясняющие графики. Главная карточка нужна только для дополнительного контекста или состава.</li><li>Период, единицы и актуальность делают показатели сопоставимыми. Разные задачи можно разделить вкладками; данные для одновременной сверки остаются рядом.</li></ul><p>Пример: «Ситуация страны»: KPI и обзор динамики, округов и событий; рабочая таблица заявок — в отдельной вкладке той же задачи.</p><p>Проверка: По первому виду назвать ситуацию, изменение и зону внимания; затем найти объект и вернуться. Проверить 1366×768 без уменьшения текста и полей.</p><p><a href="https://www.uprock.ru/education/kak-sdelat-horoshiy-dashbord">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Разделы одного уровня, у каждого свой адрес: «Обзор», «Записи», «Отчёты».</li><li>При переходе меняется вся страница или её основная часть.</li><li>Разделов от двух до шести — больше не помещается в строку на узком экране.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Переключение вида одних данных внутри виджета — <a href="component-segment.html">Сегмент</a>.</li><li>Больше шести разделов — боковое меню каркаса (<code>css/chrome.css</code>).</li><li>Действие, а не переход — <a href="component-button.html">Кнопка</a>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-shell">Шапка и завершение страницы</a></li><li><a href="index.html#pattern-ia">Информационная архитектура</a></li><li><a href="index.html#pattern-consistency">Консистентность</a></li><li><a href="index.html#pattern-interface-motion">Переходы и непрерывность работы</a></li><li><a href="index.html#pattern-dashboard">Дашборд по вопросу пользователя</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><nav class="dk-tabs" aria-label="Пример">
+    <div class="sc-anatomy"><nav class="dk-tabs" aria-label="Пример">
       <a class="dk-tab" href="#" aria-current="page"><b class="sc-callout">1</b>Текущий</a>
       <a class="dk-tab" href="#"><b class="sc-callout">2</b>Аварии <span class="dk-tab__n"><b class="sc-callout">3</b>23</span></a>
       <a class="dk-tab" href="#">Отчёты</a>
@@ -98,8 +96,8 @@
     <div class="sc-note"><b>Недоступных вкладок не бывает.</b> Раздел, в который нельзя попасть, не показывают; если доступа нет — показывают страницу «Нет доступа» (<a href="component-empty.html">Состояния</a>), а не серую вкладку.</div>
   </section>
   <section class="sc-sec" id="kontent">
-    <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Существительное во множественном числе: «Обзор», «Записи», «Отчёты».</li><li>Счётчик — число объектов, требующих действия, а не всего объектов в разделе.</li><li>Порядок вкладок постоянный: люди запоминают положение, а не название.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Глаголы: «Смотреть аварии».</li><li>Счётчик «1 284» — это статистика, а не сигнал; ей место в разделе.</li><li>Вкладка «Ещё…» с выпадающим списком — значит, разделов слишком много для вкладок.</li></ul></div></div>
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Существительное во множественном числе: «Обзор», «Записи», «Отчёты».</li><li>Счётчик — число объектов, требующих действия, а не всего объектов в разделе.</li><li>Порядок вкладок постоянный: люди запоминают положение, а не название.</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Глаголы: «Смотреть аварии».</li><li>Счётчик «1 284» — это статистика, а не сигнал; ей место в разделе.</li><li>Вкладка «Ещё…» с выпадающим списком — значит, разделов слишком много для вкладок.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
@@ -107,18 +105,18 @@
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
-    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-tabs,dk-tab"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-tabs,dk-tab"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код</h2>
-    <p>Вкладки — ссылки. Текущую отмечает сервер или страница, скрипта у компонента нет.</p><pre class="sc-code"><code>&lt;nav class=&quot;dk-tabs&quot; aria-label=&quot;Разделы мониторинга&quot;&gt;
+    <p>Вкладки — ссылки. Текущую отмечает сервер или страница, скрипта у компонента нет.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;nav class=&quot;dk-tabs&quot; aria-label=&quot;Разделы мониторинга&quot;&gt;
   &lt;a class=&quot;dk-tab&quot; href=&quot;dashboard.html&quot; aria-current=&quot;page&quot;&gt;Сводка&lt;/a&gt;
   &lt;a class=&quot;dk-tab&quot; href=&quot;accidents.html&quot;&gt;Аварии &lt;span class=&quot;dk-tab__n&quot;&gt;23&lt;/span&gt;&lt;/a&gt;
   &lt;a class=&quot;dk-tab&quot; href=&quot;calendar.html&quot;&gt;Календарь&lt;/a&gt;
 &lt;/nav&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>aria-current=&quot;page&quot;</code></td><td>атрибут</td><td>Текущий раздел.</td></tr><tr><td><code>dk-tab__n</code></td><td>элемент</td><td>Счётчик; не показывать при нуле.</td></tr><tr><td><code>aria-label</code></td><td>атрибут nav</td><td>Название группы разделов для скринридера.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
-    <h2>Связанное</h2>
+    <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-segment.html">Сегмент</a> — переключение вида внутри виджета</li><li><a href="component-badge.html">Бейдж</a> — счётчик того же вида в других местах</li><li><a href="accidents.html">Страница «Аварии»</a> — вкладки в живом дашборде</li></ul>
   </section>
 

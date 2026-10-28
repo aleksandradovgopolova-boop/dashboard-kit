@@ -513,10 +513,11 @@
     }
     listen(agendaMedia, 'change', onAgendaChange);
     var destroy = window.dkOwn(host, function () {
-      stopped = true; releases.forEach(function (off) { off(); }); host.replaceChildren();
+      stopped = true; stableView.destroy(); releases.forEach(function (off) { off(); }); host.replaceChildren();
     });
     setEvents(opts.events);
     render();
+    var stableView = window.dkStableView(host, bodyEl);
 
     return {
       destroy: destroy,

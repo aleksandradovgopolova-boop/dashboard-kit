@@ -116,15 +116,13 @@
 
 /* ---------------------------------------------------------------------------
    2. АКЦЕНТ
-   Выбирается атрибутом data-accent и меняется независимо от темы.
+   Единый синий акцент для Dark и Light.
    Задаётся один тон, остальные четыре выводятся формулой — поэтому добавить
    акцент это одна строка, а не пять.
    --------------------------------------------------------------------------- */
 
 .dk-root,
 .dk-root[data-accent="blue"]   { --brand: var(--c-accent-blue);   --brand-ink: var(--c-widget-1-light); }
-.dk-root[data-accent="violet"] { --brand: var(--c-accent-violet); --brand-ink: var(--c-widget-1-light); }
-.dk-root[data-accent="indigo"] { --brand: var(--c-accent-indigo); --brand-ink: var(--c-widget-1-light); }
 
 /* Ссылка светлее фирменного на тёмном фоне и темнее на светлом — иначе она
    либо горит, либо пропадает. */
@@ -389,6 +387,12 @@
   --type-body:       var(--weight-regular) var(--size-14)/var(--lh-20) var(--font-sans);
   --type-body-track: var(--track-none);
 
+  /* Названия карточек и KPI: спокойный вес, обычный регистр. */
+  --icon-size-compact: var(--size-16);
+  --icon-size-control: var(--size-18);
+  --type-widget-title-track: var(--track-none);
+  --type-widget-title: var(--weight-regular) var(--size-14)/var(--lh-20) var(--font-sans);
+
   --type-body-bold:       var(--weight-semibold) var(--size-14)/var(--lh-20) var(--font-sans);
   --type-body-bold-track: var(--track-none);
 
@@ -404,20 +408,20 @@
   --type-code-track: var(--track-none);
 
   /* Главное число экрана (dk-hero). Кегль 56 — единственный такой на экране. */
-  --type-metric-hero:       var(--weight-semibold) var(--size-56)/var(--lh-56) var(--font-sans);
+  --type-metric-hero:       var(--weight-medium) var(--size-56)/var(--lh-56) var(--font-sans);
   --type-metric-hero-track: var(--track-tight);
 
   /* Метрики — Golos 600, как главное число экрана (DECISIONS.md, п. 8).
      700 держался под широкую Unbounded. Главное число экрана и числа на
      образце набраны 600, и метрики с ними одного веса: на одном экране
      крупные числа не спорят насыщенностью. */
-  --type-metric-xl:       var(--weight-semibold) var(--size-40)/var(--lh-44) var(--font-display);
+  --type-metric-xl:       var(--weight-medium) var(--size-40)/var(--lh-44) var(--font-display);
   --type-metric-xl-track: var(--track-tight);
 
-  --type-metric-lg:       var(--weight-semibold) var(--size-28)/var(--lh-32) var(--font-display);
+  --type-metric-lg:       var(--weight-medium) var(--size-28)/var(--lh-32) var(--font-display);
   --type-metric-lg-track: var(--track-snug);
 
-  --type-metric:       var(--weight-semibold) var(--size-20)/var(--lh-24) var(--font-display);
+  --type-metric:       var(--weight-medium) var(--size-20)/var(--lh-24) var(--font-display);
   --type-metric-track: var(--track-none);
 
   /* Кегли для элементов управления, где стиль текста задаётся не целиком:
@@ -521,8 +525,8 @@
      Размытие и насыщенность — для backdrop-filter. */
   --glass-blur:         30px;   /* карточки, крупные панели */
   --glass-blur-sm:      14px;   /* сегменты, чипы, мелкие контролы */
-  --glass-vibrancy:     1.8;    /* saturate() в backdrop-filter */
-  --glass-vibrancy-sm:  1.4;
+  --glass-vibrancy:     1.35;    /* saturate() в backdrop-filter */
+  --glass-vibrancy-sm:  1.2;
   --glass-surface:      color-mix(in srgb, var(--surface) 42%, transparent);
   --glass-surface-2:    color-mix(in srgb, var(--surface-2) 46%, transparent);
   --glass-chip:         color-mix(in srgb, var(--surface-3) 40%, transparent);
@@ -531,11 +535,11 @@
   --glass-sheen:        linear-gradient(135deg, color-mix(in srgb, var(--c-glass-hi) 10%, transparent), transparent 40%);
   --glass-hover:        color-mix(in srgb, var(--c-glass-hi) 10%, transparent);
   --glass-hover-strong: color-mix(in srgb, var(--c-glass-hi) 14%, transparent);
-  --glass-glow-1: color-mix(in srgb, var(--c-glass-glow-1) 50%, transparent);
-  --glass-glow-2: color-mix(in srgb, var(--c-glass-glow-2) 46%, transparent);
-  --glass-glow-3: color-mix(in srgb, var(--c-glass-glow-3) 42%, transparent);
-  --glass-glow-4: color-mix(in srgb, var(--c-glass-glow-4) 38%, transparent);
-  --glass-glow-c: color-mix(in srgb, var(--c-glass-glow-c) 34%, transparent);
+  --glass-glow-1: color-mix(in srgb, var(--c-glass-glow-1) 32%, transparent);
+  --glass-glow-2: color-mix(in srgb, var(--c-glass-glow-2) 28%, transparent);
+  --glass-glow-3: color-mix(in srgb, var(--c-glass-glow-3) 24%, transparent);
+  --glass-glow-4: color-mix(in srgb, var(--c-glass-glow-4) 22%, transparent);
+  --glass-glow-c: color-mix(in srgb, var(--c-glass-glow-c) 18%, transparent);
 
   /* Светящийся ОРЕОЛ на фокусе/активном — «подсвеченное стекло» (рефы
      Google/Gemini). Мягкий цветной bloom из тонов подложки на фокусе; у
@@ -758,12 +762,10 @@
   --control-soft: color-mix(in srgb, var(--c-nav-text-main-light) 10%, transparent);
 }
 
-.dk-root[data-accent="violet"] { --nav-brand: var(--c-accent-violet); }
-.dk-root[data-accent="indigo"] { --nav-brand: var(--c-accent-indigo); }
 
 :root, .dk-root { --type-table-compact: var(--weight-regular) var(--size-10)/var(--lh-16) var(--font-sans); }
 
-:root, .dk-root { --type-overview-title: var(--weight-semibold) var(--size-32)/var(--lh-36) var(--font-sans); --type-panel-title: var(--weight-semibold) var(--size-18)/var(--lh-24) var(--font-sans); }
+:root, .dk-root { --type-overview-title: var(--weight-semibold) var(--size-32)/var(--lh-36) var(--font-sans); --type-panel-title: var(--weight-regular) var(--size-14)/var(--lh-20) var(--font-sans); }
 
 /* Крупные области риска с подписанными значениями. Малые смысловые значки
    сохраняют контрастные --crit/--high/--calm; текст всегда использует *-ink.
@@ -773,3 +775,139 @@
    (решение владельца 14.10). */
 :root, .dk-root { --risk-area-high: var(--crit); --risk-area-medium: var(--high); --risk-area-low: color-mix(in srgb, var(--calm) 38%, var(--surface)); }
 :root[data-theme="light"], .dk-root[data-theme="light"] { --risk-area-high: var(--c-risk-area-high); --risk-area-medium: var(--c-risk-area-medium); --risk-area-low: color-mix(in srgb, var(--c-risk-area-low) 38%, var(--surface)); }
+
+/* Dark / Light: единый материал панелей, контролов и выбранных состояний.
+   Разницу глубины задаёт плотность стекла; геометрия и свет общие. */
+.dk-root {
+  --glass-canvas: color-mix(in srgb, var(--bg) 94%, var(--brand));
+  --glass-vibrancy: 1.08;
+  --glass-vibrancy-sm: 1.04;
+  --glass-surface: color-mix(in srgb, var(--surface) 68%, transparent);
+  --glass-surface-2: color-mix(in srgb, var(--surface-2) 90%, transparent);
+  --glass-chip: color-mix(in srgb, var(--surface-2) 32%, transparent);
+  --glass-control: color-mix(in srgb, var(--surface-2) 54%, transparent);
+  --glass-edge: color-mix(in srgb, var(--c-glass-hi) 8%, transparent);
+  --glass-edge-soft: color-mix(in srgb, var(--c-glass-hi) 6%, transparent);
+  --glass-rim: color-mix(in srgb, var(--c-glass-hi) 10%, transparent);
+  --glass-edge-top: color-mix(in srgb, var(--c-glass-hi) 12%, transparent);
+  --glass-sheen: linear-gradient(155deg, color-mix(in srgb, var(--c-glass-hi) 6%, transparent), color-mix(in srgb, var(--c-glass-hi) 2%, transparent) 42%, transparent 100%);
+  --glass-control-sheen: linear-gradient(165deg, color-mix(in srgb, var(--c-glass-hi) 3%, transparent), transparent 100%);
+  --glass-segment-track: color-mix(in srgb, var(--surface) 30%, transparent);
+  --glass-segment-lens: color-mix(in srgb, var(--c-glass-hi) 14%, transparent);
+  --glass-segment-sheen: linear-gradient(160deg, color-mix(in srgb, var(--c-glass-hi) 7%, transparent), transparent 100%);
+  --glass-segment-shadow: inset 0 1px 0 var(--glass-edge-top), inset 0 0 0 1px var(--glass-edge-soft), 0 var(--space-1) var(--space-3) color-mix(in srgb, var(--c-board-dark) 14%, transparent);
+  --glass-selected: color-mix(in srgb, var(--brand) 10%, var(--glass-control));
+  --glass-selected-edge: color-mix(in srgb, var(--brand) 60%, transparent);
+  --glass-hover: color-mix(in srgb, var(--c-glass-hi) 7%, var(--glass-control));
+  --glass-hover-strong: color-mix(in srgb, var(--c-glass-hi) 11%, var(--glass-control));
+  --glass-glow-1: color-mix(in srgb, var(--brand) 14%, transparent);
+  --glass-glow-2: color-mix(in srgb, var(--brand) 4%, transparent);
+  --glass-glow-3: color-mix(in srgb, var(--brand) 5%, transparent);
+  --glass-glow-4: transparent;
+  --glass-glow-c: transparent;
+  --glass-shadow-color: color-mix(in srgb, var(--c-board-dark) 24%, transparent);
+  --glass-shadow: 0 var(--space-4) var(--space-8) calc(-1 * var(--space-4)) var(--glass-shadow-color);
+  --glass-control-shadow: 0 var(--space-1) var(--space-4) calc(-1 * var(--space-2)) var(--glass-shadow-color);
+  --glass-active-glow: inset 0 1px 0 var(--glass-rim), var(--glass-control-shadow);
+  --glass-focus-glow: 0 0 0 var(--space-2) color-mix(in srgb, var(--brand) 16%, transparent);
+}
+.dk-root[data-theme="light"] {
+  --glass-canvas: color-mix(in srgb, var(--brand) 3%, var(--c-board-light));
+  --glass-surface: color-mix(in srgb, var(--c-glass-hi) 48%, transparent);
+  --glass-surface-2: color-mix(in srgb, var(--c-glass-hi) 94%, transparent);
+  --glass-chip: color-mix(in srgb, var(--c-glass-hi) 24%, transparent);
+  --glass-control: color-mix(in srgb, var(--c-glass-hi) 36%, transparent);
+  --glass-edge: color-mix(in srgb, var(--c-glass-glow-1) 10%, transparent);
+  --glass-edge-soft: color-mix(in srgb, var(--c-glass-glow-1) 8%, transparent);
+  --glass-rim: color-mix(in srgb, var(--c-glass-hi) 30%, transparent);
+  --glass-edge-top: color-mix(in srgb, var(--c-glass-hi) 66%, transparent);
+  --glass-sheen: linear-gradient(155deg, color-mix(in srgb, var(--c-glass-hi) 18%, transparent), color-mix(in srgb, var(--c-glass-hi) 5%, transparent) 42%, transparent 100%);
+  --glass-control-sheen: linear-gradient(165deg, color-mix(in srgb, var(--c-glass-hi) 10%, transparent), transparent 80%);
+  --glass-segment-track: color-mix(in srgb, var(--c-glass-glow-1) 5%, transparent);
+  --glass-segment-lens: color-mix(in srgb, var(--c-glass-hi) 64%, transparent);
+  --glass-segment-sheen: linear-gradient(160deg, color-mix(in srgb, var(--c-glass-hi) 24%, transparent), transparent 100%);
+  --glass-segment-shadow: inset 0 1px 0 var(--glass-edge-top), inset 0 0 0 1px var(--glass-edge-soft), 0 var(--space-1) var(--space-3) color-mix(in srgb, var(--c-glass-glow-1) 18%, transparent);
+  --glass-selected: color-mix(in srgb, var(--brand) 8%, var(--glass-control));
+  --glass-selected-edge: color-mix(in srgb, var(--brand) 48%, transparent);
+  --glass-hover: color-mix(in srgb, var(--c-glass-hi) 54%, transparent);
+  --glass-hover-strong: color-mix(in srgb, var(--c-glass-hi) 68%, transparent);
+  --glass-glow-1: color-mix(in srgb, var(--brand) 10%, transparent);
+  --glass-glow-2: color-mix(in srgb, var(--c-glass-hi) 54%, transparent);
+  --glass-glow-3: color-mix(in srgb, var(--brand) 8%, transparent);
+  --glass-shadow-color: color-mix(in srgb, var(--c-glass-glow-1) 10%, transparent);
+}
+
+/* Подписи плиток риска: контраст на заливке, независимо от тона страницы. */
+:root, .dk-root { --risk-label-low: var(--ink); --risk-label-medium: var(--c-neutral-950); --risk-label-high: var(--c-neutral-950); }
+
+/* Graphite: chosen image exec-20e7a770. Equal specificity with legacy theme
+   selectors is required: declared tokens must reach the rendered UI. */
+.dk-root, .dk-root[data-theme] {
+  --crit: color-mix(in srgb, var(--c-status-red-dark) 96%, var(--c-graphite-ink));
+  --control-on: color-mix(in srgb, var(--c-graphite-soft) 76%, var(--c-graphite-surface));
+  --control-on-hover: color-mix(in srgb, var(--control-on) 85%, var(--ink));
+  --bg: var(--c-graphite-bg);
+  --surface: var(--c-graphite-surface);
+  --surface-2: var(--c-graphite-raised);
+  --surface-3: color-mix(in srgb, var(--surface-2) 84%, var(--ink));
+  --ink: var(--c-graphite-ink);
+  --ink-2: var(--c-graphite-muted);
+  --ink-3: var(--c-graphite-soft);
+  --rule: color-mix(in srgb, var(--ink) 14%, transparent);
+  --chart-primary: var(--c-graphite-cyan);
+  --chart-secondary: var(--c-graphite-violet);
+  --glass-canvas: var(--bg);
+  --glass-background-image: url('../assets/graphite-dark.png');
+  --glass-scene-height: max(100vh, 75vw);
+  --glass-surface: color-mix(in srgb, var(--surface) 42%, transparent);
+  --glass-surface-2: var(--surface-2);
+  --glass-control: color-mix(in srgb, var(--surface-2) 66%, transparent);
+  --glass-chip: color-mix(in srgb, var(--surface-2) 44%, transparent);
+  --glass-edge: color-mix(in srgb, var(--ink) 9%, transparent);
+  --glass-edge-soft: color-mix(in srgb, var(--ink) 11%, transparent);
+  --glass-edge-top: color-mix(in srgb, var(--ink) 24%, transparent);
+  --glass-rim: color-mix(in srgb, var(--ink) 10%, transparent);
+  --glass-sheen: linear-gradient(155deg, color-mix(in srgb, var(--ink) 8%, transparent), transparent 74%);
+  --glass-control-sheen: linear-gradient(165deg, color-mix(in srgb, var(--ink) 6%, transparent), transparent 78%);
+  --glass-shadow: inset 0 1px 0 var(--glass-rim);
+  --glass-control-shadow: inset 0 1px 0 var(--glass-rim);
+  --glass-selected: color-mix(in srgb, var(--ink) 20%, var(--surface));
+  --glass-hover: color-mix(in srgb, var(--ink) 10%, var(--glass-control));
+  --glass-hover-strong: color-mix(in srgb, var(--ink) 16%, var(--glass-control));
+  --glass-segment-track: color-mix(in srgb, var(--surface) 42%, transparent);
+  --glass-segment-lens: color-mix(in srgb, var(--ink) 20%, var(--surface));
+  --glass-segment-shadow: inset 0 1px 0 var(--glass-edge-top);
+  --glass-active-glow: inset 0 1px 0 var(--glass-edge-top);
+  --radius-xl: var(--round-5);
+  --pad-widget: var(--space-8);
+  --type-panel-title: var(--weight-medium) var(--size-18)/var(--lh-24) var(--font-sans);
+  --type-metric-band-hero: var(--weight-semibold) var(--size-64)/var(--lh-64) var(--font-sans);
+  --page-pad: clamp(var(--space-8), 2.7vw, var(--space-9));
+}
+.dk-root[data-theme="light"] {
+  --crit: color-mix(in srgb, var(--c-status-red) 90%, var(--c-pearl-ink));
+  --high: var(--c-status-yellow-ink-light);
+  --calm: color-mix(in srgb, var(--c-status-green) 90%, var(--c-pearl-ink));
+  --control-on: var(--c-gray-400);
+  --control-on-hover: color-mix(in srgb, var(--control-on) 80%, var(--ink));
+  --bg: var(--c-pearl-bg);
+  --surface: var(--c-pearl-surface);
+  --surface-2: var(--c-pearl-raised);
+  --surface-3: color-mix(in srgb, var(--surface-2) 88%, var(--ink));
+  --ink: var(--c-pearl-ink);
+  --ink-2: var(--c-pearl-muted);
+  --ink-3: var(--c-pearl-soft);
+  --chart-primary: var(--c-pearl-cyan);
+  --chart-secondary: var(--c-pearl-violet);
+  --glass-background-image: url('../assets/graphite-light.png');
+  --glass-surface: color-mix(in srgb, var(--surface) 78%, transparent);
+  --glass-control: color-mix(in srgb, var(--surface) 72%, transparent);
+  --glass-chip: color-mix(in srgb, var(--surface-2) 34%, transparent);
+  --glass-edge: color-mix(in srgb, var(--ink) 13%, transparent);
+  --glass-edge-top: color-mix(in srgb, var(--surface) 92%, transparent);
+  --glass-rim: color-mix(in srgb, var(--surface) 70%, transparent);
+  --glass-sheen: linear-gradient(155deg, color-mix(in srgb, var(--surface) 48%, transparent), transparent 66%);
+  --glass-control-sheen: linear-gradient(165deg, color-mix(in srgb, var(--surface) 56%, transparent), transparent 80%);
+  --glass-selected: color-mix(in srgb, var(--ink) 10%, var(--surface));
+  --glass-segment-lens: color-mix(in srgb, var(--ink) 9%, var(--surface));
+}

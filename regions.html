@@ -14,14 +14,14 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
 <link rel="stylesheet" href="css/chrome.css">
-<link rel="stylesheet" href="css/glass.css">
+<link rel="stylesheet" href="css/glass.css?v=20261026-readable-menu">
 <link rel="stylesheet" href="css/page.regions.css">
 
 <!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
      и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
-<script src="js/dk-util.js"></script>
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js" defer></script>
 <!-- defer, а не блокирующая загрузка. Три файла графиков весят 1148 КБ, и
      без defer разбор страницы вставал на них целиком: до первой отрисовки
@@ -36,7 +36,7 @@
 <script src="js/dk-period.js" defer></script>
 <script src="js/dk-chrome.js" defer></script>
 <script src="js/dk-modal.js" defer></script>
-<script src="js/dk-map.js" defer></script>
+<script src="js/dk-map.js?v=20261028-stable-size" defer></script>
 <script src="js/dk-table.js" defer></script>
 <script src="js/dk-pager.js" defer></script>
 </head>
@@ -95,7 +95,7 @@
         <div class="dk-side__profile-menu">
           <a class="dk-menu__item" href="index.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg>Помощь</a>
           <details><summary class="dk-menu__item"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg>Настройки</summary>
-            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button class="dk-btn dk-btn--sm" type="button" data-theme-set="light">Светлая</button><button class="dk-btn dk-btn--sm" type="button" data-theme-set="dark">Тёмная</button></div>
+            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
           </details>
           <div class="dk-side__profile-rule"></div>
           <button class="dk-menu__item" type="button" disabled title="Гостевой просмотр"><svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg>Выйти</button>
@@ -413,7 +413,7 @@
 <dialog class="dk-modal" id="r-settings" aria-labelledby="r-settings-title">
 <form method="dialog" class="dk-modal__form">
 <div class="dk-modal__head"><h2 class="dk-modal__title" id="r-settings-title">Настройки экрана</h2><button class="dk-iconbtn" value="close" aria-label="Закрыть настройки" title="Закрыть настройки"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div>
-<div class="dk-modal__body"><p>Тема оформления</p><div class="dk-seg" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="light" aria-pressed="false">Светлая</button><button type="button" data-theme-set="dark" aria-pressed="true">Тёмная</button></div><details class="r-fold"><summary><svg class="dk-i dk-i--sm r-fold-caret" aria-hidden="true"><use href="#ti-chevron-right"/></svg>О показателе риска</summary><p>Балл риска — от 0 до 100. Высокий — от 78, средний — от 60 до 77, низкий — менее 60. В примере используются демонстрационные данные.</p></details></div>
+<div class="dk-modal__body"><p>Тема оформления</p><div class="dk-seg" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div><details class="r-fold"><summary><svg class="dk-i dk-i--sm r-fold-caret" aria-hidden="true"><use href="#ti-chevron-right"/></svg>О показателе риска</summary><p>Балл риска — от 0 до 100. Высокий — от 78, средний — от 60 до 77, низкий — менее 60. В примере используются демонстрационные данные.</p></details></div>
 </form></dialog>
 <dialog class="dk-modal" id="risk-info" aria-labelledby="risk-info-title">
   <form method="dialog" class="dk-modal__form">

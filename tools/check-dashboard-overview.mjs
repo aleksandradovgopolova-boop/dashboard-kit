@@ -141,21 +141,30 @@ try {
 
     assert(result.riskReady && result.riskHigh==='18', `${theme}: shared region counts must load without invented deltas`);
     assert(result.hiddenWork && result.hiddenCauses && result.canvas>0, `${theme}: hidden details and visible chart`);
-    assert(await evaluate(`[...document.querySelectorAll('#d-view-country .dk-widget, #d-risk-summary')].every(el=>{const s=getComputedStyle(el);return ['Top','Right','Bottom','Left'].every(side=>parseFloat(s['border'+side+'Width'])===0)&&s.boxShadow==='none'})`), `${theme}: cards separate through surfaces without decorative borders or shadows`);
+    assert(await evaluate(`[...document.querySelectorAll('#d-view-country .dk-widget, #d-risk-summary')].every(el=>{const s=getComputedStyle(el);return ['Top','Right','Bottom','Left'].every(side=>parseFloat(s['border'+side+'Width'])<=(el.closest('.dk-glass')?1:0))&&s.boxShadow==='none'})`), `${theme}: cards use the current material thin edge without shadows`);
 
-    assert(await evaluate(`(()=>{
-      const banner=document.querySelector('.dk-banner'), number=banner.querySelector('.dk-banner__number');
-      const canvas=document.createElement('canvas'), ctx=canvas.getContext('2d');
-      const rgb=color=>{ctx.fillStyle=color;ctx.fillRect(0,0,1,1);return [...ctx.getImageData(0,0,1,1).data].slice(0,3)};
-      const lum=color=>rgb(color).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4}).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+    // Composite glass backgrounds must be measured as rendered pixels; drawing
+    // an alpha fill on the preceding text color creates an incorrect contrast.
+    const priorityShot = await send('Page.captureScreenshot',{format:'png'});
+    assert(await evaluate(`(async()=>{
+      const banner=document.querySelector('.dk-banner'), number=banner.querySelector('.dk-banner__number'), action=banner.querySelector('.dk-btn');
+      const image=new Image(); image.src='data:image/png;base64,${priorityShot.data}'; await image.decode();
+      const surface=document.createElement('canvas'); surface.width=image.width;surface.height=image.height;
+      const pixels=surface.getContext('2d');pixels.drawImage(image,0,0);
+      const swatch=document.createElement('canvas');swatch.width=swatch.height=1;const ctx=swatch.getContext('2d');
+      const rgb=color=>{ctx.clearRect(0,0,1,1);ctx.fillStyle=color;ctx.fillRect(0,0,1,1);const px=[...ctx.getImageData(0,0,1,1).data];if(px[3]!==255)throw Error('Opaque contrast foreground required');return px.slice(0,3)};
+      const lum=rgb=>rgb.map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4}).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
       const contrast=(a,b)=>{a=lum(a);b=lum(b);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05)};
-      const action=banner.querySelector('.dk-btn'), bg=getComputedStyle(banner).backgroundColor;
-      if(contrast(getComputedStyle(action).color,getComputedStyle(action).backgroundColor)<4.5) throw Error('Priority action contrast '+contrast(getComputedStyle(action).color,getComputedStyle(action).backgroundColor));
+      // Text has empty lower padding in these controls. Sample several points
+      // inside the rounded outline, below the glyphs and above the border.
+      const backgrounds=(el,inset)=>{const r=el.getBoundingClientRect();return [.35,.5,.65].map(f=>{const x=Math.floor(r.left+r.width*f),y=Math.floor(r.bottom-inset);if(x<0||y<0||x>=image.width||y>=image.height)throw Error('Contrast sample outside screenshot');const px=[...pixels.getImageData(x,y,1,1).data];if(px[3]!==255)throw Error('Non-opaque screenshot sample');return px.slice(0,3);});};
+      const actionRatio=Math.min(...backgrounds(action,6).map(bg=>contrast(rgb(getComputedStyle(action).color),bg)));
+      const numberRatio=Math.min(...backgrounds(number,3).map(bg=>contrast(rgb(getComputedStyle(number).color),bg)));
+      if(actionRatio<4.5||numberRatio<3)throw Error('Rendered priority contrast '+JSON.stringify({actionRatio,numberRatio}));
       return banner.classList.contains('dk-banner--priority') && number.textContent==='23' &&
-        parseFloat(getComputedStyle(number).fontSize)>=40 && contrast(getComputedStyle(number).color,bg)>=3 &&
-        contrast(getComputedStyle(action).color,getComputedStyle(action).backgroundColor)>=4.5 &&
+        parseFloat(getComputedStyle(number).fontSize)>=40 && actionRatio>=4.5 && numberRatio>=3 &&
         [...document.querySelectorAll('.dk-tile--prominent .dk-metric-lg')].every(el=>parseFloat(getComputedStyle(el).fontSize)>=40);
-    })()`), `${theme}: priority count, readable action contrast and prominent desktop KPI`);
+    })()`), `${theme}: priority count, rendered action contrast and prominent desktop KPI`);
 
     await evaluate(`document.getElementById('d-tab-country').focus()`);
     await send('Input.dispatchKeyEvent',{type:'keyDown',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});

@@ -45,8 +45,13 @@ ORDER = [
     ("js/dk-analysis.js", "defer"),
     ("js/dk-context.js", "defer"),
     ("js/dk-workspace.js", "defer"),
+    ("js/dk-dashboard.js", "defer"),
     ("js/dk-tree.js", "defer"),
     ("js/dk-layout-editor.js", "defer"),
+    ("js/reference-dashboard.js", "defer, только эталон reference-dashboard.html"),
+    ("js/family-mortgage-data.js", "defer, учебная модель family-mortgage.html; после dk-dashboard.js"),
+    ("js/family-mortgage.js", "defer, только family-mortgage.html; после компонентов и модели данных"),
+    ("js/kit2-preview.js", "defer, только kit2-preview.html; изолированный просмотр предложений, не API компонента"),
 ]
 
 # Стили в порядке подключения. Календарь — до components.css: наши правила
@@ -57,11 +62,14 @@ CSS_ORDER = [
     ("css/tokens.semantic.css", "всегда"),
     ("css/components.css", "всегда"),
     ("css/chrome.css", "только если кит рисует всю страницу"),
-    ("css/glass.css", "только дашборды с классом dk-glass; после chrome.css"),
+    ("css/glass.css", "страницы и контейнеры с классом dk-glass; после chrome.css"),
     ("css/page.regions.css", "только пример regions.html; после chrome.css"),
     ("css/page.dashboard.css", "только пример dashboard.html; после chrome.css"),
     ("css/page.family-mortgage.css", "только пример family-mortgage.html; после components.css"),
     ("css/page.grid.css", "только эталон сетки grid.html; после components.css"),
+    ("css/reference-dashboard.css", "только эталон reference-dashboard.html; после components.css"),
+    ("css/kit2-preview.css", "только оболочка kit2-preview.html; после components.css"),
+    ("css/kit2-preview-frame.css", "только iframe kit2-preview.html; после стилей потребителя; предложения не являются контрактом"),
 ]
 
 # Чужой скрипт со своим стилем: подключил скрипт — подключи и стиль. Из кода
@@ -75,6 +83,17 @@ DOCS_ONLY = ["js/docs.js", "js/docs-index.js", "css/docs.css"]
 # скилл читал их одинаково. owns — префиксы классов; правило совпадения то же,
 # что у раздела «Токены» на страницах (docs.js, owns): по границе имени блока.
 PARTS = [
+    {
+        "id": "dashboard-data", "title": "Данные и состояние дашборда", "kind": "основа", "group": "Разработка",
+        "status": "экспериментальный",
+        "purpose": "Контракт данных и единый согласованный срез: серверные агрегаты, страница таблицы, загрузка, ошибка, повтор и защита от устаревших ответов.",
+        "use_when": ["Связанные KPI, график и таблица используют один источник и фильтры.", "Большие данные: фильтрация, агрегаты и пагинация выполняются на сервере."],
+        "instead": [], "owns": [], "css": [], "scripts": ["js/dk-dashboard.js"], "js": ["dkDashboard"],
+        "docs": ["docs/dashboard-data.md", "docs/reference-server.md", "reference-dashboard.html"],
+        "rules": ["schemaVersion=1. null означает отсутствие данных; ноль — измеренное значение.", "В server-режиме KPI и series относятся ко всему срезу, rows — к текущей странице.", "Новый запрос вытесняет предыдущий, timeout и destroy освобождают ожидание даже при игнорировании AbortSignal.", "Загрузка и ошибка не показывают данные предыдущего среза под новыми фильтрами.", "Команды, авторизация и права — ответственность приложения; сервер эталона содержит только учебные данные."],
+        "api": [{"name":"dkDashboard.createSession({load, mode, timeoutMs})", "type":"session", "what":"Создать независимую от DOM сессию; mode=server для агрегатов и постраничной загрузки."}, {"name":"session.load(query) / retry()", "type":"Promise", "what":"Запросить срез или повторить последний запрос."}, {"name":"session.subscribe(fn)", "type":"function", "what":"Подписаться на неизменяемое состояние; возвращает отписку."}, {"name":"session.destroy()", "type":"void", "what":"Отменить запрос, освободить таймер и подписчиков."}],
+        "example": "<script>\nvar session = dkDashboard.createSession({mode: 'server', load: dkDashboard.fetchSource('/api/dashboard', {mode: 'server'})});\nvar unsubscribe = session.subscribe(function (snapshot) { /* render ready/empty/loading/error */ });\nsession.load({filters: {}, period: null, page: 1, pageSize: 20});\n// При размонтировании: unsubscribe(); session.destroy();\n</script>",
+    },
     {
         "id": "base", "title": "Основа страницы", "kind": "основа", "group": "Основа",
         "status": "стабильный",
@@ -91,6 +110,7 @@ PARTS = [
                  "README.md#Числа", "README.md#Внутри приложения (WebView)"],
         "rules": [
             "Класс dk-root и атрибуты data-theme и data-accent стоят на одном элементе.",
+            "Единый синий акцент для Dark / Light. Выбора цвета нет; статусные цвета не меняются.",
             "dk-page — только если кит владеет всей страницей: он красит фон и обнуляет поля документа.",
             "Числа в разметку — через dkFmt, строки из данных — через dkEsc, а не руками.",
             "Иконка из скрипта — dkIcon.el(имя, класс) — узел; dkIcon(имя) отдаёт СТРОКУ разметки.",
@@ -103,7 +123,7 @@ PARTS = [
                    "общая коробка для любого блока, шапка страницы, вложенная зона.",
         "use_when": ["Любой дашборд: блоки ставятся в dk-grid долями dk-col--*, каждый блок — dk-widget."],
         "instead": [],
-        "owns": ["dk-region-tools", "dk-region-result", "dk-details", "dk-data-summary", "dk-wrap", "dk-grid", "dk-grid--five", "dk-grid--overview-panels", "dk-col", "dk-layout", "dk-focus-layout", "dk-stack", "dk-sections", "dk-push", "dk-head",
+        "owns": ["dk-region-tools", "dk-region-result", "dk-details", "dk-data-summary", "dk-wrap", "dk-grid", "dk-metric-band", "dk-grid--five", "dk-grid--balanced", "dk-grid--overview-panels", "dk-col", "dk-layout", "dk-focus-layout", "dk-stack", "dk-sections", "dk-push", "dk-head",
                  "dk-panel", "dk-well", "dk-widget", "dk-scroll"],
         "css": ["css/components.css"], "scripts": [], "js": [],
         "docs": ["README.md#Правила раскладки дашборда", "README.md#Сетка и устройства",
@@ -112,8 +132,9 @@ PARTS = [
             "Равная высота соседних карточек — dk-grid--equal; ряд по самому высокому содержимому, без внутренней прокрутки.",
                   "Ширина — долей (--quarter, --third, --half, --two-thirds, --full), а не числом колонок.",
             "Не больше трёх-четырёх подробных виджетов в ряду; сверху вниз — от общего к частному.",
-            "dk-grid--five: пять KPI на широком экране, две колонки на телефоне; последняя нечётная карточка занимает строку.",
-            "dk-grid--overview-panels: панели 1.45:1.05:1; на планшете две колонки с первой панелью во всю строку, на телефоне одна.",
+            "dk-grid--five: пять KPI на широком экране, до трёх на планшете, до двух на телефоне; каждый фактический ряд заполняет ширину, включая неполный последний.",
+            "dk-grid--balanced: равноправные виджеты распределяются по доступной ширине, последний ряд не оставляет пустых колонок. Не резервировать места под отсутствующие или скрытые блоки.",
+            "dk-grid--overview-panels: только для трёх панелей; для другого состава брать balanced. Панели 1.45:1.05:1; на планшете две колонки с первой панелью во всю строку, на телефоне одна.",
             "Размер S — четверть: число, подпись, тренд, спарклайн. График с осями в четверть не ставится.",
             "Фильтры — одной строкой над содержимым, а не внутри виджетов.",
         ],
@@ -169,13 +190,13 @@ PARTS = [
         "purpose": "Стеклянный язык дашборда: класс dk-glass на dk-page даёт цветную подложку-vibrancy "
                    "и переводит панели и боковое меню на матовое стекло со светящейся кромкой.",
         "use_when": ["Дашборд, который ведут в стеклянном виде: dk-glass на элементе dk-page."],
-        "instead": [{"when": "документация и встроенные в чужую страницу блоки — класс не ставить, "
-                             "поверхности остаются плоскими", "use": None}],
+        "instead": [{"when": "хост сам задаёт материал — не добавлять dk-glass без его решения", "use": None}],
         "owns": ["dk-glass"],
         "css": ["css/glass.css"], "scripts": [], "js": [],
         "docs": ["family-mortgage.html"],
         "rules": [
-            "Слой отключаемый: нет класса dk-glass — нет стекла; без него дашборд работает на плоских поверхностях.",
+            "Две темы: Dark (по умолчанию) и Light, обе со стеклом и синим акцентом. data-style и data-theme на dk-root совпадают.",
+            "Выбор: dkTheme.style или data-theme-set=dark|light; обе темы сохраняют стеклянный материал.",
             "Данные (плитки карты, полосы, серии, крупные числа) остаются плотным цветом — стеклом красят только обвязку.",
             "Вложенная панель внутри панели второй раз фон не размывает: внутренняя становится лёгким чипом без своего blur.",
         ],

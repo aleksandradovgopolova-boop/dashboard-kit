@@ -30,24 +30,24 @@
     "textStyle": {
       "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
       "fontSize": 12,
-      "color": "#A9B2C2"
+      "color": "#B8C0CF"
     },
     "title": {
       "textStyle": {
-        "color": "#FBFBFB",
+        "color": "#F5F6FA",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 16,
         "fontWeight": 600
       },
       "subtextStyle": {
-        "color": "#7B8794",
+        "color": "#A3ADBF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
     },
     "legend": {
       "textStyle": {
-        "color": "#A9B2C2",
+        "color": "#B8C0CF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
@@ -57,23 +57,23 @@
       "itemGap": 16
     },
     "tooltip": {
-      "backgroundColor": "#25272F",
+      "backgroundColor": "#22262E",
       "borderWidth": 0,
       "padding": [
         10,
         14
       ],
       "textStyle": {
-        "color": "#FBFBFB",
+        "color": "#F5F6FA",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 14
       },
       "axisPointer": {
         "lineStyle": {
-          "color": "rgba(251,251,251,0.16)"
+          "color": "rgba(245,246,250,0.16)"
         },
         "crossStyle": {
-          "color": "rgba(251,251,251,0.16)"
+          "color": "rgba(245,246,250,0.16)"
         }
       }
     },
@@ -88,14 +88,14 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(251,251,251,0.16)"
+          "color": "rgba(245,246,250,0.16)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#A9B2C2",
+        "color": "#B8C0CF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
@@ -110,21 +110,21 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(251,251,251,0.16)"
+          "color": "rgba(245,246,250,0.16)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#A9B2C2",
+        "color": "#B8C0CF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "splitLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(251,251,251,0.07)",
+          "color": "rgba(245,246,250,0.07)",
           "width": 1,
           "opacity": 0.55
         }
@@ -137,21 +137,21 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(251,251,251,0.16)"
+          "color": "rgba(245,246,250,0.16)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#A9B2C2",
+        "color": "#B8C0CF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "splitLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(251,251,251,0.07)",
+          "color": "rgba(245,246,250,0.07)",
           "width": 1,
           "opacity": 0.55
         }
@@ -164,21 +164,21 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(251,251,251,0.16)"
+          "color": "rgba(245,246,250,0.16)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#A9B2C2",
+        "color": "#B8C0CF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "splitLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(251,251,251,0.07)",
+          "color": "rgba(245,246,250,0.07)",
           "width": 1,
           "opacity": 0.55
         }
@@ -208,32 +208,32 @@
         "borderWidth": 2
       },
       "label": {
-        "color": "#A9B2C2",
+        "color": "#B8C0CF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "labelLine": {
         "lineStyle": {
-          "color": "rgba(251,251,251,0.16)"
+          "color": "rgba(245,246,250,0.16)"
         }
       }
     },
     "radar": {
       "axisLine": {
         "lineStyle": {
-          "color": "rgba(251,251,251,0.07)"
+          "color": "rgba(245,246,250,0.07)"
         }
       },
       "splitLine": {
         "lineStyle": {
-          "color": "rgba(251,251,251,0.07)"
+          "color": "rgba(245,246,250,0.07)"
         }
       },
       "splitArea": {
         "show": false
       },
       "axisName": {
-        "color": "#7B8794",
+        "color": "#A3ADBF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
@@ -247,21 +247,21 @@
         "opacity": 0.35
       },
       "label": {
-        "color": "#A9B2C2",
+        "color": "#B8C0CF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
     },
     "visualMap": {
       "textStyle": {
-        "color": "#7B8794",
+        "color": "#A3ADBF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
     },
     "dataZoom": {
       "textStyle": {
-        "color": "#7B8794",
+        "color": "#A3ADBF",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
@@ -280,24 +280,24 @@
     "textStyle": {
       "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
       "fontSize": 12,
-      "color": "#425B88"
+      "color": "#4C586E"
     },
     "title": {
       "textStyle": {
-        "color": "#10204D",
+        "color": "#202633",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 16,
         "fontWeight": 600
       },
       "subtextStyle": {
-        "color": "#52658A",
+        "color": "#5C687C",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
     },
     "legend": {
       "textStyle": {
-        "color": "#425B88",
+        "color": "#4C586E",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
@@ -314,16 +314,16 @@
         14
       ],
       "textStyle": {
-        "color": "#10204D",
+        "color": "#202633",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 14
       },
       "axisPointer": {
         "lineStyle": {
-          "color": "rgba(16,32,77,0.2)"
+          "color": "rgba(32,38,51,0.2)"
         },
         "crossStyle": {
-          "color": "rgba(16,32,77,0.2)"
+          "color": "rgba(32,38,51,0.2)"
         }
       }
     },
@@ -338,14 +338,14 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(16,32,77,0.2)"
+          "color": "rgba(32,38,51,0.2)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#425B88",
+        "color": "#4C586E",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
@@ -360,21 +360,21 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(16,32,77,0.2)"
+          "color": "rgba(32,38,51,0.2)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#425B88",
+        "color": "#4C586E",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "splitLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(16,32,77,0.08)",
+          "color": "rgba(32,38,51,0.08)",
           "width": 1,
           "opacity": 0.55
         }
@@ -387,21 +387,21 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(16,32,77,0.2)"
+          "color": "rgba(32,38,51,0.2)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#425B88",
+        "color": "#4C586E",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "splitLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(16,32,77,0.08)",
+          "color": "rgba(32,38,51,0.08)",
           "width": 1,
           "opacity": 0.55
         }
@@ -414,21 +414,21 @@
       "axisLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(16,32,77,0.2)"
+          "color": "rgba(32,38,51,0.2)"
         }
       },
       "axisTick": {
         "show": false
       },
       "axisLabel": {
-        "color": "#425B88",
+        "color": "#4C586E",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "splitLine": {
         "show": true,
         "lineStyle": {
-          "color": "rgba(16,32,77,0.08)",
+          "color": "rgba(32,38,51,0.08)",
           "width": 1,
           "opacity": 0.55
         }
@@ -458,32 +458,32 @@
         "borderWidth": 2
       },
       "label": {
-        "color": "#425B88",
+        "color": "#4C586E",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       },
       "labelLine": {
         "lineStyle": {
-          "color": "rgba(16,32,77,0.2)"
+          "color": "rgba(32,38,51,0.2)"
         }
       }
     },
     "radar": {
       "axisLine": {
         "lineStyle": {
-          "color": "rgba(16,32,77,0.08)"
+          "color": "rgba(32,38,51,0.08)"
         }
       },
       "splitLine": {
         "lineStyle": {
-          "color": "rgba(16,32,77,0.08)"
+          "color": "rgba(32,38,51,0.08)"
         }
       },
       "splitArea": {
         "show": false
       },
       "axisName": {
-        "color": "#52658A",
+        "color": "#5C687C",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
@@ -497,21 +497,21 @@
         "opacity": 0.35
       },
       "label": {
-        "color": "#425B88",
+        "color": "#4C586E",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
     },
     "visualMap": {
       "textStyle": {
-        "color": "#52658A",
+        "color": "#5C687C",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }
     },
     "dataZoom": {
       "textStyle": {
-        "color": "#52658A",
+        "color": "#5C687C",
         "fontFamily": "\"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "fontSize": 12
       }

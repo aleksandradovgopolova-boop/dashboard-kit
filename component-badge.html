@@ -14,24 +14,22 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261021-docs">
-<link rel="stylesheet" href="css/docs.css?v=20261021-docs">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
-<script src="js/docs-index.js?v=20261021-docs" defer></script>
-<script src="js/docs.js?v=20261021-docs" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
   <a class="sc-brand" href="index.html">
     <span class="sc-brand__t">dashboard-kit</span>
   </a>
   <div class="sc-ctl">
-    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-    </div>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -54,31 +52,31 @@
       </details>
     </div><p class="sc-share-status" role="status"></p>
     <h1>Бейдж, статус, прогресс</h1>
-    <p class="sc-hero__lead">Мелкие детали, из которых собраны таблицы и карточки. Бейдж отвечает «сколько» или «что за штука», статус — «как дела» и обязан иметь значок и подпись, прогресс — «сколько сделано».</p>
+    <p class="sc-hero__lead">Обозначает короткую метку, состояние объекта или долю выполненной работы.</p>
     <div class="sc-meta">
-      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a></span>
+      <span class="sc-meta__i">Статус: стабильный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
-  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
-    <h2>Живой пример</h2>
-    <p>Атомы сами по себе и внутри строки таблицы — ради этого они и нужны.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-stack">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Сравните бейдж, статус и прогресс: каждый отвечает на свой вопрос.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-stack">
       <div class="sc-row" style="margin:0"><span class="dk-badge">12</span><span class="dk-badge dk-badge--brand">новое</span><span class="dk-badge dk-badge--crit">23</span><span class="dk-badge dk-badge--high">27</span><span class="dk-badge dk-badge--calm">38</span><span class="dk-badge dk-badge--pill">БПЛА</span></div>
       <div class="sc-row" style="margin:0"><span class="dk-status dk-status--crit"><svg class="dk-i"><use href="#ti-alert-circle"/></svg>Авария</span><span class="dk-status dk-status--high"><svg class="dk-i"><use href="#ti-clock"/></svg>В работе</span><span class="dk-status dk-status--calm"><svg class="dk-i"><use href="#ti-circle-check"/></svg>Устранено</span><span class="dk-status"><svg class="dk-i"><use href="#ti-circle-x"/></svg>Нет данных</span></div>
       <div class="dk-progress"><span class="dk-progress__track"><span class="dk-progress__fill" style="width:72%"></span></span><span class="dk-progress__value">72%</span></div>
       <div class="dk-progress"><span class="dk-progress__track"><span class="dk-progress__fill" style="width:34%;--accent:var(--crit)"></span></span><span class="dk-progress__value">34%</span></div>
       <div class="dk-progress dk-progress--indeterminate"><span class="dk-progress__track"><span class="dk-progress__fill"></span></span><span class="dk-progress__value">—</span></div>
       <div class="dk-inline"><span class="dk-avatars"><span class="dk-avatar" aria-label="Анна">АК</span><span class="dk-avatar" aria-label="Борис">БМ</span><span class="dk-avatar dk-avatar--more" aria-label="ещё 4">+4</span></span><span class="dk-caption">следят за регионом</span></div>
-    </div></div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+    </div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Бейдж: число или короткая метка рядом с названием — «23» у вкладки, «БПЛА» у региона.</li><li>Статус: состояние объекта в строке таблицы или карточке.</li><li>Прогресс: доля выполненного, когда есть известный конец: устранение, готовность.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Категория, которую можно снять, — <a href="component-legend.html">чип-фильтр</a>, не бейдж.</li><li>Главное число экрана — <a href="component-tile.html">KPI-плитка</a>, бейдж для этого мелок.</li><li>Доступность во времени — <a href="component-uptime.html">Полоса доступности</a>, не прогресс.</li></ul></div></div><div class="sc-note"><h3>Консистентность</h3><ul class="sc-list"><li>Одинаковые значения, действия и состояния имеют одинаковые имена, стили и поведение между экранами.</li><li>Переиспользовать компоненты и токены; отклонение объяснять задачей и согласовывать новое правило.</li><li>Консистентность не требует одинакового состава экранов с разными вопросами.</li></ul><p>Пример: Единые названия, управление и статусы; содержание выбрано по вопросу экрана.</p><p>Проверка: Сравнить соседние экраны по одинаковому действию, а не только по цветам.</p><p><a href="https://www.uprock.ru/education/konsistentnost-v-ux-ui">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Иерархия без декоративного шума</h3><ul class="sc-list"><li>Важность выражается порядком, типографикой и группировкой. Сопоставимые показатели имеют один визуальный вес; вторичные действия не спорят с основным ответом.</li><li>Цвет дополняет смысл статуса текстом или значком. Акцент продукта и цвета риска имеют разные роли; текстуры, штрихи и пунктир не добавляются ради выразительности.</li><li>Иерархия сохраняется между экранами и в узком окне: не удалять заголовки групп и единицы только ради компактности. Пропорции и уровни берутся из токенов и задачи.</li></ul><p>Пример: Спокойные поверхности, ровный ряд KPI, читаемые заголовки и текстовый статус рядом с цветом риска.</p><p>Проверка: Проверить порядок чтения без цвета и декоративных эффектов; затем сравнить одинаковые показатели на соседних экранах и при увеличенном тексте.</p><p><a href="https://www.uprock.ru/education/vizualnaya-ierarhiya-zachem-nuzhna-na-sayte-i-kak-ee-sozdat">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Таблицы для чтения и сравнения</h3><ul class="sc-list"><li>Оставлять столбцы, необходимые для задачи; ключевой объект расположен первым. Текст выравнивается по началу строки, сопоставимые числа — по правому краю; единицы указаны в заголовке или у значения.</li><li>Пустое значение, отсутствие данных и ноль различаются. Статусы объясняются текстом; оформление строк помогает читать, без интенсивной заливки и лишней сетки.</li><li>При прокрутке сохранять связь ячейки с заголовком и объектом. На узком окне сравнение допускает прокрутку внутри таблицы, отдельные объекты могут стать карточками; не уменьшать шрифт и не превращать данные в изображение.</li><li>Пагинация, поиск и сортировка сохраняют допустимую позицию и контекст возврата. Выбранная модель длинной таблицы согласуется с задачей; статья не задаёт всем таблицам один режим.</li></ul><p>Пример: Ключевой объект и заголовки доступны при чтении; числа сравниваются по колонке; возврат сохраняет фильтр и страницу.</p><p>Проверка: Сравнить две строки, найти запись, открыть детали и вернуться; проверить длинные заголовки, отсутствие значения, сортировку и управление клавиатурой при внутренней прокрутке.</p><p><a href="https://www.uprock.ru/education/kak-rabotat-s-tablicami-v-vebe">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Бейдж: число или короткая метка рядом с названием — «23» у вкладки, «БПЛА» у региона.</li><li>Статус: состояние объекта в строке таблицы или карточке.</li><li>Прогресс: доля выполненного, когда есть известный конец: устранение, готовность.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Категория, которую можно снять, — <a href="component-legend.html">чип-фильтр</a>, не бейдж.</li><li>Главное число экрана — <a href="component-tile.html">KPI-плитка</a>, бейдж для этого мелок.</li><li>Доступность во времени — <a href="component-uptime.html">Полоса доступности</a>, не прогресс.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-consistency">Консистентность</a></li><li><a href="index.html#pattern-visual-hierarchy">Иерархия без декоративного шума</a></li><li><a href="index.html#pattern-tables">Таблицы для чтения и сравнения</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-stack">
+    <div class="sc-anatomy"><div class="dk-stack">
       <div class="sc-row" style="margin:0"><span class="dk-badge dk-badge--crit"><b class="sc-callout">1</b>23</span><span class="dk-badge dk-badge--pill"><b class="sc-callout">2</b>БПЛА</span></div>
       <div class="sc-row" style="margin:0"><span class="dk-status dk-status--high"><b class="sc-callout">3</b><svg class="dk-i"><use href="#ti-clock"/></svg><b class="sc-callout">4</b>В работе</span></div>
       <div class="dk-progress"><b class="sc-callout">5</b><span class="dk-progress__track"><span class="dk-progress__fill" style="width:64%;--accent:var(--high)"></span></span><b class="sc-callout">6</b><span class="dk-progress__value">64%</span></div>
@@ -99,8 +97,8 @@
     <div class="sc-note"><b>«Нет данных» — отдельное состояние, а не ноль.</b> Статус без модификатора и прогресс с прочерком говорят «не знаем», а не «ничего». Ноль процентов — это ответ.</div>
   </section>
   <section class="sc-sec" id="kontent">
-    <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Статус — одно-два слова о состоянии: «В работе», «Устранено».</li><li>Метка — существительное-категория: «БПЛА», «Плановое».</li><li>Прогресс с числом рядом и понятным концом: 64% устранения.</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>Статус одним цветом или одним значком.</li><li>Бейдж «новое» на всём подряд — акцент перестаёт значить «новое».</li><li>Прогресс без числа и без известного конца — там неопределённая полоса.</li></ul></div></div>
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Статус — одно-два понятных слова: «Отстаёт», «По плану», «Нет данных». Выбирайте самую короткую формулировку, которая сохраняет смысл.</li><li>Метка — существительное-категория: «БПЛА», «Плановое».</li><li>Прогресс с числом рядом и понятным концом: 64% устранения.</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Статус одним цветом или одним значком.</li><li>Бейдж «новое» на всём подряд — акцент перестаёт значить «новое».</li><li>Прогресс без числа и без известного конца — там неопределённая полоса.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
@@ -108,11 +106,11 @@
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
-    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-badge,dk-status,dk-progress,dk-avatar,dk-avatars,dk-inline"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-badge,dk-status,dk-progress,dk-avatar,dk-avatars,dk-inline"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код</h2>
-    <p>Только разметка; скрипта нет. Цвет заливки прогресса задаётся входным параметром <code>--accent</code>.</p><pre class="sc-code"><code>&lt;span class=&quot;dk-badge dk-badge--crit&quot;&gt;23&lt;/span&gt;
+    <p>Только разметка; скрипта нет. Цвет заливки прогресса задаётся входным параметром <code>--accent</code>.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;span class=&quot;dk-badge dk-badge--crit&quot;&gt;23&lt;/span&gt;
 &lt;span class=&quot;dk-badge dk-badge--pill&quot;&gt;БПЛА&lt;/span&gt;
 
 &lt;span class=&quot;dk-status dk-status--high&quot;&gt;
@@ -125,7 +123,7 @@
 &lt;/div&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-badge--crit | --high | --calm | --brand | --pill</code></td><td>класс</td><td>Вид бейджа.</td></tr><tr><td><code>dk-status--crit | --high | --calm</code></td><td>класс</td><td>Цвет статуса; без модификатора — «нет данных».</td></tr><tr><td><code>--accent</code></td><td>переменная в style</td><td>Цвет заливки прогресса; по умолчанию акцент (открыто в REVIEW.md).</td></tr><tr><td><code>dk-progress--indeterminate</code></td><td>класс</td><td>Конец неизвестен.</td></tr><tr><td><code>dk-avatar--sm | --more</code></td><td>класс</td><td>Маленький аватар; «ещё N».</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
-    <h2>Связанное</h2>
+    <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — где атомы живут чаще всего</li><li><a href="component-tabs.html">Вкладки</a> — счётчик того же рода</li><li><a href="component-legend.html">Фильтры-легенда</a> — категория, которую можно снять</li></ul>
   </section>
 

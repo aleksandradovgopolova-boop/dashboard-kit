@@ -14,25 +14,23 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261021-docs">
-<link rel="stylesheet" href="css/docs.css?v=20261021-docs">
-<script src="js/dk-util.js"></script>
+<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-table.js" defer></script>
-<script src="js/docs-index.js?v=20261021-docs" defer></script>
-<script src="js/docs.js?v=20261021-docs" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
-<body class="dk-page">
+<body class="dk-page dk-glass">
 
 <header class="sc-bar">
   <a class="sc-brand" href="index.html">
     <span class="sc-brand__t">dashboard-kit</span>
   </a>
   <div class="sc-ctl">
-    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-      <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i"><use href="#ti-sun"/></svg></button>
-      <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i"><use href="#ti-moon"/></svg></button>
-    </div>
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   </div>
 </header>
 
@@ -55,16 +53,16 @@
       </details>
     </div><p class="sc-share-status" role="status"></p>
     <h1>Таблица</h1>
-    <p class="sc-hero__lead">Сравнить много объектов по нескольким показателям: регионы по баллу и событиям, заявки по сроку и исполнителю. Читается по строкам, сортируется по колонке, выбирается для действия.</p>
+    <p class="sc-hero__lead">Помогает сравнивать объекты по нескольким признакам и находить точные значения.</p>
     <div class="sc-meta">
-      <span class="dk-status dk-status--calm"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg>стабильный</span>
-      <span class="sc-meta__i">код: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-table.js"><code>js/dk-table.js</code></a></span>
+      <span class="sc-meta__i">Статус: стабильный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
-  <section class="sc-sec" id="zhivoy-primer" data-group="Обзор">
-    <h2>Живой пример</h2>
-    <p>Всё, что умеет таблица, в одном месте: закреплённая шапка и первая колонка, сортировка, выбор строк со счётчиком, группы с подытогом, строка итога, числа табличными цифрами. В разметке ни одного числа руками — все через <code>dkFmt</code>.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-widget">
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Посмотрите, как читаются названия, числа и статусы. Доступные действия обозначены в заголовках и строках.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-widget">
       <div class="dk-widget__head"><h3 class="dk-widget__title">Регионы · балл риска</h3>
         <div class="dk-chipbar" id="ex-actions"><span class="dk-chipbar__label">Ничего не выбрано — действия появятся здесь</span></div></div>
       <div class="dk-tablewrap dk-tablewrap--tall" style="--table-min:860px;--table-max:420px">
@@ -84,15 +82,15 @@
             <td class="dk-td-num" id="ex-t-people">—</td><td class="dk-td-num" id="ex-t-delta">—</td></tr></tfoot>
         </table>
       </div>
-    </div></div><div class="sc-playground__footer"><span>Рабочий пример · текущая тема</span><a href="#kod">Разметка и параметры ↗</a></div></div>
+    </div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Для последних событий используйте dk-table--events: Время, Событие, Регион, Статус, Пострадавшие. Значок в dk-td-main__icon, численность с единицей чел.; фактические статусы и числа сохраняются.</li><li>Объектов больше семи и у каждого несколько показателей — сравнивать нужно по колонкам.</li><li>По строке нужно действие: назначить, открыть, снять с контроля.</li><li>Точное число важнее формы: «73 события», а не «примерно столько же, сколько у соседа».</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Один показатель по многим объектам, вопрос «у кого хуже» — <a href="component-rank.html">Рейтинг</a>: полоса читается быстрее числа.</li><li>Одно–четыре главных числа — <a href="component-tile.html">KPI-плитки</a>, а не таблица из одной строки.</li><li>Динамика во времени — <a href="component-chart.html">График</a>: таблица покажет числа, но не форму.</li><li>Список с одним значением на строку — <a href="component-list.html">Список</a>, у него меньше шума.</li></ul></div></div><div class="sc-note"><h3>Пространство</h3><ul class="sc-list"><li>Близость группирует связанные данные; между независимыми блоками расстояние больше. Использовать шкалу токенов.</li><li>В мониторинге между виджетами 10px, внутренние поля 20px на десктопе и 16px на телефоне; соседние виджеты одного ряда одной высоты.</li><li>Не обрезать содержание и не сжимать поля ради окна. Основная картина должна помещаться, детали распределяются по утверждённым правилам.</li><li>Соседние ряды одной композиции имеют общие границы колонок и одинаковые внутренние направляющие заголовков и содержимого.</li></ul><p>Пример: Ровная сетка, простор внутри, длинный список прокручивается в своём виджете.</p><p>Проверка: Проверить внутренние поля, крайние строки, длинные названия, одинаковую высоту соседей и совпадение направляющих между рядами.</p><p><a href="https://www.uprock.ru/education/organizaciya-prostranstva-v-dizayne">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Проверка реального сценария</h3><ul class="sc-list"><li>Собирать с реальными названиями, длинными значениями и правдоподобными данными: красивый макет с короткими заглушками не подтверждает пригодность.</li><li>Проверять действие до результата: ссылка ведёт в обещанный раздел, кнопка выполняет названное действие; статическая демонстрация честно обозначена.</li><li>Ревью охватывает пустой результат, ошибку, возврат и разные размеры окна. Новое решение оценивается рядом с остальным продуктом, а не как отдельная картинка.</li></ul><p>Пример: Длинная заявка читается полностью; детали открываются и закрываются с сохранением фильтра; ошибка допускает повтор.</p><p>Проверка: Пройти один полный путь с реальными данными и один путь восстановления; отметить наблюдаемый результат и ограничения вместо оценки только скриншота.</p><p><a href="https://www.uprock.ru/education/oshibki-nachinayushchih-v-dizayne">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div><div class="sc-note"><h3>Таблицы для чтения и сравнения</h3><ul class="sc-list"><li>Оставлять столбцы, необходимые для задачи; ключевой объект расположен первым. Текст выравнивается по началу строки, сопоставимые числа — по правому краю; единицы указаны в заголовке или у значения.</li><li>Пустое значение, отсутствие данных и ноль различаются. Статусы объясняются текстом; оформление строк помогает читать, без интенсивной заливки и лишней сетки.</li><li>При прокрутке сохранять связь ячейки с заголовком и объектом. На узком окне сравнение допускает прокрутку внутри таблицы, отдельные объекты могут стать карточками; не уменьшать шрифт и не превращать данные в изображение.</li><li>Пагинация, поиск и сортировка сохраняют допустимую позицию и контекст возврата. Выбранная модель длинной таблицы согласуется с задачей; статья не задаёт всем таблицам один режим.</li></ul><p>Пример: Ключевой объект и заголовки доступны при чтении; числа сравниваются по колонке; возврат сохраняет фильтр и страницу.</p><p>Проверка: Сравнить две строки, найти запись, открыть детали и вернуться; проверить длинные заголовки, отсутствие значения, сортировку и управление клавиатурой при внутренней прокрутке.</p><p><a href="https://www.uprock.ru/education/kak-rabotat-s-tablicami-v-vebe">Источник</a> · <a href="index.html#patterns">Все правила выбора</a></p></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Для последних событий используйте dk-table--events: Время, Событие, Регион, Статус, Пострадавшие. Значок в dk-td-main__icon, численность с единицей чел.; фактические статусы и числа сохраняются.</li><li>Объектов больше семи и у каждого несколько показателей — сравнивать нужно по колонкам.</li><li>По строке нужно действие: назначить, открыть, снять с контроля.</li><li>Точное число важнее формы: «73 события», а не «примерно столько же, сколько у соседа».</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Один показатель по многим объектам, вопрос «у кого хуже» — <a href="component-rank.html">Рейтинг</a>: полоса читается быстрее числа.</li><li>Одно–четыре главных числа — <a href="component-tile.html">KPI-плитки</a>, а не таблица из одной строки.</li><li>Динамика во времени — <a href="component-chart.html">График</a>: таблица покажет числа, но не форму.</li><li>Список с одним значением на строку — <a href="component-list.html">Список</a>, у него меньше шума.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-space">Пространство</a></li><li><a href="index.html#pattern-design-review">Проверка реального сценария</a></li><li><a href="index.html#pattern-tables">Таблицы для чтения и сравнения</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
     <h2>Анатомия</h2>
-    <p>Номера на схеме — те же, что в списке.</p><div class="dk-panel sc-anatomy"><div class="dk-tablewrap" style="--table-min:640px"><table class="dk-table dk-table--zebra">
+    <div class="sc-anatomy"><div class="dk-tablewrap" style="--table-min:640px"><table class="dk-table dk-table--zebra">
       <thead><tr><th class="dk-th-pick"><b class="sc-callout">1</b><label class="dk-check" aria-label="Выбрать все"><input type="checkbox" ><span class="dk-check__box"><svg class="dk-i"><use href="#ti-check"/></svg></span></label></th>
         <th style="width:40%"><b class="sc-callout">2</b>Регион <button type="button" class="dk-th-sort" aria-label="Сортировать"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg></button><b class="sc-callout">3</b></th>
         <th style="width:30%">Состояние</th><th class="dk-td-num"><b class="sc-callout">4</b>Балл</th></tr></thead>
@@ -106,7 +104,7 @@
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Варианты включаются классами и складываются друг с другом. Размеров у таблицы нет: плотность как настройка (<code>data-density</code>) — открытый вопрос в DECISIONS.md, п. 5.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-table</code></td><td>Без разделителей: шапка поверхностью, строки наведением.</td><td>По умолчанию.</td></tr><tr><td><code>dk-table--zebra</code></td><td>Чередование строк полупрозрачной заливкой.</td><td>Длинная плотная таблица.</td></tr><tr><td><code>dk-table--cards</code></td><td>На телефоне строка — карточка «подпись — значение», шапка — пилюли сортировки. Нужен dkTable: он ставит подписи.</td><td>Таблица шире экрана телефона: больше трёх колонок.</td></tr><tr><td><code>dk-table--ruled</code></td><td>Волосяные линейки между строками.</td><td>Печать и очень плотные данные; включается вручную.</td></tr><tr><td><code>dk-table--sticky-head</code></td><td>Шапка и итог закреплены при прокрутке.</td><td>Обёртка dk-tablewrap--tall с --table-max.</td></tr><tr><td><code>dk-table--sticky-col</code></td><td>Первая колонка (и колонка выбора) закреплены.</td><td>Колонок больше, чем помещается.</td></tr><tr><td><code>dk-tablewrap</code></td><td>Горизонтальная прокрутка; --table-min — минимальная ширина.</td><td>Всегда, если колонок больше четырёх.</td></tr></tbody></table></div>
+    <p>Ширина зависит от колонок. На узком экране таблица прокручивается внутри своей области. Плотность можно менять компонентом «Плотность данных», сохраняя текст и области нажатия.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-table</code></td><td>Без разделителей: шапка поверхностью, строки наведением.</td><td>По умолчанию.</td></tr><tr><td><code>dk-table--zebra</code></td><td>Чередование строк полупрозрачной заливкой.</td><td>Длинная плотная таблица.</td></tr><tr><td><code>dk-table--cards</code></td><td>На телефоне строка — карточка «подпись — значение», шапка — пилюли сортировки. Нужен dkTable: он ставит подписи.</td><td>Таблица шире экрана телефона: больше трёх колонок.</td></tr><tr><td><code>dk-table--ruled</code></td><td>Волосяные линейки между строками.</td><td>Печать и очень плотные данные; включается вручную.</td></tr><tr><td><code>dk-table--sticky-head</code></td><td>Шапка и итог закреплены при прокрутке.</td><td>Обёртка dk-tablewrap--tall с --table-max.</td></tr><tr><td><code>dk-table--sticky-col</code></td><td>Первая колонка (и колонка выбора) закреплены.</td><td>Колонок больше, чем помещается.</td></tr><tr><td><code>dk-tablewrap</code></td><td>Горизонтальная прокрутка; --table-min — минимальная ширина.</td><td>Всегда, если колонок больше четырёх.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
@@ -119,8 +117,8 @@
     <div class="sc-note"><b>Наведение, выбор и сортировка</b> — в живом примере выше. Пустое состояние отвечает на три вопроса: что случилось, почему и что делать.</div>
   </section>
   <section class="sc-sec" id="kontent">
-    <h2>Контент</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Так</b><ul class="sc-list"><li>Единица — в заголовке колонки: «События, шт.», в ячейках только числа.</li><li>Нет значения — прочерк «—». Ноль — это ответ, отсутствие — нет.</li><li>Числа через <code>dkFmt</code>: разряды неразрывным пробелом, дробь запятой, минус настоящий.</li><li>Дельта со знаком всегда: «+4», «−8 мин».</li><li>Заголовки короткие, именительный падеж: «Регион», «Балл».</li></ul></div><div class="sc-note sc-note--bad"><b>Не так</b><ul class="sc-list"><li>«73 события» в каждой ячейке — единица повторяется сорок раз.</li><li>Пустая ячейка или «0» вместо отсутствующего значения.</li><li>«1240» рядом с «1 240» — читается как два разных числа.</li><li>Цвет статуса без значка и подписи — его видят не все.</li><li>Действия, спрятанные под наведение, — на тачскрине наведения нет.</li></ul></div></div>
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Единица — в заголовке колонки: «События, шт.», в ячейках только числа.</li><li>Нет значения — прочерк «—». Ноль — это ответ, отсутствие — нет.</li><li>Числа через <code>dkFmt</code>: разряды неразрывным пробелом, дробь запятой, минус настоящий.</li><li>Дельта со знаком всегда: «+4», «−8 мин».</li><li>Заголовки короткие, именительный падеж: «Регион», «Балл».</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>«73 события» в каждой ячейке — единица повторяется сорок раз.</li><li>Пустая ячейка или «0» вместо отсутствующего значения.</li><li>«1240» рядом с «1 240» — читается как два разных числа.</li><li>Цвет статуса без значка и подписи — его видят не все.</li><li>Действия, спрятанные под наведение, — на тачскрине наведения нет.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
@@ -128,11 +126,11 @@
   </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
     <h2>Токены</h2>
-    <p>Какие токены читает компонент. Список собирается при открытии страницы из <code>css/components.css</code> по префиксам селекторов, а не пишется руками — иначе разошёлся бы с кодом при первой правке. Значения — с экрана, в текущей теме.</p><ul class="sc-tokens" data-tokens="dk-table,dk-tablewrap,dk-td-,dk-th-,dk-tr-group"><li class="sc-tokens__wait">Читаем css/components.css…</li></ul>
+    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-table,dk-tablewrap,dk-td-,dk-th-,dk-tr-group"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код</h2>
-    <p>Разметка остаётся разметкой: без скрипта таблица показывает данные, просто не сортируется. Ширины колонок объявляет первый ряд <code>&lt;th&gt;</code>.</p><pre class="sc-code"><code>&lt;div class=&quot;dk-tablewrap dk-tablewrap--tall&quot; style=&quot;--table-min:860px;--table-max:420px&quot;&gt;
+    <p>Разметка остаётся разметкой: без скрипта таблица показывает данные, просто не сортируется. Ширины колонок объявляет первый ряд <code>&lt;th&gt;</code>.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-table.js"><code>js/dk-table.js</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-tablewrap dk-tablewrap--tall&quot; style=&quot;--table-min:860px;--table-max:420px&quot;&gt;
   &lt;table class=&quot;dk-table dk-table--zebra dk-table--sticky-head dk-table--sticky-col&quot; id=&quot;regions&quot;&gt;
     &lt;thead&gt;&lt;tr&gt;
       &lt;th class=&quot;dk-th-pick&quot;&gt;&lt;label class=&quot;dk-check&quot; aria-label=&quot;Выбрать все на странице&quot;&gt;
@@ -161,7 +159,7 @@ t.selected; t.clear();
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>onSelect(ids)</code></td><td>функция</td><td>При каждой смене выбора с массивом <code>data-id</code>.</td></tr><tr><td><code>onSort(e)</code></td><td>функция</td><td>Передан — таблица не сортирует сама, а сообщает <code>e.column</code> и <code>e.dir</code>.</td></tr><tr><td><code>data-sortable</code></td><td>атрибут th</td><td>Имя колонки для сортировки.</td></tr><tr><td><code>data-sort</code></td><td>атрибут td</td><td>Значение для сортировки, когда текст ячейки — не оно.</td></tr><tr><td><code>--table-min, --table-max</code></td><td>переменные на обёртке</td><td>Минимальная ширина и высота прокрутки; по умолчанию 720 и 480.</td></tr><tr><td><code>update({selected}) / destroy()</code></td><td>API</td><td>Восстановление выбора по data-id; cleanup обработчиков/observer без удаления таблицы. Sort host связывает через onSort.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="svyazannoe">
-    <h2>Связанное</h2>
+    <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-rank.html">Рейтинг</a> — один показатель по многим объектам</li><li><a href="component-badge.html">Бейдж и статус</a> — что стоит в ячейках</li><li><a href="component-select.html">Фильтр</a> — что стоит над таблицей</li><li><a href="component-pager.html">Пагинация</a> — как листать длинную таблицу</li><li><a href="accidents.html">Страница «Аварии»</a> — таблица в живом дашборде</li></ul>
   </section>
 

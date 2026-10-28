@@ -203,7 +203,7 @@ try {
           else if(++tries>100){clearInterval(timer);reject(Error('Monitor KPI page timeout'));}
         },50);})`);
         console.log(await evaluate(`(()=>{
-          const assert=(value,message)=>{if(!value)throw Error(message)};
+          const assert=(value,message)=>{if(!value)throw Error('${page}/${theme}/${width}: '+message)};
           const cards=[...document.querySelectorAll('.dk-wrap--monitor .dk-tile')];
           const boxes=cards.map(card=>card.getBoundingClientRect());
           assert(boxes.length===${expectedKpis},'expected primary KPI count');
@@ -222,11 +222,11 @@ try {
           });
           for(const row of visualRows.values()){
             const numberTops=row.map(card=>card.querySelector('.dk-metric-lg').getBoundingClientRect().top);
-            assert(Math.max(...numberTops)-Math.min(...numberTops)<1,'KPI values share a common row baseline');
+            assert(Math.max(...numberTops)-Math.min(...numberTops)<1,'KPI values share a common row baseline: '+JSON.stringify({page:'${page}',theme:'${theme}',width:innerWidth,numberTops,labels:row.map(card=>{const el=card.querySelector('.dk-tile__head');return {text:el.textContent.trim(),height:el.getBoundingClientRect().height};})}));
             const trends=row.map(card=>{const trend=card.querySelector('.dk-trend');if(!trend)return null;const box=trend.getBoundingClientRect(),value=card.querySelector('.dk-metric-lg').getBoundingClientRect();return box.top<value.bottom&&box.bottom>value.top?box.top:null}).filter(top=>top!==null);
             if(trends.length)assert(Math.max(...trends)-Math.min(...trends)<1,'KPI trends share a common row baseline');
             const sparks=row.map(card=>card.querySelector('.dk-chart--spark')).filter(Boolean).map(el=>el.getBoundingClientRect().bottom);
-            if(sparks.length)assert(Math.max(...sparks)-Math.min(...sparks)<1,'KPI sparklines share the same bottom edge');
+            if(sparks.length)assert(Math.max(...sparks)-Math.min(...sparks)<1,'KPI sparklines share the same bottom edge '+JSON.stringify(row.map(card=>{const r=card.getBoundingClientRect(),s=card.querySelector('.dk-tile__spark'),sr=s?.getBoundingClientRect();return {card:[r.top,r.height,r.bottom],display:getComputedStyle(card).display,spark:sr&&[sr.top,sr.height,sr.bottom],margin:s&&getComputedStyle(s).marginTop};})));
           }
           cards.forEach(card=>{
             const box=card.getBoundingClientRect(),style=getComputedStyle(card),pad=parseFloat(style.paddingLeft);
@@ -234,7 +234,7 @@ try {
             assert(label&&value,'full label and numeric value present');
             const labelBox=label.getBoundingClientRect(),valueBox=value.getBoundingClientRect();
             assert(!label.textContent.includes('…')&&getComputedStyle(label).textOverflow!=='ellipsis','KPI label must not be truncated');
-            assert(labelBox.left>=box.left+pad-1&&labelBox.right<=box.right-parseFloat(style.paddingRight)+1,'label stays inside spacious card padding');
+            assert(labelBox.left>=box.left+pad-1&&labelBox.right<=box.right-parseFloat(style.paddingRight)+1,'label stays inside spacious card padding '+JSON.stringify({label:label.textContent,box:[box.left,box.right],labelBox:[labelBox.left,labelBox.right],pad}));
             assert(Math.abs(valueBox.left-box.left-pad)<=2,'metric remains on the leading edge');
             assert(valueBox.right<=box.right-parseFloat(style.paddingRight)+1,'metric stays inside card padding');
             assert(card.scrollWidth<=card.clientWidth+1,'KPI content must not overflow horizontally');
@@ -248,7 +248,7 @@ try {
                 assert(r.left>=c.right-1||r.right<=c.left+1||r.top>=c.bottom-1||r.bottom<=c.top+1,'spark does not overlap KPI value or delta');
               }
             }
-            const icon=card.querySelector('.dk-tile__icon');assert(icon&&getComputedStyle(icon).display!=='none'&&icon.getBoundingClientRect().width===14,'compact KPI has a neutral 14px icon');
+            const icon=card.querySelector('.dk-tile__icon'),iconStyle=icon&&getComputedStyle(icon);const iconSize=iconStyle&&parseFloat(iconStyle.getPropertyValue('--icon-size-compact'));assert(icon&&iconStyle.display!=='none'&&icon.getBoundingClientRect().width===iconSize&&icon.getBoundingClientRect().height===iconSize,'compact KPI icon follows the current material token');
             const trend=card.querySelector('.dk-trend');if(trend){const rect=trend.getBoundingClientRect();assert(parseFloat(getComputedStyle(trend).borderRadius)<10,'compact KPI delta is rectangular');assert(rect.left>=box.left+pad-1&&rect.right<=box.right-parseFloat(style.paddingRight)+1,'delta stays inside card padding');assert(rect.left>=valueBox.right-1||rect.top>=valueBox.bottom-1,'inline or wrapped delta must not overlap value');}
           });
           assert(document.documentElement.scrollWidth<=innerWidth+1,'shared monitor must not overflow horizontally');

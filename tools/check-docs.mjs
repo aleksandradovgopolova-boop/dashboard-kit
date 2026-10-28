@@ -36,8 +36,9 @@ try {
   const settle = () => evaluate('new Promise(r=>setTimeout(r,150))');
   const visit = async (file, width, theme = 'light') => {
     await send('Emulation.setDeviceMetricsOverride', {width,height:900,deviceScaleFactor:1,mobile:false});
-    const url = `http://127.0.0.1:${server.address().port}/${file}`;
-    await send('Page.navigate', {url:url + (file.includes('?') ? '&' : '?') + 'theme=' + theme});
+    const url = new URL(file, `http://127.0.0.1:${server.address().port}/`);
+    url.searchParams.set('theme', theme);
+    await send('Page.navigate', {url:url.href});
     for (let i = 0; i < 100; i++) {
       if (await evaluate(`location.pathname===${JSON.stringify(new URL(url).pathname)}&&document.readyState==='complete'&&!!document.querySelector('.sc-nav__catalog')`)) break;
       if (i === 99) throw Error('Documentation did not load: ' + file);
@@ -57,14 +58,15 @@ try {
       const state = await evaluate(`(()=>{
         const active=document.querySelector('.sc-nav__component-group a[aria-current="page"]');
         return {overflow:document.documentElement.scrollWidth>innerWidth+1,
-          first:document.querySelector('.sc-nav__catalog > a').textContent,
+          first:document.querySelector('.sc-nav__catalog > a .sc-nav__text').textContent,
+          nested:!!document.querySelector('.sc-nav details details'),
           visible:[...document.querySelectorAll('h1')].filter(x=>x.getClientRects().length).map(x=>x.textContent),
           open:[...document.querySelectorAll('.sc-nav__component-group[open]')].length,
           current:!active||!!active.getClientRects().length||innerWidth<1024,
           toc:!!document.querySelector('.sc-toc:not([hidden])')&&getComputedStyle(document.querySelector('.sc-toc')).display!=='none',
           focus:[...document.querySelectorAll('.dk-tablewrap')].every(x=>!x.clientWidth||x.scrollWidth<=x.clientWidth+1||x.tabIndex===0)};
       })()`);
-      if (state.overflow || state.first !== 'Обзор' || state.visible.length !== 1 || !state.current || !state.focus || (file === 'index.html' ? state.open !== 0 || state.visible[0] !== 'Обзор' : state.open !== 1) || (width < 1440 && state.toc)) failures.push({file,width,theme,...state});
+      if (state.overflow || state.nested || state.first !== 'Обзор' || state.visible.length !== 1 || !state.current || !state.focus || (file === 'index.html' ? state.open !== 0 || state.visible[0] !== 'От вашей задачи к дашборду' : state.open !== 1) || (width < 1440 && state.toc)) failures.push({file,width,theme,...state});
       if (['index.html','component-table.html'].includes(file) && [320,1280].includes(width)) {
         const shot = await send('Page.captureScreenshot', {format:'png'});
         await writeFile(resolve(evidence, `docs-${file.replace('.html','')}-${theme}-${width}.png`), Buffer.from(shot.data,'base64'));
@@ -74,7 +76,8 @@ try {
   assert(!failures.length, 'Docs layout: ' + JSON.stringify(failures.slice(0,12)));
 
   await visit('index.html',1280);
-  await evaluate(`document.querySelector('.sc-overview-grid a[href="#rules"]').click()`); await settle();
+  assert(await evaluate(`document.querySelectorAll('.sc-hero--overview .sc-overview-steps > li').length===3&&!!document.querySelector('.sc-hero--overview a[href="#start"]')`), 'Overview must expose the accepted task/data/dashboard flow');
+  await evaluate(`const rules=document.querySelector('.sc-nav a[href="index.html#rules"]');rules.closest('details').querySelector('summary').click();rules.click()`); await settle();
   assert(await evaluate(`document.querySelector('#rules').hidden===false&&document.querySelector('.sc-hero').hidden&&document.querySelector('#catalog').hidden`), 'Rules route must show one article');
   await evaluate('history.back()'); await settle();
   assert(await evaluate(`!document.querySelector('.sc-hero').hidden&&[...document.querySelectorAll('.sc-sec')].every(x=>x.hidden)`), 'Back must restore overview');
@@ -91,6 +94,30 @@ try {
   await visit('showcase.html',1280);
   await evaluate(`location.hash='tipografika'`); await settle();
   assert(await evaluate(`!document.querySelector('#tipografika').hidden&&[...document.querySelectorAll('.sc-sec:not([hidden])')].length===1`), 'Legacy showcase anchors');
+
+  // Все статьи проходят через маршрутизацию, включая ранее выпадавший SDK-блок.
+  for (const file of ['index.html','showcase.html']) for (const theme of ['light','dark']) for (const width of [320,1280]) {
+    await visit(file,width,theme);
+    const ids = await evaluate(`[...document.querySelectorAll('.sc-shell>.dk-wrap>section')].map(x=>x.id)`);
+    for (const id of ids) {
+      await evaluate(`location.hash=${JSON.stringify(id)}`); await settle();
+      const state = await evaluate(`(()=>{const main=document.querySelector('.sc-shell>.dk-wrap');return {
+        visible:[...main.querySelectorAll(':scope>section')].filter(x=>x.getClientRects().length).map(x=>x.id),
+        headings:[...main.querySelectorAll('h1')].filter(x=>x.getClientRects().length).length,
+        overflow:document.documentElement.scrollWidth>innerWidth+1
+      };})()`);
+      const expectedId = id === 'redpolitika' ? 'principy-teksta' : id; // Preserved legacy anchor.
+      assert(state.visible.length===1&&state.visible[0]===expectedId&&state.headings===1&&!state.overflow, `Article ${file}#${id} ${theme} ${width}: `+JSON.stringify(state));
+    }
+  }
+  await visit('showcase.html#sdk-extensions',1280);
+  assert(await evaluate(`!document.querySelector('#sdk-extensions').hidden&&!!document.querySelector('.sc-nav a[href="#sdk-extensions"][aria-current="location"]')`), 'Scenarios direct link must open its article and navigation');
+  await evaluate(`location.hash='tipografika'`); await settle();
+  assert(await evaluate(`document.querySelector('#sdk-extensions').hidden`), 'Scenarios must not repeat below another article');
+  await evaluate('history.back()'); await settle();
+  assert(await evaluate(`!document.querySelector('#sdk-extensions').hidden`), 'Back must restore scenarios');
+  await visit('index.html#development--connect',390);
+  assert(await evaluate(`!document.querySelector('#development').hidden&&document.activeElement.id==='development--connect'`), 'Developer deep link and focus');
 
   // Колесо над таблицей двигает её, а у вертикального края — страницу.
   await visit('component-table.html',768);
