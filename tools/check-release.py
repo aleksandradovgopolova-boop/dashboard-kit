@@ -23,7 +23,7 @@ with tempfile.TemporaryDirectory(prefix="dk-release-test-") as temporary:
     base = Path(temporary)
     source = base / "source"
     source.mkdir()
-    for name in release.FIXED_FILES | {"js/dk-theme.js", "js/dk-util.js", "vendor/example.js", "icons/favicon.svg", "data/geometry.json"}:
+    for name in release.FIXED_FILES | {"js/dk-theme.js", "js/dk-util.js", "vendor/example.js", "icons/favicon.svg", "data/geometry.json", "assets/graphite-dark.png", "assets/graphite-light.png"}:
         path = source / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("fixture: " + name, encoding="utf-8")
@@ -37,6 +37,9 @@ with tempfile.TemporaryDirectory(prefix="dk-release-test-") as temporary:
     bundle1 = base / "0.1.0-rc.1"
     release.pack(source, bundle1)
     assert release.verify_package(bundle1, first["contentDigest"]) == first
+    for asset in ("assets/graphite-dark.png", "assets/graphite-light.png"):
+        assert asset in first["files"], "CSS background omitted from descriptor"
+        assert (bundle1 / asset).read_bytes() == (source / asset).read_bytes(), "CSS background omitted from package"
     rejects(lambda: release.verify_package(bundle1, None), "A self-declared digest must not count as a consumer pin")
     rejects(lambda: release.verify_package(bundle1, "sha256:" + "0" * 64), "Wrong external pin accepted")
     rejects(lambda: release.pack(source, bundle1), "An existing version directory was overwritten")

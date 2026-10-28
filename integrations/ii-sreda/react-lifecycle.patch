@@ -85,7 +85,7 @@
 -  }) => { set(value: string): void };
 +  }) => { set(value: string): void; update(options: {value: string; options: {name: string; value: string}[]}): void; destroy(): void };
  }
- 
+
  const base = `${import.meta.env.BASE_URL}vendor/dashboard-kit/`;
 --- a/src/features/dashboard-management/kit/DashboardKitView.tsx
 +++ b/src/features/dashboard-management/kit/DashboardKitView.tsx
@@ -94,7 +94,7 @@
  import { DashboardDataView } from "../DashboardDataView";
  import "./dashboard-kit.css";
 +import { KitRoot, useKitComponent } from "../../../shared/lib/dashboard-kit/react";
- 
+
  export interface DashboardKitViewProps {
    content: DashboardContent;
 @@ -32,21 +33,13 @@
@@ -123,7 +123,7 @@
 +  const host = useKitComponent(create, settings);
    return <div ref={host} />;
  }
- 
+
 @@ -127,7 +120,7 @@
    }, []);
    if (error) return <><p role="status">Новое оформление недоступно. Показан стандартный дашборд.</p><DashboardDataView {...props} /></>;
@@ -154,7 +154,7 @@
  import { DashboardKitView } from "./DashboardKitView";
 @@ -13,7 +13,8 @@
  Element.prototype.scrollIntoView = vi.fn();
- 
+
  const destroy = vi.fn();
 -const chart = vi.fn(() => ({ destroy }));
 +const chart = vi.fn(() => ({ destroy, update: vi.fn() }));

@@ -1,5 +1,8 @@
 # dashboard-kit
 
+[Текущее состояние и принятые правила · 28.10.2026](docs/current-state.md) ·
+[Стандарт региональной детализации](docs/2026-10-28/DASHBOARD-DETAIL-MODAL-001.md).
+
 Подтверждённые требования Dashboard Kit 2.0 и фактическая готовность —
 [матрица в DESIGN-UX-ACCESSIBILITY.md](DESIGN-UX-ACCESSIBILITY.md).
 Выбран и реализован Graphite: общие полупрозрачные поверхности Dark/Light,
