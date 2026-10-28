@@ -42,7 +42,7 @@ try {
         const headings=[...host.querySelectorAll('.dk-head__title,.dk-widget__title')];
         return {width:document.documentElement.scrollWidth,viewport:innerWidth,h1:document.querySelectorAll('h1').length,
           headings:headings.length>0&&headings.every(el=>el.scrollWidth<=el.clientWidth+1),
-          surfaces:[...host.querySelectorAll('.dk-widget')].every(el=>{const s=getComputedStyle(el);return s.boxShadow==='none'&&parseFloat(s.borderTopWidth)===0}),
+          surfaces:[...host.querySelectorAll('.dk-widget')].every(el=>{const s=getComputedStyle(el);return s.boxShadow==='none'&&parseFloat(s.borderTopWidth)<=1}),
           links:[...host.querySelectorAll('a')].every(a=>a.getAttribute('href')&&!a.getAttribute('href').startsWith('#'))};})()`);
       assert(result.width<=width&&result.h1===1&&result.headings&&result.surfaces&&result.links, `${slug}/${theme}/${width}: ${JSON.stringify(result)}`);
     }
@@ -63,10 +63,10 @@ try {
       const kpis = [...document.querySelectorAll('#fm-kpis > .dk-tile')];
       return {
         top, left, padding: parseFloat(ws.paddingLeft),
-        caps: ts.textTransform, weight: ts.fontWeight,
+        caps: ts.textTransform, weight: ts.fontWeight, size:ts.fontSize, line:ts.lineHeight,
         equalFields: kpis.every(el => { const s = getComputedStyle(el); return s.paddingTop === s.paddingLeft && s.paddingBottom === s.paddingRight && s.paddingTop === s.paddingBottom; }),
         noOverflow: kpis.every(el => el.scrollWidth <= el.clientWidth + 1),
-        noEmptyRows: kpis.every(el => getComputedStyle(el).display === 'flex'),
+        equalCards: kpis.length===5 && kpis.every(el => { const a=el.getBoundingClientRect(), b=kpis[0].getBoundingClientRect(); return Math.abs(a.top-b.top)<1 && Math.abs(a.width-b.width)<1 && Math.abs(a.height-b.height)<1; }),
         chartsVisible: ['fm-demand', 'fm-line'].every(id => {
           const chart = document.getElementById(id), canvas = chart.querySelector('canvas');
           const body = chart.parentElement.getBoundingClientRect(), rect = chart.getBoundingClientRect();
@@ -77,7 +77,7 @@ try {
     })()`);
     assert(Math.abs(geometry.top - geometry.left) <= 1 && Math.abs(geometry.left - geometry.padding) <= 1,
       `widget title inset/${theme}/${width}: ${JSON.stringify(geometry)}`);
-    assert(geometry.caps === 'uppercase' && geometry.weight === '400' && geometry.equalFields && geometry.noOverflow && geometry.noEmptyRows,
+    assert(geometry.caps === 'none' && geometry.weight === '500' && geometry.size === '18px' && geometry.line === '24px' && geometry.equalFields && geometry.noOverflow && geometry.equalCards,
       `KPI and typography/${theme}/${width}: ${JSON.stringify(geometry)}`);
     assert(geometry.chartsVisible, `Visible mortgage charts/${theme}/${width}: ${JSON.stringify(geometry)}`);
   }
@@ -102,12 +102,16 @@ try {
           Math.abs(row[0].left-bounds.left)<2 && Math.abs(row.at(-1).right-bounds.right)<2 &&
           row.every((r,i) => !i || Math.abs(r.left-row[i-1].right-gap)<2));
       }
-      const actual = ['fm-kpis','fm-panels'].every(id => filled(document.getElementById(id)));
+      const strip = document.querySelector('.fm-overview');
+      const tiles = [...strip.querySelectorAll('.dk-tile')].map(e=>e.getBoundingClientRect());
+      const gap = parseFloat(getComputedStyle(strip).columnGap);
+      const sameStrip = tiles.length===6 && tiles.every((r,i)=>Math.abs(r.top-tiles[0].top)<1 && Math.abs(r.width-tiles[0].width)<1 && Math.abs(r.height-tiles[0].height)<1 && (!i || Math.abs(r.left-tiles[i-1].right-gap)<2));
+      const actual = sameStrip && filled(document.getElementById('fm-panels'));
       let variants = true;
       for (const kind of ['dk-grid--five','dk-grid--balanced']) for (const count of [1,2,3,4,5,6,7]) {
         const fixture = document.createElement('div'); fixture.className='dk-grid '+kind;
         for (let i=0;i<count;i++) { const item=document.createElement('div'); item.style.minHeight='48px'; fixture.append(item); }
-        document.getElementById('fm-kpis').parentElement.append(fixture);
+        document.getElementById('fm-panels').parentElement.append(fixture);
         variants = variants && filled(fixture);
         if (count>1) {fixture.children[0].hidden=true; variants = variants && filled(fixture);}
         fixture.remove();

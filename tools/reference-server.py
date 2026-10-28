@@ -314,7 +314,11 @@ def main():
     require(0 <= args.port <= 65535, "Некорректный порт.")
     snapshot = decode_body((ROOT / "data/reference-dashboard.json").read_bytes())
     validate_source(snapshot)
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), handler_factory(snapshot))
+    # Chrome opens parallel connections for scripts/fonts before rendering.
+    # Keep the standard localhost/Origin boundary, but accept the initial burst.
+    class ReferenceServer(ThreadingHTTPServer):
+        request_queue_size = 32
+    server = ReferenceServer(("127.0.0.1", args.port), handler_factory(snapshot))
     print(f"ДЕМО: http://127.0.0.1:{server.server_port}/reference-dashboard.html?source=server", flush=True)
     print("Только локальные тестовые данные. Поручения хранятся в памяти; авторизации и production API нет.", flush=True)
     try:

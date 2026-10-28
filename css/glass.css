@@ -378,6 +378,10 @@
  border:1px solid var(--glass-edge); border-radius:var(--radius-sm);
  background:var(--glass-chip); color:var(--ink-2);
 }
+.dk-glass .dk-wrap--monitor .dk-tile--compact .dk-tile__icon {
+ width:var(--icon-size-compact); height:var(--icon-size-compact);
+ border:0; background:transparent;
+}
 .dk-glass .dk-metric-band .dk-tile__label { font:var(--type-body); color:var(--ink-2); }
 .dk-glass .dk-metric-band .dk-tile { border-color:var(--glass-edge); }
 /* Intrinsic shared rows align values even when one label wraps. Flex fallback above. */

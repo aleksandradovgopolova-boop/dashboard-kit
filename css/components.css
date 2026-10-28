@@ -4206,6 +4206,9 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 }
 
 .dk-pager__size select { height: var(--control-sm); padding: 0 var(--space-4); }
+@media (pointer: coarse) {
+  .dk-pager__size select { min-height: var(--control-md); }
+}
 
 /* На узком экране номера страниц не помещаются и всё равно бесполезны: пальцем
    в цифру шириной 28 пикселей не попасть. Остаются стрелки и «3 из 12». */
@@ -4954,6 +4957,37 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   .dk-grid--five { --kpi-columns: 3; }
+}
+
+/* Monitoring rows align values after complete, wrapping KPI labels.
+   Consumer-specific strips may set their own heading track. */
+.dk-root .dk-wrap--monitor .dk-tile--compact > .dk-tile__head { min-height:3lh; }
+.dk-wrap--monitor .dk-tile--overview > .dk-tile__spark { margin-top:auto; }
+.dk-wrap--monitor .dk-grid--five > .dk-tile--overview { height:auto; align-self:stretch; }
+@media (min-width:1024px) {
+  .dk-root .dk-wrap--monitor .dk-tile--compact > .dk-tile__head { min-height:2lh; }
+}
+@media (min-width:768px) {
+  .dk-wrap--monitor .dk-grid--five { --kpi-columns:5; }
+}
+@media (min-width:768px) and (max-width:1199px) {
+  .dk-root .dk-wrap--monitor .dk-tile--compact { padding:var(--space-7); }
+  .dk-wrap--monitor .dk-tile--overview > .dk-tile__spark { width:var(--space-8); height:var(--space-8); }
+  .dk-wrap--monitor .dk-tile--overview:has(> .dk-tile__spark) > .dk-tile__row { padding-right:calc(var(--space-8) + var(--space-2)); }
+}
+
+
+/* Wrapped monitor tiles share intrinsic label/value tracks per visible row. */
+@supports (grid-template-rows:subgrid) {
+  .dk-root .dk-wrap--monitor .dk-col--quarter:has(> .dk-tile--compact) {
+    display:grid; grid-row:span 2; grid-template-rows:subgrid; align-self:stretch;
+    /* Layout containment would block intrinsic row contributions to subgrid. */
+    container-type:normal;
+  }
+  .dk-root .dk-wrap--monitor .dk-col--quarter > .dk-tile--compact {
+    display:grid; grid-row:span 2; grid-template-rows:subgrid; height:auto;
+  }
+  .dk-root .dk-wrap--monitor .dk-col--quarter > .dk-tile--compact > .dk-tile__head { min-height:0; }
 }
 
 /* Обзорная карточка с компактной историей из того же набора данных.

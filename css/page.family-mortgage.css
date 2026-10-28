@@ -66,6 +66,9 @@
 #fm-dashboard .fm-pagination { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-5); }
 #fm-dashboard .fm-pagination { justify-content: center; margin-top: var(--space-6); }
 #fm-dashboard .fm-region-link { font: inherit; text-align: start; padding: var(--space-2) 0; border: 0; background: none; cursor: pointer; min-height: var(--control-md); }
+@media (pointer: coarse) {
+  #fm-dashboard .fm-region-link { min-width: 44px; }
+}
 #fm-dashboard .dk-hero__label { margin: 0; }
 #fm-dashboard .fm-budget__scale { flex-wrap: wrap; }
 @media (max-width: 767px) {
@@ -73,7 +76,7 @@
   #fm-dashboard .fm-topbar__tools { gap: var(--space-4); }
   #fm-dashboard .fm-search { flex-basis: 100%; }
   #fm-dashboard .fm-filter { flex-basis: 160px; }
-  #fm-dashboard .fm-region-link { min-height: 44px; }
+  #fm-dashboard .fm-region-link { min-width: 44px; min-height: 44px; }
 }
 
 /* Бюджет — чистый виджет вместо сырого bullet: крупное число освоено + % плана,
@@ -169,7 +172,7 @@
 #fm-dashboard .fm-brand__mark { display:none; }
 #fm-dashboard #fm-top { grid-template-columns:minmax(0,1.7fr) minmax(0,1fr); }
 #fm-dashboard #fm-map-widget,#fm-dashboard #fm-rank-widget { grid-column:auto; }
-#fm-dashboard #fm-map-widget .dk-widget__head { flex-wrap:wrap; align-items:center; }
+#fm-dashboard #fm-map-widget .dk-widget__head { flex-wrap:wrap; align-items:flex-start; }
 #fm-dashboard #fm-rank-widget .dk-widget__body { flex:1; }
 #fm-dashboard #fm-rank .dk-rank__row { padding-block:var(--space-4); }
 #fm-dashboard #fm-map .dk-map__pan { padding:var(--space-2); }

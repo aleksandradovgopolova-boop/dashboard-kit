@@ -2,14 +2,14 @@
 // Requires an allowed local HTTP server and Chrome. Skipping it is not PASS.
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
-import {mkdir, writeFile} from 'node:fs/promises';
+import {mkdir, writeFile, mkdtemp, readFile, rm} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {tmpdir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import {launch, findChrome} from './browser-harness.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-let browser, server;
+let browser, server, downloadDirectory;
 try {
   const chrome = findChrome();
   assert(chrome, 'Chrome required for family mortgage acceptance');
@@ -24,7 +24,7 @@ try {
       const match = output.match(/http:\/\/127\.0\.0\.1:\d+/);
       if (match) { clearTimeout(timer); resolve(match[0]); }
     });
-    server.stderr.on('data', chunk => { output += chunk; });
+    server.stderr.on('data', chunk => { output += chunk; console.error('Fixture server:',String(chunk)); });
     server.on('error', error => { clearTimeout(timer); reject(error); });
     server.on('exit', code => { clearTimeout(timer); reject(Error('Server exited ' + code + ': ' + output)); });
   });
@@ -39,8 +39,8 @@ try {
   };
   const waitFor = expression => evaluate(`new Promise((resolve,reject)=>{
     let n=0;const tick=()=>{if(${expression})return resolve(true);
-    if(++n>150)return reject(Error('Condition timeout'));setTimeout(tick,50)};tick();
-  })`);
+    if(++n>150)return reject(Error('Condition timeout: '+JSON.stringify({url:location.href,ready:document.readyState,status:document.querySelector('#fm-dashboard')?.dataset.status,message:document.querySelector('#fm-status')?.textContent})));setTimeout(tick,50)};tick();
+  })`).catch(error=>{throw Error(error.message+'; browser exceptions: '+JSON.stringify(errors));});
   const api = `document.querySelector('#fm-dashboard').familyMortgageDashboard`;
   const click = selector => evaluate(`(()=>{
     const target=document.querySelector(${JSON.stringify(selector)});
@@ -54,9 +54,11 @@ try {
     await send('Input.dispatchKeyEvent', {type:'keyDown', key:'Escape', code:'Escape', windowsVirtualKeyCode:27});
     await send('Input.dispatchKeyEvent', {type:'keyUp', key:'Escape', code:'Escape', windowsVirtualKeyCode:27});
   };
-  await send('Runtime.enable'); await send('Page.enable');
+  await send('Runtime.enable'); await send('Page.enable'); await send('Network.enable');
   const errors = [];
   browser.on(message => {
+    if (message.sessionId===sessionId && message.method==='Network.responseReceived' && message.params.response.status>=400) errors.push('HTTP '+message.params.response.status+' '+message.params.response.url);
+    if (message.sessionId===sessionId && message.method==='Network.loadingFailed' && !message.params.canceled) errors.push('Network '+message.params.errorText);
     if (message.sessionId === sessionId && message.method === 'Runtime.exceptionThrown') {
       errors.push(message.params.exceptionDetails.exception?.description || message.params.exceptionDetails.text);
     }
@@ -172,6 +174,61 @@ try {
   assert(exported.rows.every(row => row.kind === 'demo' && row.from === '2025-04-01' && row.to === '2025-09-30'));
   assert(exported.text.includes('Объём, млн ₽') && exported.text.includes('Одобрено / рассмотрено, %'), 'Export must retain explicit metric units');
 
+  // Genuine browser downloads in an isolated temporary directory; keep the
+  // serializer untouched and compare saved bytes/order with the current slice.
+  downloadDirectory = await mkdtemp(resolve(tmpdir(), 'dk-mortgage-csv-'));
+  await browser.send('Browser.setDownloadBehavior', {behavior:'allow', downloadPath:downloadDirectory, eventsEnabled:true});
+  const download = async (selector, filename) => {
+    let guid, timer, listener;
+    const completion = new Promise((resolve, reject) => {
+      timer = setTimeout(()=>reject(Error('CSV download did not complete: '+filename)),20000);
+      listener = message => {
+        if(message.method==='Browser.downloadWillBegin') {
+          if(message.params.suggestedFilename!==filename) {reject(Error('Unexpected CSV filename: '+message.params.suggestedFilename)); return;}
+          guid = message.params.guid;
+        }
+        if(message.method==='Browser.downloadProgress' && message.params.guid===guid) {
+          if(message.params.state==='completed') resolve();
+          if(message.params.state==='canceled') reject(Error('CSV download canceled'));
+        }
+      };
+      browser.on(listener);
+    });
+    // Register the handler before clicking, including an early rejection handler.
+    completion.catch(()=>{});
+    try {
+      await click(selector);
+      await completion;
+      const bytes = await readFile(resolve(downloadDirectory,filename));
+      assert.deepEqual([...bytes.subarray(0,3)],[239,187,191],'Excel UTF-8 BOM retained');
+      return bytes.toString('utf8');
+    } finally {clearTimeout(timer); browser.off(listener);}
+  };
+  const fullText = await download('#fm-export','family-mortgage-demo-2025-04-01-2025-09-30.csv');
+  assert.equal(fullText.replace(/^\uFEFF/,''), exported.text, 'Saved whole-slice CSV matches real serializer (Blob.text omits the BOM)');
+  await patch({region:'khmao',month:'all',district:'all',search:'',page:1});
+  await click('#fm-tbody [data-region="khmao"]');
+  await click('#fm-detail-body th[data-sortable="1"] button');
+  await click('#fm-detail-body th[data-sortable="1"] button');
+  const regionalExpected = await evaluate(`(()=>{
+    const v=${api}.getView(), region=v.regions[0];
+    return [...document.querySelectorAll('#fm-detail-body tbody tr')].map(row=>{
+      const m=region.monthly.find(m=>m.month===row.dataset.month);
+      return [region.name,m.month,m.issued,m.issuedPlan,m.planPct,m.volume,v.source.label,v.source.updatedAt].map(v=>v==null?'':String(v));
+    });
+  })()`);
+  assert.equal(regionalExpected.length,6);
+  assert(regionalExpected.every((row,i)=>!i || +row[2]<=+regionalExpected[i-1][2]),'Fact sort descending');
+  const regionalText = await download('#fm-detail-export','family-mortgage-khmao-2025-04-01-2025-09-30.csv');
+  const regionalRows = regionalText.replace(/^\uFEFF/,'').split('\r\n').map(line=>
+    [...line.matchAll(/"((?:""|[^"])*)"/g)].map(match=>match[1].replace(/""/g,'"')));
+  assert.deepEqual(regionalRows[0],['Регион','Месяц','Факт, кредитов','План, кредитов','Выполнение, %','Объём, млн ₽','Источник','Обновлено']);
+  assert.deepEqual(regionalRows.slice(1),regionalExpected,'Saved regional CSV retains six sorted months, numbers, units, source and update time');
+  await escape();
+  assert(await evaluate(`!document.querySelector('#fm-detail').open&&document.activeElement.dataset.region==='khmao'`),'Downloaded details close and restore focus');
+  await patch({region:'all'});
+  console.log('PASS: genuine full-slice and sorted regional CSV files saved/read, UTF-8 BOM, six monthly rows and focus return');
+
   // Fetch failure must hide prior values and remain recoverable on the same mount.
   await evaluate(`(()=>{
     window.__mortgageLoads=0;
@@ -218,5 +275,6 @@ try {
   console.log('PASS: mortgage consumer, full-slice totals, pages, filters/history, region details/focus, empty/error/retry/remount, themes/mobile/AX names');
 } finally {
   if (browser) await browser.close();
+  if (downloadDirectory) await rm(downloadDirectory,{recursive:true,force:true});
   if (server) server.kill();
 }
