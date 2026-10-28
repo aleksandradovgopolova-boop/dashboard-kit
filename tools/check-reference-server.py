@@ -175,11 +175,19 @@ for method in ("GET", "HEAD"):
     handler.do_GET()
     assert result["status"] == 403
 assert server.public_file(ROOT, "/reference-dashboard.html?source=server").name == "reference-dashboard.html"
+for name in ("graphite-dark.png", "graphite-light.png"):
+    assert server.public_file(ROOT, "/assets/" + name) == ROOT / "assets" / name
+
 for path in ("/.git/config", "/tools/reference-server.py", "/%2e%2e/README.md", "/data/../../README.md", "/js%5csecret.js", "/unrelated.json", "/private-notes.txt"):
     rejects(lambda value=path: server.public_file(ROOT, value), 404, "Unsafe static path accepted")
 with tempfile.TemporaryDirectory(prefix="dk-static-boundary-") as directory:
     root = Path(directory)
     (root / "js").mkdir()
+    (root / "assets").mkdir()
+    (root / "assets/private.png").write_bytes(b"private fixture")
+    rejects(lambda: server.public_file(root, "/assets/private.png"), 404, "Unlisted theme asset was exposed")
+    (root / "assets/graphite-dark.png").symlink_to(ROOT / "assets/graphite-dark.png")
+    rejects(lambda: server.public_file(root, "/assets/graphite-dark.png"), 404, "Theme asset symlink was exposed")
     (root / "js/escape.js").symlink_to(ROOT / "js/dk-util.js")
     rejects(lambda: server.public_file(root, "/js/escape.js"), 404, "Static symlink escape accepted")
 

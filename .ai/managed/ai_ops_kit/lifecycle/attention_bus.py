@@ -32,7 +32,7 @@ from ai_ops_kit.shared import lifecycle_store as _ls
 _REL = Path(".ai") / "runtime" / "attention.yaml"
 _KIND = "attention-log"
 
-# Типы повода — чтобы inbox отличал «нужно решение» от «работа остановлена». Значения — данные, не код.
+
 DECISION = "decision"          # governance/боундари: решение за человеком
 BLOCKED = "blocked"            # работа остановлена до человека (preflight/эскалация модели)
 

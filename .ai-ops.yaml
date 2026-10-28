@@ -3,7 +3,7 @@ schema_version: 1
 kind: ai-ops-child-config
 parent:
   source: git+https://github.com/aleksandradovgopolova-boop/ai-ops-kit.git
-  installed_version: 4.3.2
+  installed_version: 4.11.4
   allowed_version_range: ">=4.0.0 <5.0.0"
   # КАНАЛ — ФАКТ, А НЕ ПОЖЕЛАНИЕ (19.08.2026). Здесь стоял `stable`, и он попадал в каждую
   # установку, тогда как сам пакет заработал `qualification`. Значение сверяется тестом

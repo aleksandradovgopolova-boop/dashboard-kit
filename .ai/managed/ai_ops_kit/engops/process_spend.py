@@ -43,50 +43,50 @@ from pathlib import Path
 
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401
 
-# Потолок владельца (2026-08-17). Живёт в session_economy, потому что это политика экономии сессии,
-# а не параметр прогона: у прогона свой бюджет и другой предмет измерения.
+
+
 CEILING_KEY = "process_spend_ceiling_before_code"
 CEILING_DEFAULT = 50000
 
-# Процессные шаги — те, что ОПИСЫВАЮТ КОНКРЕТНУЮ РАБОТУ. `run`/`do` здесь нет: они её делают, и с
-# их началом процессная фаза кончается. `status`/`next` — чтение, оно ничего не описывает.
-#
-# `onboard`/`model` тоже стоят денег, но их здесь НЕТ, и это осознанно: они про репозиторий, а не про
-# работу, у них нет workitem_id, и точку отсчёта расхода вешать не на что. Считать их «шагом работы»
-# значило бы приписать первой же задаче стоимость знакомства с проектом — то есть соврать в числе.
+
+
+
+
+
+
 PROCESS_INTENTS = ("discuss", "specify", "plan")
 
 STATES = ("normal", "attention", "over_ceiling", "code_started", "unknown")
 
-# ЧТО НЕ СЧИТАЕТСЯ ПРАВКОЙ КОДА — СПИСОК ПО ЗАМЕРУ, А НЕ ПО ПАМЯТИ. Получен так: кит поставлен в
-# пустой git-репозиторий, и `git status` показал ровно эти пути (проба шва 2026-08-17). Пока список
-# состоял из трёх каталогов, свежеустановленная дочка читалась как «код уже правится» — то есть
-# потолок не применялся НИКОГДА и ни один тест этого не видел, потому что все они мерили кит, а не
-# установленную копию. Это тот самый класс F-030/F-032, и он поймался только пробой на дочке.
-#
-# `planning/`, `ROADMAP.md`, `CLAUDE.md`, `.github/` в списке сознательно: их правка — это описание
-# работы или настройка, а мерится здесь «начали ли ДЕЛАТЬ». Правка плана — не начало работы.
-# `.ai-ops/` добавлен 20.08.2026 вместе с bootstrap продуктового слоя (`_seed_product_layer`): кит
-# сам создаёт `.ai-ops/{PRODUCT_PASSPORT,ROADMAP,DELIVERY}.md`, `POLICY.yaml`, `templates/` при
-# `ai-ops init`/`update`, значит свежая поставка НЕ должна читаться как правка кода — тот же шов и
-# тот же случай, что с `.gitignore`/`.gitattributes` (проба `test_fresh_install_is_not_a_code_change`).
-# Правка этих артефактов — описание продукта, а не «начали делать»: та же категория, что `ROADMAP.md`
-# и `planning/`. ГРАНИЦА `engops/` (лента B) ПЕРЕСЕЧЕНА ОСОЗНАННО, правка на одну строку; сказано в PR.
-# `security/` добавлен в v7: установка сеет туда `security-policy.md` черновиком (обязательный
-# артефакт SEC-001), значит свежая поставка каталога НЕ должна читаться как правка кода — та же
-# категория, что `planning/` (тоже сидируется). Корневой `SECURITY.md` (архитектура, SEC-008) — ниже.
-_KIT_PREFIXES = (".ai/", ".ai-ops/", ".claude/", ".github/", "features/", "planning/", "history/",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_KIT_PREFIXES = (".ai/", ".ai-ops/", ".claude/", ".codex/", ".github/", "features/", "planning/", "history/",
                  "security/")
 _KIT_FILES = (".ai-ops.yaml", "ai-ops", "AI-OPS-ONBOARDING.md", "CLAUDE.md", "ROADMAP.md",
-              # ARCHITECTURE.md добавлен 07.09.2026 (SR-7): установка сеет его черновиком, значит
-              # свежая поставка НЕ должна читаться как правка кода — та же категория, что ROADMAP.md.
+              
+              
               "ARCHITECTURE.md",
-              # SECURITY.md (архитектура безопасности, SEC-008) сидируется черновиком — свежая
-              # поставка НЕ должна читаться как правка кода.
+              
+              
               "SECURITY.md",
-              # `.gitattributes` добавлен 18.08.2026 вместе с его установкой: `ensure_gitattributes`
-              # пишет его в дочку, значит свежая поставка НЕ должна читаться как правка кода — ровно
-              # тот же случай, что был с `.gitignore` (проба шва test_fresh_install_is_not_a_code_change).
+              
+              
+              
               ".gitignore", ".gitattributes")
 
 
@@ -148,8 +148,8 @@ def code_changed(child_root):
     Смотрим и индекс, и рабочее дерево, и неотслеживаемые файлы: правка, которую ещё не закоммитили,
     — всё равно правка. Пути самого кита исключены (см. `_is_kit_path`).
     """
-    # RAW, а не gitio.git: `git status --porcelain` — вывод с значимой ведущей колонкой XY,
-    # а gitio.git стянул бы её через .strip(). timeout= задан явно (инвариант против зависаний).
+    
+    
     try:
         r = subprocess.run(["git", "-C", str(child_root), "status", "--porcelain"],
                            capture_output=True, text=True, timeout=20, check=False)
@@ -190,8 +190,8 @@ def record_step(child_root, wid, intent, session_total, session_id=None):
     session_changed = (not new) and session_id is not None and session_id != base_sid
     first_measurable = entry.get("first_step_session_tokens") is None and session_total is not None
     if session_changed or first_measurable:
-        # session_changed — новая сессия рантайма. first_measurable — первый шаг был при недоступном
-        # транскрипте, отсчёт берём с первого измеримого (иначе ложное «пробит» на первом же числе).
+        
+        
         entry["first_step_session_tokens"] = session_total
         entry["first_step_session_id"] = session_id
         entry["baseline_from"] = intent
@@ -217,9 +217,9 @@ def classify(spent_on_process, limit):
     return "normal"
 
 
-# «Число не передано» и «числа нет» — РАЗНЫЕ входы, и различать их обязательно: без сентинела
-# явный `session_total=None` уходил в телеметрию и возвращался измеренным, то есть проверить
-# поведение на неизвестном расходе было нечем (нашлось тестом сразу же).
+
+
+
 _UNSET = object()
 
 
@@ -233,8 +233,8 @@ def assess(child_root, wid, intent, session_total=_UNSET, session_id=None, polic
     limit = ceiling(child_root, policy)
     if session_total is _UNSET:
         session_total = _session_total(child_root, wid)
-        # Личность живой сессии доезжает до РЕШЕНИЯ: без неё трата этой работы неотличима от прошлых
-        # сессий (дефект 487d952b). Тот же живой рантайм, что и расход.
+        
+        
         session_id = _session_id(child_root, wid)
     touched = code_changed(child_root)
     entry = record_step(child_root, wid, intent, session_total, session_id) if record \
@@ -292,9 +292,9 @@ def _work_scoped_spend(entry, session_total, session_id):
     base_sid = entry.get("first_step_session_id")
     if base is None or session_total is None:
         return None
-    # База из ИЗВЕСТНОЙ сессии, а личность текущей неизвестна (session_id=None, напр. рантайм без
-    # CLAUDE_CODE_SESSION_ID): same-session НЕ подтвердить -> unknown, а не вычитать. Иначе, если
-    # база из прошлой сессии, вернулся бы расход прошлых сессий (дефект 487d952b) под видом текущего.
+    
+    
+    
     if base_sid is not None and session_id is None:
         return None
     if session_id is not None and base_sid is not None and session_id != base_sid:

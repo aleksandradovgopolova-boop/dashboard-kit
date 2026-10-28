@@ -132,10 +132,11 @@ def _rank(w, res, model, plan):
     if goal_rank == 0 and len(prio) > 1:
         why.append("работает на цель первого приоритета")
     if not _plan.goal_is_live(plan, gid):
-        # Названо вслух: работа осталась под целью, которая больше никуда не ведёт. Молча опустить
-        # её было бы вторым дефектом того же рода — человек не понял бы, почему совет изменился.
-        why.append(f"цель '{gid}' уже не ведёт вперёд (достигнута или на паузе) — "
-                   f"приоритет ниже живых целей; работу стоит перевесить в плане")
+        
+        
+        
+        why.append(f"цель «{_plan.goal_display_name(gid)}» уже не ведёт вперёд (достигнута или "
+                   f"на паузе) — приоритет ниже живых целей; работу стоит перевесить в плане")
     if w.get("value") == "high":
         why.append("объявленная ценность высокая")
     if risk_score:
@@ -157,13 +158,10 @@ def _parallel_set(candidates, by_id, anchor=None):
     без объявленного `write_scope` в набор НЕ попадает: недоказанная безопасность — не
     безопасность, и молчаливое «наверное, не пересекаются» здесь стоило бы двух потерянных сессий.
     """
-    def _pref(g):
-        return (str(g) or "").split("*")[0].rstrip("/")
-
     def _overlap(a, b):
-        for x in [_pref(s) for s in (a or []) if _pref(s)]:
-            for y in [_pref(s) for s in (b or []) if _pref(s)]:
-                if x == y or x.startswith(y + "/") or y.startswith(x + "/"):
+        for x in map(_plan.scope_prefix, a or []):
+            for y in map(_plan.scope_prefix, b or []):
+                if _plan.scopes_overlap(x, y):
                     return True
         return False
 
@@ -188,6 +186,12 @@ def _parallel_set(candidates, by_id, anchor=None):
 
     chosen, skipped = [], []
     if anchor is not None:
+        if not (by_id.get(anchor["id"]) or {}).get("write_scope"):
+            
+            
+            return [], [{"id": c["id"], "reason": f"у {anchor['id']} нет write_scope — "
+                                                  f"параллельность с ней недоказуема"}
+                        for c in candidates if c["id"] != anchor["id"]]
         chosen.append(anchor)                      # якорь занимает свою область записи первым
     for c in candidates:
         w = by_id[c["id"]]
@@ -251,8 +255,8 @@ def _holders(child_root, me=None):
         wid = _plan._workitem_key(e)
         row = {"id": wid, "title": None, "branch": e.get("branch"),
                "owner_session": e.get("owner_session"), "machine": e.get("machine"),
-               # «где именно» на одной машине: имя хоста у всех рабочих копий одно, и без копии
-               # ответ «держит другой на этой машине» никуда участника не отправляет.
+               
+               
                "worktree": e.get("worktree"),
                "since": e.get("started_at")}
         (mine if (me and e.get("owner_session") == me) else others).append(row)
@@ -314,8 +318,8 @@ def compute(child_root, budget_left=None, me=None):
     model = _contours.load_model()
     plan = _plan.load(child_root)
     rm = _roadmap.check(child_root, plan)
-    # Путь называем ФАКТИЧЕСКИЙ, а не дефолтный: монорепозиторий объявляет свой, и сообщение
-    # «нет planning/plan.yaml» отправило бы владельца искать файл не там, где он у него лежит.
+    
+    
     plan_rel = _plan.plan_rel(child_root)
 
     if plan is None:
@@ -326,8 +330,8 @@ def compute(child_root, budget_left=None, me=None):
                 "gap": f"нет {plan_rel} — контур Planning & Execution не заполнен; "
                        f"шаблон: templates/planning/plan.yaml"}
 
-    # ЗАГОТОВКА — НЕ ПЛАН. Иначе кит советует работу из своего примера как настоящую (найдено тремя
-    # ревью независимо). Отвечаем тем же, чем на отсутствие плана: назван пробел и способ его закрыть.
+    
+    
     if _plan.is_template(plan):
         return {"schema_version": 1, "plan_present": True, "plan_is_template": True,
                 "plan_errors": [], "plan_warnings": [],
@@ -338,9 +342,9 @@ def compute(child_root, budget_left=None, me=None):
                        f"Впишите свою работу и снимите строку `template: true`; советовать из "
                        f"примера кит не станет."}
 
-    # ИСТОРИЯ ПОДАЁТСЯ И ЗДЕСЬ. Разнос плана на активное и закрытое (`plan-as-control-plane`) даёт
-    # правду только если её видят ВСЕ потребители плана: этот шов кит нашёл на себе сам — `next`
-    # отказался советовать работу, потому что `depends_on` смотрел на работу, уехавшую в историю.
+    
+    
+    
     try:
         closed = _plan.load_history(child_root)
     except _plan.PlanCorrupt:
@@ -351,7 +355,7 @@ def compute(child_root, budget_left=None, me=None):
     by_id = {w["id"]: w for w in ws if w.get("id")}
     caps_known = _known_capabilities()
 
-    # 1. Где мы сейчас — по целям, а не по числу закрытых карточек.
+    
     where = []
     single = _plan.goals(plan)[0]["id"] if len(_plan.goals(plan)) == 1 else None
     for g in _plan.goals(plan):
@@ -368,14 +372,14 @@ def compute(child_root, budget_left=None, me=None):
     in_progress, blocked, ready, not_ready, held = _categorize(
         by_id, res, caps_known, budget_left, model, plan)
 
-    # ВЫЧИТАНИЕ ТОГО, ЧТО ДЕРЖАТ ДРУГИЕ (работа `next-offers-work-nobody-holds`). Важность и
-    # непересечение кит считал и раньше; отсутствовало ровно одно — вопрос УЧАСТНИКА «что взять МНЕ».
-    # Держателя называет реестр рантайма, а не план: правило «роль, а не исполнитель» остаётся, и
-    # поля `assignee` в плане по-прежнему нет.
-    # ЗАМОРОЗКА УМЕНИЙ ВЫЧИТАЕТСЯ ИЗ ГОТОВОГО (работа `capability-freeze-enforced`). 18.08.2026 кит
-    # сам предложил взять `watch-contract-for-night-review` — работу из замороженной цели: решение
-    # владельца существовало ЗАПИСЬЮ и ничем не сверялось. Совет, противоречащий решению, хуже
-    # отсутствия совета: он выглядит как санкция.
+    
+    
+    
+    
+    
+    
+    
+    
     frozen = _plan.frozen_work(plan)
     frozen_rows = []
     if frozen:
@@ -413,11 +417,11 @@ def compute(child_root, budget_left=None, me=None):
     if len(ready) > 1:
         parallel, par_skipped = _parallel_set(ready[1:], by_id, anchor=next_best)
 
-    # ПРОТУХАНИЕ — часть ответа «что дальше» (наблюдение владельца 14.08.2026). Кит отвечал честно
-    # на заданные вопросы и молчал обо всём, о чём не спросили: рядом жили документация про мёртвый
-    # продукт и план, отставший на 31 изменение. Оба факта дешёвые и проверяемые, поэтому кит
-    # называет их сам — но именно как разговор, а не как гейт: проверка, останавливающая прогон на
-    # каждом устаревшем абзаце, обучает себя обходить.
+    
+    
+    
+    
+    
     try:
         from ai_ops_kit.planning import staleness as _stale
         stale = _stale.assess(child_root, plan_rel)
@@ -469,7 +473,9 @@ def render(rep) -> str:
     for g in rep["where_are_we"]:
         mark = "✓" if g["outcome_reached"] else "·"
         rm = "" if g["in_roadmap"] else "  ⚠ цели нет в roadmap (работа без направления)"
-        L.append(f"  {mark} цель {g['goal']} [{g['status']}] — работа {g['work_done']}/{g['work_total']}{rm}")
+        
+        name = _plan.goal_display_name(g["goal"])
+        L.append(f"  {mark} цель {name} [{g['status']}] — работа {g['work_done']}/{g['work_total']}{rm}")
         for k, v in (g["outcome"] or {}).items():
             L.append(f"      outcome {k}: {'достигнут' if v else 'не достигнут'}")
 
@@ -494,9 +500,9 @@ def render(rep) -> str:
         for c in r["admission"]:
             if not c["ok"]:
                 L.append(f"      {c['id']}: {c['detail']}")
-    # УДЕРЖАННОЕ ВЛАДЕЛЬЦЕМ — ОТДЕЛЬНО ОТ «ЗАБЛОКИРОВАНО». `blocked`/`waiting` снимаются графом
-    # зависимостей сами; `waiting_on_owner` не снимется, пока владелец не сделает названный шаг —
-    # молчание о нём читалось бы как «работы больше нет», а не «дело за тобой».
+    
+    
+    
     for r in rep.get("held") or []:
         L.append(f"  · {r['id']} ждёт твоего решения (waiting_on: {r.get('waiting_on') or '?'}) "
                  f"— {r['title']}")
@@ -521,8 +527,8 @@ def render(rep) -> str:
     for w in rep["plan_warnings"] + rep["roadmap"]["warnings"]:
         L.append(f"  ⚠ {w}")
 
-    # 5. ПРОТУХШЕЕ — то, о чём не спросили. Раздел появляется, только если есть что сказать:
-    # пустой раздел на каждом ответе обесценил бы его за неделю.
+    
+    
     st = rep.get("staleness") or {}
     dead, behind = st.get("dead_references") or [], st.get("plan_behind")
     stale_dec = rep.get("stale_decisions") or []

@@ -14,9 +14,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-# Декоратор `_intent` и реестр `_INTENT_HANDLERS` живут в `ai_ops_cli`; регистрация этих функций —
-# там же, расширением общего for-цикла. `_say`/`_wid_for` (инфраструктура main/диспетча) остаются
-# в `ai_ops_cli` — сюда они приходят ленивым импортом внутри функции, поэтому цикла импорта нет.
+
+
+
 
 
 def _intent_onboard(task, child_root, signals, a):
@@ -28,8 +28,8 @@ def _intent_onboard(task, child_root, signals, a):
     out = child_root / ".ai" / "repository-profile.yaml"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(yaml.safe_dump(prof, allow_unicode=True, sort_keys=False), encoding="utf-8")
-    # Соответствие Архитектурной конституции: первичный отчёт-РЕКОМЕНДАЦИИ владельцу (#846). Advisory,
-    # не блок. Пишется в protected-зону дочки (.ai/project/**), кит его при update не затирает.
+    
+    
     conf_rel = None
     try:
         from ai_ops_kit.checks import constitution_conformance as _cc
@@ -64,16 +64,16 @@ def _intent_onboard(task, child_root, signals, a):
             print(f"\n  Соответствие конституции: {_conf_summary}")
             print(f"  Отчёт с рекомендациями: {conf_rel}")
         if reach == "register":
-            # Явное «да»: отметка записана анонимно и локально, без сети.
+            
             print("\n  Отметились: анонимно и без телеметрии — кит ничего никуда не отправляет.")
             print("  Охват обновится, когда владелец кита периодически соберёт отметившиеся проекты "
                   "(reach collect).")
         elif reach == "decline":
-            # Явное «нет»: ничего не создано, онбординг это не затрагивает.
+            
             print("\n  Отметку отклонили: ничего не создано, онбординг это не затрагивает.")
         elif not _reg.has_decided(child_root):
-            # Решения ещё нет -> ОДИН РАЗ задаём явный вопрос да/нет. По умолчанию НЕ отмечаемся и
-            # НИЧЕГО не создаём в этой ветке (иначе отказ перестал бы быть безопасным и молчаливым).
+            
+            
             print("\n  Отмечаемся? Это добровольно и без телеметрии — кит ничего никуда не отправляет "
                   "(запишем имя проекта + версию кита + дату + анонимный id, без путей и почты).")
             print("  Да:  ./ai-ops onboard . --reach register   (или ./ai-ops reach register .)")
@@ -152,7 +152,7 @@ def _intent_reach(task, child_root, signals, a):
         return 1 if rep["errors"] else 0
 
     if sub == "collect":
-        # Сбор дочек в кит зовётся модулем (интент CLI отдаёт один токен, а collect берёт список дочек).
+        
         print(json.dumps({"ok": False, "reason": "collect зовётся модулем: "
                           "python3 -m ai_ops_kit.engops.child_registry collect <kit> <child>..."},
                          ensure_ascii=False, indent=2) if js
@@ -167,8 +167,8 @@ def _intent_reach(task, child_root, signals, a):
 
 def _intent_team(task, child_root, signals, a):
     js = a.json
-    # Снимок статуса команды (Фаза 4): здоровье×3 + топ-риски + блокеры + следующие задачи +
-    # milestone. Агрегатор из intelligence; CLI зовёт его вниз. Только чтение.
+    
+    
     from ai_ops_kit.intelligence import team_sync
     try:
         status = team_sync.team_status(Path(child_root))
@@ -184,10 +184,10 @@ def _intent_team(task, child_root, signals, a):
 
 def _intent_replan(task, child_root, signals, a):
     js = a.json
-    # Autonomous Replanning (Фаза 5, капстоун): оркестратор из intelligence, CLI зовёт его вниз.
-    # Без --apply — read-only отчёт (превью). С --apply — записывает переприоритизацию (класс A):
-    # обратимо, состав работ не меняет, авторский plan.yaml/main не трогает, kill-switch/policy/
-    # budget=0 внутри модуля.
+    
+    
+    
+    
     from ai_ops_kit.intelligence import replan_loop
     root = Path(child_root)
     if getattr(a, "apply", False):
@@ -217,9 +217,9 @@ def _intent_replan(task, child_root, signals, a):
 
 def _intent_governance(task, child_root, signals, a):
     js = a.json
-    # Governance-обзор (Фаза 4): активная политика автономии + журнал решений AI + переопределения
-    # человека. ТОЛЬКО ЧТЕНИЕ: enforcement (policy_engine.enforce) сознательно не трогаем — где он
-    # включается в путь исполнения, решается отдельно; здесь показываем состояние governance.
+    
+    
+    
     from ai_ops_kit.governance import decision_boundary, decision_log, human_override, policy_engine
     root = Path(child_root)
     try:
@@ -229,8 +229,8 @@ def _intent_governance(task, child_root, signals, a):
         return 1
     decisions = decision_log.ai_decisions(root)
     ovr = human_override.overrides(root)
-    # Граница решений (#631): три оси действия РАЗОМ -> имя класса + причина. Классифицируем текущее
-    # действие по сигналам вызова; без сигналов это профиль по умолчанию (fail-closed COLLABORATIVE).
+    
+    
     boundary = decision_boundary.evaluate(signals)
     if js:
         print(json.dumps({"policy": policy, "ai_decisions_count": len(decisions),
@@ -261,8 +261,8 @@ def _intent_bootstrap(task, child_root, signals, a):
     from ai_ops_kit.planning import repo_audit as _ra
     from ai_ops_kit.cli.ai_ops_cli import _say   # единый путь наружу, живёт в ai_ops_cli
     try:
-        # Аудит — один раз на команду: сухой прогон и запись смотрят на ОДНИ факты, иначе между
-        # «вот что создам» и «создал» могла бы оказаться разница, которую человек не просил.
+        
+        
         _und = _ra.run(child_root)
         boot = _boot.plan(child_root, _und)
     except (_contours.ModelCorrupt, _dp.PlanCorrupt) as e:
@@ -307,9 +307,9 @@ def _intent_roadmap(task, child_root, signals, a):
     if (task or "").strip().lower() == "sync-issues":   # реализация в roadmap_sync_cli (ратчет размера)
         from ai_ops_kit.cli.roadmap_sync_cli import run_roadmap_sync
         return run_roadmap_sync(child_root, a)
-    # PR-7 (лента 4): roadmap Now/Next/Later ВЫВОДИТСЯ из плана (цели + исходы), а не пишется
-    # руками. Команда read-only: строит три горизонта и сверяет их с авторским ROADMAP.md.
-    # Авторскую сторону разбирает существующий roadmap.py — второй правды об одном горизонте нет.
+    
+    
+    
     from ai_ops_kit.planning import roadmap_manager
     from ai_ops_kit.planning import delivery_plan as _plan
     try:
@@ -331,7 +331,7 @@ def _intent_roadmap(task, child_root, signals, a):
         if not block:
             print("  (пусто)")
         for d in block:
-            # Слаг — технический якорь; счётчик исходов подаём человеку словами, а не «0/2».
+            
             name = d.get("title") or d["goal"]
             anchor = f" ({d['goal']})" if name != d["goal"] else ""
             print(f"  • {name}{anchor}: "
@@ -343,7 +343,7 @@ def _intent_roadmap(task, child_root, signals, a):
     return 0
 
 
-# v3.36.13 (session-command-reaches-the-child): команда doctor показывает готовность дочки.
+
 def _intent_doctor(task, child_root, signals, a):
     js = a.json
     from ai_ops_kit.lifecycle import child_doctor
@@ -352,7 +352,7 @@ def _intent_doctor(task, child_root, signals, a):
         print(json.dumps(rep, ensure_ascii=False, indent=2))
     else:
         print(child_doctor.render(rep))
-    # Ненулевой код — ТОЛЬКО на блокерах: замечание («допишите имя проекта») не отказ.
+    
     return 1 if rep.get("blocking") else 0
 
 
@@ -402,14 +402,14 @@ def _intent_new(task, child_root, signals, a):
     wid = _wid_for(task, signals, a.feature)
     workitem.start(str(child_root / "features"), wid, task or wid,
                    task_type=signals.get("task_type"), risk=signals.get("risk"))
-    # v3.35.1 (ревью перед квалификацией): засев `affects` ПО ТИПУ ЗАДАЧИ УБРАН. Кит записывал
-    # `{engineering_quality_security: true}` всем шести инженерным типам, а `reconcile` читал это
-    # как заявление АВТОРА — и на каждой обычной задаче выдавал major-находку «источник истины не
-    # обновлён», потому что задача не трогает DevelopmentProcess.md. Кит ловил себя же.
-    # Теперь `affects` берётся ТОЛЬКО из плана: если элемент с этим id объявлен в
-    # `planning/plan.yaml`, его заявление переносится в WorkItem — это настоящее заявление
-    # человека и настоящая связь уровней. Нет элемента — поле остаётся пустым, и гейт называет
-    # затронутые контуры информацией, а не расхождением.
+    
+    
+    
+    
+    
+    
+    
+    
     _copy_affects_from_plan(child_root, wid)
     sp, created, spec_rep = spec_levels.create_spec(child_root, wid, signals)
     if js:
@@ -457,7 +457,7 @@ def _intent_specify(task, child_root, signals, a):
                           "answers_applied": ans_rep["applied"],
                           "answers_unmatched": ans_rep["unmatched"],
                           "answers_error": ans_rep["error"],
-                          # Исход 3: форма может быть предварительной — называем это ДО заполнения.
+                          
                           "spec_provisional": spec_provisional,
                           "level_if_escalated": _disc.get("level_if_escalated"),
                           "sections_if_escalated": _disc.get("sections_if_escalated"),
@@ -467,21 +467,24 @@ def _intent_specify(task, child_root, signals, a):
         shown = sp.relative_to(child_root)
     except ValueError:
         shown = sp
-    # Готовая команда ответить СЛОВАМИ на то, что ещё осталось (не файл, не JSON): пример из первых
-    # нескольких вопросов, чтобы строка не разрасталась на весь L2/L3 список.
+    
+    
     _answer_words = spec_answers.answer_words_for(cov["blocking_missing"][:3])
     _answer_command = None
     if _answer_words:
         _pairs = "; ".join(f"{w}=..." for w in _answer_words)
-        _answer_command = f'./ai-ops specify "{task or wid}" --feature {wid} --answers "{_pairs}"'
-    # obs e09fe515 (поле 20.08.2026): подсказка после specify вела СРАЗУ на `run --execute`, минуя
-    # plan. Заявленный путь кита — specify -> plan -> run; следующий шаг — `plan`.
+        # #958: feature id (wi-…) детерминирован от текста задачи — кит резолвит ту же фичу по
+        # тексту без `--feature`, поэтому в человеко-обращённую команду id не подставляем.
+        _answer_command = f'./ai-ops specify "{task or "<задача>"}" --answers "{_pairs}"'
+    
+    
     _say(child_root, "from_specification", shown, created, cov["level_name"],
          cov["sections"], cov["blocking_missing"],
-         f"./ai-ops plan \"{task or '<задача>'}\" --feature {wid}",
+         f"./ai-ops plan \"{task or '<задача>'}\"",
          spec_rep["added"], spec_rep["error"],
          spec_provisional, _disc.get("sections_if_escalated"), _disc.get("level_if_escalated"),
-         _answer_command, ans_rep["applied"], ans_rep["unmatched"], ans_rep["error"])
+         _answer_command, ans_rep["applied"], ans_rep["unmatched"], ans_rep["error"],
+         task=task, level_reason=cov.get("level_reason"))
     return 0
 
 
@@ -511,3 +514,156 @@ def _intent_discuss(task, child_root, signals, a):
         _say(child_root, "from_discovery_draft", draft.relative_to(child_root), created)
     return 0
 
+
+
+def _prepare_automatic_roots(root, wid, signals, base, *, session_identity=None, execution_policy=None):
+    """Ordinary automatic route can compile a bounded fresh goal without model calls."""
+    from ai_ops_kit.engine import atomic_planner
+    options = dict(session_identity=session_identity, execution_policy=execution_policy)
+    atomic_planner.prepare_literal_goal(root, wid, signals, base, **options)
+    return _automatic_roots(root, wid, signals, base, **options)
+
+
+def _automatic_roots(root, wid, signals, base, *, session_identity=None, execution_policy=None):
+    """Opt-in saved, independent roots only. No model/clone/write during admission."""
+    import hashlib
+    import os
+    import itertools
+    import re
+    import yaml
+    from ai_ops_kit.engine import parallel_planner, parallel_live, run_plan, atomic_planner
+    from ai_ops_kit.shared import budget as budgets, gitio
+    root = Path(root).resolve()
+    snapshots = {}
+
+    def read(name):
+        p = root / name
+        if (any(q.is_symlink() for q in (p, *p.parents) if q.is_relative_to(root))
+                or not p.resolve().is_relative_to(root)):
+            raise ValueError("automatic unsafe saved input")
+        raw = p.read_bytes()
+        snapshots[name] = hashlib.sha256(raw).hexdigest()
+        data = yaml.safe_load(raw)
+        if not isinstance(data, dict):
+            raise ValueError("automatic saved artifact must be an object")
+        return data
+
+    try:
+        cfg = read(".ai-ops.yaml") if (root / ".ai-ops.yaml").exists() else {}
+        economy = cfg.get("session_economy") or {}
+        enabled = economy.get("auto_parallel_independent_roots", False)
+        if not isinstance(enabled, bool):
+            raise ValueError("automatic opt-in must be boolean")
+        if not enabled:
+            return None
+        if not isinstance(wid, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", wid):
+            raise ValueError("automatic unsafe goal identity")
+        candidates = ("work-graph.yaml", ".ai/runtime/work-graph.yaml", f"features/{wid}/work-graph.yaml")
+        paths = [p for p in candidates if (root / p).exists()
+                 or any(q.is_symlink() for q in (root / p, *(root / p).parents) if q.is_relative_to(root))]
+        if not paths:
+            return None
+        if len(paths) != 1:
+            raise ValueError("automatic ambiguous saved WorkGraph")
+        wg = read(paths[0])
+        shape = {"schema_version": int, "kind": str, "id": str, "feature": str, "execution_mode": str,
+                 "packages": list, "integration_order": list, "aggregate_verification": list}
+        if (set(wg) - {'goal_plan_intent'} != set(shape) or any(type(wg[k]) is not t for k, t in shape.items())
+                or wg["schema_version"] != 1 or wg["kind"] != "WorkGraph"
+                or not re.fullmatch(r"WG-[0-9]{3,}", wg["id"]) or wg["feature"] != wid):
+            raise ValueError("automatic invalid/wrong-feature WorkGraph")
+        intent_name = wg.get('goal_plan_intent')
+        intent = None
+        if 'goal_plan_intent' in wg:
+            if intent_name != f'features/{wid}/goal-plan-intent.yaml':
+                raise ValueError('automatic invalid goal plan intent path')
+            intent = read(intent_name)
+        pkgs = wg["packages"]
+        for p in pkgs:
+            if (not isinstance(p, dict) or set(p) - {"id", "write_scope", "depends_on", "shared_contracts"}
+                    or not isinstance(p.get("id"), str) or not p.get("id") or p["id"] == wid
+                    or any(not isinstance(p.get(k, []), list) or any(not isinstance(x, str) or not x for x in p.get(k, []))
+                           for k in ("write_scope", "depends_on", "shared_contracts")) or not p.get("write_scope")):
+                raise ValueError("automatic invalid saved package")
+        ids = [p["id"] for p in pkgs]
+        if not ids or len(set(ids)) != len(ids) or sorted(wg["integration_order"]) != sorted(ids):
+            raise ValueError("automatic invalid package identity/integration order")
+        if wg["aggregate_verification"] != ["implementation_verification"]:
+            raise ValueError("automatic unsupported aggregate verification")
+        pkgs = wg["packages"]
+        if wg["execution_mode"] not in ("parallel", "hybrid") or any(p.get("depends_on") for p in pkgs):
+            raise ValueError("automatic supports independent roots only; dependencies retained")
+        if len(pkgs) < 2:
+            return None
+        if any(k not in atomic_planner.AUTOMATIC_ECONOMY_KEYS and v is not None for k, v in economy.items()):
+            raise ValueError("automatic unsupported global/session/USD hard ceiling")
+        binding = gitio.resolve_base(root, base)
+        if not binding.get("resolved") or gitio.git(root, "rev-parse", "HEAD")[1] != binding["base_sha"]:
+            raise ValueError("automatic requires current immutable base SHA")
+        entry = gitio.git(root, "ls-tree", binding["base_sha"], "--", ".ai-ops.yaml")[1].split()
+        blob = gitio.git(root, "hash-object", "--no-filters", ".ai-ops.yaml")[1]
+        mode = "100755" if (root / ".ai-ops.yaml").stat().st_mode & 0o111 else "100644"
+        if entry[:3] != [mode, "blob", blob]:
+            raise ValueError("automatic config bytes/mode must match executable base tree")
+        task_map, package_signals, declarations, contracts = {}, {}, [signals.get("execution_budget")], {}
+        caller_plan = run_plan.build_plan(signals, wid)
+        for identity in [wid, *[p["id"] for p in pkgs]]:
+            if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", identity):
+                raise ValueError("automatic unsafe identity")
+            wi = read(f"features/{identity}/workitem.yaml")
+            plan = read(f"features/{identity}/run-plan.yaml")
+            saved = read(f"features/{identity}/run-settings.yaml")
+            sig = dict(saved["signals"])
+            policy, current = saved.get("policy") or {}, execution_policy or {}
+            if (any(policy.get(k) and not current.get(k) for k in
+                    ("author", "review", "sandbox", "baseline_diff", "require_fix"))
+                    or policy.get("max_steps", 40) < current.get("max_steps", 40)
+                    or (policy.get("base_binding") or {}).get("base_sha", binding["base_sha"]) != binding["base_sha"]
+                    or any(sig.get(k) is not None for k in ("budget", "budget_contract"))):
+                raise ValueError("automatic cannot weaken saved execution policy")
+            scopes = [s for p in pkgs if identity == wid or p["id"] == identity for s in p["write_scope"]]
+            if policy.get("write_scope") and not parallel_live._scope_ok(scopes, policy["write_scope"])[0]:
+                raise ValueError("automatic scope exceeds saved policy")
+            sig["task_text"] = wi["task"]
+            expected = run_plan.build_plan(sig, identity)
+            if (wi.get("id") != identity or not isinstance(wi.get("task"), str) or not wi["task"].strip()
+                    or plan.get("workitem_id") != identity or saved.get("workitem_id") != identity
+                    or saved.get("kind") != "run-settings" or wi.get("workflow") != expected["base_workflow"]
+                    or any(plan.get(k) != expected[k] for k in ("base_workflow", "gates", "required_tracks", "task_hash"))
+                    or wi.get("human_approval_required") or sig.get("destructive")):
+                raise ValueError("automatic saved policy/identity mismatch")
+            declarations.extend([plan.get("execution_budget"), sig.get("execution_budget")])
+            if identity != wid:
+                task_map[identity], package_signals[identity] = wi["task"], sig
+            elif (any(caller_plan[k] != expected[k] for k in ("base_workflow", "gates"))
+                  or signals.get("task_text", wi["task"]) != wi["task"]):
+                raise ValueError("automatic caller policy differs from saved root")
+        for p in pkgs:
+            for scope in p["write_scope"] + p.get("shared_contracts", []):
+                if (not scope or scope in (".", "/") or Path(scope).is_absolute() or ".." in Path(scope).parts
+                        or any(c in scope for c in "*?[:\\") or not (root / scope).resolve().is_relative_to(root)
+                        or any(q.is_symlink() for q in (root / scope, *(root / scope).parents) if q.is_relative_to(root))):
+                    raise ValueError("automatic requires concrete contained scopes/contracts")
+            for contract in p.get("shared_contracts", []):
+                rc, sha, _ = gitio.git(root, "rev-parse", f"{binding['base_sha']}:{contract}")
+                if rc or gitio.git(root, "cat-file", "-t", sha)[1] != "blob":
+                    raise ValueError("automatic contract must be fixed in base")
+                if parallel_planner._overlap([contract], [s for q in pkgs for s in q["write_scope"]]):
+                    raise ValueError("automatic contract is writable")
+                contracts[contract] = sha
+        if any(not parallel_planner.can_parallel(a, b)[0] for a, b in itertools.combinations(pkgs, 2)):
+            raise ValueError("automatic scopes are not disjoint")
+        if intent is not None and (set(intent) != {'schema_version', 'kind', 'feature', 'base_sha', 'files'}
+                or type(intent.get('schema_version')) is not int or intent['schema_version'] != 1
+                or intent['kind'] != 'GoalPlanIntent' or intent['feature'] != wid or intent['base_sha'] != binding['base_sha']
+                or intent['files'] != {k: v for k, v in snapshots.items() if k not in ('.ai-ops.yaml', intent_name)}):
+            raise ValueError('automatic goal plan intent/source mismatch')
+        budget = budgets.resolve_budget(None, *declarations)
+        if budget.max_model_calls is None:
+            raise ValueError("automatic requires declared shared max_model_calls")
+        budget.ensure_execution_supported()
+        return {"work_graph": wg, "task_map": task_map, "budget": budget, "contract_shas": contracts,
+                "admission": {"base_sha": binding["base_sha"], "graph_path": paths[0], "inputs": snapshots, "identity": session_identity or f"pid:{os.getpid()}"},
+                "package_signals": package_signals}
+    except (OSError, KeyError, TypeError, yaml.YAMLError, budgets.BudgetExceeded) as exc:
+        raise ValueError(f"automatic saved admission unavailable: {exc}") from exc

@@ -30,9 +30,9 @@ try:                                          # v3.38 (лента №5): вал�
     from ai_ops_kit.validation import _bootstrap   # noqa: F401 — импорт пакетом (после pip install)
 except ImportError:                                # запуск скриптом: корня на пути ещё нет,
     import _bootstrap                              # noqa: F401 — и положить его может только он сам
-# Проверяющая логика (чтение tracking-plan/dashboard-spec — read-only I/O) вынесена ВНИЗ в пакет
-# `checks` (слой primitives): и рантайм (lifecycle.run_report), и эта CLI-обёртка импортируют её
-# вниз — без восходящего ребра lifecycle -> validation. Имена ре-экспортируются для совместимости.
+
+
+
 from ai_ops_kit.checks.cross_artifacts import (   # noqa: E402,F401
     DASHBOARD, EVENT_RE, TRACKING, check_feature, declared_events, md_section, used_events)
 

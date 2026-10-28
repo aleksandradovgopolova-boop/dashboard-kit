@@ -221,7 +221,8 @@ def public_file(root, request_path):
     require(path.startswith("/") and "\\" not in path and "\x00" not in path, "Файл недоступен.", 404, "NOT_FOUND")
     parts = path.lstrip("/").split("/") if path != "/" else ["reference-dashboard.html"]
     require(all(part and not part.startswith(".") for part in parts), "Файл недоступен.", 404, "NOT_FOUND")
-    require(len(parts) == 1 or parts[0] in {"css", "js", "vendor", "icons", "data", "docs"}, "Файл недоступен.", 404, "NOT_FOUND")
+    theme_asset = len(parts) == 2 and parts[0] == "assets" and parts[1] in {"graphite-dark.png", "graphite-light.png"}
+    require(len(parts) == 1 or parts[0] in {"css", "js", "vendor", "icons", "data", "docs"} or theme_asset, "Файл недоступен.", 404, "NOT_FOUND")
     require(len(parts) != 1 or parts[0] in PUBLIC_ROOT or bool(re.fullmatch(r"component-[a-z0-9-]+\.html", parts[0])), "Файл недоступен.", 404, "NOT_FOUND")
     candidate = root
     for part in parts:

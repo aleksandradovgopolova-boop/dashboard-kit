@@ -22,9 +22,9 @@ import yaml
 
 from ai_ops_kit.shared import gitio
 
-# Реестры решений: сначала корневой (кит/форк), затем зона дочки.
+
 REGISTRY_RELS = ("decisions/registry.yaml", ".ai/project/decisions/registry.yaml")
-# Порог возраста — как у doc-staleness (repo_audit.STALE_AFTER_DAYS): ниже него решение не кандидат.
+
 DECISION_STALE_AFTER_DAYS = 180
 
 

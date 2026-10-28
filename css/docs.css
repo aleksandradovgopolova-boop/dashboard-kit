@@ -436,7 +436,7 @@
 @media(hover:hover) and (pointer:fine){ .sc-docs .sc-nav__component-group .sc-nav__items a{ min-height:36px; padding-top:var(--space-3); padding-bottom:var(--space-3); } }
 
 /* The right-hand contents column disappears below its breakpoint. */
-
+@media(max-width:1439px){ .sc-docs .sc-toc{ display:none; } }
 
 .sc-docs .sc-nav.dk-scrollview{ max-height:none; }
 /* Large text reflows headings; code keeps a local scroll container. */

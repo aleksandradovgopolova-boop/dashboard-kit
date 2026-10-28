@@ -42,14 +42,14 @@ from pathlib import Path
 
 import yaml
 
-# Реестр решений (тот же файл, что пишет governance.decision_log): в ките — decisions/registry.yaml,
-# в дочке — .ai/project/decisions/registry.yaml. Читаем ОБА кандидата, ничего не создаём.
+
+
 _DECISIONS_RELS = ("decisions/registry.yaml", ".ai/project/decisions/registry.yaml")
-# Кандидаты расположения work-graph.yaml в дочке: движок материализует его эфемерно (validate ждёт
-# <dir>/work-graph.yaml), фиксированного места нет — поэтому проверяем несколько, а не выдумываем одно.
+
+
 _WORK_GRAPH_RELS = ("work-graph.yaml", ".ai/runtime/work-graph.yaml")
 
-# Четыре имени источников — то, что проекция ЧЕСТНО сводит в `sources`.
+
 SOURCE_NAMES = ("workitem", "active_work", "work_graph", "plan")
 
 
@@ -90,9 +90,9 @@ def _read_work_graph(child_root: Path, work_id: str) -> dict | None:
             continue
         pkg_ids = {str((p or {}).get("id") or "") for p in (data.get("packages") or [])}
         feature = str(data.get("feature") or "")
-        # id связан с графом, если он и есть feature графа, или совпадает с id пакета, или граф
-        # прямо перечисляет его в integration_order. Иначе граф — про другую работу, и мы его НЕ
-        # приписываем этой (ложная сводка хуже отсутствия).
+        
+        
+        
         if (str(work_id) == feature or str(work_id) in pkg_ids
                 or str(work_id) in {str(x) for x in (data.get("integration_order") or [])}
                 or feature.endswith(f":{work_id}")):
@@ -100,10 +100,9 @@ def _read_work_graph(child_root: Path, work_id: str) -> dict | None:
     return None
 
 
-def _read_plan_item(child_root: Path, work_id: str) -> dict | None:
-    """work[]-item этого id из planning/plan.yaml. -> dict|None. Заготовку (`template: true`) НЕ
-    читаем как план: иначе пример кита выдавался бы за работу продукта."""
-    data = _load_yaml(child_root / "planning" / "plan.yaml")
+def _read_plan_item(data: dict | None, work_id: str) -> dict | None:
+    """work[]-item из уже прочитанного plan_doc. Цель и работа относятся к одному снимку файла;
+    повторное чтение/разбор для той же карточки не нужны. Заготовка не считается планом."""
     if not isinstance(data, dict) or data.get("template"):
         return None
     for item in data.get("work") or []:
@@ -132,7 +131,7 @@ def _read_related_decisions(child_root: Path, work_id: str, feature: str | None)
     for ep in episodes:
         if not isinstance(ep, dict):
             continue
-        # Явная привязка полем — сильнее упоминания в прозе; учитываем и её, и текстовое совпадение.
+        
         explicit = {str(ep.get("feature") or ""), str(ep.get("work") or ""),
                     str(ep.get("work_id") or "")}
         hay = " ".join(str(ep.get(k) or "") for k in ("id", "question", "decision", "context"))
@@ -234,12 +233,12 @@ def _read_runs(child_root: Path, work_id: str) -> list:
     return runs
 
 
-# Приёмник доставки: DeliveryReceipt в `features/<id>/delivery-outbox/<delivery_id>.receipt.yaml`
-# (движок пишет его в `engine/ai_ops_run_lifecycle.py`; форма — TypedDict DeliveryReceipt в
-# shared/contracts.py, JSON-схемы у него нет). Плюс исторические места, где receipt мог лежать.
+
+
+
 _DELIVERY_RECEIPT_FALLBACKS = ("features/{wid}/delivery-receipt.yaml",
                                ".ai/runtime/delivery/{wid}/receipt.yaml")
-# Поля receipt, которые проекция выносит наружу (безопасные факты о доставке; секретов тут нет).
+
 _RECEIPT_FIELDS = ("delivery_id", "status", "pr_url", "pr_number", "branch", "commit_sha",
                    "remote_sha", "sha_verified", "base_ref", "merged", "pr_state",
                    "invariant_breaches")
@@ -331,9 +330,9 @@ def _read_outcome(child_root: Path, work_id: str, plan_item: dict | None,
                 out["readout"] = {"target_met": data.get("target_met"),
                                   "path": str(p.relative_to(child_root))}
                 break
-    # «Исход записан» ТОЛЬКО при СУЩЕСТВЕННЫХ данных (флаги цели / PRR / readout). Одна лишь ссылка
-    # работы на цель (`work[].goal`) исходом не является — иначе любая работа с целью выглядела бы
-    # так, будто её польза уже измерена. Пусто по существу -> None (исход не измерен — честно).
+    
+    
+    
     if not any(k in out for k in ("goal_outcome", "prr", "readout")):
         return None
     return out
@@ -397,7 +396,7 @@ def project_work(work_id, child_root) -> dict:
     workitem = _read_workitem(root, wid)
     active = _read_active_entry(root, wid)
     plan_doc = _read_plan_doc(root)
-    plan_item = _read_plan_item(root, wid)
+    plan_item = _read_plan_item(plan_doc, wid)
     work_graph = _read_work_graph(root, wid)
 
     # #565: Work — хребет, а не витрина. Три раньше отсутствовавших поля читаются из РЕАЛЬНЫХ
@@ -421,14 +420,14 @@ def project_work(work_id, child_root) -> dict:
 
     wi, aw, pi = workitem or {}, active or {}, plan_item or {}
 
-    # branch — из active-work (живой факт), иначе из плана.
+    
     branch = aw.get("branch") or pi.get("branch")
-    # title — план даёт человеческий заголовок, workitem — task; иначе сам id.
+    
     title = pi.get("title") or wi.get("task") or aw.get("title") or wid
-    # status — факт workitem'а сильнее объявленного в плане/реестре (он выводится из гейтов).
+    
     status = wi.get("status") or aw.get("status") or pi.get("status")
 
-    # current_agent — ЕДИНСТВЕННЫЙ источник — owner_session active-work. Нет записи -> None.
+    
     current_agent = aw.get("owner_session")
     # #639: роль-владелец Work на ЭТОМ этапе. Живой факт (active-work, меняется через handoff) сильнее
     # объявленного в плане — план называет стартовую роль, active-work отражает текущую после передач.
@@ -441,7 +440,7 @@ def project_work(work_id, child_root) -> dict:
     participants = _union([aw.get("owner_session")] if aw.get("owner_session") else [],
                           [owner_role] if owner_role else [], handoff_roles)
 
-    # Союзы областей: work-graph + active-work + plan (все три — законные источники write-области).
+    
     g_ws, g_dep, g_sc = _graph_scopes(work_graph, wid)
     write_scope = _union(g_ws, aw.get("affected_areas") or [], pi.get("write_scope") or [])
     depends_on = _union(g_dep, aw.get("depends_on") or [], pi.get("depends_on") or [])
@@ -496,7 +495,7 @@ def main(argv) -> int:
         return 2
     view = project_work(work_id, child_root)
     print(json.dumps(view, ensure_ascii=False, indent=2, default=str))
-    # Код возврата — «нашлась ли работа хоть в одном источнике»: пусто -> 2 (не нашли), иначе 0.
+    
     return 0 if view["sources"] else 2
 
 

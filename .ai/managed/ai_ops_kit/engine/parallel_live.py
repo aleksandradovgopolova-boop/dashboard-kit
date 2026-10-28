@@ -24,6 +24,9 @@ v3.8.3-rc2 Parallel Trust Wiring (concurrent path):
 from __future__ import annotations
 
 import fnmatch
+import hashlib
+import json
+import re
 import shutil
 import subprocess
 import sys
@@ -31,15 +34,15 @@ import tempfile
 from pathlib import Path
 
 from ai_ops_kit.shared import _bootstrap  # noqa: E402
-from ai_ops_kit.shared import gitio       # noqa: E402
+from ai_ops_kit.shared import gitio, usage_ledger, lifecycle_store       # noqa: E402
 from ai_ops_kit.engine import parallel_executor as pe   # noqa: E402
 
 
 def _git(root, *args, check=True):
-    # RAW-обёртка (а не gitio.git): вызыватели читают CompletedProcess — .stdout/.stderr/.returncode —
-    # и полагаются на порядок mutating-команд (checkout/reset/merge/push). timeout= обязателен по
-    # тому же инварианту, что держит gitio: зависший git не вешает fan-in. Таймаут -> синтетический
-    # rc=124, и check=True превратит его в RuntimeError, как любой другой сбой git.
+    
+    
+    
+    
     try:
         r = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True,
                            timeout=gitio.GIT_TIMEOUT_DEFAULT)
@@ -61,7 +64,7 @@ def _ensure_identity(root):
     настроек. Fallback ставится ТОЛЬКО когда идентичность не разрешается — реальные окружения
     (у пользователя/агента она есть) сохраняют свою и авторство коммитов не подменяется.
     """
-    # Единый вход к git с таймаутом (см. shared/gitio): читаем только rc.
+    
     if gitio.git(root, "var", "GIT_COMMITTER_IDENT")[0] == 0:
         return False
     _git(root, "config", "user.email", "ai-ops@local", check=False)
@@ -69,7 +72,7 @@ def _ensure_identity(root):
     return True
 
 
-# --- v3.8.3-rc2 Parallel Trust Wiring helpers ---
+
 _INFRA_PREFIXES = (".ai/", "openspec/", "features/")
 
 
@@ -82,10 +85,10 @@ def _glob_match(path, pat):
         return path.startswith(pat[:-2])
     if fnmatch.fnmatch(path, pat) or path == pat:
         return True
-    # Запись-каталог без wildcard (голый сегмент 'quality' или trailing-slash 'src/') -> prefix-семантика,
-    # согласовано с parallel_planner._prefix/_overlap. Иначе легитимный 'quality/foo.py' не матчил бы
-    # scope='quality' и пакет ложно помечался fail (переблок хорошей работы). Точный файл ('calc.py')
-    # уже пойман ветками выше, так что prefix-fallback его не портит.
+    
+    
+    
+    
     if not any(ch in pat for ch in "*?["):
         base = pat.rstrip("/")
         return bool(base) and (path == base or path.startswith(base + "/"))
@@ -139,6 +142,8 @@ def _pkg_signals(base_signals, pkg):
     """#1: package-specific view сигналов — write_scope/affected_areas/shared_contracts/capability/budget
     из объявления пакета WorkGraph. НЕ шлём одинаковые signals всем пакетам."""
     sig = dict(base_signals or {})
+    saved = sig.pop("_auto_package_signals", {})
+    sig.update(saved.get(pkg["id"], {}))
     ws = pkg.get("write_scope")
     if ws:
         sig["write_scope"] = ws
@@ -162,7 +167,7 @@ def package_result_from_rep(rep):
     ok = bool(rep.get("ready_for_pr"))
     return {"status": "pass" if ok else "fail", "sha": sha,
             "gate_report": {"all_pass": ok, "tested_revision": sha},
-            "model_resolution": rep.get("model_resolution")}
+            "model_resolution": rep.get("model_resolution"), "package_capacity": rep.get("package_capacity")}
 
 
 def make_package_runner(child_root, base_sha, task_map, signals, run_fn, features_dir=None):
@@ -171,13 +176,13 @@ def make_package_runner(child_root, base_sha, task_map, signals, run_fn, feature
     def runner(pkg):
         pid = pkg["id"]
         task = task_map[pid]
-        # каждый пакет от общей базы, своя фича/ветка
+        
         _git(child_root, "checkout", "-q", "main", check=False)
         _git(child_root, "reset", "--hard", "-q", base_sha)
         _git(child_root, "clean", "-fdq", "-e", ".ai", check=False)
         rep = run_fn(task, dict(signals), Path(child_root), engine="pipeline",
                      provider_name="openai-compatible", feature=pid, execute=True,
-                     author=True, review=True, features_dir=features_dir)
+                     author=True, review=True, features_dir=features_dir, verification_intent="draft")
         return package_result_from_rep(rep)
     return runner
 
@@ -197,23 +202,30 @@ def make_integration_runner(child_root, base_sha, integration_branch="ai-ops/int
                 conflicts += 1
                 _git(child_root, "merge", "--abort", check=False)
         integration_sha = _git(child_root, "rev-parse", "HEAD").stdout.strip()
-        # v3.8.2 STACK-AWARE aggregate на integration-SHA: детект стека (project_detector) + повтор
-        # evidence_collector (backend pytest/lint/typecheck; frontend build/lint/test; ...) — НЕ хардкод
-        # pytest. Как у sequential-executor'а (_aggregate_verify). Fail-closed при сбое коллектора.
+        
+        
+        
+        tested_revision, postcheck_revision, revision_ok, tree_clean = None, None, False, False
         try:
             from ai_ops_kit.shared import project_detector as _pd
             from ai_ops_kit.gates import evidence_collector as _ec
             from ai_ops_kit.engine import tool_broker as _tb
+            from ai_ops_kit.engine.pipeline_git import _tree_clean_after_checks
             _pol = _tb.sandbox_policy(child_root=str(child_root))
-            _coll = _ec.collect(_pd.detect(child_root), child_root, _pol, broker=_tb)
+            _coll = _ec.collect(_pd.detect(child_root), child_root, _pol, broker=_tb, lifecycle_intent="merge_candidate")
             _iv = (_coll.get("gate_evidence") or {}).get("implementation_verification") or {}
-            stack_ok = _iv.get("status") == "pass"
+            tested_revision = _coll.get("revision")
+            postcheck_revision = _git(child_root, "rev-parse", "HEAD").stdout.strip()
+            revision_ok = tested_revision == integration_sha == postcheck_revision
+            tree_clean = _tree_clean_after_checks(child_root)
+            stack_ok = _iv.get("status") == "pass" and revision_ok and tree_clean
             stack_checks = {k: (v.get("status") if isinstance(v, dict) else v) for k, v in (_coll.get("checks") or {}).items()}
         except Exception as _e:  # noqa: BLE001 — сбой коллектора -> fail-closed
             stack_ok = False
             stack_checks = {"error": f"{type(_e).__name__}: {_e}"[:160]}
         all_pass = conflicts == 0 and stack_ok
-        aggregate = {"all_pass": all_pass, "tested_revision": integration_sha, "conflicts": conflicts,
+        aggregate = {"all_pass": all_pass, "tested_revision": tested_revision, "conflicts": conflicts,
+                     "postcheck_revision": postcheck_revision, "revision_ok": revision_ok, "tree_clean": tree_clean,
                      "stack_aware": True, "stack_checks": stack_checks}
         return integration_sha, aggregate, conflicts, False
     return runner
@@ -259,16 +271,16 @@ def run_live(wg, child_root, base_sha, task_map, signals, run_fn, open_pr=False,
     pr = make_package_runner(child_root, base_sha, task_map, signals, run_fn, features_dir)
     ir = make_integration_runner(child_root, base_sha, integration_branch)
     rec = pe.execute_parallel(wg, pr, ir, contract_shas=None, max_parallel=1)
-    # честные поля (не выдаём serial за parallel): governance/fan-in — живые, concurrency — серийный
+    
     rec["execution_concurrency"] = "serial"
     rec["parallel_safe"] = True
     rec["fan_in"] = "live"
     rec["concurrency_note"] = "серийно (max_parallel=1); настоящая конкурентность требует отдельных клонов на пакет"
     rec["pr"] = None
     if open_pr and rec.get("delivery", {}).get("open_pr") and repo_slug:
-        # --force-with-lease (осознанно, как delivery/pr_open.py #401): безопаснее сырого -f — падёт,
-        # если в ветку дописали извне, вместо тихой затирки. Результат ПРОВЕРЯЕТСЯ: при сбое push
-        # возвращаем явную ошибку, а не глотаем rc и не идём в gh pr create с запутанной ошибкой.
+        
+        
+        
         push = _git(child_root, "push", "--force-with-lease", "-q", "origin", integration_branch, check=False)
         if push.returncode != 0:
             rec["pr"] = None
@@ -287,7 +299,8 @@ def run_live(wg, child_root, base_sha, task_map, signals, run_fn, open_pr=False,
     return rec
 
 
-def make_isolated_package_runner(child_root, base_sha, task_map, signals, run_fn, clones_dir, clones):
+def make_isolated_package_runner(child_root, base_sha, task_map, signals, run_fn, clones_dir, clones,
+                                 run_options=None):
     """v3.8.3 TRUE CONCURRENT: каждый пакет — в СВОЁМ disposable-клоне (git clone) на base_sha -> безопасно
     конкурентно (нет гонок git-worktree одного репо). Заполняет clones[pid]={path,branch}.
     v3.8.3-rc2: (#1) package-specific signals; (#7) fail-closed clone/checkout; (#2) post-commit
@@ -295,7 +308,7 @@ def make_isolated_package_runner(child_root, base_sha, task_map, signals, run_fn
     def runner(pkg):
         pid = pkg["id"]
         cpath = Path(clones_dir) / pid
-        # git clone — форма не под `-C`: единый вход с таймаутом через gitio.run (см. shared/gitio).
+        
         cl_rc, _, cl_err = gitio.run(["clone", "-q", str(child_root), str(cpath)])
         if cl_rc != 0:  # #7 fail-closed
             clones[pid] = {"path": str(cpath), "branch": f"ai-ops/{pid}", "error": "clone-failed"}
@@ -307,13 +320,31 @@ def make_isolated_package_runner(child_root, base_sha, task_map, signals, run_fn
             clones[pid] = {"path": str(cpath), "branch": f"ai-ops/{pid}", "error": "checkout-failed"}
             return {"status": "error", "sha": None, "gate_report": {"all_pass": False},
                     "error": f"checkout {base_sha[:12]}: {co.stderr.strip()[:160]}", "clone": str(cpath)}
-        rep = run_fn(task_map[pid], _pkg_signals(signals, pkg), Path(cpath), engine="pipeline",
-                     provider_name="openai-compatible", feature=pid, execute=True, author=True, review=True)
+        options = dict(run_options or {})
+        if options.get("base"):
+            _git(cpath, "checkout", "-q", "-B", options["base"], base_sha)
+        options.setdefault("provider_name", "openai-compatible")
+        options.setdefault("author", True)
+        options.setdefault("review", True)
+        options.update(engine="pipeline", feature=pid, execute=True, open_pr=False,
+                       write_scope=pkg.get("write_scope"), verification_intent="draft")
+        pkg_signals = _pkg_signals(signals, pkg)
+        pkg_signals.update(work_package_id=pid, _sequence_plan_ids=list(task_map))
         clones[pid] = {"path": str(cpath), "branch": f"ai-ops/{pid}"}
+        clones[pid]["usage_baseline"] = usage_ledger.snapshot_ledgers(cpath)
+        baseline_path = Path(clones_dir) / "_package-baselines" / (hashlib.sha256(pid.encode()).hexdigest() + ".json")
+        saved = lifecycle_store.durable_write_json(baseline_path, {"package_id": pid, "base_sha": base_sha,
+                                                   "streams": clones[pid]["usage_baseline"]})
+        if not saved.get("ok"):
+            raise ValueError("package usage baseline не зафиксирована до вызовов")
+        reused = options.pop('reused_packages', {}).get(pid)
+        if reused:
+            return _restore_package_checkpoint(child_root, cpath, pid, reused)
+        rep = run_fn(task_map[pid], pkg_signals, Path(cpath), **options)
         res = package_result_from_rep(rep)
         res["clone"] = str(cpath)
-        # #2 post-commit: заявленный write_scope принуждается на РЕАЛЬНОМ диффе (клон изолирует физически,
-        # но не запрещает модели тронуть лишний файл — принуждаем декларацию плана исполнением).
+        
+        
         if res.get("sha") and pkg.get("write_scope"):
             changed = _changed_files(cpath, base_sha, res["sha"])   # #2-fix: диффим РЕАЛЬНЫЙ package-SHA,
             sok, outside = _scope_ok(changed, pkg["write_scope"])   # не HEAD клона (ai_ops_run — вложенный worktree)
@@ -353,26 +384,160 @@ def make_isolated_integration_runner(child_root, base_sha, clones, integration_b
             if m.returncode != 0:
                 conflicts += 1; _git(iroot, "merge", "--abort", check=False)
         integration_sha = _git(iroot, "rev-parse", "HEAD").stdout.strip()
+        tested_revision, postcheck_revision, revision_ok, tree_clean = None, None, False, False
         try:
             from ai_ops_kit.shared import project_detector as _pd
             from ai_ops_kit.gates import evidence_collector as _ec
             from ai_ops_kit.engine import tool_broker as _tb
-            _coll = _ec.collect(_pd.detect(iroot), iroot, _tb.sandbox_policy(child_root=str(iroot)), broker=_tb)
+            from ai_ops_kit.engine.pipeline_git import _tree_clean_after_checks
+            _coll = _ec.collect(_pd.detect(iroot), iroot, _tb.sandbox_policy(child_root=str(iroot)), broker=_tb,
+                                lifecycle_intent="merge_candidate")
             _iv = (_coll.get("gate_evidence") or {}).get("implementation_verification") or {}
-            stack_ok = _iv.get("status") == "pass"
+            tested_revision = _coll.get("revision")
+            postcheck_revision = _git(iroot, "rev-parse", "HEAD").stdout.strip()
+            revision_ok = tested_revision == integration_sha == postcheck_revision
+            tree_clean = _tree_clean_after_checks(iroot)
+            stack_ok = _iv.get("status") == "pass" and revision_ok and tree_clean
             stack_checks = {k: (v.get("status") if isinstance(v, dict) else v) for k, v in (_coll.get("checks") or {}).items()}
         except Exception as _e:  # noqa: BLE001
             stack_ok = False; stack_checks = {"error": f"{type(_e).__name__}: {_e}"[:160]}
         all_pass = conflicts == 0 and stack_ok
-        return integration_sha, {"all_pass": all_pass, "tested_revision": integration_sha, "conflicts": conflicts,
+        return integration_sha, {"all_pass": all_pass, "tested_revision": tested_revision, "conflicts": conflicts,
+                                 "postcheck_revision": postcheck_revision, "revision_ok": revision_ok, "tree_clean": tree_clean,
                                  "stack_aware": True, "stack_checks": stack_checks,
                                  "isolation": "per-package-clone"}, conflicts, False
     return runner
 
 
+def _artifact_sha(value):
+    return value if isinstance(value, str) and len(value) == 40 and all(c in "0123456789abcdef" for c in value) else None
+
+
+class _CheckpointFailure(ValueError):
+    """Только фиксированный stage code; Git stderr/модельные данные не уходят в receipt."""
+
+
+def _checkpoint_git(root, stage, *args, **options):
+    try:
+        return _git(root, *args, **options)
+    except (RuntimeError, OSError) as exc:
+        raise _CheckpointFailure(stage) from exc
+
+
+def _require_direct_checkpoint_ref(root, ref):
+    kind = _checkpoint_git(root, "ref-type", "symbolic-ref", "--quiet", ref, check=False)
+    if kind.returncode == 0:
+        raise _CheckpointFailure("ref-symbolic")
+    if kind.returncode != 1:
+        raise _CheckpointFailure("ref-type")
+
+
+def _retain_package_commit(child_root, source, sha, run_id, pid):
+    """Git objects+CAS ref до удаления source; local checkpoint, не доставка/ready."""
+    version = _checkpoint_git(child_root, "version", "--version").stdout
+    parsed = re.search(r"\b(\d+)\.(\d+)", version)
+    if not parsed or tuple(map(int, parsed.groups())) < (2, 36):
+        raise _CheckpointFailure("unsupported-git")
+    ref = f"refs/ai-ops/parallel/{run_id}/{hashlib.sha256(pid.encode()).hexdigest()}"
+    _require_direct_checkpoint_ref(child_root, ref)
+    old = _checkpoint_git(child_root, "ref-read", "rev-parse", "--verify", "--quiet", ref, check=False)
+    if old.returncode not in (0, 1) or (old.returncode == 0 and old.stdout.strip() != sha):
+        raise _CheckpointFailure("ref-conflict")
+    harden = ("-c", "core.fsync=objects,reference", "-c", "core.fsyncMethod=fsync")
+    if old.returncode == 1:
+        _checkpoint_git(child_root, "fetch", *harden, "fetch", "--no-tags", "--no-write-fetch-head",
+             "--no-recurse-submodules", "--no-auto-maintenance", "--no-write-commit-graph",
+                        "--no-prune", "--no-prune-tags", str(source.resolve()), sha)
+    
+    _checkpoint_git(child_root, "ref-write", *harden, "update-ref", "--no-deref", ref, sha, sha if old.returncode == 0 else "0" * 40)
+    _require_direct_checkpoint_ref(child_root, ref)
+    if _checkpoint_git(child_root, "ref-readback", "rev-parse", "--verify", ref).stdout.strip() != sha:
+        raise _CheckpointFailure("ref-readback")
+    _checkpoint_git(child_root, "objects", "cat-file", "-e", f"{sha}^{{commit}}")
+    _checkpoint_git(child_root, "objects", "cat-file", "-e", f"{sha}^{{tree}}")
+    return ref
+
+
+def _preserve_package_artifacts(child_root, base_sha, clones, run_dir, results):
+    """Whitelist evidence + call streams до удаления последней package source копии."""
+    run_root = Path(run_dir).resolve()
+    run_id = hashlib.sha256(str(run_root).encode()).hexdigest()
+    sources, identities, baselines, packages = [], {}, {}, []
+    for pid, clone in sorted(clones.items()):
+        if pid == "_integration":
+            continue
+        source = Path(clone["path"])
+        result = results.get(pid) or {}
+        status = result.get("status")
+        item = {"package_id": pid, "status": status if status in ("pass", "fail", "error", "blocked-dependency") else "error",
+                "reported_package_sha": _artifact_sha(result.get("sha")), "package_sha": None,
+                "base_sha": base_sha, "source_head": None, "usage_streams": {}}
+        if not source.is_dir() or not (source / ".git").exists():
+            raise ValueError("package source/git отсутствует; cleanup запрещён")
+        if source.is_dir():
+            item["source_head"] = _git(source, "rev-parse", "HEAD").stdout.strip()
+            sha = item["reported_package_sha"]
+            if sha and _git(source, "cat-file", "-e", f"{sha}^{{commit}}", check=False).returncode == 0:
+                item["package_sha"] = sha
+                item["retained_ref"] = _retain_package_commit(child_root, source, sha, run_id, pid)
+            item["usage_streams"] = usage_ledger.snapshot_ledgers(source)
+            identity = f"{run_id}/{pid}"
+            item["source_id"] = identity
+            sources.append(source)
+            identities[str(source)] = identity
+            baseline_path = run_root / "_package-baselines" / (hashlib.sha256(pid.encode()).hexdigest() + ".json")
+            usage_ledger._no_symlink(run_root, baseline_path)
+            if not baseline_path.is_file():
+                raise ValueError("package durable baseline отсутствует; cleanup запрещён")
+            saved = json.loads(baseline_path.read_text(encoding="utf-8"))
+            if (not isinstance(saved, dict) or saved.get("package_id") != pid or saved.get("base_sha") != base_sha
+                    or not isinstance(saved.get("streams"), dict)
+                    or clone.get("usage_baseline", saved["streams"]) != saved["streams"]):
+                raise ValueError("package usage baseline identity mismatch")
+            baselines[str(source)] = saved["streams"]
+        gate = result.get("gate_report") if isinstance(result.get("gate_report"), dict) else {}
+        item["gate_report"] = {"all_pass": gate.get("all_pass") is True,
+                               "tested_revision": _artifact_sha(gate.get("tested_revision"))}
+        item['package_capacity'] = result.get('package_capacity')
+        item["usage_status"] = "available" if item["usage_streams"] else "unavailable"
+        packages.append(item)
+    count = usage_ledger.merge_ledgers(child_root, sources, source_ids=identities, source_baselines=baselines)
+    path = Path(child_root).resolve() / ".ai/usage/parallel" / run_id / "package-receipt.json"
+    usage_ledger._no_symlink(Path(child_root).resolve(), path)
+    receipt = {"kind": "ParallelPackageReceipt", "run_id": run_id, "base_sha": base_sha,
+               "packages": packages, "usage_identity": "source/run + stream + byte offset"}
+    written = lifecycle_store.durable_write_json(path, receipt)
+    if not written.get("ok") or json.loads(path.read_text(encoding="utf-8")) != receipt:
+        raise ValueError("package receipt durable write/readback не подтверждён")
+    if any(usage_ledger.snapshot_ledgers(source) != item["usage_streams"]
+           for source, item in zip(sources, [p for p in packages if p.get("source_id")])):
+        raise ValueError("package usage source изменилась до cleanup")
+    return {"status": "preserved", "receipt": str(path), "new_product_calls": count}
+
+
+def _cleanup_owned_package_sources(clones_dir, retain_integration):
+    try:
+        paths = [p for p in Path(clones_dir).iterdir() if p.name != "_integration"] if retain_integration else [Path(clones_dir)]
+    except OSError:
+        return {"status": "partial", "retained_paths": [str(clones_dir)], "integration_retained": retain_integration}
+    retained = []
+    for path in paths:
+        try:
+            if path.is_symlink() or not path.is_dir():
+                path.unlink()
+            else:
+                shutil.rmtree(path)
+        except FileNotFoundError:
+            continue
+        except OSError:
+            retained.append(str(path))
+    return {"status": "partial" if retained else "complete", "retained_paths": retained,
+            "integration_retained": retain_integration}
+
+
 def run_live_concurrent(wg, child_root, base_sha, task_map, signals, run_fn, clones_dir=None,
                         repo_slug=None, integration_branch="ai-ops/integration", max_parallel=None,
-                        contract_shas=None):
+                        contract_shas=None, run_options=None):
     """v3.8.3 НАСТОЯЩИЙ concurrent parallel-2: отдельный disposable-клон+ветка+прогон на пакет, КОНКУРЕНТНО;
     integration-клон -> fetch package-ветки -> merge -> stack-aware aggregate. Честные поля:
     execution_concurrency=concurrent, isolation=per-package-clone. Основной checkout НЕ трогается.
@@ -384,32 +549,55 @@ def run_live_concurrent(wg, child_root, base_sha, task_map, signals, run_fn, clo
       (#5b) delivery_plan несёт РЕАЛЬНЫЙ github_remote исходного репо (клон интеграции имеет origin =
             локальный путь — доставка в него не попала бы на GitHub);
       (#7) fail-closed при сбое клона интеграции;
-      (#8) run-scoped уникальный каталог клонов + гарантированная очистка (self-created)."""
+      (#8) run-scoped каталог в git common dir: неготовый удаляется, готовая integration
+           сохраняется для канонической доставки/повтора; package clones очищаются."""
     _self_clones = clones_dir is None
+    retain_integration = False
+    cleanup_safe = False
+    rec = None
     if _self_clones:
-        clones_dir = tempfile.mkdtemp(prefix="ai-ops-parallel-")
+        common = _git(child_root, "rev-parse", "--git-common-dir").stdout.strip()
+        store = (Path(child_root) / common).resolve() / "ai-ops-parallel"
+        store.mkdir(parents=True, exist_ok=True)
+        clones_dir = tempfile.mkdtemp(prefix="run-", dir=store)
     try:
         clones = {}
         iroot = Path(clones_dir) / "_integration"
-        # git clone — форма не под `-C`: единый вход с таймаутом через gitio.run (см. shared/gitio).
+        
         cl_rc, _, cl_err = gitio.run(["clone", "-q", str(child_root), str(iroot)])
         if cl_rc != 0:  # #7 fail-closed
+            cleanup_safe = True  # пакетные вызовы ещё не запускались
             return {"proceed": False, "stage": "isolation", "execution_concurrency": "concurrent",
                     "isolation": "per-package-clone", "reason": f"integration clone: {cl_err[:160]}",
                     "delivery": {"open_pr": False}, "delivery_plan": None, "pr": None}
         _ensure_identity(iroot)  # merge fan-in — это КОММИТ; клон не унаследовал идентичность
         clones["_integration"] = {"path": str(iroot)}
-        pr = make_isolated_package_runner(child_root, base_sha, task_map, signals, run_fn, clones_dir, clones)
+        pr = make_isolated_package_runner(child_root, base_sha, task_map, signals, run_fn,
+                                          clones_dir, clones, run_options)
         ir = make_isolated_integration_runner(child_root, base_sha, clones, integration_branch)
         n = max_parallel or min(len(wg.get("packages", []) or [1]), getattr(pe.pp, "MAX_PARALLEL", 2))
         rec = pe.execute_parallel(wg, pr, ir, contract_shas=contract_shas, max_parallel=max(2, n))
+        for row in rec.get('trace', []):
+            if (rec.get('package_results', {}).get(row['pkg']) or {}).get('reused_from'):
+                row['mode'] = 'reused-checkpoint'
         rec["execution_concurrency"] = "concurrent"
         rec["isolation"] = "per-package-clone"
         rec["parallel_safe"] = True
         rec["fan_in"] = "live"
         rec["pr"] = None
-        # #5/#5b DeliveryPlan (не доставляем сами): канонический controller зафиксирует Intent, запушит на
-        # РЕАЛЬНЫЙ github_remote, откроет PR, зафиксирует Receipt. Готово к доставке только при зелёном aggregate.
+        
+        
+        try:
+            rec["package_artifacts"] = _preserve_package_artifacts(
+                child_root, base_sha, clones, clones_dir, rec.get("package_results") or {})
+            cleanup_safe = True
+        except Exception as exc:  # noqa: BLE001 — потерю usage нельзя выдать за доставленный результат
+            rec["package_artifacts"] = {"status": "blocked", "reason": type(exc).__name__,
+                                        "retained_source": str(clones_dir)}
+            if isinstance(exc, _CheckpointFailure):
+                rec["package_artifacts"]["checkpoint_failure"] = str(exc)
+            rec.update(proceed=False, stage="artifact-preservation")
+            rec["delivery"] = {"intents": 0, "open_pr": False}
         _ready = bool(rec.get("delivery", {}).get("open_pr") and rec.get("integration_sha"))
         rec["delivery_plan"] = {
             "kind": "DeliveryPlan", "ready": _ready,
@@ -422,10 +610,18 @@ def run_live_concurrent(wg, child_root, base_sha, task_map, signals, run_fn, clo
             "packages": list(task_map),
             "note": "доставка через канонический DeliveryIntent/Receipt controller; parallel_live не пушит сам",
         }
+        retain_integration = _ready
+        if _self_clones and _ready:
+            rec["delivery_plan"]["owned_clones_dir"] = str(clones_dir)
         return rec
     finally:
-        if _self_clones:  # #8 гарантированная очистка self-created каталога
-            shutil.rmtree(clones_dir, ignore_errors=True)
+        if _self_clones and cleanup_safe:
+            cleanup = _cleanup_owned_package_sources(clones_dir, retain_integration)
+            if rec is not None:
+                rec["cleanup"] = cleanup
+        elif rec is not None:
+            rec["cleanup"] = {"status": "retained" if _self_clones else "caller-managed",
+                              "retained_paths": [str(clones_dir)]}
 
 
 def main(argv):
@@ -435,3 +631,20 @@ def main(argv):
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))
+
+
+def _restore_package_checkpoint(root, clone, pid, checkpoint):
+    """Fresh owned clone, exact retained SHA; never invokes package/provider callback."""
+    result = json.loads(json.dumps(checkpoint['result']))
+    sha, ref = result['sha'], checkpoint['ref']
+    _require_direct_checkpoint_ref(root, ref)
+    if _git(root, 'rev-parse', '--verify', ref).stdout.strip() != sha:
+        raise _CheckpointFailure('resume-ref-changed')
+    _checkpoint_git(clone, 'resume-fetch', '-c', 'core.fsync=objects,reference', 'fetch',
+        '--no-tags', '--no-write-fetch-head', '--no-recurse-submodules', '--no-auto-maintenance',
+        '--no-write-commit-graph', str(Path(root).resolve()), sha)
+    _checkpoint_git(clone, 'resume-checkout', 'checkout', '-q', '-B', f'ai-ops/{pid}', sha)
+    if _git(clone, 'rev-parse', 'HEAD').stdout.strip() != sha:
+        raise _CheckpointFailure('resume-head')
+    result.update(clone=str(clone), reused_from=checkpoint['receipt'])
+    return result

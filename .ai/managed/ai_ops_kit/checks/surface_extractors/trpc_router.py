@@ -46,20 +46,20 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface, _matching_brace
 
-# Индикатор tRPC в файле — иначе чужой TS-объект с ключом `query`/полем `router` дал бы ложные
-# операции (симметрия с import-сужением прочих экстракторов).
+
+
 _TRPC_INDICATOR_RE = re.compile(
     r"\binitTRPC\b|\bcreateTRPCRouter\b|\bpublicProcedure\b|@trpc/server")
 
-# Заголовок вызова-роутера: `createTRPCRouter({`, `t.router({`, `router({`. `\b` не даёт зацепить
-# `mergeRouters(` и `myrouter(` (границей слова перед `router`). За `(` сразу объектный литерал `{`.
+
+
 _ROUTER_OPEN_RE = re.compile(
     r"(?:\bcreateTRPCRouter|(?:[A-Za-z_$][\w$]*\.)?\brouter)\s*\(\s*\{")
 
-# Значение ключа — процедура, если содержит вызов builder'а .query(/.mutation(/.subscription(.
+
 _PROCEDURE_RE = re.compile(r"\.(?:query|mutation|subscription)\s*\(")
 
-# Идентификатор-ключ объекта (нестроковый, невычисляемый).
+
 _IDENT_RE = re.compile(r"[A-Za-z_$][\w$]*")
 
 
@@ -234,7 +234,7 @@ def _process_router(masked: str, src: str, open_brace_idx: int, prefix: str,
             out.append(Surface(kind="api",
                                ref=f"{rel}:{_lineno(src, key_pos)}|{name}",
                                confidence="inferred", extractor="trpc-router"))
-        # иначе — обычное поле объекта (не процедура, не роутер) → пропуск
+        
 
 
 def extract_trpc_operations(parsed: ParsedFile) -> list:

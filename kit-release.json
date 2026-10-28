@@ -24,7 +24,7 @@
     "data/regions-tiles.json": "0d00d82e37f415fed67035b0995d9c20c78365e6763c1fad986cb9cf12d52e0b",
     "data/regions.topojson": "a8d17bd7017f9a1bd115c82596a17a1b77e89fc7d45af408420c23fbe7d265b4",
     "docs/2026-10-28/DASHBOARD-DETAIL-MODAL-001.md": "6c2a0a6e145c259f3dbb5b623775426068b832abacc6ed8b54b7a390a554a2ff",
-    "docs/current-state.md": "45200e833013fa14dbf79120910c09b0cc2ef6429f5118c9fc8ffb0ab56a94ba",
+    "docs/current-state.md": "ce9c37d8652cbcc3f66c720ae0e70c6dd541077e48d1466a7770c42bdd68e7f7",
     "docs/dashboard-data.md": "c97afdb33930de54cb3904d991f1efab4eef6eefc0060539086107d4ad85f46a",
     "docs/family-mortgage.md": "04692554c26bb81bc4595eba11096bc1b8798007052e09cf8956001248fe9771",
     "docs/reference-server.md": "5a9ff2ec2ed8e84114f6ca48e1a70dc9cffd2339deed0b649cb43d7c207a756d",
@@ -70,7 +70,7 @@
     "js/reference-dashboard.js": "f1858b1f0d0565fcd9928c32dd2287ce1aa1e6cafecf526bf1e87402ae686e18",
     "kit-manifest.json": "2540d277438631e2a4827cdddf15d1b8025c533adf035f71ff754c2f6929e685",
     "reference-dashboard.html": "285815eab759ce545cb06ca14932f34e7212ef519e972f81c47db0d66f2cc49f",
-    "tools/reference-server.py": "3dc41037264fc6d5bd6bc04b89973f9727d7929a6ec0b03d504cafc7c7c64977",
+    "tools/reference-server.py": "46ad346b7616b3fd15f81b66118fdb7b2fadbf89b648abee51cd04c9461b3a7b",
     "vendor/air-datepicker.css": "110391f897ba0abc6c563bc8d1e7afa135b26955ae57a5fc0a1228e79c394f73",
     "vendor/air-datepicker.js": "24be9285f8a7b00ec14ca94a954f54383ea6a507067f7d3c3f1c2c2280462185",
     "vendor/echarts.min.js": "8d008d338a7d3e042916af3f57499865a85cb5f8f5702a303409c5b9f47be580",
@@ -89,5 +89,5 @@
     "vendor/licenses/Golos-Text-OFL.txt": "ff532f9e8789f09a9fdffc3c0954eedfb0a48be77b2e2eb90f5f82e4f347f50c",
     "vendor/licenses/Tabler-Icons-MIT.txt": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
   },
-  "contentDigest": "sha256:945a131e665c9d8a024ebfebeab9850738677f71b519deff420697a6e4e0a517"
+  "contentDigest": "sha256:3c4459fc46d4397307735d33eeeedcd779a608a6244d1ef62b33318652892cf9"
 }

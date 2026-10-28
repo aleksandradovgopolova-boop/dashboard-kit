@@ -22,29 +22,19 @@
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass
 from pathlib import Path
+from typing import NamedTuple
 
 import yaml
 
-# Пары (from_type, relation, to_type), которые вокабуляр (registry/entities.yaml) разрешает и
-# которыми пользуется сборщик. Не источник истины (им остаётся реестр) — но сборщик обязан выпускать
-# только валидные рёбра, иначе validate_knowledge_graph отвергнет граф целиком.
+from ai_ops_kit.intelligence.knowledge_graph_util import _slug, _text
+from ai_ops_kit.shared import review_verdict
+
+
+
+
 CONTAINS_LADDER = ("goal", "initiative", "epic", "feature", "story")
-
-
-def _slug(value) -> str:
-    """Строка -> id узла графа (`^[a-z0-9][a-z0-9-]*$`)."""
-    out: list[str] = []
-    for ch in str(value or "").lower():
-        if ch.isalnum():
-            out.append(ch)
-        elif out and out[-1] != "-":
-            out.append("-")
-    return "".join(out).strip("-") or "node"
-
-
-def _text(v) -> str:
-    return str(v or "").strip()
 
 
 def _load_yaml(path: Path) -> dict:
@@ -64,8 +54,8 @@ class _Builder:
     def node(self, nid: str, ntype: str, **attrs) -> str:
         nid = _slug(nid)
         if nid in self.nodes:
-            # Узел уже есть (например, цель объявлена планом и упомянута blueprint'ом ссылкой):
-            # дозаполняем недостающие атрибуты, тип НЕ переписываем — первый источник главнее.
+            
+            
             for k, v in attrs.items():
                 if v is not None and self.nodes[nid].get(k) in (None, ""):
                     self.nodes[nid][k] = v
@@ -90,6 +80,91 @@ class _Builder:
         return self.nodes.get(_slug(nid), {}).get("type", "")
 
 
+def _load_decisions(root: Path) -> dict[str, str]:
+    """id решения -> человекочитаемый текст. Источник — `decisions/registry.yaml`.
+
+    Индексирует и эпизоды (`episodes`, id вида `ep-YYYY-MM-DD-…`, текст — поле `decision`), и
+    принципы (`principles`, id вида `dp-***`, текст — поле `principle`): blueprint вправе сослаться
+    на любой из них. Нет файла/секции -> пустой индекс (решений в проекте просто нет).
+    """
+    reg = _load_yaml(root / "decisions" / "registry.yaml")
+    index: dict[str, str] = {}
+    for ep in reg.get("episodes") or []:
+        if isinstance(ep, dict) and _text(ep.get("id")):
+            index[_slug(ep["id"])] = (_text(ep.get("decision")) or _text(ep.get("question"))
+                                      or _text(ep["id"]))
+    for pr in reg.get("principles") or []:
+        if isinstance(pr, dict) and _text(pr.get("id")):
+            index[_slug(pr["id"])] = _text(pr.get("principle")) or _text(pr["id"])
+    return index
+
+
+def _decision_refs(links: dict) -> list[str]:
+    """Ссылки функции на решения из blueprint: `links.decision` (одна) и `links.decisions` (список).
+
+    Обе формы поддержаны; порядок сохраняется, дубли по slug убираются. Пусто -> [].
+    """
+    raw: list[str] = []
+    single = links.get("decision")
+    if _text(single):
+        raw.append(_text(single))
+    many = links.get("decisions")
+    if isinstance(many, list):
+        raw.extend(_text(r) for r in many if _text(r))
+    seen: set[str] = set()
+    out: list[str] = []
+    for r in raw:
+        s = _slug(r)
+        if s not in seen:
+            seen.add(s)
+            out.append(r)
+    return out
+
+
+def _load_history_works(root: Path) -> tuple[dict[str, dict], dict[str, str]]:
+    """Закрытые работы из `history/plan-history.yaml`. -> (works_by_id, pr_index).
+
+    `works_by_id[slug(id)] = {"title", "pr"}` — что за работа и каким PR закрыта; `pr_index[slug(pr)]
+    = slug(id)` — чтобы ссылка `built_by` могла назвать работу и по номеру PR, и по её id. Нет файла/
+    секции -> пустые индексы (закрытых работ у проекта просто нет). Источник истории — тот же файл,
+    по которому `delivery_plan.validate_history` требует у каждой записи НАЗВАННЫЙ результат.
+    """
+    hist = _load_yaml(root / "history" / "plan-history.yaml")
+    works: dict[str, dict] = {}
+    pr_index: dict[str, str] = {}
+    for w in hist.get("work") or []:
+        if not isinstance(w, dict) or not _text(w.get("id")):
+            continue
+        wid = _slug(w["id"])
+        pr = _text(w.get("pr")) if w.get("pr") is not None else ""
+        works[wid] = {"title": _text(w.get("title")) or _text(w["id"]), "pr": pr}
+        if pr:
+            pr_index[_slug(pr)] = wid
+    return works, pr_index
+
+
+def _built_by_refs(links: dict) -> list[str]:
+    """Ссылки функции на построившую её работу/PR: `links.built_by` (строка или список).
+
+    Обе формы поддержаны (как у `decision`/`decisions`): одиночная строка и список. Порядок
+    сохраняется, дубли по slug убираются. Пусто -> [].
+    """
+    raw: list[str] = []
+    one = links.get("built_by")
+    if isinstance(one, list):
+        raw.extend(_text(r) for r in one if _text(r))
+    elif _text(one):                       # скаляр: id-строка или № PR числом
+        raw.append(_text(one))
+    seen: set[str] = set()
+    out: list[str] = []
+    for r in raw:
+        s = _slug(r)
+        if s not in seen:
+            seen.add(s)
+            out.append(r)
+    return out
+
+
 def _iter_blueprints(root: Path):
     """Пути к blueprint'ам функций: и дочернее `features/<id>/`, и демо-каталог кита."""
     seen = set()
@@ -101,6 +176,86 @@ def _iter_blueprints(root: Path):
                 yield p
 
 
+def _load_review_verdicts(root: Path) -> list[dict]:
+    """Записи review-вердиктов: `features/<id>/review/verdict.yaml` и демо-каталог кита.
+
+    Источник — тот же, что пишет ПУТЬ РЕВЬЮ (`shared.review_verdict.persist`, судья ≠ писатель); здесь
+    только читаем. Нечитаемое/не тот kind -> запись пропускается (нет источника — нет узла)."""
+    seen: set[Path] = set()
+    records: list[dict] = []
+    for pattern in ("features/*/review/verdict.yaml",
+                    "examples/feature-blueprint-demo/*/review/verdict.yaml"):
+        for p in sorted(root.glob(pattern)):
+            if not p.is_file() or p in seen:
+                continue
+            seen.add(p)
+            rec = _load_yaml(p)
+            if isinstance(rec, dict) and rec.get("kind") == review_verdict.RECORD_KIND:
+                records.append(rec)
+    return records
+
+
+def _load_learnings(root: Path) -> list[tuple[Path, dict]]:
+    """Выводы `product-learning/FL-*.yaml` по имени. -> [(путь, запись)]; путь нужен узлу insight."""
+    learning_dir = root / "product-learning"
+    if not learning_dir.is_dir():
+        return []
+    return [(p, _load_yaml(p)) for p in sorted(learning_dir.glob("FL-*.yaml"))]
+
+
+@dataclass(frozen=True)
+class _Sources:
+    """Всё прочитанное с диска — один раз и заранее (#1134): проходы получают данные, не корень."""
+    plan: dict
+    blueprints: list[tuple[Path, dict]]
+    feature_ids: set[str]
+    decisions: dict[str, str]
+    history_works: dict[str, dict]
+    history_pr_index: dict[str, str]
+    learnings: list[tuple[Path, dict]]
+    review_records: list[dict]
+
+
+def _load_sources(root: Path) -> _Sources:
+    """Прочитать все источники графа; нет файла -> пустая часть.
+
+    Паспорта — до всех узлов: имя функции принадлежит функции. Если его же носит запись плана (а
+    работу обычно называют именем функции), узел заводился раньше и функция навсегда оставалась
+    инициативой или целью — поэтому `feature_ids` известен до прохода плана.
+    """
+    blueprints = [(bp_path, _load_yaml(bp_path)) for bp_path in _iter_blueprints(root)]
+    history_works, history_pr_index = _load_history_works(root)
+    return _Sources(
+        plan=_load_yaml(root / "planning" / "plan.yaml"),
+        blueprints=blueprints,
+        feature_ids={_slug((bp.get("feature") or {}).get("id"))
+                     for _, bp in blueprints if _text((bp.get("feature") or {}).get("id"))},
+        decisions=_load_decisions(root),
+        history_works=history_works,
+        history_pr_index=history_pr_index,
+        learnings=_load_learnings(root),
+        review_records=_load_review_verdicts(root),
+    )
+
+
+def _plan_records_lost_with(goal_id: str, plan: dict) -> int:
+    """Сколько ЕЩЁ записей плана остаётся за графом вместе с целью-тёзкой. -> число.
+
+    Считает ровно то, что стало бы узлами: исход цели (если объявлен) и работы под ней — по тем же
+    правилам, что применяет сборщик. Запись без `id` он пропускает, тёзок по `id` схлопывает в один
+    узел, поэтому и здесь они не считаются: иначе названное число было бы больше настоящей потери.
+    """
+    lost = 0
+    for g in plan.get("goals") or []:
+        if isinstance(g, dict) and _slug(g.get("id")) == goal_id:
+            if isinstance(g.get("outcome"), dict) and g.get("outcome"):
+                lost += 1
+            break                         # исход у цели один: дубликат id цели узла не добавит
+    works = {_slug(w.get("id")) for w in (plan.get("work") or [])
+             if isinstance(w, dict) and _text(w.get("id")) and _slug(w.get("goal")) == goal_id}
+    return lost + len(works)
+
+
 def _outcome_verdict(outcome: dict) -> str:
     """Свод булевых исходов цели в вердикт узла outcome. Пусто/не булево -> `pending`."""
     values = [v for v in outcome.values() if isinstance(v, bool)]
@@ -109,37 +264,38 @@ def _outcome_verdict(outcome: dict) -> str:
     return "met" if all(values) else "unmet"
 
 
-def build_graph(child_root) -> dict:
-    """Собрать Knowledge Graph из plan.yaml + FL-*.yaml + feature blueprints.
+class _PlanContext(NamedTuple):
+    """Что проход плана отдаёт паспортам функций."""
+    
+    goal_outcome: dict[str, str]
+    
+    
+    name_taken_in_plan: dict[str, set[str]]
+    
+    
+    name_conflict_dropped: dict[str, int]
 
-    Возвращает dict формата `schemas/knowledge-graph.schema.json`
-    (`{schema_version, kind, nodes, edges}`). Read-only: ничего не пишет.
 
-    Источники (нет источника — нет узла):
-      * `planning/plan.yaml`: goals -> узлы `goal` (+ узел `outcome` на цель с непустым `outcome`);
-        work -> узлы `initiative` с ребром `goal -contains-> initiative`.
-      * feature blueprints: узлы `feature` (+ `metric` из `metrics`), рёбра `feature -measured-by->
-        metric`; цепочка `goal/initiative/epic -contains-> feature` из `links` (только валидные
-        пары лестницы); `feature -targets-> <goal>-outcome`, и если у функции есть метрика —
-        `outcome -measured-by-> metric`.
-      * `product-learning/FL-*.yaml`: узлы `insight`; `insight -feeds-> feature` при совпадении
-        `feature`; `insight -derived-from-> outcome`, если эта функция нацелена на outcome.
+def _plan_pass(b: _Builder, plan: dict, feature_ids: set[str]) -> _PlanContext:
+    """Проход 1: план продукта — цели, их исходы, работы как инициативы.
 
-    Пути blueprint'а в узлах — ОТНОСИТЕЛЬНО `<child_root>/knowledge` (туда пишется graph.yaml),
-    чтобы `validate_knowledge_graph` проверил их существование без ложного срабатывания.
+    -> куда нацеливать функции и что осталось за графом из-за спора имён.
     """
-    root = Path(child_root)
-    graph_dir = root / "knowledge"
-    b = _Builder()
-
-    # feature -> id outcome-узла, на который она нацелена (для привязки ins‑ов и метрик).
-    feature_outcome: dict[str, str] = {}
-
-    # 1) plan.yaml — цели, их outcome, работы как initiative.
-    plan = _load_yaml(root / "planning" / "plan.yaml")
-    goal_outcome: dict[str, str] = {}   # goal id -> outcome node id
+    goal_outcome: dict[str, str] = {}
+    name_taken_in_plan: dict[str, set[str]] = {}
+    name_conflict_dropped: dict[str, int] = {}
     for g in plan.get("goals") or []:
         if not isinstance(g, dict) or not _text(g.get("id")):
+            continue
+        if _slug(g["id"]) in feature_ids:
+            
+            
+            
+            
+            
+            gid_conflict = _slug(g["id"])
+            name_taken_in_plan.setdefault(gid_conflict, set()).add("цель")
+            name_conflict_dropped[gid_conflict] = _plan_records_lost_with(gid_conflict, plan)
             continue
         gid = b.node(g["id"], "goal", title=_text(g.get("id")), ref="planning/plan.yaml")
         outcome = g.get("outcome")
@@ -153,65 +309,209 @@ def build_graph(child_root) -> dict:
         if not isinstance(w, dict) or not _text(w.get("id")):
             continue
         goal_ref = _slug(w.get("goal")) if _text(w.get("goal")) else None
-        if goal_ref and b.type_of(goal_ref) == "goal":
-            iid = b.node(w["id"], "initiative", title=_text(w.get("title")) or _text(w["id"]),
-                         ref="planning/plan.yaml")
-            b.edge(goal_ref, "contains", iid)
+        
+        
+        
+        goal_exists = bool(goal_ref) and (b.type_of(goal_ref) == "goal"
+                                          or "цель" in name_taken_in_plan.get(goal_ref, set()))
+        if not goal_exists:
+            continue                      # работа без резолвимой цели узлом не была и раньше
+        if _slug(w["id"]) in feature_ids:
+            
+            
+            
+            
+            
+            
+            
+            kind = ("работа" if b.type_of(goal_ref) == "goal"
+                    else "работа, но первым разведи имена у её цели")
+            name_taken_in_plan.setdefault(_slug(w["id"]), set()).add(kind)
+            continue
+        if b.type_of(goal_ref) != "goal":
+            continue                      # цель за графом из-за спора имён — вешать работу не на что
+        iid = b.node(w["id"], "initiative", title=_text(w.get("title")) or _text(w["id"]),
+                     ref="planning/plan.yaml")
+        b.edge(goal_ref, "contains", iid)
 
-    # 2) feature blueprints — функции, метрики, цепочка вверх к цели, нацеленность на outcome.
-    for bp_path in _iter_blueprints(root):
-        bp = _load_yaml(bp_path)
+    return _PlanContext(goal_outcome, name_taken_in_plan, name_conflict_dropped)
+
+
+def _feature_node(b: _Builder, bp_path: Path, feat: dict, links: dict, graph_dir: Path) -> str:
+    """Узел функции и ОБЪЯВЛЕННАЯ ею цель. -> id узла функции.
+
+    ЧЬЯ ЦЕЛЬ. Принадлежность функции цели объявляет ЕЁ ПАСПОРТ, и это записывается на самой
+    функции. Выводить её подъёмом по графу нельзя: эпик — общий узел без собственного источника, его
+    родителя-цель объявляют паспорта СОСЕДНИХ функций. Две функции одного эпика с разными целями
+    дали бы эпику двух родителей, и обход приписал бы функции цель соседа — тем увереннее, чем
+    случайнее порядок чтения каталогов.
+    """
+    return b.node(feat["id"], "feature",
+                  title=_text(feat.get("name")) or _text(feat["id"]),
+                  blueprint=os.path.relpath(bp_path, graph_dir),
+                  declared_goal=_slug(links.get("goal")) if _text(links.get("goal")) else None)
+
+
+def _feature_ladder(b: _Builder, feat: dict, links: dict, feature_ids: set[str]) -> list[str]:
+    """Лестница `contains` от цели до функции. -> потерянные уровни (`broken_links`).
+
+    Цепочка вверх: goal -> initiative -> epic -> feature. Связываются СОСЕДНИЕ ОБЪЯВЛЕННЫЕ уровни,
+    даже если между ними пропущен уровень, которого у продукта просто нет (`registry/entities.yaml`
+    объявляет такие пары явно). Раньше требовалась смежность, и объявленная автором цель ПРОПАДАЛА:
+    паспорт с goal+epic без initiative давал только `epic contains feature`, а функция оказывалась
+    «ни к какой цели не привязана» — при том что цель названа. Ничего не додумывается: связь идёт
+    сверху вниз и только между уровнями, которые автор назвал сам.
+    """
+    chain = [("goal", links.get("goal")), ("initiative", links.get("initiative")),
+             ("epic", links.get("epic")), ("feature", feat["id"])]
+    declared_levels = [(t, _slug(v)) for t, v in chain if _text(v)]
+    
+    
+    
+    broken_links = [pid for ptype, pid in declared_levels
+                    if ptype != "feature" and pid in feature_ids]
+    present = [(t, pid) for t, pid in declared_levels
+               if t == "feature" or pid not in feature_ids]
+    for (ptype, pid), (ctype, cid) in zip(present, present[1:]):
+        if CONTAINS_LADDER.index(ctype) <= CONTAINS_LADDER.index(ptype):
+            continue   # не сверху вниз по лестнице — валидного ребра contains нет
+        if not b.has(pid):
+            
+            
+            
+            
+            
+            extra = {"unresolved": True} if ptype == "goal" else {}
+            b.node(pid, ptype, title=pid, **extra)
+        elif b.type_of(pid) != ptype:
+            
+            
+            
+            broken_links.append(pid)
+            continue
+        b.edge(pid, "contains", cid)
+    return broken_links
+
+
+def _feature_losses(b: _Builder, feat: dict, fid: str, broken_links: list[str],
+                    plan_ctx: _PlanContext) -> None:
+    """Потери из-за спора имён — дозапись на узле функции.
+
+    Потеря не молчит: `trace` назовёт и потерянный уровень, и запись плана, которая носит то же имя
+    (её узла в графе нет, чтобы не подменить функцию), и сколько ещё записей ушло за графом вместе с
+    ней. Порядок фиксирован смыслом, а не алфавитом: цель выше работы в лестнице плана.
+    """
+    if not (broken_links or fid in plan_ctx.name_taken_in_plan):
+        return
+    taken = plan_ctx.name_taken_in_plan.get(fid, ())
+    order = ("цель", "работа", "работа, но первым разведи имена у её цели")
+    kinds = [k for k in order if k in taken]
+    b.node(feat["id"], "feature", broken_links=broken_links or None,
+           name_taken_in_plan=" и ".join(kinds) or None,
+           name_conflict_dropped=plan_ctx.name_conflict_dropped.get(fid) or None)
+
+
+def _feature_metrics(b: _Builder, fid: str, bp: dict) -> list[str]:
+    """Метрики функции и рёбра `feature -measured-by-> metric`. -> id метрик."""
+    metric_ids: list[str] = []
+    for m in bp.get("metrics") or []:
+        name = m.get("name") if isinstance(m, dict) else m
+        mid_src = (m.get("id") if isinstance(m, dict) else None) or f"{fid}-{name}"
+        if not _text(name) and not _text(mid_src):
+            continue
+        mid = b.node(mid_src, "metric", title=_text(name) or _slug(mid_src))
+        b.edge(fid, "measured-by", mid)
+        metric_ids.append(mid)
+    return metric_ids
+
+
+def _feature_target(b: _Builder, fid: str, links: dict, metric_ids: list[str],
+                    goal_outcome: dict[str, str]) -> str | None:
+    """Нацеленность функции на исход своей цели (и метрики — на исход). -> id исхода или None."""
+    goal_of = _slug(links.get("goal")) if _text(links.get("goal")) else None
+    oid = goal_outcome.get(goal_of)
+    if not oid:
+        return None
+    b.edge(fid, "targets", oid)
+    for mid in metric_ids:
+        b.edge(oid, "measured-by", mid)
+    return oid
+
+
+def _feature_decisions(b: _Builder, fid: str, links: dict, decisions: dict[str, str]) -> None:
+    """Решение, из которого функция появилась («зачем она вообще есть»).
+
+    Ссылку ОБЪЯВЛЯЕТ автор blueprint'а (links.decision / links.decisions) — это НЕ авто-вывод из
+    данных, как `targets`, а декларация. Поэтому и правило другое: объявленную связь мы ВЫПУСКАЕМ
+    ребром всегда, а узел решения создаём только если ссылка резолвится в decisions/registry.yaml.
+    Ссылка на несуществующее решение оставляет ребро с висящим концом — и validate_knowledge_graph
+    честно отвергает граф целиком: сломанная декларация обязана быть громкой, а не тихо пропасть.
+    Нет ссылки -> нет ребра (функция без «зачем» допустима, история просто честно не знает причину —
+    это НЕ пробел).
+    """
+    for ref in _decision_refs(links):
+        did = _slug(ref)
+        text = decisions.get(did)
+        if text:
+            b.node(did, "decision", title=text[:160], ref="decisions/registry.yaml")
+        b.edge(did, "motivates", fid)
+
+
+def _feature_builders(b: _Builder, fid: str, links: dict, history_works: dict[str, dict],
+                      history_pr_index: dict[str, str]) -> None:
+    """Работа/PR, построившая функцию («что построили и где»).
+
+    Правило то же, что у decision: связь ОБЪЯВЛЯЕТ автор blueprint'а (links.built_by), это
+    декларация, а не авто-вывод. Ссылку резолвим по id работы ИЛИ по номеру её PR
+    (history/plan-history.yaml); резолвится -> создаём узел work с названием и PR, всегда ВЫПУСКАЕМ
+    ребро work -builds-> feature. Ссылка на несуществующую работу оставляет ребро с висящим концом
+    -> validate_knowledge_graph отвергает граф целиком: сломанная декларация обязана быть громкой.
+    Нет ссылки -> нет ребра (история просто не записала, кто построил, — это НЕ пробел).
+    """
+    for ref in _built_by_refs(links):
+        wid = _slug(ref)
+        info = history_works.get(wid)
+        if info is None and wid in history_pr_index:
+            wid = history_pr_index[wid]          # ссылка дана номером PR — назовём работу по id
+            info = history_works.get(wid)
+        if info is not None:
+            b.node(wid, "work", title=info["title"][:160], pr=info.get("pr") or None,
+                   ref="history/plan-history.yaml")
+        b.edge(wid, "builds", fid)
+
+
+def _feature_pass(b: _Builder, src: _Sources, plan_ctx: _PlanContext,
+                  graph_dir: Path) -> dict[str, str]:
+    """Проход 2: паспорта функций; порядок подшагов — порядок узлов и рёбер.
+
+    -> feature_outcome: id функции -> id исхода, на который она нацелена (нужно проходу обучения).
+    """
+    feature_outcome: dict[str, str] = {}
+    for bp_path, bp in src.blueprints:
         feat = bp.get("feature") or {}
         if not _text(feat.get("id")):
             continue
-        rel = os.path.relpath(bp_path, graph_dir)
-        fid = b.node(feat["id"], "feature",
-                     title=_text(feat.get("name")) or _text(feat["id"]),
-                     blueprint=rel)
-
-        # Цепочка вверх: goal -> initiative -> epic -> feature. Только смежные валидные пары
-        # лестницы: пропущенный средний уровень честно оставляет разрыв (пробел ловит trace).
         links = bp.get("links") or {}
-        chain = [("goal", links.get("goal")), ("initiative", links.get("initiative")),
-                 ("epic", links.get("epic")), ("feature", feat["id"])]
-        present = [(t, _slug(v)) for t, v in chain if _text(v)]
-        for (ptype, pid), (ctype, cid) in zip(present, present[1:]):
-            gap_idx = CONTAINS_LADDER.index(ctype) - CONTAINS_LADDER.index(ptype)
-            if gap_idx != 1:
-                continue   # уровни не смежны в лестнице — валидного ребра contains нет
-            if ptype != "feature" and not b.has(pid):
-                b.node(pid, ptype, title=pid)
-            b.edge(pid, "contains", cid)
-
-        # Метрики функции.
-        metric_ids: list[str] = []
-        for m in bp.get("metrics") or []:
-            name = m.get("name") if isinstance(m, dict) else m
-            mid_src = (m.get("id") if isinstance(m, dict) else None) or f"{fid}-{name}"
-            if not _text(name) and not _text(mid_src):
-                continue
-            mid = b.node(mid_src, "metric", title=_text(name) or _slug(mid_src))
-            b.edge(fid, "measured-by", mid)
-            metric_ids.append(mid)
-
-        # Нацеленность функции на outcome своей цели.
-        goal_of = _slug(links.get("goal")) if _text(links.get("goal")) else None
-        oid = goal_outcome.get(goal_of)
+        fid = _feature_node(b, bp_path, feat, links, graph_dir)
+        broken_links = _feature_ladder(b, feat, links, src.feature_ids)
+        _feature_losses(b, feat, fid, broken_links, plan_ctx)
+        metric_ids = _feature_metrics(b, fid, bp)
+        oid = _feature_target(b, fid, links, metric_ids, plan_ctx.goal_outcome)
         if oid:
-            b.edge(fid, "targets", oid)
             feature_outcome[fid] = oid
-            # Есть чем измерить исход -> outcome измеряется метрикой функции.
-            for mid in metric_ids:
-                b.edge(oid, "measured-by", mid)
+        _feature_decisions(b, fid, links, src.decisions)
+        _feature_builders(b, fid, links, src.history_works, src.history_pr_index)
+    return feature_outcome
 
-    # 3) FL-*.yaml — выводы из данных.
-    learning_dir = root / "product-learning"
-    for fl_path in sorted(learning_dir.glob("FL-*.yaml")) if learning_dir.is_dir() else []:
-        fl = _load_yaml(fl_path)
+
+def _learning_pass(b: _Builder, learnings: list[tuple[Path, dict]], graph_dir: Path,
+                   feature_outcome: dict[str, str]) -> None:
+    """Проход 3: выводы из данных (`product-learning/FL-*.yaml`) — чему научились и по какому исходу."""
+    for fl_path, fl in learnings:
         if not _text(fl.get("id")):
             continue
-        learnings = fl.get("learnings") or []
-        title = _text(learnings[0]) if learnings else _text(fl.get("hypothesis")) or _text(fl["id"])
+        items = fl.get("learnings") or []
+        title = _text(items[0]) if items else _text(fl.get("hypothesis")) or _text(fl["id"])
         iid = b.node(fl["id"], "insight", title=title[:120],
                      ref=os.path.relpath(fl_path, graph_dir))
         feat_ref = _slug(fl.get("feature")) if _text(fl.get("feature")) else None
@@ -221,115 +521,176 @@ def build_graph(child_root) -> dict:
             if oid:
                 b.edge(iid, "derived-from", oid)
 
+        
+        
+        
+        
+        
+        
+        
+        oref = fl.get("derived_from_outcome")
+        if _text(oref):
+            b.edge(iid, "derived-from", _slug(oref))
+
+
+def _review_pass(b: _Builder, records: list[dict]) -> None:
+    """Проход 4: персистентные вердикты ревью — кто и что проверил у функции.
+
+    «Кто/что проверил функцию» как ПЕРСИСТЕНТНАЯ запись, а не эхо прогона. Источник —
+    `features/<id>/review/verdict.yaml`, который пишет ПУТЬ РЕВЬЮ (независимый судья), а не
+    построившая работа: иначе «проверку» приписали бы писателю и нарушили бы writer≠judge. Узел
+    review создаётся ИЗ САМОЙ ЗАПИСИ (она и есть источник), ребро `review -reviewed-> feature`
+    выпускается всегда. Запись на несуществующую фичу оставляет висящий конец ->
+    validate_knowledge_graph краснит (сломанная запись обязана быть громкой). Нет записи -> нет узла
+    (проверки могло не быть — это НЕ пробел; trace честно молчит «проверка не записана»).
+    """
+    for rec in records:
+        feat_ref = _slug(rec.get("feature")) if _text(rec.get("feature")) else None
+        if not feat_ref:
+            continue
+        rid = b.node(f"review-{feat_ref}", "review",
+                     title=review_verdict.node_title(rec),
+                     verified=bool(rec.get("verified")),
+                     reviewed_revision=_text(rec.get("reviewed_revision")) or None,
+                     ref=review_verdict.record_rel(feat_ref))
+        b.edge(rid, "reviewed", feat_ref)
+
+
+def build_graph(child_root: str | os.PathLike) -> dict:
+    """Собрать Knowledge Graph из plan.yaml + FL-*.yaml + feature blueprints.
+
+    Возвращает dict формата `schemas/knowledge-graph.schema.json`
+    (`{schema_version, kind, nodes, edges}`). Read-only: ничего не пишет.
+
+    Источники (нет источника — нет узла):
+      * `planning/plan.yaml`: goals -> узлы `goal` (+ узел `outcome` на цель с непустым `outcome`);
+        work -> узлы `initiative` с ребром `goal -contains-> initiative`.
+      * feature blueprints: узлы `feature` (+ `metric` из `metrics`), рёбра `feature -measured-by->
+        metric`; цепочка `goal/initiative/epic -contains-> feature` из `links` — связываются
+        СОСЕДНИЕ ОБЪЯВЛЕННЫЕ уровни, пропущенный (не заведённый у продукта) уровень нить не рвёт;
+        ссылка на цель, которой нет в плане, даёт узел с `unresolved` — разрыв называется, а не
+        прячется; `feature -targets-> <goal>-outcome`, и если у функции есть метрика —
+        `outcome -measured-by-> metric`.
+      * `product-learning/FL-*.yaml`: узлы `insight`; `insight -feeds-> feature` при совпадении
+        `feature`; `insight -derived-from-> outcome`, если эта функция нацелена на outcome.
+      * `decisions/registry.yaml` + blueprint `links.decision`/`links.decisions`: узел `decision`
+        (текст решения) и ребро `decision -motivates-> feature` — «зачем функция появилась».
+      * `history/plan-history.yaml` + blueprint `links.built_by` (id работы или № PR): узел `work`
+        (название + PR) и ребро `work -builds-> feature` — «что построило функцию и где».
+      * `product-learning/FL-*.yaml` `derived_from_outcome`: явное ребро `insight -derived-from->
+        outcome` — «чему научились по этому конкретному результату» (без косвенного вывода).
+      * `features/<id>/review/verdict.yaml`: узел `review` (кем проверено + verified + ревизия) и ребро
+        `review -reviewed-> feature` — «кто/что проверил функцию». Пишет путь ревью (судья), не писатель.
+
+    Пути blueprint'а в узлах — ОТНОСИТЕЛЬНО `<child_root>/knowledge` (туда пишется graph.yaml),
+    чтобы `validate_knowledge_graph` проверил их существование без ложного срабатывания.
+    """
+    root = Path(child_root)
+    graph_dir = root / "knowledge"
+    b = _Builder()
+
+    src = _load_sources(root)   # единственное чтение диска (#1134)
+
+    
+    
+    
+    
+    plan_ctx = _plan_pass(b, src.plan, src.feature_ids)
+    feature_outcome = _feature_pass(b, src, plan_ctx, graph_dir)
+    _learning_pass(b, src.learnings, graph_dir, feature_outcome)
+    _review_pass(b, src.review_records)
+
     return {"schema_version": 1, "kind": "knowledge-graph",
             "nodes": list(b.nodes.values()), "edges": b.edges}
 
 
-# ── Query-слой: чистые функции обхода над ПОСТРОЕННЫМ графом ─────────────────────────────────────
+def feature_life_source(graph: dict, feature: str, child_root: str | os.PathLike) -> dict:
+    """Поля жизни фичи из СВЯЗАННЫХ первоисточников — для десяти вопросов (`answer_ten_questions`).
 
+    Часть ответов на десять вопросов живёт не в графе, а в первоисточнике (аудитория — в паспорте
+    функции; гипотеза / выбранный вариант решения / выводы / следующий шаг — в `product-learning/
+    FL-*.yaml`). Граф их намеренно НЕ несёт (ревью просило «не расти вширь»), но СВЯЗЬ доказывает
+    именно он: узел функции указывает на свой blueprint, а ребро `insight -feeds-> feature` — на урок
+    и его файл (`ref`). Здесь по этим ССЫЛКАМ ГРАФА читаются конкретные значения — это по-прежнему
+    ответ «из связанных улик», а не генерация. Обход графа (`knowledge_graph_query`) остаётся без
+    диска: диск — только у этого фасада. Нет узла/файла/поля -> ключа в результате нет (вопрос честно
+    останется пробелом).
 
-def _index(graph: dict):
+    -> `{audience, hypothesis, solution_rationale, solution_chosen, learnings, follow_up}` (только
+    найденные ключи). Нет обоснования в уроке -> `reason` связанного решения и
+    `solution_rationale_decision` (его id — улика ответа).
+    """
+    root = Path(child_root)
+    graph_dir = root / "knowledge"
     nodes = {n.get("id"): n for n in (graph.get("nodes") or [])
              if isinstance(n, dict) and n.get("id")}
-    edges = [e for e in (graph.get("edges") or []) if isinstance(e, dict)]
-    return nodes, edges
-
-
-def trace(graph: dict, feature: str) -> dict:
-    """«Зачем существует функция»: цепочка goal -> … -> feature -> outcome + вердикт + пробелы.
-
-    Обобщение `validate_product_objects.trace_feature_rationale` до вопроса, задаваемого над
-    СОБРАННЫМ графом: идёт вверх по `contains` до цели и вперёд по `targets` к outcome. Честная
-    цепочка — если данных на полный путь нет, отдаётся лучший фрагмент с НАЗВАННЫМИ `gaps`.
-
-    Результат: `{"feature", "chain": [{id,type,title}], "goal": id|None, "outcome": {...}|None,
-    "verdict": str, "gaps": [...]}`.
-    """
-    nodes, edges = _index(graph)
     fid = _slug(feature)
-    gaps: list[str] = []
+    out: dict = {}
+    fnode = nodes.get(fid)
+    if not isinstance(fnode, dict):
+        return out
 
-    def summary(nid: str) -> dict:
-        n = nodes.get(nid, {})
-        return {"id": nid, "type": _text(n.get("type")) or "?",
-                "title": _text(n.get("title")) or nid}
+    def _read(ref: str) -> dict:
+        if not _text(ref):
+            return {}
+        data = _load_yaml((graph_dir / ref).resolve())
+        return data if isinstance(data, dict) else {}
 
-    if fid not in nodes:
-        return {"feature": fid, "chain": [], "goal": None, "outcome": None,
-                "verdict": "unknown",
-                "gaps": [f"узла «{fid}» нет в графе — цепочку строить не от чего"]}
+    
+    bp_feat = (_read(_text(fnode.get("blueprint"))).get("feature") or {})
+    if isinstance(bp_feat, dict) and _text(bp_feat.get("audience")):
+        out["audience"] = _text(bp_feat["audience"])
 
-    # Вверх по contains до цели.
-    chain_ids = [fid]
-    current, seen = fid, {fid}
-    while nodes.get(current, {}).get("type") != "goal":
-        parents = [e["from"] for e in edges if e.get("type") == "contains"
-                   and e.get("to") == current and e.get("from") in nodes]
-        parent = next((p for p in parents if p not in seen), None)
-        if parent is None:
-            gaps.append(f"выше «{current}» нет родителя — путь до цели (goal) неполон")
-            break
-        seen.add(parent)
-        chain_ids.insert(0, parent)
-        current = parent
-    goal = chain_ids[0] if nodes.get(chain_ids[0], {}).get("type") == "goal" else None
-
-    # Вперёд к outcome.
-    outcome_ids = [e["to"] for e in edges if e.get("type") == "targets"
-                   and e.get("from") == fid and e.get("to") in nodes]
-    outcome = None
-    if outcome_ids:
-        onode = nodes[outcome_ids[0]]
-        outcome = {"id": outcome_ids[0], "verdict": _text(onode.get("verdict")) or "pending",
-                   "title": _text(onode.get("title")) or outcome_ids[0],
-                   "measured_by": [e["to"] for e in edges if e.get("type") == "measured-by"
-                                   and e.get("from") == outcome_ids[0]]}
-        if not outcome["measured_by"]:
-            gaps.append(f"у исхода «{outcome_ids[0]}» нет метрики (ребро measured-by) — "
-                        f"измерить его нечем")
-    else:
-        gaps.append(f"у «{fid}» нет outcome (ребро targets) — зачем функция существует, "
-                    f"не подтверждается измеримым результатом")
-
-    verdict = _verdict(goal, outcome)
-    return {"feature": fid, "chain": [summary(i) for i in chain_ids], "goal": goal,
-            "outcome": outcome, "verdict": verdict, "gaps": gaps}
+    
+    fl_ref = None
+    for e in graph.get("edges") or []:
+        if isinstance(e, dict) and e.get("type") == "feeds" and _slug(e.get("to")) == fid:
+            fl_ref = _text((nodes.get(_slug(e.get("from"))) or {}).get("ref"))
+            if fl_ref:
+                break
+    fl = _read(fl_ref)
+    if _text(fl.get("hypothesis")):
+        out["hypothesis"] = _text(fl["hypothesis"])
+    learnings = [_text(x) for x in (fl.get("learnings") or []) if _text(x)]
+    if learnings:
+        out["learnings"] = learnings
+    follow_up = [_text(x) for x in (fl.get("follow_up") or []) if _text(x)]
+    if follow_up:
+        out["follow_up"] = follow_up
+    chosen = next((o for o in (fl.get("solution_options") or [])
+                   if isinstance(o, dict) and o.get("chosen")), None)
+    if chosen and _text(chosen.get("reason")):
+        out["solution_rationale"] = _text(chosen["reason"])
+        if _text(chosen.get("option")):
+            out["solution_chosen"] = _text(chosen["option"])
+    elif (why := _decision_reason(graph, fid, root)):
+        
+        
+        out["solution_rationale"], out["solution_rationale_decision"] = why
+    return out
 
 
-def _verdict(goal, outcome) -> str:
-    """Короткий машиночитаемый вердикт цепочки функции."""
-    if goal is None:
-        return "unmoored"          # функция ни к какой цели не привязана
-    if outcome is None:
-        return "no-outcome"        # цель есть, измеримого результата — нет
-    if not outcome.get("measured_by"):
-        return "outcome-unmeasured"
-    return {"met": "confirmed", "unmet": "refuted"}.get(outcome.get("verdict"), "pending")
+def _decision_reason(graph: dict, fid: str, root: Path) -> tuple[str, str] | None:
+    """(reason, id решения) первого решения, мотивирующего функцию; нет ребра/поля -> None."""
+    dids = [_slug(e.get("from")) for e in graph.get("edges") or []
+            if isinstance(e, dict) and e.get("type") == "motivates" and _slug(e.get("to")) == fid]
+    eps = {_slug(ep.get("id")): ep for ep in
+           _load_yaml(root / "decisions" / "registry.yaml").get("episodes") or [] if isinstance(ep, dict)}
+    return next(((_text(eps[d]["reason"]), d) for d in dids if d in eps and _text(eps[d].get("reason"))),
+                None)
 
 
-def gaps(graph: dict) -> dict:
-    """Что в графе НЕ покрыто измеримым результатом — три честных списка.
 
-    * `outcomes_without_metric` — исходы, которые ничем не измеряются (нет `outcome -measured-by->
-      metric`): цель объявлена, а сигнала нет;
-    * `metrics_without_release` — метрики, которых не наблюдает ни один релиз (нет `release
-      -observed-by-> metric`): считать вроде есть чем, а откуда придут данные — не сказано;
-    * `features_without_outcome` — функции без ребра `targets`: строим, а зачем — не подтверждено.
-    """
-    nodes, edges = _index(graph)
-    measured = {e["from"] for e in edges if e.get("type") == "measured-by"}
-    observed = {e["to"] for e in edges if e.get("type") == "observed-by"}
-    targeted = {e["from"] for e in edges if e.get("type") == "targets"}
 
-    def title(nid):
-        return _text(nodes.get(nid, {}).get("title")) or nid
 
-    outcomes = [{"id": n["id"], "title": title(n["id"])} for n in nodes.values()
-                if n.get("type") == "outcome" and n["id"] not in measured]
-    metrics = [{"id": n["id"], "title": title(n["id"])} for n in nodes.values()
-               if n.get("type") == "metric" and n["id"] not in observed]
-    features = [{"id": n["id"], "title": title(n["id"])} for n in nodes.values()
-                if n.get("type") == "feature" and n["id"] not in targeted]
-    return {"outcomes_without_metric": outcomes,
-            "metrics_without_release": metrics,
-            "features_without_outcome": features}
+from ai_ops_kit.intelligence.knowledge_graph_query import (  # noqa: E402,F401
+    _climb_to_goal,
+    _index,
+    _parents,
+    _path_down,
+    _reachable_goals,
+    _verdict,
+    answer_ten_questions,
+    gaps,
+    trace,
+)

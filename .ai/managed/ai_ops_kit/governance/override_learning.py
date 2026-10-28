@@ -22,9 +22,9 @@ from typing import Any
 
 from ai_ops_kit.governance import human_override
 
-# Максимальный сдвиг от одного override (0.0–1.0 шкала)
+
 SINGLE_OVERRIDE_SHIFT = 0.15
-# Максимальный суммарный сдвиг (независимо от числа override'ов)
+
 MAX_SHIFT = 0.4
 
 
@@ -67,7 +67,7 @@ def adjust_priority(
     count, directions = _count_overrides_for_target(signals, f"priority:{work_id}")
 
     if count == 0:
-        # Ищем по более широкому префиксу (priority: без конкретного id)
+        
         count, directions = _count_overrides_for_target(signals, "priority:")
 
     if count == 0:
@@ -79,7 +79,7 @@ def adjust_priority(
             "explanation": "без override'ов — оценка не изменена",
         }
 
-    # Вычисляем чистый сдвиг
+    
     ups = directions.count("up")
     downs = directions.count("down")
     net = ups - downs  # положительный = человек повышал, отрицательный = понижал
@@ -124,7 +124,7 @@ def adjust_risk(
             "explanation": "без override'ов — оценка не изменена",
         }
 
-    # Для рисков: 'down' = человек отклонил риск (severity ниже), 'up' = подтвердил
+    
     downs = directions.count("down")
     ups = directions.count("up")
     net = downs - ups  # положительный = человек снижал риск

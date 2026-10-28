@@ -68,7 +68,7 @@ def _validate_sequence_plan_schema(doc, expected_wid=None):
             return f"packages[{i}] depends_on не список"
         ids.append(p["id"])
         orders.append(p["order"])
-        # пересчёт pkg_hash из определения (id/scope/deps/order/write_scope) — дрейф определения ловится
+        
         if _pkg_hash(p) != p.get("pkg_hash"):
             return f"packages[{i}] ('{p['id']}') pkg_hash не сходится с определением (подмена/дрейф)"
     if len(set(ids)) != len(ids):
@@ -76,7 +76,7 @@ def _validate_sequence_plan_schema(doc, expected_wid=None):
     if len(set(orders)) != len(orders):
         return f"дубли order: {sorted({x for x in orders if orders.count(x) > 1})}"
     idset = set(ids)
-    # depends_on обязаны ссылаться на существующие пакеты; самоссылка запрещена
+    
     dep_map = {}
     for p in pkgs:
         for d in (p.get("depends_on") or []):
@@ -85,7 +85,7 @@ def _validate_sequence_plan_schema(doc, expected_wid=None):
             if d not in idset:
                 return f"пакет '{p['id']}' зависит от несуществующего '{d}'"
         dep_map[p["id"]] = list(p.get("depends_on") or [])
-    # отсутствие циклов (обход в глубину с тремя состояниями)
+    
     WHITE, GRAY, BLACK = 0, 1, 2
     color = {i: WHITE for i in idset}
 
@@ -106,7 +106,7 @@ def _validate_sequence_plan_schema(doc, expected_wid=None):
             cyc = _has_cycle(i, [i])
             if cyc:
                 return f"цикл зависимостей: {' -> '.join(cyc)}"
-    # пересчёт общего plan_hash из упорядоченных пакетов
+    
     recomputed = _plan_hash(_ordered(pkgs))
     if recomputed != doc.get("plan_hash"):
         return f"plan_hash не сходится с пакетами (сохранён {doc.get('plan_hash')}, пересчитан {recomputed})"

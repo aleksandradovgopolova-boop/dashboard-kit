@@ -49,16 +49,16 @@ KIND = "drift"
 STRENGTH = "advisory"                     # расхождение показывает, но не блокирует (SR-14, §5)
 CLASS = "drift"                           # РОД находки: расхождение, не нарушение (SR-14)
 
-# Состояния строки блока расхождений — СВОЙ набор: `drift` назван словом, отдельным от `violated`.
+
 PASS = "pass"
 DRIFT = "drift"
 NOT_CHECKED = "not_checked"
 
-# Снимок архитектуры лежит в области дочки (SR-16), рядом с прочими выгрузками продукта `.ai-ops/`.
+
 SNAPSHOT_REL = ".ai-ops/architecture-baseline.json"
 
 
-# ── Снимок архитектуры дочки: СОХРАНЕНИЕ и ЧТЕНИЕ (SR-16). ─────────────────────────────────────
+
 def snapshot_path(child_root) -> Path:
     """Единственный путь снимка в области дочки — чтобы и запись, и сравнение брали его из одного места."""
     return Path(child_root) / SNAPSHOT_REL
@@ -91,7 +91,7 @@ def load_snapshot(child_root) -> dict | None:
     return data if isinstance(data, dict) else None
 
 
-# ── Расхождение источника истины контура (переиспользует source_of_truth_behind, SR-15). ───────
+
 def _contour_drift_rows(child_root: Path, changed_files: list, model: dict | None) -> list:
     """Источник истины контура отстал от кода — расхождение на диффе.
 
@@ -114,7 +114,7 @@ def _contour_drift_rows(child_root: Path, changed_files: list, model: dict | Non
     return rows
 
 
-# ── Расхождение сохранённого снимка архитектуры (SR-16, на диффе — SR-15). ─────────────────────
+
 def _snapshot_drift_rows(child_root: Path, changed_files: list) -> list:
     """Сохранённый снимок разошёлся с кодом, а обновлён в этом PR не был — расхождение.
 
@@ -151,7 +151,7 @@ def _snapshot_drift_rows(child_root: Path, changed_files: list) -> list:
                        "видимым шагом (python -m ai_ops_kit.planning.drift snapshot .)"}]
 
 
-# ── Сборка advisory-блока `drift` для governance-отчёта. ──────────────────────────────────────
+
 def report(child_root, changed_files=None, model=None) -> dict:
     """Advisory-блок расхождений дочки. -> dict для ключа `drift` governance-отчёта.
 

@@ -66,7 +66,7 @@ try {
           toc:!!document.querySelector('.sc-toc:not([hidden])')&&getComputedStyle(document.querySelector('.sc-toc')).display!=='none',
           focus:[...document.querySelectorAll('.dk-tablewrap')].every(x=>!x.clientWidth||x.scrollWidth<=x.clientWidth+1||x.tabIndex===0)};
       })()`);
-      if (state.overflow || state.nested || state.first !== 'Обзор' || state.visible.length !== 1 || !state.current || !state.focus || (file === 'index.html' ? state.open !== 0 || state.visible[0] !== 'Обзор' : state.open !== 1) || (width < 1440 && state.toc)) failures.push({file,width,theme,...state});
+      if (state.overflow || state.nested || state.first !== 'Обзор' || state.visible.length !== 1 || !state.current || !state.focus || (file === 'index.html' ? state.open !== 0 || state.visible[0] !== 'От вашей задачи к дашборду' : state.open !== 1) || (width < 1440 && state.toc)) failures.push({file,width,theme,...state});
       if (['index.html','component-table.html'].includes(file) && [320,1280].includes(width)) {
         const shot = await send('Page.captureScreenshot', {format:'png'});
         await writeFile(resolve(evidence, `docs-${file.replace('.html','')}-${theme}-${width}.png`), Buffer.from(shot.data,'base64'));
@@ -76,8 +76,8 @@ try {
   assert(!failures.length, 'Docs layout: ' + JSON.stringify(failures.slice(0,12)));
 
   await visit('index.html',1280);
-  assert(await evaluate(`document.querySelectorAll('.sc-hero--overview .sc-audience').length===3`), 'Overview must offer three role entry points');
-  await evaluate(`document.querySelector('.sc-audience a[href="#rules"]').click()`); await settle();
+  assert(await evaluate(`document.querySelectorAll('.sc-hero--overview .sc-overview-steps > li').length===3&&!!document.querySelector('.sc-hero--overview a[href="#start"]')`), 'Overview must expose the accepted task/data/dashboard flow');
+  await evaluate(`const rules=document.querySelector('.sc-nav a[href="index.html#rules"]');rules.closest('details').querySelector('summary').click();rules.click()`); await settle();
   assert(await evaluate(`document.querySelector('#rules').hidden===false&&document.querySelector('.sc-hero').hidden&&document.querySelector('#catalog').hidden`), 'Rules route must show one article');
   await evaluate('history.back()'); await settle();
   assert(await evaluate(`!document.querySelector('.sc-hero').hidden&&[...document.querySelectorAll('.sc-sec')].every(x=>x.hidden)`), 'Back must restore overview');
@@ -106,7 +106,8 @@ try {
         headings:[...main.querySelectorAll('h1')].filter(x=>x.getClientRects().length).length,
         overflow:document.documentElement.scrollWidth>innerWidth+1
       };})()`);
-      assert(state.visible.length===1&&state.visible[0]===id&&state.headings===1&&!state.overflow, `Article ${file}#${id} ${theme} ${width}: `+JSON.stringify(state));
+      const expectedId = id === 'redpolitika' ? 'principy-teksta' : id; // Preserved legacy anchor.
+      assert(state.visible.length===1&&state.visible[0]===expectedId&&state.headings===1&&!state.overflow, `Article ${file}#${id} ${theme} ${width}: `+JSON.stringify(state));
     }
   }
   await visit('showcase.html#sdk-extensions',1280);

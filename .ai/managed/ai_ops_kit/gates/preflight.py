@@ -30,7 +30,7 @@ from ai_ops_kit.gates import spec_levels   # noqa: E402
 from ai_ops_kit.gates import approvals     # noqa: E402
 from ai_ops_kit.shared.contracts import PreflightResult  # noqa: E402
 
-# Уровни, для которых слой контекста обязан быть здоров (ошибки -> fail-closed, не «продолжаем молча»).
+
 _HEAVY = {"ENGINEERING", "PRODUCT", "CRITICAL", "AI_FEATURE", "RESEARCH"}
 
 
@@ -51,23 +51,23 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
     def block(reason):
         reasons.append(reason)
 
-    # 1. classification
+    
     ok_class = bool(tt)
     checks["classification"] = {"ok": ok_class, "task_type": tt}
     if not ok_class:
         block("classification: не удалось определить тип задачи")
 
-    # 2. ContextPayload собран (для heavy — обязателен; ошибка сборки -> fail-closed)
+    
     payload_ok = payload is not None and bool((payload or {}).get("text"))
     checks["context_payload"] = {"ok": payload_ok or (not heavy), "built": payload is not None}
     if heavy and not payload_ok:
         block("context_payload: compiled payload не собран для heavy-задачи (fail-closed)")
 
-    # 3. spec достаточна. Два условия (v2.121 P1.1 — обязательность спеки ДО tool loop для heavy):
-    #    (a) существующая, но неполная спека НЕ пускает в реализацию (фикс #1, все workflow);
-    #    (b) для heavy (ENGINEERING/PRODUCT/CRITICAL) спека ОБЯЗАТЕЛЬНА до реализации: её отсутствие
-    #        блокирует, ЕСЛИ прогон не идёт с --author (тогда движок авторизует спеку пре-стадией, а
-    #        артефакт-гейты specification/requirements всё равно проверят её на готовность). QUICK — light.
+    
+    
+    
+    
+    
     spec_artifact = bool((spec_cov or {}).get("spec_artifact"))
     spec_missing = list((spec_cov or {}).get("blocking_missing") or [])
     spec_incomplete = spec_artifact and bool(spec_missing)
@@ -84,13 +84,13 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
         block(f"spec-first: {tt} требует спеку ДО реализации — features/{wid}/spec.yaml отсутствует; "
               f"создай спеку (ai-ops specify/new) ИЛИ запусти с --author (движок авторизует её пре-стадией)")
 
-    # 4. атомарность. v2.120 (P0.4/P0.6): boolean-подтверждения НЕДОСТАТОЧНО — неатомарная задача
-    #    идёт либо через sequential executor, либо как КОНКРЕТНЫЙ существующий WorkPackage
-    #    (work_package_id, который РЕАЛЬНО есть в плане). Вымышленный id и голый decomposition_confirmed
-    #    больше не пускают блоб одним tool loop.
+    
+    
+    
+    
     should_decompose = bool((work_pkg or {}).get("should_decompose"))
     selected = signals.get("work_package_id")
-    # авторитетный источник id пакетов — из sequence-исполнителя (он строит план), плюс work_pkg прогона
+    
     plan_ids = set(signals.get("_sequence_plan_ids") or [])
     plan_ids |= {p.get("id") for p in ((work_pkg or {}).get("work_packages") or [])}
     selected_valid = bool(selected) and selected in plan_ids
@@ -106,16 +106,16 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
             block(f"atomic-planning: задача не атомарна ({n} пакетов) — исполняй через sequential "
                   f"executor (ai-ops run … --sequential) ИЛИ выбери СУЩЕСТВУЮЩИЙ work_package_id из плана")
 
-    # 5. context budget не превышен -> блок ДО исполнения
+    
     overflow = bool((bundle or {}).get("overflow"))
     checks["context_budget"] = {"ok": (not overflow) or reevaluate_only, "overflow": overflow}
     if overflow and not reevaluate_only:
         block("context-budget: контекст задачи превышает бюджет — декомпозируй до исполнения")
 
-    # 6. human approvals: доменные условия через ApprovalRecord (+ destructive)
+    
     appr = approvals.check(signals, child_root, wid, domains=domains)
     missing = list(appr["missing"])
-    # destructive не является security-доменом -> требуем отдельный ApprovalRecord "destructive"
+    
     if signals.get("destructive"):
         recs = approvals.load_approvals(child_root, wid)
         # v3.37: plan_hash передаём ЯВНО. Без него `_record_valid` не сверял привязку вовсе — то есть
@@ -132,7 +132,7 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
         block("human-approval: не хватает одобрений (ApprovalRecord): "
               + ", ".join(m["domain"] for m in missing))
 
-    # 7. ошибки слоя контекста -> fail-closed для heavy
+    
     lifecycle_ok = (not lifecycle_errors) or (not heavy)
     checks["lifecycle"] = {"ok": lifecycle_ok, "errors": lifecycle_errors}
     if heavy and lifecycle_errors:
@@ -171,7 +171,7 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
     ok = not reasons
     result = {"schema_version": 1, "kind": "PreflightTruth", "ok": ok, "blocked": not ok,
               "task_type": tt, "checks": checks, "reasons": reasons}
-    # v3.38 (K7): инварианты preflight — fail-closed, нарушение не молчит.
+    
     from ai_ops_kit.gates.invariants import check_invariant
     _inv_breaches = []
     for _inv_id, _kw in [

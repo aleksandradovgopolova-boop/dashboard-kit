@@ -41,9 +41,9 @@ try:                                          # v3.38 (лента №5): вал�
     from ai_ops_kit.validation import _bootstrap   # noqa: F401 — импорт пакетом (после pip install)
 except ImportError:                                # запуск скриптом: корня на пути ещё нет,
     import _bootstrap                              # noqa: F401 — и положить его может только он сам
-# Проверка ФОРМЫ и рендер СОДЕРЖИМОГО вынесены ВНИЗ (пакет `checks`, слой primitives): и рантайм
-# (engine.pipeline_evidence), и эта CLI-обёртка зовут их вниз — без восходящего ребра engine ->
-# validation. Запись файлов (I/O) остаётся здесь и в движке — ниже ядра ей не место.
+
+
+
 from ai_ops_kit.checks.spec_artifact import (   # noqa: E402,F401
     REQUIRED_EVIDENCE, _CAP_RE, _slug_tasks, check, provided_evidence, render_content)
 

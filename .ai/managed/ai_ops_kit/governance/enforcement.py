@@ -60,12 +60,14 @@ def enforcement_mode(root) -> str:
 def is_approved(root, *, action: str, target: str) -> bool:
     """Одобрено ли действие человеком — по ЗАПИСАННОМУ сигналу human_override, а не по флагу.
 
-    Совпадение по цели: сигнал с target == `{action}:{target}` или ровно `target`, и решением из
-    множества одобрения. Отсутствие сигнала — «не одобрено» (fail-closed), не «не знаю = можно»."""
+    Последняя запись для target == `{action}:{target}` или ровно `target` определяет решение.
+    Журнал append-only: дата без времени не заменяет порядок записи. Последующий отзыв или
+    неизвестное решение снимает старое approve; только новое явное одобрение возвращает его.
+    Отсутствие сигнала — «не одобрено» (fail-closed), не «не знаю = можно»."""
     want = {f"{action}:{target}", target}
-    for sig in human_override.override_signals(root):
-        if sig.get("target") in want and str(sig.get("human_decision", "")).lower() in _APPROVE_DECISIONS:
-            return True
+    for sig in reversed(human_override.override_signals(root)):
+        if sig.get("target") in want:
+            return str(sig.get("human_decision", "")).strip().lower() in _APPROVE_DECISIONS
     return False
 
 
@@ -102,14 +104,15 @@ def _record(root, *, action, target, outcome, reason, date) -> bool:
             data=f"governance gate: действие {action}, цель {target}")
         return True
     except (decision_log.RegistryError, OSError, yaml.YAMLError, ValueError):
-        # FAIL-OPEN по журналу: нет реестра решений, дубль id, битый YAML — доставку НЕ роняем.
+        
         return False
 
 
 def main(argv) -> int:
     import json
+    import sys
     if len(argv) < 2:
-        print("usage: enforcement.py <repo_root> <target> [--action NAME]", file=__import__("sys").stderr)
+        print("usage: enforcement.py <repo_root> <target> [--action NAME]", file=sys.stderr)
         return 1
     root, target = argv[0], argv[1]
     action = DEFAULT_ACTION

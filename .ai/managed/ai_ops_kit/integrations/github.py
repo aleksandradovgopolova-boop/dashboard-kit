@@ -37,7 +37,7 @@ from ai_ops_kit.shared.gitio import git  # noqa: E402
 
 API_ROOT = "https://api.github.com"
 _TOKEN_ENV = ("GITHUB_TOKEN", "GH_TOKEN")
-# owner/repo из git-remote: https, ssh (git@github.com:owner/repo.git) и голый owner/repo.
+
 _SLUG_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?/[A-Za-z0-9._-]+$")
 
 
@@ -60,7 +60,7 @@ class FetchResult:
     source: str = ""
 
     def __bool__(self) -> bool:                     # noqa: D401
-        # Намеренно НЕ делаем truthiness зависимой от len(items): пустой доступный ответ — истина.
+        
         return self.ok
 
 
@@ -77,10 +77,10 @@ class WriteResult:
     reason: str = ""        # человекочитаемая причина, когда ok is False
 
 
-# ── определение репозитория ─────────────────────────────────────────────────────────────────
+
 
 def _git_remote_url(root: Path) -> str:
-    # Единый вход к git с таймаутом (см. shared/gitio). OSError (нет git) по-прежнему -> "".
+    
     try:
         rc, url, _ = git(root, "remote", "get-url", "origin", timeout=10)
     except (OSError, subprocess.SubprocessError):
@@ -131,7 +131,7 @@ def _has_gh() -> bool:
     return which("gh") is not None
 
 
-# ── клиент ──────────────────────────────────────────────────────────────────────────────────
+
 
 class GitHubClient:
     """Тонкий клиент над одним из двух транспортов. Всё сетевое/subprocess сосредоточено в
@@ -143,7 +143,7 @@ class GitHubClient:
         self.token = token or _token()
         self.timeout = timeout
 
-    # -- доступность --------------------------------------------------------------------------
+    
 
     def availability(self) -> Availability:
         if not self.repo:
@@ -156,7 +156,7 @@ class GitHubClient:
             )
         return Availability(True, transport=transport, repo=self.repo)
 
-    # -- транспорты (единственное, что ходит наружу) ------------------------------------------
+    
 
     def _gh_api(self, path: str, params: "dict | None" = None) -> list:
         """`gh api --paginate` — gh сам держит токен и пагинацию. Возвращает список объектов."""
@@ -168,7 +168,7 @@ class GitHubClient:
         proc = subprocess.run(cmd, capture_output=True, text=True, timeout=self.timeout * 4)
         if proc.returncode != 0:
             raise GitHubError((proc.stderr or proc.stdout or "gh api failed").strip())
-        # --paginate склеивает страницы как несколько JSON-массивов подряд; разбираем по одному.
+        
         return _decode_json_stream(proc.stdout)
 
     def _rest_get(self, path: str, params: "dict | None" = None) -> list:
@@ -224,7 +224,7 @@ class GitHubClient:
             return FetchResult(False, reason=str(e))
         return FetchResult(True, items=[normalize(x) for x in raw], source=source)
 
-    # -- предметные чтения --------------------------------------------------------------------
+    
 
     def issues(self, state: str = "open", limit: int = 0) -> FetchResult:
         """Открытые/все Issues БЕЗ pull request'ов (REST кладёт PR в тот же эндпоинт — фильтруем)."""
@@ -252,12 +252,12 @@ class GitHubClient:
     def labels(self) -> FetchResult:
         return self._fetch("repos/%s/labels" % self.repo, {"per_page": 100}, _norm_label)
 
-    # -- предметные ЗАПИСИ (approval-gated: выполняются только по явному одобрению человека) -------
-    #
-    # Единственный write-путь — `_gh_mutate` (gh api -X POST/PATCH). Тесты подменяют ровно его и
-    # живого GitHub не касаются. GitHub НЕ умеет «слить» два Issue: конвенция — закрыть ДУБЛЬ с
-    # кросс-ссылкой на канонический (комментарий + state=closed, reason=not_planned), канонический
-    # оставить открытым. Операция ОБРАТИМА: закрытый issue переоткрывается (`reopen_issue`).
+    
+    
+    
+    
+    
+    
 
     def _gh_mutate(self, method: str, path: str, fields: "dict | None" = None) -> dict:
         """`gh api -X METHOD path -f k=v` — единственный write-транспорт. -> распарсенный ответ (dict).
@@ -328,7 +328,7 @@ class GitHubError(RuntimeError):
     """Ошибка транспорта: сеть, HTTP, отказ gh. Ловится в `_fetch` → «не проверено» с причиной."""
 
 
-# ── нормализация REST-объектов в общую форму ──────────────────────────────────────────────────
+
 
 def _norm_issue(raw: dict) -> dict:
     return {
@@ -386,7 +386,7 @@ def _norm_label(raw: dict) -> dict:
     }
 
 
-# ── вспомогательное ───────────────────────────────────────────────────────────────────────────
+
 
 def _next_link(link_header: str) -> str:
     """URL следующей страницы из заголовка Link (`<url>; rel="next", ...`) или ""."""
@@ -428,7 +428,7 @@ def make_client(repo_or_root: str = ".", transport: str = "") -> GitHubClient:
     return GitHubClient(repo=resolve_repo(repo_or_root), transport=transport)
 
 
-# ── CLI ───────────────────────────────────────────────────────────────────────────────────────
+
 
 def _cmd_probe(ns) -> int:
     client = make_client(ns.target)

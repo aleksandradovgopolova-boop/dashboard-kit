@@ -26,10 +26,10 @@ def build_preview(intent, task, child_root, signals):
     if task:
         signals.setdefault("task_text", task)
     plan = run_plan.build_plan(signals, workitem_id=signals.get("feature"))
-    # v2.107 (finding аудита): единый результат классификации. Раньше router мог решить ENGINEERING,
-    # а preset/Spec-First — QUICK (task_type по умолчанию) -> противоречивый режим (workflow
-    # ENGINEERING, spec L0, review/author off -> закономерный блок). Теперь task_type берём из
-    # РЕШЕНИЯ роутера (base_workflow), и его же используют resolve_flags и spec_levels.
+    
+    
+    
+    
     if not signals.get("task_type"):
         signals["task_type"] = plan["base_workflow"]
     flags = resolve_flags(signals)
@@ -37,9 +37,9 @@ def build_preview(intent, task, child_root, signals):
     try:
         bundle = context_compiler.compile_bundle(signals, child_root, plan=plan)
     except Exception as _e:  # noqa: BLE001 — сборка контекста не должна ронять превью...
-        # ...но и молчать о деградации нельзя: с bundle=None превью печатало «агентов 0 · ~None
-        # ток.» как обычный результат, и прогон с несобранным контекстом выглядел нормальным
-        # (показательный случай из внешнего ревью про 137 проглоченных исключений).
+        
+        
+        
         bundle, bundle_error = None, f"{type(_e).__name__}: {_e}"[:200]
     cov = spec_levels.assess(signals)
     wp = atomic_planner.assess(signals, child_root=child_root, bundle=bundle)
@@ -53,15 +53,19 @@ def build_preview(intent, task, child_root, signals):
     if signals.get("secret_boundary") or signals.get("destructive"):
         approvals.append("человек: затронута граница секретов/деструктивное действие")
 
-    # ЭТУ СТРОКУ ЧИТАЕТ ЧЕЛОВЕК. Прежде здесь стояли внутренние имена артефактов — `RunPlan +
-    # оценка без изменений кода`, `RepositoryProfile (стек/команды)`, `Product Health Score`, — и
-    # они выходили наружу через превью, то есть через самое частое сообщение кита. Проверка на
-    # реалистичном дереве показала это первой же строкой ответа.
-    # Формулировка — от первого лица и глаголом: эту строку человек читает как ответ на «что ты
-    # сейчас сделаешь». Существительные не годятся: «Собираюсь: чем проект написан» — не фраза.
-    expected = ("проверю изменение и открою черновой pull request, если все проверки пройдут"
-                if intent == "run"
-                else {"plan": "построю план работы и оценю объём; код при этом не меняю",
+    
+    
+    
+    
+    
+    
+    
+    if intent == "run":
+        expected = ("запущу исследование: превращу вопрос в доказательства и пакет для решения "
+                    "(материалы соберу в .research/)" if plan["base_workflow"] == "RESEARCH"
+                    else "проверю изменение и открою черновой pull request, если все проверки пройдут")
+    else:
+        expected = {"plan": "построю план работы и оценю объём; код при этом не меняю",
                       "specify": "напишу заготовку описания задачи нужной глубины",
                       "review": "проведу независимую проверку сделанного",
                       "onboard": "разберусь, чем проект написан и чем он проверяется",
@@ -80,7 +84,7 @@ def build_preview(intent, task, child_root, signals):
                       "reach": "покажу состояние добровольной отметки о подключении (охват — "
                                "без телеметрии, только по твоему решению)",
                       "backlog": "разберу GitHub Issues: тип, дубликаты, приоритет, зависимости"}.get(
-                          intent, "выполню намерение"))
+                          intent, "выполню намерение")
 
     return {
         "schema_version": 1, "kind": "ExecutionPreview",
@@ -94,8 +98,8 @@ def build_preview(intent, task, child_root, signals):
                       "rules": (bundle or {}).get("included", {}).get("rules", []),
                       "estimated_tokens": (bundle or {}).get("estimated_tokens"),
                       "context_budget": (bundle or {}).get("context_budget"),
-                      # None здесь означает «контекст не собран», а не «контекст пуст» — разницу
-                      # обязан видеть и человек, и машиночитаемый потребитель превью.
+                      
+                      
                       "context_error": bundle_error},
         "approvals_needed": approvals,
         "decomposition_advised": wp["should_decompose"],
@@ -141,7 +145,7 @@ def _run_backlog(sub, child_root, signals, js, a=None):
     state = (signals or {}).get("state", "open")
     root = str(child_root)
     if sub not in _BACKLOG_SUBS:
-        # Без подкоманды (или с неизвестной) — назвать, что умеет, а не молча вернуть успех.
+        
         msg = ("backlog: операционный разбор GitHub Issues. Подкоманды:\n"
                "  classify    — тип/область/приоритет/атрибуты, каждый вывод с объяснением\n"
                "  dedup       — дубликаты (предлагает объединение) и устаревшие\n"
@@ -205,9 +209,9 @@ def _run_backlog(sub, child_root, signals, js, a=None):
         return 0 if rep.ok else 2
 
     if sub == "merge":
-        # Approval-gated слияние дублей (PR-19/20 «Execute → Require approval»). Пары одобряет
-        # ЧЕЛОВЕК файлом --approved (из детектора они не берутся). Без --apply — dry-run (что закроется,
-        # видно ДО того). Закрывается ТОЛЬКО дубль, канонический остаётся; операция обратима.
+        
+        
+        
         import yaml as _yaml
         from ai_ops_kit.planning import backlog_dedup as _dd
         approved_path = getattr(a, "approved", None) if a is not None else None
@@ -248,7 +252,7 @@ def _run_backlog(sub, child_root, signals, js, a=None):
                 print(f"  {res.reason}")
         return 0 if res.ok or res.dry_run else 2
 
-    # graph
+    
     from ai_ops_kit.planning import backlog_depgraph as _dg
     g = _dg.graph_from_backlog(root, state=state)
     if js:
@@ -269,14 +273,14 @@ def _run_backlog(sub, child_root, signals, js, a=None):
 
 def _intent_model(task, child_root, signals, a):
     js = a.json
-    # DISCOVER -> CLASSIFY -> RECONSTRUCT -> AUDIT -> ASK. Понимание репозитория: артефактов
-    # проекта команда не создаёт и ничего не перестраивает.
-    #
-    # ОДИН ФАЙЛ ОНА ВСЁ-ТАКИ ПИШЕТ, и объявить это обязательно: `.ai/project/
-    # onboarding-answers.yaml` — форма, в которую человек впишет ответы. Раньше здесь стояло
-    # «ничего не пишет», а команда писала (это внёс фикс тупика с вопросами), и человек, позвав
-    # `model` просто посмотреть состояние, находил в своём `git status` незнакомый файл.
-    # Заявление приведено к фактам, повторный вызов файл НЕ трогает, если текст тот же.
+    
+    
+    
+    
+    
+    
+    
+    
     from ai_ops_kit.planning import repo_audit
     from ai_ops_kit.planning import contours as _contours
     try:
@@ -284,30 +288,30 @@ def _intent_model(task, child_root, signals, a):
     except _contours.ModelCorrupt as e:
         print(f"ОШИБКА: {e}")
         return 1
-    # #612 + one-screen: `model --answer <qid> "<value>"` записывает ответ(ы) онбординга без ручной
-    # правки YAML. Флаг ПОВТОРЯЕМ (`--answer a "x" --answer b "y"`) — все ответы пишутся по очереди.
-    # `--why` тоже повторяем, по одному на ответ в порядке; лишние ответы просто без основания.
+    
+    
+    
     if getattr(a, "answer", None):
         whys = list(getattr(a, "why", None) or [])
         for i, pair in enumerate(a.answer):
             why = whys[i] if i < len(whys) else None
             ok, msg = repo_audit.record_answer(child_root, pair[0], pair[1], rep["ask"], why=why)
             print(msg)
-            # Любой невалидный ответ — стоп и ненулевой код: пакет ответов не должен применяться
-            # наполовину, а `--flow` за ним — тем более (мы бы собрали направление по неполным фактам).
+            
+            
             if not ok:
                 return 2
-        # Без `--flow` — записал и вышел (прежнее поведение, только пакетом ответов).
+        
         if not getattr(a, "flow", False):
             return 0
-        # С `--flow` — НЕ ранний return: продолжаем в первый час тем же вызовом. Понимание
-        # ПЕРЕСЧИТЫВАЕМ — записанные ответы обязаны учитываться, иначе first_hour собрал бы
-        # направление по устаревшим фактам (rep выше посчитан ДО записи).
+        
+        
+        
         rep = repo_audit.run(child_root)
-    # ПОБОЧНЫЙ ЭФФЕКТ НЕ ЗАВИСИТ ОТ ФОРМАТА ВЫВОДА и от `--flow`. Форма ответов создаётся в ЛЮБОМ
-    # пути просмотра (обычном И первом часе): первый час не полон без места, куда человек впишет
-    # ответы. Прежде `--flow` короткозамыкал ДО записи формы, и `setup` (шаг первого часа) не
-    # оставлял «ответь на вопросы» — остаток прятался (issue #612).
+    
+    
+    
+    
     answers_file = None
     if rep["ask"]["questions"]:
         answers_file = repo_audit.write_question_file(child_root, rep["ask"])
@@ -318,15 +322,33 @@ def _intent_model(task, child_root, signals, a):
         from ai_ops_kit.planning import first_hour
         res = first_hour.run(child_root, apply=bool(getattr(a, "apply", False)),
                              budget_left=getattr(a, "budget", None), understanding=rep)
+        # #1200: первый результат говорит, в каком состоянии проект СЕЙЧАС — из уже существующих
+        # проверок (конституция, сканер, команды проверки). Только чтение; на непрочитанном дереве не
+        # считаем: говорить «в порядке» о том, чего кит не понял, — выдумка.
+        if res.get("stage") != first_hour.BLOCKED_UNDERSTANDING:
+            from ai_ops_kit.cli import ai_ops_cli_first_health as _health
+            res["health"] = _health.assess(child_root)
+        
+        
+        
+        
+        result_file = first_hour.write_result(child_root, res) \
+            if bool(getattr(a, "apply", False)) else None
         if js:
             out = dict(res)
             if answers_file:
                 out["answers_file"] = str(answers_file)
+            if result_file:
+                out["first_result_file"] = str(result_file)
             print(json.dumps(out, ensure_ascii=False, indent=2, default=str))
         else:
             from ai_ops_kit.ui import presenter
             aud = presenter.audience_from_config(child_root)
             print(presenter.render(presenter.from_first_hour(res), audience=aud))
+            if (res.get("health") or {}).get("verdict"):
+                print(f"\nСостояние проекта: {res['health']['verdict']}")
+            if result_file:
+                print(f"\nПервый результат сохранён: {result_file}")
         return 0
     if js:
         out = dict(rep)
@@ -348,9 +370,9 @@ def _intent_model(task, child_root, signals, a):
             print(f"  {mark} [{q['id']}] {q['ask']}")
             if q["proposal"]:
                 print(f"      предполагаю: {q['proposal']['value']} — подтвердить?")
-        # ВОПРОСАМ НУЖНО МЕСТО. Прежде кит печатал их и завершался: куда отвечать — не сказано,
-        # интерактива нет, человек в тупике на главном шаге первого сценария. И проще всего —
-        # по одному, командой, а не правкой YAML-файла руками (её оставляем как альтернативу).
+        
+        
+        
         if answers_file:
             try:
                 shown = answers_file.relative_to(Path(child_root))
@@ -397,13 +419,13 @@ def _product_risks(root):
 
 def _intent_contract(task, child_root, signals, a):
     js = a.json
-    # Единый объект продукта: агрегирует существующие вычислители (product_templates, contours,
-    # passport_generator) в один контракт. Ничего не пишет и ничего не перестраивает.
+    
+    
     from ai_ops_kit.planning import artifact_registry as _AR
     from ai_ops_kit.planning import product_contract
-    # Здоровье и риски считает intelligence (слой ВЫШЕ planning) — поэтому их считает CLI (может звать
-    # вниз) и ВПРЫСКИВАЕТ в контракт. band уже в вокабуляре green/yellow/red/unknown; нет данных ->
-    # unknown/not_computed (честно), а не выдуманное зелёное.
+    
+    
+    
     health = _product_health_report(child_root)
     risks = _product_risks(child_root)
     try:
@@ -440,19 +462,19 @@ def _intent_contract(task, child_root, signals, a):
 
 def _intent_products(task, child_root, signals, a):
     js = a.json
-    # Флит-операции над реестром продуктов. Подкоманда — первым словом (как у `backlog`):
-    #   products           — сводный вердикт по всему флоту (только чтение);
-    #   products register  — добавить/обновить ТЕКУЩИЙ репозиторий в реестре флота (запись).
-    # Подробная карточка ОДНОГО продукта — это `ai-ops contract`, запущенный в его репозитории:
-    # модель CLI передаёт один токен задачи + путь, поэтому inspect-по-id отдельной командой пока нет
-    # (функция product_registry.inspect() есть для программного вызова и будущего флага).
+    
+    
+    
+    
+    
+    
     from ai_ops_kit.planning import product_registry
     sub = (task or "").strip()
 
     if sub == "register":
-        # Регистрируем ТЕКУЩИЙ репозиторий (child_root). Реестр флота — центральный файл оператора
-        # ($AI_OPS_PRODUCTS), иначе products.yaml рядом. Так `cd продукт && ai-ops products register`
-        # накапливает флот в одном файле.
+        
+        
+        
         reg_path = product_registry._default_registry(Path(child_root)) or (Path(child_root) / "products.yaml")
         res = product_registry.register(reg_path, Path(child_root).resolve())
         if js:
@@ -481,8 +503,8 @@ def _intent_products(task, child_root, signals, a):
         print("или создайте вручную: kind: product-registry, products: [{id, name, path}].")
         return 1
 
-    # Живое здоровье по каждому продукту считаем ЗДЕСЬ (CLI видит intelligence) и передаём во флот
-    # картой id->отчёт: planning не тянет intelligence вверх. Нет метрик у продукта -> band=unknown.
+    
+    
     health_map = {}
     _data = product_registry.load(reg_path)
     for _p in (_data.get("products", []) if isinstance(_data, dict) else []):
@@ -514,8 +536,8 @@ def _intent_products(task, child_root, signals, a):
 
 def _intent_inspect(task, child_root, signals, a):
     js = a.json
-    # Карточка одного продукта флота по id. id — единственный токен задачи (модель CLI отдаёт один).
-    # health/risks считает CLI и впрыскивает вниз — как в `contract`.
+    
+    
     from ai_ops_kit.planning import product_registry
     pid = (task or "").strip()
     if not pid:
@@ -553,70 +575,6 @@ def _intent_inspect(task, child_root, signals, a):
     return 0
 
 
-def _intent_delivery(task, child_root, signals, a):
-    import yaml
-    js = a.json
-    # PR-10/PR-15 (лента 4): backlog под milestone -> исполнимый delivery-план (порядок, прогноз-
-    # ОЦЕНКА, риски) + ранние блокеры. Backlog берётся ПО КОНТРАКТУ ленты 3 из файла
-    # (--backlog или .ai-ops/backlog.yaml); источника нет -> третье состояние, а не пустой план.
-    from ai_ops_kit.planning import roadmap_manager as _rm
-    from ai_ops_kit.planning import roadmap_milestones as _ms
-    from ai_ops_kit.planning import delivery_planning as _dpn
-    from ai_ops_kit.planning import delivery_planning_blockers as _blk
-    from ai_ops_kit.planning import delivery_plan as _plan
-    bl_arg = getattr(a, "backlog", None)
-    bpath = Path(bl_arg) if bl_arg else (child_root / ".ai-ops" / "backlog.yaml")
-    if not bpath.is_file():
-        msg = (f"источник backlog не подключён ({bpath}) — delivery-план строить не из чего. "
-               f"Его кладёт интеграция ленты 3; форма файла: {{tasks: [...], milestones: [...]}}")
-        if js:
-            print(json.dumps({"connected": False, "note": msg}, ensure_ascii=False, indent=2))
-        else:
-            print(f"  · {msg}")
-        return 0
-    try:
-        plan = _plan.load(child_root)
-        doc = yaml.safe_load(bpath.read_text(encoding="utf-8")) or {}
-    except _plan.PlanCorrupt as e:
-        print(f"ОШИБКА: {e}")
-        return 1
-    if plan is None:
-        print("ОШИБКА: нет planning/plan.yaml — roadmap выводить не из чего")
-        return 1
-    tasks = [t for t in (doc.get("tasks") or []) if isinstance(t, dict)]
-    milestones = [m for m in (doc.get("milestones") or []) if isinstance(m, dict)]
-    capacity, today = doc.get("capacity"), doc.get("today")
-    milestone = getattr(a, "milestone", None)
-    roadmap = _rm.build(plan, _plan.load_history(child_root))
-    result = {"link": _ms.link(roadmap, milestones, tasks),
-              "blockers": _blk.report(tasks, milestone, today)}
-    if milestone:
-        due = next((m.get("due") for m in milestones if m.get("id") == milestone), None)
-        result["plan"] = _dpn.plan(tasks, milestone, capacity=capacity,
-                                   start=today, due=due).as_dict()
-    if js:
-        print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
-        return 0
-    for dl in result["link"]["directions"]:
-        if dl["horizon"] in ("now", "next"):
-            print(f"  • {dl['goal']} [{dl['horizon']}]: "
-                  f"{len(dl['milestones'])} milestone / {len(dl['tasks'])} задач")
-    for s in result["link"]["dangling_links"]:
-        print(f"  ✗ {s}")
-    if "plan" in result:
-        fc = result["plan"]["forecast"]
-        if fc and fc.get("available"):
-            end = f" → {fc.get('estimated_end')}" if fc.get("estimated_end") else ""
-            print(f"  прогноз (ОЦЕНКА): {fc['days']} дн.{end}")
-        elif fc:
-            print(f"  прогноз: НЕДОСТУПЕН — {fc.get('reason')}")
-        for r in result["plan"]["risks"]:
-            print(f"  ⚠ {r}")
-    for b in result["blockers"]["early_blockers"]:
-        print(f"  ⚠ блокер '{b['id']}' держит {b['downstream']} задач")
-    return 0
-
-
 def _intent_plan(task, child_root, signals, a):
     import yaml
     js = a.json
@@ -638,8 +596,8 @@ def _intent_plan(task, child_root, signals, a):
         (fdir / "context-bundle.yaml").write_text(
             yaml.safe_dump(bundle, allow_unicode=True, sort_keys=False), encoding="utf-8")
     except Exception as _ce:  # noqa: BLE001 — план не должен рушиться из-за контекста...
-        # ...но деградация обязана быть видна: без бандла оценка пакета уходит на дефолты,
-        # а context-bundle.yaml не пишется — молча это выглядит как обычный план.
+        
+        
         bundle = None
         ctx_error = f"{type(_ce).__name__}: {_ce}"[:200]
     cov = spec_levels.assess_from_artifacts(signals, child_root, wid)
@@ -684,7 +642,7 @@ def _intent_session(task, child_root, signals, a):
     if js:
         print(json.dumps({"snapshot": snap, "recommendation": rec}, ensure_ascii=False, indent=2))
     else:
-        # Простой текстовый вывод без presenter (функция from_session_snapshot не реализована)
+        
         print("Session Snapshot:")
         for k, v in snap.items():
             print(f"  {k}: {v}")

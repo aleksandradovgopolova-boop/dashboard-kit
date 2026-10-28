@@ -30,8 +30,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-# Состояния наблюдения, при которых оно ещё ЖДЁТ разбора (доехало в кит, но не решено). `new` —
-# ещё в дочке (в кит не доставлено), сюда не попадает; `became_work`/`rejected` — уже закрыто.
+
+
 _OPEN_STATES = ("delivered", "accepted")
 
 
@@ -78,6 +78,7 @@ def _candidate_from_observation(obs: dict) -> dict:
         "status": "draft",                 # предложение, а не работа
         "active": False,                   # не занимает область записи
         "requires_human_decision": True,   # не станет активной без решения человека
+        "source": "child-finding",         # источник кандидата (для ярлыка во входящих/приёмке)
         "source_observation": oid,
         "source_context": context,
         "severity": _text(obs.get("severity")) or None,

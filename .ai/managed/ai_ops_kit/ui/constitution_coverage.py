@@ -126,7 +126,7 @@ def coverage(rules_p: Path | None = None, design_d: Path | None = None) -> dict:
             "category": rule.get("category"),
             "automated": True,
             "reviewer_wired": wired,
-            # Статус честен: либо проверка-двойник у ревьюера есть, либо КАК проверять — дизайн-решение.
+            
             "status": "reviewer_wired" if wired else "design_decision_pending",
         })
 
@@ -150,7 +150,7 @@ def check(report: dict) -> list[str]:
         return ["kind должен быть ConstitutionCoverage"]
     if report.get("dangling"):
         e.append(f"висячие constitution_id (не резолвятся в реестр): {report['dangling']}")
-    # Каждая health-проверка обязана нести constitution_id (привязка к Конституции, не текст).
+    
     for c in report.get("checks", []) or []:
         if not c.get("constitution_id"):
             e.append(f"health-проверка без constitution_id: {c!r}")

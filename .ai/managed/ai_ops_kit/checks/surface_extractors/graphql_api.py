@@ -40,18 +40,18 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface, _matching_brace
 
-# ─── имена корневых типов ────────────────────────────────────────────────────────────────────────
-# Конвенциональные корневые типы GraphQL. Переименование через `schema { query: X }` НЕ разрешаем
-# (честный предел — см. honest_limits): берём только эти три имени и их `extend`.
+
+
+
 _ROOT_TYPES = ("Query", "Mutation", "Subscription")
 
-# Заголовок блока корневого типа: `type Query { … }` или `extend type Query { … }`. Между именем типа
-# и `{` допускаются директивы/`implements` (`type Query @key(...) implements Node {`) — `[^{]*` их
-# пропускает (строки к этому моменту уже замаскированы, `{` внутри них не встретится).
+
+
+
 _ROOT_BLOCK_HEAD_RE = re.compile(
     r"\b(?:extend\s+)?type\s+(?:" + "|".join(_ROOT_TYPES) + r")\b[^{]*\{")
 
-# Идентификатор GraphQL (имя поля/типа): буква/подчёркивание, затем буквы/цифры/подчёркивания.
+
 _IDENT_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 
 

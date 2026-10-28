@@ -9,9 +9,9 @@ reason или quote; охват сверяется с criterion_ids (None = «о
 from __future__ import annotations
 
 CRITERION_STATUS = {"met", "unmet", "undetermined"}
-# Вид основания (второе ревью PR #118): `present` — цитата ЕСТЬ в результате; `absent` — её В ФАЙЛЕ
-# НЕТ, и это доказательство для критериев об отсутствии. Второй вид требует source по построению:
-# отсутствие подтверждается только чтением файла, «нигде не нашёл» доказательством не является.
+
+
+
 EVIDENCE_KINDS = {"present", "absent"}
 
 

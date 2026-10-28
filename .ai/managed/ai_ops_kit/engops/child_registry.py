@@ -61,12 +61,12 @@ from pathlib import Path
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401
 from ai_ops_kit.shared.gitio import git  # noqa: E402
 
-# ЧЕСТНАЯ CAPABILITY-ДЕКЛАРАЦИЯ. Модуль объявляет РОВНО то, что делает: читает и пишет локальные
-# файлы дочки/кита, и НЕ звонит домой. Это не украшение — соблюдение проверяется тестом
-# (`tests/unit/test_child_registry.py::test_module_declares_no_network_and_keeps_the_promise`),
-# который читает эту декларацию и сверяет её с исходником: `network: False` обязан подтверждаться
-# отсутствием сетевых импортов/вызовов в коде. Так «не звонит домой» перестаёт быть обещанием на
-# словах и становится проверяемым фактом.
+
+
+
+
+
+
 CAPABILITIES = {
     "network": False,          # ни запроса, ни сокета, ни токена — сборка и доставка локальны
     "reads": ["local_files"],  # features/*, VERSION, .ai/reach/*, registry/child-registrations/*
@@ -74,15 +74,15 @@ CAPABILITIES = {
     "sends": False,            # никакой автоматической отправки — отдаёт только владелец руками
 }
 
-# Решения владельца. `registered` ставит явное «да», `declined` — явное «нет»/пропуск. Оба делают
-# онбординг идемпотентным: пока решения НЕТ, кит вправе предложить снова; как только оно есть — молчит.
+
+
 DECISIONS = ("registered", "declined")
 
 CHILD_DIR = Path(".ai") / "reach"
 DECISION_FILE = "decision.yaml"
 REGISTRATION_FILE = "registration.yaml"
 SUMMARY_FILE = "summary.yaml"
-# Реестр охвата в ките — источник истины: счёт выводится из набора этих файлов.
+
 KIT_DIR = Path("registry") / "child-registrations"
 
 
@@ -194,7 +194,7 @@ def read_registration(child_root):
     return _load(registration_path(child_root))
 
 
-# ── СЛОЙ 1: отметка о подключении ────────────────────────────────────────────────────────────────
+
 
 def build_registration(child_root, *, anon_id=None, at=None):
     """Собрать ChildRegistration (без записи). Состав УЗОК намеренно (инвариант приватности).
@@ -277,10 +277,10 @@ def registration_state(child_root):
     }
 
 
-# ── СЛОЙ 3: снимок продуктового статуса из Product Passport ──────────────────────────────────────
 
-# Разделы паспорта, которые несут продуктовый статус (версия/релизы/стек/CI/тесты/зрелость). Ключи —
-# подстроки заголовков из passport_generator.sections(); значение — короткое имя поля в снимке.
+
+
+
 _PASSPORT_SECTIONS = (
     ("версия и последний релиз", "version_release"),
     ("repository и окружения", "stack_and_env"),
@@ -298,7 +298,7 @@ def product_status_snapshot(sections):
     -> тоже `unknown` (а не пропуск): «не знаю» называется, а не замалчивается.
     """
     sections = sections or {}
-    # заголовок(lower) -> данные раздела; сопоставление по подстроке, как в passport_generator._milestone
+    
     lower = {str(k).strip().lower(): v for k, v in sections.items() if isinstance(v, dict)}
     out = {}
     for needle, field in _PASSPORT_SECTIONS:
@@ -306,12 +306,12 @@ def product_status_snapshot(sections):
         if data is None:
             out[field] = {"state": "unknown", "value": None}
             continue
-        # Переносим state и value КАК ЕСТЬ — доверие паспорта не переоцениваем и не занижаем.
+        
         out[field] = {"state": data.get("state", "unknown"), "value": data.get("value")}
     return out
 
 
-# ── СЛОЙ 2: локальная сводка использования ───────────────────────────────────────────────────────
+
 
 def scan_usage(child_root):
     """Число прогонов и типы задач ЛОКАЛЬНО, из фич дочки. -> {runs, features, task_types}.
@@ -351,7 +351,7 @@ def scan_usage(child_root):
         if counted == 0 and (fd / "run-report.json").is_file():
             counted = 1
         runs += counted
-        # тип задачи: run-plan.yaml -> base_workflow, иначе workitem.yaml -> task_type
+        
         tt = None
         for rel, key in (("run-plan.yaml", "base_workflow"), ("workitem.yaml", "task_type")):
             p = fd / rel
@@ -380,7 +380,7 @@ def build_summary(child_root, product_status=None):
     reg, _err = read_registration(child_root)
     return {
         "schema_version": 1, "kind": "ChildUsageSummary", "at": _now(),
-        # id связывает сводку с регистрацией при агрегации охвата (тот же анонимный id).
+        
         "id": (reg or {}).get("id") or project_anon_id(child_root),
         "project": _project_name(child_root),
         "kit_version": _kit_version(child_root),
@@ -399,7 +399,7 @@ def write_summary(child_root, product_status=None):
     return _dump(summary_path(child_root), rep), rep
 
 
-# ── СЛОЙ охвата (в ките): доставка и счёт ────────────────────────────────────────────────────────
+
 
 def collect(kit_root, child_roots, *, dry_run=False):
     """Собрать регистрации дочек в реестр кита. -> отчёт. Мирроринг kit_feedback.collect.
@@ -419,12 +419,12 @@ def collect(kit_root, child_roots, *, dry_run=False):
             report["errors"].append(f"{cr.name}: {err}")
             continue
         if not reg:
-            # Не ошибка: дочка не отметилась (отказ или ещё не решала) — собирать нечего.
+            
             report["skipped"].append({"child": cr.name, "reason": "не отмечена"})
             continue
         landed = dict(reg, state="collected",
                       collected_from={"project": reg.get("project"), "at": _now()})
-        # Сводка (слой 2) — отдельный opt-in: собираем её ТОЛЬКО если владелец дочки её сохранил.
+        
         summ, summ_err = _load(summary_path(cr))
         if summ_err:
             report["errors"].append(f"{cr.name}: {summ_err}")
@@ -494,8 +494,8 @@ def coverage(kit_root):
         ver = r.get("kit_version") or "неизвестна"
         by_version[ver] = by_version.get(ver, 0) + 1
         summ = summaries.get(r.get("id"))
-        # Продуктовый статус берём из СВОДКИ (регистрация его не несёт — приватность). Нет сводки или
-        # в ней пробел -> «неизвестен», а не выдуманный класс.
+        
+        
         mat = None
         if summ:
             ps = summ.get("product_status") or {}
@@ -524,7 +524,7 @@ def coverage(kit_root):
     }
 
 
-# ── Рендеры для человека ─────────────────────────────────────────────────────────────────────────
+
 
 def render_state(rep):
     if rep.get("errors"):
@@ -635,7 +635,7 @@ def main(argv=None):
         return 1 if rep["errors"] else 0
 
     if a.cmd == "summary":
-        # Модульный CLI без passport (его впрыскивает интент CLI): product_status -> unknown честно.
+        
         p, rep = write_summary(a.root)
         if a.json:
             print(json.dumps(dict(rep, saved_to=str(p)), ensure_ascii=False, indent=2))

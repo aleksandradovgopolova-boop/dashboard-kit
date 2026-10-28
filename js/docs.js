@@ -350,7 +350,7 @@
     main.querySelector('.sc-hero').hidden = !!selected;
     sections.forEach(function (sec) {
       sec.hidden = sec !== selected;
-      var heading = sec.querySelector('h2');
+      var heading = sec.querySelector(':scope > h2');
       if (heading) { var title = document.createElement('h1'); while (heading.firstChild) title.appendChild(heading.firstChild); heading.replaceWith(title); }
     });
     sectionLinks.forEach(function (x) {

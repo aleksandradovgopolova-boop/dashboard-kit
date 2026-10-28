@@ -62,12 +62,12 @@ def load_policy(root: Path) -> dict:
     if not isinstance(data, dict):
         raise PolicyInvalid(f"{POLICY_REL}: ожидался mapping, получен {type(data).__name__}")
     default = data.get("default", DEFAULT_LEVEL)
-    # СВЕДЕНИЕ СХЕМ (блокер Фазы Б, enforcement.py). Официальный шаблон
-    # `templates/product-layer/POLICY.yaml` объявляет поканальные уровни под ключом `autonomy:`
-    # (update_artifacts/create_pr/merge/change_policy), а исторические примеры и старые дочки — под
-    # `actions:`. Раньше движок читал только `actions:`/`default:`, поэтому `autonomy:`-уровни дочки
-    # молча игнорировались и КАЖДОЕ действие падало в default (require_approval). Читаем ОБА ключа в
-    # одну карту action->level; при совпадении имени явный `actions:` (старая форма) переопределяет.
+    
+    
+    
+    
+    
+    
     autonomy = data.get("autonomy") or {}
     actions_legacy = data.get("actions") or {}
     if not isinstance(autonomy, dict):

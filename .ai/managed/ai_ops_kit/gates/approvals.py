@@ -42,9 +42,9 @@ from pathlib import Path
 
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
-# Домен -> сигналы-триггеры, которые ДЕТЕРМИНИРОВАННО (по сигналам, до диффа) делают домен применимым
-# и требующим человеко-одобрения. Для secrets/dependencies applicability.signals в доменах пуст (они
-# ловятся по содержимому диффа), поэтому им заданы явные сигналы намерения.
+
+
+
 _EXPLICIT_TRIGGERS = {
     "secrets": ["secret_boundary"],
     "dependencies": ["dependency_addition", "dependency_added", "new_dependency"],
@@ -219,9 +219,9 @@ def load_approvals(child_root, wid):
                 r = yaml.safe_load(p.read_text(encoding="utf-8"))
                 if isinstance(r, dict) and r.get("kind") == "ApprovalRecord":
                     recs.append(r)
-            # Причина подавления (срез ратчета, 2026-08-12): FAIL-CLOSED и он верен — битая
-            # запись НЕ становится одобрением. Тип широк намеренно: любой отказ чтения обязан
-            # дать «одобрения нет», а не исключение наружу посреди проверки прав.
+            
+            
+            
             except Exception:  # noqa: BLE001,S110 — битая запись не считается одобрением
                 pass
     return recs
@@ -355,9 +355,9 @@ def write_record(child_root, wid, approval, approved_by, scope, reason, revision
     if binds_to is None:
         binds_to = plan_binding_hash(child_root, wid)
     if not binds_to:
-        # Отказ на ЗАПИСИ, а не на проверке: несвязываемое одобрение нельзя сохранить, иначе на диске
-        # появится запись, которая никогда не пройдёт проверку, и человек узнает об этом позже и в
-        # другом месте. Если плана и спеки нет — одобрять пока нечего.
+        
+        
+        
         raise ValueError(
             f"ApprovalRecord '{approval}' нечем связать: в features/{wid}/ нет ни run-plan.yaml, "
             f"ни spec.yaml. Одобрение обязано ссылаться на содержимое (v3.37) — сначала план/спека, "
@@ -376,8 +376,8 @@ def write_record(child_root, wid, approval, approved_by, scope, reason, revision
     if covers_packages:              # v3.0-rc5 (P1.2): какие пакеты покрывает (supply-chain fingerprint)
         rec["covers_packages"] = list(covers_packages)
     p = d / f"{approval}.yaml"
-    # v3.0.14 (finding аудита #2): ApprovalRecord — человеческий источник истины для high-risk; пишем
-    # DURABLE (атомарно+fsync+перечитывание), а не plain write_text (частичная запись = потеря одобрения).
+    
+    
     from ai_ops_kit.shared import lifecycle_store as _ls
     _r = _ls.durable_write(p, rec, require_keys=("approval", "approved_by", "scope"))
     if not _r.get("ok"):

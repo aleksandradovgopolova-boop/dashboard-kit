@@ -39,32 +39,32 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface
 
-# ─── индикатор Phoenix-роутинга ────────────────────────────────────────────────────────────────────
-# Файл считается таблицей маршрутов Phoenix только при явном индикаторе: подстрока `Phoenix.Router`
-# (`use Phoenix.Router`), макрос `use <App>Web, :router` ИЛИ конвенциональное имя файла router.ex.
-# Симметрия с import-сужением rails-/go-/java-экстракторов: без этого чужой `get`/`resources` в
-# обычном .ex дал бы ложь.
+
+
+
+
+
 _PHOENIX_TEXT_INDICATOR = "Phoenix.Router"
-# `use MyAppWeb, :router` — стандартный носитель роутера в приложении Phoenix (в тексте нет строки
-# `Phoenix.Router`, но `, :router`-макрос однозначно вводит роутер).
+
+
 _ROUTER_USE_RE = re.compile(r'\buse\s+\w[\w.]*\s*,\s*:router\b')
 
-# HTTP-глаголы Phoenix-DSL: `get "/x", Controller, :action`. Глагол — В НАЧАЛЕ логической строки
-# (после отступа), путь — двойные кавычки сразу за ним (Elixir: строки в "…"; '…' — charlist, не путь).
+
+
 _VERB_RE = re.compile(r'^\s*(get|post|put|patch|delete)\s+"([^"\n]*)"')
 
-# `resources "/orders", OrderController[, …]` — путь ресурса из литерала (первый аргумент).
+
 _RESOURCES_RE = re.compile(r'^\s*resources\s+"([^"\n]*)"')
 
-# `scope "/api" do` / `scope "/api", AppWeb do` — позиционный литеральный путь-префикс.
+
 _SCOPE_POS_RE = re.compile(r'^\s*scope\s+"([^"\n]*)"')
-# `scope path: "/api", alias: AppWeb do` — путь в именованном аргументе path:.
+
 _SCOPE_PATH_KW_RE = re.compile(r'^\s*scope\b[^\n]*\bpath:\s*"([^"\n]*)"')
-# Любой `scope` (в т.ч. `scope alias: AppWeb do` / `scope host: "…" do` без сегмента пути).
+
 _SCOPE_RE = re.compile(r'^\s*scope\b')
 
-# Строка ОТКРЫВАЕТ блок Elixir, если заканчивается на `do` (после снятия комментария). `do:`-инлайн
-# (keyword-форма) блок НЕ открывает и сюда не попадает (за `do` идёт `:`).
+
+
 _BLOCK_OPEN_RE = re.compile(r'\bdo\s*$')
 
 
@@ -176,8 +176,8 @@ def extract_phoenix_routes(parsed: ParsedFile) -> list:
         return []
 
     out: list = []
-    # Стек фреймов блоков: [(kind, prefix_segment)]. Префикс пути = сегменты scope в стеке; флаг
-    # внутри resources-блока (там member/collection и вложенные ресурсы честно НЕ разбираем).
+    
+    
     stack: list = []
     for idx, raw in enumerate(src.split("\n")):
         line = _strip_comment(raw)

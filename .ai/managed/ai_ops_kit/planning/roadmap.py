@@ -35,7 +35,7 @@ from pathlib import Path
 
 ROADMAP_REL = "ROADMAP.md"
 
-# Горизонты и их синонимы: репозиторий вправе писать «Next outcome» вместо «Следующий результат».
+
 HORIZONS = [
     ("now", ["сейчас", "now"]),
     ("next_outcome", ["следующий результат", "next outcome", "next"]),
@@ -62,8 +62,8 @@ def roadmap_rel(child_root) -> str:
     try:
         return _c.declared_path(child_root, "roadmap", ROADMAP_REL)
     except _c.ConfigInvalid:
-        # Направление — не fail-closed-контур: кит не читает по нему решения, он лишь сверяет цели.
-        # Объявление недостоверно -> работаем по дефолту, и об этом скажет `doctor`/`validate`.
+        
+        
         return ROADMAP_REL
 
 
@@ -71,11 +71,11 @@ def roadmap_path(child_root) -> Path:
     return Path(child_root) / roadmap_rel(child_root)
 
 
-# Уходящий путь направления из Product Operating Layer. Прежде health/drift читали ЕГО, а
-# planning/passport — корневой `ROADMAP.md`: один и тот же артефакт жил под двумя путями, и части
-# кита расходились в том, где направление (SR-2, свод реестров к одному источнику). Оставлен ТОЛЬКО
-# как fallback для дочек, установленных до свода: новые репозитории ведут направление в каноническом
-# `roadmap_rel`, а этот путь уходит через окно вывода.
+
+
+
+
+
 LEGACY_ROADMAP_REL = ".ai-ops/ROADMAP.md"
 
 

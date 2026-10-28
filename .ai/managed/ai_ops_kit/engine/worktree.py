@@ -40,8 +40,8 @@ def _safe_target(root, wt_dir, wid):
     root = Path(root).resolve()
     base = (root / wt_dir).resolve()
     target = (base / str(wid)).resolve()
-    # Требуем, чтобы worktree лежал СТРОГО внутри <root>/<wt_dir> — не только внутри root.
-    # Так `../escape` (уводит в root/.ai/escape) тоже отвергается, а не только уход за root.
+    
+    
     for anchor, label in ((base, f"каталога worktree {base}"), (root, f"корня {root}")):
         try:
             target.relative_to(anchor)
@@ -196,7 +196,7 @@ def apply_fixes_in_worktree(root, branch, fixers, *, base="HEAD", verify=None,
                 skipped.append({"key": key, "reason": f"потолок файлов ({max_files}) — фиксер пропущен"})
                 continue
             if verify is not None and not verify(wt_path):
-                # проверка не прошла -> откат ИМЕННО его изменений, фиксер skipped (не в PR)
+                
                 _git(wt_path, "checkout", "--", *touched)
                 skipped.append({"key": key, "reason": "проверка после фиксера не прошла — откат"})
                 continue

@@ -26,9 +26,9 @@ entry). Значения каталога ВЫВЕДЕНЫ из реестра �
 """
 from __future__ import annotations
 
-# Порядок и подписи статусов. Активные — первыми (их аналитик смотрит чаще всего), затем planned
-# (объявлено, кода ещё нет), затем deprecated (выводится из эксплуатации). Неизвестный статус не
-# теряется — он выносится в свою группу в конце, честно назван, а не молча спрятан.
+
+
+
 STATUS_ORDER: tuple[str, ...] = ("active", "planned", "deprecated")
 STATUS_LABEL: dict[str, str] = {
     "active": "active (живёт)",
@@ -117,7 +117,7 @@ def _feature_block(feature: dict) -> list[str]:
     surfaces = [s for s in surfaces if isinstance(s, dict)] if isinstance(surfaces, list) else []
     if surfaces:
         lines += ["| Поверхность | Ссылка в коде | Уверенность | Экстрактор |", "|---|---|---|---|"]
-        # Детерминированный порядок строк: по виду, затем по ссылке — чтобы diff краснел по сути.
+        
         for s in sorted(surfaces, key=lambda x: (_clean(x.get("kind")), _clean(x.get("ref")))):
             lines.append(
                 f"| {_clean(s.get('kind')) or '—'} | `{_clean(s.get('ref')) or '—'}` | "
@@ -147,7 +147,7 @@ def render_catalog(registry: dict | None, *, regen_cmd: str = _DEFAULT_REGEN) ->
         lines.append(f"| {label} | {summary['by_status'][status]} |")
     lines.append("")
 
-    # Фичи сгруппированы по статусу (active -> planned -> deprecated -> прочее), внутри — по id.
+    
     grouped: dict[str, list[dict]] = {}
     for f in feats:
         grouped.setdefault(_status_of(f), []).append(f)

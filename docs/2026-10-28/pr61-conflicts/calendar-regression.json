@@ -1,0 +1,54 @@
+[
+  {
+    "width": 390,
+    "frames": [
+      {
+        "height": 402,
+        "width": 262
+      },
+      {
+        "height": 402,
+        "width": 262
+      },
+      {
+        "height": 402,
+        "width": 262
+      },
+      {
+        "height": 402,
+        "width": 262
+      },
+      {
+        "height": 402,
+        "width": 262
+      }
+    ],
+    "stable": true
+  },
+  {
+    "width": 1280,
+    "frames": [
+      {
+        "height": 801.515625,
+        "width": 854.890625
+      },
+      {
+        "height": 801.515625,
+        "width": 854.890625
+      },
+      {
+        "height": 801.515625,
+        "width": 854.890625
+      },
+      {
+        "height": 801.515625,
+        "width": 854.890625
+      },
+      {
+        "height": 801.515625,
+        "width": 854.890625
+      }
+    ],
+    "stable": true
+  }
+]

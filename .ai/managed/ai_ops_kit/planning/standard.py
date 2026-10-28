@@ -54,7 +54,7 @@ def requirement_set(pkg_root: Path = PKG) -> dict:
     required_artifacts = set()
     required_sections = set()
 
-    # контуры продукта
+    
     for c in pom.get("contours") or []:
         for s in c.get("source_of_truth") or []:
             if s.get("required"):
@@ -62,7 +62,7 @@ def requirement_set(pkg_root: Path = PKG) -> dict:
             for sec in s.get("required_sections") or []:
                 required_sections.add(f"{s['path']}::{sec}")
 
-    # слой .ai-ops/ (artifact-registry)
+    
     for a in ar.get("artifacts") or []:
         if a.get("required"):
             required_artifacts.add(a.get("path", a.get("id")))
@@ -88,8 +88,8 @@ def requirement_set(pkg_root: Path = PKG) -> dict:
     for a in pom_man.get("required_repo_artifacts") or []:
         required_artifacts.add(a)
 
-    # сила проверок (change of check strength — триггер версии): id -> blocking из полных
-    # определений `gates` (`mvp_blocking_gates` — лишь список id блокирующего набора).
+    
+    
     gate_strength = {}
     gdict = gates.get("gates") or {}
     _iter = gdict.values() if isinstance(gdict, dict) else gdict

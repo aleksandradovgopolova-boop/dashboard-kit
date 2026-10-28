@@ -45,7 +45,7 @@ def component_stories(stories, component):
     return sorted(s["id"] for s in stories if sa._component_of(s) == component)
 
 
-# Суффиксы «файла компонента/истории», которые снимаем, чтобы получить стем компонента.
+
 _COMPONENT_SUFFIXES = (".stories.tsx", ".stories.ts", ".stories.jsx", ".stories.js",
                        ".tsx", ".ts", ".jsx", ".js")
 

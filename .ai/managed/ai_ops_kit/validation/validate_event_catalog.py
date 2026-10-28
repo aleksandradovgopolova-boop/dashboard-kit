@@ -40,13 +40,13 @@ import yaml
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
 KINDS = {"domain", "audit", "analytics"}
-# каноничная грамматика: lowercase, dot-нотация, ≥2 сегмента, внутри сегмента [a-z0-9_]
+
 EVENT_RE = re.compile(r"^[a-z][a-z0-9]*(?:\.[a-z0-9]+(?:_[a-z0-9]+)*)+$")
 AUDIT_FIELD_MARKERS = {"actor", "actorid", "action", "result", "objecttype", "objectid"}
 
 
 def _stem(name):
-    # грубый «стем»: имя без последнего сегмента (концепт), для поиска расхождений
+    
     return name.rsplit(".", 1)[0] if "." in name else name
 
 
@@ -75,14 +75,14 @@ def check(data: dict):
         if k not in KINDS:
             errors.append(f"событие {n}: kind '{k}' не в {sorted(KINDS)}")
 
-        # 3. концептуальная раздельность domain vs audit
+        
         if k == "domain":
             flds = {str(f).lower() for f in (e.get("fields") or [])}
             if flds & AUDIT_FIELD_MARKERS:
                 errors.append(f"domain-событие {n} описано audit-полями "
                               f"{sorted(flds & AUDIT_FIELD_MARKERS)} — domain event подменён на AuditEvent")
 
-        # 4-5. audit/analytics -> maps_to domain (или standalone+reason)
+        
         if k in ("audit", "analytics"):
             if e.get("standalone"):
                 if not e.get("reason"):
@@ -95,14 +95,14 @@ def check(data: dict):
                 elif mt not in domain_names:
                     errors.append(f"событие {n}: maps_to '{mt}' — нет такого domain-события")
 
-    # 6. WARN: одинаковый стем у разных имён без связи (вероятный drift)
+    
     by_stem = {}
     for e in events:
         by_stem.setdefault(_stem(e.get("name", "")), []).append(e)
     for stem, group in by_stem.items():
         gnames = {g.get("name") for g in group}
         if len(gnames) > 1:
-            # если внутри группы есть maps_to-связь между ними — ок
+            
             linked = any(g.get("maps_to") in gnames for g in group)
             if not linked:
                 warns.append(f"разные имена с общим концептом '{stem}': {sorted(gnames)} — "
@@ -113,7 +113,7 @@ def check(data: dict):
 def scan_code(catalog_names, mapped_names, files):
     """Best-effort: строковые литералы событий в коде, не совпадающие с каноном."""
     known = set(catalog_names) | set(mapped_names)
-    # ловим литералы вида "word.word" / 'word.word.word'
+    
     lit_re = re.compile(r"""['"]([a-z][a-z0-9]*(?:[._][a-z0-9]+)+)['"]""")
     drift = []
     for f in files:
@@ -122,7 +122,7 @@ def scan_code(catalog_names, mapped_names, files):
             continue
         for m in lit_re.finditer(p.read_text(encoding="utf-8", errors="ignore")):
             lit = m.group(1)
-            # интересуют только «событие-подобные» (есть точка) и не входящие в канон
+            
             if "." in lit and lit not in known:
                 drift.append({"file": f, "literal": lit})
     return drift

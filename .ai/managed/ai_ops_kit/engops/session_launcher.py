@@ -62,20 +62,20 @@ try:
 except ImportError:  # pragma: no cover
     yaml = None
 
-# Потолок автономии. None = НЕ ОБЪЯВЛЕН -> автономная трата запрещена (fail-closed, не «ноль»).
+
 AUTONOMY_DEFAULTS = {
     "max_autonomous_spend_usd": None,
     "max_subsessions_per_session": None,
 }
-# Роль в ledger, по которой автономная трата отличима от всякой другой. Не менять молча:
-# по ней считается потолок, и переименование обнулит учёт (тест это ловит).
+
+
 AUTONOMOUS_ROLE = "autonomous-subsession"
 RUN_ID_PREFIX = "subsession"
 
 REFUSALS = ("unsafe_boundary", "no_ceiling", "session_unidentified",
             "spend_unprovable", "over_ceiling", "over_count", "no_usage_accounting")
 ACTIONS = ("spawn_subsession", "continue_here", "refuse")
-# Свежая сессия оправдана только когда контекст ИЗМЕРЕННО дорогой И работа впереди — другая.
+
 WARRANTING_STATES = ("compact_recommended", "new_session_recommended")
 
 
@@ -100,8 +100,8 @@ def load_ceiling(child_root):
         try:
             se = (yaml.safe_load(src.read_text(encoding="utf-8")) or {}).get(key) or {}
         except (yaml.YAMLError, OSError):
-            # Нечитаемый конфиг НЕ означает «потолка нет и трать сколько хочешь»: дефолты
-            # fail-closed (None), поэтому итог — отказ no_ceiling. Молчаливого разрешения не будет.
+            
+            
             return out
         for k in AUTONOMY_DEFAULTS:
             if k in se:
@@ -109,11 +109,11 @@ def load_ceiling(child_root):
     return out
 
 
-# Сколько подсессий должно уместиться в предлагаемую сумму. Не «побольше на всякий случай»: число
-# входит в предложение владельцу, и он должен видеть, за что платит.
+
+
 SUGGESTED_SUBSESSIONS = 4
-# Меньше этого числа измеренных вызовов — выборка не выборка, предложения не делаем. Порог не
-# выведен статистикой, он объявлен: на трёх вызовах p90 — это просто максимум.
+
+
 MIN_SAMPLE_FOR_SUGGESTION = 20
 
 
@@ -130,7 +130,8 @@ def suggest_ceiling(child_root, subsessions=SUGGESTED_SUBSESSIONS, reference_roo
     `no_measurement` и тогда числа НЕТ. Выдуманного числа под видом расчёта не будет.
     """
     def _measured(root):
-        return [float(r["cost"]) for r in usage_ledger.load_product(root)
+        records = (usage_ledger.normalize(r) for r in usage_ledger.load_product(root))
+        return [r["cost"] for r in records
                 if r.get("cost") is not None and r.get("cost_status") == "measured"]
 
     own = _measured(child_root)
@@ -151,7 +152,11 @@ def suggest_ceiling(child_root, subsessions=SUGGESTED_SUBSESSIONS, reference_roo
                           f"{MIN_SAMPLE_FOR_SUGGESTION}, поэтому предлагать сумму было бы гаданием."}
     ordered = sorted(costs)
     p90 = ordered[max(0, math.ceil(len(ordered) * 0.9) - 1)]
-    amount = math.ceil(p90 * subsessions * 100) / 100.0
+    scaled = p90 * subsessions * 100
+    if not math.isfinite(scaled):
+        return {"amount": None, "basis": "no_measurement", "sample": len(costs), "source": source,
+                "reason": "предложенная сумма не представима конечным числом; лимит не назначен"}
+    amount = math.ceil(scaled) / 100.0
     return {"amount": amount, "basis": basis, "sample": len(costs), "source": source,
             "p90": round(p90, 4), "subsessions": subsessions,
             "reason": f"{subsessions} подсессии по ${p90:.2f} — это p90 измеренной стоимости вызова "
@@ -234,7 +239,7 @@ def decide(child_root, snapshot, *, ceiling=None, next_relation="new_independent
                        f"исчерпан объявленный лимит подсессий ({spent['calls']} из {int(max_count)}).",
                        numbers)
 
-    # Разрешение есть. Дальше вопрос не «можно ли», а «нужно ли».
+    
     if state == "unknown":
         return {"kind": "SubsessionDecision", "schema_version": 1, "action": "continue_here",
                 "refusal": None,
@@ -286,7 +291,7 @@ def build_brief(*, workitem_id=None, title=None, repo_path=None, safe_step=None,
               "через свои проверки — сам не пиши файлы, не коммить, не создавай PR."]
     brief = "\n".join(L)
     if len(brief) > max_chars:
-        # Усечение НАЗЫВАЕТСЯ: молчаливое читалось бы как «в брифе всё».
+        
         brief = brief[:max_chars] + f"\n\n[бриф усечён до {max_chars} символов — часть фактов не вошла]"
     return brief
 
@@ -318,7 +323,7 @@ def spawn(child_root, brief, snapshot, *, ceiling=None, provider=None, usage_hoo
                     "нельзя записать, сделала бы следующий потолок недействительным.",
                     d.get("numbers") or {})
     if d["action"] != "spawn_subsession":
-        # Ни одного вызова модели: отказ означает «не потратили», а не «потратили и передумали».
+        
         return {"kind": "SubsessionResult", "schema_version": 1, "spawned": False,
                 "decision": d, "spend_before": None, "spend_after": None, "result": None,
                 "ceiling_crossed_by": None}
@@ -342,8 +347,8 @@ def spawn(child_root, brief, snapshot, *, ceiling=None, provider=None, usage_hoo
     return {"kind": "SubsessionResult", "schema_version": 1, "spawned": True, "decision": d,
             "run_id": run_id, "result": text,
             "spend_before": before, "spend_after": after, "records_written": written,
-            # Потраченное не отменить. Честная половина — НАЗВАТЬ пересечение, а не спрятать его:
-            # следующий `decide` откажет по over_ceiling, и причина будет видна человеку.
+            
+            
             "ceiling_crossed_by": crossed}
 
 

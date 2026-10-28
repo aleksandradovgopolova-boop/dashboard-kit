@@ -18,10 +18,10 @@ try:                                          # v3.38: валидатор дву
     from ai_ops_kit.validation import _bootstrap   # noqa: F401 — импорт пакетом (после pip install)
 except ImportError:                                # запуск скриптом: корня на пути ещё нет,
     import _bootstrap                              # noqa: F401 — и положить его может только он сам
-# Проверяющая логика вынесена ВНИЗ (пакет `checks`, слой primitives): и рантайм (security_enforcement),
-# и эта CLI-обёртка импортируют её вниз — без восходящего ребра security -> validation. check и
-# константы ре-экспортируются для обратной совместимости (тесты и старые вызовы
-# `validate_memory_governance.check`).
+
+
+
+
 from ai_ops_kit.checks.memory_governance import (   # noqa: E402
     EXPIRY_MODES, SOURCE_TYPES, check)              # noqa: F401
 

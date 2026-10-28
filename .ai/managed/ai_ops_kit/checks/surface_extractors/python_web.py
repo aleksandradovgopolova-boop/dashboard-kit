@@ -19,10 +19,10 @@ from ai_ops_kit.checks.surface_extractors._common import (
     _is_str_literal,
 )
 
-# ── Декораторы HTTP-маршрутов известных питон-фреймворков (Flask 2.x, FastAPI, APIRouter). ────────
-# Метод-атрибут декоратора: Flask `@app.route`, Flask 2.0+ / FastAPI `@app.get/@router.post/...`,
-# `@app.api_route`, `@app.websocket`. Сам по себе этот набор поверхности не доказывает — доказывает
-# связка «декоратор-Call + атрибут из набора + первый арг = строковый путь, начинающийся с '/'».
+
+
+
+
 _HTTP_DECORATOR_ATTRS = frozenset({
     "route", "api_route", "websocket",
     "get", "post", "put", "delete", "patch", "head", "options", "trace",
@@ -55,8 +55,8 @@ def extract_python_web_routes(parsed: ParsedFile) -> list:
                 continue
             if dec.func.attr not in _HTTP_DECORATOR_ATTRS:
                 continue
-            # приёмник декоратора — имя (app/router/bp/api) или атрибут (app.router): маршрутизатор,
-            # а не произвольный объект. Реальная граница точности — литерал-путь ниже.
+            
+            
             if not isinstance(dec.func.value, (ast.Name, ast.Attribute)):
                 continue
             if not (dec.args and _is_path_literal(dec.args[0])):
@@ -68,9 +68,9 @@ def extract_python_web_routes(parsed: ParsedFile) -> list:
     return out
 
 
-# ─── Ещё веб-фреймворки (вид route, точный разбор AST): Django / DRF / aiohttp ────────────────────
-# Проверка «строковый литерал» и «файл импортирует модуль» переиспользуют общие хелперы
-# (`_is_str_literal`, `_imports_module`) — одна реализация на назначение, без дублей.
+
+
+
 
 
 def _dotted_name(node: ast.expr | None) -> str | None:
@@ -105,7 +105,7 @@ def _call_func_name(func: ast.expr) -> str | None:
     return None
 
 
-# ── Django urlpatterns ───────────────────────────────────────────────────────────────────────────
+
 _DJANGO_URL_FUNCS = frozenset({"path", "re_path"})
 
 
@@ -136,7 +136,7 @@ def extract_django_urls(parsed: ParsedFile) -> list:
     return out
 
 
-# ── DRF-роутеры ──────────────────────────────────────────────────────────────────────────────────
+
 
 
 def extract_drf_router(parsed: ParsedFile) -> list:
@@ -163,13 +163,13 @@ def extract_drf_router(parsed: ParsedFile) -> list:
     return out
 
 
-# ── aiohttp ──────────────────────────────────────────────────────────────────────────────────────
-# Методы-адаптеры маршрутизатора: `app.router.add_get("/p", h)` / `app.add_post("/p", h)` и т.п.
+
+
 _AIOHTTP_METHOD_ADDERS = frozenset({
     "add_get", "add_post", "add_put", "add_delete", "add_patch",
     "add_head", "add_options", "add_view",
 })
-# Хелперы описания маршрута внутри `app.add_routes([...])`: `web.get("/p", h)` / `web.post(...)` и т.п.
+
 _AIOHTTP_WEB_METHODS = frozenset({
     "get", "post", "put", "delete", "patch", "head", "options", "view",
 })
