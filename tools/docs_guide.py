@@ -57,9 +57,9 @@ def render(pages, component_render):
  start = start.replace('<body class="dk-page dk-glass">', '<body class="dk-page dk-glass sc-guide">')
  start = start.replace('<title>Кнопка · dashboard-kit</title>', '<title>Обзор · dashboard-kit</title>')
  # Static hero illustration; the task form is the only page-specific component.
- start = start.replace('</head>', '''<link rel="stylesheet" href="css/page.overview.css?v=20261029-clean-home">
+ start = start.replace('</head>', '''<link rel="stylesheet" href="css/page.overview.css?v=20261029-single-row">
 <script src="js/dk-form.js" defer></script>
-<script src="js/docs-overview.js?v=20261029-clean-home" defer></script>
+<script src="js/docs-overview.js?v=20261029-single-row" defer></script>
 </head>''')
  start = start.replace('tools/component_pages/p1_controls.py', 'tools/docs_guide.py')
  rules = ''.join('<div class="sc-note"><h3>'+e(title)+'</h3><ul class="sc-list">'+''.join('<li>'+e(x)+'</li>' for x in items)+'</ul></div>' for title,items in RULES)
@@ -79,14 +79,12 @@ def render(pages, component_render):
  return start + f'''<header class="sc-hero sc-hero--overview">
 <div class="sc-overview-intro">
 <div class="sc-overview-copy"><h1>От вашей задачи<br> к дашборду</h1><p class="sc-hero__lead">Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.</p>
-<div class="sc-overview-actions"><a class="dk-btn dk-btn--primary" href="#start">Собрать дашборд <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a><a class="dk-btn" href="#workflow">Как работать с ИИ <svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg></a></div></div>
+<div class="sc-overview-actions"><a class="dk-btn dk-btn--lg dk-btn--primary" href="#start">Собрать дашборд <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a><a class="dk-btn dk-btn--lg" href="#workflow">Как работать с ИИ <svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg></a></div></div>
 <div class="sc-overview-art" aria-hidden="true"><img src="assets/dashboard-kit-hero-charts.png" width="1663" height="946" alt="" fetchpriority="high" decoding="async"></div></div>
 <ol class="sc-overview-steps dk-widget" aria-label="Как собрать дашборд"><li><span class="sc-step-emoji" aria-hidden="true">📝</span><div><strong>1. Опишите задачу</strong><span>Какой дашборд нужен и кому он поможет.</span></div></li><li><span class="sc-step-emoji" aria-hidden="true">🗂️</span><div><strong>2. Передайте данные</strong><span>Файл, источник или описание будущих данных.</span></div></li><li><span class="sc-step-emoji" aria-hidden="true">✨</span><div><strong>3. Получите дашборд</strong><span>Помощник подберёт компоненты и проверит результат.</span></div></li></ol>
 <div class="sc-overview-examples" id="overview-examples"><div class="sc-overview-section-head"><h2><span class="sc-doc-emoji" aria-hidden="true">🖥️</span>Примеры дашбордов</h2></div>
 <div class="sc-example-cards">{''.join('<a class="dk-widget sc-example-card" href="'+href+'.html"><img src="assets/examples/'+href+'-dark.png" data-example-image="'+href+'" width="640" height="450" alt="" loading="lazy"><strong>'+title+'</strong></a>' for href,title in [('regions','Мониторинг регионов'),('accidents','Аварии и инциденты'),('calendar','Календарь событий'),('family-mortgage','Семейная ипотека')])}</div>
-<button class="dk-btn dk-btn--ghost sc-overview-all" type="button" data-more-examples aria-expanded="false" aria-controls="overview-more-examples">Все примеры</button>
-<div class="sc-overview-more" id="overview-more-examples" hidden><a class="dk-btn" href="dashboard.html">Мониторинг показателей <svg class="dk-i" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg></a><a class="dk-btn" href="reference-dashboard.html">Данные и действия <svg class="dk-i" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg></a><a class="dk-btn" href="ai-value.html">Польза AI <svg class="dk-i" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg></a></div></div>
-<div class="dk-widget sc-overview-catalog"><span class="sc-catalog-emoji" aria-hidden="true">📖</span><div><h2>Справочник компонентов</h2></div><a class="dk-btn" href="#catalog">Открыть справочник <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a></div>
+</div>
 </header>
 <section class="sc-sec" id="start"><h2><span class="sc-doc-emoji" aria-hidden="true">🛠️</span>Собрать дашборд</h2><p>Подготовьте задачу и получите запрос для Codex, Claude или другого ИИ-помощника. Компоненты и графики он подберёт по правилам кита.</p>
 <form class="dk-form dk-form--one sc-task-form" id="dashboard-task-form"><div class="dk-form__alarm" hidden></div>

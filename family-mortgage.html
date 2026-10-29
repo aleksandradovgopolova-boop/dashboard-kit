@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/tokens.semantic.css?v=20261027-widget-polish">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
 <link rel="stylesheet" href="css/chrome.css?v=20261026-region-select">
-<link rel="stylesheet" href="css/page.family-mortgage.css?v=20261028-filters-stable">
+<link rel="stylesheet" href="css/page.family-mortgage.css?v=20261029-header-adapt">
 
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261026-region-select" defer></script>
@@ -31,7 +31,7 @@
 <script src="js/dk-workspace.js?v=20261026-region-select" defer></script>
 <script src="js/dk-dashboard.js?v=20261026-region-select" defer></script>
 <script src="js/family-mortgage-data.js?v=20261026-region-select" defer></script>
-<script src="js/family-mortgage.js?v=20261028-detail-final" defer></script>
+<script src="js/family-mortgage.js?v=20261029-header-adapt" defer></script>
 <!-- данные рядом с китом: data/family-mortgage-observations.json, data/regions.topojson,
      data/regions-tiles.json; страница открывается по http -->
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
@@ -46,7 +46,8 @@
       <span class="fm-brand__mark" aria-hidden="true"><svg class="dk-i"><use href="#ti-home"/></svg></span>
       <h1 class="fm-brand__name">Семейная ипотека</h1>
     </div>
-    <section class="dk-toolbar fm-filters" aria-label="Фильтры программы" inert aria-busy="true">
+    <button type="button" class="dk-iconbtn fm-filter-toggle" id="fm-filter-toggle" aria-label="Фильтры программы" title="Фильтры программы" aria-controls="fm-filter-panel" aria-expanded="false" hidden disabled><svg class="dk-i" aria-hidden="true"><use href="#ti-filter"/></svg></button>
+    <section id="fm-filter-panel" class="dk-toolbar fm-filters" aria-label="Фильтры программы" inert aria-busy="true">
       <div class="fm-filter fm-search"><div id="fm-region-filter" class="dk-select"><button type="button" class="dk-select__trigger" disabled><span class="dk-select__label">Все регионы</span><svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-down"/></svg></button></div></div>
       <div class="fm-filter"><div id="fm-district-filter" class="dk-select"><button type="button" class="dk-select__trigger" disabled><span class="dk-select__label">Все округа</span><svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-down"/></svg></button></div></div>
       <div class="fm-filter"><div id="fm-month-filter" class="dk-select"><button type="button" class="dk-select__trigger" disabled><span class="dk-select__label">Весь период</span><svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-down"/></svg></button></div></div>

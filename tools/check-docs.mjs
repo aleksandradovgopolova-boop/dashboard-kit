@@ -86,8 +86,7 @@ try {
   assert(await evaluate(`(()=>{const img=document.querySelector('.sc-overview-art img');return img.complete&&img.naturalWidth>0&&!document.querySelector('.sc-live-preview')&&!document.querySelector('.sc-overview-intro canvas');})()`),'Hero must use the accepted static illustration, without live preview');
   assert(await evaluate(`!document.querySelector('script[src*="echarts"]')&&!document.querySelector('script[src*="dk-map"]')`),'Static overview must not load live chart/map dependencies');
   assert(await evaluate(`[...document.querySelectorAll('[data-example-image]')].every(x=>x.complete&&x.naturalWidth>0)`),'Real example screenshots must load');
-  await evaluate(`document.querySelector('[data-more-examples]').click()`);
-  assert(await evaluate(`!document.querySelector('#overview-more-examples').hidden&&document.querySelector('[data-more-examples]').getAttribute('aria-expanded')==='true'`),'All examples disclosure');
+  assert(await evaluate(`document.querySelectorAll('.sc-example-cards>a').length===4&&!document.querySelector('[data-more-examples],#overview-more-examples,.sc-overview-catalog')`),'Overview contains exactly four examples and no extra examples or library banner');
   await evaluate(`location.hash='start'`); await settle();
   await evaluate(`document.querySelector('#dashboard-task-form button[type="submit"]').click()`);
   assert(await evaluate(`document.querySelector('[data-task-result]').hidden && document.querySelector('#task-goal').getAttribute('aria-invalid')==='true'`),'Blank task must be rejected without losing entered values');
@@ -108,7 +107,7 @@ try {
   await evaluate(`location.hash='catalog'`); await settle();
   assert(await evaluate(`!document.querySelector('#catalog').hidden&&!!document.querySelector('.sc-nav a[aria-current="location"][href="index.html#catalog"]')`), 'Catalog deep link and active navigation');
   await visit('index.html',390);
-  await evaluate(`document.querySelector('.sc-topnav button').click()`); await settle();
+  await evaluate(`document.querySelector('.sc-bar__menu').click()`); await settle();
   assert(await evaluate(`!document.querySelector('.sc-nav').hidden&&document.querySelector('.sc-shell>.dk-wrap').inert`), 'Mobile menu must isolate background');
   await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
   await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});

@@ -11,11 +11,6 @@
   }
   new MutationObserver(syncImages).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   syncImages();
-  var more = root.querySelector('[data-more-examples]');
-  more.addEventListener('click',function () {
-    var panel = document.getElementById('overview-more-examples'); panel.hidden = !panel.hidden;
-    more.setAttribute('aria-expanded',String(!panel.hidden));
-  });
   var form = document.getElementById('dashboard-task-form');
   var result = document.querySelector('[data-task-result]');
   var output = document.getElementById('dashboard-task-prompt');

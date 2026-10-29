@@ -66,7 +66,7 @@ try {
   const evidence = resolve(process.env.DK_EVIDENCE_DIR || resolve(tmpdir(), 'dashboard-kit-evidence'));
   await mkdir(evidence, {recursive:true});
 
-  for (const theme of ['light', 'dark']) for (const width of [320, 390, 600, 768, 1024, 1100, 1280, 1536]) {
+  for (const theme of ['light', 'dark']) for (const width of [320, 390, 600, 768, 859, 860, 886, 1024, 1100, 1280, 1536]) {
     await send('Emulation.setDeviceMetricsOverride', {width, height:900, deviceScaleFactor:1, mobile:width < 768});
     const url = `${base}/family-mortgage.html?theme=${theme}`;
     await send('Page.navigate', {url});
@@ -75,6 +75,30 @@ try {
     await waitFor(`document.querySelector('#fm-map .dk-map__tile')`);
     await click(`[data-theme-set="${theme}"]`);
     assert(await evaluate(`document.documentElement.dataset.theme===${JSON.stringify(theme)}`), 'Requested theme must be applied');
+    const header=await evaluate(`(()=>{const r=x=>{const a=x.getBoundingClientRect();return {l:a.left,r:a.right,t:a.top,b:a.bottom,h:a.height,cy:(a.top+a.bottom)/2};};return {inner:r(document.querySelector('.fm-topbar__inner')),brand:r(document.querySelector('.fm-brand')),filters:r(document.querySelector('.fm-filters')),tools:r(document.querySelector('.fm-topbar__tools')),toggle:r(document.querySelector('#fm-filter-toggle')),compact:!document.querySelector('#fm-filter-toggle').hidden,hidden:document.querySelector('.fm-filters').hidden};})()`);
+    assert(header.inner.h<=58&&header.brand.r<= (width<860?header.toggle.l:header.filters.l)+1&&header.tools.r<=width+1,'One family header row without overlap: '+width+' '+JSON.stringify(header));
+    if(width>=860){
+      assert(!header.compact&&!header.hidden&&header.filters.r<=header.tools.l+1&&Math.abs(header.filters.cy-header.tools.cy)<1,'Inline filters stay in the title row');
+    }else{
+      assert(header.compact&&header.hidden,'Phone filters use the compact entry');
+      await click('#fm-filter-toggle');
+      assert(await evaluate(`(()=>{const r=document.querySelector('.fm-filters').getBoundingClientRect(),h=document.querySelector('.fm-topbar__inner').getBoundingClientRect();return r.width>250&&r.left>=0&&r.right<=innerWidth+1&&r.top>=h.bottom-1;})()`),'Filter disclosure uses the viewport width below the header');
+      assert(await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__label')).every(x=>x.scrollWidth<=x.clientWidth+1)`),'Expanded phone filters show full default labels');
+      assert(await evaluate(`!document.querySelector('.fm-filters').hidden&&document.querySelector('#fm-filter-toggle').getAttribute('aria-expanded')==='true'`),'Compact filters open');
+      await click('#fm-district-filter .dk-select__trigger');await escape();
+      assert(await evaluate(`!document.querySelector('.fm-filters').hidden`),'First Escape closes select only');
+      await escape();assert(await evaluate(`document.querySelector('.fm-filters').hidden&&document.activeElement.id==='fm-filter-toggle'`),'Second Escape closes filters and restores focus');
+    }
+    if(width===886){
+      const frame=()=>evaluate(`Array.from(document.querySelectorAll('.fm-topbar .fm-filter,.fm-filter-actions')).map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height];})`);
+      const original=await frame();
+      await click('#fm-district-filter .dk-select__trigger');
+      await evaluate(`Array.from(document.querySelectorAll('#fm-district-filter .dk-menu__item')).find(b=>b.textContent.includes('Дальневосточный')).click()`);await ready();
+      assert.deepEqual(await frame(),original,'Long district and reset visibility must not move filters');
+      await click('#fm-reset');await ready();assert.deepEqual(await frame(),original,'Reset preserves header positions');
+      const shot=await send('Page.captureScreenshot',{format:'png'});await writeFile(resolve(evidence,'mortgage-header-'+theme+'-886.png'),Buffer.from(shot.data,'base64'));
+    }
+    assert(await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__label')).filter(x=>x.getClientRects().length).every(x=>x.scrollWidth<=x.clientWidth+1)`),'Default filter labels remain readable');
     const baseline = await view();
     assert.equal(baseline.rowCount, 89, 'All demonstration regions must be accessible');
     assert.equal(baseline.rows.length, 12);

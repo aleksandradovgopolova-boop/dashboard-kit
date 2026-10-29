@@ -31,6 +31,7 @@
   var lastMegaTrigger = null, currentMegaId = '';
   var hoverMenu = false, menuCloseTimer = null;
   var desktopHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+  var compactNav = window.matchMedia('(max-width:859px)'), compactToggle = null;
   function cancelMenuClose() { clearTimeout(menuCloseTimer); }
   function scheduleMenuClose() {
     cancelMenuClose();
@@ -63,7 +64,8 @@
     if (megaButtons) megaButtons.forEach(function (button) { button.setAttribute('aria-expanded', String(open && button.getAttribute('aria-controls') === currentMegaId)); });
     shade.hidden = !open; main.inert = open;
     document.body.classList.toggle('sc-menu-open', open);
-    if (focus && lastMegaTrigger) lastMegaTrigger.focus({preventScroll:true});
+    if (compactToggle) compactToggle.setAttribute('aria-expanded',String(open));
+    if (focus) { var returnTo = compactNav.matches ? compactToggle : lastMegaTrigger; if (returnTo) returnTo.focus({preventScroll:true}); }
     if (open) requestAnimationFrame(function () {
       revealMegaCategory(); revealCurrentComponent();
     });
@@ -263,7 +265,7 @@
       hoverMenu = false; lastMegaTrigger = button; selectMega(panel.id); setMenu(!close);
     });
     button.addEventListener('pointerenter',function (event) {
-      if (event.pointerType !== 'mouse' || !desktopHover.matches || window.innerWidth < 1024 || nav.contains(document.activeElement)) return;
+      if (event.pointerType !== 'mouse' || !desktopHover.matches || compactNav.matches || nav.contains(document.activeElement)) return;
       cancelMenuClose(); hoverMenu = true; lastMegaTrigger = button; selectMega(panel.id); setMenu(true);
     });
     button.addEventListener('keydown',function (event) {
@@ -285,6 +287,19 @@
   megaRail.querySelector('.sc-mega__home').addEventListener('pointerenter',scheduleMenuClose);
   var barTools = document.createElement('div'); barTools.className = 'sc-bar__tools';
   bar.appendChild(barTools); barTools.append(searchButton,bar.querySelector('.sc-ctl'));
+  compactToggle = document.createElement('button'); compactToggle.type = 'button'; compactToggle.className = 'sc-bar__menu';
+  compactToggle.textContent = 'Меню'; compactToggle.setAttribute('aria-label','Меню разделов кита'); compactToggle.setAttribute('aria-controls',nav.id); compactToggle.setAttribute('aria-expanded','false');
+  bar.insertBefore(compactToggle,barTools);
+  compactToggle.addEventListener('click',function () { hoverMenu = false; setMenu(nav.hidden); });
+  compactToggle.addEventListener('keydown',function (event) { if (event.key === 'ArrowDown') { event.preventDefault(); setMenu(true); megaRail.querySelector('a').focus(); } });
+  function syncCompactNavigation() {
+    var restore = !nav.hidden || megaRail.contains(document.activeElement) || document.activeElement === compactToggle;
+    setMenu(false); compactToggle.hidden = !compactNav.matches;
+    if (compactNav.matches) nav.insertBefore(megaRail,catalog);
+    else bar.insertBefore(megaRail,compactToggle);
+    if (restore) (compactNav.matches ? compactToggle : megaButtons.find(function (button) { return button.getAttribute('aria-controls') === currentMegaId; })).focus({preventScroll:true});
+  }
+  compactNav.addEventListener('change',syncCompactNavigation); syncCompactNavigation();
   if (!initialMega && showcase) { var designPanel = megaPanels.find(function (panel) { return panel.querySelector('.sc-mega__title').textContent === 'Дизайн-система'; }); if (designPanel) initialMega = designPanel.id; }
   selectMega(initialMega || megaPanels[0].id);
   if (here.startsWith('component-')) requestAnimationFrame(revealCurrentComponent);
@@ -449,7 +464,7 @@
       if (x.sec === selected) { x.link.setAttribute('aria-current','location'); openParents(x.link); }
       else x.link.removeAttribute('aria-current');
     });
-    nav.querySelectorAll('.sc-nav__home').forEach(function (a) { if (selected || !overview) a.removeAttribute('aria-current'); else a.setAttribute('aria-current','page'); });
+    megaRail.querySelectorAll('.sc-nav__home').forEach(function (a) { if (selected || !overview) a.removeAttribute('aria-current'); else a.setAttribute('aria-current','page'); });
     main.classList.toggle('sc-article', !!selected);
     document.title = (selected ? selected.querySelector('h1').textContent.replace(/#$/, '').trim() : 'Обзор') + ' · dashboard-kit';
     if (selected) { var destination = guidePanels.length ? selected.querySelector('h1') : (target && target !== selected ? target : selected.querySelector('h1')); destination.scrollIntoView({block:'start'}); destination.setAttribute('tabindex','-1'); destination.focus({preventScroll:true}); }

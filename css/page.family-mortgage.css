@@ -400,3 +400,39 @@
  #fm-dashboard .fm-topbar .fm-filter:first-child { flex-basis:144px; width:144px; }
  #fm-dashboard .fm-topbar .fm-filter:nth-child(2) { flex-basis:132px; width:132px; }
 }
+
+/* Один командный ряд: фиксированные фильтры на среднем экране, раскрытие на телефоне. */
+#fm-dashboard .fm-topbar { position:relative; z-index:var(--z-chrome); }
+#fm-dashboard .fm-topbar__inner { position:relative; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; padding-block:var(--space-3); min-height:56px; }
+#fm-dashboard .fm-topbar .fm-filters { grid-column:2; grid-row:1; flex-wrap:nowrap; gap:var(--space-4); }
+#fm-dashboard .fm-topbar__tools { grid-column:3; grid-row:1; }
+#fm-dashboard .fm-topbar .fm-filter .dk-select__trigger,
+#fm-dashboard .fm-topbar .dk-iconbtn { height:44px; min-height:44px; }
+#fm-dashboard .fm-topbar .dk-iconbtn { width:44px; min-width:44px; }
+#fm-dashboard .fm-topbar .fm-filter-actions { width:calc(44px * 3 + var(--space-2) * 2); }
+#fm-dashboard .fm-topbar__tools .dk-seg { padding:0; border:0; gap:var(--space-2); background:none; }
+#fm-dashboard .fm-topbar__tools .dk-seg button { width:44px; min-width:44px; height:44px; min-height:44px; padding:0; border-radius:var(--radius-md); }
+@media(min-width:860px) and (max-width:1199px){
+ #fm-dashboard .fm-topbar__inner { padding-inline:var(--space-5); gap:var(--space-4); }
+ #fm-dashboard .fm-brand__name { font:var(--type-h3); white-space:nowrap; }
+ #fm-dashboard .fm-topbar .fm-filter:first-child { flex-basis:144px; width:144px; }
+ #fm-dashboard .fm-topbar .fm-filter:nth-child(2) { flex-basis:124px; width:124px; }
+ #fm-dashboard .fm-topbar .fm-filter:nth-child(3) { flex-basis:136px; width:136px; }
+ #fm-dashboard .fm-topbar .fm-filter .dk-select__trigger { padding-inline:var(--space-4); }
+}
+@media(max-width:859px){
+ #fm-dashboard .fm-topbar__inner { grid-template-columns:minmax(0,1fr) 44px auto; padding:var(--space-3) var(--space-4); gap:var(--space-4); min-height:56px; }
+ #fm-dashboard .fm-brand__name { font:var(--type-h3); white-space:nowrap; }
+ #fm-dashboard .fm-filter-toggle { grid-column:2; grid-row:1; }
+ #fm-dashboard .fm-topbar .fm-filters { position:absolute; grid-column:auto; grid-row:auto; justify-self:stretch; z-index:var(--z-chrome); top:100%; left:var(--space-4); right:var(--space-4); width:auto; max-width:none; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); padding:var(--space-6); gap:var(--space-5); background:var(--surface-2); border:1px solid var(--glass-edge); border-radius:var(--radius-lg); }
+ #fm-dashboard .fm-topbar .fm-filter { width:100%; }
+ #fm-dashboard .fm-topbar .fm-filter:first-child { grid-column:1 / -1; width:100%; }
+ #fm-dashboard .fm-topbar .fm-filter:nth-child(2),
+ #fm-dashboard .fm-topbar .fm-filter:nth-child(3) { width:100%; }
+ #fm-dashboard .fm-topbar .fm-filter-actions { grid-column:1 / -1; width:100%; }
+}
+@media(max-width:359px){ #fm-dashboard .fm-brand__name { font:var(--type-body-bold); } }
+
+#fm-dashboard .fm-topbar__tools .dk-seg button { border:1px solid var(--glass-edge-soft); border-top-color:var(--glass-edge-top); background:var(--glass-control-sheen),var(--glass-control); }
+#fm-dashboard .fm-topbar__tools .dk-seg button[aria-pressed="true"] { background:var(--control-on); color:var(--control-on-ink); }
+@media(max-width:399px){ #fm-dashboard .fm-topbar .fm-filters { grid-template-columns:minmax(0,1fr); } }
