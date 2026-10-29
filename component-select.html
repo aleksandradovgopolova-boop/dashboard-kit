@@ -15,12 +15,12 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-select.js" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -52,26 +52,26 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Фильтр</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🔎</span>Фильтр</h1>
     <p class="sc-hero__lead">Ограничивает данные выбранными значениями из списка. Текущий выбор виден в закрытом фильтре.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Откройте список, выберите значение и сбросьте выбор. Сравните одиночный и множественный выбор.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group">
+    <p>Выберите значение из списка или найдите его поиском. Выбранный фильтр остаётся виден после закрытия; его можно сбросить.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group">
       <div id="x-okrug"></div><div id="x-tier"></div><div id="x-region"></div>
     </div><div class="dk-result" id="x-result"><b>89</b> регионов</div></div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Значения известны заранее и их больше пяти: категории, статусы, исполнители.</li><li>Выбор ограничивает данные на всей странице и применяется сразу.</li><li>Рядом с каждым значением можно показать, сколько записей за ним.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Два–пять значений, видимых сразу, — <a href="component-segment.html">Сегмент</a> или <a href="component-legend.html">Фильтры-легенда</a>.</li><li>Даты — <a href="component-period.html">Период</a>.</li><li>Ввод значения в форме, которое применяется по кнопке, — <a href="component-field.html">Поле</a> с <code>&lt;select&gt;</code>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-micro">Микровзаимодействия</a></li><li><a href="index.html#pattern-sizes">Размеры элементов</a></li><li><a href="index.html#pattern-selectors">Выбор значений</a></li><li><a href="index.html#pattern-filters">Фильтрация</a></li><li><a href="index.html#pattern-consistency">Консистентность</a></li><li><a href="index.html#pattern-tables">Таблицы для чтения и сравнения</a></li></ul></details>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно ограничить срез известными значениями: категориями, статусами, исполнителями.</li><li>Выбор применяется сразу и отражается в связанных показателях. Область действия фильтра понятна.</li><li>Для длинного списка нужен поиск; количество записей рядом со значением помогает оценить выбор.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Два–пять значений, видимых сразу, — <a href="component-segment.html">Сегмент</a> или <a href="component-legend.html">Фильтры-легенда</a>.</li><li>Даты — <a href="component-period.html">Период</a>.</li><li>Ввод значения в форме, которое применяется по кнопке, — <a href="component-field.html">Поле</a> с <code>&lt;select&gt;</code>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-micro">Микровзаимодействия</a></li><li><a href="index.html#pattern-sizes">Размеры элементов</a></li><li><a href="index.html#pattern-selectors">Выбор значений</a></li><li><a href="index.html#pattern-filters">Фильтрация</a></li><li><a href="index.html#pattern-consistency">Консистентность</a></li><li><a href="index.html#pattern-tables">Таблицы для чтения и сравнения</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group">
       <div class="dk-select" data-active="true"><button type="button" class="dk-select__trigger" aria-haspopup="listbox" aria-expanded="true"><b class="sc-callout">1</b><span class="dk-select__label">Округ: Сибирский</span><b class="sc-callout">2</b><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
       <div class="dk-select"><button type="button" class="dk-select__trigger" aria-haspopup="listbox" aria-expanded="false"><span class="dk-select__label">Уровень риска</span><span class="dk-select__count"><b class="sc-callout">3</b>2</span><svg class="dk-i"><use href="#ti-chevron-down"/></svg></button></div>
@@ -102,12 +102,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Роли.</b> Кнопка с <code>aria-haspopup="listbox"</code> и <code>aria-expanded</code>; меню — <code>listbox</code> с <code>option</code> и <code>aria-selected</code>.</li><li><b>Клавиатура.</b> Стрелки, Home, End, Enter, Escape с возвратом фокуса на фильтр. Поиск получает фокус при открытии.</li><li><b>Не только цветом.</b> Выбранное отмечено галочкой; активный фильтр — ещё и текстом подписи.</li><li><b>Контраст.</b> Активный фильтр различим по подписи и мягкому тону поверхности; клавиатурный фокус виден отдельно.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-period.html">Период</a> — тот же фильтр, только значение — время</li><li><a href="component-legend.html">Фильтры-легенда</a> — фильтр в один ряд, когда значений мало</li><li><a href="component-table.html">Таблица</a> — что стоит под фильтрами</li><li><a href="showcase.html#filtry">Витрина: фильтры</a> — полный пример со строкой применённого</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-select,dk-menu,dk-toolbar,dk-result,dk-chipbar,dk-fchip"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-select,dk-menu,dk-toolbar,dk-result,dk-chipbar,dk-fchip"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Контейнер пустой, разметку строит скрипт. Значения приходят списком объектов.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-select.js"><code>js/dk-select.js</code></a></p><pre class="sc-code"><code>&lt;!-- Строка фильтров — прямо на странице, над содержимым. На телефоне она
      переносится по доступной ширине. --&gt;
 &lt;div class=&quot;dk-toolbar&quot;&gt;
@@ -128,10 +132,6 @@ var f = dkSelect(document.getElementById(&#x27;okrug&#x27;), {
 f.value;                 // текущее
 f.set(&#x27;sfo&#x27;); f.clear(); f.setOptions(list);
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>label</code></td><td>строка</td><td>Название измерения; после выбора становится «Название: значение».</td></tr><tr><td><code>options[]</code></td><td>массив {value, name, count}</td><td>Значения; count — записей за значением, ноль не прячется.</td></tr><tr><td><code>mode</code></td><td>'single' | 'multi'</td><td>Одиночный закрывает меню, множественный — нет.</td></tr><tr><td><code>value</code></td><td>строка | массив</td><td>Начальное значение; адрес (url) главнее.</td></tr><tr><td><code>defaultValue</code></td><td>строка</td><td>Исходное значение одиночного фильтра, например all. Без активной заливки и крестика; clear() возвращает его.</td></tr><tr><td><code>search</code></td><td>boolean</td><td>Поле поиска; по умолчанию от 9 значений.</td></tr><tr><td><code>url</code></td><td>строка</td><td>Ключ в строке запроса; пусто — не пишется.</td></tr><tr><td><code>onChange(v)</code></td><td>функция</td><td>При каждой смене выбора.</td></tr><tr><td><code>value / set(v) / clear() / setOptions(list)</code></td><td>API</td><td>Читать и менять снаружи.</td></tr><tr><td><code>update({value,options}) / destroy()</code></td><td>API</td><td>Тихое обновление; cleanup меню, focusout, anchor и подписок. Старые set/clear/setOptions сохранены.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-period.html">Период</a> — тот же фильтр, только значение — время</li><li><a href="component-legend.html">Фильтры-легенда</a> — фильтр в один ряд, когда значений мало</li><li><a href="component-table.html">Таблица</a> — что стоит под фильтрами</li><li><a href="showcase.html#filtry">Витрина: фильтры</a> — полный пример со строкой применённого</li></ul>
   </section>
 
 </div>

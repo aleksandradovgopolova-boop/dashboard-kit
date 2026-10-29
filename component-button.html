@@ -15,11 +15,11 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -51,17 +51,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Кнопка</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🔘</span>Кнопка</h1>
     <p class="sc-hero__lead">Запускает действие: сохранить изменения, добавить запись или открыть отчёт.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Сравните приоритеты кнопок и кнопки со значком. Здесь показан внешний вид; сохранение и удаление не выполняются.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel">
+    <p>Основная кнопка выделяет главное действие, остальные поддерживают его. Здесь показан внешний вид: сохранение и удаление не выполняются.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel">
       <div class="sc-row"><span class="dk-caption" style="width:96px">S · 28</span>
         <button class="dk-btn dk-btn--primary dk-btn--sm">Действие</button>
         <button class="dk-btn dk-btn--sm">Обычная</button>
@@ -84,7 +84,7 @@
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Действие меняет данные или открывает новый экран: «Добавить работу», «Удалить запись».</li><li>На экране нужно показать, какое действие главное — оно одно и оно основное.</li><li>Привычное действие на дашборде — чаще кнопка-значок с доступным именем и подсказкой. Это правило действует и в сборщиках, и в живых примерах.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Переключение вида одних и тех же данных — <a href="component-segment.html">Сегмент</a>.</li><li>Переход в другой раздел с адресом — <a href="component-tabs.html">Вкладки</a> или ссылка.</li><li>Включить режим без подтверждения — <a href="component-check.html">Тумблер</a>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-loading">Загрузка</a></li><li><a href="index.html#pattern-copy">Текст интерфейса</a></li><li><a href="index.html#pattern-micro">Микровзаимодействия</a></li><li><a href="index.html#pattern-sizes">Размеры элементов</a></li><li><a href="index.html#pattern-consistency">Консистентность</a></li><li><a href="index.html#pattern-interface-motion">Переходы и непрерывность работы</a></li><li><a href="index.html#pattern-design-review">Проверка реального сценария</a></li><li><a href="index.html#pattern-visual-hierarchy">Иерархия без декоративного шума</a></li><li><a href="index.html#pattern-ux-writing">Текст для действия и восстановления</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="sc-row" style="margin:0">
       <button class="dk-btn dk-btn--primary"><b class="sc-callout">1</b>Основное действие</button>
       <button class="dk-btn"><b class="sc-callout">2</b>Обычная</button>
@@ -119,22 +119,22 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Клавиатура.</b> Настоящий <code>&lt;button&gt;</code>: Tab, Enter и пробел работают сами. Кольцо фокуса — только при навигации с клавиатуры.</li><li><b>Подписи.</b> Кнопка-значок обязана иметь <code>aria-label</code>; проверка на витрине это не ловит — на совести автора.</li><li><b>Контраст.</b> Подпись на основной кнопке и силуэт кнопки на поверхности проверяются проверкой КНОПКА на всех акцентах в обеих темах.</li><li><b>Недоступная</b> нативная кнопка с <code>disabled</code> пропускается при Tab; причина видна рядом и доступна при чтении страницы.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-segment.html">Сегмент</a> — переключение вида, а не действие</li><li><a href="component-tabs.html">Вкладки</a> — переход между разделами</li><li><a href="component-modal.html">Модальное окно</a> — подтверждение опасного действия</li><li><a href="showcase.html#upravlenie">Витрина: управление</a> — все контролы в одной строке</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-btn,dk-iconbtn"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-btn,dk-iconbtn"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Обычные кнопки без скрипта. Ссылка с классом кнопки допустима, когда действие — переход.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;button class=&quot;dk-btn dk-btn--primary&quot;&gt;Добавить работу&lt;/button&gt;
 &lt;button class=&quot;dk-btn dk-btn--ghost&quot;&gt;Отмена&lt;/button&gt;
 &lt;button class=&quot;dk-iconbtn&quot; title=&quot;Обновить&quot; aria-label=&quot;Обновить&quot;&gt;
   &lt;svg class=&quot;dk-i&quot;&gt;&lt;use href=&quot;#ti-refresh&quot;/&gt;&lt;/svg&gt;
 &lt;/button&gt;
 &lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Страница компонента →&lt;/a&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-btn--primary</code></td><td>класс</td><td>Основное действие, одно на экран.</td></tr><tr><td><code>dk-btn--ghost</code></td><td>класс</td><td>Тихая кнопка без заливки.</td></tr><tr><td><code>dk-btn--sm, dk-btn--lg</code></td><td>класс</td><td>Высота 28 или 40; по умолчанию 32.</td></tr><tr><td><code>dk-iconbtn</code></td><td>класс</td><td>Кнопка под значок; те же модификаторы размера.</td></tr><tr><td><code>aria-busy</code></td><td>атрибут</td><td>Пока идёт действие; подпись меняется на «…аем».</td></tr><tr><td><code>disabled</code></td><td>атрибут</td><td>Недоступна; причина должна быть видна рядом.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-segment.html">Сегмент</a> — переключение вида, а не действие</li><li><a href="component-tabs.html">Вкладки</a> — переход между разделами</li><li><a href="component-modal.html">Модальное окно</a> — подтверждение опасного действия</li><li><a href="showcase.html#upravlenie">Витрина: управление</a> — все контролы в одной строке</li></ul>
   </section>
 
 </div>

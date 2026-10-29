@@ -4,11 +4,11 @@
 
 ## Когда использовать
 
-- Пользователь регулярно возвращается к одним фильтрам и периодам.
+- Нужно возвращаться к одним фильтрам, периодам и настройкам обзора.
 
 ## Когда выбрать другое
 
-- Нужны общие виды команды: локальное хранилище не является синхронизацией.
+- Общие виды команды требуют серверного хранения и прав доступа; локальное сохранение этого не даёт.
 
 ## Контент: так
 
@@ -25,20 +25,20 @@
 
 ## Пример
 
-Создайте именованный вид и примените его. Синхронизация между устройствами в пример не входит.
+Выберите службу и период, сохраните вид, затем измените выбор и примените сохранённый. Параметры восстановятся. Вид хранится только в этом браузере.
 
 ## Структура
 
-- **Контекст** — Возвращает локальный рабочий срез со всеми согласованными параметрами.
+- **Контекст** — Сохраняет рабочий срез в этом браузере и позволяет к нему вернуться.
 - **Данные и действие** — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.
 
 ## Состояния
 
-Формат version=1, v0 views мигрирует; неизвестная версия не применяется. Storage отказ сохраняет работу в памяти. Состояние отделено от компонентов: host подписывается на dk:statechange и обновляет фильтры/период/таблицу/карту.
+Вид можно сохранить, применить, переименовать и удалить. Ошибка сохранения сообщается рядом. Ограничения и подключение Формат version=1, v0 views мигрирует; неизвестная версия не применяется. Storage отказ сохраняет работу в памяти. Состояние отделено от компонентов: host подписывается на dk:statechange и обновляет фильтры/период/таблицу/карту.
 
 ## Варианты
 
-- `dkState(el, initial)` — Основной контракт API/markup. При задаче, описанной выше.
+- `dkState(el, initial)` — Разметка и параметры компонента. При задаче, описанной выше.
 
 ## Размеры
 
@@ -47,10 +47,16 @@
 ## Код
 
 ```html
-<div id="advanced-state"></div><div id="advanced-views"></div>
+<div id="advanced-state"><div class="dk-form"><div class="dk-ff"><label class="dk-label" for="view-service">Служба</label><div class="dk-field"><select id="view-service"><option value="heat">Теплоснабжение</option><option value="water">Водоснабжение</option></select></div></div><div class="dk-ff"><label class="dk-label" for="view-period">Период</label><div class="dk-field"><select id="view-period"><option value="14d">14 дней</option><option value="30d">30 дней</option></select></div></div></div></div><div id="advanced-views"></div>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-var state=dkState(document.getElementById('advanced-state'), {filters:{service:'heat'},period:'14d'});dkSavedViews(document.getElementById('advanced-views'), {key:'dk-demo-views',state:state});
+var stateHost=document.getElementById('advanced-state');
+var service=document.getElementById('view-service'), period=document.getElementById('view-period');
+var state=dkState(stateHost,{filters:{service:'heat'},period:'14d'});
+function changeView(){state.update({filters:{service:service.value},period:period.value});}
+service.addEventListener('change',changeView);period.addEventListener('change',changeView);
+stateHost.addEventListener('dk:statechange',function(event){service.value=event.detail.filters.service;period.value=event.detail.period;});
+dkSavedViews(document.getElementById('advanced-views'),{key:'dk-demo-views',state:state});
 });
 </script>
 ```

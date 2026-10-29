@@ -15,12 +15,12 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-analysis.js" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -52,33 +52,33 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>События на шкале</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">📍</span>События на шкале</h1>
     <p class="sc-hero__lead">Дополняет временную шкалу событиями, которые помогают объяснить изменения.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: экспериментальный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Сопоставьте даты и описания событий. Совпадение по времени не доказывает причинную связь.</p><div class="sc-playground"><div class="sc-playground__canvas"><div id="advanced-annotations"></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
+    <p>Событие на шкале помогает сопоставить даты и изменения метрики. Совпадение по времени само по себе не доказывает причину.</p><div class="sc-playground"><div class="sc-playground__canvas"><div id="advanced-annotations"></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно сопоставить изменение метрики с точкой события или диапазоном.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Требуется планировать календарь: используйте calendar.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно сопоставить изменение метрики с датой события или интервалом.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Планирование работ и событий — <a href="component-calendar.html">Календарь</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
-    <ol class="sc-anatomy__list"><li><b>Контекст</b> — Объясняет пики и интервалы изменениями, работами и инцидентами.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
+    <h2>Из чего состоит</h2>
+    <ol class="sc-anatomy__list"><li><b>Контекст</b> — Дополняет временную шкалу событиями, которые помогают объяснить изменения.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Каждое событие занимает отдельную строку. На узком экране сохраняются даты и полный текст.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkTimelineAnnotations(el, opts)</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+    <p>Каждое событие занимает отдельную строку. На узком экране сохраняются даты и полный текст.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkTimelineAnnotations(el, opts)</code></td><td>Разметка и параметры компонента.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
-    <p>Точки и диапазоны; пустой список явно сообщает «Событий за период нет». События за пределами шкалы остаются в тексте, полоса ограничивается шкалой. Время отображается в часовом поясе браузера; источник должен указывать offset.</p>
+    <p>Одиночные события и интервалы показаны вместе с датами.</p><details class="dk-data-summary"><summary>Ограничения и подключение</summary><p>Точки и диапазоны; пустой список явно сообщает «Событий за период нет». События за пределами шкалы остаются в тексте, полоса ограничивается шкалой. Время отображается в часовом поясе браузера; источник должен указывать offset.</p></details>
   </section>
   <section class="sc-sec" id="kontent">
     <h2>Текст и подписи</h2>
@@ -88,22 +88,22 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li>События сортируются по времени и перечислены полным текстом. Каждой подписи отдельная строка: столкновений нет при крупном шрифте. На телефоне сохраняется список, полосы вторичны.</li><li>Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — точные числа</li><li><a href="README.md">Подключение</a> — dk-theme первым, dk-util до компонента</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-annotations"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-annotations"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-analysis.js"><code>js/dk-analysis.js</code></a></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-annotations&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
 document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
 dkTimelineAnnotations(document.getElementById(&#x27;advanced-annotations&#x27;), {label:&#x27;События за смену&#x27;,start:&#x27;2026-10-06T08:00:00+03:00&#x27;,end:&#x27;2026-10-06T20:00:00+03:00&#x27;,events:[{label:&#x27;Начало работ&#x27;,start:&#x27;2026-10-06T10:00:00+03:00&#x27;},{label:&#x27;Ограничение&#x27;,start:&#x27;2026-10-06T12:00:00+03:00&#x27;,end:&#x27;2026-10-06T16:00:00+03:00&#x27;}]});
 });
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkTimelineAnnotations(el, opts)</code></td><td>API</td><td>start/end задают шкалу, events:{label,start,end?}[]; update(opts) заменяет весь набор, включая start/end; destroy().</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — точные числа</li><li><a href="README.md">Подключение</a> — dk-theme первым, dk-util до компонента</li></ul>
   </section>
 
 </div>

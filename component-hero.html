@@ -15,11 +15,11 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -51,17 +51,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Главная карточка</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🎯</span>Главная карточка</h1>
     <p class="sc-hero__lead">Выделяет главный показатель экрана и объясняет его состав.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Прочитайте итог, базу сравнения и состав. На одном экране достаточно одного такого акцента.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-grid">
+    <p>Главное число сопровождается базой сравнения и составом. Такой акцент нужен только тогда, когда у экрана есть один главный вопрос.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-grid">
       <div class="dk-col--half"><section class="dk-hero">
         <div class="dk-hero__label">Регионов с высоким риском</div>
         <div class="dk-hero__row">
@@ -99,7 +99,7 @@
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Одно число, ради которого открывают экран: «регионов с высоким риском», «аварий сейчас».</li><li>Число — часть целого, и важно, из чего оно сложено: 25 из 89, по уровням или по источникам.</li><li>Первый экран телефона, если одно главное число отвечает на основной вопрос пользователя.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Главных чисел несколько и они равноправны — ряд <a href="component-tile.html">KPI-плиток</a>: вторая главная карточка на экране отменяет первую.</li><li>Нужен ещё и список «кто хуже всех» — <a href="component-rank.html">Рейтинг и сводка</a>.</li><li>Долей больше шести или их надо сравнивать точно — <a href="component-chart.html">График</a>: отрезки полосы глазом точно не сравнить.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-scale">Масштаб и пропорции</a></li><li><a href="index.html#pattern-space">Пространство</a></li><li><a href="index.html#pattern-dashboard">Дашборд по вопросу пользователя</a></li><li><a href="index.html#pattern-visual-hierarchy">Иерархия без декоративного шума</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><section class="dk-hero" style="max-width:520px">
       <div class="dk-hero__label"><b class="sc-callout">1</b>Регионов с высоким риском</div>
       <div class="dk-hero__row">
@@ -129,12 +129,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Полоса — картинка</b>: <code>role="img"</code> и <code>aria-label</code> с составом словами; числа — в чипах под ней.</li><li><b>Цвет не единственный признак</b>: у каждой доли есть название и число в чипе.</li><li><b>Контраст.</b> Знаменатель и подписи на нейтральной поверхности — проверка КОНТРАСТ.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-tile.html">KPI-плитка</a> — несколько равноправных чисел</li><li><a href="component-rank.html">Рейтинг и сводка</a> — главное число и список «кто хуже»</li><li><a href="component-legend.html">Фильтры-легенда</a> — та же легенда, но нажимается</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-hero,dk-split,dk-keys,dk-key"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-hero,dk-split,dk-keys,dk-key"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Только разметка: скрипта у карточки нет. Числа — через <code>dkFmt</code>, доли — теми же числами в <code>--share</code>.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;section class=&quot;dk-hero&quot;&gt;
   &lt;div class=&quot;dk-hero__label&quot;&gt;Регионов с высоким риском&lt;/div&gt;
   &lt;div class=&quot;dk-hero__row&quot;&gt;
@@ -151,10 +155,6 @@
     &lt;span class=&quot;dk-key&quot; style=&quot;--swatch:var(--crit)&quot;&gt;&lt;i class=&quot;dk-key__dot&quot;&gt;&lt;/i&gt;Высокий &lt;b&gt;25&lt;/b&gt;&lt;span class=&quot;dk-key__d&quot;&gt;+1&lt;/span&gt;&lt;/span&gt;
   &lt;/div&gt;
 &lt;/section&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-hero</code></td><td>класс</td><td>Нейтральная главная карточка; семантический цвет применяют к данным и обоснованным статусам, а не поверхности.</td></tr><tr><td><code>--share</code></td><td>число в style отрезка</td><td>Доля отрезка полосы; складывать заранее не нужно.</td></tr><tr><td><code>--swatch</code></td><td>переменная в style</td><td>Цвет отрезка и точки чипа: смысл или серия, один и тот же для пары.</td></tr><tr><td><code>dk-hero__of</code></td><td>элемент</td><td>Мера «из скольких»; не пропускать, если она есть.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-tile.html">KPI-плитка</a> — несколько равноправных чисел</li><li><a href="component-rank.html">Рейтинг и сводка</a> — главное число и список «кто хуже»</li><li><a href="component-legend.html">Фильтры-легенда</a> — та же легенда, но нажимается</li></ul>
   </section>
 
 </div>

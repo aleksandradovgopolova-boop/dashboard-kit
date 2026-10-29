@@ -15,12 +15,12 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-car.js" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -52,17 +52,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Лента карточек</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🗃️</span>Лента карточек</h1>
     <p class="sc-hero__lead">Показывает последовательность карточек, у каждой из которых свой контекст.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Прокрутите ряд: край следующей карточки подсказывает, что содержимое продолжается.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-car" id="x-car">
+    <p>Каждая карточка объясняет отдельное изменение. Лента подходит для последовательного просмотра; сравнивать объекты удобнее в рейтинге или таблице.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-car" id="x-car">
       <div class="dk-car__head"><h3 class="dk-car__title">Резко выросли за день</h3><span class="dk-push dk-car__pos">1 из 3</span>
         <span class="dk-car__nav"><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="prev" aria-label="Предыдущая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-left"/></svg></button><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="next" aria-label="Следующая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button></span></div>
       <ul class="dk-car__track" role="list">
@@ -90,10 +90,10 @@
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Три–семь объектов, и у каждого есть рассказ: было → стало, причина, где.</li><li>Верх телефонного экрана под главной карточкой: «что изменилось сегодня».</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Объектов больше семи или их надо сравнивать между собой — <a href="component-rank.html">Рейтинг</a> или <a href="component-table.html">Таблица</a>: в ленте видна одна карточка за раз.</li><li>Одно число с тем, из чего оно сложено — <a href="component-hero.html">Главная карточка</a>.</li><li>Список событий по времени — <a href="component-list.html">Список</a>.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно последовательно рассмотреть несколько значимых изменений, у каждого есть свой контекст.</li><li>Сравнивать карточки одновременно не требуется. Лента добавляется по задаче, а не как обязательный блок первого экрана.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Объектов больше семи или их надо сравнивать между собой — <a href="component-rank.html">Рейтинг</a> или <a href="component-table.html">Таблица</a>: в ленте видна одна карточка за раз.</li><li>Одно число с тем, из чего оно сложено — <a href="component-hero.html">Главная карточка</a>.</li><li>Список событий по времени — <a href="component-list.html">Список</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-car"><div class="dk-car__head"><h3 class="dk-car__title"><b class="sc-callout">1</b>Резко выросли за день</h3><span class="dk-push dk-car__pos">1 из 3</span><b class="sc-callout">2</b></div>
       <ul class="dk-car__track" role="list"><li class="dk-car__item" style="--accent:var(--crit)">
         <span class="dk-car__tags"><b class="sc-callout">3</b><span class="dk-trend" style="--accent:var(--crit-ink)">+27 за день</span></span>
@@ -111,18 +111,22 @@
   </section>
   <section class="sc-sec" id="kontent">
     <h2>Текст и подписи</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Заголовок отвечает, почему эти карточки вместе: «Резко выросли за день».</li><li>Было → стало числами: «30 → 57».</li><li>Рассказ — причина: «авария теплосети», а не «рост показателя».</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Лента из одной карточки — это главная карточка.</li><li>Двадцать карточек: до последней не долистают.</li><li>Пустая лента без слов, когда изменений нет.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Заголовок отвечает, почему эти карточки вместе: «Резко выросли за день».</li><li>Было → стало числами: «30 → 57».</li><li>Рассказ — причина: «авария теплосети», а не «рост показателя».</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Карточки нужно сравнивать, но одновременно видна только одна.</li><li>Длинная лента без перехода к полному списку.</li><li>Пустая лента без объяснения, что изменений нет.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Лента — список</b>: <code>ul role="list"</code>, карточки — пункты; скринридер называет, сколько их.</li><li><b>Позиция словами</b>: счётчик «1 из 3»; точки скрыты от скринридера (<code>aria-hidden</code>).</li><li><b>Было → стало</b> — <code>aria-label</code> на паре чисел: «было 30, стало 57», стрелка скрыта.</li><li><b>Стрелки</b> — кнопки с подписью; на краях ленты отключаются.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-hero.html">Главная карточка</a> — одно главное число экрана</li><li><a href="component-rank.html">Рейтинг и сводка</a> — много объектов для сравнения</li><li><a href="component-list.html">Список</a> — события по времени</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-car"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-car"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Разметку пишет страница, <code>dkCar</code> только оживляет её: счётчик, точки и стрелки.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-car.js"><code>js/dk-car.js</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-car&quot; id=&quot;car&quot;&gt;
   &lt;div class=&quot;dk-car__head&quot;&gt;
     &lt;h3 class=&quot;dk-car__title&quot;&gt;Резко выросли за день&lt;/h3&gt;
@@ -152,10 +156,6 @@ var car = dkCar(document.getElementById(&#x27;car&#x27;));
 car.index;    // текущая карточка
 car.go(2);    // пролистать к третьей
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkCar(el)</code></td><td>функция</td><td>Оживляет разметку ленты; возвращает управление.</td></tr><tr><td><code>index</code></td><td>число, чтение</td><td>Номер текущей карточки, с нуля.</td></tr><tr><td><code>go(i)</code></td><td>функция</td><td>Пролистать к карточке; движение гасится системной настройкой.</td></tr><tr><td><code>destroy()</code></td><td>функция</td><td>Снять обработчики; сторож dk-util.js сделает это сам, когда узел уйдёт.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-hero.html">Главная карточка</a> — одно главное число экрана</li><li><a href="component-rank.html">Рейтинг и сводка</a> — много объектов для сравнения</li><li><a href="component-list.html">Список</a> — события по времени</li></ul>
   </section>
 
 </div>

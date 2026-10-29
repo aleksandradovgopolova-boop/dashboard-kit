@@ -13,7 +13,7 @@ const server = createServer(async (req, res) => {
     const path = resolve(root, '.' + (pathname === '/' ? '/index.html' : pathname));
     if (!path.startsWith(resolve(root) + sep)) { res.writeHead(403); res.end(); return; }
     const data = await readFile(path);
-    res.setHeader('Content-Type', ({'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2'})[extname(path)] || 'application/octet-stream');
+    res.setHeader('Content-Type', ({'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2','.png':'image/png'})[extname(path)] || 'application/octet-stream');
     res.end(data);
   } catch { res.writeHead(404); res.end(); }
 });
@@ -58,16 +58,16 @@ try {
       const state = await evaluate(`(()=>{
         const active=document.querySelector('.sc-nav__component-group a[aria-current="page"]');
         return {overflow:document.documentElement.scrollWidth>innerWidth+1,
-          first:document.querySelector('.sc-nav__catalog > a .sc-nav__text').textContent,
+          first:document.querySelector('.sc-mega__home .sc-nav__text').textContent,
           nested:!!document.querySelector('.sc-nav details details'),
           visible:[...document.querySelectorAll('h1')].filter(x=>x.getClientRects().length).map(x=>x.textContent),
-          open:[...document.querySelectorAll('.sc-nav__component-group[open]')].length,
-          current:!active||!!active.getClientRects().length||innerWidth<1024,
+          open:[...document.querySelectorAll('.sc-nav__component-group:not([hidden])')].length,
+          current:!active||!active.closest('.sc-mega__panel').hidden,closed:document.querySelector('.sc-nav').hidden,
           toc:!!document.querySelector('.sc-toc:not([hidden])')&&getComputedStyle(document.querySelector('.sc-toc')).display!=='none',
           focus:[...document.querySelectorAll('.dk-tablewrap')].every(x=>!x.clientWidth||x.scrollWidth<=x.clientWidth+1||x.tabIndex===0)};
       })()`);
-      if (state.overflow || state.nested || state.first !== 'Обзор' || state.visible.length !== 1 || !state.current || !state.focus || (file === 'index.html' ? state.open !== 0 || state.visible[0] !== 'От вашей задачи к дашборду' : state.open !== 1) || (width < 1440 && state.toc)) failures.push({file,width,theme,...state});
-      if (['index.html','component-table.html'].includes(file) && [320,1280].includes(width)) {
+      if (!state.closed || state.overflow || state.nested || state.first !== 'Обзор' || state.visible.length !== 1 || !state.current || !state.focus || (file === 'index.html' ? state.open !== 0 || state.visible[0] !== 'От вашей задачи к дашборду' : state.open !== 1) || (width < 1440 && state.toc)) failures.push({file,width,theme,...state});
+      if ((width===1280 && theme==='dark') || (['index.html','component-table.html'].includes(file) && [320,1280].includes(width))) {
         const shot = await send('Page.captureScreenshot', {format:'png'});
         await writeFile(resolve(evidence, `docs-${file.replace('.html','')}-${theme}-${width}.png`), Buffer.from(shot.data,'base64'));
       }
@@ -77,20 +77,54 @@ try {
 
   await visit('index.html',1280);
   assert(await evaluate(`document.querySelectorAll('.sc-hero--overview .sc-overview-steps > li').length===3&&!!document.querySelector('.sc-hero--overview a[href="#start"]')`), 'Overview must expose the accepted task/data/dashboard flow');
-  await evaluate(`const rules=document.querySelector('.sc-nav a[href="index.html#rules"]');rules.closest('details').querySelector('summary').click();rules.click()`); await settle();
+  assert(await evaluate(`JSON.stringify([...document.querySelectorAll('.sc-mega__rail .sc-nav__text')].map(x=>x.textContent))===JSON.stringify(['Обзор','Начало работы','Дизайн-система','Компоненты','Разработка'])`),'Navigation must expose the five agreed primary sections');
+  await evaluate(`[...document.querySelectorAll('.sc-mega__category')].find(x=>x.textContent.includes('Дизайн-система')).click()`);
+  assert(await evaluate(`(()=>{const group=[...document.querySelectorAll('.sc-mega__panel')].find(x=>x.querySelector('.sc-mega__title').textContent==='Дизайн-система');return !group.hidden&&group.querySelectorAll('details').length===0&&group.querySelectorAll('.sc-mega__group').length===3&&!!group.querySelector('a[href="showcase.html#principy-teksta"]')&&!!group.querySelector('a[href="showcase.html#dostupnost"]');})()`),'Megamenu design system combines visual language, editorial policy and interface quality');
+  await evaluate(`document.querySelector('.sc-nav a[href="showcase.html#principy-teksta"]').click()`); await settle();
+  await visit('index.html',1280);
+  // The primary journey must produce a usable, safe task rather than a demo link.
+  assert(await evaluate(`(()=>{const img=document.querySelector('.sc-overview-art img');return img.complete&&img.naturalWidth>0&&!document.querySelector('.sc-live-preview')&&!document.querySelector('.sc-overview-intro canvas');})()`),'Hero must use the accepted static illustration, without live preview');
+  assert(await evaluate(`!document.querySelector('script[src*="echarts"]')&&!document.querySelector('script[src*="dk-map"]')`),'Static overview must not load live chart/map dependencies');
+  assert(await evaluate(`[...document.querySelectorAll('[data-example-image]')].every(x=>x.complete&&x.naturalWidth>0)`),'Real example screenshots must load');
+  await evaluate(`document.querySelector('[data-more-examples]').click()`);
+  assert(await evaluate(`!document.querySelector('#overview-more-examples').hidden&&document.querySelector('[data-more-examples]').getAttribute('aria-expanded')==='true'`),'All examples disclosure');
+  await evaluate(`location.hash='start'`); await settle();
+  await evaluate(`document.querySelector('#dashboard-task-form button[type="submit"]').click()`);
+  assert(await evaluate(`document.querySelector('[data-task-result]').hidden && document.querySelector('#task-goal').getAttribute('aria-invalid')==='true'`),'Blank task must be rejected without losing entered values');
+  await evaluate(`(()=>{const values={goal:'Сравнить план и факт <img src=x onerror=alert(1)>',audience:'Руководители регионов',data:'Данных пока нет, предложи структуру',context:'Телефон и компьютер; полный месяц'};Object.keys(values).forEach(name=>{const el=document.querySelector('#dashboard-task-form').elements[name];el.value=values[name];el.dispatchEvent(new Event('input',{bubbles:true}));});document.querySelector('#dashboard-task-form button[type="submit"]').click();})()`); await settle();
+  assert(await evaluate(`(()=>{const x=document.querySelector('#dashboard-task-prompt');return !document.querySelector('[data-task-result]').hidden && !x.querySelector('img') && x.textContent.includes('Руководители регионов') && x.textContent.includes('Данных пока нет') && x.textContent.includes('skill/dashboard-build/SKILL.md') && x.textContent.includes('Публикацию согласуй отдельно') && document.activeElement.matches('[data-task-result-title]');})()`),'Task must include inputs, kit instructions, demo boundary, safe text and focus');
+  await evaluate(`Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.copiedTask=text;}}});document.querySelector('[data-copy-task]').click()`); await settle();
+  assert(await evaluate(`window.copiedTask===document.querySelector('#dashboard-task-prompt').textContent&&document.querySelector('[data-copy-task-status]').textContent.includes('скопирован')`),'Copy must use the prepared task');
+  await evaluate(`Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async()=>{throw Error('denied');}}});document.querySelector('[data-copy-task]').click()`); await settle();
+  assert(await evaluate(`document.querySelector('[data-copy-task-status]').textContent.includes('вручную')`),'Clipboard denial must explain manual recovery');
+  await visit('index.html#start',1280);
+  assert(await evaluate(`document.querySelector('#task-goal').value.includes('Сравнить план и факт')&&document.querySelector('#task-data').value.includes('Данных пока нет')`),'Task draft must survive reload in the current session');
+  await evaluate(`sessionStorage.removeItem('dk-overview-task-v1')`);
+  await visit('index.html',1280);
+  await evaluate(`const rules=document.querySelector('.sc-nav a[href="index.html#rules"]');[...document.querySelectorAll('.sc-mega__category')].find(x=>x.textContent.includes('Начало работы')).click();rules.click()`); await settle();
   assert(await evaluate(`document.querySelector('#rules').hidden===false&&document.querySelector('.sc-hero').hidden&&document.querySelector('#catalog').hidden`), 'Rules route must show one article');
   await evaluate('history.back()'); await settle();
   assert(await evaluate(`!document.querySelector('.sc-hero').hidden&&[...document.querySelectorAll('.sc-sec')].every(x=>x.hidden)`), 'Back must restore overview');
   await evaluate(`location.hash='catalog'`); await settle();
   assert(await evaluate(`!document.querySelector('#catalog').hidden&&!!document.querySelector('.sc-nav a[aria-current="location"][href="index.html#catalog"]')`), 'Catalog deep link and active navigation');
   await visit('index.html',390);
-  await evaluate(`document.querySelector('.sc-bar > button[aria-controls="sc-navigation"]').click()`); await settle();
+  await evaluate(`document.querySelector('.sc-topnav button').click()`); await settle();
   assert(await evaluate(`!document.querySelector('.sc-nav').hidden&&document.querySelector('.sc-shell>.dk-wrap').inert`), 'Mobile menu must isolate background');
   await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
   await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
   assert(await evaluate(`document.querySelector('.sc-nav').hidden&&!document.querySelector('.sc-shell>.dk-wrap').inert&&!document.body.classList.contains('sc-menu-open')`), 'Escape must release page scrolling and restore focus');
   await evaluate(`document.querySelector('.sc-search-trigger').click();const q=document.querySelector('.sc-search input');q.value='Таблица';q.dispatchEvent(new Event('input'))`); await settle();
   assert(await evaluate(`document.querySelector('.sc-search').open&&!!document.querySelector('.sc-search__results a[href="component-table.html"]')`), 'Component search must work with folded groups');
+  await visit('component-density-controls.html',1280);
+  const comfortableHeight=await evaluate(`document.querySelector('#zhivoy-primer tbody tr').getBoundingClientRect().height`);
+  await evaluate(`const density=document.querySelector('#advanced-density select');density.value='compact';density.dispatchEvent(new Event('change',{bubbles:true}))`); await settle();
+  assert(await evaluate(`document.querySelector('#zhivoy-primer tbody tr').getBoundingClientRect().height`) < comfortableHeight,'Density example must visibly change its sample rows');
+  await visit('component-saved-views.html',1280);
+  await evaluate(`localStorage.removeItem('dk-demo-views')`);
+  await visit('component-saved-views.html',1280);
+  await evaluate(`document.querySelector('#view-service').value='water';document.querySelector('#view-period').value='30d';document.querySelector('#view-service').dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('#advanced-views [data-name]').value='Вода за месяц';document.querySelector('#advanced-views [data-action="create"]').click();document.querySelector('#view-service').value='heat';document.querySelector('#view-period').value='14d';document.querySelector('#view-service').dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('#advanced-views [data-action="apply"]').click()`); await settle();
+  assert(await evaluate(`document.querySelector('#view-service').value==='water'&&document.querySelector('#view-period').value==='30d'`),'Saved-view example must restore visible parameters');
+  await evaluate(`localStorage.removeItem('dk-demo-views')`);
   await visit('showcase.html',1280);
   await evaluate(`location.hash='tipografika'`); await settle();
   assert(await evaluate(`!document.querySelector('#tipografika').hidden&&[...document.querySelectorAll('.sc-sec:not([hidden])')].length===1`), 'Legacy showcase anchors');

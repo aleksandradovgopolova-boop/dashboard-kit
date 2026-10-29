@@ -7,7 +7,7 @@ PAGES = [{'slug': 'adaptive-icons',
   'purpose': 'Подбирает размер значка по контексту и способу управления.',
   'files': ['css/components.css'],
   'scripts': [],
-  'live_intro': 'Сравните размеры значков и их области нажатия. Размер картинки и размер кнопки — разные параметры.',
+  'live_intro': 'Значок подстраивается под соседний контрол и способ управления. Маленькая иконка не уменьшает область нажатия.',
   'live': '<div class="dk-panel"><div class="dk-inline"><button class="dk-btn dk-btn--sm"><svg class="dk-i '
           'dk-i--adaptive" aria-hidden="true"><use href="#ti-search"/></svg>Найти</button><button '
           'class="dk-iconbtn dk-iconbtn--sm" aria-label="Поиск"><svg class="dk-i dk-i--adaptive" '
@@ -56,7 +56,7 @@ PAGES = [{'slug': 'adaptive-icons',
   'purpose': 'Ограничивает высоту длинной области и оставляет её содержимое доступным через прокрутку.',
   'files': ['css/components.css'],
   'scripts': [],
-  'live_intro': 'Прокрутите область до конца. Короткое содержимое не должно создавать лишнюю полосу прокрутки.',
+  'live_intro': 'Длинное содержимое прокручивается внутри заданной области. Короткое остаётся без лишней полосы прокрутки.',
   'live': '<div class="dk-panel"><div class="dk-scrollview" tabindex="0" role="region" aria-label="Список '
           'отчётов" style="--scrollview-height:200px"><div class="dk-row"><span class="dk-row__label">Отчёт '
           '1</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span '
@@ -144,7 +144,7 @@ PAGES.append({'slug': 'onboarding',
  'purpose': 'Знакомит с новым действием короткой подсказкой рядом с нужным элементом.',
  'files': ['css/components.css', 'js/dk-onboarding.js'],
  'scripts': ['dk-onboarding.js'],
- 'live_intro': 'Запустите знакомство, пройдите шаги или пропустите их. Escape закрывает подсказку.',
+ 'live_intro': 'Подсказка появляется рядом с новым действием. Знакомство можно пройти, пропустить или закрыть клавишей Escape.',
  'live': '<div class="dk-panel"><div class="dk-inline"><button class="dk-btn dk-btn--sm" '
          'id="onboard-period">30 дней</button><button class="dk-btn dk-btn--sm" '
          'id="onboard-export">Экспорт</button><button class="dk-btn dk-btn--sm dk-btn--primary" '
@@ -225,18 +225,18 @@ PAGES.append({'slug': 'onboarding',
               'Последовательность и доступность')]})
 
 PAGES.append({'slug': 'flex',
- 'title': 'Flex · гибкая раскладка',
+ 'title': 'Строка и колонка',
  'group': 'Утилиты',
  'status': 'стабильный',
- 'purpose': 'Располагает элементы в строку или колонку с общими интервалами.',
+ 'purpose': 'Располагает элементы в строку или колонку с едиными интервалами и переносом.',
  'files': ['css/components.css'],
  'scripts': [],
- 'live_intro': 'Измените ширину окна: обратите внимание на перенос и выравнивание группы действий.',
+ 'live_intro': 'Элементы выстраиваются в строку или колонку с едиными интервалами. При изменении ширины группа переносится, сохраняя порядок.',
  'live': '<div class="dk-panel"><div class="dk-flex dk-flex--between"><span>Отчёты</span><div '
          'class="dk-flex"><button class="dk-btn dk-btn--sm">Обновить</button><button class="dk-btn '
          'dk-btn--sm">Экспорт</button></div></div></div>',
  'when_yes': ['Кнопки и подписи внутри одной группы.', 'Колонка элементов с одинаковым интервалом.'],
- 'when_no': ['Сетка карточек — CardGrid или dk-grid.', 'Не меняйте визуальный порядок относительно DOM.'],
+ 'when_no': ['Равноправные карточки — <a href="component-card-grid.html">Сетка карточек</a>.', 'Виджеты разной ширины — сетка дашборда <code>dk-grid</code>.', 'Визуальный порядок не должен расходиться с порядком чтения и клавиатуры.'],
  'anatomy_html': '<div class="dk-panel"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> '
                  'Содержимое и управление</div>',
  'anatomy': [('Контейнер', 'Задаёт раскладку или поведение.'),
@@ -269,7 +269,7 @@ PAGES.append({'slug': 'card-grid',
  'purpose': 'Располагает равноправные карточки в адаптивной сетке.',
  'files': ['css/components.css'],
  'scripts': [],
- 'live_intro': 'Измените ширину окна: количество колонок меняется, порядок карточек сохраняется.',
+ 'live_intro': 'Равноправные карточки занимают доступные колонки. На узком экране их становится меньше в ряду, порядок остаётся прежним.',
  'live': '<div class="dk-panel"><ul class="dk-card-grid" aria-label="Отчёты"><li><div class="dk-widget '
          'dk-widget--s"><h3 class="dk-widget__title">Отчёт 1</h3><p>Продажи по каналам.</p><button '
          'class="dk-btn dk-btn--sm">Открыть отчёт {n}</button></div></li><li><div class="dk-widget '
@@ -279,8 +279,7 @@ PAGES.append({'slug': 'card-grid',
          'каналам.</p><button class="dk-btn dk-btn--sm">Открыть отчёт {n}</button></div></li></ul></div>',
  'when_yes': ['Сравнить несколько равноправных объектов.',
               'Все карточки должны быть видны в потоке страницы.'],
- 'when_no': ['Сложный дашборд с разными долями виджетов — dk-grid.',
-             'Последовательные истории — CardScroll.'],
+ 'when_no': ['Виджеты разной ширины — сетка дашборда <code>dk-grid</code>.', 'Последовательный просмотр историй — <a href="component-card-scroll.html">Прокручиваемая лента</a>.'],
  'anatomy_html': '<div class="dk-panel"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> '
                  'Содержимое и управление</div>',
  'anatomy': [('Контейнер', 'Задаёт раскладку или поведение.'),
@@ -307,13 +306,13 @@ PAGES.append({'slug': 'card-grid',
  'related': [('https://vkui.io/components/card-grid/', 'Референс VKUI', 'Структура и поведение')]})
 
 PAGES.append({'slug': 'card-scroll',
- 'title': 'Лента карточек · CardScroll',
+ 'title': 'Прокручиваемая лента',
  'group': 'Утилиты',
  'status': 'стабильный',
  'purpose': 'Показывает горизонтальную ленту карточек с прокруткой и навигацией.',
  'files': ['css/components.css', 'js/dk-card-scroll.js'],
  'scripts': ['dk-card-scroll.js'],
- 'live_intro': 'Прокрутите ленту и используйте стрелки. Последняя карточка должна быть полностью доступна.',
+ 'live_intro': 'Лента прокручивается жестом, колесом или стрелками. Край следующей карточки показывает, что есть продолжение.',
  'live': '<div class="dk-panel"><div class="dk-card-scroll" id="demo-cards"><div '
          'class="dk-card-scroll__actions"><button class="dk-iconbtn dk-iconbtn--sm dk-scroll-arrow" '
          'data-scroll-prev aria-label="Предыдущие отчёты"><svg class="dk-i dk-i--adaptive" '
@@ -336,8 +335,7 @@ PAGES.append({'slug': 'card-scroll',
          'отчёт {n}</button></div></li></ul></div></div>',
  'when_yes': ['Последовательность отчётов, материалов или историй.',
               'На телефоне виден край следующей карточки.'],
- 'when_no': ['Основные KPI должны быть видны одновременно — CardGrid.',
-             'Не включайте автоматическое перелистывание.'],
+ 'when_no': ['Главные показатели нужны одновременно — <a href="component-card-grid.html">Сетка карточек</a>.', 'Карточки должны переключаться по действию человека, без автоматического перелистывания.'],
  'anatomy_html': '<div class="dk-panel"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> '
                  'Содержимое и управление</div>',
  'anatomy': [('Контейнер', 'Задаёт раскладку или поведение.'),
@@ -396,7 +394,7 @@ PAGES.append({'slug': 'scroll-arrow',
  'purpose': 'Перемещает горизонтальную ленту на следующий или предыдущий фрагмент.',
  'files': ['css/components.css', 'js/dk-card-scroll.js'],
  'scripts': ['dk-card-scroll.js'],
- 'live_intro': 'Нажмите стрелку и дойдите до края ленты. Проверьте состояние недоступного направления.',
+ 'live_intro': 'Стрелка сдвигает ленту на следующий или предыдущий фрагмент. На краю недоступное направление отключается.',
  'live': '<div class="dk-panel"><div class="dk-card-scroll" id="demo-cards"><div '
          'class="dk-card-scroll__actions"><button class="dk-iconbtn dk-iconbtn--sm dk-scroll-arrow" '
          'data-scroll-prev aria-label="Предыдущие отчёты"><svg class="dk-i dk-i--adaptive" '
@@ -470,7 +468,7 @@ PAGES.append({'slug': 'popout',
  'purpose': 'Размещает модальное содержимое поверх страницы и отделяет его от недоступного фона.',
  'files': ['css/components.css', 'js/dk-modal.js'],
  'scripts': ['dk-modal.js'],
- 'live_intro': 'Откройте слой и закройте его. Фон не должен принимать действия, пока слой открыт.',
+ 'live_intro': 'Слой отделяет открытое окно от страницы. Пока окно открыто, фон не принимает действия.',
  'live': '<div class="dk-panel"><button class="dk-btn dk-btn--sm" data-modal="#demo-popout">Открыть '
          'слой</button><dialog class="dk-modal dk-popout" id="demo-popout" '
          'aria-labelledby="demo-popout-title"><div class="dk-modal__head"><h2 class="dk-modal__title" '
@@ -478,7 +476,7 @@ PAGES.append({'slug': 'popout',
          'слой с затемнением и фокусом внутри.</p></div><form method="dialog" class="dk-modal__foot"><button '
          'class="dk-btn dk-btn--sm">Закрыть</button></form></dialog></div>',
  'when_yes': ['Модальное содержимое поверх страницы.', 'Окно по центру или у края экрана.'],
- 'when_no': ['Подсказка рядом с действием — Onboarding.', 'Не открывайте второй слой поверх первого.'],
+ 'when_no': ['Пояснение рядом с действием — <a href="component-tooltip.html">Подсказка</a>.', 'Знакомство с новой функцией — <a href="component-onboarding.html">Онбординг-подсказка</a>.', 'Готовое окно с поведением — <a href="component-modal.html">Модальное окно</a>. Не открывайте второй модальный слой поверх первого.'],
  'anatomy_html': '<div class="dk-panel"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> '
                  'Содержимое и управление</div>',
  'anatomy': [('Контейнер', 'Задаёт раскладку или поведение.'),
@@ -517,7 +515,7 @@ PAGES.append({'slug': 'focus-trap',
  'purpose': 'Удерживает клавиатурный фокус внутри открытого модального слоя.',
  'files': ['css/components.css', 'js/dk-focus-trap.js'],
  'scripts': ['dk-focus-trap.js'],
- 'live_intro': 'Откройте пример и пройдите элементы клавишами Tab и Shift+Tab. Фокус остаётся внутри слоя.',
+ 'live_intro': 'Tab и Shift+Tab обходят элементы открытого окна по кругу. После закрытия фокус возвращается к исходному действию.',
  'live': '<div class="dk-panel"><button class="dk-btn dk-btn--sm" id="demo-trap-start">Проверить '
          'фокус</button><dialog class="dk-modal dk-popout" id="demo-trap" '
          'aria-labelledby="demo-trap-title"><div class="dk-modal__head"><h2 class="dk-modal__title" '
@@ -527,8 +525,7 @@ PAGES.append({'slug': 'focus-trap',
          'method="dialog" class="dk-modal__foot"><button class="dk-btn '
          'dk-btn--sm">Закрыть</button></form></dialog></div>',
  'when_yes': ['Собственный всплывающий слой, где фокус должен оставаться до закрытия.'],
- 'when_no': ['Не удерживайте фокус в обычной карточке или меню страницы.',
-             'Нативный dialog.showModal уже исключает фон; helper дополняет цикл, но не заменяет inert.'],
+ 'when_no': ['Обычная карточка или меню не должны удерживать фокус.', 'Для готового окна используйте <a href="component-modal.html">Модальное окно</a>: оно управляет фокусом и фоном.'],
  'anatomy_html': '<div class="dk-panel"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> '
                  'Содержимое и управление</div>',
  'anatomy': [('Контейнер', 'Задаёт раскладку или поведение.'),
@@ -584,7 +581,7 @@ PAGES.append({'slug': 'touch',
  'purpose': 'Обрабатывает начало, движение, завершение и отмену жеста указателя.',
  'files': ['css/components.css', 'js/dk-touch.js'],
  'scripts': ['dk-touch.js'],
- 'live_intro': 'Проведите указателем по области и сравните результат с обычным нажатием.',
+ 'live_intro': 'Пример различает нажатие и движение указателя. Для обычной кнопки или прокрутки отдельный обработчик жестов не нужен.',
  'live': '<div class="dk-panel"><div class="dk-touch dk-touch--pan-y dk-panel" id="demo-touch" '
          'style="min-height:160px"><p>Проведите по этой области мышью или пальцем.</p><p class="dk-hint" '
          'id="demo-touch-status" role="status">Жестов пока нет</p></div></div>',

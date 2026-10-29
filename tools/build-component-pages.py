@@ -31,20 +31,18 @@ sys.path.insert(0, str(ROOT / "tools"))
 GROUPS = ["Управление", "Фильтры", "Данные", "Визуализация", "Обратная связь", "Утилиты", "Композиция"]
 MODULES = ["p1_controls", "p2_filters", "p3_data", "p4_viz", "p5_feedback", "p6_utilities", "p6_advanced", "p7_composition"]
 
-CATALOG_DESCRIPTIONS = {'flex': 'Раскладка элементов в строку или колонку с общими отступами и выравниванием.', 'card-grid': 'Адаптивная сетка карточек с равной высотой соседей.', 'card-scroll': 'Горизонтальный список карточек с нативной прокруткой и кнопками навигации.', 'scroll-arrow': 'Доступная кнопка перемещения по прокручиваемому содержимому.', 'popout': 'Оболочка модального слоя: размещение, подложка и недоступный фон.', 'focus-trap': 'Tab и Shift+Tab циклически обходят интерактивные элементы открытого слоя.', 'touch': 'Начало, движение, завершение и отмена pointer-жеста для мыши, пера и тача.'} | {'onboarding':'Знакомство с действием рядом с целевым элементом.', 'adaptive-icons':'Размер иконок по контексту и способу управления.', 'scrollview':'Нативная прокрутка ограниченной области.', 'accordion': 'Раскрываемые определения, настройки и ответы на вопросы.', 'avatar': 'Человек: фото, инициалы и группа участников.', 'counter': 'Количество объектов в кнопке, вкладке или меню.', 'chip': 'Отдельное выбранное значение с удалением.', 'chips-input': 'Ввод набора произвольных значений с отдельным удалением.', 'chips-select': 'Выбор нескольких значений из справочника с видимым набором.', 'button': 'Выполнение основного или дополнительного действия.', 'segment': 'Переключение вида одних и тех же данных.', 'tabs': 'Переход между разделами продукта.', 'check': 'Независимый выбор, выбор одного варианта и переключение режима.', 'field': 'Ввод данных с подписью, подсказкой и проверкой.', 'select': 'Выбор одного или нескольких значений из списка.', 'period': 'Выбор периода для просмотра и сравнения данных.', 'search': 'Поиск объекта по названию.', 'legend': 'Обозначение категорий данных и фильтрация по ним.', 'pager': 'Переход между страницами набора данных.', 'table': 'Сравнение объектов по общим признакам.', 'badge': 'Краткие метки, статусы и показатели внутри других компонентов.', 'tile': 'Отображение отдельного показателя и его изменения.', 'hero': 'Общее состояние и ключевой показатель экрана.', 'car': 'Группа связанных карточек с навигацией.', 'rank': 'Ранжирование объектов по выбранному показателю.', 'list': 'Список объектов с дополнительными данными и действиями.', 'uptime': 'История доступности служб за выбранный период.', 'chart': 'Сравнение величин, динамики и состава данных.', 'map': 'Географическое распределение показателей и альтернативный вид плитками.', 'calendar': 'Распределение работ и событий по датам.', 'banner': 'Состояние страницы и подтверждение выполненного действия.', 'modal': 'Подтверждение действия или выполнение отдельной задачи.', 'empty': 'Сообщения о загрузке, отсутствии данных и ошибке.'}
-
 # Порядок блоков — из шаблона разбора. Менять порядок здесь, а не в страницах.
 BLOCKS = [
     ("zhivoy-primer", "В работе", "Знакомство"),
     ("kogda-ispolzovat", "Когда использовать", None),
-    ("anatomiya", "Анатомия", None),
+    ("anatomiya", "Из чего состоит", None),
     ("varianty-i-razmery", "Варианты и размеры", "Использование"),
     ("sostoyaniya", "Состояния", None),
     ("kontent", "Текст и подписи", None),
     ("dostupnost", "Доступность", None),
-    ("tokeny", "Токены", "Разработка"),
-    ("kod", "Код", None),
     ("svyazannoe", "С чем сочетать", None),
+    ("tokeny", "Токены оформления", "Разработка"),
+    ("kod", "Код и API", None),
 ]
 
 REQUIRED = ["slug", "title", "group", "purpose", "status", "files", "scripts",
@@ -59,6 +57,9 @@ def esc(s: str) -> str:
 
 def li(items) -> str:
     return "".join(f"<li>{x}</li>" for x in items)
+
+
+PAGE_EMOJI = {'button': '🔘', 'segment': '↔️', 'tabs': '🗂️', 'check': '☑️', 'field': '✍️', 'select': '🔎', 'period': '📆', 'search': '🔍', 'legend': '🎨', 'pager': '📑', 'chips-input': '🏷️', 'chips-select': '🏷️', 'table': '📋', 'badge': '🔖', 'tile': '🔢', 'hero': '🎯', 'car': '🗃️', 'rank': '🏆', 'list': '📝', 'uptime': '📶', 'avatar': '👤', 'counter': '🔢', 'chip': '🏷️', 'accordion': '🪗', 'chart': '📊', 'map': '🗺️', 'calendar': '🗓️', 'banner': '💬', 'modal': '🪟', 'empty': '📭', 'adaptive-icons': '🔣', 'scrollview': '📜', 'onboarding': '👋', 'flex': '↔️', 'card-grid': '🧩', 'card-scroll': '🗃️', 'scroll-arrow': '➡️', 'popout': '🪟', 'focus-trap': '⌨️', 'touch': '👆', 'breadcrumbs': '🧭', 'tooltip': '💡', 'details-sidebar': '📌', 'heatmap': '🌡️', 'bullet-chart': '🎯', 'period-comparison': '⚖️', 'timeline-annotations': '📍', 'fullscreen': '🔎', 'export': '📤', 'density-controls': '📏', 'tree-select': '🌳', 'saved-views': '💾', 'layout-editor': '🧱', 'page-header': '📰', 'widget-header': '🏷️', 'widget': '🧩'}
 
 
 def render(p: dict) -> str:
@@ -101,10 +102,10 @@ def render(p: dict) -> str:
                         '<ul class="sc-list">' + li(p["content_bad"]) + '</ul></div></div>'),
             "dostupnost": '<ul class="sc-list sc-list--wide">' + li(p["a11y"]) + '</ul>',
             "tokeny": ('<p>Токены компонента из '
-                       '<code>css/components.css?v=20261028-detail-final</code> для текущей темы. '
+                       '<code>css/components.css</code> для текущей темы. '
                        '</p>'
                        f'<ul class="sc-tokens" data-tokens="{esc(",".join(p["tokens"]))}">'
-                       '<li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>'),
+                       '<li class="sc-tokens__wait">Загружаем токены…</li></ul>'),
             "kod": ((f'<p>{p["code_intro"]}</p>' if p.get("code_intro") else "") + f'<p class="sc-source">Исходники: {files}</p><pre class="sc-code"><code>{esc(p["code"])}</code></pre>'
                     '<h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr>'
                     '<th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th>'
@@ -131,11 +132,11 @@ def render(p: dict) -> str:
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 {scripts}<script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -167,11 +168,11 @@ def render(p: dict) -> str:
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>{esc(p["title"])}</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">{PAGE_EMOJI[p["slug"]]}</span>{esc(p["title"])}</h1>
     <p class="sc-hero__lead">{p["purpose"]}</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: {esc(p["status"])}</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
@@ -209,6 +210,10 @@ def load_pages() -> list[dict]:
             }
             p["api"] = list(p["api"]) + additions.get(p["slug"], [])
             pages.append(p)
+    # Keep renamed components consistent in navigation, HTML and Markdown.
+    renamed = {"page-header":"Заголовок страницы", "widget-header":"Заголовок виджета", "flex":"Строка и колонка", "card-scroll":"Прокручиваемая лента"}
+    for page in pages:
+        page["related"] = [(href, renamed.get(href.removeprefix("component-").removesuffix(".html"), label), description) for href, label, description in page["related"]]
     return pages
 
 
@@ -230,7 +235,7 @@ def build() -> dict[str, str]:
         out[f"component-{p['slug']}.md"] = "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
     from docs_guide import render as render_guide
     out["index.html"] = render_guide(pages, render)
-    index = [{"slug": p["slug"], "title": p["title"], "group": p["group"], "description": CATALOG_DESCRIPTIONS.get(p["slug"], p["purpose"])} for p in pages]
+    index = [{"slug": p["slug"], "title": p["title"], "group": p["group"], "description": p["purpose"]} for p in pages]
     out["js/docs-index.js"] = (
         "/* СОБРАНО tools/build-component-pages.py — указатель страниц компонентов для\n"
         "   оглавления документации (js/docs.js). Руками не править. */\n"

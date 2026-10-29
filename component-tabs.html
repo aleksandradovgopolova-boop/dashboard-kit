@@ -15,11 +15,11 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -51,17 +51,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Вкладки</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🗂️</span>Вкладки</h1>
     <p class="sc-hero__lead">Помогают перейти между разделами одного уровня и показывают текущий раздел.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Сравните активную вкладку, обычную ссылку и вкладку со счётчиком.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><nav class="dk-tabs" aria-label="Разделы мониторинга">
+    <p>Вкладка показывает текущий раздел, счётчик — сколько в нём объектов. Переход к другому разделу задаётся обычной ссылкой.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><nav class="dk-tabs" aria-label="Разделы мониторинга">
       <a class="dk-tab" href="#" aria-current="page">Инфраструктура</a>
       <a class="dk-tab" href="#">Аварии <span class="dk-tab__n">23</span></a>
       <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
@@ -74,7 +74,7 @@
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Разделы одного уровня, у каждого свой адрес: «Обзор», «Записи», «Отчёты».</li><li>При переходе меняется вся страница или её основная часть.</li><li>Разделов от двух до шести — больше не помещается в строку на узком экране.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Переключение вида одних данных внутри виджета — <a href="component-segment.html">Сегмент</a>.</li><li>Больше шести разделов — боковое меню каркаса (<code>css/chrome.css</code>).</li><li>Действие, а не переход — <a href="component-button.html">Кнопка</a>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-shell">Шапка и завершение страницы</a></li><li><a href="index.html#pattern-ia">Информационная архитектура</a></li><li><a href="index.html#pattern-consistency">Консистентность</a></li><li><a href="index.html#pattern-interface-motion">Переходы и непрерывность работы</a></li><li><a href="index.html#pattern-dashboard">Дашборд по вопросу пользователя</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><nav class="dk-tabs" aria-label="Пример">
       <a class="dk-tab" href="#" aria-current="page"><b class="sc-callout">1</b>Текущий</a>
       <a class="dk-tab" href="#"><b class="sc-callout">2</b>Аварии <span class="dk-tab__n"><b class="sc-callout">3</b>23</span></a>
@@ -103,21 +103,21 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Роль.</b> <code>&lt;nav aria-label&gt;</code> со ссылками, а не <code>tablist</code>: это переходы между страницами, и скринридер должен ждать загрузку.</li><li><b>Текущая</b> — <code>aria-current="page"</code>, скринридер объявляет «текущая страница».</li><li><b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Кольцо фокуса — только при навигации табом.</li><li><b>Контраст.</b> Черта текущей вкладки — <code>--control-on</code>, тот же серый, что у выбранного управления: не ниже 3:1 к поверхности.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-segment.html">Сегмент</a> — переключение вида внутри виджета</li><li><a href="component-badge.html">Бейдж</a> — счётчик того же вида в других местах</li><li><a href="accidents.html">Страница «Аварии»</a> — вкладки в живом дашборде</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-tabs,dk-tab"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-tabs,dk-tab"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Вкладки — ссылки. Текущую отмечает сервер или страница, скрипта у компонента нет.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;nav class=&quot;dk-tabs&quot; aria-label=&quot;Разделы мониторинга&quot;&gt;
   &lt;a class=&quot;dk-tab&quot; href=&quot;dashboard.html&quot; aria-current=&quot;page&quot;&gt;Сводка&lt;/a&gt;
   &lt;a class=&quot;dk-tab&quot; href=&quot;accidents.html&quot;&gt;Аварии &lt;span class=&quot;dk-tab__n&quot;&gt;23&lt;/span&gt;&lt;/a&gt;
   &lt;a class=&quot;dk-tab&quot; href=&quot;calendar.html&quot;&gt;Календарь&lt;/a&gt;
 &lt;/nav&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>aria-current=&quot;page&quot;</code></td><td>атрибут</td><td>Текущий раздел.</td></tr><tr><td><code>dk-tab__n</code></td><td>элемент</td><td>Счётчик; не показывать при нуле.</td></tr><tr><td><code>aria-label</code></td><td>атрибут nav</td><td>Название группы разделов для скринридера.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-segment.html">Сегмент</a> — переключение вида внутри виджета</li><li><a href="component-badge.html">Бейдж</a> — счётчик того же вида в других местах</li><li><a href="accidents.html">Страница «Аварии»</a> — вкладки в живом дашборде</li></ul>
   </section>
 
 </div>

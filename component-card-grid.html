@@ -15,11 +15,11 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -51,24 +51,24 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Сетка карточек</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🧩</span>Сетка карточек</h1>
     <p class="sc-hero__lead">Располагает равноправные карточки в адаптивной сетке.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Измените ширину окна: количество колонок меняется, порядок карточек сохраняется.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><ul class="dk-card-grid" aria-label="Отчёты"><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 1</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 2</h3><p>Продажи по каналам и категориям товаров.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 3</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li></ul></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
+    <p>Равноправные карточки занимают доступные колонки. На узком экране их становится меньше в ряду, порядок остаётся прежним.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><ul class="dk-card-grid" aria-label="Отчёты"><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 1</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 2</h3><p>Продажи по каналам и категориям товаров.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li><li><div class="dk-widget dk-widget--s"><h3 class="dk-widget__title">Отчёт 3</h3><p>Продажи по каналам.</p><a class="dk-btn dk-btn--sm" href="component-table.html">Открыть пример таблицы</a></div></li></ul></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Сравнить несколько равноправных объектов.</li><li>Все карточки должны быть видны в потоке страницы.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Сложный дашборд с разными долями виджетов — dk-grid.</li><li>Последовательные истории — CardScroll.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Сравнить несколько равноправных объектов.</li><li>Все карточки должны быть видны в потоке страницы.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Виджеты разной ширины — сетка дашборда <code>dk-grid</code>.</li><li>Последовательный просмотр историй — <a href="component-card-scroll.html">Прокручиваемая лента</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-panel"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> Содержимое и управление</div></div><ol class="sc-anatomy__list"><li><b>Контейнер</b> — Задаёт раскладку или поведение.</li><li><b>Содержимое</b> — Названия, данные и доступные действия задаёт приложение.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
@@ -87,17 +87,17 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li>Порядок чтения и Tab соответствует DOM; не используйте reverse для смысловой перестановки.</li><li>На телефоне кнопки имеют область нажатия минимум 44 px.</li></ul>
   </section>
-  <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-card-grid"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
-  </section>
-  <section class="sc-sec" id="kod">
-    <h2>Код</h2>
-    <p>Используйте общую основу и подключите скрипты в порядке описи кита.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;ul class=&quot;dk-card-grid&quot; aria-label=&quot;Отчёты&quot;&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 1&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 2&lt;/h3&gt;&lt;p&gt;Продажи по каналам и категориям товаров.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 3&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ul&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--card-min-width</code></td><td>переменная в style</td><td>Минимальная ширина, не больше ширины контейнера.</td></tr></tbody></table></div>
-  </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="https://vkui.io/components/card-grid/">Референс VKUI</a> — Структура и поведение</li></ul>
+  </section>
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-card-grid"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
+  </section>
+  <section class="sc-sec" id="kod">
+    <h2>Код и API</h2>
+    <p>Используйте общую основу и подключите скрипты в порядке описи кита.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;ul class=&quot;dk-card-grid&quot; aria-label=&quot;Отчёты&quot;&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 1&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 2&lt;/h3&gt;&lt;p&gt;Продажи по каналам и категориям товаров.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;li&gt;&lt;div class=&quot;dk-widget dk-widget--s&quot;&gt;&lt;h3 class=&quot;dk-widget__title&quot;&gt;Отчёт 3&lt;/h3&gt;&lt;p&gt;Продажи по каналам.&lt;/p&gt;&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Открыть пример таблицы&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ul&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--card-min-width</code></td><td>переменная в style</td><td>Минимальная ширина, не больше ширины контейнера.</td></tr></tbody></table></div>
   </section>
 
 </div>

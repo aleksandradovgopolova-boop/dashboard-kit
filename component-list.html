@@ -15,11 +15,11 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -51,17 +51,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Список, полосы, раскрытие</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">📝</span>Список, полосы, раскрытие</h1>
     <p class="sc-hero__lead">Показывает объекты, события или доли без сложной структуры таблицы.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Сравните обычный список, полосы сравнения и раскрываемые подробности.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-grid">
+    <p>События читаются по порядку, полосы помогают сравнить значения, раскрытие показывает дополнительные сведения. Выберите вариант под вопрос пользователя.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-grid">
       <div class="dk-col--half"><div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Последние события</h3></div><div class="dk-list">
         <button class="dk-list__row" style="--accent:var(--crit-ink)"><span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-list__text"><span class="dk-list__name">Прорыв теплотрассы</span><span class="dk-list__sub">Новосибирск · 14:20</span></span><span class="dk-list__v" style="--accent:var(--crit-ink)">1 240 чел.</span></button>
         <button class="dk-list__row" style="--accent:var(--high-ink)"><span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span><span class="dk-list__text"><span class="dk-list__name">Отключение электроснабжения</span><span class="dk-list__sub">Ростовская область · 12:05</span></span><span class="dk-list__v" style="--accent:var(--high-ink)">380 чел.</span></button>
@@ -76,10 +76,10 @@
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Список: лента событий с одним значением на строку, где важны время и вид.</li><li>Полосы: доля от самого крупного в списке из трёх–семи категорий.</li><li>Раскрытие: подробности, без которых можно понять итог, — и итог стоит в заголовке.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Несколько показателей на строку — <a href="component-table.html">Таблица</a>.</li><li>Доля от целого — <a href="component-chart.html">пончик</a>: полосы показывают долю от максимума, а не от суммы.</li><li>Ранжирование по одному числу — <a href="component-rank.html">Рейтинг</a>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-space">Пространство</a></li><li><a href="index.html#pattern-dashboard">Дашборд по вопросу пользователя</a></li></ul></details>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Список: лента событий с одним значением на строку, где важны время и вид.</li><li>Полосы: доля от самого крупного в списке из трёх–семи категорий.</li><li>Раскрытие: подробности, без которых можно понять итог, — и итог стоит в заголовке.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Несколько показателей на строку — <a href="component-table.html">Таблица</a>.</li><li>Состав целого — <a href="component-chart.html">график состава</a> с явной базой: полосы списка сравниваются с максимумом.</li><li>Места и ранжирование — <a href="component-rank.html">Рейтинг</a>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-space">Пространство</a></li><li><a href="index.html#pattern-dashboard">Дашборд по вопросу пользователя</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-grid"><div class="dk-col--half"><div class="dk-list">
       <button class="dk-list__row" style="--accent:var(--crit-ink)"><span class="dk-list__icon"><b class="sc-callout">1</b><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-list__text"><span class="dk-list__name"><b class="sc-callout">2</b>Прорыв теплотрассы</span><span class="dk-list__sub"><b class="sc-callout">3</b>Новосибирск · 14:20</span></span><span class="dk-list__v" style="--accent:var(--crit-ink)"><b class="sc-callout">4</b>1 240 чел.</span></button>
       <button class="dk-list__more"><b class="sc-callout">5</b>Показать все <svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button></div></div>
@@ -87,7 +87,7 @@
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Размеры одни: строка списка 56 px, полоса 8 px. Список — в M-виджете, полосы — в M и L.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-list / dk-list__row</code></td><td>Лента событий; строка — кнопка.</td><td>Верх ленты с «Показать все».</td></tr><tr><td><code>dk-bars / dk-bar</code></td><td>Полосы от максимума.</td><td>Три–семь категорий.</td></tr><tr><td><code>dk-fold</code></td><td>Раскрывающийся блок на <code>&lt;details&gt;</code>.</td><td>Подробности с итогом в заголовке.</td></tr><tr><td><code>dk-fold--plain</code></td><td>Раскрытие без заливки: разделительная линия и заголовок с зоной касания не менее 44 px.</td><td>Определения метрик и дополнительные показатели под обзором. Стрелка <code>ti-chevron-down</code> обязательна в разметке.</td></tr><tr><td><code>dk-row</code></td><td>Строка «подпись — значение».</td><td>Внутри раскрытия и в коротких сводках.</td></tr><tr><td><code>--accent</code></td><td>Тон значка, значения, полосы.</td><td>Смысл, не украшение.</td></tr></tbody></table></div>
+    <p>Высота строки зависит от текста и действий. Полосы и интервалы используют токены компонента; ширину задаёт сетка виджетов. На телефоне названия сохраняются целиком.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-list / dk-list__row</code></td><td>Лента событий; строка — кнопка.</td><td>Верх ленты с «Показать все».</td></tr><tr><td><code>dk-bars / dk-bar</code></td><td>Полосы от максимума.</td><td>Три–семь категорий.</td></tr><tr><td><code>dk-fold</code></td><td>Раскрывающийся блок на <code>&lt;details&gt;</code>.</td><td>Подробности с итогом в заголовке.</td></tr><tr><td><code>dk-fold--plain</code></td><td>Раскрытие без заливки: разделительная линия и заголовок с зоной касания не менее 44 px.</td><td>Определения метрик и дополнительные показатели под обзором. Стрелка <code>ti-chevron-down</code> обязательна в разметке.</td></tr><tr><td><code>dk-row</code></td><td>Строка «подпись — значение».</td><td>Внутри раскрытия и в коротких сводках.</td></tr><tr><td><code>--accent</code></td><td>Тон значка, значения, полосы.</td><td>Смысл, не украшение.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
@@ -106,12 +106,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Строки списка — кнопки</b>: Tab, Enter; фокус виден.</li><li><b>Раскрытие</b> — настоящий <code>&lt;details&gt;</code>: клавиатура и скринридер бесплатно.</li><li><b>Полосы</b> — число рядом читается; полоса декоративна.</li><li><b>Контраст.</b> Подстрока <code>--ink-3</code> на поверхности — не ниже 4,07:1.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-rank.html">Рейтинг</a> — ранжирование по числу</li><li><a href="component-table.html">Таблица</a> — когда показателей несколько</li><li><a href="component-uptime.html">Доступность служб</a> — полоса другого рода — во времени</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-list,dk-bars,dk-bar,dk-fold,dk-fold--plain,dk-row"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-list,dk-bars,dk-bar,dk-fold,dk-fold--plain,dk-row"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Только разметка. «Показать все» — событие страницы.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-list&quot;&gt;
   &lt;button class=&quot;dk-list__row&quot; style=&quot;--accent:var(--crit-ink)&quot; data-id=&quot;4821&quot;&gt;
     &lt;span class=&quot;dk-list__icon&quot;&gt;&lt;svg class=&quot;dk-i dk-i--sm&quot;&gt;&lt;use href=&quot;#ti-alert-triangle&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
@@ -129,10 +133,6 @@
   &lt;div class=&quot;dk-bar__track&quot;&gt;&lt;div class=&quot;dk-bar__fill&quot; style=&quot;width:66%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
   &lt;div class=&quot;dk-bar__meta&quot;&gt;27% обращений&lt;/div&gt;
 &lt;/div&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--accent</code></td><td>переменная в style</td><td>Тон строки или полосы.</td></tr><tr><td><code>dk-list__more</code></td><td>кнопка</td><td>Показать остальное; страница решает как.</td></tr><tr><td><code>dk-bar__fill style=width</code></td><td>проценты от максимума</td><td>Считает страница: max = 100%.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-rank.html">Рейтинг</a> — ранжирование по числу</li><li><a href="component-table.html">Таблица</a> — когда показателей несколько</li><li><a href="component-uptime.html">Доступность служб</a> — полоса другого рода — во времени</li></ul>
   </section>
 
 </div>

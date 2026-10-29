@@ -15,12 +15,12 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-workspace.js" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -52,33 +52,33 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Сохранённые виды</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">💾</span>Сохранённые виды</h1>
     <p class="sc-hero__lead">Сохраняет рабочий срез в этом браузере и позволяет к нему вернуться.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: экспериментальный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Создайте именованный вид и примените его. Синхронизация между устройствами в пример не входит.</p><div class="sc-playground"><div class="sc-playground__canvas"><div id="advanced-state"></div><div id="advanced-views"></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
+    <p>Выберите службу и период, сохраните вид, затем измените выбор и примените сохранённый. Параметры восстановятся. Вид хранится только в этом браузере.</p><div class="sc-playground"><div class="sc-playground__canvas"><div id="advanced-state"><div class="dk-form"><div class="dk-ff"><label class="dk-label" for="view-service">Служба</label><div class="dk-field"><select id="view-service"><option value="heat">Теплоснабжение</option><option value="water">Водоснабжение</option></select></div></div><div class="dk-ff"><label class="dk-label" for="view-period">Период</label><div class="dk-field"><select id="view-period"><option value="14d">14 дней</option><option value="30d">30 дней</option></select></div></div></div></div><div id="advanced-views"></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Пользователь регулярно возвращается к одним фильтрам и периодам.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Нужны общие виды команды: локальное хранилище не является синхронизацией.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-filters">Фильтрация</a></li></ul></details>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно возвращаться к одним фильтрам, периодам и настройкам обзора.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Общие виды команды требуют серверного хранения и прав доступа; локальное сохранение этого не даёт.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-filters">Фильтрация</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
-    <ol class="sc-anatomy__list"><li><b>Контекст</b> — Возвращает локальный рабочий срез со всеми согласованными параметрами.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
+    <h2>Из чего состоит</h2>
+    <ol class="sc-anatomy__list"><li><b>Контекст</b> — Сохраняет рабочий срез в этом браузере и позволяет к нему вернуться.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Список и действия используют ширину контейнера. Длинное название вида не должно скрывать действия.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkState(el, initial)</code></td><td>Основной контракт API/markup.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+    <p>Список и действия используют ширину контейнера. Длинное название вида не должно скрывать действия.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkState(el, initial)</code></td><td>Разметка и параметры компонента.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
-    <p>Формат version=1, v0 views мигрирует; неизвестная версия не применяется. Storage отказ сохраняет работу в памяти. Состояние отделено от компонентов: host подписывается на dk:statechange и обновляет фильтры/период/таблицу/карту.</p>
+    <p>Вид можно сохранить, применить, переименовать и удалить. Ошибка сохранения сообщается рядом.</p><details class="dk-data-summary"><summary>Ограничения и подключение</summary><p>Формат version=1, v0 views мигрирует; неизвестная версия не применяется. Storage отказ сохраняет работу в памяти. Состояние отделено от компонентов: host подписывается на dk:statechange и обновляет фильтры/период/таблицу/карту.</p></details>
   </section>
   <section class="sc-sec" id="kontent">
     <h2>Текст и подписи</h2>
@@ -88,22 +88,28 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li>Названия и действия видимы, status сообщает ошибки хранения. После действий фокус остаётся в контексте. Переименование использует поле Название вида.</li><li>Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.</li></ul>
   </section>
-  <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-saved-views"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
-  </section>
-  <section class="sc-sec" id="kod">
-    <h2>Код</h2>
-    <p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-workspace.js"><code>js/dk-workspace.js</code></a></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-state&quot;&gt;&lt;/div&gt;&lt;div id=&quot;advanced-views&quot;&gt;&lt;/div&gt;
-&lt;script&gt;
-document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
-var state=dkState(document.getElementById(&#x27;advanced-state&#x27;), {filters:{service:&#x27;heat&#x27;},period:&#x27;14d&#x27;});dkSavedViews(document.getElementById(&#x27;advanced-views&#x27;), {key:&#x27;dk-demo-views&#x27;,state:state});
-});
-&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkState(el, initial)</code></td><td>API</td><td>get(), update(patch), destroy(); dk:statechange содержит snapshot. filters, period, sort, page, size, mode, density.</td></tr><tr><td><code>dkSavedViews(el, opts)</code></td><td>API</td><td>key/state обязательны, storage?, applyDefault?. create(name), rename(id,name), apply(id), remove(id), setDefault(id|null), list(), destroy().</td></tr></tbody></table></div>
-  </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — точные числа</li><li><a href="README.md">Подключение</a> — dk-theme первым, dk-util до компонента</li></ul>
+  </section>
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-saved-views"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
+  </section>
+  <section class="sc-sec" id="kod">
+    <h2>Код и API</h2>
+    <p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-workspace.js"><code>js/dk-workspace.js</code></a></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-state&quot;&gt;&lt;div class=&quot;dk-form&quot;&gt;&lt;div class=&quot;dk-ff&quot;&gt;&lt;label class=&quot;dk-label&quot; for=&quot;view-service&quot;&gt;Служба&lt;/label&gt;&lt;div class=&quot;dk-field&quot;&gt;&lt;select id=&quot;view-service&quot;&gt;&lt;option value=&quot;heat&quot;&gt;Теплоснабжение&lt;/option&gt;&lt;option value=&quot;water&quot;&gt;Водоснабжение&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dk-ff&quot;&gt;&lt;label class=&quot;dk-label&quot; for=&quot;view-period&quot;&gt;Период&lt;/label&gt;&lt;div class=&quot;dk-field&quot;&gt;&lt;select id=&quot;view-period&quot;&gt;&lt;option value=&quot;14d&quot;&gt;14 дней&lt;/option&gt;&lt;option value=&quot;30d&quot;&gt;30 дней&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;advanced-views&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
+var stateHost=document.getElementById(&#x27;advanced-state&#x27;);
+var service=document.getElementById(&#x27;view-service&#x27;), period=document.getElementById(&#x27;view-period&#x27;);
+var state=dkState(stateHost,{filters:{service:&#x27;heat&#x27;},period:&#x27;14d&#x27;});
+function changeView(){state.update({filters:{service:service.value},period:period.value});}
+service.addEventListener(&#x27;change&#x27;,changeView);period.addEventListener(&#x27;change&#x27;,changeView);
+stateHost.addEventListener(&#x27;dk:statechange&#x27;,function(event){service.value=event.detail.filters.service;period.value=event.detail.period;});
+dkSavedViews(document.getElementById(&#x27;advanced-views&#x27;),{key:&#x27;dk-demo-views&#x27;,state:state});
+});
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkState(el, initial)</code></td><td>API</td><td>get(), update(patch), destroy(); dk:statechange содержит snapshot. filters, period, sort, page, size, mode, density.</td></tr><tr><td><code>dkSavedViews(el, opts)</code></td><td>API</td><td>key/state обязательны, storage?, applyDefault?. create(name), rename(id,name), apply(id), remove(id), setDefault(id|null), list(), destroy().</td></tr></tbody></table></div>
   </section>
 
 </div>
@@ -113,7 +119,13 @@ var state=dkState(document.getElementById(&#x27;advanced-state&#x27;), {filters:
 (function () {
   'use strict';
   var root = document.documentElement;
-document.addEventListener("DOMContentLoaded", function(){var state=dkState(document.getElementById('advanced-state'), {filters:{service:'heat'},period:'14d'});dkSavedViews(document.getElementById('advanced-views'), {key:'dk-demo-views',state:state});});
+document.addEventListener("DOMContentLoaded", function(){var stateHost=document.getElementById('advanced-state');
+var service=document.getElementById('view-service'), period=document.getElementById('view-period');
+var state=dkState(stateHost,{filters:{service:'heat'},period:'14d'});
+function changeView(){state.update({filters:{service:service.value},period:period.value});}
+service.addEventListener('change',changeView);period.addEventListener('change',changeView);
+stateHost.addEventListener('dk:statechange',function(event){service.value=event.detail.filters.service;period.value=event.detail.period;});
+dkSavedViews(document.getElementById('advanced-views'),{key:'dk-demo-views',state:state});});
 })();
 </script>
 </body>

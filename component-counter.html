@@ -15,11 +15,11 @@
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
 <link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/docs.css?v=20261029-topnav-illustration">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261029-topnav-illustration" defer></script>
 <link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
 </head>
 <body class="dk-page dk-glass">
@@ -51,24 +51,24 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Счётчик</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🔢</span>Счётчик</h1>
     <p class="sc-hero__lead">Показывает количество объектов рядом с названием раздела или действия.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Сравните короткое и длинное число. Счётчик дополняет название, а не заменяет его.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-stack"><div class="dk-inline"><button class="dk-btn dk-btn--sm">Сообщения <span class="dk-counter">12</span></button><button class="dk-btn dk-btn--sm dk-btn--primary">Обработать <span class="dk-counter">8</span></button></div><div class="dk-inline"><span class="dk-counter dk-counter--sm" aria-label="3 сообщения">3</span><span class="dk-counter" aria-label="12 сообщений">12</span><span class="dk-counter dk-counter--crit" aria-label="125 ошибок">99+</span><span>Нейтральный · обычный · ошибка</span></div></div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
+    <p>Счётчик читается вместе с названием: «Сообщения 12». Он дополняет контекст, а не заменяет его.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-stack"><div class="dk-inline"><button class="dk-btn dk-btn--sm">Сообщения <span class="dk-counter">12</span></button><button class="dk-btn dk-btn--sm dk-btn--primary">Обработать <span class="dk-counter">8</span></button></div><div class="dk-inline"><span class="dk-counter dk-counter--sm" aria-label="3 сообщения">3</span><span class="dk-counter" aria-label="12 сообщений">12</span><span class="dk-counter dk-counter--crit" aria-label="125 ошибок">99+</span><span>Нейтральный · обычный · ошибка</span></div></div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Количество объектов внутри кнопки, вкладки или строки меню.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Главное число дашборда — KPI-плитка.</li><li>Состояние объекта — статус с текстовой подписью.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><button class="dk-btn dk-btn--sm">Сообщения <span class="dk-counter">12</span></button></div><ol class="sc-anatomy__list"><li><b>Содержимое</b> — Подпись и значение доступны без цвета.</li><li><b>Контекст</b> — Находится рядом с объектом, к которому относится.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
@@ -87,17 +87,17 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li>Внутри подписанной кнопки число входит в её доступное имя.</li><li>Для 99+ укажите точное число и объект в aria-label.</li><li>Ноль показывайте только если отсутствие объектов важно для решения; скрытие счётчика не должно менять размер кнопки.</li></ul>
   </section>
-  <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-counter"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
-  </section>
-  <section class="sc-sec" id="kod">
-    <h2>Код</h2>
-    <p>HTML и общие стили кита. Изменение данных выполняет приложение.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;button class=&quot;dk-btn dk-btn--sm&quot;&gt;Сообщения &lt;span class=&quot;dk-counter&quot;&gt;12&lt;/span&gt;&lt;/button&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-counter</code></td><td>класс</td><td>Нейтральная заливка.</td></tr><tr><td><code>dk-counter--sm</code></td><td>класс</td><td>Меньший размер.</td></tr><tr><td><code>dk-counter--brand</code></td><td>класс</td><td>Акцентная заливка.</td></tr><tr><td><code>dk-counter--crit</code></td><td>класс</td><td>Критическое состояние.</td></tr><tr><td><code>dk-counter--plain</code></td><td>класс</td><td>Без заливки, цвет контекста.</td></tr></tbody></table></div>
-  </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-badge.html">Бейдж и статус</a> — состояние объекта</li><li><a href="component-chips-input.html">ChipsInput</a> — ввод набора</li><li><a href="component-chips-select.html">ChipsSelect</a> — выбор набора</li></ul>
+  </section>
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-counter"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
+  </section>
+  <section class="sc-sec" id="kod">
+    <h2>Код и API</h2>
+    <p>HTML и общие стили кита. Изменение данных выполняет приложение.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;button class=&quot;dk-btn dk-btn--sm&quot;&gt;Сообщения &lt;span class=&quot;dk-counter&quot;&gt;12&lt;/span&gt;&lt;/button&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-counter</code></td><td>класс</td><td>Нейтральная заливка.</td></tr><tr><td><code>dk-counter--sm</code></td><td>класс</td><td>Меньший размер.</td></tr><tr><td><code>dk-counter--brand</code></td><td>класс</td><td>Акцентная заливка.</td></tr><tr><td><code>dk-counter--crit</code></td><td>класс</td><td>Критическое состояние.</td></tr><tr><td><code>dk-counter--plain</code></td><td>класс</td><td>Без заливки, цвет контекста.</td></tr></tbody></table></div>
   </section>
 
 </div>
