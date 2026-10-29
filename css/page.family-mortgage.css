@@ -393,7 +393,7 @@
 #fm-dashboard .fm-topbar .fm-filter:first-child { flex-basis:176px; width:176px; }
 #fm-dashboard .fm-topbar .fm-filter .dk-select,
 #fm-dashboard .fm-topbar .fm-filter .dk-select__trigger { width:100%; max-width:100%; }
-#fm-dashboard .fm-topbar .fm-filter .dk-select__trigger { height:var(--control-lg); padding-block:0; }
+#fm-dashboard .fm-topbar .fm-filter .dk-select__trigger { height:var(--control-lg); }
 #fm-dashboard .fm-topbar .fm-filter .dk-select__label { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:start; }
 #fm-dashboard .fm-topbar .fm-filter-actions { width:calc(var(--control-lg) * 3 + var(--space-2) * 2); justify-content:flex-end; }
 @media(max-width:767px) {
@@ -408,17 +408,17 @@
 #fm-dashboard .fm-topbar__tools { grid-column:3; grid-row:1; }
 #fm-dashboard .fm-topbar .fm-filter .dk-select__trigger,
 #fm-dashboard .fm-topbar .dk-iconbtn { height:44px; min-height:44px; }
+#fm-dashboard .fm-topbar :is(.dk-select,.dk-iconbtn) { --glass-control-size:44px; }
 #fm-dashboard .fm-topbar .dk-iconbtn { width:44px; min-width:44px; }
 #fm-dashboard .fm-topbar .fm-filter-actions { width:calc(44px * 3 + var(--space-2) * 2); }
 #fm-dashboard .fm-topbar__tools .dk-seg { padding:0; border:0; gap:var(--space-2); background:none; }
-#fm-dashboard .fm-topbar__tools .dk-seg button { width:44px; min-width:44px; height:44px; min-height:44px; padding:0; border-radius:var(--radius-md); }
+#fm-dashboard .fm-topbar__tools .dk-seg button { width:44px; min-width:44px; height:44px; min-height:44px; padding:calc((44px - var(--icon-size-control) - 2 * var(--hairline)) / 2); border-radius:var(--radius-md); }
 @media(min-width:860px) and (max-width:1199px){
  #fm-dashboard .fm-topbar__inner { padding-inline:var(--space-5); gap:var(--space-4); }
  #fm-dashboard .fm-brand__name { font:var(--type-h3); white-space:nowrap; }
- #fm-dashboard .fm-topbar .fm-filter:first-child { flex-basis:144px; width:144px; }
- #fm-dashboard .fm-topbar .fm-filter:nth-child(2) { flex-basis:124px; width:124px; }
- #fm-dashboard .fm-topbar .fm-filter:nth-child(3) { flex-basis:136px; width:136px; }
- #fm-dashboard .fm-topbar .fm-filter .dk-select__trigger { padding-inline:var(--space-4); }
+ #fm-dashboard .fm-topbar .fm-filter:first-child { flex-basis:150px; width:150px; }
+ #fm-dashboard .fm-topbar .fm-filter:nth-child(2) { flex-basis:130px; width:130px; }
+ #fm-dashboard .fm-topbar .fm-filter:nth-child(3) { flex-basis:142px; width:142px; }
 }
 @media(max-width:859px){
  #fm-dashboard .fm-topbar__inner { grid-template-columns:minmax(0,1fr) 44px auto; padding:var(--space-3) var(--space-4); gap:var(--space-4); min-height:56px; }

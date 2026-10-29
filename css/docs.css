@@ -674,5 +674,6 @@
 
 /* Поиск и тема имеют одинаковые размеры и самостоятельные поверхности. */
 .sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg{ border:0; background:none; box-shadow:none; padding:0; }
-.sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg button{ width:44px; height:44px; min-width:44px; min-height:44px; padding:0; border:1px solid var(--glass-edge-soft); border-top-color:var(--glass-edge-top); border-radius:var(--radius-md); background:var(--glass-control-sheen),var(--glass-control); }
+.sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg button{ width:44px; height:44px; min-width:44px; min-height:44px; padding:calc((44px - 20px - 2 * var(--hairline)) / 2); border:1px solid var(--glass-edge-soft); border-top-color:var(--glass-edge-top); border-radius:var(--radius-md); background:var(--glass-control-sheen),var(--glass-control); }
 .sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg button[aria-pressed="true"]{ background:var(--control-on); color:var(--control-on-ink); }
+.sc-docs.dk-glass .sc-bar .sc-search-trigger{ --glass-control-size:44px; --glass-control-icon:20px; padding:calc((44px - 20px - 2 * var(--hairline)) / 2); }

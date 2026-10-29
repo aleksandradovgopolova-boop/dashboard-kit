@@ -5,7 +5,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve,extname,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url)).replace(/\/$/,'');
-const out=root+'/docs/2026-10-29/kit-single-row/';
+const out=resolve(process.env.DK_EVIDENCE_DIR || root+'/docs/2026-10-29/kit-single-row/')+'/';
 const server=createServer(async(req,res)=>{try{const f=resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://local').pathname));if(!f.startsWith(root+sep)){res.writeHead(403);res.end();return;}const b=await readFile(f);res.setHeader('Content-Type',({'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.topojson':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2','.png':'image/png'})[extname(f)]||'application/octet-stream');res.end(b);}catch{res.writeHead(404);res.end();}});
 await mkdir(out,{recursive:true});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
@@ -32,6 +32,7 @@ try {
   assert(await ev(`document.querySelector('.sc-nav').hidden&&!document.querySelector('.sc-shell>.dk-wrap').inert`),'Megamenu is closed by default');
   assert(await ev(`document.documentElement.scrollWidth<=innerWidth+1`),'No page overflow: '+file+' '+width);
   assert(await ev(`Array.from(document.querySelectorAll('.sc-bar button')).filter(x=>x.getClientRects().length).every(x=>Math.abs(x.getBoundingClientRect().height-44)<1)`),'Header controls use equal 44px targets');
+  assert(await ev(`Array.from(document.querySelectorAll('.sc-bar__tools .dk-iconbtn,.sc-bar__tools .dk-seg button,.sc-overview-actions .dk-btn,.sc-overview-steps,.sc-example-card')).filter(x=>x.getClientRects().length).every(x=>{const s=getComputedStyle(x),p=[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat);return Math.max(...p)-Math.min(...p)<.1;})`),'Bounded buttons and overview containers have equal padding on all four sides');
   if(file==='index.html')assert(await ev(`(()=>{const a=[...document.querySelectorAll('.sc-overview-actions a')];return a.length===2&&a.every(x=>Math.abs(x.getBoundingClientRect().height-48)<1&&parseFloat(getComputedStyle(x).fontSize)>=14)&&(innerWidth<=859||Math.abs(a[0].getBoundingClientRect().top-a[1].getBoundingClientRect().top)<1);})()`),'Hero actions use readable, aligned 48px controls');
 
   assert(await ev(`(()=>{const h=document.querySelector('.sc-bar').getBoundingClientRect(),b=document.querySelector('.sc-brand').getBoundingClientRect(),t=document.querySelector('.sc-bar__tools').getBoundingClientRect(),c=document.querySelector('.sc-bar__menu'),n=document.querySelector('.sc-topnav').getBoundingClientRect();return h.height===56&&b.top>=h.top&&t.bottom<=h.bottom+1&&t.right<=innerWidth&&(!c.hidden?(c.getBoundingClientRect().left>=b.right&&c.getBoundingClientRect().right<=t.left):n.left>=b.right+3&&n.right<=t.left-3&&n.width>=document.querySelector('.sc-topnav').scrollWidth-1);})()`),'One header row without overlaps or clipped labels: '+file+' '+width);

@@ -1,0 +1,4102 @@
+[
+  {
+    "file": "family-mortgage.html",
+    "theme": "dark",
+    "width": 320,
+    "controls": [
+      {
+        "name": "fm-filter-toggle",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 304,
+        "height": 236,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [
+          {
+            "scroll": 224,
+            "client": 224
+          },
+          {
+            "scroll": 224,
+            "client": 224
+          },
+          {
+            "scroll": 224,
+            "client": 224
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 274,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 224,
+            "client": 224
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 274,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 224,
+            "client": 224
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 274,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 224,
+            "client": 224
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "dark",
+    "width": 320,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 272,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          61.171875,
+          15,
+          192.828125
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 272,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          59.234375,
+          15,
+          194.765625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 272,
+        "height": 306,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 272,
+        "height": 194.875,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 272,
+        "height": 194.875,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 272,
+        "height": 194.875,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 272,
+        "height": 194.875,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "family-mortgage.html",
+    "theme": "dark",
+    "width": 390,
+    "controls": [
+      {
+        "name": "fm-filter-toggle",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 374,
+        "height": 236,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [
+          {
+            "scroll": 294,
+            "client": 294
+          },
+          {
+            "scroll": 294,
+            "client": 294
+          },
+          {
+            "scroll": 294,
+            "client": 294
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 344,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 294,
+            "client": 294
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 344,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 294,
+            "client": 294
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 344,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 294,
+            "client": 294
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "dark",
+    "width": 390,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 342,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          96.171875,
+          15,
+          227.828125
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 342,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          94.234375,
+          15,
+          229.765625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 342,
+        "height": 268,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 166,
+        "height": 155.25,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 166,
+        "height": 155.25,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 166,
+        "height": 135.25,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 166,
+        "height": 135.25,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "family-mortgage.html",
+    "theme": "dark",
+    "width": 860,
+    "controls": [
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 586,
+        "height": 44,
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "contentInsets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "labels": [
+          {
+            "scroll": 100,
+            "client": 100
+          },
+          {
+            "scroll": 80,
+            "client": 80
+          },
+          {
+            "scroll": 92,
+            "client": 92
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 150,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 100,
+            "client": 100
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 130,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 80,
+            "client": 80
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 142,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 92,
+            "client": 92
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "dark",
+    "width": 860,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 179.65625,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          146.65625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 183.546875,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          150.546875
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 812,
+        "height": 94,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15.015625,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 195.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 195.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 195.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 195.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "family-mortgage.html",
+    "theme": "dark",
+    "width": 886,
+    "controls": [
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 586,
+        "height": 44,
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "contentInsets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "labels": [
+          {
+            "scroll": 100,
+            "client": 100
+          },
+          {
+            "scroll": 80,
+            "client": 80
+          },
+          {
+            "scroll": 92,
+            "client": 92
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 150,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 100,
+            "client": 100
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 130,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 80,
+            "client": 80
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 142,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 92,
+            "client": 92
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "dark",
+    "width": 886,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 179.65625,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          146.65625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 183.546875,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          150.546875
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 838,
+        "height": 94,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 202,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 202,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 202,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 202,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "family-mortgage.html",
+    "theme": "dark",
+    "width": 1280,
+    "controls": [
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 628,
+        "height": 44,
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "contentInsets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "labels": [
+          {
+            "scroll": 126,
+            "client": 126
+          },
+          {
+            "scroll": 94,
+            "client": 94
+          },
+          {
+            "scroll": 94,
+            "client": 94
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 176,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 126,
+            "client": 126
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 144,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 94,
+            "client": 94
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 144,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 94,
+            "client": 94
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "dark",
+    "width": 1280,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 179.65625,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          146.65625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 183.546875,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          150.546875
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 1200,
+        "height": 74,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15.015625,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 292.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 292.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 292.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 292.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "family-mortgage.html",
+    "theme": "light",
+    "width": 320,
+    "controls": [
+      {
+        "name": "fm-filter-toggle",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 304,
+        "height": 236,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [
+          {
+            "scroll": 224,
+            "client": 224
+          },
+          {
+            "scroll": 224,
+            "client": 224
+          },
+          {
+            "scroll": 224,
+            "client": 224
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 274,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 224,
+            "client": 224
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 274,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 224,
+            "client": 224
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 274,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 224,
+            "client": 224
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "light",
+    "width": 320,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 272,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          61.171875,
+          15,
+          192.828125
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 272,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          59.234375,
+          15,
+          194.765625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 272,
+        "height": 306,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 272,
+        "height": 194.875,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 272,
+        "height": 194.875,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 272,
+        "height": 194.875,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 272,
+        "height": 194.875,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "family-mortgage.html",
+    "theme": "light",
+    "width": 390,
+    "controls": [
+      {
+        "name": "fm-filter-toggle",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 374,
+        "height": 236,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [
+          {
+            "scroll": 294,
+            "client": 294
+          },
+          {
+            "scroll": 294,
+            "client": 294
+          },
+          {
+            "scroll": 294,
+            "client": 294
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 344,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 294,
+            "client": 294
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 344,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 294,
+            "client": 294
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 344,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 294,
+            "client": 294
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "light",
+    "width": 390,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 342,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          96.171875,
+          15,
+          227.828125
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 342,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          94.234375,
+          15,
+          229.765625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 342,
+        "height": 268,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 166,
+        "height": 155.25,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 166,
+        "height": 155.25,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 166,
+        "height": 135.25,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 166,
+        "height": 135.25,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "family-mortgage.html",
+    "theme": "light",
+    "width": 860,
+    "controls": [
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 586,
+        "height": 44,
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "contentInsets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "labels": [
+          {
+            "scroll": 100,
+            "client": 100
+          },
+          {
+            "scroll": 80,
+            "client": 80
+          },
+          {
+            "scroll": 92,
+            "client": 92
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 150,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 100,
+            "client": 100
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 130,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 80,
+            "client": 80
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 142,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 92,
+            "client": 92
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "light",
+    "width": 860,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 179.65625,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          146.65625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 183.546875,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          150.546875
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 812,
+        "height": 94,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15.015625,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 195.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 195.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 195.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 195.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "family-mortgage.html",
+    "theme": "light",
+    "width": 886,
+    "controls": [
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 586,
+        "height": 44,
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "contentInsets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "labels": [
+          {
+            "scroll": 100,
+            "client": 100
+          },
+          {
+            "scroll": 80,
+            "client": 80
+          },
+          {
+            "scroll": 92,
+            "client": 92
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 150,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 100,
+            "client": 100
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 130,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 80,
+            "client": 80
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 142,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 92,
+            "client": 92
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "light",
+    "width": 886,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 179.65625,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          146.65625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 183.546875,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          150.546875
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 838,
+        "height": 94,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 202,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 202,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 202,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 202,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "family-mortgage.html",
+    "theme": "light",
+    "width": 1280,
+    "controls": [
+      {
+        "name": "fm-filter-panel",
+        "text": "Все регионы\n      Все округа",
+        "width": 628,
+        "height": 44,
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "contentInsets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "labels": [
+          {
+            "scroll": 126,
+            "client": 126
+          },
+          {
+            "scroll": 94,
+            "client": 94
+          },
+          {
+            "scroll": 94,
+            "client": 94
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все регионы",
+        "width": 176,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 126,
+            "client": 126
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Все округа",
+        "width": 144,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 94,
+            "client": 94
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "dk-select__trigger",
+        "text": "Весь период",
+        "width": 144,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [
+          {
+            "scroll": 94,
+            "client": 94
+          }
+        ],
+        "overflow": false
+      },
+      {
+        "name": "fm-export",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-iconbtn",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "file": "index.html",
+    "theme": "light",
+    "width": 1280,
+    "controls": [
+      {
+        "name": "dk-iconbtn sc-search-trigger",
+        "text": "Поиск в ките…",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "",
+        "text": "",
+        "width": 44,
+        "height": 44,
+        "padding": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "contentInsets": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg dk-btn--primary",
+        "text": "Собрать дашборд",
+        "width": 179.65625,
+        "height": 48,
+        "padding": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          146.65625
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-btn dk-btn--lg",
+        "text": "Как работать с ИИ",
+        "width": 183.546875,
+        "height": 48,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15,
+          15,
+          150.546875
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "sc-overview-steps dk-widget",
+        "text": "📝1. Опишите задачуКакой даш",
+        "width": 1200,
+        "height": 74,
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "contentInsets": [
+          15,
+          15.015625,
+          15,
+          15
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Мониторинг регионов",
+        "width": 292.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Аварии и инциденты",
+        "width": 292.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Календарь событий",
+        "width": 292.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      },
+      {
+        "name": "dk-widget sc-example-card",
+        "text": "Семейная ипотека",
+        "width": 292.5,
+        "height": 151.75,
+        "padding": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "contentInsets": [
+          9,
+          9,
+          13,
+          9
+        ],
+        "labels": [],
+        "overflow": false
+      }
+    ]
+  }
+]

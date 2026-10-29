@@ -69,7 +69,7 @@
   .sc-overview-intro{ gap:var(--space-7); }
   .sc-overview-art img{ width:100%; max-width:100%; height:clamp(176px,calc(100dvh - 440px),360px); }
   .sc-guide .sc-hero--overview h1{ margin-bottom:var(--space-6); }
-  .sc-guide .sc-overview-steps{ padding:var(--space-4) var(--space-6); gap:var(--space-6); margin:var(--space-5) 0; }
+  .sc-guide .sc-overview-steps{ padding:var(--space-6); gap:var(--space-6); margin:var(--space-5) 0; }
   .sc-overview-steps li > .sc-step-emoji{ width:32px; height:44px; }
   .sc-guide .sc-overview-steps strong{ margin:0 0 var(--space-2); }
   .sc-guide .sc-hero__lead{ font:var(--type-body); margin-bottom:var(--space-6); }
@@ -87,10 +87,10 @@
   .sc-overview-art img{ height:200px; }
   .sc-guide .sc-hero__lead{ margin-bottom:var(--space-4); }
   .sc-guide .sc-hero--overview h1{ margin-bottom:var(--space-4); }
-  .sc-guide .sc-overview-steps{ margin:var(--space-4) 0; padding-block:0; }
+  .sc-guide .sc-overview-steps{ margin:var(--space-4) 0; padding:var(--space-4); }
   .sc-example-card img{ height:56px; }
 }
 
 /* Главные действия — явный крупный размер, одинаковая геометрия в обеих темах. */
-.sc-guide .sc-overview-actions .dk-btn{ height:48px; min-height:48px; padding-inline:var(--space-7); font-size:var(--text-body); gap:var(--space-4); }
+.sc-guide .sc-overview-actions .dk-btn{ --glass-control-size:48px; height:48px; min-height:48px; font-size:var(--text-body); gap:var(--space-4); }
 @media(max-width:859px){ .sc-overview-actions{ display:grid; grid-template-columns:minmax(0,1fr); } .sc-overview-actions .dk-btn{ width:100%; } }

@@ -66,6 +66,14 @@ try {
   const evidence = resolve(process.env.DK_EVIDENCE_DIR || resolve(tmpdir(), 'dashboard-kit-evidence'));
   await mkdir(evidence, {recursive:true});
 
+  const equalHeaderInsets = async () => {
+    const controls = await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__trigger,.fm-topbar .dk-iconbtn,.fm-topbar__tools .dk-seg button,.fm-filters')).filter(x=>x.getClientRects().length).map(x=>{const s=getComputedStyle(x),r=x.getBoundingClientRect(),b=Array.from(x.children).filter(n=>n.getClientRects().length).map(n=>n.getBoundingClientRect());return {name:x.className,padding:[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat),insets:x.matches('.dk-select__trigger')?[Math.min(...b.map(n=>n.top))-r.top,r.right-Math.max(...b.map(n=>n.right)),r.bottom-Math.max(...b.map(n=>n.bottom)),Math.min(...b.map(n=>n.left))-r.left]:[]};})`);
+    for (const c of controls) {
+      assert(Math.max(...c.padding)-Math.min(...c.padding)<.1,'Equal padding on all four sides: '+JSON.stringify(c));
+      if(c.insets.length) assert(Math.max(...c.insets)-Math.min(...c.insets)<1,'Filter text/arrow have equal actual edge insets: '+JSON.stringify(c));
+    }
+  };
+
   for (const theme of ['light', 'dark']) for (const width of [320, 390, 600, 768, 859, 860, 886, 1024, 1100, 1280, 1536]) {
     await send('Emulation.setDeviceMetricsOverride', {width, height:900, deviceScaleFactor:1, mobile:width < 768});
     const url = `${base}/family-mortgage.html?theme=${theme}`;
@@ -79,11 +87,13 @@ try {
     assert(header.inner.h<=58&&header.brand.r<= (width<860?header.toggle.l:header.filters.l)+1&&header.tools.r<=width+1,'One family header row without overlap: '+width+' '+JSON.stringify(header));
     if(width>=860){
       assert(!header.compact&&!header.hidden&&header.filters.r<=header.tools.l+1&&Math.abs(header.filters.cy-header.tools.cy)<1,'Inline filters stay in the title row');
+      await equalHeaderInsets();
     }else{
       assert(header.compact&&header.hidden,'Phone filters use the compact entry');
       await click('#fm-filter-toggle');
       assert(await evaluate(`(()=>{const r=document.querySelector('.fm-filters').getBoundingClientRect(),h=document.querySelector('.fm-topbar__inner').getBoundingClientRect();return r.width>250&&r.left>=0&&r.right<=innerWidth+1&&r.top>=h.bottom-1;})()`),'Filter disclosure uses the viewport width below the header');
       assert(await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__label')).every(x=>x.scrollWidth<=x.clientWidth+1)`),'Expanded phone filters show full default labels');
+      await equalHeaderInsets();
       assert(await evaluate(`!document.querySelector('.fm-filters').hidden&&document.querySelector('#fm-filter-toggle').getAttribute('aria-expanded')==='true'`),'Compact filters open');
       await click('#fm-district-filter .dk-select__trigger');await escape();
       assert(await evaluate(`!document.querySelector('.fm-filters').hidden`),'First Escape closes select only');
