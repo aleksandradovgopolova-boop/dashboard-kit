@@ -29,6 +29,14 @@
   var bar = document.querySelector('.sc-bar');
   var main = shell.querySelector('.dk-wrap');
   var lastMegaTrigger = null, currentMegaId = '';
+  var hoverMenu = false, menuCloseTimer = null;
+  var desktopHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+  function cancelMenuClose() { clearTimeout(menuCloseTimer); }
+  function scheduleMenuClose() {
+    cancelMenuClose();
+    if (!hoverMenu) return;
+    menuCloseTimer = setTimeout(function () { if (!nav.contains(document.activeElement)) setMenu(false); },180);
+  }
   var shade = document.createElement('div');
   shade.className = 'sc-shade'; shade.hidden = true;
   shell.insertBefore(shade, nav);
@@ -48,6 +56,8 @@
     else if (item.right > frame.right) megaRail.scrollLeft += item.right - frame.right;
   }
   function setMenu(open, focus) {
+    cancelMenuClose();
+    if (!open) hoverMenu = false;
     nav.hidden = !open;
     shell.classList.toggle('sc-shell--closed', !open);
     if (megaButtons) megaButtons.forEach(function (button) { button.setAttribute('aria-expanded', String(open && button.getAttribute('aria-controls') === currentMegaId)); });
@@ -72,6 +82,10 @@
     }
   });
   nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  nav.addEventListener('pointerenter',cancelMenuClose);
+  nav.addEventListener('pointerleave',scheduleMenuClose);
+  bar.addEventListener('pointerleave',scheduleMenuClose);
+  nav.addEventListener('focusin',function () { hoverMenu = false; cancelMenuClose(); });
   var sections = Array.prototype.slice.call(main.querySelectorAll(':scope > section'));
   var group = '';
   var links = [];
@@ -222,8 +236,8 @@
   Array.from(catalog.children).forEach(function (item, index) {
     if (item.tagName === 'A') { item.classList.add('sc-mega__category','sc-mega__home'); megaRail.appendChild(item); return; }
     var title = item.querySelector('summary .sc-nav__text').textContent;
-    var button = document.createElement('button'); button.type = 'button'; button.className = 'dk-btn sc-mega__category';
-    button.id = 'sc-mega-trigger-' + index; emojiLabel(button,title); button.appendChild(dkIcon.el('chevron-down'));
+    var button = document.createElement('button'); button.type = 'button'; button.className = 'sc-mega__category';
+    button.id = 'sc-mega-trigger-' + index; emojiLabel(button,title);
     var panel = item.querySelector('.sc-nav__items'); panel.id = 'sc-mega-panel-' + index;
     panel.classList.add('sc-mega__panel'); panel.setAttribute('role','region'); panel.setAttribute('aria-labelledby',button.id);
     if (item.classList.contains('sc-nav__component-group')) panel.classList.add('sc-nav__component-group');
@@ -245,9 +259,15 @@
     megaRail.appendChild(button); megaContent.appendChild(panel); megaPanels.push(panel); megaButtons.push(button);
     button.addEventListener('click',function () {
       var close = !nav.hidden && currentMegaId === panel.id;
-      lastMegaTrigger = button; selectMega(panel.id); setMenu(!close);
+      if (hoverMenu) close = false;
+      hoverMenu = false; lastMegaTrigger = button; selectMega(panel.id); setMenu(!close);
+    });
+    button.addEventListener('pointerenter',function (event) {
+      if (event.pointerType !== 'mouse' || !desktopHover.matches || window.innerWidth < 1024 || nav.contains(document.activeElement)) return;
+      cancelMenuClose(); hoverMenu = true; lastMegaTrigger = button; selectMega(panel.id); setMenu(true);
     });
     button.addEventListener('keydown',function (event) {
+      hoverMenu = false; cancelMenuClose();
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
         event.preventDefault(); var next = (megaButtons.indexOf(button) + (event.key === 'ArrowRight' ? 1 : -1) + megaButtons.length) % megaButtons.length;
         var wasOpen = !nav.hidden; megaButtons[next].focus();
@@ -262,6 +282,9 @@
   });
   catalog.replaceChildren(megaContent);
   bar.insertBefore(megaRail,searchButton);
+  megaRail.querySelector('.sc-mega__home').addEventListener('pointerenter',scheduleMenuClose);
+  var barTools = document.createElement('div'); barTools.className = 'sc-bar__tools';
+  bar.appendChild(barTools); barTools.append(searchButton,bar.querySelector('.sc-ctl'));
   if (!initialMega && showcase) { var designPanel = megaPanels.find(function (panel) { return panel.querySelector('.sc-mega__title').textContent === 'Дизайн-система'; }); if (designPanel) initialMega = designPanel.id; }
   selectMega(initialMega || megaPanels[0].id);
   if (here.startsWith('component-')) requestAnimationFrame(revealCurrentComponent);
