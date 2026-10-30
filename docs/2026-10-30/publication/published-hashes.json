@@ -1,0 +1,133 @@
+{
+  "origin": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/",
+  "testedHead": "5dd542a10c4e1899e8380fbae0a7fad8666ba739",
+  "results": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "expected": "4bfe2d39be1ff2d79535e19e5ad0485a829967aabfa22e47b9291bad72f2d65a",
+      "actual": "4bfe2d39be1ff2d79535e19e5ad0485a829967aabfa22e47b9291bad72f2d65a",
+      "match": true,
+      "bytes": 124072,
+      "etag": "\"6ae49411-1e4a8\""
+    },
+    {
+      "path": "family-mortgage.html",
+      "status": 200,
+      "expected": "d0f1f5dfeaa2d6ce5662bbce72e406ec34a2e7f3885cab324888bfd8477176f9",
+      "actual": "d0f1f5dfeaa2d6ce5662bbce72e406ec34a2e7f3885cab324888bfd8477176f9",
+      "match": true,
+      "bytes": 19440,
+      "etag": "\"6ae49411-4bf0\""
+    },
+    {
+      "path": "regions.html",
+      "status": 200,
+      "expected": "ca88cdb713cda295f60f03f2d3e7b44e548d17abe378e45669717bc70ccb985e",
+      "actual": "ca88cdb713cda295f60f03f2d3e7b44e548d17abe378e45669717bc70ccb985e",
+      "match": true,
+      "bytes": 31547,
+      "etag": "\"6ae49411-7b3b\""
+    },
+    {
+      "path": "css/tokens.primitives.css",
+      "status": 200,
+      "expected": "fac36e2e152d177a9bcbf5f3c610689d3953b33fd15002bc7ff2065bdab9aad1",
+      "actual": "fac36e2e152d177a9bcbf5f3c610689d3953b33fd15002bc7ff2065bdab9aad1",
+      "match": true,
+      "bytes": 41935,
+      "etag": "\"6ae49411-a3cf\""
+    },
+    {
+      "path": "css/tokens.semantic.css",
+      "status": 200,
+      "expected": "b064676266a06e36c8abd553be8a3707e7aca6512ad6ac93f6463828fe72736b",
+      "actual": "b064676266a06e36c8abd553be8a3707e7aca6512ad6ac93f6463828fe72736b",
+      "match": true,
+      "bytes": 57398,
+      "etag": "\"6ae49411-e036\""
+    },
+    {
+      "path": "css/components.css",
+      "status": 200,
+      "expected": "f44200cbc02f1dc6a80ae86a3f112748887d842b65652154bb07f60e8f838b6c",
+      "actual": "f44200cbc02f1dc6a80ae86a3f112748887d842b65652154bb07f60e8f838b6c",
+      "match": true,
+      "bytes": 276987,
+      "etag": "\"6ae49411-439fb\""
+    },
+    {
+      "path": "css/glass.css",
+      "status": 200,
+      "expected": "d54d90112cd6336758d50d549bc4fdf265d9d63ba2abee04bac22b4decdcd325",
+      "actual": "d54d90112cd6336758d50d549bc4fdf265d9d63ba2abee04bac22b4decdcd325",
+      "match": true,
+      "bytes": 24252,
+      "etag": "\"6ae49411-5ebc\""
+    },
+    {
+      "path": "css/docs.css",
+      "status": 200,
+      "expected": "b9a6fc8c037ce5dea9c8efb6f0cb9e4d93a8121e8fc18e89389b74877c33327b",
+      "actual": "b9a6fc8c037ce5dea9c8efb6f0cb9e4d93a8121e8fc18e89389b74877c33327b",
+      "match": true,
+      "bytes": 57369,
+      "etag": "\"6ae49411-e019\""
+    },
+    {
+      "path": "css/page.overview.css",
+      "status": 200,
+      "expected": "63659b12845801a24213eb7774a39f4707aff0f175aa311d42e80119f066c6d2",
+      "actual": "63659b12845801a24213eb7774a39f4707aff0f175aa311d42e80119f066c6d2",
+      "match": true,
+      "bytes": 7494,
+      "etag": "\"6ae49411-1d46\""
+    },
+    {
+      "path": "css/page.family-mortgage.css",
+      "status": 200,
+      "expected": "72121e457af83d214396a7440c77fdb6e21891edc51a8015750021a3ff344053",
+      "actual": "72121e457af83d214396a7440c77fdb6e21891edc51a8015750021a3ff344053",
+      "match": true,
+      "bytes": 29959,
+      "etag": "\"6ae49411-7507\""
+    },
+    {
+      "path": "js/docs.js",
+      "status": 200,
+      "expected": "5f20695494858d84f1f06ee1bd5ea7f141ee3001dbb6caba37615fc8e287357b",
+      "actual": "5f20695494858d84f1f06ee1bd5ea7f141ee3001dbb6caba37615fc8e287357b",
+      "match": true,
+      "bytes": 48412,
+      "etag": "\"6ae49411-bd1c\""
+    },
+    {
+      "path": "js/family-mortgage.js",
+      "status": 200,
+      "expected": "7dc573c11e788df0866b8a228900caad9b97eb0f7766062bd06fbbc8d2f6035a",
+      "actual": "7dc573c11e788df0866b8a228900caad9b97eb0f7766062bd06fbbc8d2f6035a",
+      "match": true,
+      "bytes": 29703,
+      "etag": "\"6ae49411-7407\""
+    },
+    {
+      "path": "docs/assembly-rules.md",
+      "status": 200,
+      "expected": "6423ce6d576fb39d5a9e90371f4857bcec186eb5a0dc0bcb0693f127f558efaf",
+      "actual": "6423ce6d576fb39d5a9e90371f4857bcec186eb5a0dc0bcb0693f127f558efaf",
+      "match": true,
+      "bytes": 23002,
+      "etag": "\"6ae49411-59da\""
+    },
+    {
+      "path": "assets/dashboard-kit-hero-charts.png",
+      "status": 200,
+      "expected": "7c055ab406e6cb6f09f3c9a23786aa8b456dc1409845e10cd0247cb75cf0785f",
+      "actual": "7c055ab406e6cb6f09f3c9a23786aa8b456dc1409845e10cd0247cb75cf0785f",
+      "match": true,
+      "bytes": 1232403,
+      "etag": "\"6ae49411-12ce13\""
+    }
+  ],
+  "success": true
+}
