@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -51,17 +51,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Рейтинг и сводка</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🏆</span>Рейтинг и сводка</h1>
     <p class="sc-hero__lead">Располагает объекты по одному показателю, чтобы быстро увидеть лидеров и отстающих.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Сопоставьте порядок строк, длину полос и числа. Уточняйте, что означает рост показателя.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-layout"><div class="dk-panel">
+    <p>Порядок строк помогает найти крайние значения, полосы — оценить разницу. Подпись уточняет показатель и направление сортировки.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-layout"><div class="dk-panel">
       <div class="dk-panel__head"><div><div class="dk-overline">Сводка по стране · 14 дней</div><div class="dk-h2" style="margin-top:var(--space-2)">Российская Федерация</div></div></div>
       <div class="dk-summary" style="--accent:var(--crit-ink)"><div><div class="dk-trend"><svg class="dk-i"><use href="#ti-arrow-up-right"/></svg> негатив растёт в 28</div><div style="font-size:var(--text-caption);color:var(--ink-2);margin-top:var(--space-2)"><b class="dk-num" style="color:var(--ink)">15</b> регионов с событием</div></div><div class="dk-score"><span class="dk-score__v">23</span><span class="dk-score__of">/89</span></div></div>
       <div class="dk-rank" style="margin-top:var(--space-6)"><div class="dk-rank__head"><span class="dk-overline">Регионы</span><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg></div>
@@ -78,7 +78,7 @@
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Вопрос «у кого хуже» по одному показателю: регионы по баллу, команды по просрочке.</li><li>Нужен верх списка, а не весь список — топ-5 или топ-10.</li><li>Строка ведёт к объекту: клик открывает регион.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Несколько показателей на объект — <a href="component-table.html">Таблица</a>.</li><li>Доля от самого крупного полосой — <a href="component-list.html">Полосы</a> (<code>dk-bars</code>).</li><li>Все 89 регионов — <a href="component-map.html">Плитки регионов</a>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-scale">Масштаб и пропорции</a></li><li><a href="index.html#pattern-dashboard">Дашборд по вопросу пользователя</a></li><li><a href="index.html#pattern-visual-hierarchy">Иерархия без декоративного шума</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-panel"><div class="dk-summary" style="--accent:var(--crit-ink)"><div><div class="dk-trend"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-arrow-up-right"/></svg> негатив растёт в 28</div></div><div class="dk-score"><b class="sc-callout">2</b><span class="dk-score__v">23</span><span class="dk-score__of">/89</span></div></div>
       <div class="dk-rank" style="margin-top:var(--space-6)"><div class="dk-rank__head"><b class="sc-callout">3</b><span class="dk-overline">Регионы</span><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg></div>
         <button class="dk-rank__row"><span class="dk-rank__i"><b class="sc-callout">4</b>01</span><span class="dk-rank__name"><b class="sc-callout">5</b>Крым</span><span class="dk-rank__v" style="--accent:var(--crit-ink)"><b class="sc-callout">6</b>82</span></button></div></div></div><ol class="sc-anatomy__list"><li><b>Тренд сводки</b> — <code>dk-trend</code> внутри <code>dk-summary</code>: куда идёт и в скольких объектах.</li><li><b>Главное число</b> — <code>dk-score</code>: значение и «из скольких» мельче.</li><li><b>Шапка рейтинга</b> — надпись и стрелка направления сортировки.</li><li><b>Номер</b> — <code>dk-rank__i</code>: место в списке, две цифры.</li><li><b>Название</b> — переносится и остаётся видимым целиком.</li><li><b>Значение</b> — <code>dk-rank__v</code> табличными цифрами; цвет смысла через <code>--accent</code>.</li></ol>
@@ -97,18 +97,22 @@
   </section>
   <section class="sc-sec" id="kontent">
     <h2>Текст и подписи</h2>
-    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Заголовок сводки с периодом: «Сводка по стране · 14 дней».</li><li>Главное число с «из скольких»: 23/89.</li><li>Название региона официальное, как в справочнике.</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Рейтинг из двадцати строк — это таблица.</li><li>Число без периода и без «из».</li><li>Цвет значения без порога — «просто красиво».</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Заголовок называет показатель и порядок: «Регионы с наибольшим отставанием».</li><li>У числа есть единица и период; база сравнения указана, если нужна.</li><li>Полные названия объектов совпадают с источником.</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Длина полосы и число показывают разные показатели.</li><li>Порядок строк не объяснён.</li><li>Одинаковый цвет обозначает разные уровни риска.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Строки — кнопки</b>: Tab и Enter открывают объект; кольцо фокуса при навигации с клавиатуры.</li><li><b>Порядок</b> читается числом номера, не только положением.</li><li><b>Значение</b> цветом и числом; цвет — дополнение.</li><li><b>Контраст.</b> Значения на поверхности панели — проверка КОНТРАСТ.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — несколько показателей на объект</li><li><a href="component-tile.html">KPI-плитка</a> — одно число без списка</li><li><a href="component-map.html">Регионы</a> — те же данные на карте и плитках</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-summary,dk-score,dk-rank,dk-chip,dk-trend"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-summary,dk-score,dk-rank,dk-chip,dk-trend"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Только разметка. Ряды строит страница из данных; клик по строке — её событие.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-summary&quot; style=&quot;--accent:var(--crit-ink)&quot;&gt;
   &lt;div&gt;&lt;div class=&quot;dk-trend&quot;&gt;&lt;svg class=&quot;dk-i&quot;&gt;&lt;use href=&quot;#ti-arrow-up-right&quot;/&gt;&lt;/svg&gt; негатив растёт в 28&lt;/div&gt;&lt;/div&gt;
   &lt;div class=&quot;dk-score&quot;&gt;&lt;span class=&quot;dk-score__v&quot;&gt;23&lt;/span&gt;&lt;span class=&quot;dk-score__of&quot;&gt;/89&lt;/span&gt;&lt;/div&gt;
@@ -122,10 +126,6 @@
     &lt;span class=&quot;dk-rank__v&quot; style=&quot;--accent:var(--crit-ink)&quot;&gt;82&lt;/span&gt;
   &lt;/button&gt;
 &lt;/div&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--accent</code></td><td>переменная в style</td><td>Цвет значения или числа чипа.</td></tr><tr><td><code>dk-rank__row</code></td><td>кнопка</td><td>Строка; страница вешает клик.</td></tr><tr><td><code>dk-score__of</code></td><td>элемент</td><td>«из скольких» — не пропускать.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — несколько показателей на объект</li><li><a href="component-tile.html">KPI-плитка</a> — одно число без списка</li><li><a href="component-map.html">Регионы</a> — те же данные на карте и плитках</li></ul>
   </section>
 
 </div>

@@ -35,7 +35,7 @@
 #d-dashboard .dk-map__zoom button + button { border-top: 0; }
 #d-dashboard #d-events-widget .dk-tablewrap { max-height: 240px; overflow: auto; }
 #d-dashboard #d-events-widget .dk-list__more { margin: 0; padding: 0; font: var(--type-caption); white-space: nowrap; }
-#d-dashboard .d-insight { margin-top: var(--grid-gap); padding: var(--space-6) var(--pad-widget); }
+#d-dashboard .d-insight { margin-top: var(--grid-gap); padding: var(--space-6); }
 #d-dashboard .d-insight .dk-banner__title { color: var(--link); }
 #d-dashboard .d-insight .dk-banner__sub { margin-top: var(--space-2); }
 #d-dashboard #d-view-work .dk-tablewrap { max-height: 55svh; overflow: auto; }
@@ -58,7 +58,7 @@
   #d-dashboard .dk-top__tools { width: 100%; justify-content: space-between; }
   #d-dashboard .d-status-row { grid-template-columns: minmax(0, 1fr); }
   #d-dashboard #d-alert .dk-banner__title { flex-wrap: wrap; }
-  #d-dashboard .d-country-status { padding: var(--space-6) var(--pad-widget); }
+  #d-dashboard .d-country-status { padding: var(--space-6); }
 }
 @media (max-width: 767px) {
   #d-dashboard .dk-top { display: flex; }
@@ -103,7 +103,7 @@
 #d-dashboard .d-map-summary .dk-caption { font-size: var(--text-caption); }
 #d-dashboard #d-events-widget .dk-tablewrap { max-height: none; }
 #d-dashboard #d-events-widget .dk-list__more { margin-left: auto; text-decoration: none; }
-#d-dashboard .d-insight { padding-block: var(--space-6); }
+#d-dashboard .d-insight { padding: var(--space-6); }
 @media (min-width: 1200px) {
   #d-dashboard .dk-wrap--monitor, #d-dashboard .dk-top { max-width: 1408px; margin-inline: auto; width: 100%; box-sizing: border-box; }
   #d-dashboard #d-country-charts > .dk-widget { min-height: 276px; }
@@ -119,7 +119,7 @@
 #d-dashboard .dk-top__title { font: var(--type-overview-title); }
 #d-dashboard .dk-top__path { font: var(--type-body); }
 #d-dashboard #d-kpis .dk-tile__label { font: var(--type-body); }
-#d-dashboard #d-alert > .dk-btn { min-height: 44px; padding-inline: var(--space-6); }
+#d-dashboard #d-alert > .dk-btn { min-height:var(--control-sm); padding:var(--control-pad-sm); }
 @media (max-width: 1199px) {
   #d-dashboard #d-kpis .dk-tile__label { font: var(--type-caption); }
 }

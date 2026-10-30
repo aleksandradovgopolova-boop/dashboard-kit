@@ -14,14 +14,14 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-pager.js" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -52,24 +52,24 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Пагинация</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">📑</span>Пагинация</h1>
     <p class="sc-hero__lead">Показывает текущую часть набора данных и позволяет перейти к следующей странице.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Перейдите вперёд и назад. Сверьте номер страницы и диапазон показанных записей.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div id="x-pager"></div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
+    <p>Номер страницы и диапазон записей показывают, где вы находитесь в наборе. Переходы вперёд и назад работают в примере.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div id="x-pager"></div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Записей больше, чем помещается на экране, и они равноправны: журнал аварий, список заявок.</li><li>Человеку важно знать, сколько всего и где он сейчас.</li><li>Сортировка и фильтры должны работать по всему набору, а не по видимой странице.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Записей до тридцати — просто прокрутка; полосу прокрутки не прячут.</li><li>Лента событий, которую читают сверху вниз, — кнопка «Показать ещё» в <a href="component-list.html">Списке</a>.</li><li>Рейтинг — <a href="component-rank.html">Рейтинг</a>: там показывают верх, а не листают.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-filters">Фильтрация</a></li><li><a href="index.html#pattern-tables">Таблицы для чтения и сравнения</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-pager"><div class="dk-pager__count"><b class="sc-callout">1</b><b>41–60</b> из <b>89</b> регионов</div>
       <div class="dk-pager__nav"><button type="button" class="dk-iconbtn dk-iconbtn--sm" aria-label="Назад"><b class="sc-callout">2</b><svg class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg></button>
         <div class="dk-pager__pages"><button type="button" class="dk-pager__p">1</button><span class="dk-pager__gap">…</span><button type="button" class="dk-pager__p">2</button><button type="button" class="dk-pager__p" aria-current="page"><b class="sc-callout">3</b>3</button><button type="button" class="dk-pager__p">4</button><button type="button" class="dk-pager__p">5</button></div>
@@ -96,12 +96,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Роли.</b> Текущая страница — <code>aria-current="page"</code>; стрелки — кнопки с <code>aria-label</code>.</li><li><b>Живая область.</b> Счётчик объявляется скринридеру при смене страницы.</li><li><b>Клавиатура.</b> Обычные кнопки: Tab, Enter.</li><li><b>Контраст.</b> Текущая страница залита <code>--control-on</code>, цифра на ней 4,79 / 5,04:1.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — что листают</li><li><a href="component-list.html">Список</a> — «Показать ещё» вместо страниц</li><li><a href="accidents.html">Страница «Аварии»</a> — пагинация журнала с сортировкой по всему набору</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-pager"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-pager"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Контейнер пустой, разметку строит скрипт. Данные листает страница по <code>onChange</code>.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-pager.js"><code>js/dk-pager.js</code></a></p><pre class="sc-code"><code>&lt;div id=&quot;pager&quot;&gt;&lt;/div&gt;
 
 &lt;script&gt;
@@ -113,10 +117,6 @@ var pg = dkPager(document.getElementById(&#x27;pager&#x27;), {
 });
 pg.page; pg.size; pg.setTotal(120);
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>total</code></td><td>число</td><td>Сколько всего записей.</td></tr><tr><td><code>size / sizes</code></td><td>число / массив</td><td>Размер страницы и доступные размеры.</td></tr><tr><td><code>page</code></td><td>число</td><td>Начальная страница.</td></tr><tr><td><code>noun</code></td><td>массив из трёх форм</td><td>«регион, региона, регионов».</td></tr><tr><td><code>onChange(e)</code></td><td>функция</td><td>e.page, e.size при смене.</td></tr><tr><td><code>page / size / setTotal(n)</code></td><td>API</td><td>Читать; пересчитать после фильтра.</td></tr><tr><td><code>update({total,page,size}) / destroy()</code></td><td>API</td><td>Тихое восстановление, page ограничивается количеством страниц. Старые goTo/setTotal сохранены.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — что листают</li><li><a href="component-list.html">Список</a> — «Показать ещё» вместо страниц</li><li><a href="accidents.html">Страница «Аварии»</a> — пагинация журнала с сортировкой по всему набору</li></ul>
   </section>
 
 </div>

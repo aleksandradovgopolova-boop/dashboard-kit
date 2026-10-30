@@ -66,7 +66,15 @@ try {
   const evidence = resolve(process.env.DK_EVIDENCE_DIR || resolve(tmpdir(), 'dashboard-kit-evidence'));
   await mkdir(evidence, {recursive:true});
 
-  for (const theme of ['light', 'dark']) for (const width of [320, 390, 600, 768, 1024, 1100, 1280, 1536]) {
+  const equalHeaderInsets = async () => {
+    const controls = await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__trigger,.fm-topbar .dk-iconbtn,.fm-topbar__tools .dk-seg button,.fm-filters')).filter(x=>x.getClientRects().length).map(x=>{const s=getComputedStyle(x),r=x.getBoundingClientRect(),b=Array.from(x.children).filter(n=>n.getClientRects().length).map(n=>n.getBoundingClientRect());return {name:x.className,padding:[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat),insets:x.matches('.dk-select__trigger')?[Math.min(...b.map(n=>n.top))-r.top,r.right-Math.max(...b.map(n=>n.right)),r.bottom-Math.max(...b.map(n=>n.bottom)),Math.min(...b.map(n=>n.left))-r.left]:[]};})`);
+    for (const c of controls) {
+      assert(Math.max(...c.padding)-Math.min(...c.padding)<.1,'Equal padding on all four sides: '+JSON.stringify(c));
+      if(c.insets.length) assert(Math.max(...c.insets)-Math.min(...c.insets)<=1.1,'Filter text/arrow have equal actual edge insets: '+JSON.stringify(c));
+    }
+  };
+
+  for (const theme of ['light', 'dark']) for (const width of [320, 390, 600, 768, 859, 860, 886, 1024, 1100, 1280, 1536]) {
     await send('Emulation.setDeviceMetricsOverride', {width, height:900, deviceScaleFactor:1, mobile:width < 768});
     const url = `${base}/family-mortgage.html?theme=${theme}`;
     await send('Page.navigate', {url});
@@ -75,6 +83,37 @@ try {
     await waitFor(`document.querySelector('#fm-map .dk-map__tile')`);
     await click(`[data-theme-set="${theme}"]`);
     assert(await evaluate(`document.documentElement.dataset.theme===${JSON.stringify(theme)}`), 'Requested theme must be applied');
+    const header=await evaluate(`(()=>{const r=x=>{const a=x.getBoundingClientRect();return {l:a.left,r:a.right,t:a.top,b:a.bottom,h:a.height,cy:(a.top+a.bottom)/2};};return {inner:r(document.querySelector('.fm-topbar__inner')),brand:r(document.querySelector('.fm-brand')),filters:r(document.querySelector('.fm-filters')),tools:r(document.querySelector('.fm-topbar__tools')),toggle:r(document.querySelector('#fm-filter-toggle')),compact:!document.querySelector('#fm-filter-toggle').hidden,hidden:document.querySelector('.fm-filters').hidden};})()`);
+    assert(header.inner.h<=58&&header.brand.r<= (width<860?header.toggle.l:header.filters.l)+1&&header.tools.r<=width+1,'One family header row without overlap: '+width+' '+JSON.stringify(header));
+    if(width>=860){
+      assert(!header.compact&&!header.hidden&&header.filters.r<=header.tools.l+1&&Math.abs(header.filters.cy-header.tools.cy)<1,'Inline filters stay in the title row');
+      await equalHeaderInsets();
+    }else{
+      assert(header.compact&&header.hidden,'Phone filters use the compact entry');
+      await click('#fm-filter-toggle');
+      assert(await evaluate(`(()=>{const r=document.querySelector('.fm-filters').getBoundingClientRect(),h=document.querySelector('.fm-topbar__inner').getBoundingClientRect();return r.width>250&&r.left>=0&&r.right<=innerWidth+1&&r.top>=h.bottom-1;})()`),'Filter disclosure uses the viewport width below the header');
+      assert(await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__label')).every(x=>x.scrollWidth<=x.clientWidth+1)`),'Expanded phone filters show full default labels');
+      await equalHeaderInsets();
+      assert(await evaluate(`!document.querySelector('.fm-filters').hidden&&document.querySelector('#fm-filter-toggle').getAttribute('aria-expanded')==='true'`),'Compact filters open');
+      await click('#fm-district-filter .dk-select__trigger');await escape();
+      assert(await evaluate(`!document.querySelector('.fm-filters').hidden`),'First Escape closes select only');
+      await escape();assert(await evaluate(`document.querySelector('.fm-filters').hidden&&document.activeElement.id==='fm-filter-toggle'`),'Second Escape closes filters and restores focus');
+    }
+    if(width===886){
+      const widths=()=>evaluate(`Array.from(document.querySelectorAll('.fm-topbar .fm-filter')).map(e=>e.getBoundingClientRect().width)`);
+      const actions=()=>evaluate(`document.querySelector('.fm-filter-actions').getBoundingClientRect().width`);
+      const original=await widths(),collapsed=await actions();
+      assert(await evaluate(`document.querySelector('#fm-reset').hidden`),'No reset in the initial state');
+      await click('#fm-district-filter .dk-select__trigger');
+      await evaluate(`Array.from(document.querySelectorAll('#fm-district-filter .dk-menu__item')).find(b=>b.textContent.includes('Дальневосточный')).click()`);await ready();
+      assert.deepEqual(await widths(),original,'Selected value must not expand any filter');
+      assert(await evaluate(`!document.querySelector('#fm-reset').hidden`),'Active filter exposes reset');
+      assert((await actions())>collapsed+20,'Reset occupies its real space only while present');
+      await click('#fm-reset');await ready();assert.deepEqual(await widths(),original,'Reset restores the same field sizes');
+      assert.equal(await actions(),collapsed,'No reserved width remains after reset');
+      const shot=await send('Page.captureScreenshot',{format:'png'});await writeFile(resolve(evidence,'mortgage-header-'+theme+'-886.png'),Buffer.from(shot.data,'base64'));
+    }
+    assert(await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__label')).filter(x=>x.getClientRects().length).every(x=>x.scrollWidth<=x.clientWidth+1)`),'Default filter labels remain readable');
     const baseline = await view();
     assert.equal(baseline.rowCount, 89, 'All demonstration regions must be accessible');
     assert.equal(baseline.rows.length, 12);
@@ -109,6 +148,7 @@ try {
     await click('#fm-next'); await ready();
     const next = await view();
     assert.equal(next.query.page, 2);
+    assert(await evaluate(`document.querySelector('#fm-reset').hidden`),'Pagination alone is not an active filter requiring reset');
     assert.deepEqual(next.kpis, baseline.kpis, 'Changing table page must preserve the full-slice KPIs');
     assert.deepEqual(next.monthly, baseline.monthly, 'Changing table page must preserve the graph');
     assert.deepEqual(next.counts, baseline.counts, 'Changing table page must preserve the regional summary');

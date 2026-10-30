@@ -14,14 +14,14 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-modal.js" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -52,17 +52,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Модальное окно</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🪟</span>Модальное окно</h1>
     <p class="sc-hero__lead">Помогает выполнить короткую задачу или подтвердить действие, сохраняя контекст страницы.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Откройте окно, закройте его и проверьте возврат к исходной кнопке.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="sc-row" style="margin:0"><button class="dk-btn dk-btn--primary" data-modal="#x-confirm">Удалить запись</button><button class="dk-btn" data-modal="#x-form">Добавить работу</button></div>
+    <p>Окно помогает решить короткую задачу и вернуться к исходному действию. В примере можно открыть его, закрыть и проверить возврат фокуса.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="sc-row" style="margin:0"><button class="dk-btn dk-btn--primary" data-modal="#x-confirm">Удалить запись</button><button class="dk-btn" data-modal="#x-form">Добавить работу</button></div>
       <div class="dk-result" id="x-modal-out" style="margin-top:var(--space-6)">Окно ещё не открывали</div></div>
     <dialog class="dk-modal" id="x-confirm" aria-labelledby="x-confirm-t"><form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="x-confirm-t">Удалить запись</h2><button type="button" class="dk-iconbtn dk-modal__close" data-modal-close aria-label="Закрыть окно" title="Закрыть"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div><div class="dk-modal__body"><p>Запись будет удалена. Восстановить её не получится.</p></div><div class="dk-modal__foot"><button class="dk-btn dk-btn--ghost" value="cancel">Отмена</button><button class="dk-btn dk-btn--primary" value="ok">Удалить запись</button></div></form></dialog>
     <dialog class="dk-modal" id="x-form" aria-labelledby="x-form-t"><form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="x-form-t">Добавить работу</h2><button type="button" class="dk-iconbtn dk-modal__close" data-modal-close aria-label="Закрыть окно" title="Закрыть"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div><div class="dk-modal__body"><div class="dk-form"><div class="dk-ff dk-ff--wide"><label class="dk-label" for="x-m-name">Название работы</label><div class="dk-field"><input id="x-m-name" placeholder="Замена задвижки на вводе"></div></div></div></div><div class="dk-modal__foot"><button class="dk-btn dk-btn--ghost" value="cancel">Отмена</button><button class="dk-btn dk-btn--primary" value="ok">Добавить</button></div></form></dialog></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
@@ -72,7 +72,7 @@
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Действие необратимо или дорого: удалить запись, удалить срез — нужно подтверждение своими словами.</li><li>Короткая форма из одного–трёх полей, после которой человек возвращается туда же.</li><li>Нужно остановить всё остальное, пока не решено.</li><li>Быстрый обзор региона: 3–5 ключевых метрик, одна короткая таблица и возврат к исходному срезу.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Большой объём данных, сложные сравнения или длительная работа с регионом — отдельная страница дашборда с сохранённым контекстом; не растягивать модалку и не добавлять бесконечные вкладки.</li><li>Длинная форма — отдельная страница или <a href="component-field.html">форма</a> в панели.</li><li>Уведомление о результате — <a href="component-banner.html">Уведомление</a>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-popup">Окна и детали</a></li><li><a href="index.html#pattern-motion">Анимация</a></li><li><a href="index.html#pattern-consistency">Консистентность</a></li><li><a href="index.html#pattern-interface-motion">Переходы и непрерывность работы</a></li><li><a href="index.html#pattern-design-review">Проверка реального сценария</a></li><li><a href="index.html#pattern-ux-writing">Текст для действия и восстановления</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-modal" style="position:static;display:block;max-width:520px;margin:0"><form method="dialog" class="dk-modal__form" onsubmit="return false"><div class="dk-modal__head"><h2 class="dk-modal__title"><b class="sc-callout">1</b>Удалить запись</h2><button type="button" class="dk-iconbtn dk-modal__close" data-modal-close aria-label="Закрыть окно" title="Закрыть"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div><div class="dk-modal__body"><p><b class="sc-callout">2</b>Запись будет удалена. Восстановить её не получится.</p></div><div class="dk-modal__foot"><b class="sc-callout">3</b><button type="button" class="dk-btn dk-btn--ghost">Отмена</button><button type="button" class="dk-btn dk-btn--primary"><b class="sc-callout">4</b>Удалить запись</button></div></form></div></div><ol class="sc-anatomy__list"><li><b>Заголовок</b> — в подтверждении — действие, в краткой детализации — полное название объекта и его контекст.</li><li><b>Текст</b> — последствие простыми словами: что произойдёт после «да».</li><li><b>Подвал</b> — тихая «Отмена» слева, основная справа; порядок один во всём ките.</li><li><b>Подтверждение</b> — называет действие своим именем — не «ОК» и не «Да»; <code>value</code> кнопки возвращается через <code>returnValue</code>.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
@@ -93,12 +93,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Ловушка фокуса, фон недоступен, возврат фокуса</b> на кнопку-открыватель — делает <code>&lt;dialog&gt;</code>.</li><li><b>Escape</b> закрывает ровно один слой: открытый внутри окна список закрывается первым, окно с заполненной формой остаётся.</li><li><b>Заголовок</b> связан через <code>aria-labelledby</code>.</li><li><b>Не проверялось</b> со скринридером; в старых браузерах без <code>showModal</code> окно не откроется и напишет ошибку.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-button.html">Кнопка</a> — порядок кнопок в подвале</li><li><a href="component-field.html">Поле и форма</a> — форма внутри окна</li><li><a href="accidents.html">Страница «Аварии»</a> — окно «Удалить запись» в живом дашборде</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-modal"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-modal"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Разметка — <code>&lt;dialog&gt;</code> с формой <code>method="dialog"</code>; скрипт — один вызов.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-modal.js"><code>js/dk-modal.js</code></a></p><pre class="sc-code"><code>&lt;button class=&quot;dk-btn dk-btn--primary&quot; data-modal=&quot;#confirm&quot;&gt;Удалить запись&lt;/button&gt;
 
 &lt;dialog class=&quot;dk-modal&quot; id=&quot;confirm&quot; aria-labelledby=&quot;confirm-t&quot;&gt;
@@ -117,10 +121,6 @@ var m = dkModal(&#x27;#confirm&#x27;);
 button.addEventListener(&#x27;click&#x27;, m.open);
 m.el.addEventListener(&#x27;close&#x27;, function () { if (m.returnValue === &#x27;ok&#x27;) closeAccident(); });
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkModal(el | селектор)</code></td><td>функция</td><td>Обёртка над dialog; null, если окна нет.</td></tr><tr><td><code>open()</code></td><td>метод</td><td>Открыть; предыдущее окно закроется с предупреждением.</td></tr><tr><td><code>close(value)</code></td><td>метод</td><td>Закрыть с результатом.</td></tr><tr><td><code>returnValue</code></td><td>свойство</td><td>value нажатой кнопки; пусто при Escape.</td></tr><tr><td><code>el</code></td><td>свойство</td><td>Сам <code>&lt;dialog&gt;</code> — на него вешают <code>close</code>.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-button.html">Кнопка</a> — порядок кнопок в подвале</li><li><a href="component-field.html">Поле и форма</a> — форма внутри окна</li><li><a href="accidents.html">Страница «Аварии»</a> — окно «Удалить запись» в живом дашборде</li></ul>
   </section>
 
 </div>

@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -51,17 +51,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Сегмент</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">↔️</span>Сегмент</h1>
     <p class="sc-hero__lead">Переключает представление одних данных: карту и список, месяц и неделю.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Выберите другой вариант. Активным остаётся только один пункт; переключение видно сразу.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel">
+    <p>Один вариант выбран всегда. Переключите его: это меняет вид тех же данных, а не открывает другой раздел.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel">
       <div class="sc-row"><span class="dk-caption" style="width:96px">S · 28</span>
         <div class="dk-seg dk-seg--sm" role="group" aria-label="Период"><button type="button" aria-pressed="true">7д</button><button type="button" aria-pressed="false">30д</button><button type="button" aria-pressed="false">Год</button></div></div>
       <div class="sc-row"><span class="dk-caption" style="width:96px">M · 32</span>
@@ -78,14 +78,14 @@
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Два–пять вариантов одного и того же: вид, период, единица измерения.</li><li>Переключение мгновенное и без загрузки страницы.</li><li>Все варианты должны быть видны сразу — выбор из скрытого списка здесь хуже.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Переход в другой раздел со своим адресом — <a href="component-tabs.html">Вкладки</a>.</li><li>Больше пяти вариантов — <a href="component-select.html">Фильтр</a> с выпадающим списком.</li><li>Независимое «да / нет» — <a href="component-check.html">Флажок или тумблер</a>.</li></ul></div></div><details class="sc-related-rules"><summary>Правила сочетания</summary><ul class="sc-list"><li><a href="index.html#pattern-motion">Анимация</a></li><li><a href="index.html#pattern-ia">Информационная архитектура</a></li><li><a href="index.html#pattern-selectors">Выбор значений</a></li><li><a href="index.html#pattern-interface-motion">Переходы и непрерывность работы</a></li></ul></details>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="sc-row" style="margin:0"><div class="dk-seg" role="group" aria-label="Вид"><b class="sc-callout">1</b>
       <button type="button" aria-pressed="true"><b class="sc-callout">2</b><svg class="dk-i"><use href="#ti-map"/></svg>Карта</button>
       <button type="button" aria-pressed="false"><b class="sc-callout">3</b>Плитки</button></div></div></div><ol class="sc-anatomy__list"><li><b>Контейнер</b> — <code>role="group"</code> с <code>aria-label</code>: скринридер слышит «группа Вид», а не «вкладки», и не ждёт новой загрузки.</li><li><b>Выбранная кнопка</b> — <code>aria-pressed="true"</code>: серая заливка <code>--control-on</code>, подпись жирнее. Контраст к контейнеру 3,44:1 (проверка ТИШИНА).</li><li><b>Обычная кнопка</b> — прозрачная, при наведении темнеет подпись.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Размер согласуется с соседними контролами. В стеклянной теме обычный сегмент использует --control-lg, компактный — --control-sm. Внутренняя кнопка учитывает поля общей подложки.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-seg</code></td><td>Сегмент размера M.</td><td>По умолчанию.</td></tr><tr><td><code>dk-seg--sm / dk-seg--lg</code></td><td>Высота 28 или 40.</td><td>Шапка виджета (sm), панель страницы (lg).</td></tr><tr><td><code>dk-seg--icons</code></td><td>Кнопки только со значками, квадратные.</td><td>Когда слов не хватает по ширине; подпись — в aria-label и title.</td></tr><tr><td><code>aria-pressed=&quot;true&quot;</code></td><td>Атрибут выбранной кнопки.</td><td>Ровно у одной кнопки группы.</td></tr></tbody></table></div>
+    <p>Размер согласуется с соседними контролами. Обычный сегмент использует --control-md (36 px), компактный — --control-sm (32 px), крупный — --control-lg (44 px). На таче цели от 44 px. Внутренняя кнопка учитывает поля общей подложки.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-seg</code></td><td>Сегмент размера M.</td><td>По умолчанию.</td></tr><tr><td><code>dk-seg--sm / dk-seg--lg</code></td><td>Высота 32 или 44.</td><td>Шапка виджета (sm), панель страницы (lg).</td></tr><tr><td><code>dk-seg--icons</code></td><td>Кнопки только со значками, квадратные.</td><td>Когда слов не хватает по ширине; подпись — в aria-label и title.</td></tr><tr><td><code>aria-pressed=&quot;true&quot;</code></td><td>Атрибут выбранной кнопки.</td><td>Ровно у одной кнопки группы.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
@@ -102,12 +102,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li><b>Роль.</b> <code>role="group"</code> + <code>aria-label</code>, кнопки с <code>aria-pressed</code>. Не <code>tablist</code>: вкладки обещают отдельные панели с адресом.</li><li><b>Клавиатура.</b> Tab ходит по кнопкам, Enter и пробел переключают. Стрелки внутри группы кит не перехватывает — это обычные кнопки.</li><li><b>Контраст.</b> Выбранная кнопка к контейнеру не ниже 3:1 в обеих темах и не ярче самой контрастной серии — проверка ТИШИНА.</li><li><b>Не только цветом.</b> Выбранное отличается ещё и жирностью подписи.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-tabs.html">Вкладки</a> — когда варианты — это разделы с адресом</li><li><a href="component-map.html">Регионы</a> — сегмент «карта / плитки» внутри виджета</li><li><a href="component-button.html">Кнопка</a> — те же размеры и кольцо фокуса</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-seg"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-seg"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Логику переключения задаёт страница: сегмент не знает, что значит «Карта». Ниже — минимальный обработчик.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-seg&quot; role=&quot;group&quot; aria-label=&quot;Вид данных&quot;&gt;
   &lt;button type=&quot;button&quot; data-view=&quot;map&quot; aria-pressed=&quot;true&quot;&gt;Карта&lt;/button&gt;
   &lt;button type=&quot;button&quot; data-view=&quot;tiles&quot; aria-pressed=&quot;false&quot;&gt;Плитки&lt;/button&gt;
@@ -121,10 +125,6 @@ seg.addEventListener(&#x27;click&#x27;, function (e) {
   map.view = b.dataset.view;   // например, dkMap
 });
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>aria-pressed</code></td><td>атрибут</td><td>«true» у выбранной кнопки; страница переключает сама.</td></tr><tr><td><code>dk-seg--sm, dk-seg--lg</code></td><td>класс</td><td>Размер группы.</td></tr><tr><td><code>dk-seg--icons</code></td><td>класс</td><td>Квадратные кнопки под значки.</td></tr><tr><td><code>disabled</code></td><td>атрибут кнопки</td><td>Вариант недоступен — например, нет данных для плиток.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-tabs.html">Вкладки</a> — когда варианты — это разделы с адресом</li><li><a href="component-map.html">Регионы</a> — сегмент «карта / плитки» внутри виджета</li><li><a href="component-button.html">Кнопка</a> — те же размеры и кольцо фокуса</li></ul>
   </section>
 
 </div>

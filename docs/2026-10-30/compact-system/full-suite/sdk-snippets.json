@@ -1,0 +1,225 @@
+{
+  "kind": "consumer integration; independent AI skill execution not assessed",
+  "results": [
+    {
+      "scenario": 7,
+      "theme": "dark",
+      "width": 390,
+      "parts": [
+        "breadcrumbs",
+        "details-sidebar",
+        "tooltip"
+      ]
+    },
+    {
+      "scenario": 7,
+      "theme": "dark",
+      "width": 1280,
+      "parts": [
+        "breadcrumbs",
+        "details-sidebar",
+        "tooltip"
+      ]
+    },
+    {
+      "scenario": 7,
+      "theme": "light",
+      "width": 390,
+      "parts": [
+        "breadcrumbs",
+        "details-sidebar",
+        "tooltip"
+      ]
+    },
+    {
+      "scenario": 7,
+      "theme": "light",
+      "width": 1280,
+      "parts": [
+        "breadcrumbs",
+        "details-sidebar",
+        "tooltip"
+      ]
+    },
+    {
+      "scenario": 8,
+      "theme": "dark",
+      "width": 390,
+      "parts": [
+        "heatmap"
+      ]
+    },
+    {
+      "scenario": 8,
+      "theme": "dark",
+      "width": 1280,
+      "parts": [
+        "heatmap"
+      ]
+    },
+    {
+      "scenario": 8,
+      "theme": "light",
+      "width": 390,
+      "parts": [
+        "heatmap"
+      ]
+    },
+    {
+      "scenario": 8,
+      "theme": "light",
+      "width": 1280,
+      "parts": [
+        "heatmap"
+      ]
+    },
+    {
+      "scenario": 9,
+      "theme": "dark",
+      "width": 390,
+      "parts": [
+        "bullet-chart",
+        "period-comparison",
+        "timeline-annotations"
+      ]
+    },
+    {
+      "scenario": 9,
+      "theme": "dark",
+      "width": 1280,
+      "parts": [
+        "bullet-chart",
+        "period-comparison",
+        "timeline-annotations"
+      ]
+    },
+    {
+      "scenario": 9,
+      "theme": "light",
+      "width": 390,
+      "parts": [
+        "bullet-chart",
+        "period-comparison",
+        "timeline-annotations"
+      ]
+    },
+    {
+      "scenario": 9,
+      "theme": "light",
+      "width": 1280,
+      "parts": [
+        "bullet-chart",
+        "period-comparison",
+        "timeline-annotations"
+      ]
+    },
+    {
+      "scenario": 10,
+      "theme": "dark",
+      "width": 390,
+      "parts": [
+        "fullscreen",
+        "export",
+        "density-controls"
+      ]
+    },
+    {
+      "scenario": 10,
+      "theme": "dark",
+      "width": 1280,
+      "parts": [
+        "fullscreen",
+        "export",
+        "density-controls"
+      ]
+    },
+    {
+      "scenario": 10,
+      "theme": "light",
+      "width": 390,
+      "parts": [
+        "fullscreen",
+        "export",
+        "density-controls"
+      ]
+    },
+    {
+      "scenario": 10,
+      "theme": "light",
+      "width": 1280,
+      "parts": [
+        "fullscreen",
+        "export",
+        "density-controls"
+      ]
+    },
+    {
+      "scenario": 11,
+      "theme": "dark",
+      "width": 390,
+      "parts": [
+        "tree-select"
+      ]
+    },
+    {
+      "scenario": 11,
+      "theme": "dark",
+      "width": 1280,
+      "parts": [
+        "tree-select"
+      ]
+    },
+    {
+      "scenario": 11,
+      "theme": "light",
+      "width": 390,
+      "parts": [
+        "tree-select"
+      ]
+    },
+    {
+      "scenario": 11,
+      "theme": "light",
+      "width": 1280,
+      "parts": [
+        "tree-select"
+      ]
+    },
+    {
+      "scenario": 12,
+      "theme": "dark",
+      "width": 390,
+      "parts": [
+        "saved-views",
+        "layout-editor"
+      ]
+    },
+    {
+      "scenario": 12,
+      "theme": "dark",
+      "width": 1280,
+      "parts": [
+        "saved-views",
+        "layout-editor"
+      ]
+    },
+    {
+      "scenario": 12,
+      "theme": "light",
+      "width": 390,
+      "parts": [
+        "saved-views",
+        "layout-editor"
+      ]
+    },
+    {
+      "scenario": 12,
+      "theme": "light",
+      "width": 1280,
+      "parts": [
+        "saved-views",
+        "layout-editor"
+      ]
+    }
+  ]
+}

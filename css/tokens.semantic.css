@@ -388,8 +388,8 @@
   --type-body-track: var(--track-none);
 
   /* Названия карточек и KPI: спокойный вес, обычный регистр. */
-  --icon-size-compact: var(--size-16);
-  --icon-size-control: var(--size-18);
+  --icon-size-compact: var(--size-20);
+  --icon-size-control: var(--size-20);
   --type-widget-title-track: var(--track-none);
   --type-widget-title: var(--weight-regular) var(--size-14)/var(--lh-20) var(--font-sans);
 
@@ -566,12 +566,13 @@
   --control-sm: var(--height-1);
   --control-md: var(--height-2);
   --control-lg: var(--height-3);
+  --rail-control: var(--size-40);
 
-  /* Боковые поля растут вместе с высотой, иначе крупная кнопка выглядит
-     сплюснутой, а мелкая — разъехавшейся. */
-  --control-pad-sm: var(--step-5);
-  --control-pad-md: var(--step-6);
-  --control-pad-lg: var(--step-7);
+  /* Одно значение spacing на четыре стороны. Размер задаёт вариант,
+     свободное место растянутой кнопки не становится padding. */
+  --control-pad-sm: var(--step-3);
+  --control-pad-md: var(--step-4);
+  --control-pad-lg: var(--size-12);
 
   /* -------------------------------------------------------------------------
      СЕТКА И УСТРОЙСТВА
@@ -691,7 +692,10 @@
   .dk-root {
     --control-sm: 44px;
     --control-md: 44px;
-    --control-lg: 48px;
+    --control-lg: 44px;
+    --rail-control:44px;
+    --control-pad-sm:var(--control-pad-lg);
+    --control-pad-md:var(--control-pad-lg);
   }
 }
 

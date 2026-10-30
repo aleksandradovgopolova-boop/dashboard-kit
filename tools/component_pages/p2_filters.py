@@ -10,7 +10,7 @@ PAGES = [
     "slug": "select", "title": "Фильтр", "group": "Фильтры", "status": "стабильный",
     "purpose": 'Ограничивает данные выбранными значениями из списка. Текущий выбор виден в закрытом фильтре.',
     "files": ["css/components.css", "js/dk-select.js"], "scripts": ["dk-select.js"],
-    "live_intro": 'Откройте список, выберите значение и сбросьте выбор. Сравните одиночный и множественный выбор.',
+    "live_intro": 'Выберите значение из списка или найдите его поиском. Выбранный фильтр остаётся виден после закрытия; его можно сбросить.',
     "live": """<div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group">
       <div id="x-okrug"></div><div id="x-tier"></div><div id="x-region"></div>
     </div><div class="dk-result" id="x-result"><b>89</b> регионов</div></div></div>""",
@@ -36,9 +36,7 @@ PAGES = [
     dkSelect(document.getElementById('x-region'), { label: 'Регион', options: REGIONS, url: 'region', onChange: function (v) { st.region = v; paint(); } });
     paint();
   });""",
-    "when_yes": ["Значения известны заранее и их больше пяти: категории, статусы, исполнители.",
-                 "Выбор ограничивает данные на всей странице и применяется сразу.",
-                 "Рядом с каждым значением можно показать, сколько записей за ним."],
+    "when_yes": ['Нужно ограничить срез известными значениями: категориями, статусами, исполнителями.', 'Выбор применяется сразу и отражается в связанных показателях. Область действия фильтра понятна.', 'Для длинного списка нужен поиск; количество записей рядом со значением помогает оценить выбор.'],
     "when_no": ["Два–пять значений, видимых сразу, — <a href=\"component-segment.html\">Сегмент</a> или <a href=\"component-legend.html\">Фильтры-легенда</a>.",
                 "Даты — <a href=\"component-period.html\">Период</a>.",
                 "Ввод значения в форме, которое применяется по кнопке, — <a href=\"component-field.html\">Поле</a> с <code>&lt;select&gt;</code>."],
@@ -120,7 +118,7 @@ f.set('sfo'); f.clear(); f.setOptions(list);
     "slug": "period", "title": "Период", "group": "Фильтры", "status": "стабильный",
     "purpose": 'Задаёт временной диапазон для связанных показателей, графиков и таблиц.',
     "files": ["css/components.css", "js/dk-period.js", "vendor/air-datepicker.js"], "scripts": ["dk-select.js", "vendor/air-datepicker.js", "dk-period.js"],
-    "live_intro": 'Откройте календарь: выберите готовый период или задайте собственный диапазон.',
+    "live_intro": 'Готовый период экономит время, собственный диапазон уточняет срез. В примере можно выбрать оба варианта.',
     "live": """<div class="dk-panel"><div class="dk-toolbar" style="margin-top:0"><div class="dk-toolbar__group"><div id="x-period"></div></div>
       <div class="dk-result" id="x-period-out"></div></div></div>""",
     "live_script": """  window.addEventListener('DOMContentLoaded', function () {
@@ -162,9 +160,7 @@ f.set('sfo'); f.clear(); f.setOptions(list);
     "content_ok": ["Пресет назван словами: «Последние 14 дней», «Сегодня».",
                    "Свой диапазон — «11–24 сен», без года, если он текущий.",
                    "Строка применённых фильтров называет период так же, как поле."],
-    "content_bad": ["«14д» в поле — это сокращение для сегмента, не для фильтра.",
-                    "«11.09.2026 – 24.09.2026» — восемь лишних знаков.",
-                    "Период по умолчанию не выбран: данные «за всё время» на дашборде — почти всегда ошибка."],
+    "content_bad": ['Период не указан: непонятно, за какое время рассчитаны показатели.', 'Дата в подписи не совпадает с применённым диапазоном.', 'Смена периода обновляет только часть связанных блоков.'],
     "a11y": ["<b>Роли.</b> Поле — кнопка с <code>aria-haspopup=\"dialog\"</code>; в <code>aria-label</code> — и название пресета, и точные даты.",
              "<b>Клавиатура.</b> По пресетам — стрелки, Enter; Escape закрывает меню и возвращает фокус. Календарь — клавиатура Air Datepicker.",
              "<b>Не только цветом.</b> Выбранный пресет отмечен <code>aria-pressed</code>; диапазон в календаре — заливкой и подписью в поле.",
@@ -203,7 +199,7 @@ p.set({ preset: 30 }); p.clear();
     "slug": "search", "title": "Поиск", "group": "Фильтры", "status": "стабильный",
     "purpose": 'Находит объекты по названию и позволяет быстро очистить запрос.',
     "files": ["css/components.css", "js/dk-util.js"], "scripts": [],
-    "live_intro": 'Введите название и очистите поле. Пример показывает ввод; поиск по данным подключает приложение.',
+    "live_intro": 'Поле принимает запрос и позволяет очистить его одним действием. Фильтрацию записей подключает приложение; сам пример данные не ищет.',
     "live": """<div class="dk-grid">
       <div class="dk-col--half"><div class="dk-search">
         <svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg>
@@ -277,7 +273,7 @@ document.querySelector('.dk-search__input').addEventListener('input', function (
     "slug": "legend", "title": "Фильтры-легенда", "group": "Фильтры", "status": "стабильный",
     "purpose": 'Объясняет цвета категорий и позволяет включать или исключать их из среза.',
     "files": ["css/components.css"], "scripts": [],
-    "live_intro": 'Переключите категорию. Состояние выбора различается и без опоры только на цвет.',
+    "live_intro": 'Подпись объясняет цвет, счётчик — размер категории. Нажатие меняет выбор; приложение связывает его с данными виджета.',
     "live": """<div class="dk-legend">
       <button class="dk-lg is-on" aria-pressed="true"><i class="dk-lg__sw"></i>Все<b class="dk-lg__n">89</b></button>
       <button class="dk-lg" aria-pressed="false" style="--swatch:var(--crit)"><i class="dk-lg__sw"></i>Высокий<b class="dk-lg__n">23</b></button>
@@ -305,8 +301,7 @@ document.querySelector('.dk-search__input').addEventListener('input', function (
     "anatomy": [("Чип", "кнопка с <code>aria-pressed</code>; включённый залит своим цветом на 22 %, чтобы не спорить с данными."),
                 ("Метка цвета", "<code>dk-lg__sw</code> берёт <code>--swatch</code>; без него — серый."),
                 ("Число", "сколько записей за категорией; ноль показывается приглушённым.")],
-    "sizes": "Три размера по высоте контролов: <code>dk-lg--sm</code> 28, по умолчанию 32, <code>dk-lg--lg</code> 40; "
-             "метка цвета растёт вместе.",
+    "sizes": 'Высота согласуется с соседними контролами и темой. Компактный и крупный варианты задаются dk-lg--sm и dk-lg--lg. На сенсорном экране область нажатия сохраняется не меньше 44 × 44 px.',
     "variants": [("dk-lg", "Чип-фильтр.", "Каждая категория."),
                  ("is-on + aria-pressed", "Включён.", "Ставит скрипт страницы."),
                  ("--swatch", "Цвет категории через стиль.", "Всегда, кроме «Все»."),
@@ -356,7 +351,7 @@ legend.addEventListener('click', function (e) {
     "slug": "pager", "title": "Пагинация", "group": "Фильтры", "status": "стабильный",
     "purpose": 'Показывает текущую часть набора данных и позволяет перейти к следующей странице.',
     "files": ["css/components.css", "js/dk-pager.js"], "scripts": ["dk-pager.js"],
-    "live_intro": 'Перейдите вперёд и назад. Сверьте номер страницы и диапазон показанных записей.',
+    "live_intro": 'Номер страницы и диапазон записей показывают, где вы находитесь в наборе. Переходы вперёд и назад работают в примере.',
     "live": """<div class="dk-panel"><div id="x-pager"></div></div>""",
     "live_script": """  window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkPager !== 'function') return;
@@ -456,7 +451,7 @@ PAGES.extend([
     **_CHIPS_COMMON,
     "slug": "chips-input", "title": "Ввод нескольких значений · ChipsInput",
     "purpose": 'Принимает несколько произвольных значений и показывает их отдельными метками.',
-    "live_intro": 'Добавьте значение и удалите одну из меток. Остальная часть набора должна сохраниться.',
+    "live_intro": 'Введите значение и нажмите Enter: оно станет отдельной меткой. Удаление одной метки сохраняет остальные.',
     "live": '<div class="dk-panel"><div id="x-chips-input"></div><p class="dk-hint" id="x-chips-result" role="status"></p></div>',
     "live_script": """window.addEventListener('DOMContentLoaded', function () {
   var out = document.getElementById('x-chips-result');
@@ -486,7 +481,7 @@ tags.value(['Проверено']);
     **_CHIPS_COMMON,
     "slug": "chips-select", "title": "Выбор нескольких значений · ChipsSelect",
     "purpose": 'Выбирает несколько значений из справочника и сохраняет выбранный набор на виду.',
-    "live_intro": 'Выберите несколько пунктов, затем удалите один через его метку.',
+    "live_intro": 'Выберите несколько пунктов из справочника. Метки сохраняют выбор на виду и позволяют удалить отдельное значение.',
     "live": '<div class="dk-panel"><div id="x-chips-select"></div><p class="dk-hint" id="x-chips-result" role="status"></p></div>',
     "live_script": """window.addEventListener('DOMContentLoaded', function () {
   var out = document.getElementById('x-chips-result');

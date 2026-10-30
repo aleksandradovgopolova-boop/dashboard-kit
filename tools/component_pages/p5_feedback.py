@@ -5,7 +5,7 @@ PAGES = [
     "slug": "banner", "title": "Баннер и уведомление", "group": "Обратная связь", "status": "стабильный",
     "purpose": 'Сообщает о состоянии страницы, а краткое уведомление подтверждает результат действия.',
     "files": ["css/components.css", "js/dk-notify.js"], "scripts": ["dk-notify.js"],
-    "live_intro": 'Сравните постоянное сообщение и временное уведомление: важная причина не должна исчезать по таймеру.',
+    "live_intro": 'Баннер остаётся рядом с проблемой, уведомление подтверждает выполненное действие. Важное сообщение не должно исчезать раньше, чем его прочитали.',
     "live": """<div class="dk-panel"><div class="dk-stack">
       <div class="dk-banner dk-banner--crit dk-banner--priority"><svg class="dk-i" aria-hidden="true"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title"><span class="dk-banner__number">23</span> аварии требуют решения</div></div><a class="dk-btn dk-btn--sm" href="accidents.html">Открыть аварии</a></div>
       <div class="dk-banner dk-banner--crit"><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title">Не удалось обновить данные</div><div class="dk-banner__sub">Проверьте подключение и повторите загрузку</div></div></div>
@@ -27,9 +27,7 @@ PAGES = [
     "when_yes": ["Баннер: состояние, которое касается всей страницы, — сбой служб, устаревшие данные, готовый отчёт.",
                  "Уведомление: подтвердить, что действие человека выполнено: «Срез сброшен», «Работа добавлена».",
                  "Уведомление с «Отменить»: действие обратимо, и отмена дешевле подтверждения заранее."],
-    "when_no": ["Новость о данных («Авария в Новосибирске») — не уведомление: уехавшее через пять секунд сообщение о новой аварии — это авария, которую никто не увидел. Это баннер или строка в ленте.",
-                "Проблема одного виджета — <a href=\"component-empty.html\">ошибка внутри виджета</a>, не баннер страницы.",
-                "Подтверждение опасного действия — <a href=\"component-modal.html\">Модальное окно</a>."],
+    "when_no": ['Важное новое событие должно остаться в <a href="component-list.html">ленте</a> или баннере, чтобы его можно было прочитать позже.', 'Проблема одного блока — <a href="component-empty.html">ошибка внутри виджета</a>.', 'Необратимое действие требует понятного подтверждения — <a href="component-modal.html">Модальное окно</a>.'],
     "anatomy_html": """<div class="dk-stack"><div class="dk-banner dk-banner--crit"><b class="sc-callout">1</b><svg class="dk-i"><use href="#ti-alert-triangle"/></svg><div class="dk-banner__text"><div class="dk-banner__title"><b class="sc-callout">2</b>Не удалось обновить данные</div><div class="dk-banner__sub"><b class="sc-callout">3</b>Проверьте подключение и повторите загрузку</div></div><div class="dk-banner__stats"><b class="sc-callout">4</b><div class="dk-banner__stat"><b>9/11</b><span>служб</span></div></div></div>
       <div class="dk-toast dk-toast--calm" style="position:static;max-width:520px"><svg class="dk-i"><use href="#ti-circle-check"/></svg><span class="dk-toast__text"><b class="sc-callout">5</b>Срез сброшен к настройкам по умолчанию</span><button type="button" class="dk-btn dk-btn--ghost dk-btn--sm"><b class="sc-callout">6</b>Отменить</button><button type="button" class="dk-iconbtn dk-iconbtn--sm" title="Закрыть" aria-label="Закрыть"><b class="sc-callout">7</b><svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></div></div>""",
     "anatomy": [("Значок баннера", "вид состояния; цвет смысла — crit, high, calm, event."),
@@ -54,9 +52,7 @@ PAGES = [
       <div class="dk-toast dk-toast--crit" style="position:static;max-width:520px"><svg class="dk-i"><use href="#ti-alert-circle"/></svg><span class="dk-toast__text">Не удалось сохранить срез — попробуйте ещё раз</span><button type="button" class="dk-iconbtn dk-iconbtn--sm" title="Закрыть" aria-label="Закрыть"><svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg></button></div>
     </div></div>
     <div class="sc-note"><b>Время жизни считается по длине текста</b>: четыре секунды плюс сорок миллисекунд на знак, не больше десяти. Под курсором и под фокусом отсчёт стоит. С действием таймера нет вовсе: «успей или потеряй» бьёт по тем, кто и так работает медленнее.</div>""",
-    "content_ok": ["Крупный значок в сводке: dk-widget-icon — контур на мягком круге; dk-widget-icon--crit — авария. Размер и форма едины с другими виджетами, без обводки.", "Заголовок баннера с числом и глаголом: «Не удалось обновить данные».",
-                   "Уведомление в прошедшем времени: «Работа добавлена в календарь».",
-                   "Тревожное уведомление говорит, что делать: «попробуйте ещё раз»."],
+    "content_ok": ['Заголовок объясняет состояние: «Не удалось обновить данные».', 'Текст сообщает последствие и следующий шаг: «Показан вчерашний срез. Повторите загрузку».', 'Уведомление называет результат: «Работа добавлена в календарь».'],
     "content_bad": ["Баннер «Внимание!» без того, на что.",
                     "Уведомление «Успешно» — что именно?",
                     "Крестик на баннере о сбое — сбой, спрятанный руками человека, который через час о нём забудет."],
@@ -94,7 +90,7 @@ t.close();
     "slug": "modal", "title": "Модальное окно", "group": "Обратная связь", "status": "стабильный",
     "purpose": 'Помогает выполнить короткую задачу или подтвердить действие, сохраняя контекст страницы.',
     "files": ["css/components.css", "js/dk-modal.js"], "scripts": ["dk-modal.js"],
-    "live_intro": 'Откройте окно, закройте его и проверьте возврат к исходной кнопке.',
+    "live_intro": 'Окно помогает решить короткую задачу и вернуться к исходному действию. В примере можно открыть его, закрыть и проверить возврат фокуса.',
     "live": """<div class="dk-panel"><div class="sc-row" style="margin:0"><button class="dk-btn dk-btn--primary" data-modal="#x-confirm">Удалить запись</button><button class="dk-btn" data-modal="#x-form">Добавить работу</button></div>
       <div class="dk-result" id="x-modal-out" style="margin-top:var(--space-6)">Окно ещё не открывали</div></div>
     <dialog class="dk-modal" id="x-confirm" aria-labelledby="x-confirm-t"><form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="x-confirm-t">Удалить запись</h2><button type="button" class="dk-iconbtn dk-modal__close" data-modal-close aria-label="Закрыть окно" title="Закрыть"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div><div class="dk-modal__body"><p>Запись будет удалена. Восстановить её не получится.</p></div><div class="dk-modal__foot"><button class="dk-btn dk-btn--ghost" value="cancel">Отмена</button><button class="dk-btn dk-btn--primary" value="ok">Удалить запись</button></div></form></dialog>
@@ -172,16 +168,14 @@ m.el.addEventListener('close', function () { if (m.returnValue === 'ok') closeAc
     "slug": "empty", "title": "Состояния: загрузка, пусто, ошибка", "group": "Обратная связь", "status": "стабильный",
     "purpose": 'Объясняет загрузку, отсутствие результатов или ошибку и подсказывает следующий шаг.',
     "files": ["css/components.css"], "scripts": [],
-    "live_intro": 'Сравните причины отсутствия содержимого. У каждой — своё объяснение и уместное действие.',
+    "live_intro": 'Загрузка, пустой результат и ошибка требуют разных сообщений. Покажите причину и действие, которое поможет продолжить.',
     "live": """<div class="dk-grid--even">
       <div class="dk-panel"><div class="dk-overline" style="margin-bottom:var(--space-6)">Загрузка</div><span class="dk-vh">Загружаем показатели</span><div class="dk-skel" style="height:14px;width:60%;margin-bottom:var(--space-5)"></div><div class="dk-skel" style="height:14px;width:85%;margin-bottom:var(--space-5)"></div><div class="dk-skel" style="height:14px;width:45%"></div></div>
       <div class="dk-panel"><div class="dk-empty"><div class="dk-empty__t">Ничего не найдено</div><div>Под выбранные фильтры не попал ни один регион.</div><div class="dk-empty__do">Снимите фильтр по округу или расширьте период.</div></div></div>
       <div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Динамика балла</h3><div class="dk-widget__actions"><button class="dk-iconbtn dk-iconbtn--sm" title="Обновить" aria-label="Обновить"><svg class="dk-i"><use href="#ti-refresh"/></svg></button></div></div><div class="dk-error"><span class="dk-error__icon"><svg class="dk-i"><use href="#ti-plug-connected-x"/></svg></span><h4 class="dk-error__title">Виджет не загрузился</h4><p class="dk-error__text">Остальные показатели на странице актуальны.</p><div class="dk-error__actions"><button class="dk-btn dk-btn--sm">Повторить</button></div></div></div>
     </div>
     <div class="dk-panel" style="margin-top:var(--space-6)"><div class="dk-error dk-error--alarm"><span class="dk-error__icon"><svg class="dk-i"><use href="#ti-plug-connected-x"/></svg></span><h3 class="dk-error__title">Данные не загрузились</h3><p class="dk-error__text">Сервер не ответил. Показатели на экране могли остаться со вчерашнего среза — на них сейчас нельзя опираться.</p><div class="dk-error__actions"><button class="dk-btn dk-btn--primary"><svg class="dk-i"><use href="#ti-refresh"/></svg>Попробовать снова</button></div><div class="dk-error__code">ERR_TIMEOUT · 22.09.2026 23:14</div></div></div>""",
-    "when_yes": ["Загрузка: данные ещё едут, и место под них известно — скелетон повторяет форму будущего содержимого.",
-                 "Пусто: запрос выполнился, а ответ пуст — фильтры, период, новый объект.",
-                 "Ошибка: запрос не выполнился; внутри виджета — компактно, на всю страницу — с кодом для поддержки."],
+    "when_yes": ['Загрузка: запрос ещё выполняется, под содержимое сохранено место.', 'Пустой результат: запрос выполнен, но подходящих записей нет.', 'Ошибка: запрос не выполнен. Объясните, какие данные сейчас показаны и можно ли повторить действие.'],
     "when_no": ["Служба не отвечает сутки — это <a href=\"component-banner.html\">Баннер</a> страницы, не ошибка виджета.",
                 "Ноль значений — не «пусто»: ноль — это ответ, и его показывает сам компонент (график, таблица).",
                 "Нет доступа — страница ошибки 403 (на <a href=\"showcase.html#stranicy-oshibok\">витрине</a>), а не пустое состояние."],

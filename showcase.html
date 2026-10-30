@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
 <!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
      и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
+<script src="js/docs.js?v=20261030-compact" defer></script>
 <!-- defer, а не блокирующая загрузка. Три файла графиков весят 1148 КБ, и
      без defer разбор страницы вставал на них целиком: до первой отрисовки
      человек ждал движок, который нужен ниже первого экрана. Порядок при defer
@@ -39,8 +39,8 @@
 <script src="js/dk-map.js?v=20261028-stable-size" defer></script>
 <script src="js/dk-notify.js" defer></script>
 <script src="js/dk-uptime.js" defer></script>
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
-<link rel="stylesheet" href="css/glass.css?v=20261026-readable-menu">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -61,7 +61,7 @@
 <div class="dk-wrap" id="top">
 
   <header class="sc-hero">
-    <h1>Дизайн-система дашбордов</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🧩</span>Дизайн-система дашбордов</h1>
     <p class="sc-hero__lead">Для аналитических и операционных дашбордов. Помогает отслеживать показатели, анализировать изменения и управлять рабочими процессами.
       Компоненты и рекомендации задают единый подход к представлению данных — от ключевых показателей
       до подробных отчётов.</p>
@@ -75,7 +75,7 @@
 
   <section class="sc-sec sc-guide" id="sborka-po-zadache" data-group="Руководство">
     <h2>Сборка дашборда по задаче</h2>
-    <p>Данные, аудитория, решение — остальное собирает исполнитель. Здесь показано, как выбрать график, выстроить экран и проверить результат.</p>
+    <p>Начните с вопроса к данным и решения, которое нужно принять. Затем выберите показатели, представления и действия. Примеры ниже помогают собрать и проверить экран.</p>
     <nav class="dk-tabs sc-guide__tabs" aria-label="Разделы руководства">
       <a class="dk-tab" href="#sborka-po-zadache--grafiki">Метрики и графики</a>
       <a class="dk-tab" href="#sborka-po-zadache--kompoziciya">Композиция</a>
@@ -227,7 +227,7 @@
   <!-- ---------------------------------------------------------------- -->
   <section class="sc-sec" id="tri-principa" data-group="Визуальный язык">
     <h2>Основы визуального языка</h2>
-    <p>Визуальный язык dashboard-kit объединяет экраны мониторинга в последовательную систему. Структура, типографика и цвет помогают ориентироваться в данных, сравнивать показатели и замечать изменения. Каждый приём имеет назначение и используется одинаково в разных компонентах.</p>
+    <p>Сетка задаёт порядок, типографика — иерархию, цвет — смысл. Общие токены сохраняют эти правила в компонентах и обеих темах.</p>
     <h3>Структура интерфейса</h3>
     <p>Сетка задаёт расположение виджетов, а поверхности и отступы объединяют связанные данные. Иерархия ведёт от общего состояния к деталям. На узких экранах блоки перестраиваются с сохранением порядка чтения.</p>
     <p><a href="#setka-i-ustroystva">Структура и сетка</a> · <a href="#otstupy">Отступы</a></p>
@@ -1795,7 +1795,7 @@
   <!-- ---------------------------------------------------------------- -->
   <section class="sc-sec">
     <h2>Состояния</h2>
-    <p>Загрузка и «данных нет» — это тоже компоненты. Без них дашборд в проде выглядит сломанным.</p>
+    <p>Загрузка, отсутствие результатов и ошибка — разные состояния. Для каждого объясните причину и следующий шаг; ноль не заменяет отсутствие данных.</p>
     <div class="dk-grid--even">
       <div class="dk-panel">
         <div class="dk-overline" style="margin-bottom:var(--space-6)">Загрузка</div>

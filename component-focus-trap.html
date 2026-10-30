@@ -14,14 +14,14 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-focus-trap.js" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -52,24 +52,24 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Удержание фокуса</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">⌨️</span>Удержание фокуса</h1>
     <p class="sc-hero__lead">Удерживает клавиатурный фокус внутри открытого модального слоя.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Откройте пример и пройдите элементы клавишами Tab и Shift+Tab. Фокус остаётся внутри слоя.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><button class="dk-btn dk-btn--sm" id="demo-trap-start">Проверить фокус</button><dialog class="dk-modal dk-popout" id="demo-trap" aria-labelledby="demo-trap-title"><div class="dk-modal__head"><h2 class="dk-modal__title" id="demo-trap-title">Проверка фокуса</h2></div><div class="dk-modal__body"><p>Tab и Shift+Tab остаются внутри. Escape закрывает окно.</p><button class="dk-btn dk-btn--sm">Первое действие</button><button class="dk-btn dk-btn--sm">Второе действие</button></div><form method="dialog" class="dk-modal__foot"><button class="dk-btn dk-btn--sm">Закрыть</button></form></dialog></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
+    <p>Tab и Shift+Tab обходят элементы открытого окна по кругу. После закрытия фокус возвращается к исходному действию.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><button class="dk-btn dk-btn--sm" id="demo-trap-start">Проверить фокус</button><dialog class="dk-modal dk-popout" id="demo-trap" aria-labelledby="demo-trap-title"><div class="dk-modal__head"><h2 class="dk-modal__title" id="demo-trap-title">Проверка фокуса</h2></div><div class="dk-modal__body"><p>Tab и Shift+Tab остаются внутри. Escape закрывает окно.</p><button class="dk-btn dk-btn--sm">Первое действие</button><button class="dk-btn dk-btn--sm">Второе действие</button></div><form method="dialog" class="dk-modal__foot"><button class="dk-btn dk-btn--sm">Закрыть</button></form></dialog></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Собственный всплывающий слой, где фокус должен оставаться до закрытия.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Не удерживайте фокус в обычной карточке или меню страницы.</li><li>Нативный dialog.showModal уже исключает фон; helper дополняет цикл, но не заменяет inert.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Собственный всплывающий слой, где фокус должен оставаться до закрытия.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Обычная карточка или меню не должны удерживать фокус.</li><li>Для готового окна используйте <a href="component-modal.html">Модальное окно</a>: оно управляет фокусом и фоном.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-panel"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> Содержимое и управление</div></div><ol class="sc-anatomy__list"><li><b>Контейнер</b> — Задаёт раскладку или поведение.</li><li><b>Содержимое</b> — Названия, данные и доступные действия задаёт приложение.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
@@ -88,12 +88,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li>Закрытие доступно кнопкой и Escape; фокус возвращается к запуску.</li><li>Заголовок окна связан через aria-labelledby. Фон исключается нативным showModal.</li><li>Не выдавайте один цикл Tab за полноценную модальность или недоступность фона.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="https://vkui.io/components/focus-trap/">Референс VKUI</a> — Структура и поведение</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-focus-trap"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-focus-trap"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Используйте общую основу и подключите скрипты в порядке описи кита.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-focus-trap.js"><code>js/dk-focus-trap.js</code></a></p><pre class="sc-code"><code>&lt;button class=&quot;dk-btn dk-btn--sm&quot; id=&quot;demo-trap-start&quot;&gt;Проверить фокус&lt;/button&gt;&lt;dialog class=&quot;dk-modal dk-popout&quot; id=&quot;demo-trap&quot; aria-labelledby=&quot;demo-trap-title&quot;&gt;&lt;div class=&quot;dk-modal__head&quot;&gt;&lt;h2 class=&quot;dk-modal__title&quot; id=&quot;demo-trap-title&quot;&gt;Проверка фокуса&lt;/h2&gt;&lt;/div&gt;&lt;div class=&quot;dk-modal__body&quot;&gt;&lt;p&gt;Tab и Shift+Tab остаются внутри. Escape закрывает окно.&lt;/p&gt;&lt;button class=&quot;dk-btn dk-btn--sm&quot;&gt;Первое действие&lt;/button&gt;&lt;button class=&quot;dk-btn dk-btn--sm&quot;&gt;Второе действие&lt;/button&gt;&lt;/div&gt;&lt;form method=&quot;dialog&quot; class=&quot;dk-modal__foot&quot;&gt;&lt;button class=&quot;dk-btn dk-btn--sm&quot;&gt;Закрыть&lt;/button&gt;&lt;/form&gt;&lt;/dialog&gt;
 &lt;script&gt;
 window.addEventListener(&#x27;DOMContentLoaded&#x27;,function(){
@@ -102,10 +106,6 @@ window.addEventListener(&#x27;DOMContentLoaded&#x27;,function(){
  dialog.addEventListener(&#x27;close&#x27;,function(){if(trap){trap.destroy();trap=null;}button.focus();});
 });
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkFocusTrap(root, options)</code></td><td>функция</td><td>Устанавливает цикл фокуса.</td></tr><tr><td><code>destroy()</code></td><td>метод</td><td>Снимает обработчики и возвращает предыдущий фокус.</td></tr><tr><td><code>onEscape</code></td><td>функция</td><td>Обязательный путь закрытия для собственного слоя.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="https://vkui.io/components/focus-trap/">Референс VKUI</a> — Структура и поведение</li></ul>
   </section>
 
 </div>

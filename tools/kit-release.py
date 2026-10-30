@@ -25,7 +25,7 @@ FIXED_FILES = {
     "family-mortgage.html", "js/family-mortgage-data.js", "js/family-mortgage.js",
     "data/family-mortgage-observations.json", "data/regions.topojson", "data/regions-tiles.json",
     "docs/family-mortgage.md",
-    "docs/current-state.md", "docs/2026-10-28/DASHBOARD-DETAIL-MODAL-001.md",
+    "docs/current-state.md", "docs/assembly-rules.md", "docs/2026-10-28/DASHBOARD-DETAIL-MODAL-001.md",
 }
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?\Z")

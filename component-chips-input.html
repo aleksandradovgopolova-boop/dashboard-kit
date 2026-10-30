@@ -14,14 +14,14 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/dk-chips.js" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -52,24 +52,24 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Ввод нескольких значений · ChipsInput</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🏷️</span>Ввод нескольких значений · ChipsInput</h1>
     <p class="sc-hero__lead">Принимает несколько произвольных значений и показывает их отдельными метками.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Добавьте значение и удалите одну из меток. Остальная часть набора должна сохраниться.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div id="x-chips-input"></div><p class="dk-hint" id="x-chips-result" role="status"></p></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
+    <p>Введите значение и нажмите Enter: оно станет отдельной меткой. Удаление одной метки сохраняет остальные.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div id="x-chips-input"></div><p class="dk-hint" id="x-chips-result" role="status"></p></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Пользователь создаёт набор произвольных меток или ключевых слов.</li><li>Каждое значение нужно видеть и удалять независимо.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Выбор ограничен справочником — <a href="component-chips-select.html">Выбор нескольких значений</a>.</li><li>Одно значение или связный текст — <a href="component-field.html">Поле и форма</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-ff"><label class="dk-label"><b class="sc-callout">1</b> Метки</label><div class="dk-inline"><span class="dk-chip"><b class="sc-callout">2</b> Плановые работы</span></div><div class="dk-field"><b class="sc-callout">3</b><input aria-label="Пример поля меток" placeholder="Введите метку" readonly></div></div></div><ol class="sc-anatomy__list"><li><b>Подпись</b> — объясняет, какие значения нужно ввести.</li><li><b>Набор меток</b> — показывает уже добавленные значения; у каждой метки есть удаление.</li><li><b>Поле добавления</b> — принимает следующее значение, не заменяя весь набор.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
@@ -88,12 +88,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li>В текстовом поле Enter добавляет значение. Backspace в пустом поле переводит фокус на удаление последней метки; Enter или пробел выполняет удаление.</li><li>Выбор из списка использует нативный select. Уже выбранные и отключённые варианты недоступны для повторного выбора.</li><li>Поле имеет постоянную видимую подпись. Кнопки удаления получают доступное название с именем значения.</li><li>Добавление и удаление должны быть доступны с клавиатуры; фокус остаётся в рабочем контексте поля.</li><li>Отключённое состояние запрещает изменение, сохраняя выбранные значения для чтения.</li><li>Проверьте работу с длинными названиями, увеличенным текстом и на телефоне. Полная проверка со скринридером требует отдельного прохода.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-chips-select.html">Выбор нескольких значений</a> — набор из готового справочника</li><li><a href="component-field.html">Поле и форма</a> — обычный текстовый ввод</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-chips"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-chips"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p>Подключите js/dk-chips.js после js/dk-util.js и js/dk-icons.js. Компонент сообщает значения; сохранение и применение фильтра выполняет приложение.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-chips.js"><code>js/dk-chips.js</code></a></p><pre class="sc-code"><code>&lt;div id=&quot;tags&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
 var tags = dkChipsInput(document.getElementById(&#x27;tags&#x27;), {
@@ -105,10 +109,6 @@ var tags = dkChipsInput(document.getElementById(&#x27;tags&#x27;), {
 tags.value([&#x27;Проверено&#x27;]);
 // tags.destroy();
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>label</code></td><td>строка</td><td>Постоянная подпись поля.</td></tr><tr><td><code>value</code></td><td>массив строк</td><td>Начальные значения.</td></tr><tr><td><code>placeholder</code></td><td>строка</td><td>Подсказка в поле добавления.</td></tr><tr><td><code>disabled</code></td><td>boolean</td><td>Запрет изменения набора.</td></tr><tr><td><code>onChange(value)</code></td><td>функция</td><td>Получает новый массив значений после изменения пользователем.</td></tr><tr><td><code>instance.value(nextArray)</code></td><td>метод</td><td>Без аргумента возвращает набор; с массивом заменяет значения.</td></tr><tr><td><code>instance.disabled(bool)</code></td><td>метод</td><td>Без аргумента возвращает состояние; с boolean переключает доступность.</td></tr><tr><td><code>instance.destroy()</code></td><td>метод</td><td>Удаление компонента и его обработчиков.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-chips-select.html">Выбор нескольких значений</a> — набор из готового справочника</li><li><a href="component-field.html">Поле и форма</a> — обычный текстовый ввод</li></ul>
   </section>
 
 </div>

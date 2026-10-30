@@ -1,0 +1,1142 @@
+{
+  "browser": "Chrome CDP",
+  "physicalDevices": false,
+  "screenReaderSpeech": false,
+  "pages": [
+    {
+      "page": "regions.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": "static",
+      "regionReset": true,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "Календарь",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 780,
+            "width": 238,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-table dk-table--zebra",
+            "scroll": 780,
+            "width": 720,
+            "overflow": "visible"
+          },
+          {
+            "cls": "",
+            "scroll": 780,
+            "width": 720,
+            "overflow": "visible"
+          },
+          {
+            "cls": "",
+            "scroll": 780,
+            "width": 720,
+            "overflow": "visible"
+          },
+          {
+            "cls": "dk-vh",
+            "scroll": 403,
+            "width": 1,
+            "overflow": "hidden"
+          },
+          {
+            "cls": "dk-tabbar",
+            "scroll": 430,
+            "width": 272,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "A",
+            "cls": "dk-tabbar__item",
+            "parent": "dk-tabbar",
+            "text": "Календарь"
+          },
+          {
+            "tag": "svg",
+            "cls": {},
+            "parent": "dk-tabbar__item",
+            "text": ""
+          },
+          {
+            "tag": "use",
+            "cls": {},
+            "parent": {},
+            "text": ""
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "parent": "dk-tabbar__item",
+            "text": "Календарь"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "accidents.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": "static",
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "Календарь",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "",
+            "scroll": 769,
+            "width": 266,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-vh",
+            "scroll": 368,
+            "width": 1,
+            "overflow": "hidden"
+          },
+          {
+            "cls": "dk-tabbar",
+            "scroll": 430,
+            "width": 272,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "A",
+            "cls": "dk-tabbar__item",
+            "parent": "dk-tabbar",
+            "text": "Календарь"
+          },
+          {
+            "tag": "svg",
+            "cls": {},
+            "parent": "dk-tabbar__item",
+            "text": ""
+          },
+          {
+            "tag": "use",
+            "cls": {},
+            "parent": {},
+            "text": ""
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "parent": "dk-tabbar__item",
+            "text": "Календарь"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "calendar.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": "static",
+      "calendarAgenda": true,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "Календарь",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tabbar",
+            "scroll": 430,
+            "width": 272,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "A",
+            "cls": "dk-tabbar__item",
+            "parent": "dk-tabbar",
+            "text": "Календарь"
+          },
+          {
+            "tag": "svg",
+            "cls": {},
+            "parent": "dk-tabbar__item",
+            "text": ""
+          },
+          {
+            "tag": "use",
+            "cls": {},
+            "parent": {},
+            "text": ""
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "parent": "dk-tabbar__item",
+            "text": "Календарь"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "dashboard.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "chartTop": 1558.609375,
+      "sticky": "static",
+      "fullscreen": "native",
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "Календарь",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 616,
+            "width": 238,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-table dk-table--events",
+            "scroll": 616,
+            "width": 520,
+            "overflow": "visible"
+          },
+          {
+            "cls": "",
+            "scroll": 616,
+            "width": 520,
+            "overflow": "visible"
+          },
+          {
+            "cls": "",
+            "scroll": 616,
+            "width": 520,
+            "overflow": "visible"
+          },
+          {
+            "cls": "",
+            "scroll": 539,
+            "width": 520,
+            "overflow": "visible"
+          },
+          {
+            "cls": "",
+            "scroll": 539,
+            "width": 520,
+            "overflow": "visible"
+          },
+          {
+            "cls": "",
+            "scroll": 522,
+            "width": 520,
+            "overflow": "visible"
+          },
+          {
+            "cls": "",
+            "scroll": 522,
+            "width": 520,
+            "overflow": "visible"
+          },
+          {
+            "cls": "dk-tabbar",
+            "scroll": 430,
+            "width": 272,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "A",
+            "cls": "dk-tabbar__item",
+            "parent": "dk-tabbar",
+            "text": "Календарь"
+          },
+          {
+            "tag": "svg",
+            "cls": {},
+            "parent": "dk-tabbar__item",
+            "text": ""
+          },
+          {
+            "tag": "use",
+            "cls": {},
+            "parent": {},
+            "text": ""
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "parent": "dk-tabbar__item",
+            "text": "Календарь"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "component-heatmap.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": null,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "400 14px/20px \"Golos Text\", system-ui, -",
+            "cls": ""
+          },
+          {
+            "text": "<div id=\"advanced-heatmap\"></div>\n<script>\ndocument.addEvent",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 720,
+            "width": 262,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "",
+            "scroll": 482,
+            "width": 105,
+            "overflow": "hidden"
+          },
+          {
+            "cls": "sc-code",
+            "scroll": 3039,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "CODE",
+            "cls": "",
+            "parent": "sc-code",
+            "text": "<div id=\"advanced-heatmap\"></div>\n<script>\ndocument.addEvent"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "component-tree-select.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": null,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "#121419",
+            "cls": ""
+          },
+          {
+            "text": "400 14px/20px \"Golos Text\", system-ui, -",
+            "cls": ""
+          },
+          {
+            "text": "<div id=\"advanced-tree\"></div>\n<script>\ndocument.addEventLis",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "",
+            "scroll": 482,
+            "width": 105,
+            "overflow": "hidden"
+          },
+          {
+            "cls": "sc-code",
+            "scroll": 2562,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "CODE",
+            "cls": "",
+            "parent": "sc-code",
+            "text": "<div id=\"advanced-tree\"></div>\n<script>\ndocument.addEventLis"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "component-layout-editor.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": null,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "400 14px/20px \"Golos Text\", system-ui, -",
+            "cls": ""
+          },
+          {
+            "text": "<div id=\"advanced-editor\"></div><div class=\"dk-grid\" id=\"adv",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "",
+            "scroll": 482,
+            "width": 105,
+            "overflow": "hidden"
+          },
+          {
+            "cls": "sc-code",
+            "scroll": 5033,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "CODE",
+            "cls": "",
+            "parent": "sc-code",
+            "text": "<div id=\"advanced-editor\"></div><div class=\"dk-grid\" id=\"adv"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "component-saved-views.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": null,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "400 14px/20px \"Golos Text\", system-ui, -",
+            "cls": ""
+          },
+          {
+            "text": "<div id=\"advanced-state\"><div class=\"dk-form\"><div class=\"dk",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "",
+            "scroll": 482,
+            "width": 105,
+            "overflow": "hidden"
+          },
+          {
+            "cls": "sc-code",
+            "scroll": 7807,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "CODE",
+            "cls": "",
+            "parent": "sc-code",
+            "text": "<div id=\"advanced-state\"><div class=\"dk-form\"><div class=\"dk"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "component-fullscreen.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": null,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "clamp(24px, 2.7vw, 36px)",
+            "cls": ""
+          },
+          {
+            "text": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-fullscreen",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "sc-code",
+            "scroll": 4585,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "CODE",
+            "cls": "",
+            "parent": "sc-code",
+            "text": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-fullscreen"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "component-tooltip.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": null,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "400 12px/16px \"Golos Text\", system-ui, -",
+            "cls": ""
+          },
+          {
+            "text": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-tooltip\">Ч",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "",
+            "scroll": 482,
+            "width": 62,
+            "overflow": "hidden"
+          },
+          {
+            "cls": "sc-code",
+            "scroll": 1652,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "CODE",
+            "cls": "",
+            "parent": "sc-code",
+            "text": "<button type=\"button\" class=\"dk-btn\" id=\"advanced-tooltip\">Ч"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "component-bullet-chart.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": null,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "<div id=\"advanced-bullet\"></div>\n<script>\ndocument.addEventL",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "sc-code",
+            "scroll": 2981,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "CODE",
+            "cls": "",
+            "parent": "sc-code",
+            "text": "<div id=\"advanced-bullet\"></div>\n<script>\ndocument.addEventL"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "component-period-comparison.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": null,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "400 14px/20px \"Golos Text\", system-ui, -",
+            "cls": ""
+          },
+          {
+            "text": "<div id=\"advanced-comparison\"></div>\n<script>\ndocument.addEv",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "",
+            "scroll": 482,
+            "width": 105,
+            "overflow": "hidden"
+          },
+          {
+            "cls": "sc-code",
+            "scroll": 1999,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "CODE",
+            "cls": "",
+            "parent": "sc-code",
+            "text": "<div id=\"advanced-comparison\"></div>\n<script>\ndocument.addEv"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "component-timeline-annotations.html",
+      "duplicate": [],
+      "dangling": [],
+      "width": 390,
+      "viewport": 390,
+      "sticky": null,
+      "largeText": {
+        "width": 390,
+        "viewport": 390
+      },
+      "reflow320": {
+        "width": 320,
+        "viewport": 320,
+        "textOverflow": [
+          {
+            "text": "<div id=\"advanced-annotations\"></div>\n<script>\ndocument.addE",
+            "cls": ""
+          }
+        ],
+        "overflow": [
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "sc-code",
+            "scroll": 4657,
+            "width": 292,
+            "overflow": "auto"
+          },
+          {
+            "cls": "dk-tablewrap",
+            "scroll": 560,
+            "width": 292,
+            "overflow": "auto"
+          }
+        ],
+        "culprit": [
+          {
+            "tag": "CODE",
+            "cls": "",
+            "parent": "sc-code",
+            "text": "<div id=\"advanced-annotations\"></div>\n<script>\ndocument.addE"
+          }
+        ]
+      },
+      "axNamedControls": true
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "dark",
+      "width": 320,
+      "height": 568,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "dark",
+      "width": 390,
+      "height": 844,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "dark",
+      "width": 1280,
+      "height": 720,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "dark",
+      "width": 1366,
+      "height": 768,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "light",
+      "width": 320,
+      "height": 568,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "light",
+      "width": 390,
+      "height": 844,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "light",
+      "width": 1280,
+      "height": 720,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "light",
+      "width": 1366,
+      "height": 768,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "dashboard.html",
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "viewportFit": true,
+      "mainChartsBottom": 0
+    },
+    {
+      "page": "accidents.html",
+      "theme": "dark",
+      "width": 320,
+      "height": 568,
+      "viewportFit": true,
+      "mainChartsBottom": 1292
+    },
+    {
+      "page": "accidents.html",
+      "theme": "dark",
+      "width": 390,
+      "height": 844,
+      "viewportFit": true,
+      "mainChartsBottom": 1168
+    },
+    {
+      "page": "accidents.html",
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "viewportFit": true,
+      "mainChartsBottom": 728
+    },
+    {
+      "page": "accidents.html",
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "viewportFit": true,
+      "mainChartsBottom": 636.921875
+    },
+    {
+      "page": "accidents.html",
+      "theme": "dark",
+      "width": 1280,
+      "height": 720,
+      "viewportFit": true,
+      "mainChartsBottom": 629.640625
+    },
+    {
+      "page": "accidents.html",
+      "theme": "dark",
+      "width": 1366,
+      "height": 768,
+      "viewportFit": true,
+      "mainChartsBottom": 646
+    },
+    {
+      "page": "accidents.html",
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "viewportFit": true,
+      "mainChartsBottom": 679
+    },
+    {
+      "page": "accidents.html",
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "viewportFit": true,
+      "mainChartsBottom": 694
+    },
+    {
+      "page": "accidents.html",
+      "theme": "light",
+      "width": 320,
+      "height": 568,
+      "viewportFit": true,
+      "mainChartsBottom": 1292
+    },
+    {
+      "page": "accidents.html",
+      "theme": "light",
+      "width": 390,
+      "height": 844,
+      "viewportFit": true,
+      "mainChartsBottom": 1168
+    },
+    {
+      "page": "accidents.html",
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "viewportFit": true,
+      "mainChartsBottom": 728
+    },
+    {
+      "page": "accidents.html",
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "viewportFit": true,
+      "mainChartsBottom": 636.921875
+    },
+    {
+      "page": "accidents.html",
+      "theme": "light",
+      "width": 1280,
+      "height": 720,
+      "viewportFit": true,
+      "mainChartsBottom": 629.640625
+    },
+    {
+      "page": "accidents.html",
+      "theme": "light",
+      "width": 1366,
+      "height": 768,
+      "viewportFit": true,
+      "mainChartsBottom": 646
+    },
+    {
+      "page": "accidents.html",
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "viewportFit": true,
+      "mainChartsBottom": 679
+    },
+    {
+      "page": "accidents.html",
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "viewportFit": true,
+      "mainChartsBottom": 694
+    },
+    {
+      "rail": {
+        "compact": true,
+        "expanded": true,
+        "profileEscape": true,
+        "namedLinks": true
+      }
+    },
+    {
+      "solidLines": {
+        "targetSolid": true,
+        "forecastSolid": true,
+        "forecastNamed": true
+      }
+    }
+  ],
+  "chart": {
+    "pngBytes": 45442,
+    "solidNoData": true
+  },
+  "map": {
+    "solidNoData": true,
+    "zeroIsData": true,
+    "tileTexture": true
+  }
+}

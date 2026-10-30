@@ -14,6 +14,23 @@
     function node(tag, text, cls) { var n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
     function text(id, value) { el(id).textContent = value; }
     function listen(target, name, fn) { target.addEventListener(name, fn); releases.push(function () { target.removeEventListener(name, fn); }); }
+    var compactHeader = window.matchMedia('(max-width:859px)');
+    var filterToggle = el('fm-filter-toggle'), filterPanel = el('fm-filter-panel'), topbar = root.querySelector('.fm-topbar');
+    function setHeaderFilters(open, restore) {
+      filterPanel.hidden = compactHeader.matches && !open;
+      filterToggle.setAttribute('aria-expanded',String(compactHeader.matches && open));
+      if (restore && compactHeader.matches) filterToggle.focus({preventScroll:true});
+    }
+    function syncHeaderFilters() {
+      var hadFocus = filterPanel.contains(document.activeElement) || document.activeElement === filterToggle;
+      filterToggle.hidden = !compactHeader.matches; setHeaderFilters(false);
+      if (hadFocus) { var target = compactHeader.matches ? filterToggle : filterPanel.querySelector('button:not(:disabled)'); if (target) target.focus({preventScroll:true}); }
+    }
+    listen(filterToggle,'click',function () { setHeaderFilters(filterPanel.hidden); });
+    listen(compactHeader,'change',syncHeaderFilters);
+    listen(document,'pointerdown',function (event) { if (compactHeader.matches && !filterPanel.hidden && !topbar.contains(event.target)) setHeaderFilters(false); });
+    listen(document,'keydown',function (event) { if (event.key === 'Escape' && !event.defaultPrevented && compactHeader.matches && !filterPanel.hidden) { event.preventDefault(); setHeaderFilters(false,true); } });
+    syncHeaderFilters();
     function num(value, places) { return value == null ? 'Нет данных' : dkFmt.num(value, places || 0); }
     function pct(value) { return value == null ? 'Нет данных' : dkFmt.pct(value, 1); }
     function billion(value) { return value == null ? 'Нет данных' : dkFmt.num(value / 1000, 2); }
@@ -45,7 +62,7 @@
       if (controls.length) { controls[0].set(query.month); controls[1].set(query.district); controls[2].set(query.sort); }
       if (controls[3]) controls[3].set(query.region);
       var base = defaults();
-      el('fm-reset').hidden = ['month','district','region','search','sort','page'].every(function (key) { return query[key] === base[key]; });
+      el('fm-reset').hidden = ['month','district','region','search'].every(function (key) { return query[key] === base[key]; });
     }
     function setQuery(patch, push) {
       if (stopped) return;
@@ -287,7 +304,7 @@
     function loadingState(loading) {
       el('fm-loading').hidden = !loading;
       var filters = root.querySelector('.fm-filters');
-      filters.inert = loading;
+      filters.inert = loading; filterToggle.disabled = loading;
       filters.setAttribute('aria-busy', String(loading));
     }
     function showFailure() {

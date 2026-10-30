@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -51,24 +51,24 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Прокручиваемая область</h1>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">📜</span>Прокручиваемая область</h1>
     <p class="sc-hero__lead">Ограничивает высоту длинной области и оставляет её содержимое доступным через прокрутку.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Прокрутите область до конца. Короткое содержимое не должно создавать лишнюю полосу прокрутки.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-scrollview" tabindex="0" role="region" aria-label="Список отчётов" style="--scrollview-height:200px"><div class="dk-row"><span class="dk-row__label">Отчёт 1</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 2</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 3</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 4</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 5</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 6</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 7</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 8</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 9</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 10</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 11</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 12</span><span class="dk-row__value">Готов</span></div></div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
+    <p>Длинное содержимое прокручивается внутри заданной области. Короткое остаётся без лишней полосы прокрутки.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><div class="dk-scrollview" tabindex="0" role="region" aria-label="Список отчётов" style="--scrollview-height:200px"><div class="dk-row"><span class="dk-row__label">Отчёт 1</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 2</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 3</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 4</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 5</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 6</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 7</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 8</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 9</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 10</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 11</span><span class="dk-row__value">Готов</span></div><div class="dk-row"><span class="dk-row__label">Отчёт 12</span><span class="dk-row__value">Готов</span></div></div></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Список в боковой панели или модальном окне с ограниченной высотой.</li><li>Широкое содержимое требует горизонтального просмотра.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Обычная статья — прокручивайте страницу целиком.</li><li>Сжимать основные показатели в прокручиваемые карточки ради первого экрана.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-scrollview" tabindex="0" role="region" aria-label="Пример области"><b class="sc-callout">1</b> Контейнер<br><b class="sc-callout">2</b> Нативная полоса появляется при переполнении.</div></div><ol class="sc-anatomy__list"><li><b>Контейнер</b> — Ограниченная высота, фокусируемая именованная область.</li><li><b>Полоса</b> — Нативная: системное поведение и управление клавиатурой сохраняются.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
@@ -87,17 +87,17 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li>tabindex="0" позволяет прокручивать область стрелками и PageDown; Tab выводит фокус наружу.</li><li>Система может скрывать полосу до прокрутки. CSS не отменяет предпочтения пользователя.</li><li>Плавная прокрутка отключается при prefers-reduced-motion.</li><li>В forced-colors сохраняется системная полоса; не назначайте роль scrollbar обычному контейнеру.</li></ul>
   </section>
-  <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-scrollview"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
-  </section>
-  <section class="sc-sec" id="kod">
-    <h2>Код</h2>
-    <p>Только HTML/CSS. Скрипт иконок подключается вместе с основой кита.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-scrollview&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;Список отчётов&quot; style=&quot;--scrollview-height:200px&quot;&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 1&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 2&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 3&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 4&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 5&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 6&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 7&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 8&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 9&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 10&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 11&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 12&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--scrollview-height</code></td><td>переменная в style</td><td>Ограничение высоты, по умолчанию 320px.</td></tr><tr><td><code>scroll</code></td><td>DOM-событие</td><td>Стандартный addEventListener; никаких особых API.</td></tr><tr><td><code>scrollTo</code></td><td>DOM-метод</td><td>Нативная программная прокрутка.</td></tr></tbody></table></div>
-  </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>С чем сочетать</h2>
     <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — Для таблиц есть dk-tablewrap</li><li><a href="https://vkui.io/components/custom-scroll-view/">Референс VKUI</a> — Нативная оформленная прокрутка</li></ul>
+  </section>
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-scrollview"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
+  </section>
+  <section class="sc-sec" id="kod">
+    <h2>Код и API</h2>
+    <p>Только HTML/CSS. Скрипт иконок подключается вместе с основой кита.</p><p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;div class=&quot;dk-scrollview&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;Список отчётов&quot; style=&quot;--scrollview-height:200px&quot;&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 1&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 2&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 3&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 4&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 5&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 6&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 7&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 8&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 9&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 10&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 11&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;dk-row&quot;&gt;&lt;span class=&quot;dk-row__label&quot;&gt;Отчёт 12&lt;/span&gt;&lt;span class=&quot;dk-row__value&quot;&gt;Готов&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>--scrollview-height</code></td><td>переменная в style</td><td>Ограничение высоты, по умолчанию 320px.</td></tr><tr><td><code>scroll</code></td><td>DOM-событие</td><td>Стандартный addEventListener; никаких особых API.</td></tr><tr><td><code>scrollTo</code></td><td>DOM-метод</td><td>Нативная программная прокрутка.</td></tr></tbody></table></div>
   </section>
 
 </div>

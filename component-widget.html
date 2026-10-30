@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -51,17 +51,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Каркас виджета</h1>
-    <p class="sc-hero__lead">Объединяет хедер, содержимое и необязательный подвал в одну повторяемую структуру с едиными отступами и состояниями.</p>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🧩</span>Каркас виджета</h1>
+    <p class="sc-hero__lead">Объединяет заголовок, содержимое и необязательный подвал в блок с едиными полями и состояниями.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Атомы (текст, значок, кнопка, статус) → хедер → тело с компонентом данных → виджет → сетка страницы. В примере все переходы работают.</p><div class="sc-playground"><div class="sc-playground__canvas"><section class="dk-widget dk-widget--overview">
+    <p>Шапка, содержимое и необязательный подвал собираются в одну поверхность. График, таблица или карта внутри сохраняют собственное поведение.</p><div class="sc-playground"><div class="sc-playground__canvas"><section class="dk-widget dk-widget--overview">
 <header class="dk-widget__head">
   <div class="dk-widget__heading">
     <h3 class="dk-widget__title">Последние события</h3>
@@ -81,7 +81,7 @@
     <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужно поместить график, карту, таблицу или список в общую поверхность.</li><li>Несколько блоков должны собираться по одинаковым правилам.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Для KPI брать tile, для сообщения состояния banner.</li><li>Не оборачивать виджет ещё одним виджетом ради дополнительного фона.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-grid"><div class="dk-col--full"><b class="sc-callout">5</b><section class="dk-widget dk-widget--overview"><b class="sc-callout">1</b>
 <header class="dk-widget__head"><b class="sc-callout">2</b>
   <div class="dk-widget__heading">
@@ -113,12 +113,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li>Заголовки передают иерархию: один h1 страницы, h2 виджетов; в живых примерах справочника уровень сдвинут на один.</li><li>Название не обрезается многоточием. При увеличении текста хедер растёт, действия переносятся.</li><li>Переход — ссылка, изменение состояния — кнопка с доступным именем; декоративные SVG скрыты от скринридера.</li><li>Цвет не заменяет текст состояния. Клавиатурный фокус остаётся видимым, сенсорная цель не меньше 44 px.</li><li>Для именованной секции свяжите section и заголовок через уникальные aria-labelledby/id. Повторные экземпляры не разделяют id.</li><li>Статус обновления — role=status; ошибка объявляется в месте действия. Не переводить фокус при фоновом обновлении.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-page-header.html">Заголовок страницы</a> — Контекст всего экрана</li><li><a href="component-widget-header.html">Заголовок виджета</a> — Локальный вопрос и действия</li><li><a href="component-empty.html">Состояния</a> — Тело виджета без данных</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-widget"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-widget"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;section class=&quot;dk-widget dk-widget--overview&quot;&gt;
 &lt;header class=&quot;dk-widget__head&quot;&gt;
   &lt;div class=&quot;dk-widget__heading&quot;&gt;
@@ -133,10 +137,6 @@
   &lt;/div&gt;
   &lt;footer class=&quot;dk-widget__footer&quot;&gt;&lt;span&gt;Два демонстрационных события&lt;/span&gt;&lt;a class=&quot;dk-btn dk-btn--ghost dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Табличный вариант&lt;/a&gt;&lt;/footer&gt;
 &lt;/section&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>Сборка</code></td><td>Порядок</td><td>dk-widget > header.dk-widget__head + div.dk-widget__body + footer.dk-widget__footer (опционально).</td></tr><tr><td><code>Данные</code></td><td>Ответственность</td><td>Хост передаёт один согласованный срез в компоненты данных. Оболочка не вычисляет показатели.</td></tr><tr><td><code>Проверка</code></td><td>Критерий</td><td>320/390/1536 px, обе темы, длинный заголовок, 200% текст, клавиатура, загрузка/пусто/ошибка без потери контекста.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-page-header.html">Хедер страницы</a> — Контекст всего экрана</li><li><a href="component-widget-header.html">Хедер виджета</a> — Локальный вопрос и действия</li><li><a href="component-empty.html">Состояния</a> — Тело виджета без данных</li></ul>
   </section>
 
 </div>

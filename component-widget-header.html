@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Хедер виджета · dashboard-kit</title>
+<title>Заголовок виджета · dashboard-kit</title>
 <!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
      Содержание — tools/component_pages/p7_composition.py. Проверка СТРАНИЦЫ
      в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261028-merged-docs">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261028-merged-docs2" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261027-table-chips-kpi">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -51,17 +51,17 @@
         </div>
       </details>
     </div><p class="sc-share-status" role="status"></p>
-    <h1>Хедер виджета</h1>
-    <p class="sc-hero__lead">Называет вопрос виджета и размещает рядом его локальные действия. Не зависит от типа содержимого.</p>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🏷️</span>Заголовок виджета</h1>
+    <p class="sc-hero__lead">Называет вопрос виджета и объединяет действия, которые относятся только к нему.</p>
     <div class="sc-meta">
       <span class="sc-meta__i">Статус: стабильный</span>
-      <a href="#zhivoy-primer">Пример</a><a href="#kod">Код и API</a>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
     </div>
   </header>
 
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
-    <p>Фильтры, сортировка и переключатели вида располагаются справа сверху в шапке. Без отдельных подписей «Сортировка» или «Вид»: выбранное значение видно в контроле, его назначение задано доступным именем.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-widget dk-widget--overview"><header class="dk-widget__head">
+    <p>Название формулирует вопрос блока. Справа находятся действия только этого виджета: фильтр, смена вида, экспорт или детали.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-widget dk-widget--overview"><header class="dk-widget__head">
   <div class="dk-widget__heading">
     <h3 class="dk-widget__title">Последние события</h3>
     <p class="dk-widget__meta">Демонстрационные данные · за сутки</p>
@@ -71,10 +71,10 @@
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
     <h2>Когда использовать</h2>
-    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Любой содержательный виджет с названием.</li><li>Нужны локальные экспорт, полный экран, переход к деталям или смена представления.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Название всего экрана — хедер страницы.</li><li>Число KPI — компонент tile; не собирать KPI из хедера графика.</li></ul></div></div>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Любой содержательный виджет с названием.</li><li>Нужны локальные экспорт, полный экран, переход к деталям или смена представления.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Название всего экрана — <a href="component-page-header.html">Заголовок страницы</a>.</li><li>Числовой показатель — <a href="component-tile.html">KPI-плитка</a>.</li></ul></div></div>
   </section>
   <section class="sc-sec" id="anatomiya">
-    <h2>Анатомия</h2>
+    <h2>Из чего состоит</h2>
     <div class="sc-anatomy"><div class="dk-widget dk-widget--overview"><header class="dk-widget__head">
   <div class="dk-widget__heading"><b class="sc-callout">1</b>
     <h3 class="dk-widget__title"><b class="sc-callout">2</b>Последние события</h3>
@@ -85,7 +85,7 @@
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Хедер наследует поля оболочки. Высота определяется текстом и действиями; пустого резерва под кнопки нет. Заголовок виджета — --type-panel-title (14/20, Regular 400, верхний регистр) на всех ширинах; подпись KPI — --type-widget-title (14/20, Regular 400). Иконки и текст выровнены по центру строки. Группы разделены --gap-inline, действия --gap-tight.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-widget__head</code></td><td>Общий ряд.</td><td>Внутри dk-widget.</td></tr><tr><td><code>dk-widget__heading + __meta</code></td><td>Название и дополнительный контекст.</td><td>Когда одной строки названия недостаточно.</td></tr><tr><td><code>dk-widget__actions</code></td><td>Группа локальных контролов.</td><td>Ссылка на детали или кнопки с реальной реализацией.</td></tr></tbody></table></div>
+    <p>Заголовок наследует поля виджета. В Graphite он набран обычным регистром, Medium 18/24; подпись показателя использует отдельный токен --type-widget-title. Высота зависит от содержания. Действия выровнены по верхнему краю и переносятся при нехватке места.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-widget__head</code></td><td>Общий ряд.</td><td>Внутри dk-widget.</td></tr><tr><td><code>dk-widget__heading + __meta</code></td><td>Название и дополнительный контекст.</td><td>Когда одной строки названия недостаточно.</td></tr><tr><td><code>dk-widget__actions</code></td><td>Группа локальных контролов.</td><td>Ссылка на детали или кнопки с реальной реализацией.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
@@ -99,12 +99,16 @@
     <h2>Доступность</h2>
     <ul class="sc-list sc-list--wide"><li>Заголовки передают иерархию: один h1 страницы, h2 виджетов; в живых примерах справочника уровень сдвинут на один.</li><li>Название не обрезается многоточием. При увеличении текста хедер растёт, действия переносятся.</li><li>Переход — ссылка, изменение состояния — кнопка с доступным именем; декоративные SVG скрыты от скринридера.</li><li>Цвет не заменяет текст состояния. Клавиатурный фокус остаётся видимым, сенсорная цель не меньше 44 px.</li></ul>
   </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-page-header.html">Заголовок страницы</a> — Контекст всего экрана</li><li><a href="component-widget.html">Каркас виджета</a> — Шапка → тело → подвал</li><li><a href="component-button.html">Кнопки</a> — Действия</li></ul>
+  </section>
   <section class="sc-sec" id="tokeny" data-group="Разработка">
-    <h2>Токены</h2>
-    <p>Токены компонента из <code>css/components.css?v=20261028-detail-final</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-widget__head,dk-widget__heading,dk-widget__title,dk-widget__meta,dk-widget__actions"><li class="sc-tokens__wait">Читаем css/components.css?v=20261028-detail-final…</li></ul>
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-widget__head,dk-widget__heading,dk-widget__title,dk-widget__meta,dk-widget__actions"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
   </section>
   <section class="sc-sec" id="kod">
-    <h2>Код</h2>
+    <h2>Код и API</h2>
     <p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a></p><pre class="sc-code"><code>&lt;header class=&quot;dk-widget__head&quot;&gt;
   &lt;div class=&quot;dk-widget__heading&quot;&gt;
     &lt;h2 class=&quot;dk-widget__title&quot;&gt;Последние события&lt;/h2&gt;
@@ -112,10 +116,6 @@
   &lt;/div&gt;
   &lt;div class=&quot;dk-widget__actions&quot;&gt;&lt;a class=&quot;dk-btn dk-btn--ghost dk-btn--sm&quot; href=&quot;accidents.html&quot;&gt;Все аварии &lt;svg class=&quot;dk-i&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ti-chevron-right&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;
 &lt;/header&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>Слоты</code></td><td>HTML</td><td>Название обязательно; контекст и действия выводятся только при наличии.</td></tr><tr><td><code>Локальные контролы</code></td><td>Поведение</td><td>Триггер → результат в этом виджете → статус результата; ошибки не сбрасывают текущий срез.</td></tr></tbody></table></div>
-  </section>
-  <section class="sc-sec" id="svyazannoe">
-    <h2>С чем сочетать</h2>
-    <ul class="sc-list sc-list--wide"><li><a href="component-page-header.html">Хедер страницы</a> — Контекст всего экрана</li><li><a href="component-widget.html">Каркас виджета</a> — Шапка → тело → подвал</li><li><a href="component-button.html">Кнопки</a> — Действия</li></ul>
   </section>
 
 </div>

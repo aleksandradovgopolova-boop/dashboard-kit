@@ -77,7 +77,7 @@ CSS_ORDER = [
 VENDOR_CSS = {"vendor/air-datepicker.js": "vendor/air-datepicker.css"}
 
 # Скрипты, которых нет в дашборде: они обслуживают страницы документации.
-DOCS_ONLY = ["js/docs.js", "js/docs-index.js", "css/docs.css"]
+DOCS_ONLY = ["js/docs.js", "js/docs-index.js", "js/docs-overview.js", "css/docs.css", "css/page.overview.css"]
 
 # Части без страницы компонента. Поля те же, что у частей из страниц, чтобы
 # скилл читал их одинаково. owns — префиксы классов; правило совпадения то же,
