@@ -62,7 +62,7 @@
       if (controls.length) { controls[0].set(query.month); controls[1].set(query.district); controls[2].set(query.sort); }
       if (controls[3]) controls[3].set(query.region);
       var base = defaults();
-      el('fm-reset').hidden = ['month','district','region','search','sort','page'].every(function (key) { return query[key] === base[key]; });
+      el('fm-reset').hidden = ['month','district','region','search'].every(function (key) { return query[key] === base[key]; });
     }
     function setQuery(patch, push) {
       if (stopped) return;

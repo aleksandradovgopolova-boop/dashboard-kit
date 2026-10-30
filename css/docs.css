@@ -647,7 +647,7 @@
 .sc-docs .sc-bar .sc-bar__menu{ display:none; width:44px; min-width:44px; height:44px; border:0; background:none; color:var(--ink); font:var(--type-caption); cursor:pointer; }
 .sc-bar__menu:focus-visible{ outline:var(--focus-width) solid var(--brand); outline-offset:calc(-1 * var(--focus-offset)); }
 @media(min-width:860px) and (max-width:1099px){
-  .sc-docs .sc-bar{ padding-inline:var(--space-5); gap:var(--space-4); }
+  .sc-docs .sc-bar{ padding-inline:var(--page-pad); gap:var(--space-4); }
   .sc-docs .sc-topnav{ gap:var(--space-2); }
   .sc-docs .sc-topnav .sc-mega__category{ font:var(--type-caption); padding-inline:var(--space-1); }
   .sc-docs .sc-topnav .sc-nav__emoji{ font:var(--type-body); }
@@ -672,8 +672,45 @@
   .sc-mega__quicklinks{ grid-template-columns:minmax(0,1fr); gap:var(--space-3); }
 }
 
-/* Поиск и тема имеют одинаковые размеры и самостоятельные поверхности. */
+/* Header uses the kit compact variant, with separate non-overlapping touch boxes. */
 .sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg{ border:0; background:none; box-shadow:none; padding:0; }
-.sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg button{ width:44px; height:44px; min-width:44px; min-height:44px; padding:calc((44px - 20px - 2 * var(--hairline)) / 2); border:1px solid var(--glass-edge-soft); border-top-color:var(--glass-edge-top); border-radius:var(--radius-md); background:var(--glass-control-sheen),var(--glass-control); }
+.sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg button,
+.sc-docs.dk-glass .sc-bar .sc-search-trigger{ --glass-control-size:var(--control-sm); --glass-control-icon:var(--icon-size-control); width:var(--control-sm); min-width:var(--control-sm); height:var(--control-sm); min-height:var(--control-sm); padding:var(--control-pad-sm); border:var(--hairline) solid var(--glass-edge-soft); border-radius:var(--radius-md); background:var(--glass-control-sheen),var(--glass-control); }
 .sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg button[aria-pressed="true"]{ background:var(--control-on); color:var(--control-on-ink); }
-.sc-docs.dk-glass .sc-bar .sc-search-trigger{ --glass-control-size:44px; --glass-control-icon:20px; padding:calc((44px - 20px - 2 * var(--hairline)) / 2); }
+.sc-docs .sc-bar__tools .dk-i{ width:var(--icon-size-control); height:var(--icon-size-control); }
+.sc-docs .sc-search-trigger__text{ display:none; }
+.sc-docs .sc-nav.sc-mega{ border:var(--hairline) solid var(--glass-edge); border-radius:var(--radius-lg); }
+.sc-mega__content{ padding:var(--space-6); }
+.sc-mega__title{ display:none; }
+.sc-docs .sc-nav.sc-mega .sc-mega__panel a{ padding:var(--space-4); }
+@media(max-width:859px){ .sc-docs .sc-nav.sc-mega{ border-radius:0; } }
+
+/* Content-fit fallback for enlarged text, independent of device width. */
+
+  .sc-docs.sc-header-compact .sc-bar{ grid-template-columns:minmax(0,1fr) 44px auto; grid-template-areas:"brand menu tools"; gap:var(--space-3); padding:var(--space-3) var(--space-4); }
+  .sc-docs.sc-header-compact .sc-bar .sc-bar__menu:not([hidden]){ display:block; grid-area:menu; }
+  .sc-docs.sc-header-compact .sc-bar__tools{ gap:var(--space-2); }
+  .sc-docs.dk-glass .sc-bar .sc-search-trigger{ margin:0; }
+  .sc-docs.sc-header-compact .sc-nav.sc-mega:not([hidden]){ display:flex; flex-direction:column; }
+  .sc-docs.sc-header-compact .sc-nav.sc-mega .sc-topnav{ flex:none; display:flex; flex-wrap:wrap; justify-content:center; overflow:visible; width:100%; padding:var(--space-4) var(--page-pad); gap:var(--space-2) var(--space-5); border-bottom:1px solid var(--rule); }
+  .sc-docs.sc-header-compact .sc-nav.sc-mega .sc-topnav .sc-mega__category{ font:var(--type-caption); }
+  .sc-docs.sc-header-compact .sc-nav.sc-mega .sc-nav__catalog{ flex:1; min-height:0; }
+  .sc-docs.sc-header-compact .sc-mega__content{ min-height:0; max-height:none; }
+
+.sc-docs.sc-header-compact .sc-bar{ height:auto; min-height:var(--docs-header-height); padding-block:var(--space-2); }
+.sc-docs.sc-header-compact .sc-brand{ min-width:0; max-width:100%; }
+.sc-docs.sc-header-compact .sc-brand__t{ overflow-wrap:anywhere; white-space:normal; }
+/* Header and document content share their outer edge at every breakpoint. */
+@media(max-width:859px){
+ .sc-docs{ --page-pad:var(--space-6); }
+ .sc-docs .sc-bar{ padding-inline:var(--page-pad); }
+}
+/* One even gutter for the entire header, matching the document edge. */
+.sc-docs{ --page-pad:var(--space-8); --docs-header-height:calc(var(--control-sm) + 2 * var(--page-pad)); }
+.sc-docs .sc-bar,.sc-docs.sc-header-compact .sc-bar{ padding:var(--page-pad); border:0; box-shadow:inset 0 calc(-1 * var(--hairline)) 0 var(--glass-edge-soft); }
+.sc-docs .sc-topnav .sc-mega__category{ height:var(--control-sm); min-height:var(--control-sm); padding:var(--space-4); }
+.sc-docs .sc-bar .sc-bar__menu{ width:var(--control-sm); min-width:var(--control-sm); height:var(--control-sm); min-height:var(--control-sm); }
+.sc-docs.sc-header-compact .sc-bar{ grid-template-columns:minmax(0,1fr) var(--control-sm) auto; }
+.sc-docs.dk-glass .sc-bar .sc-search-trigger{ justify-content:center; }
+
+@media(max-width:859px){ .sc-docs{ --page-pad:var(--space-6); } }

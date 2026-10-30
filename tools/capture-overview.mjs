@@ -15,8 +15,8 @@ const server = createServer(async (request,response)=>{
     response.end(data);
   } catch {response.writeHead(404);response.end();}
 });
-await new Promise(done=>server.listen(0,'127.0.0.1',done));
-const base = 'http://127.0.0.1:'+server.address().port+'/';
+if(!process.env.DK_PREVIEW_URL) await new Promise(done=>server.listen(0,'127.0.0.1',done));
+const base = process.env.DK_PREVIEW_URL || 'http://127.0.0.1:'+server.address().port+'/';
 const directory = new URL('../assets/examples/',import.meta.url);
 await mkdir(directory,{recursive:true});
 const browser = await launch(findChrome());
@@ -56,4 +56,4 @@ try {
     execFileSync('/usr/bin/sips',['--resampleWidth','640',path],{stdio:'ignore'});
     console.log(name,theme,path.replace(root,''));
   }
-} finally { await browser.close(); server.close(); }
+} finally { await browser.close(); if(server.listening) server.close(); }

@@ -31,7 +31,8 @@
   var lastMegaTrigger = null, currentMegaId = '';
   var hoverMenu = false, menuCloseTimer = null;
   var desktopHover = window.matchMedia('(hover: hover) and (pointer: fine)');
-  var compactNav = window.matchMedia('(max-width:859px)'), compactToggle = null;
+  var narrowNav=window.matchMedia('(max-width:859px)'), forcedCompact=false, forcedWidth=0;
+  var compactNav={get matches(){return narrowNav.matches||forcedCompact;},addEventListener:function(type,fn){narrowNav.addEventListener(type,fn);}}, compactToggle = null;
   function cancelMenuClose() { clearTimeout(menuCloseTimer); }
   function scheduleMenuClose() {
     cancelMenuClose();
@@ -56,10 +57,20 @@
     if (item.left < frame.left) megaRail.scrollLeft += item.left - frame.left;
     else if (item.right > frame.right) megaRail.scrollLeft += item.right - frame.right;
   }
+  function positionMega() {
+    nav.style.top=bar.getBoundingClientRect().bottom+'px';
+    shade.style.top=bar.getBoundingClientRect().bottom+'px';
+    if (compactNav.matches || !lastMegaTrigger) { nav.style.left='';nav.style.right='';nav.style.width='';return; }
+    var w=Math.min(currentMegaId==='sc-mega-panel-3'?960:760,window.innerWidth-16);
+    var r=lastMegaTrigger.getBoundingClientRect();
+    nav.style.left=Math.max(8,Math.min(r.left,window.innerWidth-w-8))+'px';
+    nav.style.right='auto';nav.style.width=w+'px';
+  }
   function setMenu(open, focus) {
     cancelMenuClose();
     if (!open) hoverMenu = false;
     nav.hidden = !open;
+    if(open) positionMega();
     shell.classList.toggle('sc-shell--closed', !open);
     if (megaButtons) megaButtons.forEach(function (button) { button.setAttribute('aria-expanded', String(open && button.getAttribute('aria-controls') === currentMegaId)); });
     shade.hidden = !open; main.inert = open;
@@ -72,7 +83,7 @@
   }
   setMenu(false);
   shade.addEventListener('click', function () { setMenu(false, true); });
-  window.addEventListener('resize', function () { if (!nav.hidden) requestAnimationFrame(function () { revealMegaCategory(); revealCurrentComponent(); }); });
+  window.addEventListener('resize', function () { if (!nav.hidden) requestAnimationFrame(function () { positionMega(); revealMegaCategory(); revealCurrentComponent(); }); });
   document.addEventListener('keydown', function (e) {
     if (nav.hidden || (searchDialog && searchDialog.open)) return;
     if (e.key === 'Escape') { e.preventDefault(); setMenu(false, true); }
@@ -295,11 +306,22 @@
   function syncCompactNavigation() {
     var restore = !nav.hidden || megaRail.contains(document.activeElement) || document.activeElement === compactToggle;
     setMenu(false); compactToggle.hidden = !compactNav.matches;
+    document.body.classList.toggle('sc-header-compact',compactNav.matches);
     if (compactNav.matches) nav.insertBefore(megaRail,catalog);
     else bar.insertBefore(megaRail,compactToggle);
     if (restore) (compactNav.matches ? compactToggle : megaButtons.find(function (button) { return button.getAttribute('aria-controls') === currentMegaId; })).focus({preventScroll:true});
   }
-  compactNav.addEventListener('change',syncCompactNavigation); syncCompactNavigation();
+  compactNav.addEventListener('change',syncCompactNavigation);
+  var headerObserver=new ResizeObserver(function(){
+    if(narrowNav.matches)return;
+    if(forcedCompact){if(bar.clientWidth>forcedWidth+120){forcedCompact=false;syncCompactNavigation();}return;}
+    if(!bar.contains(megaRail))return;
+    var r=megaRail.getBoundingClientRect(),l=bar.querySelector('.sc-brand').getBoundingClientRect(),t=barTools.getBoundingClientRect();
+    if(megaRail.scrollWidth>megaRail.clientWidth+1||r.left<l.right+4||r.right>t.left-4){forcedCompact=true;forcedWidth=bar.clientWidth;syncCompactNavigation();}
+  });
+  headerObserver.observe(bar);headerObserver.observe(megaRail);
+  document.fonts.ready.then(function(){headerObserver.observe(bar.querySelector('.sc-brand'));});
+  syncCompactNavigation();
   if (!initialMega && showcase) { var designPanel = megaPanels.find(function (panel) { return panel.querySelector('.sc-mega__title').textContent === 'Дизайн-система'; }); if (designPanel) initialMega = designPanel.id; }
   selectMega(initialMega || megaPanels[0].id);
   if (here.startsWith('component-')) requestAnimationFrame(revealCurrentComponent);

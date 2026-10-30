@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css?v=20261028-detail-final">
-<link rel="stylesheet" href="css/docs.css?v=20261029-equal-insets">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
-<script src="js/docs.js?v=20261029-single-row" defer></script>
-<link rel="stylesheet" href="css/glass.css?v=20261029-equal-insets">
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 </head>
 <body class="dk-page dk-glass">
 
@@ -96,7 +96,7 @@
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Высота и отступы задаются токенами контролов. В стеклянной теме обычная кнопка использует --control-lg, компактная — --control-sm. Соседние кнопки и фильтры выбирайте одной высоты; приоритет задаётся оформлением, а не размером.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-btn</code></td><td>Обычная кнопка, размер M.</td><td>По умолчанию.</td></tr><tr><td><code>dk-btn--primary</code></td><td>Основное действие, заливка акцентом.</td><td>Одна на экран или на форму.</td></tr><tr><td><code>dk-btn--ghost</code></td><td>Тихая: без заливки до наведения.</td><td>Второстепенное рядом с основным: «Отмена», «Снять выбор».</td></tr><tr><td><code>dk-btn--sm / dk-btn--lg</code></td><td>Высота 28 или 40 вместо 32.</td><td>Строка действий в таблице (sm), шапка страницы (lg).</td></tr><tr><td><code>dk-iconbtn</code></td><td>Квадратная кнопка под значок, те же три размера.</td><td>Действия виджета: обновить, скачать, настройки.</td></tr><tr><td><code>disabled</code></td><td>Атрибут: приглушена, не нажимается.</td><td>Только когда причина видна рядом.</td></tr></tbody></table></div>
+    <p>Высота и отступы задаются токенами контролов. Обычная кнопка M — 36 px (--control-md), компактная S — 32 px (--control-sm), CTA L — 44 px (--control-lg). Поля симметричны и берутся из --control-pad-sm/md/lg; текст 14 px, CTA 16 px. На таче цель не меньше 44 px, значок 18–20 px. Соседние кнопки и фильтры выбирайте одной высоты; приоритет задаётся оформлением, а не размером.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-btn</code></td><td>Обычная кнопка, размер M.</td><td>По умолчанию.</td></tr><tr><td><code>dk-btn--primary</code></td><td>Основное действие, заливка акцентом.</td><td>Одна на экран или на форму.</td></tr><tr><td><code>dk-btn--ghost</code></td><td>Тихая: без заливки до наведения.</td><td>Второстепенное рядом с основным: «Отмена», «Снять выбор».</td></tr><tr><td><code>dk-btn--sm / dk-btn--lg</code></td><td>Высота 32 или 44 вместо 36.</td><td>Строка действий в таблице (sm), шапка страницы (lg).</td></tr><tr><td><code>dk-iconbtn</code></td><td>Квадратная кнопка под значок, те же три размера.</td><td>Действия виджета: обновить, скачать, настройки.</td></tr><tr><td><code>disabled</code></td><td>Атрибут: приглушена, не нажимается.</td><td>Только когда причина видна рядом.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
@@ -134,7 +134,7 @@
 &lt;button class=&quot;dk-iconbtn&quot; title=&quot;Обновить&quot; aria-label=&quot;Обновить&quot;&gt;
   &lt;svg class=&quot;dk-i&quot;&gt;&lt;use href=&quot;#ti-refresh&quot;/&gt;&lt;/svg&gt;
 &lt;/button&gt;
-&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Страница компонента →&lt;/a&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-btn--primary</code></td><td>класс</td><td>Основное действие, одно на экран.</td></tr><tr><td><code>dk-btn--ghost</code></td><td>класс</td><td>Тихая кнопка без заливки.</td></tr><tr><td><code>dk-btn--sm, dk-btn--lg</code></td><td>класс</td><td>Высота 28 или 40; по умолчанию 32.</td></tr><tr><td><code>dk-iconbtn</code></td><td>класс</td><td>Кнопка под значок; те же модификаторы размера.</td></tr><tr><td><code>aria-busy</code></td><td>атрибут</td><td>Пока идёт действие; подпись меняется на «…аем».</td></tr><tr><td><code>disabled</code></td><td>атрибут</td><td>Недоступна; причина должна быть видна рядом.</td></tr></tbody></table></div>
+&lt;a class=&quot;dk-btn dk-btn--sm&quot; href=&quot;component-table.html&quot;&gt;Страница компонента →&lt;/a&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dk-btn--primary</code></td><td>класс</td><td>Основное действие, одно на экран.</td></tr><tr><td><code>dk-btn--ghost</code></td><td>класс</td><td>Тихая кнопка без заливки.</td></tr><tr><td><code>dk-btn--sm, dk-btn--lg</code></td><td>класс</td><td>Высота 32 или 44; по умолчанию 36.</td></tr><tr><td><code>dk-iconbtn</code></td><td>класс</td><td>Кнопка под значок; те же модификаторы размера.</td></tr><tr><td><code>aria-busy</code></td><td>атрибут</td><td>Пока идёт действие; подпись меняется на «…аем».</td></tr><tr><td><code>disabled</code></td><td>атрибут</td><td>Недоступна; причина должна быть видна рядом.</td></tr></tbody></table></div>
   </section>
 
 </div>

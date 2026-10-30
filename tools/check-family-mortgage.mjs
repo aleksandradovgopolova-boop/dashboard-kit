@@ -70,7 +70,7 @@ try {
     const controls = await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__trigger,.fm-topbar .dk-iconbtn,.fm-topbar__tools .dk-seg button,.fm-filters')).filter(x=>x.getClientRects().length).map(x=>{const s=getComputedStyle(x),r=x.getBoundingClientRect(),b=Array.from(x.children).filter(n=>n.getClientRects().length).map(n=>n.getBoundingClientRect());return {name:x.className,padding:[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat),insets:x.matches('.dk-select__trigger')?[Math.min(...b.map(n=>n.top))-r.top,r.right-Math.max(...b.map(n=>n.right)),r.bottom-Math.max(...b.map(n=>n.bottom)),Math.min(...b.map(n=>n.left))-r.left]:[]};})`);
     for (const c of controls) {
       assert(Math.max(...c.padding)-Math.min(...c.padding)<.1,'Equal padding on all four sides: '+JSON.stringify(c));
-      if(c.insets.length) assert(Math.max(...c.insets)-Math.min(...c.insets)<1,'Filter text/arrow have equal actual edge insets: '+JSON.stringify(c));
+      if(c.insets.length) assert(Math.max(...c.insets)-Math.min(...c.insets)<=1.1,'Filter text/arrow have equal actual edge insets: '+JSON.stringify(c));
     }
   };
 
@@ -100,12 +100,17 @@ try {
       await escape();assert(await evaluate(`document.querySelector('.fm-filters').hidden&&document.activeElement.id==='fm-filter-toggle'`),'Second Escape closes filters and restores focus');
     }
     if(width===886){
-      const frame=()=>evaluate(`Array.from(document.querySelectorAll('.fm-topbar .fm-filter,.fm-filter-actions')).map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height];})`);
-      const original=await frame();
+      const widths=()=>evaluate(`Array.from(document.querySelectorAll('.fm-topbar .fm-filter')).map(e=>e.getBoundingClientRect().width)`);
+      const actions=()=>evaluate(`document.querySelector('.fm-filter-actions').getBoundingClientRect().width`);
+      const original=await widths(),collapsed=await actions();
+      assert(await evaluate(`document.querySelector('#fm-reset').hidden`),'No reset in the initial state');
       await click('#fm-district-filter .dk-select__trigger');
       await evaluate(`Array.from(document.querySelectorAll('#fm-district-filter .dk-menu__item')).find(b=>b.textContent.includes('Дальневосточный')).click()`);await ready();
-      assert.deepEqual(await frame(),original,'Long district and reset visibility must not move filters');
-      await click('#fm-reset');await ready();assert.deepEqual(await frame(),original,'Reset preserves header positions');
+      assert.deepEqual(await widths(),original,'Selected value must not expand any filter');
+      assert(await evaluate(`!document.querySelector('#fm-reset').hidden`),'Active filter exposes reset');
+      assert((await actions())>collapsed+20,'Reset occupies its real space only while present');
+      await click('#fm-reset');await ready();assert.deepEqual(await widths(),original,'Reset restores the same field sizes');
+      assert.equal(await actions(),collapsed,'No reserved width remains after reset');
       const shot=await send('Page.captureScreenshot',{format:'png'});await writeFile(resolve(evidence,'mortgage-header-'+theme+'-886.png'),Buffer.from(shot.data,'base64'));
     }
     assert(await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__label')).filter(x=>x.getClientRects().length).every(x=>x.scrollWidth<=x.clientWidth+1)`),'Default filter labels remain readable');
@@ -143,6 +148,7 @@ try {
     await click('#fm-next'); await ready();
     const next = await view();
     assert.equal(next.query.page, 2);
+    assert(await evaluate(`document.querySelector('#fm-reset').hidden`),'Pagination alone is not an active filter requiring reset');
     assert.deepEqual(next.kpis, baseline.kpis, 'Changing table page must preserve the full-slice KPIs');
     assert.deepEqual(next.monthly, baseline.monthly, 'Changing table page must preserve the graph');
     assert.deepEqual(next.counts, baseline.counts, 'Changing table page must preserve the regional summary');

@@ -27,14 +27,20 @@ try {
   const {targetId} = await browser.send('Target.createTarget', {url:'about:blank'});
   const {sessionId} = await browser.send('Target.attachToTarget', {targetId, flatten:true});
   const send = (method, params = {}) => browser.send(method, params, sessionId);
+  let currentView = 'startup';
   const evaluate = async expression => {
-    const result = await send('Runtime.evaluate', {expression, returnByValue:true, awaitPromise:true});
+    let result;
+    try { result=await send('Runtime.evaluate', {expression, returnByValue:true, awaitPromise:true}); }
+    catch(error){throw Error(error.message+'; view: '+currentView);}
     if (result.exceptionDetails) throw Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text);
     return result.result.value;
   };
   const assert = (condition, message) => { if (!condition) throw Error(message); };
   const settle = () => evaluate('new Promise(r=>setTimeout(r,150))');
   const visit = async (file, width, theme = 'light') => {
+    currentView=file+' '+width+' '+theme;
+    // Dispose the previous chart-heavy page before changing emulated dimensions.
+    await send('Page.navigate',{url:'about:blank'});
     await send('Emulation.setDeviceMetricsOverride', {width,height:900,deviceScaleFactor:1,mobile:false});
     const url = new URL(file, `http://127.0.0.1:${server.address().port}/`);
     url.searchParams.set('theme', theme);

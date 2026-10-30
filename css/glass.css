@@ -4,7 +4,7 @@
    empty surface layer; content and controls do not receive a filter. */
 .dk-glass {
   background-color: var(--bg);
-  background-image: linear-gradient(to bottom, transparent 64%, var(--bg) 100%), var(--glass-background-image);
+  background-image: linear-gradient(color-mix(in srgb,var(--bg) 86%,transparent),color-mix(in srgb,var(--bg) 86%,transparent)), var(--glass-background-image);
   background-size: 100% var(--glass-scene-height);
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -87,19 +87,21 @@
 
 /* Одинаковый размер по умолчанию. S/M/L остаются только явными вариантами. */
 .dk-glass :is(.dk-btn, .dk-iconbtn, .dk-select, .dk-field, .dk-search, .dk-seg) {
-  --glass-control-size: var(--control-lg);
+  --glass-control-size: var(--control-md);
   --glass-control-icon: var(--icon-size-control);
-  --glass-control-border: var(--hairline);
+  --glass-control-pad: var(--control-pad-md);
 }
-.dk-glass :is(.dk-btn--primary, .dk-btn--ghost) { --glass-control-border: 0px; }
 .dk-glass :is(.dk-btn--sm, .dk-iconbtn--sm, .dk-select--sm, .dk-seg--sm) {
   --glass-control-size: var(--control-sm);
+  --glass-control-pad: var(--control-pad-sm);
   --glass-control-icon: var(--icon-size-compact);
 }
+.dk-glass :is(.dk-btn--lg,.dk-seg--lg) { --glass-control-size:var(--control-lg); --glass-control-pad:var(--control-pad-lg); --glass-control-icon:var(--icon-size-control); }
 .dk-glass :is(.dk-field--md, .dk-select--md) { --glass-control-size: var(--control-md); }
-.dk-glass :is(.dk-btn, .dk-field, .dk-search, .dk-select__trigger, .dk-iconbtn) {
+.dk-glass :is(.dk-field, .dk-search, .dk-select__trigger, .dk-iconbtn) {
   height: var(--glass-control-size);
 }
+.dk-glass .dk-btn { height:auto; min-height:var(--glass-control-size); }
 .dk-glass .dk-iconbtn { width: var(--glass-control-size); }
 /* Дорожка и выбранная стеклянная линза читаются как два уровня глубины. */
 .dk-glass .dk-seg {
@@ -111,7 +113,7 @@
   border-radius: calc(var(--radius-md) - var(--track-pad));
 }
 /* Одна шкала SVG для обычных контролов; явно адаптивные значки имеют свой API. */
-.dk-root .dk-glass :is(.dk-btn, .dk-iconbtn, .dk-seg button, .dk-select__trigger, .dk-search, .dk-field) > .dk-i:not(.dk-i--adaptive) {
+.dk-root .dk-glass :is(.dk-btn, .dk-iconbtn, .dk-seg button, .dk-select__trigger, .dk-search, .dk-field) > .dk-i {
   display: block;
   flex: none;
   align-self: center;
@@ -121,14 +123,14 @@
   vertical-align: middle;
 }
 .dk-root .dk-glass .dk-iconbtn {
-  padding: max(0px, calc((var(--glass-control-size) - var(--glass-control-icon) - 2 * var(--glass-control-border)) / 2));
+  padding: var(--glass-control-pad);
   border-radius: var(--radius-md);
 }
-/* One inset on all four sides. Text/icon size and the actual border determine
-   the inset without changing the control height or applying optical offsets. */
+/* One existing spacing token on all four sides, without optical offsets. */
 .dk-root .dk-glass .dk-btn,
-.dk-root .dk-glass .dk-select > .dk-select__trigger {
-  padding: max(0px, calc((var(--glass-control-size) - max(1lh, var(--glass-control-icon)) - 2 * var(--glass-control-border)) / 2));
+.dk-root .dk-glass .dk-select > .dk-select__trigger,
+.dk-root .dk-glass .dk-pager__size select {
+  padding: var(--glass-control-pad);
   gap: var(--gap-tight);
 }
 .dk-glass :is(.dk-btn, .dk-iconbtn):disabled,
@@ -283,9 +285,9 @@
 
 /* Graphite widget refinement: quiet edges and one uninterrupted surface. */
 .dk-glass .dk-widget { gap:var(--space-7); }
-.dk-glass .dk-rank__head { padding-inline:0; }
+.dk-glass .dk-rank__head { padding:var(--space-4); }
 .dk-glass .dk-rank__head .dk-overline { font:var(--type-caption); letter-spacing:var(--type-body-track); text-transform:none; }
-.dk-glass .dk-rank__row { padding-inline:0; }
+.dk-glass .dk-rank__row { padding:var(--space-4); }
 .dk-glass .dk-rank__meter { height:var(--space-3); background:color-mix(in srgb,var(--ink) 7%,transparent); }
 .dk-glass .dk-map[data-appearance="glass"] .dk-map__tile { background:color-mix(in srgb,var(--fill,var(--nodata)) 7%,var(--glass-chip)); border-color:color-mix(in srgb,var(--fill,var(--nodata)) 16%,var(--glass-edge-soft)); box-shadow:inset 0 1px 0 var(--glass-rim); }
 
@@ -293,9 +295,9 @@
 @media(prefers-reduced-transparency:reduce),(forced-colors:active) { .dk-glass .dk-widget::before { -webkit-backdrop-filter:none; backdrop-filter:none; } }
 
 /* Graphite tables: quieter scaffolding, aligned numbers, explicit statuses. */
-.dk-glass .dk-table th { font:var(--type-caption); font-weight:var(--weight-ui); text-transform:none; letter-spacing:var(--type-body-track); color:var(--ink-2); padding-block:var(--space-6); }
+.dk-glass .dk-table th { font:var(--type-caption); font-weight:var(--weight-ui); text-transform:none; letter-spacing:var(--type-body-track); color:var(--ink-2); padding:var(--space-5); }
 .dk-glass .dk-table:not(.dk-table--sticky-head):not(.dk-table--sticky-col) th { background:none; border-bottom:1px solid var(--glass-edge); }
-.dk-glass .dk-table td { padding-block:var(--space-4); }
+.dk-glass .dk-table td { padding:var(--space-5); }
 .dk-glass .dk-table--ruled tbody td { border-bottom-color:color-mix(in srgb,var(--ink) 6%,transparent); }
 .dk-glass .dk-table .dk-td-num { font-weight:var(--weight-ui); }
 .dk-glass .dk-table .dk-status { background:none; padding:0; }
@@ -306,7 +308,7 @@
 }
 @media(max-width:767px) {
  .dk-glass .dk-table--cards > thead:not(:has([aria-sort], .dk-th-pick)) { display:none; }
- .dk-glass .dk-table--cards > tbody > tr { padding:var(--space-6) 0; margin-bottom:var(--space-5); border-bottom:1px solid var(--glass-edge-soft); gap:var(--space-4); }
+ .dk-glass .dk-table--cards > tbody > tr { padding:var(--space-6); margin-bottom:var(--space-5); border-bottom:1px solid var(--glass-edge-soft); gap:var(--space-4); }
  .dk-glass .dk-table--cards.dk-table--cards.dk-table--cards tbody tr > td:nth-child(n) { border-bottom:0; }
  .dk-glass .dk-table--cards.dk-table--cards.dk-table--cards tbody tr:not(:has(.dk-td-pick)) > td:first-child { padding-right:0; }
  .dk-glass .dk-table--cards tbody td[data-label]::before { font:var(--type-caption); color:var(--ink-2); }
@@ -324,7 +326,7 @@
 .dk-glass .dk-table--sticky-head thead th,
 .dk-glass .dk-table--sticky-col thead th,
 .dk-glass .dk-table tfoot :is(td, th) { background:var(--surface-2); }
-.dk-glass .dk-table tfoot :is(td, th) { padding-block:var(--space-6); border-top:1px solid var(--glass-edge); font-weight:var(--weight-ui-strong); }
+.dk-glass .dk-table tfoot :is(td, th) { padding:var(--space-5); border-top:1px solid var(--glass-edge); font-weight:var(--weight-ui-strong); }
 .dk-glass .dk-table .dk-tr-group :is(td, th) {
  font:var(--type-caption); font-weight:var(--weight-ui-strong);
  text-transform:none; letter-spacing:var(--type-body-track); color:var(--ink-2);
@@ -340,7 +342,7 @@
 .dk-glass .dk-pager { padding-top:var(--space-7); }
 .dk-glass .dk-pager__p { border-radius:var(--radius-sm); font-weight:var(--weight-ui); }
 .dk-glass .dk-pager__p[aria-current] { box-shadow:inset 0 1px 0 var(--glass-edge-top); }
-.dk-glass .dk-pager__size select { border:1px solid var(--glass-edge); border-radius:var(--radius-sm); background:var(--glass-control); }
+.dk-glass .dk-pager__size select { --glass-control-pad:var(--control-pad-sm); --glass-control-size:var(--control-sm); border:1px solid var(--glass-edge); border-radius:var(--radius-sm); background:var(--glass-control); }
 @media (hover: hover) and (pointer: fine) {
  .dk-glass .dk-th-sort:hover { background:var(--glass-hover); }
  .dk-glass .dk-pager__p:not([aria-current]):hover { background:var(--glass-hover); }
@@ -348,7 +350,7 @@
 
 .dk-glass :is(.dk-fchip, .dk-chips__item) {
  box-sizing:border-box; min-height:var(--control-sm); height:auto; max-width:100%;
- padding:var(--space-1) var(--space-2) var(--space-1) var(--control-pad-sm);
+ padding:var(--space-2);
  font:var(--type-body); overflow-wrap:anywhere;
  background:var(--glass-control-sheen),var(--glass-chip);
  border:1px solid var(--glass-edge); border-radius:var(--radius-md);
@@ -408,4 +410,31 @@
 @media(max-width:767px), (pointer:coarse) {
  .dk-glass :is(.dk-fchip, .dk-chips__item) { min-height:44px; }
  .dk-glass :is(.dk-fchip__x, .dk-chips__item > .dk-iconbtn) { width:var(--control-sm); height:var(--control-sm); min-width:var(--control-sm); }
+}
+
+.dk-glass :is(.dk-field,.dk-search,.dk-select__trigger){ height:auto; min-height:var(--glass-control-size); }
+.dk-glass .dk-field input,.dk-glass .dk-field select,.dk-glass .dk-search__input{ height:auto; min-height:var(--glass-control-size); }
+.dk-root .dk-glass :is(.dk-field,.dk-search) > svg.dk-i{ margin-inline-start:var(--control-pad-md); }
+.dk-root .dk-glass .dk-table :is(.dk-td-pick,.dk-th-pick){ padding:var(--space-1); }
+
+/* An inset edge preserves the size variant and even content gutters. */
+.dk-root .dk-glass .dk-btn{ border:0; }
+.dk-root .dk-glass .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost){ border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
+
+
+/* The edge is drawn inside the surface, without adding odd layout insets. */
+.dk-root .dk-glass :is(.dk-field,.dk-search){ border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
+.dk-glass .dk-menu__search > .dk-i{ width:var(--icon-size-control); height:var(--icon-size-control); margin-inline-start:var(--control-pad-md); }
+.dk-glass .dk-map__zoom{ width:var(--control-lg); border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
+.dk-glass .dk-map__zoom button .dk-i{ width:var(--icon-size-control); height:var(--icon-size-control); }
+.dk-glass .dk-map__zoom button + button{ border-top:0; box-shadow:inset 0 var(--hairline) 0 var(--glass-edge-soft); }
+/* Select content is one 20px row; one even inset keeps every edge aligned. */
+.dk-glass .dk-select{ --glass-control-pad:var(--control-pad-md); }
+.dk-glass .dk-select--sm{ --glass-control-pad:var(--control-pad-sm); }
+.dk-root .dk-glass .dk-select > .dk-select__trigger,
+.dk-root .dk-glass .dk-pager__size select{ border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
+@media(pointer:coarse){ .dk-glass .dk-select{ --glass-control-pad:var(--control-pad-lg); } }
+
+@media(pointer:coarse){
+ .dk-root .dk-glass :is(.dk-field,.dk-search) > svg.dk-i,.dk-glass .dk-menu__search > .dk-i{ margin-inline-start:var(--control-pad-lg); }
 }

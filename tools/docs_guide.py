@@ -4,52 +4,7 @@ import manifest_parts as MP
 import json
 from pathlib import Path
 
-RULES = [
- ('Порядок и KPI', [
-  'Сначала статус и основные KPI, затем подробные графики, карта, списки и таблицы. Отдельная главная карточка только когда нужен состав или дополнительный контекст.',
-  'Основных KPI обычно пять (5 ± 2), максимум семь на обзорном экране. Самостоятельный KPI главной карточки входит в лимит. Не дублировать числа ради заполнения сетки.',
-  'КПЭ одного уровня имеют равные размеры. В семейной ипотеке шесть отдельных мини-виджетов одной полосой; при нехватке ширины полоса прокручивается, число и единица не разрываются. Не применять историческую сетку 2×2 к этой композиции.']),
- ('Сетка и размеры окна', [
-  'Внутренние поля контейнера, фильтра и кнопки одинаковы сверху, справа, снизу и слева. В Dark/Light общий стиль выводит поле контрола из его высоты, текста/значка и рамки; не заменять его отдельным горизонтальным отступом. Внешние промежутки сетки задаются отдельно.',
-  'Заголовки называют показатель и группировку; период не дублируется. Графики с точными подписями значений обходятся без линий сетки. Соседние виджеты одного ряда имеют одинаковую высоту по самому высокому содержимому. Между рядами совпадают границы колонок и внутренние направляющие. Между виджетами ипотеки — 10px; внутренние поля задаёт --pad-widget, в текущем Graphite ипотеки это 18px на десктопе и 24px на телефоне.',
-  'Размер переключаемого виджета задаётся для текущего viewport: карта/список/плитки и месяц/неделя календаря сохраняют рамку. Resize пересчитывает базовый размер; данные прокручиваются внутри, текст не ужимается.',
-  'Проектировать от viewport и задачи; требование уместить конкретную сводку в 1366×768 не переносится на все дашборды. На телефоне ипотеки карта сохраняет читаемые плитки и сдвигается внутри ограниченного окна; список даёт полные названия.',
-  'На текущей сводке KPI 2×2 на телефоне, включая 320px. Статус и состав риска компактны; вкладки «Обзор / Работа / Аналитика» идут одной строкой. На планшете подробные виджеты располагаются друг под другом. Проверять 320–1920px, низкие окна и 200% текст.']),
- ('Навигация и действия', [
-  'Вкладки представлений сводки — под заголовком, перед статусом и содержимым.',
-  'Меню мониторинга — один плоский список без групп «Обзор» и «Работа». Радиус панели 12px; свёрнутая ширина 60px с обычным указателем.',
-  'Кнопки свёрнутого меню квадратные: 40×40px; на таче размеры растут вместе с токеном высоты.',
-  'Заголовок ипотеки слева, компактные фильтры и действия справа рядом с темой. Ширина/высота полей фиксированы для breakpoint; выбор и сброс не сдвигают соседей. Под условный сброс резервируется место. Длинное полное имя доступно в списке и aria-label.',
-  'Одна основная кнопка на задачу. Недоступное действие объясняется; в гостевой демонстрации выход отключён.']),
- ('Данные и графики', [
-  'Нет данных — ровная нейтральная заливка и текст; отсутствие отличается от нуля. Статусы читаются словами, а не только цветом. Для серии плана в ипотеке сохранена согласованная пунктирная линия сравнения.',
-  'Прогноз — обычная подпись без обводки и тени. Технические объяснения формы маркеров не выводятся в рабочий интерфейс.',
-  'Цвет не единственный носитель смысла: добавить слово, число или доступное описание. Шкала карты общая при фильтрации.',
-  'Период, единица измерения и база сравнения должны быть понятны. Тип графика выбирается по вопросу к данным.']),
- ('Основная картина и детали', [
-  'Экран сразу отвечает на основные вопросы. Выбор между вкладками, отдельными экранами и внутренней прокруткой зависит от задачи; единого обязательного шаблона нет.',
-  'Небольшой быстрый обзор региона — общая модалка: контекст, КПЭ, детализация, примечания, реальные действия. Много данных и длительная работа — отдельная страница с реальным маршрутом. Стандарт DASHBOARD-DETAIL-MODAL-001; вкладки только для самостоятельных представлений.',
-  'Сокращать клики до ответа на вопрос. Не прятать необходимые данные за переходами и не создавать цепочки вложенных модалок.',
-  'Между экранами сохранять одинаковые названия, статусы, общие действия, правила фильтрации, навигации и раскрытия деталей.',
-  'Примеры: обстоятельства выбранной заявки — детали; работа со всеми авариями — самостоятельный экран. Конкретный состав вкладок ещё не утверждён.']),
- ('Текст и состояния', [
-  'На дашбордах, в сборщиках и живых примерах не выводить лишние пояснения, инструкции по клику и постоянный блок методики. Подробности — по иконке информации или в документации.',
-  'Для привычных действий чаще выбирать кнопку-иконку с aria-label и подсказкой. Текст нужен, если иконка неоднозначна; ошибки и пустые состояния должны объяснять следующий шаг.',
-  'Полные названия, обычный регистр, конкретные действия. Убрать избыточные подписи вроде «в срезе 89 из 89» и инструкции по устройству интерфейса.',
-  'Число результатов появляется при активном поиске или фильтре. Пустой результат, отсутствие данных, загрузка и ошибка — разные состояния.',
-  'Для каждого компонента описать начальное состояние, выбор, недоступность, ошибки и обновление, если они применимы. Не обещать загрузку или сохранение в статическом примере, где их нет.']),
- ('Доступность', [
-  'У кнопки-значка обязательны aria-label и подсказка; декоративная иконка скрыта от скринридера.',
-  'Все действия доступны с клавиатуры; видимый фокус сохраняется. Диалог именуется, удерживает Tab, закрывается Escape и возвращает фокус.',
-  'На таче цели не меньше 44px. Проверять перенос текста и отсутствие горизонтального переполнения страницы при 200% тексте.',
-  'Автоматическая проверка AX tree не заменяет проверку настоящим скринридером и на физических устройствах.']),
- ('Подключение и обновления', [
-  'Статический HTML/CSS/JavaScript: не добавлять фреймворк или зависимости ради сборки экрана.',
-  'Токены: primitives → semantic → components. dk-theme первым, dk-util до остальных компонентов; зависимости берутся из описи.',
-  'Данные форматировать dkFmt, строки экранировать dkEsc. update и destroy использовать согласно API компонента, освобождая обработчики и подписки.',
-  'Быстрая проверка: python3 tools/check.py --fast. Полная: python3 tools/test.py с Chrome; пропуск браузера не является полной проверкой.',
-  'Изменения через PR, канал stable. Управляемый слой AI Ops не редактировать. Не публиковать и не сливать автоматически.'])
-]
+from assembly_rules import render as render_assembly_rules
 
 def render(pages, component_render):
  # Общая оболочка документации, единые стили и навигация.
@@ -58,12 +13,12 @@ def render(pages, component_render):
  start = start.replace('<body class="dk-page dk-glass">', '<body class="dk-page dk-glass sc-guide">')
  start = start.replace('<title>Кнопка · dashboard-kit</title>', '<title>Обзор · dashboard-kit</title>')
  # Static hero illustration; the task form is the only page-specific component.
- start = start.replace('</head>', '''<link rel="stylesheet" href="css/page.overview.css?v=20261029-equal-insets">
+ start = start.replace('</head>', '''<link rel="stylesheet" href="css/page.overview.css?v=20261030-compact">
 <script src="js/dk-form.js" defer></script>
 <script src="js/docs-overview.js?v=20261029-single-row" defer></script>
 </head>''')
  start = start.replace('tools/component_pages/p1_controls.py', 'tools/docs_guide.py')
- rules = ''.join('<div class="sc-note"><h3>'+e(title)+'</h3><ul class="sc-list">'+''.join('<li>'+e(x)+'</li>' for x in items)+'</ul></div>' for title,items in RULES)
+ rules = render_assembly_rules()
  policy = json.loads((Path(__file__).resolve().parent.parent/'.ai/project/uiux-policy.json').read_text())
  heuristics = ''.join('<tr><td>'+e(h['name'])+'</td><td>'+e(h['requirement'])+'</td></tr>' for h in policy['heuristics'])
  patterns = ''.join('<details class="dk-data-summary" id="pattern-'+e(row['id'])+'"><summary>'+e(row['title'])+'</summary><ul class="sc-list">'+''.join('<li>'+e(x)+'</li>' for x in row['rules'])+'</ul><p>Избегать: '+e(row['example_bad'])+'</p><p>Выбирать: '+e(row['example_good'])+'</p><p>Проверка: '+e(row['review'])+'</p><details class="dk-data-summary"><summary>Критерии ревью реализации</summary><p>'+e(', '.join(row['constitution']))+'</p></details><p>'+ ' · '.join('<a href="component-'+e(slug)+'.html">'+e(next(p['title'] for p in pages if p['slug']==slug))+'</a>' for slug in row['components'])+'</p><p><a href="'+e(row['source'])+'">Материал UPROCK</a></p></details>' for row in policy['patterns'])
@@ -82,11 +37,12 @@ def render(pages, component_render):
 <div class="sc-overview-copy"><h1>От вашей задачи<br> к дашборду</h1><p class="sc-hero__lead">Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.</p>
 <div class="sc-overview-actions"><a class="dk-btn dk-btn--lg dk-btn--primary" href="#start">Собрать дашборд <svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></a><a class="dk-btn dk-btn--lg" href="#workflow">Как работать с ИИ <svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg></a></div></div>
 <div class="sc-overview-art" aria-hidden="true"><img src="assets/dashboard-kit-hero-charts.png" width="1663" height="946" alt="" fetchpriority="high" decoding="async"></div></div>
-<ol class="sc-overview-steps dk-widget" aria-label="Как собрать дашборд"><li><span class="sc-step-emoji" aria-hidden="true">📝</span><div><strong>1. Опишите задачу</strong><span>Какой дашборд нужен и кому он поможет.</span></div></li><li><span class="sc-step-emoji" aria-hidden="true">🗂️</span><div><strong>2. Передайте данные</strong><span>Файл, источник или описание будущих данных.</span></div></li><li><span class="sc-step-emoji" aria-hidden="true">✨</span><div><strong>3. Получите дашборд</strong><span>Помощник подберёт компоненты и проверит результат.</span></div></li></ol>
-<div class="sc-overview-examples" id="overview-examples"><div class="sc-overview-section-head"><h2><span class="sc-doc-emoji" aria-hidden="true">🖥️</span>Примеры дашбордов</h2></div>
+<ol class="sc-overview-steps dk-widget" aria-label="Как собрать дашборд"><li><span class="sc-step-emoji" aria-hidden="true">📝</span><strong>Опишите задачу</strong></li><li><span class="sc-step-emoji" aria-hidden="true">🗂️</span><strong>Передайте данные</strong></li><li><span class="sc-step-emoji" aria-hidden="true">✨</span><strong>Получите дашборд</strong></li></ol>
+<div class="sc-overview-examples" id="overview-examples"><div class="sc-overview-section-head"><h2><span class="sc-doc-emoji" aria-hidden="true">🖥️</span>Примеры дашбордов</h2><a class="dk-btn dk-btn--sm" href="#examples">Все примеры</a></div>
 <div class="sc-example-cards">{''.join('<a class="dk-widget sc-example-card" href="'+href+'.html"><img src="assets/examples/'+href+'-dark.png" data-example-image="'+href+'" width="640" height="450" alt="" loading="lazy"><strong>'+title+'</strong></a>' for href,title in [('regions','Мониторинг регионов'),('accidents','Аварии и инциденты'),('calendar','Календарь событий'),('family-mortgage','Семейная ипотека')])}</div>
 </div>
 </header>
+<section class="sc-sec" id="examples"><h2>Примеры дашбордов</h2><ul class="sc-list"><li><a href="regions.html">Мониторинг регионов</a></li><li><a href="accidents.html">Аварии и инциденты</a></li><li><a href="calendar.html">Календарь событий</a></li><li><a href="family-mortgage.html">Семейная ипотека</a></li><li><a href="dashboard.html">Сводка</a></li><li><a href="reference-dashboard.html">Рабочая сводка</a></li><li><a href="mobile.html">Мобильный дашборд</a></li></ul></section>
 <section class="sc-sec" id="start"><h2><span class="sc-doc-emoji" aria-hidden="true">🛠️</span>Собрать дашборд</h2><p>Подготовьте задачу и получите запрос для Codex, Claude или другого ИИ-помощника. Компоненты и графики он подберёт по правилам кита.</p>
 <form class="dk-form dk-form--one sc-task-form" id="dashboard-task-form"><div class="dk-form__alarm" hidden></div>
 <div class="dk-ff"><label class="dk-label" for="task-goal">Какой ответ нужен <span class="dk-label__req">обязательно</span></label><textarea class="dk-area" id="task-goal" name="goal" required maxlength="4000" placeholder="Хочу видеть выполнение плана продаж по регионам и понимать причины отклонений"></textarea></div>
@@ -106,10 +62,10 @@ def render(pages, component_render):
 <tr><td>Шрифт</td><td>Golos Text</td><td>Локальные файлы шрифта для русского и латинского текста.</td></tr>
 </tbody></table></div><p>Зависимости лежат в <code>vendor/</code>, их лицензии — в <code>vendor/licenses/</code>. Браузеру не нужно скачивать их с внешнего CDN. VKUI и другие дизайн-системы, упомянутые в материалах, — ориентиры документации, а не подключённые UI-библиотеки.</p>
 <h3>Граница ответственности</h3><p>Кит отвечает за интерфейс. Приложение подключает API, авторизацию, права доступа, расчёт метрик и сохранение данных. Экспорт и сохранённые виды используют доступные приложению данные; серверное хранение подключается отдельно.</p>
-<h3 id="development--connect">Подключение и проверка</h3><ol class="sc-list"><li>Найти нужные части: <code>python3 tools/kit.py list</code>, затем <code>python3 tools/kit.py show table chart</code>.</li><li>Получить теги подключения: <code>python3 tools/kit.py head table chart</code>. Тема подключается первой; <code>dk-util</code> — до остальных компонентов. Стили: primitives → semantic → components.</li><li>Взять пример со страницы компонента и подключить свои данные. Строки экранировать через <code>dkEsc</code>, числа форматировать через <code>dkFmt</code>.</li><li>Открыть через локальный сервер: <code>python3 tools/preview.py --port 8771</code>. Для карты и загрузки данных нужен HTTP.</li><li>Запустить <code>python3 tools/check.py --fast</code>; полную проверку — <code>python3 tools/check.py</code> с Node.js 22+ и Chrome. Расширенный набор браузерных регрессий — <code>python3 tools/test.py</code>.</li></ol>
+<h3 id="development--connect">Подключение и проверка</h3><ol class="sc-list"><li>Найти нужные части: <code>python3 tools/kit.py list</code>, затем <code>python3 tools/kit.py show table chart</code>.</li><li>Получить теги подключения: <code>python3 tools/kit.py head table chart</code>. Тема подключается первой; <code>dk-util</code> — до остальных компонентов. Стили: primitives → semantic → components.</li><li>Взять пример со страницы компонента и подключить свои данные. Строки экранировать через <code>dkEsc</code>, числа форматировать через <code>dkFmt</code>.</li><li>Открыть через локальный сервер: <code>python3 tools/preview.py --port 8771</code>. Для карты и загрузки данных нужен HTTP.</li><li>Запустить <code>python3 tools/check.py --fast</code>; базовую проверку с Chrome — <code>python3 tools/check.py</code>. Полная проверка — <code>python3 tools/test.py</code> с Node.js 22+ и Chrome.</li></ol>
 <h3>Что означает «без сборки»</h3><p>Страница запускается из готовых HTML/CSS/JS-файлов. Python и Node.js нужны сопровождающим кит для генерации документации, проверки и обновления ресурсов; это не зависимости страницы в браузере.</p>
 <h3 id="development--scale">Контракт и тиражирование</h3><p>Целевой масштаб — десятки тысяч строк и больше, отдельные сайты и встраивание в ИИ-среду, анализ и рабочие действия. Сервер фильтрует и считает весь срез, браузер получает готовые агрегаты и одну страницу таблицы. Переключение страницы не меняет смысл KPI и графика.</p><p><a href="reference-dashboard.html">Эталон «Работа служб» ↗</a> · <a href="docs/dashboard-data.md">Контракт данных и API</a> · <a href="docs/reference-server.md">Учебный сервер</a> · <a href="docs/releases.md">Версии и откат</a></p><p>Эталон использует вымышленные данные. Новый слой экспериментальный: до выпуска обязательны сквозная браузерная проверка, реальный источник и проверка прав и команд в приложении. Учебное поручение не создаёт рабочую задачу.</p><h3>Как оценивать готовность</h3><p>Проверяйте статус компонента, ограничения API и реальные сценарии: данные, клавиатуру, темы, размеры экрана, ошибку и восстановление. Статус «экспериментальный» требует отдельной проверки перед использованием. Текущие ограничения и технический долг описаны в <a href="REVIEW.md">REVIEW</a> и <a href="HANDOFF.md">HANDOFF</a>.</p></section>
-<section class="sc-sec" id="rules"><h2><span class="sc-doc-emoji" aria-hidden="true">📐</span>Правила сборки</h2><p>Начните с вопроса пользователя, выберите показатели и соберите экран из готовых частей. Данные, действия и состояния проверяются вместе.</p><p><a href="docs/current-state.md">Текущие принятые решения</a></p><p>Каждый ряд должен заполнять доступную ширину: для равноправных виджетов используйте <code>dk-grid--balanced</code>, для пяти КПЭ — <code>dk-grid--five</code>. Не резервируйте место под отсутствующий блок. Источники: <a href="README.md">README</a>, <a href="DECISIONS.md">DECISIONS</a>, <a href="DESIGN-UX-ACCESSIBILITY.md">UX и доступность</a>, <a href="REVIEW.md">REVIEW</a>, <a href="HANDOFF.md">HANDOFF</a>. Поздние утверждённые решения заменяют исторические описания.</p>{rules}</section>
+<section class="sc-sec" id="rules"><h2><span class="sc-doc-emoji" aria-hidden="true">📐</span>Правила сборки дашбордов</h2>{rules}</section>
 <section class="sc-sec" id="uiux"><h2><span class="sc-doc-emoji" aria-hidden="true">🧭</span>UI/UX и эвристики</h2><p>Основной ответ сразу; детали по задаче. Система берёт на себя проверку ввода, форматирование и сохранение контекста. Одинаковые действия сохраняют названия и поведение между экранами.</p><p>Политика: <a href="UIUX.md">правила, кнопки, состояния и способы проверки</a>. Ниже — критерии проверки интерфейса. Подробный технический реестр предназначен для ревью реализации.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th scope="col">Эвристика</th><th scope="col">Применение в ките</th></tr></thead><tbody>{heuristics}</tbody></table></div><p>Кнопки: приоритет по задаче, понятный результат, квадратные кнопки-значки, объяснимая недоступность и обратная связь. См. <a href="component-button.html">Кнопка</a> и <a href="component-field.html">Поле и форма</a>.</p></section>
 <section class="sc-sec" id="patterns"><h2><span class="sc-doc-emoji" aria-hidden="true">🧩</span>Как выбирать и сочетать компоненты</h2><p>Начните с задачи: что человек выбирает, сравнивает или уточняет. В каждом разделе — подходящие компоненты, частые ошибки и способ проверить результат.</p>{patterns}</section>
 <section class="sc-sec" id="design-guidance"><h2><span class="sc-doc-emoji" aria-hidden="true">🎨</span>Визуальные принципы</h2><p>Иерархия, ритм, контраст и состояния помогают читать данные и находить действия. Ниже — способы применить эти принципы в существующей системе токенов.</p>{guidance}</section>
