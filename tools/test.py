@@ -39,12 +39,13 @@ def main():
         run([node, '--check', str(file)])
     run([node, 'tools/check-dashboard-data.mjs'])
     run([node, 'tools/check-family-mortgage-data.mjs'])
+    run([node, 'tools/check-numeric-data.mjs'])
     run(['python3', 'tools/check-reference-server.py'])
     run([node, 'tools/check-reference-contract.mjs'])
     run(['python3', 'tools/check-release.py'])
     run(['python3', 'tools/kit-release.py', '--check'])
     run(['python3', 'tools/check.py'], timeout=600)
-    for name in ['docs', 'reference-dashboard', 'family-mortgage', 'select', 'chips', 'meaning', 'advanced', 'runtime', 'filter-context', 'dashboard-overview', 'composition', 'region-focus', 'sdk-snippets']:
+    for name in ['numeric-browser', 'docs', 'reference-dashboard', 'family-mortgage', 'select', 'chips', 'meaning', 'advanced', 'runtime', 'filter-context', 'dashboard-overview', 'composition', 'region-focus', 'sdk-snippets']:
         print('RUN: browser/' + name, flush=True)
         run([node, f'tools/check-{name}.mjs'], timeout=600 if name == 'docs' else 240)
     from tempfile import gettempdir

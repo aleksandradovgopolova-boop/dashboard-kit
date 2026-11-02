@@ -234,7 +234,7 @@
     ]
    },
    {
-    "file": "js/dk-analysis.js",
+    "file": "js/dk-context.js",
     "how": "defer",
     "defer": true,
     "requires": [
@@ -242,10 +242,11 @@
     ]
    },
    {
-    "file": "js/dk-context.js",
+    "file": "js/dk-analysis.js",
     "how": "defer",
     "defer": true,
     "requires": [
+     "js/dk-context.js",
      "js/dk-util.js"
     ]
    },
@@ -4659,6 +4660,7 @@
    ],
    "include": [
     "js/dk-util.js",
+    "js/dk-context.js",
     "js/dk-analysis.js"
    ]
   },
@@ -4728,6 +4730,7 @@
    ],
    "include": [
     "js/dk-util.js",
+    "js/dk-context.js",
     "js/dk-analysis.js"
    ]
   },
@@ -4754,6 +4757,7 @@
     "css/components.css"
    ],
    "scripts": [
+    "js/dk-context.js",
     "js/dk-analysis.js"
    ],
    "data": [],
@@ -4762,24 +4766,25 @@
     "dkComparison",
     "dkHeatmap",
     "dkPeriodComparison",
-    "dkTimelineAnnotations"
+    "dkTimelineAnnotations",
+    "dkTooltip"
    ],
    "docs": [
     "component-period-comparison.html"
    ],
    "api": [
     {
-     "name": "dkComparison(current, previous, better)",
+     "name": "dkComparison(current, previous, better, comparison?)",
      "type": "чистая функция",
-     "what": "Возвращает delta, percent, direction, meaning. better: increase/decrease/neutral."
+     "what": "delta, percent, direction, meaning; с метаданными также comparable, code, status, reason, context. better: increase/decrease/neutral. comparison: currentPeriod/previousPeriod {from,to,complete,sampleSize?}, duration: equal (по умолчанию) или calendar-month, minBase?, baseLabel при переданной базе. Неверные/частичные метаданные вызывают TypeError. Полный контракт — skill/dashboard-build/references/numeric-checks.md."
     },
     {
      "name": "dkPeriodComparison(el, opts)",
      "type": "API",
-     "what": "current, previous, better, label, unit; update(opts), destroy()."
+     "what": "current, previous, better, label, unit, comparison?; update(opts) заменяет все параметры, destroy() удаляет причину и обработчики. С метаданными нужны dk-analysis.js и dk-context.js; kit.py head period-comparison включает оба."
     }
    ],
-   "example": "<div id=\"advanced-comparison\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkPeriodComparison(document.getElementById('advanced-comparison'), {label:'Аварии за сутки',current:23,previous:19,better:'decrease'});\n});\n</script>",
+   "example": "<div id=\"advanced-comparison\"></div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\ndkPeriodComparison(document.getElementById('advanced-comparison'), {label:'Учебные обращения',unit:'обращений',current:10,previous:20,better:'decrease',comparison:{currentPeriod:{from:'2025-05-01',to:'2025-05-15',complete:false,sampleSize:40},previousPeriod:{from:'2025-04-01',to:'2025-04-30',complete:true,sampleSize:100},baseLabel:'заявок'}});\n});\n</script>",
    "rules": [
     "«Март: 120; февраль: 100; изменение: +20%»."
    ],
@@ -4799,6 +4804,7 @@
    ],
    "include": [
     "js/dk-util.js",
+    "js/dk-context.js",
     "js/dk-analysis.js"
    ]
   },
@@ -4865,6 +4871,7 @@
    ],
    "include": [
     "js/dk-util.js",
+    "js/dk-context.js",
     "js/dk-analysis.js"
    ]
   },

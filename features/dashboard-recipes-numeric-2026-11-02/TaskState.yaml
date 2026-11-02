@@ -1,0 +1,22 @@
+schema_version: 1
+workitem_id: dashboard-recipes-numeric-2026-11-02
+workflow: ENGINEERING
+status: blocked
+stage: verify
+completed:
+- requirements
+- requirements-review
+- specification
+- plan
+- plan-critique
+- implementation
+pending:
+- browser-verification
+- full-suite
+- final-acceptance
+reasons:
+- Sandbox denies localhost listen (EPERM); Chrome process unavailable
+- CUA security policy rejects file URL; no bypass attempted
+next: Run tools/test.py and numeric UI check in environment permitting Chrome and
+  localhost; inspect screenshots; then reassess draft.
+note: Companion factual handoff, not a fabricated native-controller successful execution.

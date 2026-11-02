@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/docs.css?v=20261030-compact">
 <script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/dk-context.js" defer></script>
 <script src="js/dk-analysis.js" defer></script>
 <script src="js/docs-index.js?v=20261026-editorial" defer></script>
 <script src="js/docs.js?v=20261030-compact" defer></script>
@@ -74,11 +75,11 @@
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Компактный блок помещается в KPI. Значения с единицами сохраняются, пояснения переносятся.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkComparison(current, previous, better)</code></td><td>Разметка и параметры компонента.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+    <p>Компактный блок помещается в KPI. Значения с единицами сохраняются, пояснения переносятся.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkComparison(current, previous, better, comparison?)</code></td><td>Разметка и параметры компонента.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
-    <p>Оба периода и единицы указаны. Если процент нельзя вычислить, компонент объясняет причину.</p><details class="dk-data-summary"><summary>Ограничения и подключение</summary><p>При previous=0 процент не определён. Нет данных не превращается в ноль. По умолчанию направление нейтрально. Процент считается по модулю предыдущего значения; отрицательная база требует объяснения.</p></details>
+    <p>Оба периода и единицы указаны. Если процент нельзя вычислить, компонент объясняет причину.</p><details class="dk-data-summary"><summary>Ограничения и подключение</summary><p>Без comparison сохраняется прежний API; сопоставимость проверяет приложение. С метаданными неполный период, разная длительность и база ниже явного minBase блокируют дельту/цвет. calendar-month разрешает только два полных календарных месяца без нормализации. Даты и базы видны; причина статуса доступна по наведению, фокусу, нажатию, Escape. При previous=0 доступна только абсолютная дельта. Порог малой базы не задан по умолчанию; sampleSize не означает автоматически число строк. Определения, единицы и одинаковые фильтры подтверждает источник.</p></details>
   </section>
   <section class="sc-sec" id="kontent">
     <h2>Текст и подписи</h2>
@@ -98,12 +99,12 @@
   </section>
   <section class="sc-sec" id="kod">
     <h2>Код и API</h2>
-    <p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-analysis.js"><code>js/dk-analysis.js</code></a></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-comparison&quot;&gt;&lt;/div&gt;
+    <p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-context.js"><code>js/dk-context.js</code></a> · <a href="js/dk-analysis.js"><code>js/dk-analysis.js</code></a></p><pre class="sc-code"><code>&lt;div id=&quot;advanced-comparison&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
 document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
-dkPeriodComparison(document.getElementById(&#x27;advanced-comparison&#x27;), {label:&#x27;Аварии за сутки&#x27;,current:23,previous:19,better:&#x27;decrease&#x27;});
+dkPeriodComparison(document.getElementById(&#x27;advanced-comparison&#x27;), {label:&#x27;Учебные обращения&#x27;,unit:&#x27;обращений&#x27;,current:10,previous:20,better:&#x27;decrease&#x27;,comparison:{currentPeriod:{from:&#x27;2025-05-01&#x27;,to:&#x27;2025-05-15&#x27;,complete:false,sampleSize:40},previousPeriod:{from:&#x27;2025-04-01&#x27;,to:&#x27;2025-04-30&#x27;,complete:true,sampleSize:100},baseLabel:&#x27;заявок&#x27;}});
 });
-&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkComparison(current, previous, better)</code></td><td>чистая функция</td><td>Возвращает delta, percent, direction, meaning. better: increase/decrease/neutral.</td></tr><tr><td><code>dkPeriodComparison(el, opts)</code></td><td>API</td><td>current, previous, better, label, unit; update(opts), destroy().</td></tr></tbody></table></div>
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkComparison(current, previous, better, comparison?)</code></td><td>чистая функция</td><td>delta, percent, direction, meaning; с метаданными также comparable, code, status, reason, context. better: increase/decrease/neutral. comparison: currentPeriod/previousPeriod {from,to,complete,sampleSize?}, duration: equal (по умолчанию) или calendar-month, minBase?, baseLabel при переданной базе. Неверные/частичные метаданные вызывают TypeError. Полный контракт — skill/dashboard-build/references/numeric-checks.md.</td></tr><tr><td><code>dkPeriodComparison(el, opts)</code></td><td>API</td><td>current, previous, better, label, unit, comparison?; update(opts) заменяет все параметры, destroy() удаляет причину и обработчики. С метаданными нужны dk-analysis.js и dk-context.js; kit.py head period-comparison включает оба.</td></tr></tbody></table></div>
   </section>
 
 </div>
@@ -113,7 +114,7 @@ dkPeriodComparison(document.getElementById(&#x27;advanced-comparison&#x27;), {la
 (function () {
   'use strict';
   var root = document.documentElement;
-document.addEventListener("DOMContentLoaded", function(){dkPeriodComparison(document.getElementById('advanced-comparison'), {label:'Аварии за сутки',current:23,previous:19,better:'decrease'});});
+document.addEventListener("DOMContentLoaded", function(){dkPeriodComparison(document.getElementById('advanced-comparison'), {label:'Учебные обращения',unit:'обращений',current:10,previous:20,better:'decrease',comparison:{currentPeriod:{from:'2025-05-01',to:'2025-05-15',complete:false,sampleSize:40},previousPeriod:{from:'2025-04-01',to:'2025-04-30',complete:true,sampleSize:100},baseLabel:'заявок'}});});
 })();
 </script>
 </body>

@@ -1,0 +1,93 @@
+{
+  "feature_dir": "/private/tmp/dashboard-kit-recipes-20261102/features/dashboard-recipes-numeric-2026-11-02",
+  "blueprint_errors": [],
+  "stages": {
+    "discovery": {
+      "filled": 1,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "definition": {
+      "filled": 2,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "ux": {
+      "filled": 1,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "architecture": {
+      "filled": 1,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "delivery": {
+      "filled": 2,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "analytics": {
+      "filled": 0,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "documentation": {
+      "filled": 1,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "release": {
+      "filled": 0,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "monitoring": {
+      "filled": 0,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "adoption": {
+      "filled": 0,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    },
+    "retrospective": {
+      "filled": 1,
+      "draft_or_done_untouched": 0,
+      "planned": 0,
+      "declined": 0,
+      "missing": 0
+    }
+  },
+  "findings": [],
+  "verdict": "OK",
+  "current_stage": "delivery",
+  "coverage": {
+    "total": 9,
+    "filled": 9,
+    "declined": 0,
+    "skeletons": 0,
+    "missing_or_planned": 0
+  }
+}

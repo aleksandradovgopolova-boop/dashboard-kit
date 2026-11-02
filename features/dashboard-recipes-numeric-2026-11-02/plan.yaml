@@ -1,0 +1,35 @@
+schema_version: 1
+kind: plan-artifact
+workitem_id: dashboard-recipes-numeric-2026-11-02
+source: implementation-plan.md
+work_packages:
+- id: recipes
+  summary: Четыре рецепта и eval prompts
+  depends_on: []
+- id: numeric
+  summary: Independent oracle and comparison metadata
+  depends_on: []
+- id: verification
+  summary: Static/model checks; browser acceptance
+  depends_on:
+  - recipes
+  - numeric
+- id: handoff
+  summary: Draft PR with actual evidence
+  depends_on:
+  - verification
+write_scope:
+- README.md
+- HANDOFF.md
+- REVIEW.md
+- DECISIONS.md
+- docs/releases.md
+- .ai/repository-profile.yaml
+- js/dk-analysis.js
+- skill/dashboard-build/
+- tools/
+- component-period-comparison.html
+- component-period-comparison.md
+- kit-manifest.json
+- kit-release.json
+- features/dashboard-recipes-numeric-2026-11-02

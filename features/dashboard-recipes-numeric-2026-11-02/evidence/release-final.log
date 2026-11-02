@@ -1,0 +1,1 @@
+PASS: reproducible runtime package, external version pin, corruption/path/symlink rejection, isolated upgrade and rollback packages
