@@ -53,11 +53,11 @@
     function drawMetrics(view) {
       var box = el('ref-metrics'); box.replaceChildren();
       view.metrics.forEach(function (metric) {
-        var total = view.totals[metric.id], tile = node('section',null,'dk-widget dk-widget--s dk-tile');
+        var total = view.totals[metric.id], tile = node('section',null,'dk-widget dk-widget--s dk-tile dk-tile--compact');
         tile.append(node('h2',metric.label + ', ' + metric.unit,'dk-tile__label'));
         var value = node('div',null,'dk-tile__row'); value.append(node('span',number(total.value),'dk-metric-lg')); tile.append(value);
-        var coverage = total.observed === 0 ? 'Сведения отсутствуют во всех наблюдениях' : total.partial ? 'Неполные данные: сумма по ' + total.observed + ' из ' + total.total + ' наблюдений' : 'Все ' + total.total + ' наблюдений выбранного среза';
-        tile.append(node('p',coverage,'dk-caption')); tile.dataset.metric = metric.id; box.append(tile);
+        var coverage = total.observed === 0 ? 'Сведения отсутствуют во всех наблюдениях' : total.partial ? 'Неполные данные: сумма по ' + total.observed + ' из ' + total.total + ' наблюдений' : '';
+        if (coverage) tile.append(node('p',coverage,'dk-caption')); tile.dataset.metric = metric.id; box.append(tile);
       });
     }
     function drawRows(view) {
@@ -82,7 +82,8 @@
         return {name:metric.label,data:view.series.map(function (point) { var c = point.coverage[metric.id]; if (c.observed < c.total) { partial = true; return null; } return point.values[metric.id]; })};
       })};
       if (chart) chart.update(spec); else chart = window.dkChart(el('ref-chart'),spec);
-      el('ref-chart-note').textContent = partial ? 'Столбец с неполными сведениями пропущен. Известные значения и отсутствие данных показаны в таблице; частичная сумма отмечена в KPI.' : 'Все наблюдения выбранного среза. Переключение страниц таблицы не меняет график и KPI.';
+      el('ref-chart-note').textContent = partial ? 'Неполные столбцы пропущены. Доступные значения — в таблице; частичная сумма отмечена в КПЭ.' : '';
+      el('ref-chart-note').hidden = !partial;
     }
     function render(snapshot) {
       if (stopped) return;
@@ -97,6 +98,7 @@
       el('ref-refresh').disabled = busy;
       el('ref-context').textContent = context(query);
       el('ref-reset').hidden = !query.period && !Object.keys(query.filters).some(function (k) { return query.filters[k].length; });
+      el('ref-status').parentElement.classList.toggle('dk-vh',ready);
       el('ref-status').textContent = busy ? 'Загрузка выбранного среза…' : snapshot.status === 'error' ? 'Не удалось получить данные. Выбранные условия сохранены.' : snapshot.status === 'empty' ? 'По выбранным условиям наблюдений нет.' : ready ? 'Данные обновлены.' : 'Загрузка данных…';
       var view = snapshot.view;
       if (view) el('ref-source').textContent = (view.source.kind === 'demo' ? 'Демонстрационные данные · ' : '') + view.source.label + ' · обновлено ' + new Date(view.source.updatedAt).toLocaleString('ru-RU',{timeZone:'UTC'}) + ' UTC';

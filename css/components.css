@@ -5051,7 +5051,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
    (overline-стиль), как на продакшн-референсе «РАСХОД НА МОДЕЛИ / КТО ЖЖЁТ /
    ТОП МОДЕЛЕЙ»: шапка — тихий ярлык секции, а не крупный заголовок (решение
    владельца 14.10). */
-/* Актуальный стиль всех заголовков — капс Regular, общий type-panel-title. */
+/* Общий стиль заголовков виджетов задаёт type-panel-title. */
 /* Графики обзорных панелей — одной высоты, чтобы низ ряда не был рваным. */
 .dk-grid--overview-panels .dk-chart { min-height: 200px; }
 .dk-widget__heading { flex: 1 1 10rem; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
@@ -5059,6 +5059,8 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-widget__footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--gap-inline); font: var(--type-caption); color: var(--ink-2); }
 .dk-widget--overview > .dk-widget__head > .dk-widget__actions { flex-wrap: wrap; min-width: 0; max-width: 100%; }
 @media (max-width: 767px) { .dk-head__title { font: var(--type-h2); } .dk-head__actions { flex: 1 1 100%; } }
+/* Heading rank does not change a widget's visual title size. */
+.dk-widget__head .dk-head__title { font:var(--type-panel-title); letter-spacing:var(--type-body-track); text-transform:none; }
 
 /* Главный объект + связанная сводка: выбранная композиция карты регионов. */
 .dk-focus-layout { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(340px, 1fr); gap: var(--grid-gap); align-items: stretch; }
