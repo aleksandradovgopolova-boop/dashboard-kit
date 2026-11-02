@@ -18,8 +18,8 @@
     "assets/graphite-dark.png": "d212df2d6f3f6d41befd4b11ca743d791db767188120508b873966494cde8a5d",
     "assets/graphite-light.png": "cd330a9ef8bb163f2ffd1fb86e78a875c06e0638eaacf8bba082c191ae6d4d72",
     "css/chrome.css": "2df09fd6afc92b421183bfcdc80be36327b787b20c636c64279df8a6d4e4b7cf",
-    "css/components.css": "f10ed52f4c074a4e468467fde73d881b29b39f6031c7cffdee15fee2abb4dcb3",
-    "css/glass.css": "3b21a76ca98e6af02d11dc9fa368b52703bfa7a67547678525767ae8428e4007",
+    "css/components.css": "cc361393126455dd167a7d27d335ce618966a1711cd8333c1c00f566d7355c5a",
+    "css/glass.css": "dc4319158349da59c093d11a63976f66feb6d6cd1c4159232864184ae699a7e0",
     "css/kit2-preview-frame.css": "3230716ea0c33b5eb50fc3eb57d756898caa2ec59f88cb1dc0667fa1522a99ef",
     "css/kit2-preview.css": "aa44c4d6145b5d80239ea86ffd821e6dba322c7d43d37ab4c7366c2c95bdabf1",
     "css/page.dashboard.css": "3da454cb0b0a4d36505e723fb729805757b5cc795e033fcf4d93a28ca23aa5d4",
@@ -100,5 +100,5 @@
     "vendor/licenses/Golos-Text-OFL.txt": "ff532f9e8789f09a9fdffc3c0954eedfb0a48be77b2e2eb90f5f82e4f347f50c",
     "vendor/licenses/Tabler-Icons-MIT.txt": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
   },
-  "contentDigest": "sha256:0ed45ca0e6ba8e53c603010876b76e5ec0e237ea0da80843c0932402120e6373"
+  "contentDigest": "sha256:ba5b49ea1e774ebc11eadf50e3eb7de9d1e98685c8f02c9aa926d1ce28b82377"
 }

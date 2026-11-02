@@ -40,6 +40,8 @@ try {
     const header=document.querySelector('.dk-top'),style=header&&getComputedStyle(header),rail=rect(side),content=rect(first);
     return {overflow:document.documentElement.scrollWidth>innerWidth+1,rail,content,gap:rail&&content?content.left-rail.right:null,header:rect(header),headerPadding:style?[style.paddingTop,style.paddingRight,style.paddingBottom,style.paddingLeft].map(parseFloat):null,
       obsoletePath:!!document.querySelector('.dk-top__path'),
+      tableHeaders:[...document.querySelectorAll('.dk-table--cards > thead > tr > th[aria-sort]')].filter(x=>x.getClientRects().length).map(x=>{const s=getComputedStyle(x),b=x.querySelector('button'),r=b.getBoundingClientRect();return {background:s.backgroundColor,radius:parseFloat(s.borderRadius),padding:[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat),buttonHeight:r.height};}),
+      accidentTableGap:(()=>{const t=document.querySelector('#a-table');if(!t)return null;const w=t.closest('.dk-widget');return t.getBoundingClientRect().top-w.querySelector('.dk-widget__head').getBoundingClientRect().bottom;})(),
       widgetTitles:[...document.querySelectorAll('.dk-widget__head .dk-head__title,.dk-widget__title')].filter(x=>x.getClientRects().length).map(x=>{const s=getComputedStyle(x);return {text:x.textContent.trim(),size:parseFloat(s.fontSize),line:parseFloat(s.lineHeight),weight:s.fontWeight};}),
       headerRow:(()=>{const b=document.querySelector('.dk-top__burger'),t=document.querySelector('.dk-top__titles'),a=document.querySelector('.dk-top__tools .dk-seg[aria-label="Тема"]');return [b,t,a].every(x=>x?.getClientRects().length)?[b,t,a].map(x=>{const r=x.getBoundingClientRect();return (r.top+r.bottom)/2;}):null;})(),
       copy:[...document.querySelectorAll('.dk-widget__meta,.dk-head__subtitle,p.dk-caption')].filter(x=>x.getClientRects().length).map(x=>x.textContent.trim()).filter(Boolean)};
@@ -62,6 +64,8 @@ try {
     if(state.overflow)errors.push(file+' overflow at '+width);
     if(state.rail&&width>=1024&&Math.abs(state.gap-14)>1)errors.push(file+' rail gap '+width+': '+state.gap);
     if(state.obsoletePath)errors.push(file+' redundant header path');
+    if(width<768&&state.tableHeaders.some(x=>x.background!=='rgba(0, 0, 0, 0)'||x.radius!==0||x.padding.some(n=>n!==0)||x.buttonHeight<44))errors.push(file+' oversized mobile sort header '+JSON.stringify(state.tableHeaders));
+    if(file==='accidents'&&state.accidentTableGap>20)errors.push('Accidents table has a redundant intro gap: '+state.accidentTableGap);
     if(state.widgetTitles.some(x=>x.size!==18||x.line!==24||x.weight!=='500'))errors.push(file+' widget title mismatch '+JSON.stringify(state.widgetTitles));
     if(state.headerRow&&Math.max(...state.headerRow)-Math.min(...state.headerRow)>1)errors.push(file+' header elements are on different rows '+width+' '+JSON.stringify(state.headerRow));
     // Below 1200px the working overview intentionally has a second action row.
@@ -78,6 +82,20 @@ try {
       const expanded=await measure();rows.push({file,theme,width,view:'expanded',...expanded});
       if(expanded.overflow||Math.abs(expanded.gap-14)>1)errors.push(file+' expanded rail geometry');
       await evaluate("document.querySelector('[data-act=fold]').click()");await settle();
+    }
+    if(file==='accidents'&&[390,713,1470].includes(width)){
+      await evaluate("document.querySelector('#a-table').closest('.dk-widget').scrollIntoView({block:'start'})");await settle();
+      const shot=await send('Page.captureScreenshot',{format:'png'});
+      await writeFile(resolve(out,'accidents-table-'+theme+'-'+width+'.png'),Buffer.from(shot.data,'base64'));
+      if(width===390){
+        await evaluate("document.querySelector('#a-table .dk-th-sort').focus()");
+        await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13,text:'\r',unmodifiedText:'\r'});
+        await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
+        await settle();
+        if(!await evaluate("document.querySelector('#a-table th[aria-sort]').getAttribute('aria-sort')==='ascending'"))errors.push('Accidents keyboard sorting');
+        await evaluate("(()=>{const r=document.documentElement,s=getComputedStyle(r);for(const k of Array.from(s).filter(k=>/^--(type-|text-)/.test(k))){const v=s.getPropertyValue(k);if(/px/.test(v))r.style.setProperty(k,v.replace(/([0-9.]+)px/g,(_,n)=>Number(n)*2+'px'));}})()");await settle();
+        if(await evaluate("document.documentElement.scrollWidth>innerWidth+1||[...document.querySelectorAll('#a-table .dk-th-sort')].some(b=>b.scrollHeight>b.clientHeight+1)"))errors.push('Accidents table enlarged text clipping');
+      }
     }
   }
   await writeFile(resolve(out,'example-shell.json'),JSON.stringify({rows,errors},null,2));
