@@ -28,6 +28,7 @@ try {
   const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;};
   const wait=condition=>evaluate(`new Promise((resolve,reject)=>{let n=0;const tick=()=>{if(${condition})return resolve();if(++n>200)return reject(Error('UI wait: '+${JSON.stringify(condition)}));setTimeout(tick,50)};tick()})`);
   const key=async key=>{await send('Input.dispatchKeyEvent',{type:'keyDown',key,code:key,windowsVirtualKeyCode:key==='Escape'?27:13});await send('Input.dispatchKeyEvent',{type:'keyUp',key,code:key,windowsVirtualKeyCode:key==='Escape'?27:13});};
+  const frames=()=>evaluate('new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))');
   const click=selector=>evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e)throw Error('Missing '+${JSON.stringify(selector)});e.focus();e.click()})()`);
   const errors=[];
   browser.on(message=>{if(message.sessionId===sessionId&&message.method==='Runtime.exceptionThrown')errors.push(message.params.exceptionDetails.text);});
@@ -87,7 +88,10 @@ try {
     // A standalone kit surface isolates component geometry from the documentation shell.
     await evaluate(`document.body.replaceChildren();document.documentElement.dataset.theme=${JSON.stringify(theme)};document.body.className='dk-page dk-glass';window.__host=document.createElement('section');__host.className='dk-widget';document.body.append(__host);window.__comparison=dkPeriodComparison(__host,{});`);
     for(const item of comparisons) {
+      // Isolate keyboard input from pointer/touch events left by the previous case.
+      await send('Input.dispatchMouseEvent',{type:'mouseMoved',x:width-2,y:898});
       await evaluate(`__comparison.update(${JSON.stringify({label:'Учебные обращения',unit:'обращений',current:item.current,previous:item.previous,better:item.better,comparison:item.comparison})})`);
+      await frames();
       const text=normalized(await evaluate('__host.innerText'));
       assert(text.includes(normalized(item.dom)),'UI binding comparison '+item.id+': '+text);
       assert(text.includes(item.comparison.currentPeriod.from)&&text.includes(item.comparison.currentPeriod.to)&&text.includes(item.comparison.previousPeriod.from)&&text.includes(item.comparison.previousPeriod.to),'UI binding dates remain visible');
@@ -95,10 +99,17 @@ try {
       assert(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),'UI comparison overflow');
       if(item.expected.comparable===false) assert(await evaluate(`!__host.querySelector('.dk-comparison__delta')`),'UI binding blocked delta has no success/failure colour');
       if(item.expected.code) {
+        await evaluate(`window.__events=[];window.__button=__host.querySelector('button');window.__tip=document.getElementById(__button.getAttribute('aria-describedby'));for(const type of ['mouseenter','mouseleave','focus','blur','click','keydown','keyup'])__button.addEventListener(type,e=>__events.push({type:e.type,key:e.key,time:performance.now(),hidden:__tip.hidden}));`);
+        assert.equal(await evaluate(`document.querySelectorAll('.dk-tooltip').length`),1,'UI explanation has one owner');
         await evaluate(`__host.querySelector('button').focus()`);
-        assert(await evaluate(`!document.querySelector('.dk-tooltip').hidden`),'UI explanation on focus');
-        assert((await evaluate(`document.querySelector('.dk-tooltip').textContent`)).includes(item.reasonContains),'UI explanation belongs to current state: '+item.id);
-        await key('Escape');assert(await evaluate(`document.querySelector('.dk-tooltip').hidden`),'UI explanation Escape');
+        assert(await evaluate(`!__tip.hidden`),'UI explanation on focus');
+        assert((await evaluate(`__tip.textContent`)).includes(item.reasonContains),'UI explanation belongs to current state: '+item.id);
+        await key('Escape');
+        const initiallyHidden=await evaluate('__tip.hidden');
+        // A transient hidden state is insufficient: Escape must stay effective.
+        await frames();
+        const escapeState=await evaluate(`({hidden:__tip.hidden,focused:document.activeElement===__button,id:__tip.id,count:document.querySelectorAll('.dk-tooltip').length,text:__tip.textContent,active:document.activeElement.outerHTML,documentFocused:document.hasFocus(),hover:__button.matches(':hover'),events:__events})`);
+        assert(initiallyHidden&&escapeState.hidden&&escapeState.focused,'UI explanation Escape '+item.id+'/'+theme+'/'+width+': '+JSON.stringify({initiallyHidden,...escapeState}));
         await evaluate(`__host.querySelector('button').blur()`);
         const point=await evaluate(`(()=>{const r=__host.querySelector('button').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
         await send('Input.dispatchMouseEvent',{type:'mouseMoved',x:width-2,y:898});
