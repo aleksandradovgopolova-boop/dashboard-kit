@@ -105,7 +105,7 @@
 #d-dashboard #d-events-widget .dk-list__more { margin-left: auto; text-decoration: none; }
 #d-dashboard .d-insight { padding: var(--space-6); }
 @media (min-width: 1200px) {
-  #d-dashboard .dk-wrap--monitor, #d-dashboard .dk-top { max-width: 1408px; margin-inline: auto; width: 100%; box-sizing: border-box; }
+  #d-dashboard .dk-wrap--monitor, #d-dashboard .dk-top { max-width: none; margin-inline: auto; width: 100%; box-sizing: border-box; }
   #d-dashboard #d-country-charts > .dk-widget { min-height: 276px; }
   #d-dashboard #d-country-charts .dk-chart { height: 190px; min-height: 190px; flex-grow: 0; }
 }
@@ -128,6 +128,17 @@
 }
 /* Ширина холста от прошлого viewport не расширяет внутреннюю колонку KPI. */
 #d-dashboard #d-kpis > .dk-tile--overview { grid-template-columns: minmax(0, 1fr); }
+@media(max-width:1199px) {
+ #d-dashboard .dk-top { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"title tools" "views views"; gap:var(--space-4); }
+ #d-dashboard .dk-top__titles { grid-area:title; order:0; }
+ #d-dashboard .dk-top__tools { display:contents; }
+ #d-dashboard .dk-top__tools > .dk-seg:not(#d-views) { grid-area:tools; }
+ #d-dashboard #d-views { grid-area:views; width:100%; min-width:0; overflow-x:auto; }
+ #d-dashboard #d-views button { flex:1 0 auto; min-width:max-content; height:auto; min-height:var(--control-md); }
+}
+@media(max-width:1023px) {
+ #d-dashboard .dk-top { grid-template-columns:auto minmax(0,1fr) auto; grid-template-areas:"burger title tools" "views views views"; }
+}
 @media (min-width: 1200px) {
   #d-dashboard #d-country-charts .dk-widget__head { min-height: 0; }
 }

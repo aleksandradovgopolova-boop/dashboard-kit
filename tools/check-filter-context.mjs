@@ -108,7 +108,7 @@ try {
         assert(bars.series[0].data.includes(0)&&bars.xAxis[0].name==='ч','removing grid preserves zero and unit');
         const button=document.querySelector('#a-tbody .dk-td-act button'),rows=document.getElementById('a-tbody').innerHTML;
         assert(button.disabled&&button.getAttribute('aria-describedby')==='a-demo-actions','demo close must be disabled with explanation');
-        assert(document.getElementById('a-demo-actions').textContent.includes('недоступно в демонстрации'),'visible unavailable-action explanation');
+        assert(document.getElementById('a-demo-actions').textContent.includes('недоступно в демонстрации')&&button.getAttribute('title').includes('недоступно в демонстрации'),'unavailable-action explanation belongs to the disabled action');
         button.click();
         assert(document.getElementById('a-tbody').innerHTML===rows&&!document.querySelector('dialog[open],.dk-toast'),'disabled close must not report success');
       }

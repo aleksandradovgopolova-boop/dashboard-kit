@@ -1738,7 +1738,7 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
    - первая колонка — заголовок карточки, крупнее и без подписи;
    - остальные — пары «подпись — значение», подписи ставит dkTable
      (data-label);
-   - шапка — строка пилюль сортировки, листается вбок: сортировать можно и на
+   - шапка — строка текстовых действий сортировки, листается вбок: сортировать можно и на
      телефоне; колонки без сортировки в ней не нужны;
    - флажок выбора — в правом верхнем углу карточки.
    На широком экране это обычная таблица, модификатор ничего не меняет.
@@ -1761,8 +1761,8 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
     gap: var(--space-3);
     overflow-x: auto;
     scrollbar-width: none;
-    margin: 0 calc(var(--space-6) * -1);
-    padding: 0 var(--space-6) var(--space-5);
+    margin: 0;
+    padding: 0;
   }
   .dk-table--cards > thead > tr::-webkit-scrollbar { display: none; }
   .dk-table--cards.dk-table--cards.dk-table--cards > thead > tr > th:nth-child(n) { display: none; }
@@ -1771,16 +1771,17 @@ button.dk-car__item, a.dk-car__item { cursor: pointer; }
     align-items: center;
     flex: none;
     width: auto !important;
-    height: var(--control-sm);
-    padding: var(--space-4);
+    height: auto;
+    padding: 0;
     position: static;
     font: var(--type-caption);
     font-weight: var(--weight-ui-strong);
     letter-spacing: normal;
     text-transform: none;
     color: var(--ink-2);
-    background: var(--surface-2);
-    border-radius: var(--radius-full);
+    background: none;
+    border: 0;
+    border-radius: 0;
   }
   .dk-table--cards > tbody > tr,
   .dk-table--cards > tfoot > tr {
@@ -4109,6 +4110,18 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   padding: 0;
   cursor: pointer;
 }
+@media (max-width: 767px) {
+  .dk-table--cards > thead .dk-th-sort {
+    box-sizing: border-box;
+    min-height: var(--control-sm);
+    padding: var(--control-pad-sm);
+    margin: 0;
+    border-radius: var(--radius-xs);
+  }
+}
+@media (max-width: 767px) and (pointer: coarse) {
+  .dk-table--cards > thead .dk-th-sort { min-width: var(--control-lg); min-height: var(--control-lg); }
+}
 @media (hover: hover) and (pointer: fine) {
   .dk-th-sort:hover { color: var(--ink); }
 }
@@ -5051,7 +5064,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
    (overline-стиль), как на продакшн-референсе «РАСХОД НА МОДЕЛИ / КТО ЖЖЁТ /
    ТОП МОДЕЛЕЙ»: шапка — тихий ярлык секции, а не крупный заголовок (решение
    владельца 14.10). */
-/* Актуальный стиль всех заголовков — капс Regular, общий type-panel-title. */
+/* Общий стиль заголовков виджетов задаёт type-panel-title. */
 /* Графики обзорных панелей — одной высоты, чтобы низ ряда не был рваным. */
 .dk-grid--overview-panels .dk-chart { min-height: 200px; }
 .dk-widget__heading { flex: 1 1 10rem; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
@@ -5059,6 +5072,8 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-widget__footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--gap-inline); font: var(--type-caption); color: var(--ink-2); }
 .dk-widget--overview > .dk-widget__head > .dk-widget__actions { flex-wrap: wrap; min-width: 0; max-width: 100%; }
 @media (max-width: 767px) { .dk-head__title { font: var(--type-h2); } .dk-head__actions { flex: 1 1 100%; } }
+/* Heading rank does not change a widget's visual title size. */
+.dk-widget__head .dk-head__title { font:var(--type-panel-title); letter-spacing:var(--type-body-track); text-transform:none; }
 
 /* Главный объект + связанная сводка: выбранная композиция карты регионов. */
 .dk-focus-layout { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(340px, 1fr); gap: var(--grid-gap); align-items: stretch; }

@@ -53,6 +53,8 @@
   backdrop-filter: none;
 }
 .dk-glass .dk-side { border-right: 1px solid var(--glass-edge-soft); }
+/* A sticky example header stays readable over charts, without a heavy panel. */
+.dk-glass .dk-app--rail .dk-top { background:var(--bg); box-shadow:none; }
 .dk-glass :is(.dk-menu, .dk-pop, .dk-modal, .dk-tooltip) {
   /* Читаемый верхний слой: содержимое страницы не просвечивает. */
   background: var(--surface-2);
@@ -225,9 +227,6 @@
 }
 .dk-glass .dk-table th { background: var(--glass-chip); }
 .dk-glass .dk-table--cards > tbody > tr { background: var(--glass-chip); }
-.dk-glass .dk-table--cards.dk-table--cards.dk-table--cards > thead > tr > th:is([aria-sort], .dk-th-pick) {
-  background: var(--glass-chip);
-}
 .dk-glass .dk-table--sticky-col thead th:first-child,
 .dk-glass .dk-table--sticky-col thead .dk-th-pick + th,
 .dk-glass .dk-table--sticky-col td:first-child,
