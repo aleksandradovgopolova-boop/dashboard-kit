@@ -22,7 +22,7 @@ artifacts:
     status: done
   - path: verification.md
     status: draft
-    note: Browser/full suite blocked by environment; not acceptance PASS.
+    note: Full suite and MCP PASS in CI 41457051676; manual screenshot review pending.
   discovery:
   - path: implementation-plan.md
     status: done

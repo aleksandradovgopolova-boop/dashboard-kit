@@ -1,7 +1,7 @@
 schema_version: 1
 workitem_id: dashboard-recipes-numeric-2026-11-02
 workflow: ENGINEERING
-status: blocked
+status: awaiting_review
 stage: verify
 completed:
 - requirements
@@ -10,13 +10,14 @@ completed:
 - plan
 - plan-critique
 - implementation
-pending:
 - browser-verification
 - full-suite
+- mcp-verification
+pending:
+- screenshot-visual-review
 - final-acceptance
 reasons:
-- Sandbox denies localhost listen (EPERM); Chrome process unavailable
-- CUA security policy rejects file URL; no bypass attempted
-next: Run tools/test.py and numeric UI check in environment permitting Chrome and
-  localhost; inspect screenshots; then reassess draft.
+- GitHub Actions 41457051676 passed on dd87a91; screenshot archive could not be downloaded locally
+- Native AI Ops WorkItem remains needs_more_evidence; not a successful controller run
+next: Inspect Actions screenshots, check current PR checks, reassess draft; after PR71 acceptance retarget PR73 to main.
 note: Companion factual handoff, not a fabricated native-controller successful execution.

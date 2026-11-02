@@ -23,7 +23,7 @@ sections:
     note: null
   acceptance_criteria:
     status: complete
-    content: R1–R6 в requirements.yaml; текущая браузерная приёмка blocked, не PASS.
+    content: R1–R6 в requirements.yaml; полный CI с Chrome PASS, ручной просмотр снимков pending.
     note: null
   constraints:
     status: complete

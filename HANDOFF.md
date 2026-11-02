@@ -7,12 +7,16 @@
 сопоставимости в dkComparison/dkPeriodComparison. Формулы ипотеки сохранены.
 Кандидат 0.1.0-rc.4 не опубликован. Основная ветка example-shell не менялась.
 
-Статика и числовые проверки проходят; полный suite и новая UI-проверка
-останавливаются на запрете localhost listen (EPERM). Визуальная/клавиатурная
-и touch-приёмка этой версии не выполнена; draft не готов к слиянию. Следующий
-шаг: node tools/check-numeric-browser.mjs и python3 tools/test.py в разрешённой
-среде, просмотр снимков, затем пересмотр статуса. Evals16–19 ещё не запускались
-отдельными Codex/Claude. Отчёт: features/dashboard-recipes-numeric-2026-11-02/verification.md.
+Полный tools/test.py с Chrome и MCP прошли в GitHub Actions для dd87a91
+(run 41457051676). Новые numeric UI checks прошли Dark/Light × 390/1280,
+включая hover/focus/tap/Escape и восстановление фокуса. Первый CI выявил
+сбой Escape; тест разделяет остаточный hover и клавиатуру и проверяет
+устойчивое закрытие. Все прежние browser suites также PASS.
+
+Draft PR #73 сохранён: архив снимков доступен в Actions, ручной просмотр
+не выполнен из-за недоступности скачивания в этой среде. Evals16–19 ещё
+не запускались отдельными Codex/Claude. Точный SHA, журналы и границы:
+features/dashboard-recipes-numeric-2026-11-02/verification.md. Следующий пакет — #65.
 
 ## Первый пакет минимального текста · 02.11.2026
 
