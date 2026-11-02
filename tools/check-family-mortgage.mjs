@@ -74,6 +74,155 @@ try {
     }
   };
 
+  // Consumer acceptance: optional explanations, rather than a second test of
+  // the generic Tooltip API. Real source changes and filters exercise cleanup.
+  const coverageHidden = async () => {
+    assert(await evaluate(`(()=>{const b=document.querySelector('#fm-coverage');return b.hidden&&!b.textContent&&!b.hasAttribute('aria-describedby')&&!b.getClientRects().length;})()`),'Complete coverage leaves no status, tooltip link or reserved slot');
+    assert.equal(await evaluate(`document.querySelectorAll('.dk-tooltip[id^="dk-tooltip-"]').length`),0,'No stale coverage tooltip');
+  };
+  const tipFor = selector => evaluate(`(()=>{const b=document.querySelector(${JSON.stringify(selector)}),id=b.getAttribute('aria-describedby'),t=document.getElementById(id);return {id,text:t?.textContent,visible:!!t&&!t.hidden,role:t?.getAttribute('role'),inDialog:!!t?.closest('dialog'),name:b.getAttribute('aria-label')};})()`);
+  const pointerAt = async selector => evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
+  const focusHint = async selector => {
+    await pointerAt(selector);
+    await evaluate('new Promise(requestAnimationFrame)');
+    await evaluate(`document.querySelector(${JSON.stringify(selector)}).focus({preventScroll:true})`);
+  };
+  const tap = async selector => {
+    const point = await pointerAt(selector);
+    await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...point,radiusX:1,radiusY:1}]});
+    await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  };
+  const checkCoverage = async (width,theme) => {
+    await evaluate(`(async()=>{
+      window.__mortgageCoverageFixture=await fetch('data/family-mortgage-observations.json').then(r=>r.json());
+      window.__mortgageCoverageSource=structuredClone(window.__mortgageCoverageFixture);
+      window.__mortgageCompleteRegion=window.__mortgageCoverageFixture.rows.find(r=>r.dimensions.region!=='spb').dimensions.region;
+      window.familyMortgageDashboard(document.querySelector('#fm-dashboard'),{url:false,load:async()=>window.__mortgageCoverageSource});
+    })()`);
+    await ready(); await waitFor(`document.querySelector('#fm-map .dk-map__tile')`);
+    const full = await view();
+    await coverageHidden();
+    const load = async mutation => {
+      await evaluate(`(async()=>{window.__mortgageCoverageSource=structuredClone(window.__mortgageCoverageFixture);${mutation};await ${api}.session.retry();})()`);
+      await ready();
+    };
+    await load(`window.__mortgageCoverageSource.rows.find(r=>r.dimensions.region==='spb').values.issued=null`);
+    assert.equal((await view()).kpis.issued,null,'Partial observation stays missing rather than zero');
+    assert.equal(await evaluate(`document.querySelector('#fm-coverage').textContent.trim()`),'Без оценки: 1');
+    await focusHint('#fm-coverage');
+    const partialTip = await tipFor('#fm-coverage');
+    assert(partialTip.visible&&partialTip.role==='tooltip'&&partialTip.name.includes('пояснение')&&partialTip.text.includes('не ноль'),'Focus reveals named, described partial-data explanation: '+JSON.stringify(partialTip));
+    assert(!partialTip.text.includes('нулевом плане'),'Partial data is not mislabelled as a zero denominator');
+    await escape(); assert(!(await tipFor('#fm-coverage')).visible,'Escape dismisses coverage explanation');
+    await evaluate(`document.querySelector('#fm-coverage').blur()`);
+    await send('Input.dispatchMouseEvent',{type:'mouseMoved',x:1,y:1});
+    await send('Input.dispatchMouseEvent',{type:'mouseMoved',...await pointerAt('#fm-coverage')});
+    assert((await tipFor('#fm-coverage')).visible,'Mouse hover exposes the same explanation');
+    await escape();
+    if (width===390) {
+      await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
+      await tap('#fm-coverage');
+      await waitFor(`!document.getElementById(document.querySelector('#fm-coverage').getAttribute('aria-describedby')).hidden`);
+      assert(await evaluate(`(()=>{const r=document.querySelector('#fm-coverage').getBoundingClientRect();return r.height>=44&&r.width>=44;})()`),'Coverage touch target is at least 44×44');
+      await tap('#fm-coverage');
+      assert(!(await tipFor('#fm-coverage')).visible,'Second emulated tap dismisses the pinned explanation');
+      await tap('#fm-map-controls [data-view="list"]');
+      assert(await evaluate(`document.querySelector('#fm-map').dataset.view==='list'&&document.querySelector('#fm-map .dk-map__li[data-id="spb"]').textContent.includes('Санкт-Петербург')`),'Emulated tap opens the list with full region names');
+      await tap('#fm-map .dk-map__li');
+      assert(await evaluate(`document.querySelector('#fm-detail').open`),'An emulated list tap opens actual region details');
+      await escape();
+      await tap('#fm-map-controls [data-view="tiles"]');
+      await evaluate(`document.querySelector('#fm-map .dk-map__pan').scrollLeft=0`);
+      const pan=await pointerAt('#fm-map .dk-map__pan');
+      await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:pan.x+60,y:pan.y}]});
+      for (let step=1;step<=6;step++) {
+        await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:pan.x+60-step*20,y:pan.y}]});
+        await evaluate('new Promise(requestAnimationFrame)');
+      }
+      await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+      await waitFor(`document.querySelector('#fm-map .dk-map__pan').scrollLeft>20`);
+      assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`),'Map pans inside its viewport without page overflow');
+    } else {
+      await click('#fm-coverage'); assert((await tipFor('#fm-coverage')).visible,'Click opens the explanation');
+      await click('#fm-coverage'); assert(!(await tipFor('#fm-coverage')).visible,'Repeated click dismisses the explanation');
+    }
+    await evaluate(`scrollTo(0,0);document.activeElement.blur()`);
+    const shot = await send('Page.captureScreenshot',{format:'png'});
+    await writeFile(resolve(evidence,`family-mortgage-partial-${theme}-${width}.png`),Buffer.from(shot.data,'base64'));
+
+    for(let repeat=0;repeat<2;repeat++) {
+      await click('#fm-map .dk-map__tile[data-id="spb"]');
+      await evaluate('new Promise(requestAnimationFrame)');
+      assert.equal(await evaluate(`document.querySelectorAll('#fm-detail-coverage').length`),1,'One regional coverage entry after repeated opening');
+      assert(await evaluate(`!document.querySelector('#fm-detail-method').open&&!document.querySelector('#fm-detail-body').innerText.includes('Полоса ограничена')`),'Methodology stays available on demand without a permanent explanatory paragraph');
+      await focusHint('#fm-detail-coverage');
+      const regionalTip=await tipFor('#fm-detail-coverage');
+      assert(regionalTip.visible&&regionalTip.inDialog&&regionalTip.text.includes('полный факт'),'Regional explanation belongs to the active modal: '+JSON.stringify(regionalTip));
+      await escape();
+      assert(await evaluate(`document.querySelector('#fm-detail').open`),'First Escape dismisses only the explanation');
+      if(width===390) {
+        await tap('#fm-detail-coverage');
+        assert((await tipFor('#fm-detail-coverage')).visible,'Emulated tap reveals the regional explanation inside the dialog');
+        await tap('#fm-detail-coverage');
+        assert(!(await tipFor('#fm-detail-coverage')).visible&&await evaluate(`document.querySelector('#fm-detail').open`),'Repeated regional tap dismisses only its explanation');
+      }
+      if(repeat===0) {
+        await evaluate(`document.querySelector('#fm-detail-method summary').focus()`);
+        await send('Input.dispatchKeyEvent',{type:'keyDown',key:' ',code:'Space',windowsVirtualKeyCode:32});
+        await send('Input.dispatchKeyEvent',{type:'keyUp',key:' ',code:'Space',windowsVirtualKeyCode:32});
+        const disclosure=await evaluate(`({open:document.querySelector('#fm-detail-method').open,text:document.querySelector('#fm-detail-body').innerText,focus:document.activeElement.tagName,dialog:document.querySelector('#fm-detail').open})`);
+        assert(disclosure.open&&disclosure.text.includes('Полоса ограничена'),'Keyboard reveals the existing methodology disclosure: '+JSON.stringify(disclosure));
+        await click('#fm-detail-method summary');
+      }
+      await escape();
+      await waitFor(`!document.querySelector('#fm-detail').open&&!document.querySelector('#fm-detail .dk-tooltip')`);
+      assert(await evaluate(`!document.getElementById(${JSON.stringify(regionalTip.id)})`),'Closing details removes its tooltip and stale contents');
+    }
+    await evaluate(`${api}.setQuery({region:window.__mortgageCompleteRegion})`); await ready();
+    await coverageHidden();
+    assert(await evaluate(`!document.getElementById(${JSON.stringify(partialTip.id)})`),'A complete filtered slice removes the earlier explanation');
+    await click('#fm-tbody [data-region]');
+    assert(await evaluate(`!document.querySelector('#fm-detail-coverage')&&!document.querySelector('#fm-detail-method').open`),'Complete regional details do not retain a partial status or open methodology');
+    await escape();
+    await patch({region:'all'});
+    await load(''); await coverageHidden();
+    assert.deepEqual((await view()).kpis,full.kpis,'Full observations restore the original metrics');
+
+    await load(`window.__mortgageCoverageSource.rows.find(r=>r.dimensions.region==='spb').values.volume=null`);
+    assert.equal((await view()).counts.missing,0,'Missing volume does not remove a valid plan assessment');
+    assert.equal(await evaluate(`document.querySelector('#fm-coverage').textContent.trim()`),'Частичные данные','Non-plan missing data still has a visible status');
+    await focusHint('#fm-coverage');
+    assert((await tipFor('#fm-coverage')).text.includes('не ноль')&&!(await tipFor('#fm-coverage')).text.includes('полный факт'),'Volume-only explanation does not invent a missing plan');
+    await load(''); await coverageHidden();
+
+    await patch({month:'2025-09'});
+    assert(await evaluate(`document.querySelector('#fm-context').textContent==='Учебные данные · 01.09.2025–30.09.2025'&&document.querySelector('#fm-context').getClientRects().length>0`),'Visible common period follows the selected month');
+    await patch({month:'all'});
+
+    await load(`window.__mortgageCoverageSource.rows.filter(r=>r.dimensions.region==='spb').forEach(r=>{r.values.issued=null;r.values.issuedPlan=null;})`);
+    await patch({region:'spb'});
+    assert.equal((await view()).counts.missing,1);
+    assert(await evaluate(`document.querySelector('#fm-rank').textContent.includes('Нет данных об отставании')`),'Missing observations do not assert that no regions are behind plan');
+    await patch({region:'all'});
+    await load(''); await coverageHidden();
+
+    await load(`window.__mortgageCoverageSource.rows.filter(r=>r.dimensions.region==='spb').forEach(r=>{r.values.issuedPlan=0;})`);
+    assert(await evaluate(`Object.values(${api}.getView().kpis.coverage).every(c=>!c.partial)`),'Zero denominator fixture has complete coverage');
+    await click('#fm-coverage');
+    const zeroTip=await tipFor('#fm-coverage');
+    assert(zeroTip.visible&&zeroTip.text.includes('нулевом плане')&&!zeroTip.text.includes('Неполные'),'Zero denominator has its own explanation, not a false partial-data warning');
+    await escape();
+    await click('#fm-map .dk-map__tile[data-id="spb"]');
+    assert.equal(await evaluate(`document.querySelector('#fm-detail-coverage').textContent.trim()`),'Без оценки выполнения');
+    await focusHint('#fm-detail-coverage');
+    assert((await tipFor('#fm-detail-coverage')).text.includes('нулевом плане'),'Regional details preserve the zero-denominator explanation');
+    await load(''); await coverageHidden();
+    assert(await evaluate(`!document.querySelector('#fm-detail').open`),'Reload closes stale regional details');
+    assert(await evaluate(`!document.getElementById(${JSON.stringify(zeroTip.id)})`),'Restored source removes zero-denominator tooltip content');
+    assert.deepEqual((await view()).kpis,full.kpis);
+    await send('Emulation.setTouchEmulationEnabled',{enabled:false});
+  };
+
   for (const theme of ['light', 'dark']) for (const width of [320, 390, 600, 768, 859, 860, 886, 1024, 1100, 1280, 1536]) {
     await send('Emulation.setDeviceMetricsOverride', {width, height:900, deviceScaleFactor:1, mobile:width < 768});
     const url = `${base}/family-mortgage.html?theme=${theme}`;
@@ -81,6 +230,7 @@ try {
     await waitFor(`location.href===${JSON.stringify(url)}&&document.readyState==='complete'&&document.querySelector('#fm-dashboard')?.dataset.status==='ready'`);
     await evaluate('document.fonts.ready');
     await waitFor(`document.querySelector('#fm-map .dk-map__tile')`);
+    assert(await evaluate(`!document.querySelector('.fm-map-help')`),'The working map has no permanent instruction paragraph');
     await click(`[data-theme-set="${theme}"]`);
     assert(await evaluate(`document.documentElement.dataset.theme===${JSON.stringify(theme)}`), 'Requested theme must be applied');
     const header=await evaluate(`(()=>{const r=x=>{const a=x.getBoundingClientRect();return {l:a.left,r:a.right,t:a.top,b:a.bottom,h:a.height,cy:(a.top+a.bottom)/2};};return {inner:r(document.querySelector('.fm-topbar__inner')),brand:r(document.querySelector('.fm-brand')),filters:r(document.querySelector('.fm-filters')),tools:r(document.querySelector('.fm-topbar__tools')),toggle:r(document.querySelector('#fm-filter-toggle')),compact:!document.querySelector('#fm-filter-toggle').hidden,hidden:document.querySelector('.fm-filters').hidden};})()`);
@@ -115,6 +265,9 @@ try {
     }
     assert(await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__label')).filter(x=>x.getClientRects().length).every(x=>x.scrollWidth<=x.clientWidth+1)`),'Default filter labels remain readable');
     const baseline = await view();
+    const periodText=baseline.period.from.split('-').reverse().join('.')+'–'+baseline.period.to.split('-').reverse().join('.');
+    assert.equal(await evaluate(`document.querySelector('#fm-context').textContent`),'Учебные данные · '+periodText,'Working overview exposes data kind and actual date range');
+    if(width===390) assert(await evaluate(`document.querySelector('#fm-filter-panel').hidden&&document.querySelector('#fm-context').getClientRects().length>0`),'Phone context stays visible while filters are closed');
     assert.equal(baseline.rowCount, 89, 'All demonstration regions must be accessible');
     assert.equal(baseline.rows.length, 12);
     assert(await evaluate(`Array.from(document.querySelectorAll('#fm-table .dk-status > span')).every(el => el.getBoundingClientRect().height <= parseFloat(getComputedStyle(el).lineHeight) * 2 + 1)`), 'Short status labels wrap by words in at most two lines');
@@ -168,6 +321,7 @@ try {
     assert(await evaluate(`document.querySelector('#fm-detail-body').textContent.trim().length>0`), 'Regional details must have content');
     await escape();
     assert(await evaluate(`!document.querySelector('#fm-detail').open&&document.activeElement.hasAttribute('data-region')`), 'Escape must close details and return focus to its opener');
+    if ([390,1280].includes(width)) await checkCoverage(width,theme);
   }
 
   // The full dataset oracle catches stale KPIs or mismatched widget filters.

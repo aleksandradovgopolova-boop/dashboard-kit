@@ -141,8 +141,10 @@
 #fm-dashboard #fm-map .dk-map__abbr { font-size: var(--text-caption); opacity: 1; font-weight: var(--weight-ui-strong); color: inherit; }
 #fm-dashboard #fm-map-controls .dk-seg { font: var(--type-caption); }
 /* Успешная загрузка не оставляет поясняющую строку и пустой отступ. */
-#fm-dashboard .fm-status:has(#fm-status:empty):has(#fm-retry[hidden]),
-#fm-dashboard #fm-coverage:empty { display: none; }
+#fm-dashboard .fm-status:has(#fm-status:empty):has(#fm-retry[hidden]) { display: none; }
+#fm-dashboard #fm-context { margin:0; }
+#fm-dashboard .fm-hero-heading { flex-direction:column; gap:var(--space-2); }
+#fm-dashboard .fm-coverage { align-self:flex-start; max-width:100%; white-space:normal; text-align:start; }
 
 /* Статический каркас до данных: без мерцания и активных пустых фильтров. */
 #fm-dashboard .fm-loading__hero { display: grid; gap: var(--gap-group); min-height: 120px; }
@@ -360,7 +362,6 @@
  }
  #fm-dashboard #fm-map .dk-map__pan::-webkit-scrollbar { display:block; width:8px; height:8px; }
  #fm-dashboard #fm-map .dk-map__li-name { white-space:normal; overflow-wrap:anywhere; }
- #fm-dashboard .fm-map-help { display:block; margin:0; }
  #fm-dashboard #fm-rank-widget .dk-widget__body { max-height:280px; overflow:auto; overscroll-behavior-y:auto; }
  #fm-dashboard #fm-rank .dk-rank__row { flex:none; min-height:44px; }
  #fm-dashboard #fm-table-widget > .dk-widget__head { align-items:flex-start; }
@@ -377,7 +378,6 @@
  #fm-dashboard #fm-table.dk-table--cards > tbody > tr > td:is(:first-child,:nth-child(2),:last-child) { grid-column:1 / -1; }
  #fm-dashboard #fm-table.dk-table--cards > tbody > tr > td:nth-child(2) { flex-direction:row; justify-content:flex-start; align-items:baseline; gap:var(--space-4); }
 }
-@media(min-width:768px) { #fm-dashboard .fm-map-help { display:none; } }
 
 /* Keep the geographic overview at its readable scale on portrait tablets too. */
 @media(min-width:768px) { #fm-dashboard #fm-map .dk-map__pan { max-width:680px; margin-inline:auto; } }
