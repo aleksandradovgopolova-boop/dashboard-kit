@@ -46,27 +46,27 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface, _matching_brace
 
-# ─── индикатор Ktor ───────────────────────────────────────────────────────────────────────────────
-# Файл считается Ktor-бэкендом только при явном индикаторе — иначе одноимённый чужой `get(...)`/
-# `post(...)` другого кода дал бы ложный маршрут. Индикатор: импорт io.ktor, DSL-точка `routing {`
-# ЛИБО установка фичи маршрутизации `install(Routing)`.
+
+
+
+
 _INDICATOR_RE = re.compile(
     r"\bimport\s+io\.ktor\b"
     r"|\brouting\s*\{"
     r"|\binstall\s*\(\s*Routing\b")
 
-# HTTP-глаголы Ktor DSL. Совпадают с именами функций-расширений Route: get/post/put/patch/delete/
-# head/options. `(?<![.\w])` отсекает member-вызовы (`x.get {`) и хвосты слов (`forget`), `\b` — начало.
+
+
 _METHOD_RE = re.compile(
     r"(?<![.\w])(get|post|put|patch|delete|head|options)\b\s*"
     r"(\([^(){}]*\))?\s*\{")
 
-# Блок-префикс `route("/prefix") { … }`. Как и у методов, `(?<![.\w])` отсекает member-вызов. Тело
-# скобок (`[^(){}]*`) — путь-литерал (или переменная/пусто), без вложенных `(`/`{` (строки к моменту
-# скана уже замаскированы `_mask_kotlin`, так что их скобки/кавычки в счёт не идут).
+
+
+
 _ROUTE_BLOCK_RE = re.compile(r"(?<![.\w])route\b\s*\(([^(){}]*)\)\s*\{")
 
-# Ведущий строковый литерал в аргументах: сырой `"""…"""` ПЕРЕД обычным `"…"` (три кавычки жаднее).
+
 _LEAD_RAW_RE = re.compile(r'\s*"""(.*?)"""', re.DOTALL)
 _LEAD_STR_RE = re.compile(r'\s*"((?:[^"\\]|\\.)*)"')
 

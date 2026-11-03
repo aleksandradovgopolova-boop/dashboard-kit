@@ -29,7 +29,7 @@ from pathlib import Path
 import yaml
 
 CONFIG_REL = ".ai-ops.yaml"
-# значение целиком — угловые скобки установщика; пустые `<>` не считаем (это не заготовка)
+
 PLACEHOLDER = re.compile(r"^<[^<>]+>$")
 
 

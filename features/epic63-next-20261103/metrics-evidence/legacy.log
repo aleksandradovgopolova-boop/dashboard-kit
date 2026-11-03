@@ -1,0 +1,29 @@
+✔ validation clones and deeply freezes data without freezing caller data (13.452625ms)
+✔ one filter and period derive rows, sums and means from the same snapshot (1.251542ms)
+✔ unknown filter values and empty input produce empty results, never fabricated zeros (1.484583ms)
+✔ malformed metadata, dates, duplicates, unknown fields and invalid numbers fail closed (1.999292ms)
+✔ dangerous keys and invalid queries cannot enter the data model (1.788ms)
+✔ overflow is rejected while finite large means remain computable (0.48425ms)
+✔ late success cannot overwrite the latest query, even when loader ignores abort (2.801667ms)
+✔ late error and current error never restore or relabel stale data (1.385125ms)
+✔ timeout settles an ignored abort and retry retains the filter (16.118125ms)
+✔ destroy aborts work, disconnects subscribers and permits independent remount (0.773542ms)
+✔ unsubscribe and consumer mutation cannot corrupt the store or later renderers (0.387791ms)
+✔ reentrant subscribers can supersede or destroy a load before its loader starts (0.374208ms)
+✔ invalid queries never reach loader; invalid payload and empty payload have distinct states (0.35525ms)
+✔ fetch adapter propagates signal, checks HTTP and hides response parsing errors (2.229833ms)
+✔ local pagination never changes KPI or chart aggregates (0.439666ms)
+✔ server mode keeps whole-slice totals and charts with only one returned page (2.070042ms)
+✔ server contract supports 50000 matching rows without downloading those rows (0.707292ms)
+✔ server response rejects query mismatch, partial pages, inconsistent totals and coverage (6.531208ms)
+✔ server means are weighted by observed count and all-null remains missing (0.945958ms)
+✔ server aggregation overflow and table/series disagreement fail closed (0.810375ms)
+✔ fetch server mode posts normalized query and limits streamed response bytes (41.558916ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 106.838667

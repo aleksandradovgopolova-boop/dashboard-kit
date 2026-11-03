@@ -1,0 +1,15 @@
+schema_version: 1
+kind: workitem
+id: dashboard-recipes-numeric-2026-11-02
+task: 'Рецепты #30 и независимые числовые проверки #66, продолжение #63'
+workflow: ENGINEERING
+route_reasons:
+- task_type 'feature' -> ENGINEERING (selection_criteria)
+human_approval_required: false
+paths:
+  blueprint: features/dashboard-recipes-numeric-2026-11-02/blueprint.yaml
+  run_state: .ai/runtime/workitems/dashboard-recipes-numeric-2026-11-02/TaskState.yaml
+  workitem: features/dashboard-recipes-numeric-2026-11-02/workitem.yaml
+status: needs_more_evidence
+lifecycle_intent: implementation
+affects: {}

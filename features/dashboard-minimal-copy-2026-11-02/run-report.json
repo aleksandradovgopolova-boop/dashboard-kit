@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "kind": "run-report",
+  "workitem_id": "dashboard-minimal-copy-2026-11-02",
+  "base_workflow": "ENGINEERING",
+  "required_tracks": [
+    "VISUAL",
+    "DOCUMENTATION"
+  ],
+  "conditional_tracks": [],
+  "skipped_tracks": [
+    {
+      "track": "ANALYTICS",
+      "reason": "измеримое поведение не заявлено в сигналах задачи — трек аналитики не активирован"
+    },
+    {
+      "track": "SECURITY",
+      "reason": "изменение границы безопасности не заявлено в сигналах задачи — security-трек не активирован"
+    },
+    {
+      "track": "EVENTS",
+      "reason": "изменение событий не заявлено в сигналах задачи — трек событий не активирован"
+    },
+    {
+      "track": "AI",
+      "reason": "AI-компонент не заявлен в сигналах задачи — трек AI-оценки не активирован"
+    },
+    {
+      "track": "FEATURE_DECISIONS",
+      "reason": "фича-решение не заявлено в сигналах задачи — трек фича-решений не активирован (не факт о коде: план строится до правок)"
+    },
+    {
+      "track": "RELEASE",
+      "reason": "изменение релизного контура не заявлено в сигналах задачи — трек релиза не активирован"
+    }
+  ],
+  "gates": [
+    "intake_completeness",
+    "concurrency_preflight",
+    "requirements",
+    "specification",
+    "event_contract_consistency",
+    "plan_readiness",
+    "implementation_verification",
+    "code_review",
+    "security",
+    "architecture_review",
+    "deploy_readiness",
+    "ux_review",
+    "design_system_usage",
+    "accessibility_review",
+    "visual_regression",
+    "documentation_updated"
+  ],
+  "runtime": "codex",
+  "execution": "native-tool-loop",
+  "status": "blocked",
+  "run_state": ".ai/runtime/workitems/dashboard-minimal-copy-2026-11-02/TaskState.yaml",
+  "run_state_materialized": false,
+  "artifacts": {
+    "workitem": "features/dashboard-minimal-copy-2026-11-02/workitem.yaml",
+    "run_plan": "features/dashboard-minimal-copy-2026-11-02/run-plan.yaml",
+    "blueprint": "features/dashboard-minimal-copy-2026-11-02/blueprint.yaml",
+    "implementation_plan": "features/dashboard-minimal-copy-2026-11-02/implementation-plan.md",
+    "verification": "features/dashboard-minimal-copy-2026-11-02/verification.md",
+    "requirements": "features/dashboard-minimal-copy-2026-11-02/requirements.yaml",
+    "spec_change": "features/dashboard-minimal-copy-2026-11-02/spec-change.yaml",
+    "plan": "features/dashboard-minimal-copy-2026-11-02/plan.yaml",
+    "artifact_validation": "features/dashboard-minimal-copy-2026-11-02/artifact-validation.json",
+    "gate_evidence": "features/dashboard-minimal-copy-2026-11-02/gate-evidence.json",
+    "implementation_verification": "features/dashboard-minimal-copy-2026-11-02/implementation-verification.json",
+    "reviewer_result": "features/dashboard-minimal-copy-2026-11-02/reviewer-result.json",
+    "retrospective": "features/dashboard-minimal-copy-2026-11-02/retrospective.md",
+    "workitem_status": "features/dashboard-minimal-copy-2026-11-02/workitem-status.json",
+    "profile_gate_report": "features/dashboard-minimal-copy-2026-11-02/profile-gate-report.json",
+    "structural_report": "features/dashboard-minimal-copy-2026-11-02/structural-report.txt"
+  },
+  "delivery": {
+    "requested": true,
+    "status": "draft-pr-open",
+    "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/pull/71",
+    "merged": false,
+    "deployed": false,
+    "github_actions": "not-run"
+  },
+  "product_validation": "passed",
+  "profile_gate_report": "profile-gate-report.json",
+  "formal_status_reason": "Lifecycle CLI omits repository-profile not_applicable for static-core build/typecheck; actual lint/test/browser/review passed. No managed/config modification or fabricated PASS.",
+  "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+  "tested_tree": "e9ba871e54dc74762e2f7efc7ac683453821a841"
+}

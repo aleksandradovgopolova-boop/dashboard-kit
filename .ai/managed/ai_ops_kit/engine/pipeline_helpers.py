@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 import re
 import subprocess
+from pathlib import Path
 from ai_ops_kit.gates import gate_executor
 
 
@@ -94,17 +95,17 @@ def _profile_summary(profile):
     return f"Стек: {langs}. Команды проверки: {cmds or 'нет'}."
 
 
-# Соответствие required_evidence гейта intake_completeness входным сигналам.
+
 INTAKE_SIGNAL_MAP = {"classified_type": "task_type", "size": "size", "risk": "risk"}
 
-# Что кит классифицирует САМ: task_type выводит роутер (run_plan.build_plan -> base_workflow),
-# поэтому спрашивать его у пользователя не нужно. Всё остальное — продуктовое суждение вызывающего:
-# вывести размер и риск из репозитория нечем, а угадать их значило бы сфабриковать evidence
-# блокирующего гейта. Значит, их надо ЗАПРОСИТЬ до старта, а не завалить гейт после прогона.
+
+
+
+
 DERIVED_INTAKE_FLAGS = {"classified_type"}
 
-# Словари значений — из мест, где они реально используются: size ниже сверяется с
-# atomic_planner.SIZE_FILES, risk — уровни эскалации spec_levels (critical/high -> L3).
+
+
 INTAKE_SIGNAL_VALUES = {
     "size": ("small", "medium", "large", "xl"),
     "risk": ("low", "medium", "high", "critical"),
@@ -175,8 +176,8 @@ def _intake_evidence(signals):
             "evidence": [f"intake из сигналов: {', '.join(provided)}"]}
 
 
-# v2.85 (finding аудита): гейты, которые НЕЛЬЗЯ закрывать автоматическим ревьюером той же модели —
-# слишком консеквентны для self-attestation.
+
+
 NO_SELF_REVIEW = {"security", "ai_red_team"}
 
 
@@ -194,21 +195,135 @@ def _reviewable_gates(gate_ids, signals):
     return out
 
 
-def _gate_checklist(gate):
-    """Короткий чек-лист для ревьюера: required_evidence + ответственная роль."""
+def _gate_checklist(gate, root=None, changed_files=None):
+    """Чек-лист для ревьюера: required_evidence + ответственная роль + (для ревью кода) статьи
+    Архитектурной конституции и, если переданы изменённые файлы, машинные находки по ним.
+
+    Тот же текст уходит и в промпт живого ревьюера (`<criteria>`), и в поле `checklist` запроса
+    внешнему ревьюеру (`reviewer_handoff.open_request`) — оба зовут эту функцию."""
     req = gate.get("required_evidence", []) or []
     role = gate.get("responsible_role", "reviewer")
     parts = [f"роль: {role}"]
     if req:
         parts.append("подтверди по факту: " + ", ".join(req))
-    return "; ".join(parts)
+    base = "; ".join(parts)
+    block = _constitution_criteria(gate.get("id"), root=root, changed_files=changed_files)
+    return f"{base}\n{block}" if block else base
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_CONSTITUTION_PARTS = {"code_review": ("I", "II")}
+_CONSTITUTION_ARTICLES_CAP = 1800
+_CONSTITUTION_FINDINGS_CAP = 600
+_CONSTITUTION_REL = "standards/architecture/rules.yaml"
+
+
+def _constitution_rules_path(root=None):
+    """Реестр Архитектурной конституции. Сперва — в проверяемом дереве `root` (в дочке кит лежит
+    под `.ai/managed/`, резолв — общий `constitution_conformance.registry_path`); нет там (или `root`
+    не задан) — у ЗАПУЩЕННОГО кита (`_bootstrap.PKG`: в ките — корень репо, в дочке — `.ai/managed`).
+    Откат нужен: одноразовое дерево прогона может не нести `.ai/managed`, а кит его несёт всегда."""
+    from ai_ops_kit.checks import constitution_conformance as _cc
+    from ai_ops_kit.shared import _bootstrap
+    if root:
+        own = _cc.registry_path(Path(root), "architecture")
+        if own.is_file():
+            return own
+    return _cc.registry_path(_bootstrap.PKG, "architecture")
+
+
+def _load_review_articles(path, parts):
+    """Статьи нужных частей из rules.yaml. -> list | None (None — реестра нет или он нечитаем)."""
+    import yaml
+    try:
+        doc = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError):
+        return None
+    rules = doc.get("rules") if isinstance(doc, dict) else None
+    if not isinstance(rules, list):
+        return None
+    return [r for r in rules if isinstance(r, dict) and r.get("id") and r.get("part") in parts]
+
+
+def _render_capped(header, lines, cap, tail):
+    """Заголовок + строки, пока влезают в `cap`; остаток назван числом через `tail(n)`."""
+    out, used = [header], len(header)
+    for i, ln in enumerate(lines):
+        if used + len(ln) + 1 > cap:
+            out.append(tail(len(lines) - i))
+            break
+        out.append(ln)
+        used += len(ln) + 1
+    return "\n".join(out)
+
+
+def _render_articles(articles):
+    lines = [f"- {r['id']} · {str(r.get('level', '')).replace('_', ' ')} · {r.get('title', '')}"
+             for r in articles]
+    header = (f"Статьи Архитектурной конституции для ревью кода ({_CONSTITUTION_REL}, части I–II). "
+              "Замечание по статье называй её ID; SHOULD-статьи (имена, место логики) машина не "
+              "ловит — их проверяешь ты. Вердикт по-прежнему заземляй цитатой изменённого файла:")
+    return _render_capped(header, lines, _CONSTITUTION_ARTICLES_CAP,
+                          lambda n: f"… не вошло статей: {n} (лимит размера) — см. {_CONSTITUTION_REL}")
+
+
+def _render_findings(root, changed_files, rules_path=None):
+    """Машинные находки конформанса ТОЛЬКО по изменённым файлам (пофайловые эвристики, только .py,
+    дёшево: разбор AST лишь этих файлов). Статьи — из того же реестра, что показан ревьюеру.
+    Сбой советчика ревью НЕ роняет (это совет, не гейт) — ревьюер видит честную строку о сбое."""
+    try:
+        from ai_ops_kit.checks import constitution_conformance as _cc
+        findings = _cc.conform_paths(root, sorted(changed_files), rules_path=rules_path)
+    except Exception as exc:  # noqa: BLE001 — любой сбой советчика -> названная строка, а не упавшее ревью
+        return (f"машинная проверка конституции по изменённым файлам не выполнилась "
+                f"({type(exc).__name__}) — суди без неё")
+    if not findings:
+        return "машинных находок конституции по изменённым .py-файлам нет (эвристики — только размер и вложенность)"
+    lines = [f"- {f['article_id']} {f['title']}: {', '.join(f['locations'][:3])}"
+             + (f" (+{len(f['locations']) - 3})" if len(f["locations"]) > 3 else "") for f in findings]
+    header = "Машинные находки конституции по изменённым файлам (совет, НЕ блок; проверь чтением):"
+    return _render_capped(header, lines, _CONSTITUTION_FINDINGS_CAP,
+                          lambda n: f"… не вошло находок: {n} (лимит размера)")
+
+
+def _constitution_criteria(gate_id, root=None, changed_files=None):
+    """Блок критериев конституции для гейта. -> str ('' — гейту статьи не положены).
+
+    Реестра нет или он нечитаем — ЧЕСТНАЯ строка «статьи недоступны», а не пустота: иначе ревьюер
+    не отличил бы «судить не по чему» от «кит забыл положить». Находки по изменённым файлам — только
+    если вызывающий передал `root` и `changed_files` (дорогой скан всего репо здесь не запускаем)."""
+    parts = _CONSTITUTION_PARTS.get(gate_id)
+    if not parts:
+        return ""
+    path = _constitution_rules_path(root)
+    articles = _load_review_articles(path, parts)
+    if not articles:
+        block = f"статьи конституции недоступны: реестр {_CONSTITUTION_REL} не найден или пуст — суди без них"
+    else:
+        block = _render_articles(articles)
+    
+    if articles and root is not None and changed_files is not None:
+        block += "\n" + _render_findings(root, changed_files, rules_path=path)
+    return block
 
 
 def _parse_yaml_block(text):
     """Достать YAML-артефакт из ответа author-модели. v3.0-rc5 (finding живого прогона kimi): терпимо к
     РАЗНЫМ стилям вывода моделей — несколько ```-блоков, проза вокруг, YAML без ограды после текста."""
     import yaml
-    # `import re` здесь был дублем модульного (строка 10) — снят ревизией 2026-08-11.
+    
     if isinstance(text, dict):
         return text
     s = text or ""
@@ -246,8 +361,8 @@ def _openspec_validate(work_root, change_id):
 def _authoring_specs():
     """v2.86: артефакт-гейты, которые движок умеет ЗАКРЫВАТЬ производством артефакта + детерминированной
     проверкой ФОРМЫ (не «качества»). specification обрабатывается ОТДЕЛЬНО."""
-    # Чистые проверки формы живут ВНИЗ, в пакете `checks` (слой primitives): зовём их вниз, без
-    # восходящего ребра engine -> validation (лента №5).
+    
+    
     from ai_ops_kit.checks import requirements_artifact as vra
     from ai_ops_kit.checks import plan_artifact as vpa
     return {
@@ -259,14 +374,14 @@ def _authoring_specs():
                            "write_scope: [пути]"),
     }
 
-# Запуск скриптом ОБЪЯСНЯЕТ модуль, а не молчит (ревизия 2026-08-11).
-#
-# Здесь стояло `sys.exit(selftest())`, а сама функция удалена в v3.30 вместе с переносом
-# селфтестов в pytest: любой запуск падал с `NameError`. Просто убрать блок — тоже неверно:
-# модуль остаётся запускаемой точкой входа (`python3 -m ai_ops_kit.engine.pipeline_helpers`), и молчаливый
-# выход с кодом 0 — тот самый дефект «ноль и есть симптом».
-# Поэтому вход делает осмысленную работу — печатает назначение модуля, как `invariants.py`.
-# Проверки модуля — в `tests/unit/`.
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     print(__doc__)
     print("Проверки этого модуля — в tests/unit/ (pytest), отдельного --selftest нет с v3.30.")

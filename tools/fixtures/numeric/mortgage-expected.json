@@ -1,0 +1,254 @@
+{
+  "cases": [
+    {
+      "id": "all",
+      "query": {},
+      "kpis": {
+        "issued": 100,
+        "issuedPlan": 200,
+        "volume": 1000,
+        "rate": 6.6,
+        "planPct": 50,
+        "approval": 70,
+        "applied": 200,
+        "approved": 140,
+        "budget": {
+          "spent": 50,
+          "plan": 80,
+          "limit": 120,
+          "pct": 62.5
+        }
+      },
+      "rowCount": 2,
+      "dom": {
+        "fm-issued": "100",
+        "fm-planpct": "50,0%",
+        "fm-volume": "1,00",
+        "fm-rate": "6,6%",
+        "fm-approval": "70,0%",
+        "fm-bud-spent": "0,05",
+        "fm-bud-pct": "62,5% плана"
+      }
+    },
+    {
+      "id": "district",
+      "query": {
+        "district": "СЗФО"
+      },
+      "kpis": {
+        "issued": 40,
+        "issuedPlan": 50,
+        "volume": 400,
+        "rate": 4.5,
+        "planPct": 80,
+        "approval": 50,
+        "budget": {
+          "spent": 20,
+          "plan": 30,
+          "limit": 50,
+          "pct": 66.66666666666667
+        }
+      },
+      "rowCount": 1,
+      "dom": {
+        "fm-issued": "40",
+        "fm-planpct": "80,0%",
+        "fm-volume": "0,40",
+        "fm-rate": "4,5%",
+        "fm-approval": "50,0%"
+      }
+    },
+    {
+      "id": "region",
+      "query": {
+        "region": "altai-rep"
+      },
+      "kpis": {
+        "issued": 60,
+        "issuedPlan": 150,
+        "volume": 600,
+        "rate": 8,
+        "planPct": 40,
+        "approval": 90
+      },
+      "rowCount": 1,
+      "dom": {
+        "fm-issued": "60",
+        "fm-planpct": "40,0%",
+        "fm-rate": "8,0%",
+        "fm-approval": "90,0%"
+      }
+    },
+    {
+      "id": "month",
+      "query": {
+        "month": "2025-05"
+      },
+      "kpis": {
+        "issued": 30,
+        "issuedPlan": 80,
+        "volume": 300,
+        "rate": 4,
+        "planPct": 37.5,
+        "approval": 50,
+        "budget": {
+          "spent": 15,
+          "plan": 30,
+          "limit": 50,
+          "pct": 50
+        }
+      },
+      "rowCount": 2,
+      "dom": {
+        "fm-issued": "30",
+        "fm-planpct": "37,5%",
+        "fm-rate": "4,0%",
+        "fm-approval": "50,0%"
+      }
+    },
+    {
+      "id": "intersection",
+      "query": {
+        "district": "СЗФО",
+        "month": "2025-05",
+        "search": "Петербург"
+      },
+      "kpis": {
+        "issued": 30,
+        "issuedPlan": 30,
+        "volume": 300,
+        "rate": 4,
+        "planPct": 100,
+        "approval": 50
+      },
+      "rowCount": 1,
+      "dom": {
+        "fm-issued": "30",
+        "fm-planpct": "100,0%",
+        "fm-rate": "4,0%"
+      }
+    },
+    {
+      "id": "zero",
+      "query": {
+        "region": "altai-rep",
+        "month": "2025-05"
+      },
+      "kpis": {
+        "issued": 0,
+        "issuedPlan": 50,
+        "volume": 0,
+        "rate": null,
+        "planPct": 0,
+        "approval": null
+      },
+      "rowCount": 1,
+      "dom": {
+        "fm-issued": "0",
+        "fm-planpct": "0,0%",
+        "fm-volume": "0,00",
+        "fm-rate": "Нет данных",
+        "fm-approval": "Нет данных"
+      }
+    },
+    {
+      "id": "empty",
+      "query": {
+        "district": "СЗФО",
+        "region": "altai-rep"
+      },
+      "kpis": {
+        "issued": null,
+        "volume": null,
+        "rate": null,
+        "planPct": null
+      },
+      "rowCount": 0,
+      "dom": {}
+    },
+    {
+      "id": "unequal-approval-bases",
+      "query": {},
+      "mutation": "approval-bases",
+      "kpis": {
+        "issued": 100,
+        "planPct": 50,
+        "rate": 6.6,
+        "approval": 76.66666666666667,
+        "applied": 300,
+        "approved": 230
+      },
+      "rowCount": 2,
+      "dom": {
+        "fm-issued": "100",
+        "fm-approval": "76,7%"
+      }
+    },
+    {
+      "id": "partial",
+      "query": {},
+      "mutation": "partial",
+      "kpis": {
+        "issued": null,
+        "issuedPlan": 200,
+        "volume": 1000,
+        "rate": 6.6,
+        "planPct": null,
+        "approval": 70
+      },
+      "rowCount": 2,
+      "dom": {
+        "fm-issued": "Нет данных",
+        "fm-planpct": "Нет данных",
+        "fm-rate": "6,6%",
+        "fm-coverage": "Без оценки: 1"
+      }
+    },
+    {
+      "id": "no-data",
+      "query": {},
+      "mutation": "no-data",
+      "kpis": {
+        "issued": null,
+        "issuedPlan": null,
+        "volume": null,
+        "rate": null,
+        "planPct": null,
+        "approval": null
+      },
+      "rowCount": 2,
+      "dom": {
+        "fm-issued": "Нет данных",
+        "fm-planpct": "Нет данных",
+        "fm-rate": "Нет данных",
+        "fm-coverage": "Без оценки: 2"
+      }
+    }
+  ],
+  "detail": {
+    "region": "spb",
+    "query": {
+      "district": "СЗФО"
+    },
+    "kpis": [
+      "80,0%",
+      "40",
+      "0,40",
+      "4,5%"
+    ],
+    "monthly": [
+      [
+        "10",
+        "20",
+        "50,0%",
+        "−10"
+      ],
+      [
+        "30",
+        "30",
+        "100,0%",
+        "0"
+      ]
+    ]
+  }
+}

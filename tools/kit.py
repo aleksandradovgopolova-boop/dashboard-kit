@@ -131,6 +131,8 @@ def show_part(p: dict) -> str:
     for title, key in (("Правила", "rules"), ("Не так", "avoid"), ("Доступность", "a11y")):
         if p[key]:
             r += ["", f"{title}:"] + [f"  - {x}" for x in p[key]]
+    if p.get("parameterContract"):
+        r += ["", "Декларативный screen-spec/1: python3 tools/kit.py schema " + p["id"]]
     if p["example"]:
         r += ["", "Пример:", "```", p["example"].rstrip(), "```"]
     r += ["", "Подробно: " + ", ".join(p["docs"])]
@@ -179,10 +181,10 @@ def cmd_head(m: dict, args: list[str]) -> str:
     if data:
         r.append(f"<!-- данные рядом с китом: {', '.join(data)}; страница открывается по http -->")
     if embed:
-        r.append('<!-- встроенный кит: обёртка <div class="dk-root" data-theme="dark|light" data-accent="…"> '
+        r.append('<!-- встроенный кит: обёртка <div class="dk-root" data-theme="dark|light" data-accent="blue"> '
                  'вокруг блоков; dk-page и каркас не ставить -->')
     else:
-        r.append('<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" '
+        r.append('<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue" '
                  'на одном элементе — <html> своей страницы или обёртка внутри чужой; '
                  'dk-page на body — только если кит владеет всей страницей -->')
     return "\n".join(r)
@@ -229,7 +231,41 @@ def cmd_find(m: dict, args: list[str]) -> str:
     return f"«{q}»:\n" + "\n".join(hits)
 
 
-COMMANDS = {"list": cmd_list, "show": cmd_show, "head": cmd_head, "charts": cmd_charts, "find": cmd_find}
+def cmd_schema(m: dict, args: list[str]) -> str:
+    if len(args) != 1:
+        raise SystemExit("kit.py schema <component>")
+    part = pick(m, args)[0]
+    if "parameterContract" not in part:
+        raise SystemExit(f"{args[0]}: нет контракта screen-spec; поддержаны tile/chart/table/select")
+    return json.dumps(part["parameterContract"], ensure_ascii=False, indent=2)
+
+
+def cmd_validate(m: dict, args: list[str]) -> str:
+    if len(args) not in (2, 4) or len(args) == 4 and args[2] != "--version":
+        raise SystemExit("kit.py validate <component> '<JSON parameters>' [--version 1]")
+    from component_contracts import validate_schema
+    try:
+        definition = json.loads(cmd_schema(m, [args[0]]))
+        version = int(args[3]) if len(args) == 4 else 1
+        if version != definition["schemaVersion"]:
+            raise ValueError("unsupported parameter schema version")
+        if len(args[1]) > 1048576:
+            raise ValueError("parameters: JSON exceeds 1 MiB")
+        def unique(pairs):
+            out = {}
+            for key, value in pairs:
+                if key in out:
+                    raise ValueError("duplicate JSON field: " + key)
+                out[key] = value
+            return out
+        parameters = json.loads(args[1], object_pairs_hook=unique, parse_constant=lambda value: (_ for _ in ()).throw(ValueError("non-finite JSON number")))
+        result = validate_schema(parameters, definition["parameters"])
+    except (ValueError, TypeError) as error:
+        raise SystemExit(str(error)) from error
+    return json.dumps({"schemaVersion": version, "component": args[0], "parameters": result}, ensure_ascii=False, indent=2, allow_nan=False)
+
+
+COMMANDS = {"list": cmd_list, "show": cmd_show, "head": cmd_head, "charts": cmd_charts, "find": cmd_find, "schema": cmd_schema, "validate": cmd_validate}
 
 
 def main(argv: list[str]) -> int:

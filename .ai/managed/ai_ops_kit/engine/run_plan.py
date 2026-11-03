@@ -34,10 +34,12 @@ from pathlib import Path
 
 import yaml
 
+from ai_ops_kit.shared.budget import declared_limits
+
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
-# finding аудита (P1.1): workitem_id доходит до путей (worktree add строит root/<wt>/<wid>).
-# Пускаем только безопасный slug — иначе `../`, абсолютные пути и разделители дают traversal.
+
+
 WORKITEM_ID_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,63}$")
 
 
@@ -67,11 +69,11 @@ def _base_workflow(signals):
         from ai_ops_kit.shared import ai_route
         d = ai_route.route(signals)
         return d.get("workflow"), d.get("reasons", []), d.get("classification_confidence", "normal")
-    # Причина подавления ЗАПИСАНА (срез engine ратчета 2026-08-12): это ПРАВИЛЬНЫЙ образец —
-    # отказ не гасится, а становится видимой строкой в `reasons`, которая уезжает в план и в отчёт
-    # («fallback base_workflow=... (ai_route недоступен: ...)»). Тип не сужен намеренно: сюда
-    # приходит любой сбой импорта/классификации, и любой из них обязан дать честный fallback, а не
-    # уронить планирование. Тихого пути здесь нет.
+    
+    
+    
+    
+    
     except Exception as e:  # noqa: BLE001 — отказ роутера становится ВИДИМОЙ причиной fallback, не тишиной
         tt = signals.get("task_type")
         wfs = load("registry/workflows.yaml")["workflows"]
@@ -104,8 +106,8 @@ def _escalation_disclosure(base_wf, current_gates, confidence, wfs):
         "escalation_workflow": esc_wf,
         "gates_if_escalated": esc_gates,
     }
-    # Форма спецификации растёт вместе с уровнем: назвать разделы, которые добавит L1, ДО заполнения
-    # (obs 8a891ce7 — человек заполнил форму L0 и узнал про L1 только на run).
+    
+    
     try:
         from ai_ops_kit.gates import spec_levels
         cur_lvl = spec_levels.TASK_TYPE_LEVEL.get(base_wf, 0)
@@ -141,7 +143,7 @@ def build_plan(signals, workitem_id=None):
 
     task_text = signals.get("task_text", "")
     task_hash = hashlib.sha256(task_text.encode("utf-8")).hexdigest()[:12] if task_text else None
-    # Явный workitem_id валидируем (может дойти до путей); авто-сгенерированный безопасен by construction.
+    
     wid = validate_workitem_id(workitem_id) if workitem_id else (f"wi-{task_hash}" if task_hash else "wi-unknown")
     provisional, disclosure = _escalation_disclosure(base_wf, gates, classification_confidence, wfs)
     return {
@@ -151,12 +153,12 @@ def build_plan(signals, workitem_id=None):
         "required_tracks": required, "conditional_tracks": conditional, "skipped_tracks": skipped,
         "gates": gates, "route_reasons": route_reasons,
         "classification_confidence": classification_confidence,
-        # Один источник истины о наборе гейтов: этот же `gates` прогон и применяет (gate_executor
-        # получает gate_ids=plan["gates"]). Когда классификация предварительна, план не выдаёт 3
-        # гейта за окончательные, а честно называет эскалацию (см. _escalation_disclosure).
+        
+        
+        
         "classification_provisional": provisional,
         "escalation_disclosure": disclosure,
-        "execution_budget": {"max_cost": None, "max_duration": None, "max_model_calls": None},
+        "execution_budget": declared_limits(signals.get("execution_budget")),
     }
 
 
@@ -192,8 +194,8 @@ def validate_plan(data):
         for e in data.get(key, []) or []:
             if not e.get("reason"):
                 errors.append(f"{key}: у трека '{e.get('track')}' нет reason")
-    # Раскрытие эскалации: провизорный план ОБЯЗАН его нести, окончательный — не должен (иначе
-    # план снова обещает не то, что применит прогон). Названные к добавлению гейты обязаны резолвиться.
+    
+    
     disc = data.get("escalation_disclosure")
     if data.get("classification_provisional"):
         if not disc:

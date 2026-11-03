@@ -28,49 +28,83 @@
   var shell = nav.parentElement;
   var bar = document.querySelector('.sc-bar');
   var main = shell.querySelector('.dk-wrap');
-  var narrow = window.matchMedia('(max-width:1279px)');
-  var toggle = document.createElement('button');
-  toggle.type = 'button'; toggle.className = 'dk-btn dk-btn--sm';
-  toggle.appendChild(dkIcon.el('menu-2')); toggle.title = 'Навигация по киту'; toggle.setAttribute('aria-controls', nav.id);
-  bar.insertBefore(toggle, bar.firstChild);
+  var lastMegaTrigger = null, currentMegaId = '';
+  var hoverMenu = false, menuCloseTimer = null;
+  var desktopHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+  var narrowNav=window.matchMedia('(max-width:859px)'), forcedCompact=false, forcedWidth=0;
+  var compactNav={get matches(){return narrowNav.matches||forcedCompact;},addEventListener:function(type,fn){narrowNav.addEventListener(type,fn);}}, compactToggle = null;
+  function cancelMenuClose() { clearTimeout(menuCloseTimer); }
+  function scheduleMenuClose() {
+    cancelMenuClose();
+    if (!hoverMenu) return;
+    menuCloseTimer = setTimeout(function () { if (!nav.contains(document.activeElement)) setMenu(false); },180);
+  }
   var shade = document.createElement('div');
   shade.className = 'sc-shade'; shade.hidden = true;
   shell.insertBefore(shade, nav);
-  function setMenu(open, focus) {
-    nav.hidden = !open;
-    shell.classList.toggle('sc-shell--closed', !open);
-    toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Скрыть меню' : 'Открыть меню');
-    shade.hidden = !open || !narrow.matches;
-    main.inert = open && narrow.matches;
-    bar.querySelector('.sc-brand').inert = open && narrow.matches;
-    bar.querySelector('.sc-ctl').inert = open && narrow.matches;
-    if (searchButton) searchButton.inert = open && narrow.matches;
-    document.body.classList.toggle('sc-menu-open', open && narrow.matches);
-    if (focus) toggle.focus();
+  function revealCurrentComponent() {
+    var active = nav.querySelector('.sc-nav__component-group a[aria-current="page"]');
+    if (active && !nav.hidden && megaContent) {
+      var item = active.getBoundingClientRect(), frame = megaContent.getBoundingClientRect();
+      if (item.top < frame.top || item.bottom > frame.bottom) megaContent.scrollTop += item.top - frame.top - megaContent.clientHeight / 2;
+    }
   }
-  setMenu(!narrow.matches);
-  toggle.addEventListener('click', function () { setMenu(nav.hidden); });
+  function revealMegaCategory() {
+    if (!megaRail || nav.hidden) return;
+    var active = megaRail.querySelector('[aria-expanded="true"]');
+    if (!active) return;
+    var item = active.getBoundingClientRect(), frame = megaRail.getBoundingClientRect();
+    if (item.left < frame.left) megaRail.scrollLeft += item.left - frame.left;
+    else if (item.right > frame.right) megaRail.scrollLeft += item.right - frame.right;
+  }
+  function positionMega() {
+    nav.style.top=bar.getBoundingClientRect().bottom+'px';
+    shade.style.top=bar.getBoundingClientRect().bottom+'px';
+    if (compactNav.matches || !lastMegaTrigger) { nav.style.left='';nav.style.right='';nav.style.width='';return; }
+    var w=Math.min(currentMegaId==='sc-mega-panel-3'?960:760,window.innerWidth-16);
+    var r=lastMegaTrigger.getBoundingClientRect();
+    nav.style.left=Math.max(8,Math.min(r.left,window.innerWidth-w-8))+'px';
+    nav.style.right='auto';nav.style.width=w+'px';
+  }
+  function setMenu(open, focus) {
+    cancelMenuClose();
+    if (!open) hoverMenu = false;
+    nav.hidden = !open;
+    if(open) positionMega();
+    shell.classList.toggle('sc-shell--closed', !open);
+    if (megaButtons) megaButtons.forEach(function (button) { button.setAttribute('aria-expanded', String(open && button.getAttribute('aria-controls') === currentMegaId)); });
+    shade.hidden = !open; main.inert = open;
+    document.body.classList.toggle('sc-menu-open', open);
+    if (compactToggle) compactToggle.setAttribute('aria-expanded',String(open));
+    if (focus) { var returnTo = compactNav.matches ? compactToggle : lastMegaTrigger; if (returnTo) returnTo.focus({preventScroll:true}); }
+    if (open) requestAnimationFrame(function () {
+      revealMegaCategory(); revealCurrentComponent();
+    });
+  }
+  setMenu(false);
   shade.addEventListener('click', function () { setMenu(false, true); });
-  narrow.addEventListener('change', function () { setMenu(!narrow.matches, narrow.matches && nav.contains(document.activeElement)); });
+  window.addEventListener('resize', function () { if (!nav.hidden) requestAnimationFrame(function () { positionMega(); revealMegaCategory(); revealCurrentComponent(); }); });
   document.addEventListener('keydown', function (e) {
     if (nav.hidden || (searchDialog && searchDialog.open)) return;
     if (e.key === 'Escape') { e.preventDefault(); setMenu(false, true); }
-    if (e.key === 'Tab' && narrow.matches) {
-      var targets = [toggle].concat(Array.from(nav.querySelectorAll('summary, a, input, button')).filter(function (el) { return el.getClientRects().length; }));
+    if (e.key === 'Tab') {
+      var targets = Array.from(bar.querySelectorAll('a,button,input')).concat(Array.from(nav.querySelectorAll('a,input,button'))).filter(function (el) { return !el.disabled && !el.inert && el.getClientRects().length; });
       var first = targets[0], last = targets[targets.length - 1];
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
   });
-  nav.addEventListener('click', function (e) {
-    if (narrow.matches && e.target.closest('a')) setMenu(false, true);
-  });
-  var sections = Array.prototype.slice.call(document.querySelectorAll('section.sc-sec'));
+  nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  nav.addEventListener('pointerenter',cancelMenuClose);
+  nav.addEventListener('pointerleave',scheduleMenuClose);
+  bar.addEventListener('pointerleave',scheduleMenuClose);
+  nav.addEventListener('focusin',function () { hoverMenu = false; cancelMenuClose(); });
+  var sections = Array.prototype.slice.call(main.querySelectorAll(':scope > section'));
   var group = '';
   var links = [];
 
   sections.forEach(function (sec, i) {
+    sec.classList.add('sc-sec');
     var h = sec.querySelector('h2');
     if (!h) return;
     var title = h.textContent.trim();
@@ -80,7 +114,7 @@
     var eb = document.createElement('p');
     eb.className = 'sc-eyebrow';
     eb.textContent = group;
-    sec.insertBefore(eb, h);
+    if (sec.dataset.group) sec.insertBefore(eb, h);
 
     var a = document.createElement('a');
     a.className = 'sc-anchor';
@@ -98,8 +132,11 @@
 
   /* Навигация по задачам: обзор и компоненты рядом, без дублирующего
      плоского списка. Названия компонентов приходят из общего указателя. */
-  var here = location.pathname.split('/').pop();
+  var here = location.pathname.split('/').pop() || 'index.html';
   var showcase = here === 'showcase.html';
+  var overview = here === 'index.html';
+  var articleRouter = showcase || overview;
+  bar.querySelector('.sc-brand').href = 'index.html';
   var sectionLinks = links.slice();
   nav.classList.add('dk-scrollview','dk-scrollview--contain');
   nav.replaceChildren();
@@ -111,7 +148,7 @@
   var searchButton = document.createElement('button');
   searchButton.type = 'button'; searchButton.className = 'dk-iconbtn sc-search-trigger';
   searchButton.setAttribute('aria-label', 'Поиск по киту'); searchButton.title = 'Поиск · ⌘K / Ctrl+K';
-  searchButton.appendChild(dkIcon.el('search')); bar.insertBefore(searchButton, bar.querySelector('.sc-ctl'));
+  searchButton.appendChild(dkIcon.el('search')); var searchText = document.createElement('span'); searchText.className = 'sc-search-trigger__text'; searchText.textContent = 'Поиск в ките…'; searchButton.appendChild(searchText); bar.insertBefore(searchButton, bar.querySelector('.sc-ctl'));
   var searchDialog = document.createElement('dialog'); searchDialog.className = 'sc-search';
   searchDialog.setAttribute('aria-label', 'Поиск по киту');
   var searchLabel = document.createElement('div'); searchLabel.className = 'sc-search__head';
@@ -128,78 +165,199 @@
   document.body.appendChild(searchDialog);
   var catalog = document.createElement('div'); catalog.className = 'sc-nav__catalog'; nav.appendChild(catalog);
   var entries = [];
-  function heading(text) {
+  var menuEmoji = {'Обзор':'🏠','Начало работы':'🧭','Дизайн-система':'🎨','Компоненты':'🧩','Разработка':'💻'};
+  function emojiLabel(parent, text) {
+    if (menuEmoji[text]) { var icon = document.createElement('span'); icon.className = 'sc-nav__emoji'; icon.setAttribute('aria-hidden','true'); icon.textContent = menuEmoji[text]; parent.appendChild(icon); }
+    var label = document.createElement('span'); label.className = 'sc-nav__text'; label.textContent = text; parent.appendChild(label);
+  }
+  function heading(text, iconName) {
     var summary = document.createElement('summary');
-    var label = document.createElement('span'); label.textContent = text;
-    summary.appendChild(label); summary.appendChild(dkIcon.el('chevron-right')); return summary;
+    emojiLabel(summary, text);
+    summary.appendChild(dkIcon.el('chevron-right')); return summary;
   }
   function addLink(parent, text, href, kind, groupName) {
-    var existing = showcase && href.charAt(0) === '#' ? sectionLinks.find(function (x) { return x.sec.id === href.slice(1); }) : null;
+    var address = new URL(href, location.href);
+    var samePage = address.pathname === location.pathname || (overview && address.pathname.endsWith('/index.html'));
+    var existing = articleRouter && samePage && address.hash ? sectionLinks.find(function (x) { return x.sec.id === address.hash.slice(1); }) : null;
     var a = existing ? existing.link : document.createElement('a'); a.href = href; a.textContent = text;
     if (here === href) a.setAttribute('aria-current', 'page'); parent.appendChild(a);
+    if (here === href) openParents(a);
     entries.push({text:text,href:href,kind:kind,group:groupName}); return a;
   }
+  function openParents(link) {
+    for (var parent = link.parentElement; parent && parent !== nav; parent = parent.parentElement) {
+      if (parent.tagName === 'DETAILS') parent.open = true;
+      if (parent.classList.contains('sc-mega__panel')) selectMega(parent.id);
+    }
+  }
   function sectionHref(id) { return (showcase ? '' : 'showcase.html') + '#' + id; }
-  function addGroup(name, items, open) {
+  function addGroup(name, items, open, iconName) {
     var box = document.createElement('details'); box.className = 'sc-nav__category'; box.open = open;
-    box.appendChild(heading(name));
+    box.appendChild(heading(name, iconName));
     var body = document.createElement('div'); body.className = 'sc-nav__items'; box.appendChild(body);
-    items.forEach(function (item) { addLink(body, item[0], sectionHref(item[1]), 'Руководство', name); });
+    items.forEach(function (item) { addLink(body, item[0], item[1].includes('.html') ? item[1] : sectionHref(item[1]), 'Руководство', name); });
     catalog.appendChild(box); return body;
   }
-  addLink(catalog, 'Правила и компоненты', 'index.html', 'Руководство', 'Начало работы');
-  var home = document.createElement('a'); home.className = 'sc-nav__home'; home.href = 'showcase.html';
-  home.appendChild(document.createTextNode('Обзор')); catalog.appendChild(home);
-  var visual = [
-    ['Основы визуального языка','tri-principa'], ['Палитра','smyslovye'], ['Типографика','tipografika'],
-    ['Иконографика','ikonki'], ['Структура и сетка','setka-i-ustroystva'],
-    ['Эффекты','effekty'], ['Анимации','animacii']
-  ];
-  addGroup('Визуальный язык', visual, false);
-  var componentBox = addGroup('Компоненты', [['Все компоненты','komponenty']], !showcase);
-  ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты','Композиция'].forEach(function (name) {
-    var subgroup = document.createElement('div'); subgroup.className = 'sc-nav__component-group'; var groupLabel = document.createElement('p'); groupLabel.className = 'sc-nav__label'; groupLabel.textContent = name; subgroup.appendChild(groupLabel);
-    var body = document.createElement('div'); body.className = 'sc-nav__items'; subgroup.appendChild(body); componentBox.appendChild(subgroup);
+  var home = addLink(catalog, 'Обзор', 'index.html', 'Руководство', 'Начало работы');
+  home.className = 'sc-nav__home';
+  home.replaceChildren(); emojiLabel(home, 'Обзор');
+  addGroup('Начало работы', [['Собрать дашборд','index.html#start'], ['Как работать с ИИ','index.html#workflow'], ['Сборка по задаче','sborka-po-zadache'], ['Правила сборки','index.html#rules'], ['Рабочие сценарии','sdk-extensions']], false, 'arrow-up-right');
+  function subsection(parent, title) {
+    var label = document.createElement('p'); label.className = 'sc-nav__subhead';
+    label.textContent = title; parent.appendChild(label);
+  }
+  var design = addGroup('Дизайн-система', [], false);
+  [
+    ['Визуальный язык', [['Основы визуального языка','tri-principa'], ['Палитра','smyslovye'], ['Типографика','tipografika'], ['Иконографика','ikonki'], ['Структура и сетка','setka-i-ustroystva'], ['Эффекты','effekty'], ['Анимации','animacii']]],
+    ['Редполитика', [['Принципы текста','principy-teksta'], ['Интерфейсные тексты','yazyk-interfeysa'], ['Глоссарий','glossariy']]],
+    ['Качество интерфейса', [['Удобство использования','usability'], ['Доступность','dostupnost'], ['UI/UX и эвристики','index.html#uiux'], ['Выбор компонентов','index.html#patterns'], ['Визуальные принципы','index.html#design-guidance']]]
+  ].forEach(function (section) {
+    subsection(design, section[0]);
+    section[1].forEach(function (item) { addLink(design, item[0], item[1].includes('.html') ? item[1] : sectionHref(item[1]), 'Руководство', 'Дизайн-система · ' + section[0]); });
+  });
+  var components = addGroup('Компоненты', [], false);
+  components.parentElement.classList.add('sc-nav__component-group');
+  addLink(components, 'Все компоненты', 'index.html#catalog', 'Каталог', 'Компоненты');
+  ['Композиция','Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты'].forEach(function (name) {
+    subsection(components, name);
     (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
       var navNames = {'check':'Флажок, радио, тумблер','chips-input':'Ввод меток','chips-select':'Выбор меток','badge':'Бейдж и статус','list':'Список','banner':'Баннеры и уведомления','empty':'Состояния','legend':'Легенда','uptime':'Доступность служб'};
-      var href = 'component-' + c.slug + '.html'; var link = addLink(body,navNames[c.slug] || c.title,href,'Компонент',name); link.title = c.title;
-
+      var link = addLink(components, navNames[c.slug] || c.title, 'component-' + c.slug + '.html', 'Компонент', 'Компоненты · ' + name); link.title = c.title;
     });
   });
-  addGroup('Редполитика', [
-    ['Принципы текста','principy-teksta'],
-    ['Интерфейсные тексты','yazyk-interfeysa'], ['Глоссарий','glossariy']
-  ], false);
-  addGroup('Качество интерфейса', [['Удобство использования','usability'], ['Доступность','dostupnost']], false);
-  addGroup('Сборка дашборда', [['Сборка по задаче','sborka-po-zadache']], false);
-  var exampleBox = addGroup('Примеры дашбордов', [], false);
-  [['Мониторинг показателей','dashboard.html'], ['Аварии и события','accidents.html'], ['Планирование работ','calendar.html'], ['Польза AI · тестовые данные','ai-value.html']].forEach(function (item) {
-    addLink(exampleBox,item[0],item[1],'Рабочий экран','Примеры дашбордов');
+  addGroup('Разработка', [['Стек и библиотеки','index.html#development'], ['Контракт и тиражирование','index.html#development--scale'], ['Основа и каркас','index.html#foundations'], ['Подключение и проверка','index.html#development--connect']], false);
+  // Examples remain available on the overview and through search.
+  [['Эталон · данные и действия','reference-dashboard.html'], ['Мониторинг показателей','dashboard.html'], ['Регионы','regions.html'], ['Аварии и события','accidents.html'], ['Планирование работ','calendar.html'], ['Семейная ипотека','family-mortgage.html'], ['Польза AI · тестовые данные','ai-value.html']].forEach(function (item) {
+    entries.push({text:item[0],href:item[1],kind:'Рабочий экран',group:'Примеры дашбордов'});
   });
+  // Reuse the existing links and route references in a header megamenu.
+  nav.classList.add('sc-mega'); nav.setAttribute('aria-label','Библиотека кита');
+  nav.classList.remove('dk-scrollview','dk-scrollview--contain');
+  navHead.remove();
+  var megaRail = document.createElement('div'); megaRail.className = 'sc-mega__rail sc-topnav'; megaRail.setAttribute('aria-label','Основные разделы');
+  var megaContent = document.createElement('div'); megaContent.className = 'sc-mega__content';
+  var megaPanels = [], megaButtons = [], initialMega = '';
+  var topicEmoji = {'Визуальный язык':'🎨','Редполитика':'✍️','Качество интерфейса':'✅','Композиция':'🧱','Управление':'🎛️','Фильтры':'🔎','Данные':'📋','Визуализация':'📊','Обратная связь':'💬','Утилиты':'🛠️'};
+  function selectMega(id) {
+    if (!megaPanels) return;
+    currentMegaId = id;
+    megaPanels.forEach(function (panel) { panel.hidden = panel.id !== id; });
+    megaButtons.forEach(function (button) { button.setAttribute('aria-expanded',String(!nav.hidden && button.getAttribute('aria-controls') === id)); });
+    if (megaContent) megaContent.scrollTop = 0;
+    requestAnimationFrame(revealMegaCategory);
+  }
+  Array.from(catalog.children).forEach(function (item, index) {
+    if (item.tagName === 'A') { item.classList.add('sc-mega__category','sc-mega__home'); megaRail.appendChild(item); return; }
+    var title = item.querySelector('summary .sc-nav__text').textContent;
+    var button = document.createElement('button'); button.type = 'button'; button.className = 'sc-mega__category';
+    button.id = 'sc-mega-trigger-' + index; emojiLabel(button,title);
+    var panel = item.querySelector('.sc-nav__items'); panel.id = 'sc-mega-panel-' + index;
+    panel.classList.add('sc-mega__panel'); panel.setAttribute('role','region'); panel.setAttribute('aria-labelledby',button.id);
+    if (item.classList.contains('sc-nav__component-group')) panel.classList.add('sc-nav__component-group');
+    button.setAttribute('aria-controls', panel.id); button.setAttribute('aria-expanded','false');
+    if (item.open) initialMega = panel.id;
+    var content = Array.from(panel.children), groups = document.createElement('div'), quick = document.createElement('div'), activeGroup = null;
+    groups.className = 'sc-mega__groups'; quick.className = 'sc-mega__quicklinks';
+    var heading = document.createElement('h2'); heading.className = 'sc-mega__title'; heading.textContent = title;
+    content.forEach(function (child) {
+      if (child.classList.contains('sc-nav__subhead')) {
+        activeGroup = document.createElement('section'); activeGroup.className = 'sc-mega__group';
+        var groupTitle = document.createElement('h3'); groupTitle.className = 'sc-mega__group-title';
+        var glyph = topicEmoji[child.textContent];
+        if (glyph) { var icon = document.createElement('span'); icon.className = 'sc-doc-emoji'; icon.setAttribute('aria-hidden','true'); icon.textContent = glyph; groupTitle.appendChild(icon); }
+        groupTitle.appendChild(document.createTextNode(child.textContent)); activeGroup.appendChild(groupTitle); groups.appendChild(activeGroup); child.remove();
+      } else (activeGroup || quick).appendChild(child);
+    });
+    panel.replaceChildren(heading); if (quick.children.length) panel.appendChild(quick); if (groups.children.length) panel.appendChild(groups);
+    megaRail.appendChild(button); megaContent.appendChild(panel); megaPanels.push(panel); megaButtons.push(button);
+    button.addEventListener('click',function () {
+      var close = !nav.hidden && currentMegaId === panel.id;
+      if (hoverMenu) close = false;
+      hoverMenu = false; lastMegaTrigger = button; selectMega(panel.id); setMenu(!close);
+    });
+    button.addEventListener('pointerenter',function (event) {
+      if (event.pointerType !== 'mouse' || !desktopHover.matches || compactNav.matches || nav.contains(document.activeElement)) return;
+      cancelMenuClose(); hoverMenu = true; lastMegaTrigger = button; selectMega(panel.id); setMenu(true);
+    });
+    button.addEventListener('keydown',function (event) {
+      hoverMenu = false; cancelMenuClose();
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault(); var next = (megaButtons.indexOf(button) + (event.key === 'ArrowRight' ? 1 : -1) + megaButtons.length) % megaButtons.length;
+        var wasOpen = !nav.hidden; megaButtons[next].focus();
+        if (wasOpen) { lastMegaTrigger = megaButtons[next]; selectMega(lastMegaTrigger.getAttribute('aria-controls')); setMenu(true); }
+      }
+      if (event.key === 'ArrowDown') {
+        event.preventDefault(); lastMegaTrigger = button; selectMega(panel.id); setMenu(true);
+        var first = panel.querySelector('a'); if (first) first.focus();
+      }
+    });
+    item.remove();
+  });
+  catalog.replaceChildren(megaContent);
+  bar.insertBefore(megaRail,searchButton);
+  megaRail.querySelector('.sc-mega__home').addEventListener('pointerenter',scheduleMenuClose);
+  var barTools = document.createElement('div'); barTools.className = 'sc-bar__tools';
+  bar.appendChild(barTools); barTools.append(searchButton,bar.querySelector('.sc-ctl'));
+  compactToggle = document.createElement('button'); compactToggle.type = 'button'; compactToggle.className = 'sc-bar__menu';
+  compactToggle.textContent = 'Меню'; compactToggle.setAttribute('aria-label','Меню разделов кита'); compactToggle.setAttribute('aria-controls',nav.id); compactToggle.setAttribute('aria-expanded','false');
+  bar.insertBefore(compactToggle,barTools);
+  compactToggle.addEventListener('click',function () { hoverMenu = false; setMenu(nav.hidden); });
+  compactToggle.addEventListener('keydown',function (event) { if (event.key === 'ArrowDown') { event.preventDefault(); setMenu(true); megaRail.querySelector('a').focus(); } });
+  function syncCompactNavigation() {
+    var restore = !nav.hidden || megaRail.contains(document.activeElement) || document.activeElement === compactToggle;
+    setMenu(false); compactToggle.hidden = !compactNav.matches;
+    document.body.classList.toggle('sc-header-compact',compactNav.matches);
+    if (compactNav.matches) nav.insertBefore(megaRail,catalog);
+    else bar.insertBefore(megaRail,compactToggle);
+    if (restore) (compactNav.matches ? compactToggle : megaButtons.find(function (button) { return button.getAttribute('aria-controls') === currentMegaId; })).focus({preventScroll:true});
+  }
+  compactNav.addEventListener('change',syncCompactNavigation);
+  var headerObserver=new ResizeObserver(function(){
+    if(narrowNav.matches)return;
+    if(forcedCompact){if(bar.clientWidth>forcedWidth+120){forcedCompact=false;syncCompactNavigation();}return;}
+    if(!bar.contains(megaRail))return;
+    var r=megaRail.getBoundingClientRect(),l=bar.querySelector('.sc-brand').getBoundingClientRect(),t=barTools.getBoundingClientRect();
+    if(megaRail.scrollWidth>megaRail.clientWidth+1||r.left<l.right+4||r.right>t.left-4){forcedCompact=true;forcedWidth=bar.clientWidth;syncCompactNavigation();}
+  });
+  headerObserver.observe(bar);headerObserver.observe(megaRail);
+  document.fonts.ready.then(function(){headerObserver.observe(bar.querySelector('.sc-brand'));});
+  syncCompactNavigation();
+  if (!initialMega && showcase) { var designPanel = megaPanels.find(function (panel) { return panel.querySelector('.sc-mega__title').textContent === 'Дизайн-система'; }); if (designPanel) initialMega = designPanel.id; }
+  selectMega(initialMega || megaPanels[0].id);
+  if (here.startsWith('component-')) requestAnimationFrame(revealCurrentComponent);
   var local = null;
-  var toc = document.createElement('details'); toc.className = 'sc-toc'; toc.open = true;
+  var toc = document.createElement('details'); toc.className = 'sc-toc'; toc.open = window.innerWidth >= 640;
   var tocTitle = document.createElement('summary'); tocTitle.textContent = 'На этой странице'; toc.appendChild(tocTitle);
   var tocLinks = document.createElement('nav'); tocLinks.setAttribute('aria-label','Содержание страницы'); toc.appendChild(tocLinks);
   function buildToc(selected, panel) {
     tocLinks.replaceChildren();
-    var headings = panel ? Array.from(panel.querySelectorAll('h3')) : (showcase ? (selected && selected.id !== 'komponenty' ? Array.from(selected.querySelectorAll(':scope > h3')) : []) : sections.map(function (sec) { return sec.querySelector('h2'); }).filter(Boolean));
+    var headings = panel ? Array.from(panel.querySelectorAll('h3')) : (articleRouter ? (selected && selected.id !== 'komponenty' ? Array.from(selected.querySelectorAll('h3')).filter(function (h) { return !h.closest('details:not([open])'); }) : []) : sections.map(function (sec) { return sec.querySelector('h2'); }).filter(Boolean));
     headings.forEach(function (h, i) {
       if (!h.id) h.id = 'topic-' + (selected ? selected.id : here.replace('.html','')) + '-' + i;
+      var section = h.closest('.sc-sec');
+      if (!articleRouter && section && section.dataset.group) {
+        var groupLabel = document.createElement('p'); groupLabel.className = 'sc-toc__group';
+        groupLabel.textContent = section.dataset.group; tocLinks.appendChild(groupLabel);
+      }
       var a = document.createElement('a'); a.href = '#' + h.id;
       a.textContent = h.textContent.replace(/#$/, '').trim(); tocLinks.appendChild(a);
-      h.style.scrollMarginTop = '72px';
+      if (!articleRouter && section) section.querySelectorAll(':scope > h3').forEach(function (sub) {
+        var sublink = document.createElement('a'); sublink.href = '#' + sub.id;
+        sublink.className = 'sc-toc__sub'; sublink.textContent = sub.textContent;
+        tocLinks.appendChild(sublink);
+      });
     });
     toc.hidden = !headings.length;
     shell.classList.toggle('sc-shell--toc', !!headings.length);
     if (selected) selected.insertBefore(toc, selected.querySelector(':scope > h3'));
-    else if (!showcase) main.insertBefore(toc, main.querySelector('.sc-sec'));
+    else if (!articleRouter) main.insertBefore(toc, main.querySelector('.sc-sec'));
   }
   tocLinks.addEventListener('click', function (e) {
     var a = e.target.closest('a'); if (!a) return;
     var target = document.getElementById(a.hash.slice(1));
     if (target) { target.setAttribute('tabindex','-1'); target.focus({preventScroll:true}); }
   });
-  if (!showcase) buildToc(null);
+  if (!articleRouter) buildToc(null);
   function renderSearch() {
     var query = search.value.trim().toLocaleLowerCase('ru');
     results.replaceChildren(); status.textContent = '';
@@ -221,7 +379,7 @@
   }
   function openSearch() {
     if (searchDialog.open) return;
-    if (narrow.matches && !nav.hidden) setMenu(false);
+    if (!nav.hidden) setMenu(false);
     renderSearch(); searchDialog.showModal(); search.focus(); search.select();
   }
   function closeSearch() { searchDialog.close(); searchButton.focus(); }
@@ -286,7 +444,7 @@
 
   var componentIndex = document.querySelector('.sc-component-index');
   if (componentIndex) {
-    ['Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты','Композиция'].forEach(function (name) {
+    ['Композиция','Управление','Фильтры','Данные','Визуализация','Обратная связь','Утилиты'].forEach(function (name) {
       var block = document.createElement('div'); var h = document.createElement('h3'); h.textContent = name; block.appendChild(h);
       (window.dkDocsIndex || []).filter(function (c) { return c.group === name; }).forEach(function (c) {
         var a = document.createElement('a'); a.href = 'component-' + c.slug + '.html'; var text = document.createElement('span'); text.className = 'sc-component-index__text';
@@ -299,11 +457,15 @@
   /* Витрина читается как документация: один выбранный раздел, а не
      непрерывная лента всех образцов. Существующие адреса разделов сохранены. */
   function showArticle() {
-    if (!showcase) return;
+    if (!articleRouter) return;
+    setMenu(false);
     var id = location.hash.slice(1);
     if (['redpolitika','pishem-chisto','pishem-prosto','pishem-kompetentno','pishem-dlya-cheloveka'].includes(id)) id = 'principy-teksta';
     var target = document.getElementById(id);
     var selected = sections.find(function (sec) { return sec.id === id; }) || (target && target.closest('section.sc-sec'));
+    for (var owner = target; owner && owner !== main; owner = owner.parentElement) {
+      if (owner.tagName === 'DETAILS') owner.open = true;
+    }
     var guidePanels = selected ? Array.from(selected.querySelectorAll('.sc-guide__panel')) : [];
     var activePanel = guidePanels.find(function (panel) { return panel === target || panel.contains(target); }) || guidePanels[0];
     guidePanels.forEach(function (panel) { panel.hidden = panel !== activePanel; });
@@ -317,19 +479,20 @@
     main.querySelector('.sc-hero').hidden = !!selected;
     sections.forEach(function (sec) {
       sec.hidden = sec !== selected;
-      var heading = sec.querySelector('h2');
+      var heading = sec.querySelector(':scope > h2');
       if (heading) { var title = document.createElement('h1'); while (heading.firstChild) title.appendChild(heading.firstChild); heading.replaceWith(title); }
     });
     sectionLinks.forEach(function (x) {
-      if (x.sec === selected) { x.link.setAttribute('aria-current','location'); var owner = x.link.closest('details'); if (owner) owner.open = true; }
+      if (x.sec === selected) { x.link.setAttribute('aria-current','location'); openParents(x.link); }
       else x.link.removeAttribute('aria-current');
     });
-    nav.querySelectorAll('.sc-nav__home').forEach(function (a) { if (selected) a.removeAttribute('aria-current'); else a.setAttribute('aria-current','page'); });
+    megaRail.querySelectorAll('.sc-nav__home').forEach(function (a) { if (selected || !overview) a.removeAttribute('aria-current'); else a.setAttribute('aria-current','page'); });
     main.classList.toggle('sc-article', !!selected);
-    document.title = (selected ? selected.querySelector('h1').textContent.replace(/#$/, '').trim() + ' · ' : '') + 'dashboard-kit';
+    document.title = (selected ? selected.querySelector('h1').textContent.replace(/#$/, '').trim() : 'Обзор') + ' · dashboard-kit';
     if (selected) { var destination = guidePanels.length ? selected.querySelector('h1') : (target && target !== selected ? target : selected.querySelector('h1')); destination.scrollIntoView({block:'start'}); destination.setAttribute('tabindex','-1'); destination.focus({preventScroll:true}); }
+    else window.scrollTo(0, 0);
   }
-  if (showcase) { window.addEventListener('hashchange', showArticle); showArticle(); }
+  if (articleRouter) { window.addEventListener('hashchange', showArticle); showArticle(); }
 
   /* Текущий раздел — тот, чей заголовок последним прошёл под шапку. Считается
      по положению, а не по «виден ли раздел»: длинный раздел виден долго, и
@@ -339,7 +502,7 @@
     var active = tocEntries[0];
     tocEntries.forEach(function (a) { var h = document.getElementById(a.hash.slice(1)); if (h && h.getBoundingClientRect().top <= 112) active = a; });
     tocEntries.forEach(function (a) { if (a === active) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current'); });
-    if (showcase) return;
+    if (articleRouter) return;
     var line = 56 + 40;
     var cur = links[0];
     links.forEach(function (x) { if (x.sec.getBoundingClientRect().top <= line) cur = x; });
@@ -357,6 +520,47 @@
     requestAnimationFrame(function () { ticking = false; current(); });
   }, { passive: true });
   current();
+
+  /* Нативная прокрутка, без перехвата колеса. В фокус попадают только
+     действительно прокручиваемые таблицы; авторские атрибуты сохраняются. */
+  var scrollWrappers = new Map();
+  function watchTables() {
+    scrollWrappers.forEach(function (state, wrap) {
+      if (main.contains(wrap)) return;
+      state.observer.disconnect(); state.hint.remove(); scrollWrappers.delete(wrap);
+    });
+    main.querySelectorAll('.dk-tablewrap').forEach(function (wrap) {
+    var table = wrap.querySelector('table');
+    if (!table) return;
+    var state = scrollWrappers.get(wrap);
+    if (state) {
+      if (state.table !== table) { state.observer.unobserve(state.table); state.observer.observe(table); state.table = table; }
+      state.update(); return;
+    }
+    var original = {};
+    ['tabindex','role','aria-label'].forEach(function (name) { original[name] = wrap.getAttribute(name); });
+    var hint = document.createElement('p'); hint.className = 'sc-scroll-hint';
+    hint.textContent = 'Таблица прокручивается по горизонтали'; hint.hidden = true;
+    wrap.after(hint);
+    function updateScroll() {
+      var horizontal = wrap.clientWidth > 0 && wrap.scrollWidth > wrap.clientWidth + 1;
+      var scrollable = horizontal || (wrap.clientHeight > 0 && wrap.scrollHeight > wrap.clientHeight + 1);
+      hint.hidden = !horizontal;
+      var section = wrap.closest('.sc-sec');
+      var title = section && section.querySelector('h1,h2');
+      var values = {'tabindex':'0','role':'region','aria-label':'Прокручиваемая таблица' + (title ? ': ' + title.textContent.replace(/#$/, '').trim() : '')};
+      Object.keys(original).forEach(function (name) {
+        if (original[name] !== null) return;
+        if (scrollable) wrap.setAttribute(name, values[name]); else wrap.removeAttribute(name);
+      });
+    }
+    var observer = new ResizeObserver(updateScroll); observer.observe(wrap); observer.observe(table);
+    scrollWrappers.set(wrap, {table:table, observer:observer, hint:hint, update:updateScroll});
+    updateScroll();
+    });
+  }
+  watchTables();
+  new MutationObserver(watchTables).observe(main, {childList:true, subtree:true});
 
   /* Значение под каждым образцом цвета. Берётся с экрана, а не из файла:
      половина токенов собрана color-mix, и в файле у них формула, а не цвет. */
@@ -475,4 +679,19 @@
     tokBox.textContent = ''; tokBox.appendChild(li);
   }
 
+})();
+
+// Task entry works with any assistant; copying does not open an external service.
+(function () {
+  var button = document.querySelector('[data-copy-task]');
+  if (!button) return;
+  button.addEventListener('click', async function () {
+    var status = document.querySelector('[data-copy-task-status]');
+    try {
+      await navigator.clipboard.writeText(document.getElementById('dashboard-task-prompt').textContent);
+      status.textContent = 'Запрос скопирован. Вставьте его помощнику и добавьте свои данные.';
+    } catch (_) {
+      status.textContent = 'Не удалось скопировать автоматически. Выделите текст запроса и скопируйте вручную.';
+    }
+  });
 })();

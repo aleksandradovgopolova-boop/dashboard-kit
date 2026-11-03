@@ -28,10 +28,10 @@ try:                                          # v3.38 (лента №5): вал�
     from ai_ops_kit.validation import _bootstrap   # noqa: F401 — импорт пакетом (после pip install)
 except ImportError:                                # запуск скриптом: корня на пути ещё нет,
     import _bootstrap                              # noqa: F401 — и положить его может только он сам
-# Проверяющая логика (чтение каталога функции — read-only I/O) вынесена ВНИЗ в пакет `checks` (слой
-# primitives): и рантайм (lifecycle.run_report), и эта CLI-обёртка импортируют её вниз — без
-# восходящего ребра lifecycle -> validation. Имена ре-экспортируются для обратной совместимости
-# (в т.ч. make_demo/validate_dir, которые зовут тесты селфтеста).
+
+
+
+
 from ai_ops_kit.checks.feature_blueprint import (   # noqa: E402,F401
     DEBT_REL, FEATURE_STATUSES, PROFILES, STAGES, STATUSES,
     _debt_ids, make_demo, validate_dir, validate_dir_full)
@@ -46,7 +46,7 @@ def main(argv):
         all_errors += _e
         all_debt += _a
     if all_debt:
-        # Долг печатается ВСЕГДА и до вердикта: невидимый долг перестаёт быть долгом.
+        
         print(f"ДОЛГ ДОКАЗАТЕЛЬСТВА ПОСТАВКИ ({len(all_debt)}) — не блокирует, но остаётся:")
         for a in all_debt:
             print(f"  · {a}")

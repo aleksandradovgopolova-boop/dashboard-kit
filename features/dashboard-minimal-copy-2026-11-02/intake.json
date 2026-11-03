@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "intake",
+  "runtime": "codex",
+  "engine": "controller",
+  "signals": {
+    "task_type": "feature",
+    "size": "small",
+    "risk": "low",
+    "ui_changed": true,
+    "user_facing_change": true,
+    "measurable_behavior": false,
+    "security_surface_changed": false,
+    "events_changed": false,
+    "ai_component": false,
+    "deploy_touched": false,
+    "affected_areas": [
+      "docs",
+      "skill/dashboard-build",
+      "family-mortgage",
+      "tools/check-family-mortgage"
+    ]
+  },
+  "workflow": "ENGINEERING",
+  "origin": "Signals supplied to the initial successful native-controller invocation; scope clarified in implementation-plan.md."
+}

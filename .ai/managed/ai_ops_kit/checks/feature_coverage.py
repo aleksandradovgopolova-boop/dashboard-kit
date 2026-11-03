@@ -40,7 +40,7 @@ BOOTSTRAP / РАТЧЕТ: у пустого реестра (или на перв
 from __future__ import annotations
 
 
-# ─── Сопоставление поверхностей по ссылке на код ────────────────────────────────────────────────
+
 
 def ref_key(ref: str) -> str:
     """Ключ сопоставления surface↔surface по ссылке на код.
@@ -68,7 +68,7 @@ def ref_evidence(ref: str) -> dict:
     return {"file": file, "lines": int(line) if line.isdigit() else line}
 
 
-# ─── Отчёт об охвате ─────────────────────────────────────────────────────────────────────────────
+
 
 def build_coverage_report(registry: dict, surfaces: list) -> dict:
     """Сверить реестр фич с извлечёнными поверхностями. -> coverage report по контракту.
@@ -125,7 +125,7 @@ def build_coverage_report(registry: dict, surfaces: list) -> dict:
     }
 
 
-# ─── Вердикт гейта (сила по confidence + bootstrap-ратчет) ──────────────────────────────────────
+
 
 def verified_orphans(report: dict) -> list[dict]:
     return [o for o in report.get("orphans") or [] if o.get("confidence") == "verified"]

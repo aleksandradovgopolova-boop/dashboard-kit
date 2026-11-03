@@ -1,0 +1,27 @@
+2026-11-02T13:48:20.3429132Z RUN: browser/numeric-browser
+2026-11-02T13:48:23.7490782Z PASS: numeric UI binding dark 390
+2026-11-02T13:48:27.8371140Z PASS: numeric UI binding dark 1280
+2026-11-02T13:48:30.5090579Z node:internal/modules/run_main:123
+2026-11-02T13:48:30.5136783Z     triggerUncaughtException(
+2026-11-02T13:48:30.5176951Z     ^
+2026-11-02T13:48:30.5178657Z
+2026-11-02T13:48:30.5225812Z AssertionError [ERR_ASSERTION]: UI explanation Escape
+2026-11-02T13:48:30.5227105Z     at file:///home/runner/work/dashboard-kit/dashboard-kit/tools/check-numeric-browser.mjs:101:29 {
+2026-11-02T13:48:30.5256311Z   generatedMessage: false,
+2026-11-02T13:48:30.5285513Z   code: 'ERR_ASSERTION',
+2026-11-02T13:48:30.5295330Z   actual: false,
+2026-11-02T13:48:30.5315511Z   expected: true,
+2026-11-02T13:48:30.5344023Z   operator: '==',
+2026-11-02T13:48:30.5377003Z   diff: 'simple'
+2026-11-02T13:48:30.5409078Z }
+2026-11-02T13:48:30.5416914Z
+2026-11-02T13:48:30.5417085Z Node.js v22.23.4
+2026-11-02T13:48:30.5666142Z Traceback (most recent call last):
+2026-11-02T13:48:30.5696320Z   File "/home/runner/work/dashboard-kit/dashboard-kit/tools/test.py", line 61, in <module>
+2026-11-02T13:48:30.5755918Z     main()
+2026-11-02T13:48:30.5788013Z   File "/home/runner/work/dashboard-kit/dashboard-kit/tools/test.py", line 50, in main
+2026-11-02T13:48:30.5798292Z     run([node, f'tools/check-{name}.mjs'], timeout=600 if name == 'docs' else 240)
+2026-11-02T13:48:30.5802479Z   File "/home/runner/work/dashboard-kit/dashboard-kit/tools/test.py", line 31, in run
+2026-11-02T13:48:30.5803049Z     raise subprocess.CalledProcessError(code, args)
+2026-11-02T13:48:30.5804459Z subprocess.CalledProcessError: Command '['/opt/hostedtoolcache/node/22.23.4/x64/bin/node', 'tools/check-numeric-browser.mjs']' returned non-zero exit status 1.
+2026-11-02T13:48:30.5841979Z ##[error]Process completed with exit code 1.

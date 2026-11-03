@@ -50,29 +50,29 @@ SCHEMA_VERSION = 1
 KIND = "architecture-invariants"
 STRENGTH = "advisory"                     # сила инварианта поверх JS/TS-графа (§5.2, SR-9)
 
-# Состояния строки архитектурной проверки (свой набор — это advisory-слой поверх отчёта).
+
 PASS = "pass"
 VIOLATED = "violated"
 NOT_CHECKED = "not_checked"
 
-# Где дочка объявляет инвариант: файл в корне ИЛИ блок в .ai-ops.yaml (standard.architecture).
+
 DECL_FILE = "architecture-invariants.yaml"
 CONFIG_REL = ".ai-ops.yaml"
 
-# Расширения исходников фронтенда/ноды, по которым строится граф импортов (regex, §5.2).
+
 _JS_EXT = {".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".vue", ".svelte"}
 _SKIP_DIRS = {".git", "node_modules", "dist", "build", ".next", "out", "coverage",
               "__pycache__", ".venv", "venv", "vendor", ".ai"}
 
-# import ... from 'x' | export ... from 'x' | require('x') | import('x'). Строка нужна для адреса.
+
 _IMPORT_RE = re.compile(
     r"""(?:import\b[^'"]*?from|export\b[^'"]*?from|require|import)\s*\(?\s*['"]([^'"]+)['"]""")
 
-# Где живут ADR дочки (те же пути, что у сигналов контура decision/knowledge, product-operating-model).
+
 _ADR_GLOBS = ("decisions/**", "docs/adr/**", "**/ADR-*.md", "adr/**", "research/**")
 
 
-# ── Чтение объявления (SR-9). ─────────────────────────────────────────────────────────────────
+
 def load_declaration(child_root) -> dict:
     """Объявление инварианта дочки: файл `architecture-invariants.yaml` ИЛИ `.ai-ops.yaml`.
 
@@ -114,7 +114,7 @@ def _aliases(decl: dict) -> dict:
     return {str(k): str(v) for k, v in a.items()} if isinstance(a, dict) else {}
 
 
-# ── Резолвер путь→зона: ОДИН на всех потребителей (SR-10). ────────────────────────────────────
+
 def zone_of(rel_path: str, zones: dict) -> str | None:
     """Репо-относительный путь -> имя зоны по глобам объявления. None, если ни одна не совпала.
 
@@ -128,7 +128,7 @@ def zone_of(rel_path: str, zones: dict) -> str | None:
     return None
 
 
-# ── Граф импортов JS/TS (regex, advisory по построению — §5.2). ───────────────────────────────
+
 def _iter_source_files(root: Path):
     for p in root.rglob("*"):
         if p.suffix not in _JS_EXT or not p.is_file():
@@ -157,7 +157,7 @@ def _resolve_import(from_rel: str, spec: str, aliases: dict) -> str | None:
         s = str((base / s)).replace("\\", "/")
     elif not aliased:
         return None                       # голый/scoped-пакет без объявленного алиаса — внешняя
-                                          # зависимость или пропуск (§5.2: пропуск, не ложь)
+                                          
     parts = []
     for seg in s.split("/"):
         if seg in ("", "."):
@@ -205,7 +205,7 @@ def build_import_graph(child_root, zones: dict, aliases: dict | None = None) -> 
     return edges
 
 
-# ── Проверка рёбер против правил — та же логика, что у validate_layering.check() (SR-9). ───────
+
 def _known(decl: dict) -> set:
     """Замороженные рёбра `from_zone -> to_zone` (реестр вправе только сокращаться, SR-9)."""
     out = set()
@@ -269,7 +269,7 @@ def check(decl: dict, edges: list) -> list:
     return findings
 
 
-# ── Новая зависимость без ADR — находка с адресом (SR-13). ────────────────────────────────────
+
 def _adr_blob(root: Path) -> str:
     """Слитый текст ADR дочки (best-effort): по нему судим, объяснена ли новая зависимость."""
     chunks = []
@@ -311,7 +311,7 @@ def dependency_findings(child_root, before: dict, after: dict) -> list:
     return findings
 
 
-# ── Сборка advisory-блока для governance-отчёта. ──────────────────────────────────────────────
+
 def report(child_root, deps=None) -> dict:
     """Advisory-блок архитектурных инвариантов дочки. -> dict для ключа `architecture` отчёта.
 

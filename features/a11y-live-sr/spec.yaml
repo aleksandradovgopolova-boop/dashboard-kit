@@ -1,0 +1,48 @@
+# status раздела: complete | declined | missing | needs_human | not_applicable
+# declined требует note с объяснением.
+schema_version: 1
+kind: spec
+workitem_id: a11y-live-sr
+level: 0
+level_name: L0 QUICK
+level_reason:
+- task_type=QUICK -> базовый L0 QUICK
+signals:
+  task_type: QUICK
+section_statuses:
+- complete
+- declined
+- missing
+- needs_human
+- not_applicable
+sections:
+  goal:
+    status: complete
+    content: Доступность собранных дашбордов не доказана
+    note: null
+  scope:
+    status: complete
+    content: 'Клавиатурная навигация плюс автоматический аудит доступности (контраст
+      AA, доступные имена и роли, landmarks и заголовки) на четырёх собранных дашбордах:
+      обзорный, Семейная ипотека, регионы, мобильный.'
+    note: null
+  expected_behavior:
+    status: complete
+    content: Все интерактивные элементы достижимы и управляемы с клавиатуры, фокус
+      виден и идёт в логичном порядке, ловушек фокуса нет
+    note: null
+  acceptance_criteria:
+    status: complete
+    content: На четырёх дашбордах ноль ошибок автоматического аудита доступности по
+      правилам AA
+    note: null
+  constraints:
+    status: complete
+    content: Без фреймворка и шага сборки (решение README)
+    note: null
+  affected_files:
+    status: complete
+    content: dashboard.html, family-mortgage.html, regions.html, mobile.html, css/
+      компоненты кита, при необходимости проверка в tools/, отметка в ROADMAP.md и
+      HANDOFF.md
+    note: null

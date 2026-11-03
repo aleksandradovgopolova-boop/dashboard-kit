@@ -73,7 +73,7 @@ def _cron_of_nightly_workflow(root: Path) -> str | None:
             continue
         if not isinstance(doc, dict):
             continue
-        # PyYAML разбирает `on:` в YAML 1.1 как булев ключ True — учитываем оба написания.
+        
         on = doc.get("on", doc.get(True))
         sched = on.get("schedule") if isinstance(on, dict) else None
         if isinstance(sched, list):

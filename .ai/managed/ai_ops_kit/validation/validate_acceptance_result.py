@@ -32,9 +32,9 @@ try:                                          # v3.38 (лента №5): вал�
     from ai_ops_kit.validation import _bootstrap   # noqa: F401 — импорт пакетом (после pip install)
 except ImportError:                                # запуск скриптом: корня на пути ещё нет,
     import _bootstrap                              # noqa: F401 — и положить его может только он сам
-# Проверяющая логика вынесена ВНИЗ (пакет `checks`, слой primitives): и рантайм (engine.acceptance_verify),
-# и эта CLI-обёртка импортируют её вниз — без восходящего ребра engine -> validation. check и
-# константы ре-экспортируются для обратной совместимости.
+
+
+
 from ai_ops_kit.checks.acceptance_result import (   # noqa: E402,F401
     CRITERION_STATUS, EVIDENCE_KINDS, check)
 

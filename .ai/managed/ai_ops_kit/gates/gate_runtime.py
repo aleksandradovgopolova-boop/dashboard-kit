@@ -50,7 +50,7 @@ def _decide_raw(gate, signals, verdicts, evidence_status="not_run", max_retries=
     evidence_mode = (dec or {}).get("evidence_mode", "ai_review")
     applicability = (dec or {}).get("applicability", "applicable")
 
-    # not_applicable по политике (UI-гейт вне применимого impact)
+    
     if applicability == "not_applicable":
         return _v2(gate, "not_applicable", blocking=True, applicability="not_applicable",
                    enforcement="advisory", evidence_mode=evidence_mode, owner=owner,
@@ -87,12 +87,12 @@ def _decide_raw(gate, signals, verdicts, evidence_status="not_run", max_retries=
             if retries < max_retries and i < len(verdicts) - 1:
                 retries += 1            # targeted retry: следующий вердикт из последовательности
                 continue
-            # ретраи исчерпаны и всё ещё abstain по БЛОКИРУЮЩЕМУ гейту ->
-            # решение НЕ принято -> blocking-abstain(pending_human), доставка ЗАПРЕЩЕНА, нужен человек.
+            
+            
             return _blocking_abstain(gate, evidence_mode, owner, review_mode,
                                      "повторный abstain по блокирующему гейту -> pending_human (не авто-pass/fail)"), \
                 {"retries": retries, "human_handoff": True, "terminal": "abstain-handoff"}
-    # пустая/незавершённая последовательность -> человек (fail-closed на неопределённости)
+    
     return _blocking_abstain(gate, (dec or {}).get("evidence_mode", "ai_review"), owner, review_mode,
                              "нет вынесенного вердикта по блокирующему гейту -> pending_human"), \
         {"retries": retries, "human_handoff": True, "terminal": "no-verdict-handoff"}

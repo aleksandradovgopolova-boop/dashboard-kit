@@ -64,6 +64,19 @@ def get_includes(components: list[str], embed: bool = False) -> str:
     return answer("head", components + (["--embed"] if embed else []))
 
 
+@mcp.tool(annotations=READ_ONLY)
+def get_component_schema(component: str) -> str:
+    """Read versioned parameters/defaults/actions for the minimal screen-spec adapter."""
+    return answer("schema", [component])
+
+
+@mcp.tool(annotations=READ_ONLY)
+def validate_component_parameters(component: str, parameters: dict, schema_version: int = 1) -> str:
+    """Read-only validation against the same generated contract used by CLI/spec."""
+    import json
+    return answer("validate", [component, json.dumps(parameters, allow_nan=False), "--version", str(schema_version)])
+
+
 @mcp.resource("dashboard-kit://build-guide")
 def build_guide() -> str:
     """Canonical build workflow, with references available as resources."""

@@ -1,0 +1,43 @@
+schema_version: 1
+kind: feature-blueprint
+feature:
+  id: dashboard-recipes-numeric-2026-11-02
+  name: Рецепты и независимые числовые проверки
+  owner: product-engineering
+  status: in-progress
+  current_stage: delivery
+  profile: full
+links:
+  epic: https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/63
+  implementation_plan: implementation-plan.md
+  verification: verification.md
+artifacts:
+  definition:
+  - path: requirements.yaml
+    status: done
+  - path: spec.yaml
+    status: done
+  delivery:
+  - path: plan.yaml
+    status: done
+  - path: verification.md
+    status: draft
+    note: Full suite and MCP PASS in CI 41457051676; manual screenshot review pending.
+  discovery:
+  - path: implementation-plan.md
+    status: done
+    section: Основание и границы
+  ux:
+  - path: implementation-plan.md
+    status: done
+    section: Требования 4–6; приёмка реализации пока pending
+  architecture:
+  - path: spec.yaml
+    status: done
+    section: expected_behavior / constraints
+  documentation:
+  - path: verification.md
+    status: done
+  retrospective:
+  - path: retrospective.md
+    status: done

@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "kind": "implementation-verification",
+  "status": "pass",
+  "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+  "tested_tree": "e9ba871e54dc74762e2f7efc7ac683453821a841",
+  "local_equivalent_revision": "e1703ed3e5cb3155dfa40555a9394ddc1f3fc13d",
+  "transport": "GitHub connector recreated an identical product tree; tree identity checked locally.",
+  "runtime": {
+    "node": "v24.22.1",
+    "chrome": "Google Chrome for Testing 156.0.8078.80",
+    "browser_setup": "Temporary external wrapper uses --no-sandbox in the root-owned test container; no product dependencies changed."
+  },
+  "release_version": "0.1.0-rc.3",
+  "release_content_digest": "sha256:4c2e183f96bd0026f190335fca1f38de9c4a48b800bbbb0358ea12a7026e9b92",
+  "commands": [
+    {
+      "command": "python3 tools/check.py --fast",
+      "exit_code": 0,
+      "scope": "static only",
+      "log_path": "evidence/static-fast.log"
+    },
+    {
+      "command": "DK_CHROME=/tmp/dashboard-kit-chrome DK_EVIDENCE_DIR=/tmp/dashboard-kit-minimal-copy-evidence python3 tools/test.py",
+      "exit_code": 0,
+      "scope": "complete required product suite, including browser/family-mortgage",
+      "log_path": "evidence/full-test.log"
+    },
+    {
+      "command": "python3 tools/kit-release.py --check",
+      "exit_code": 0,
+      "scope": "candidate descriptor, also repeated in full suite"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "scope": "product diff, also checked in full suite"
+    }
+  ],
+  "build": {
+    "status": "not_applicable",
+    "reason": "Static HTML/CSS/JavaScript core; no product build command in the existing repository profile. Generated docs and manifest were rebuilt and checked."
+  },
+  "typecheck": {
+    "status": "not_applicable",
+    "reason": "Core JavaScript has no TypeScript typecheck command in the existing repository profile; syntax and runtime contracts were actually checked. Optional React adapter unchanged."
+  },
+  "independent_numerical_oracle": "Not claimed: existing consistency test reuses model selector; separate work is tracked in issue #66.",
+  "limits": [
+    "No physical phone",
+    "No actual screen-reader speech",
+    "Safari/Firefox not tested",
+    "GitHub Actions not run by this local suite",
+    "No merge or deploy"
+  ],
+  "evidence_sha256": {
+    "baseline-light-390.png": "6adc5efbd5df8994374aacb4d6da50b2c061985a25cbbc4db74c8308346861e3",
+    "current-light-390.png": "8e039446738886195d57102c4e4ae3b0b39266c9fde540b824df65a9aff1b774",
+    "baseline-dark-1280.png": "2f68fc229290994f90417e1730aaa04e55a0ef4645d93e7aa950b185ec5825ca",
+    "current-dark-1280.png": "1bb95eed054aa563cf92bb032a061db699a441093f9362636cf795ce0eab561f",
+    "partial-light-390.png": "b27fddc2f0301f9475f27a8baa1ccc8d249edb90ff541fda3058ebee45ef8b5b",
+    "partial-dark-1280.png": "e2b79482fe8835b421031db3671c5e406f6db98c1fd2ae88df4ad1c52b510145",
+    "detail-partial-light-390.png": "d669054a350a8a0d98809737ecf8986d7a48db16db42ffad4449e3ac05ae545c",
+    "detail-explanation-method-dark-1280.png": "c6b86ab6bcd9c7ed1571978553dbc638b64893dc480168fc6d86567dec4e1f4a",
+    "full-test.log": "1888463ed9e50c8f3e8fc4514b1c64c33bb5cc6eccb058000ff6d297995a4379",
+    "static-fast.log": "8591d4605d48c59c072ee36c48904ac6a0bac5a7d4e6b0db77c665a602313185"
+  }
+}

@@ -41,6 +41,9 @@
                  иконка iPhone и маскируемая непрозрачны
   25. ТЕЛЕФОН    страницы на телефоне и планшете: ширина, цели, поля, вырез
                  (браузерная часть — tools/check-mobile.mjs; --fast её пропускает)
+  26. ДОСТУП     дашборды с клавиатуры: достижимость, видимый фокус, имена для
+                 скринридера, каркас страницы (tools/check-a11y.mjs; --fast её
+                 пропускает). Речь скринридера на живом устройстве — ручной шаг
 
 Код возврата 0 — всё чисто, 1 — есть нарушения. Непроверенное (например,
 ДВИЖОК без node) печатается знаком «?» и не выдаётся за чистое.
@@ -429,7 +432,7 @@ def theme_tables(primitives: str, semantic: str) -> dict[str, dict[str, str]]:
         if 'data-theme="light"' in sel:
             target = [light]
         elif ('data-theme="dark"' in sel
-              or sel.strip().startswith(".dk-root,") or sel.strip() == ".dk-root"):
+              or re.search(r"(^|,)\s*(?:\.dk-root|:root)\s*(?:,|$)", sel)):
             target = [dark] if 'data-theme="dark"' in sel else [dark, light]
         for name, value in declarations(body):
             for t in target:
@@ -441,7 +444,10 @@ def check_contrast(primitives: str, semantic: str) -> None:
     # Требования: основной и вторичный текст — 4.5:1, третичный и штрихи — 3:1.
     pairs = [("--ink", "--surface", 4.5), ("--ink-2", "--surface", 4.5),
              ("--ink-3", "--surface", 3.0), ("--ink", "--bg", 4.5),
-             ("--ink-2", "--surface-2", 4.5)]
+             ("--ink-2", "--surface-2", 4.5),
+             ("--risk-label-low", "--risk-area-low", 4.5),
+             ("--risk-label-medium", "--risk-area-medium", 4.5),
+             ("--risk-label-high", "--risk-area-high", 4.5)]
     ok = True
     for theme, table in theme_tables(primitives, semantic).items():
         for fg, bg, need in pairs:
@@ -1876,6 +1882,9 @@ def check_manifest() -> None:
         no("kit-manifest.json не собран — python3 tools/build-manifest.py")
     elif out.read_text("utf-8") != fresh:
         no("kit-manifest.json разошёлся с кодом — пересобери: python3 tools/build-manifest.py")
+    reference = ROOT / "skill/dashboard-build/references/component-parameters.md"
+    if not reference.exists() or reference.read_text("utf-8") != mod.build_schema_reference():
+        no("component-parameters.md разошёлся с контрактами — python3 tools/build-manifest.py")
     m = json.loads(fresh)
     MP = mod.MP
     parts = m["parts"]
@@ -2325,6 +2334,53 @@ def check_phone(fast: bool = False) -> None:
                      f"не шире экрана, цели от 44 px, поля не зумятся, вырез обойдён")
 
 
+def check_a11y(fast: bool = False) -> None:
+    """Доступность собранных дашбордов — в настоящем браузере.
+
+    tools/check-a11y.mjs: каждый контрол достижим обходом Tab и на нём виден
+    фокус, обход не застревает ловушкой, у каждого контрола и значимой картинки
+    есть доступное имя из дерева доступности (то же, что читает скринридер),
+    у страницы есть ориентир main, один заголовок h1 и уровни без пропусков.
+    Нужны node 22+ и Chrome; без них часть печатается знаком «?», а не галочкой.
+    --fast пропускает её так же честно.
+
+    ЧЕГО НЕ ДЕЛАЕТ: не слышит, ПОНЯТНА ли речь на живом устройстве и верно ли
+    читается порядок вслух. «Имя есть» не равно «озвучено правильно». Реальное
+    озвучивание скринридером на живом устройстве — ручной шаг (README, ROADMAP).
+    """
+    import json
+    import shutil
+    import subprocess
+
+    script = ROOT / "tools" / "check-a11y.mjs"
+    node = shutil.which("node")
+    if fast:
+        skipped.append("ДОСТУП · браузерная часть пропущена (--fast): клавиатура, "
+                       "имена и каркас страниц не проверены")
+        return
+    if not node or not script.exists():
+        skipped.append("ДОСТУП · не проверено: нет node")
+        return
+    try:
+        r = subprocess.run([node, str(script), "--json"], capture_output=True,
+                           text=True, timeout=600, cwd=ROOT)
+        res = json.loads(r.stdout.strip().splitlines()[-1])
+    except Exception as e:                       # noqa: BLE001
+        fail("ДОСТУП", f"tools/check-a11y.mjs не отработал: {e}; {r.stderr[-300:] if 'r' in dir() else ''}")
+        return
+    if res.get("skipped"):
+        skipped.append(f"ДОСТУП · не проверено: {res['skipped']}")
+        return
+    bad = False
+    for msg in res["problems"]:
+        fail("ДОСТУП", msg)
+        bad = True
+    if not bad:
+        notes.append(f"ДОСТУП · {res['pages']} дашбордов: контролы достижимы с клавиатуры "
+                     f"с видимым фокусом, у контролов есть имена, каркас страниц на месте "
+                     f"(речь скринридера на живом устройстве — ручной шаг)")
+
+
 def check_page(path: Path) -> None:
     """Страница, собранная ВНЕ кита, по правилам кита: python3 tools/check.py --page путь.
 
@@ -2433,6 +2489,8 @@ def check_page(path: Path) -> None:
     for base in ("css/tokens.primitives.css", "css/tokens.semantic.css", "css/components.css"):
         if base not in css_seen:
             fail(L, f"{path.name}: не подключён {base}")
+    if any(cls == "dk-glass" for _, cls in _used_classes(text)) and "css/glass.css" not in css_seen:
+        fail(L, f"{path.name}: dk-glass без css/glass.css — подключите glass через kit.py head")
     if "vendor/air-datepicker.js" in js_files and "vendor/air-datepicker.css" not in css_seen:
         fail(L, f"{path.name}: календарь периода без vendor/air-datepicker.css — нарисуется голым списком")
 
@@ -2514,12 +2572,21 @@ def check_page(path: Path) -> None:
 
 
 def main() -> int:
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print("Usage: python3 tools/check.py [--fast] [--page PATH]\n"
+              "Without --page: check the kit. --page: check a static consumer.\n"
+              "--fast skips browser checks; help never starts checks or a server.")
+        return 0
     if "--page" in sys.argv:
         i = sys.argv.index("--page")
         if i + 1 >= len(sys.argv):
             print("--page без пути: python3 tools/check.py --page путь/к/странице.html", file=sys.stderr)
             return 2
         check_page(Path(sys.argv[i + 1]).resolve())
+        from screen_policy import review_html
+        target = Path(sys.argv[i + 1]).resolve()
+        for issue in review_html(str(target), target.read_text("utf-8")):
+            fail("КОМПОЗИЦИЯ", f"{issue['path']} [{issue['code']}] {issue['message']}")
         print()
         for n in notes:
             print(f"  ✓ {n}")
@@ -2548,6 +2615,10 @@ def main() -> int:
         print("нет ни одного файла слоя компонентов в css/", file=sys.stderr)
         return 1
 
+    from screen_policy import review_html, review_page_css
+    for issue in review_page_css(ROOT) + [issue for name, html in pages for issue in review_html(name, html)]:
+        fail("КОМПОЗИЦИЯ", f"{issue['path']} [{issue['code']}] {issue['message']}")
+    notes.append("КОМПОЗИЦИЯ · явная область обзора, самостоятельные КПЭ, пустые слоты, сброс и page.css; редакционная приёмка отдельно")
     check_layers(primitives, semantic, layers)
     check_raw_values(semantic, layers)
     check_unknown(primitives, semantic, layers, pages, scripts)
@@ -2579,6 +2650,7 @@ def main() -> int:
     check_classes()
     check_app_icons()
     check_phone(fast="--fast" in sys.argv)
+    check_a11y(fast="--fast" in sys.argv)
 
     print()
     for n in notes:

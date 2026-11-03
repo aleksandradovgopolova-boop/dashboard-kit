@@ -1,0 +1,30 @@
+✔ MODEL hand-checked mortgage: all (14.921625ms)
+✔ MODEL hand-checked mortgage: district (0.350875ms)
+✔ MODEL hand-checked mortgage: region (0.282417ms)
+✔ MODEL hand-checked mortgage: month (0.290791ms)
+✔ MODEL hand-checked mortgage: intersection (0.261667ms)
+✔ MODEL hand-checked mortgage: zero (0.216416ms)
+✔ MODEL hand-checked mortgage: empty (0.179625ms)
+✔ MODEL hand-checked mortgage: unequal-approval-bases (0.313167ms)
+✔ MODEL hand-checked mortgage: partial (0.313542ms)
+✔ MODEL hand-checked mortgage: no-data (0.313292ms)
+✔ MODEL independent detail, pagination and boundaries (0.287791ms)
+✔ MODEL omission is invalid, partial calendar period is rejected, zero plan is not missing data (0.680459ms)
+✔ MODEL explicit comparison: decrease (0.1905ms)
+✔ MODEL explicit comparison: zero (0.042292ms)
+✔ MODEL explicit comparison: previous-zero (0.041958ms)
+✔ MODEL explicit comparison: missing (0.037125ms)
+✔ MODEL explicit comparison: partial (0.036334ms)
+✔ MODEL explicit comparison: unequal (0.033209ms)
+✔ MODEL explicit comparison: calendar (0.031625ms)
+✔ MODEL explicit comparison: small-base (0.03ms)
+✔ MODEL explicit comparison: explicit-small-base (0.037417ms)
+✔ MODEL metadata is atomic, dates and policies fail closed (0.338125ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23.275709

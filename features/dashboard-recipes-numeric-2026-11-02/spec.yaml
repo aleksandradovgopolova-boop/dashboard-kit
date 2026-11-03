@@ -1,0 +1,37 @@
+schema_version: 1
+kind: spec
+workitem_id: dashboard-recipes-numeric-2026-11-02
+level: 1
+level_name: L1 ENGINEERING
+signals:
+  task_type: ENGINEERING
+sections:
+  goal:
+    status: complete
+    content: 'Продолжить #63 через #30 и #66; подготовить отдельный draft PR поверх
+      #71.'
+    note: null
+  scope:
+    status: complete
+    content: 'Рецепты/skill/evals, independent numeric fixtures/tests, optional comparison
+      metadata; #65 отдельно.'
+    note: null
+  expected_behavior:
+    status: complete
+    content: При несопоставимости дельта/цвет заблокированы; оба числа/периода/базы
+      видимы, причины по запросу. Legacy API без метаданных сохранён.
+    note: null
+  acceptance_criteria:
+    status: complete
+    content: R1–R6 в requirements.yaml; полный CI с Chrome PASS, ручной просмотр снимков pending.
+    note: null
+  constraints:
+    status: complete
+    content: Без новых зависимостей, managed/config/workflow, merge/deploy. Нет универсального
+      minBase.
+    note: null
+  affected_files:
+    status: complete
+    content: js/dk-analysis.js; skill/dashboard-build; tools numeric checks, generator,
+      manifest and suite; docs.
+    note: null

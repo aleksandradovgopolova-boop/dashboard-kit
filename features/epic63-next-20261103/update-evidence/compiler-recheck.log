@@ -1,0 +1,1 @@
+PASS: closed versioned spec, typed bindings/actions, cycles, invalid inputs, escaping, deterministic standalone build and preservation of existing output

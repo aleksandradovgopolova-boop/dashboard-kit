@@ -27,9 +27,9 @@ try:                                          # v3.34: валидатор дву
 except ImportError:                                # запуск скриптом: корня на пути ещё нет,
     import _bootstrap                              # noqa: F401 — и положить его может только он сам
 from ai_ops_kit.validation import validate_adr_registry as reg  # noqa: E402
-# Чистая логика fitness вынесена ВНИЗ (пакет `checks`, слой primitives): рантайм
-# (intelligence.evolution_triggers) зовёт profile() отсюда вниз, без ребра intelligence -> validation.
-# profile/fitness/ACTIVE ре-экспортируются для обратной совместимости (лента №5).
+
+
+
 from ai_ops_kit.checks.quality_attributes import ACTIVE, fitness, profile  # noqa: E402,F401
 
 

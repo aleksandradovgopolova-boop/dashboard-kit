@@ -32,7 +32,7 @@ from ai_ops_kit.intelligence import health_common as hc
 KIND = "tech-health-report"
 EXPORT_REL = ".ai-ops/tech-health.yaml"
 
-# пороги долей (доля прошедших тестов; доля устаревших зависимостей)
+
 _TESTS_GREEN, _TESTS_YELLOW = 0.98, 0.80
 
 

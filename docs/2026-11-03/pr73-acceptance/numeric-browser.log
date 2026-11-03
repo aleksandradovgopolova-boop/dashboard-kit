@@ -1,0 +1,5 @@
+PASS: numeric UI binding dark 390
+PASS: numeric UI binding dark 1280
+PASS: numeric UI binding light 390
+PASS: numeric UI binding light 1280
+PASS: literal UI oracle, filters/details/return, zero/partial/no-data, comparison policies and tooltip lifecycle

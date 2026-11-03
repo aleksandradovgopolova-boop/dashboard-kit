@@ -1,6 +1,6 @@
 {
   "skill_name": "dashboard-build",
-  "how_to_run": "Для каждой задачи: чистая папка продукта рядом с китом, в ней независимый агент со скиллом получает только prompt (исполнитель фиксируется в отчёте). Потом: python3 <кит>/tools/check.py --page <собранная страница> — ожидания с \"check\" проверяются этой командой; остальные — по транскрипту и снимку. Задача пройдена, если выполнены все ожидания.",
+  "how_to_run": "Каждый prompt + актуальный skill/catalog получает отдельный fresh-context агент в чистой папке. Expected_output/expectations, прошлые артефакты и corrections доступны только принимающему. Не передавать исполнителю готовый ответ. После сборки: check.py --fast --page, реальные Chrome390/1280 в обеих темах, отдельно данные/действия и visual/text review. Фиксировать runtime, точный kit pin, вход и артефакт, substantive corrections после first-complete отдельно data/UX/technical. Self corrections до первого артефакта — отдельно. Недоступный runtime: blocked/skipped, не PASS.",
   "evals": [
     {
       "id": 1,
@@ -519,6 +519,191 @@
           "check": "page"
         }
       ]
+    },
+    {
+      "id": 16,
+      "recipe": "monitoring",
+      "components": [
+        "table",
+        "tile",
+        "map"
+      ],
+      "prompt": "Руководителю нужен обзор объектов, требующих внимания. Используй учебный tools/fixtures/numeric/mortgage-source.json и правило риска ипотеки: недовыполнение >=20 п.п. — сильно отстаёт; >0 — отстаёт; иначе по плану. Выбери рецепт, собери 1280x900 и 390x844; фильтр округа, детали и возврат. Не добавляй блоки без полезного вопроса.",
+      "expected_output": "Статический экран из кита и отчёт по независимым числам, обеим темам и 390/1280. Реальный прогон отдельно в #70.",
+      "expectations": [
+        {
+          "text": "Два объекта требуют внимания; СЗФО: 40 выдано, 80% выполнения",
+          "check": null
+        },
+        {
+          "text": "После null факта нет ложной оценки «По плану»",
+          "check": null
+        },
+        {
+          "text": "Пояснения по запросу; даты/единицы/статусы видимы; возврат сохраняет срез",
+          "check": null
+        },
+        {
+          "text": "Проверка страницы проходит",
+          "check": "page"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "recipe": "plan-fact",
+      "components": [
+        "tile",
+        "table",
+        "chart"
+      ],
+      "prompt": "Покажи владельцу программы выполнение плана из tools/fixtures/numeric/mortgage-source.json. Выдачи и бюджет в разных единицах. Нужны фильтр месяца и помесячные детали; zero/null различать. Поясняющие абзацы не нужны.",
+      "expected_output": "Статический экран из кита и отчёт по независимым числам, обеим темам и 390/1280. Реальный прогон отдельно в #70.",
+      "expectations": [
+        {
+          "text": "Итог 100/200=50%; бюджет 50/80=62,5%, лимит120",
+          "check": null
+        },
+        {
+          "text": "Май:30/80=37,5%; zero plan не даёт процента",
+          "check": null
+        },
+        {
+          "text": "Не усредняются проценты регионов; телефон и возврат проверены",
+          "check": null
+        },
+        {
+          "text": "Проверка страницы проходит",
+          "check": "page"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "recipe": "portfolio",
+      "components": [
+        "table",
+        "select",
+        "pager"
+      ],
+      "prompt": "Сравни регионы из tools/fixtures/numeric/mortgage-source.json по выдачам, выполнению и средней ставке. Нужны поиск, фильтр округа/месяца, сортировка и детали. Не выдумывай интегральную оценку. Дополнительно объясни, почему готовых конверсий 10% и 90% без знаменателей недостаточно для общей конверсии.",
+      "expected_output": "Статический экран из кита и отчёт по независимым числам, обеим темам и 390/1280. Реальный прогон отдельно в #70.",
+      "expectations": [
+        {
+          "text": "Общая ставка6,6%; Санкт-Петербург4,5%; май4%",
+          "check": null
+        },
+        {
+          "text": "Пагинация не меняет KPI; пустое пересечение фильтров не становится общим срезом",
+          "check": null
+        },
+        {
+          "text": "Неподходящий пример отклонён без выдуманного знаменателя",
+          "check": null
+        },
+        {
+          "text": "Проверка страницы проходит",
+          "check": "page"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "recipe": "operations",
+      "components": [
+        "table",
+        "modal",
+        "pager"
+      ],
+      "prompt": "На основе существующего reference-dashboard.html подготовь оператору таблицу службы × день с доступным учебным поручением. Сохрани единицу строки, серверный контракт и обратную связь. Сначала выбери рецепт; не превращай агрегированные строки в отдельные инциденты. Проверь ошибку, повтор и возврат из деталей.",
+      "expected_output": "Статический экран из кита и отчёт по независимым числам, обеим темам и 390/1280. Реальный прогон отдельно в #70.",
+      "expectations": [
+        {
+          "text": "Единица строки названа; фиктивного журнала инцидентов нет",
+          "check": null
+        },
+        {
+          "text": "Фильтры/KPI/таблица едины; страницы не меняют итоги",
+          "check": null
+        },
+        {
+          "text": "Действие сообщает исход; ошибка сохраняет срез; readonly/нет доступа не маскируются",
+          "check": null
+        },
+        {
+          "text": "Проверка страницы проходит",
+          "check": "page"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "components": [
+        "chart",
+        "table",
+        "tooltip"
+      ],
+      "prompt": "Добавь один график «Обращения за неделю» для встраивания в существующий рабочий экран. Дни Пн–Вс:34,28,31,40,36,12,9 обращений. Нужны понятное сравнение дней, единица и числовая альтернатива. Без дополнительного обзора, KPI или навигации. Пояснение по методике — по запросу; обе темы390/1280.",
+      "expected_output": "Статический артефакт и отчёт; отдельный реальный runtime-прогон, не deterministic fixtures",
+      "expectations": [
+        {
+          "text": "Один widget без KPI/nav; точные7значений, числовая альтернатива и доступная методика",
+          "check": null
+        },
+        {
+          "text": "Выполнены общие требования minimal copy, data/UX/technical и actual page check",
+          "check": "page"
+        }
+      ],
+      "scope": "one-widget"
+    },
+    {
+      "id": 21,
+      "recipe": "plan-fact",
+      "components": [
+        "screen",
+        "named-metrics",
+        "tile",
+        "chart",
+        "table",
+        "select"
+      ],
+      "prompt": "Используя screen-spec/1, реальные validator/compiler и именованные метрики, собери plan-fact из examples/spec/plan-fact-source.json и tools/fixtures/named-metrics/registry.json: выдачи, исполнение плана, взвешенная ставка, дневное сравнение и регионы с деталями; фильтры региона/канала, empty/reset/return. Подтверждено4dailyrows, grain day/region.",
+      "expected_output": "Статический артефакт и отчёт; отдельный реальный runtime-прогон, не deterministic fixtures",
+      "expectations": [
+        {
+          "text": "Сгенерированный runnable consumer проходит настоящий page checker, данные/фильтры/details/partial верны",
+          "check": null
+        },
+        {
+          "text": "Выполнены общие требования minimal copy, data/UX/technical и actual page check",
+          "check": "page"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "recipe": "plan-fact",
+      "components": [
+        "screen",
+        "named-metrics",
+        "tile",
+        "chart",
+        "table",
+        "select"
+      ],
+      "prompt": "Повтори typed plan-fact на новом source.json/registry.json из eval-input, числа отсутствуют в reference-ожиданиях. Владелец выбирает регион для разбора: выдачи/план, исполнение, взвешенная ставка, дневное сравнение, фильтры региона/канала и детали. Подтверждён полный local day/region snapshot4rows.",
+      "expected_output": "Статический артефакт и отчёт; отдельный реальный runtime-прогон, не deterministic fixtures",
+      "expectations": [
+        {
+          "text": "Новый независимый input; общийфакт80/план150, исполнение53,333333%, ставка5800/1100; computed/DOM/detail значения согласованы",
+          "check": null
+        },
+        {
+          "text": "Выполнены общие требования minimal copy, data/UX/technical и actual page check",
+          "check": "page"
+        }
+      ]
     }
   ],
   "runs": [
@@ -553,6 +738,44 @@
       ],
       "evidence": "runs/2026-10-06/README.md",
       "result": "Все шесть страниц собраны по описи и проходят check.py --page; 24 снимка 390/1280 в обеих темах осмотрены. Независимый прогон выявил наложение длинных строк heatmap, неполную легенду I–IV, Escape tooltip/sidebar, неявное отсутствие bullet и пустой timeline. Исправлены в SDK и проверены consumer/runtime регрессиями. Семантическое имя high уточнено, исполнитель задачи 7 поправил consumer и повторил действия. Ограничения: physical phone, spoken SR, native fullscreen Escape через CDP не подтверждены; map tiles требуют увеличения/альтернативы. Это реальные независимые сборки, а не check-evals.py fixtures."
+    },
+    {
+      "date": "2026-11-03",
+      "executor": "seven native Codex agents, fork_turns=none; no model override",
+      "tasks": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "evidence": "runs/2026-11-03/README.md",
+      "result": "Семь настоящих fresh-context Codex consumers16–22: final28Chromeviews +4view targeted table recheck, отдельный независимый UX/editorial APPROVE всем7 после сохранённых initial failures/corrections. Typed blind22 на новых числах; ошибки данных отделены от UX и tooling. Claude deferred владельцем, не PASS; #70 полностью не закрыта."
+    }
+  ],
+  "policy_version": "2026-11-03/minimal-copy-typed-contracts",
+  "shared_expectations": [
+    {
+      "text": "Рабочий обзор и детали: постоянных поясняющих предложений0; labels/units/period/legend/status и необходимые сообщения состояний видимы",
+      "check": null
+    },
+    {
+      "text": "Методика/причины доступны по запросу с клавиатуры, нажатием и Escape; нет ложных обещаний сохранения/отправки",
+      "check": null
+    },
+    {
+      "text": "Открытые details: названия/значения/единицы видимы, карточки внутриmetrics, таблица после них; нет пересеченийcontrols",
+      "check": null
+    },
+    {
+      "text": "Точные числа проверяются независимо от модели, после реальныхfilters/details/return; partial не выдаётся за полный итог",
+      "check": null
+    },
+    {
+      "text": "Scope одного виджета сохраняется; mobile390 и desktop1280, Dark/Light, actual dependency/pin verified",
+      "check": null
     }
   ]
 }

@@ -28,8 +28,8 @@ import yaml
 from datetime import datetime
 from pathlib import Path
 
-# Read-only сбор сигналов дельты вынесен в сателлит nightly_collectors; ре-экспорт сохраняет
-# доступ `nightly_review.<имя>` для оркестрации (collect_delta/confirm_review) и тестов.
+
+
 from ai_ops_kit.intelligence.nightly_collectors import (  # noqa: F401
     _check_ci_status,
     _check_open_prs,
@@ -39,8 +39,8 @@ from ai_ops_kit.intelligence.nightly_collectors import (  # noqa: F401
     _git,
     run_checks,
 )
-# Расписание и доставка брифа вынесены в сателлит nightly_schedule; run_nightly (оркестрация)
-# остаётся здесь и зовёт deliver_brief отсюда.
+
+
 from ai_ops_kit.intelligence.nightly_schedule import (  # noqa: F401
     SCHEDULE_WORKFLOW_REL,
     BRIEFS_DIR_REL,
@@ -51,15 +51,31 @@ from ai_ops_kit.intelligence.nightly_schedule import (  # noqa: F401
 )
 
 
-# ТОЧКА ОТСЧЁТА — ПОСЛЕДНИЙ ПОДТВЕРЖДЁННЫЙ ОБЗОР, А НЕ «24 ЧАСА» (v0, 20.08.2026).
-#
-# Работа обещает «delta по изменениям с последнего ПОДТВЕРЖДЁННОГО обзора». Сутки вместо
-# подтверждения — не то же самое: пропущенная ночь молча теряет изменения, а разобранная дважды
-# показывает одни и те же находки. Ни то ни другое не заметно человеку — он видит правдоподобный
-# бриф в обоих случаях.
-#
-# Подтверждение — ДЕЙСТВИЕ ЧЕЛОВЕКА (`--confirm`), а не факт отправки брифа: отправленный и
-# прочитанный — разные вещи, и точку отсчёта двигает второе.
+
+from ai_ops_kit.intelligence.nightly_trends import (  # noqa: F401
+    HISTORY_REL,
+    TREND_WINDOW_DAYS,
+    compute_axis_trends,
+    compute_trends,
+    finding_counts,
+    format_trends,
+    read_history,
+    record_history,
+)
+
+from ai_ops_kit.intelligence import nightly_dimensions as nd
+from ai_ops_kit.intelligence.nightly_hotspots import format_hotspots_section  # noqa: F401
+
+
+
+
+
+
+
+
+
+
+
 CONFIRMED_REL = ".ai/project/nightly-review/last-confirmed.json"
 
 
@@ -99,21 +115,21 @@ def confirm_review(root: Path, sha: str | None = None, dismissed=None) -> dict:
     return rec
 
 
-# ─── ЧАСТОТА ЛОЖНЫХ СРАБАТЫВАНИЙ: обзор НАЗЫВАЕТ свою точность (или честно молчит) ──────────────
-#
-# Обзор ФЛАГАЕТ расхождения. Но флаг, чья точность не измерена, — тот же ложный green: владелец не
-# знает, чинить по нему или отмахнуться, а сам обзор становится кандидатом в «судит, но свою
-# точность не меряет» (F-002/F-005). Поэтому обзор называет, КАК ЧАСТО его флаги оказываются
-# ложными, — из ОБРАТНОЙ СВЯЗИ, а не из воздуха. Обратная связь берётся при подтверждении: владелец
-# помечает флаги, которые были ложными (`--confirm --dismiss <флаг>`).
-#
-# БЕЗ ФАБРИКАЦИИ. Пока подтверждённых обзоров с флагами меньше порога, частота НЕ ИЗМЕРЕНА — так и
-# говорим, называя порог, а не выдумываем число. Выдуманная точность — ровно тот дефект, что кит
-# ловит везде, и здесь он был бы вдвойне циничен: обзор соврал бы именно о своей правдивости.
-#
-# ХРАНЕНИЕ — ШАРДАМИ (учёт #148). Одна запись на подтверждённый обзор, отдельным файлом: слияние
-# веток объединяет каталог (union), общего конфликтного файла нет. Append-only: записи не
-# переписываются, только добавляются.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 FEEDBACK_DIR_REL = ".ai/project/nightly-review/feedback"
 # Порог: сколько подтверждённых обзоров С ФЛАГАМИ нужно, чтобы назвать частоту числом. Меньше —
@@ -231,10 +247,15 @@ def review_baseline(root: Path) -> dict:
             "reason": f"дельта с последнего подтверждённого обзора ({rec.get('confirmed_at')})"}
 
 
-def collect_delta(root: Path, since: str | None = None) -> dict:
-    """Collect all delta information."""
+def collect_delta(root: Path, since: str | None = None, *, focus: str | None = None) -> dict:
+    """Collect all delta information. `focus` не задан — заглядываем в курсор ротации, НЕ двигая его
+    (показ/подтверждение); реальный прогон (run_nightly) передаёт уже сдвинутый фокус."""
     baseline = review_baseline(root) if since is None else {
         "since": since, "kind": "explicit", "reason": "точка отсчёта задана вызывающим"}
+    findings = run_checks(root)
+    if focus is None:
+        focus = nd.rotate_focus(root, advance=False)
+    axis_counts = nd.axis_finding_counts(findings)
     return {
         "baseline": baseline,
         "commits": _get_recent_commits(root, baseline["since"]),
@@ -242,8 +263,15 @@ def collect_delta(root: Path, since: str | None = None) -> dict:
         "plan": _check_plan_status(root),
         "ci": _check_ci_status(root),
         "prs": _check_open_prs(root),
-        "findings": run_checks(root),
+        "findings": findings,
+        "focus": focus,
+        "dimensions": nd.group_findings_by_axis(findings),
+        "axis_counts": axis_counts,
         "false_positive_rate": false_positive_rate(root),
+        
+        
+        "trends": compute_trends(read_history(root), findings),
+        "axis_trends": compute_axis_trends(read_history(root), axis_counts),
         "timestamp": datetime.now().isoformat(),
     }
 
@@ -270,9 +298,8 @@ def format_brief(delta: dict, root: Path) -> str:
 
     L = ["# Утренний обзор продукта", ""]
 
-    # 1. Что изменилось — и ОТ ЧЕГО считали.
-    L += ["## Что изменилось", ""]
-    L.append(f"Точка отсчёта: {b.get('reason', 'не названа')}.")
+    
+    L += ["## Что изменилось", "", f"Точка отсчёта: {b.get('reason', 'не названа')}."]
     if b.get("kind") in ("fallback", "unreadable"):
         L.append("**Это не подтверждённая точка отсчёта** — часть изменений могла остаться за кадром "
                  "или попасть в обзор второй раз.")
@@ -281,43 +308,43 @@ def format_brief(delta: dict, root: Path) -> str:
     else:
         L.append("С тех пор изменений не зафиксировано.")
 
-    # 2. Что система сделала — НАХОДКИ, а не количества.
-    L += ["", "## Что я проверила", ""]
-    if bad:
-        L.append(f"Расхождений: **{len(bad)}**.")
-        for f in bad:
-            L.append(f"- **{f['check']}** ({f['subject']}): {f['detail']}")
-    elif findings:
-        L.append("Расхождений не найдено ни одной из выполненных проверок.")
-    else:
-        L.append("Проверки не выполнялись.")
+    
+    groups = delta.get("dimensions") or nd.group_findings_by_axis(findings)
+    L += ["", "## Что я проверил — по осям", "", *nd.format_dimensions(groups, focus=delta.get("focus"))]
     if isinstance(plan.get("by_status"), dict):
         L.append(f"- план: " + ", ".join(f"{k} — {v}" for k, v in sorted(plan["by_status"].items())))
     elif plan.get("error"):
         L.append(f"- план: {plan['error']}")
 
-    # 2.5 НАСКОЛЬКО ДОВЕРЯТЬ ФЛАГАМ — частота ложных срабатываний названа ПЕРВОКЛАССНО.
-    # Обзор, который флагает, но не меряет свою точность, неотличим от гадания. Число берётся из
-    # обратной связи владельца (`--confirm --dismiss`), а нет данных — говорим «не измерено», а не
-    # выдумываем процент.
-    fpr = delta.get("false_positive_rate") or false_positive_rate(root)
-    L += ["", "## Насколько можно доверять моим флагам", ""]
-    L.append(format_false_positive_rate(fpr))
+    
+    
+    trend = delta.get("trends") or compute_trends(read_history(root), findings)
+    L += ["", "## Тренд за неделю", ""]
+    L += [*format_trends(trend), "", *nd.format_axis_trends(delta.get("axis_trends") or {})]
 
-    # 3. Чего НЕ стала делать и почему.
-    L += ["", "## Чего я не стала делать и почему", ""]
-    L.append("- **Ничего не правила**: v0 работает только на чтение. Это граница выпуска, а не "
+    
+    L += format_hotspots_section(root)
+
+    
+    
+    
+    fpr = delta.get("false_positive_rate") or false_positive_rate(root)
+    L += ["", "## Насколько можно доверять моим флагам", "", format_false_positive_rate(fpr)]
+
+    
+    L += ["", "## Чего я не стал делать и почему", ""]
+    L.append("- **Ничего не правил**: v0 работает только на чтение. Это граница выпуска, а не "
              "недоделка: автофикс без измеренного false-positive rate — тот же ложный green, "
              "только теперь он коммитит.")
     for f in unknown:
         L.append(f"- **{f['check']}** не проверена: {f['detail']}")
     if open_prs is None:
-        L.append(f"- Состояние запросов на слияние не узнала: "
+        L.append(f"- Состояние запросов на слияние не узнал: "
                  f"{prs.get('unavailable', 'причина не названа')}.")
     if not unknown and open_prs is not None:
         L.append("- Остальное из объявленного объёма проверено.")
 
-    # 4. Где нужно решение.
+    
     L += ["", "## Где нужно твоё решение", ""]
     asks = []
     if b.get("kind") == "unreadable":
@@ -332,7 +359,7 @@ def format_brief(delta: dict, root: Path) -> str:
     else:
         L.append("- Ничего не жду. Решений от тебя сейчас не требуется.")
 
-    # 5. Что важнее всего сегодня — ОДНО.
+    
     L += ["", "## Что важнее всего сегодня", ""]
     if bad:
         L.append(f"Разобрать «{bad[0]['check']}»: {bad[0]['detail'][:160]}")
@@ -349,25 +376,25 @@ def format_brief(delta: dict, root: Path) -> str:
     return "\n".join(L)
 
 
-# ─── КЛАСС A: детерминированный автофикс в worktree -> ОДИН черновой PR за ночь ────────────────
-#
-# Owner decision ep-2026-08-14-nightly-review, четыре класса правок:
-#   A — детерминированное, обратимое, не меняющее поведение: можно автоматически, но НИКОГДА в main;
-#       worktree -> проверки -> draft PR. B кит готовит, мержит человек. C — только рекомендация.
-#       D (секрет/сломанный main/выключенный security-гейт) — срочно, не дожидаясь утра.
-#
-# КЛАСС A НА СТАРТЕ ПУСТ. Какие ИМЕННО пункты допускаются к автоматической правке — решение
-# владельца по одному, и только после измеренной точности v0 (human_decision в карточке работы).
-# Поэтому реестр фиксеров существует, но ВКЛЮЧЁННЫЙ список по умолчанию пуст (fail-closed): фиксер
-# ездит выключенным, владелец открывает его отдельным решением. Ничего не правится, пока список пуст.
-#
-# ГРАНИЦЫ (все механизмами, не на словах):
-#   · никогда в main — worktree.add отказывает main/master, PR всегда черновой, слияние не делаем;
-#   · не более ОДНОГО PR за ночь — одна стабильная ветка + идемпотентный open_draft_pr (обновляет);
-#   · ноль вызовов модели — класс A детерминирован (Budget(max_model_calls=0) как заявленный инвариант);
-#   · kill-switch — env AI_OPS_NIGHTLY_AUTOFIX=off или файл-сигнал; пустой список — тоже «выключено»;
-#   · откат при провале проверки — в worktree.apply_fixes_in_worktree (per-fixer revert / force remove);
-#   · unknown не чинится — берём только доказанные расхождения, «не проверено» не трогаем.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 NIGHTLY_AUTOFIX_ENV = "AI_OPS_NIGHTLY_AUTOFIX"          # =off (любой регистр) -> глушим
 AUTOFIX_OFF_SENTINEL = ".ai/project/nightly-review/autofix-off"
@@ -409,8 +436,8 @@ def _fix_trailing_whitespace(globs):
     return apply
 
 
-# Реестр фиксеров класса A. Ключ -> FixerSpec. ВКЛЮЧАЮТСЯ отдельным решением владельца (см. ниже);
-# по умолчанию не включён НИ ОДИН. Эталонный фиксер держим на узком allowlist (док-Markdown).
+
+
 CLASS_A_FIXERS = {
     "trailing-whitespace": FixerSpec(
         "trailing-whitespace",
@@ -447,7 +474,7 @@ def enabled_fixers(root: Path, enabled=None) -> list:
 
 def run_autofix(root: Path, *, dry_run: bool = False, enabled=None, date: str | None = None,
                 policy=None, verify=None) -> dict:
-    """Собрать включённые правки класса A в ОДИН черновой PR за ночь (или сказать, почему не собрала).
+    """Собрать включённые правки класса A в ОДИН черновой PR за ночь (или сказать, почему не собрал).
 
     Возврат (AutoFixResult): {status, reason?, branch?, base_sha?, head_sha?, applied, skipped, pr?,
     budget, enabled}. status: disabled | suggest-only | no_changes | prepared | dry_run | rolled_back.
@@ -470,8 +497,8 @@ def run_autofix(root: Path, *, dry_run: bool = False, enabled=None, date: str | 
                 "reason": "класс A пуст — включённых фиксеров нет (открывается решением владельца)"}
 
     pol = policy if policy is not None else policy_engine.load_policy(root)
-    # Черновой PR — действие уровня «подготовить» (кит готовит, мержит человек). suggest = даже не
-    # готовим, только рекомендуем. prepare и выше — готовим черновой PR (но НЕ мержим никогда).
+    
+    
     if policy_engine.level_for("nightly_autofix", pol) == "suggest":
         return {**result, "status": "suggest-only",
                 "reason": "policy: nightly_autofix=suggest — только рекомендация, правку не готовлю"}
@@ -515,7 +542,7 @@ def format_autofix_report(res: dict) -> str:
     st = res.get("status")
     L = ["# Ночной автофикс (класс A)", ""]
     if st in ("disabled", "suggest-only"):
-        L.append(f"Ничего не правила: {res.get('reason')}.")
+        L.append(f"Ничего не правил: {res.get('reason')}.")
         L.append("Это граница по решению, а не недоделка: класс A открывается по одному пункту.")
         return "\n".join(L)
     if st == "no_changes":
@@ -552,8 +579,15 @@ def run_nightly(root: Path, *, since: str | None = None, deliver: bool = True,
     -> {"brief", "receipt"|None, "baseline"}. Это ровно то, что зовёт сгенерированный CI-workflow.
     """
     root = Path(root)
-    delta = collect_delta(root, since)
+    
+    
+    focus = nd.rotate_focus(root, advance=True)
+    delta = collect_delta(root, since, focus=focus)
     brief = format_brief(delta, root)
+    
+    
+    
+    record_history(root, delta.get("findings", []), axis_counts=delta.get("axis_counts"))
     receipt = deliver_brief(root, brief, date=date) if deliver else None
     return {"brief": brief, "receipt": receipt, "baseline": delta.get("baseline")}
 
@@ -585,13 +619,13 @@ def main():
     args = ap.parse_args()
 
     if args.selftest:
-        # ЧЕСТНЫЙ --selftest (фаза 0, 19.08.2026). Здесь печаталась строка о пройденном
-        # селфтесте и три строки «... : OK» — без единого вызова проверяемых функций. То есть
-        # модуль УТВЕРЖДАЛ проверку, которой не было: ровно класс «объявлено, но не
-        # исполняется», против которого стоит весь кит (ср. R-31/R-32 — две фиктивные проверки
-        # в валидаторах). Образец честной формы — devtools/mutation_probe.py: модуль объясняет
-        # себя и называет, где лежат его настоящие проверки. Правило репозитория (AGENTS.md):
-        # тест модуля живёт в tests/, а не в продакшн-модуле, который едет в child-репозиторий.
+        
+        
+        
+        
+        
+        
+        
         print(__doc__)
         print("Проверки модуля — в tests/unit/ (AGENTS.md: selftest не живёт в продакшн-модуле).")
         return 0
@@ -602,9 +636,9 @@ def main():
         return 1
 
     if args.confirm:
-        # ПОДТВЕРЖДЕНИЕ — ДЕЙСТВИЕ ЧЕЛОВЕКА, а не факт отправки брифа. Отправленный и разобранный
-        # обзор — разные вещи, и точку отсчёта двигает второе. Иначе пропущенная ночь молча
-        # теряла бы изменения, а разобранная дважды показывала одни и те же находки.
+        
+        
+        
         rec = confirm_review(root, dismissed=args.dismiss)
         print(f"обзор подтверждён на {rec['commit_sha'] or 'неизвестном коммите'} "
               f"({rec['confirmed_at']}) — завтрашняя дельта пойдёт отсюда")
@@ -615,9 +649,9 @@ def main():
         return 0
 
     if args.autofix:
-        # КЛАСС A: детерминированный автофикс в worktree -> один черновой PR. По умолчанию класс A
-        # пуст (fail-closed) — тогда честно скажет, что ничего не правила и почему. Никогда не пишет
-        # в main и не мержит.
+        
+        
+        
         res = run_autofix(root, dry_run=args.dry_run)
         if args.json:
             print(json.dumps(res, indent=2, ensure_ascii=False))
@@ -641,7 +675,7 @@ def main():
         return 0
 
     if args.deliver:
-        # НОЧНОЙ ПРОГОН: бриф не в stdout, а ДОСТАВЛЕН владельцу (произведён ≠ доставлен).
+        
         out = run_nightly(root, since=args.since)
         if args.json:
             print(json.dumps(out, indent=2, ensure_ascii=False))

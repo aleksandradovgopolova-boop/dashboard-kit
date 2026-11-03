@@ -37,33 +37,33 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface
 
-# ─── индикаторы Laravel-роутинга ──────────────────────────────────────────────────────────────────
-# Файл считается таблицей маршрутов Laravel только при явном индикаторе: фасад `Route::` в тексте,
-# импорт фасада `Illuminate\Support\Facades\Route`, либо расположение файла в каталоге routes/.
-# Симметрия с import-сужением питон-/go-/java-экстракторов: без этого чужой `->get(...)` в обычном
-# .php дал бы ложь.
+
+
+
+
+
 _FACADE_INDICATOR = "Route::"
 _USE_INDICATOR = "Illuminate\\Support\\Facades\\Route"
 
-# HTTP-глаголы фасада Laravel: `Route::get('/x', …)` и т.д. Путь — строковый литерал сразу за `(`.
-# `\b`-границы не нужны: `Route::` уже фиксирует начало вызова фасада.
+
+
 _VERB_RE = re.compile(
     r'Route::(get|post|put|patch|delete|options)\s*\(\s*(["\'])(.*?)\2',
     re.IGNORECASE)
 
-# `Route::resource('orders', …)` / `Route::apiResource('orders', …)` — имя ресурса из литерала.
-# group(1) == 'api' (без учёта регистра) → API-ресурс (без create/edit-форм).
+
+
 _RESOURCE_RE = re.compile(
     r'Route::(api)?resource\s*\(\s*(["\'])(.*?)\2',
     re.IGNORECASE)
 
-# Открытие группы: `->group(function () {` (fluent) или `Route::group([...], function () {` (array).
-# Требуем `{` на той же строке — это тело-замыкание; форму `->group(base_path('...'))` без `{` (группа
-# файлом, не замыканием) не открываем, чтобы не осталось незакрытого фрейма.
+
+
+
 _GROUP_OPEN_RE = re.compile(r'(?:->group\s*\(|Route::group\s*\()')
 
-# Литеральный префикс группы: fluent `->prefix('api')` / `Route::prefix('api')` ИЛИ
-# array `['prefix' => 'admin']`. Иные ключи/варианты (middleware/name/domain) префикса пути не дают.
+
+
 _PREFIX_FLUENT_RE = re.compile(r'(?:->|Route::)prefix\s*\(\s*(["\'])(.*?)\1')
 _PREFIX_ARRAY_RE = re.compile(r'["\']prefix["\']\s*=>\s*(["\'])(.*?)\1')
 
@@ -104,7 +104,7 @@ def _strip_php_comments(line: str, in_block: bool) -> tuple:
                 quote = None
             i += 1
             continue
-        # вне строки и вне блока
+        
         if c == "/" and i + 1 < n and line[i + 1] == "/":   # строчный // → до конца строки
             break
         if c == "#":                                        # строчный # → до конца строки
@@ -204,7 +204,7 @@ def extract_laravel_routes(parsed: ParsedFile) -> list:
         return []
 
     out: list = []
-    # Стек литеральных префиксов открытых prefix-групп. Полный префикс пути = непустые сегменты стека.
+    
     stack: list = []
     in_block = False
     for idx, raw in enumerate(src.split("\n")):
@@ -213,7 +213,7 @@ def extract_laravel_routes(parsed: ParsedFile) -> list:
         lineno = idx + 1
         prefix_segs = [seg for seg in stack if seg]
 
-        # 1) Глаголы фасада с литеральным путём.
+        
         for mv in _VERB_RE.finditer(line):
             if not _is_literal_path(mv.group(2), mv.group(3)):
                 continue
@@ -224,7 +224,7 @@ def extract_laravel_routes(parsed: ParsedFile) -> list:
                 kind="route", ref=f"{parsed.rel_path}:{lineno}|{mv.group(1).upper()} {path}",
                 confidence="inferred", extractor="laravel-routes"))
 
-        # 2) resource / apiResource → RESTful-развёртка.
+        
         for mr in _RESOURCE_RE.finditer(line):
             if not _is_literal_path(mr.group(2), mr.group(3)):
                 continue
@@ -234,7 +234,7 @@ def extract_laravel_routes(parsed: ParsedFile) -> list:
                     kind="route", ref=f"{parsed.rel_path}:{lineno}|{method} {path}",
                     confidence="inferred", extractor="laravel-routes"))
 
-        # 3) Обновление стека prefix-групп для последующих строк.
+        
         if _GROUP_OPEN_RE.search(line) is not None and "{" in line:
             stack.append(_group_prefix_segment(line))
         elif stripped.startswith("})") and stack:

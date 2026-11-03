@@ -30,7 +30,7 @@ import yaml
 
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
-# Внешние скиллы, которые предоставляет раннер (не поставляются китом):
+
 EXTERNAL_SKILLS = {"deep-research"}
 
 
@@ -73,7 +73,7 @@ def check(root: Path):
 
     agent_ids, gate_ids, skill_ids, shipped = collect(root)
 
-    # --- workflows.yaml ---
+    
     wf = load_yaml(root / "registry" / "workflows.yaml")
     for wid, w in (wf.get("workflows") or {}).items():
         for g in (w.get("quality_gates") or []):
@@ -88,7 +88,7 @@ def check(root: Path):
                 if sk not in skill_ids and sk not in EXTERNAL_SKILLS:
                     bad("skill", sk, f"workflow {wid}.{st.get('id')}.uses_skills")
 
-    # --- gates.yaml: checklist / source_of_truth ---
+    
     gates = load_yaml(root / "quality" / "gates.yaml")
     for gid, g in (gates.get("gates") or {}).items():
         for key in ("checklist", "source_of_truth"):
@@ -96,7 +96,7 @@ def check(root: Path):
             if isinstance(ref, str) and not path_exists(root, ref):
                 bad("path", ref, f"gate {gid}.{key}")
 
-    # --- rules/**/*.yaml: skill / source_of_truth ---
+    
     for rp in sorted((root / "rules").rglob("*.yaml")):
         try:
             d = load_yaml(rp) or {}
@@ -107,20 +107,20 @@ def check(root: Path):
             if isinstance(ref, str) and not path_exists(root, ref):
                 bad("path", ref, f"{rp.relative_to(root)}.{key}")
 
-    # --- skills/*/SKILL.md frontmatter: checklist ---
+    
     for sp in sorted((root / "skills").glob("*/SKILL.md")):
         fm = frontmatter(sp.read_text(encoding="utf-8"))
         ref = fm.get("checklist")
         if isinstance(ref, str) and not path_exists(root, ref):
             bad("path", ref, f"{sp.relative_to(root)}.checklist")
 
-    # --- manifest.skills.shipped: path / checklist ---
+    
     for s in shipped:
         for key in ("path", "checklist"):
             ref = s.get(key)
             if isinstance(ref, str) and not path_exists(root, ref):
                 bad("path", ref, f"manifest.skills.shipped[{s.get('id')}].{key}")
-        # конвенция авторинга (rules/meta/skill-authoring): frontmatter name + description
+        
         sp = s.get("path")
         if isinstance(sp, str) and (root / sp).exists():
             fm = frontmatter((root / sp).read_text(encoding="utf-8"))
@@ -128,16 +128,16 @@ def check(root: Path):
                 if not fm.get(req):
                     bad("skill-frontmatter", f"{s.get('id')}: нет '{req}'", f"{sp} frontmatter")
 
-    # --- manifest: package-относительные пути (инструменты/контракты/примеры) резолвятся ---
-    # Раньше валидатор смотрел только shipped skills — routing engine, updater, examples,
-    # compatibility check и т.п. могли тихо протухнуть (02_tools/... после переезда структуры).
+    
+    
+    
     for f in manifest_path_findings(root):
         bad(f["kind"], f["ref"], f["where"])
 
     return findings
 
 
-# package-относительные префиксы: токены с ними — это пути к файлам/каталогам пакета
+
 _MANIFEST_PATH_PREFIXES = (
     "registry/", "installer/", "validation/", "tools/", "examples/", "schemas/",
     "quality/", "security/", "agents/", "rules/", "templates/", "context/",
@@ -146,21 +146,21 @@ _MANIFEST_PATH_PREFIXES = (
 )
 
 
-# ЧТО ДОСТАВЛЯЕТСЯ ДОЧКЕ — СПРАШИВАЕМ У МАНИФЕСТА, А НЕ ПОМНИМ СПИСКОМ.
-#
-# ЗАМЕР 20.08.2026 (ночной обзор, первый живой прогон на трёх подключённых репозиториях). В КАЖДОЙ
-# дочке валидатор ссылок давал 33 «не резолвится» подряд: `skills/`, `governance/`, `openspec/`,
-# `decisions/`, `knowledge/`, `examples/`, `installer/`. Все эти каталоги есть в ките и НЕ входят в
-# `update_policy.managed_set` — то есть у дочки их не будет никогда, и красный не гасится никакой
-# работой.
-#
-# Красный, который нельзя погасить, не проверка: отчёт с ним перестают читать построчно, и вместе
-# с вечной строкой пролистываются настоящие находки. Из тех же 33 настоящих оказалось ровно две —
-# их и должно быть видно.
-#
-# Список доставки НЕ ДУБЛИРУЕТСЯ здесь константой: он уже записан в манифесте, и вторая копия
-# разошлась бы с первой на первом же изменении поставки. Тот же принцип, что «реестр — источник
-# истины»: спрашиваем у него, а не помним.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def _delivered_tops(man) -> set:
     """Верхние каталоги из `update_policy.managed_set`. -> {"registry/", "tools/", …}."""
     out = set()
@@ -191,8 +191,8 @@ def manifest_path_findings(root):
     delivered = _delivered_tops(man)
     out = []
     for tok in _manifest_path_tokens(man):
-        # У дочки проверяем только то, что ей ДОСТАВЛЯЮТ. Остальное — инструменты кита, и их
-        # отсутствие у дочки не дефект, а замысел (см. комментарий у `_delivered_tops`).
+        
+        
         if not kit and delivered and not tok.startswith(tuple(delivered)):
             continue
         if not path_exists(root, tok.rstrip("/")):

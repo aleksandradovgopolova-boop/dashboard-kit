@@ -1,0 +1,14 @@
+{
+  "correction": "postreview UX/layout correction 2",
+  "before": {
+    "app/operations.js": "3f6e837490b3b25d01a94a96b8371625fbc336191167e86d5c0c6671638edd53"
+  },
+  "after": {
+    "app/operations.js": "aab03a3761a6e8cf33e0e65a9740140d022760272c2e230c8658895cbbb960ba"
+  },
+  "changedFiles": [
+    "app/operations.js"
+  ],
+  "scope": "detail metrics parent grid and standard compact tile structure only",
+  "browserRetest": "PENDING"
+}

@@ -30,9 +30,9 @@ import argparse
 import json
 import sys
 
-# 4 UI-review-гейта трека VISUAL (registry/tracks.yaml).
+
 UI_GATES = ("ux_review", "design_system_usage", "accessibility_review", "visual_regression")
-# accessibility остаётся blocking всегда: автоматические критические a11y-нарушения не ослабляем.
+
 SAFETY_UI_GATES = ("accessibility_review",)
 
 UI_IMPACT = ("none", "internal", "user_facing", "critical")
@@ -172,11 +172,11 @@ def candidate_blocking_gates(signals: dict) -> set:
     return {d["gate"] for d in candidate_policy(signals) if _effective(d) == "blocks"}
 
 
-# --- shadow -> live: owner-флаг боевого enforcement риск-калиброванной политики (#543) ------------
-# По умолчанию OFF. Пока флаг выключен, движок держит СЕГОДНЯШНЮЮ строгость (все UI-гейты blocking по
-# current_policy) — candidate только считается рядом (shadow). Флип opt-in: без явного owner-решения
-# ни один гейт не ослабляется. Флаг едет в сигналах задачи (плоско `risk_calibrated_enforcement` или
-# вложенно `gates.risk_calibrated_enforcement`); на входе CLI туда же инжектится значение из .ai-ops.yaml.
+
+
+
+
+
 def risk_calibrated_enforcement_enabled(signals: dict) -> bool:
     """ON только по явному owner-флагу. Всё остальное -> False (без тихого ослабления гейтов)."""
     s = signals or {}

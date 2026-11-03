@@ -39,26 +39,26 @@ from pathlib import Path
 
 import yaml
 
-# --- зоны репозитория: смешивать в одном коммите нельзя -----------------------------------------
-# kit_managed  — слой, которым владеет `ai-ops update` (перезаписывается целиком);
-# kit_config   — конфиг связи с китом (версия/политики);
-# product      — код и тесты продукта;
-# runtime      — артефакты прогонов (в историю попадать не должны вовсе).
+
+
+
+
+
 ZONE_KIT_MANAGED = "kit_managed"
 ZONE_KIT_CONFIG = "kit_config"
 ZONE_PRODUCT = "product"
 ZONE_RUNTIME = "runtime"
 
-# Пары зон, которые нельзя мешать в одном коммите (откат должен быть независимым).
+
 _UNMIXABLE = frozenset({frozenset({ZONE_KIT_MANAGED, ZONE_PRODUCT}),
                         frozenset({ZONE_KIT_CONFIG, ZONE_PRODUCT})})
 
-# Файлы, которых не должно быть в истории ни при каких условиях (проверка по ИМЕНИ, не по содержимому).
+
 _FORBIDDEN_NAMES = ("id_rsa", "id_dsa", "id_ecdsa", "id_ed25519", ".npmrc", ".netrc", ".pypirc")
 _FORBIDDEN_SUFFIXES = (".pem", ".key", ".p12", ".pfx", ".keystore", ".jks", ".ppk")
 _ENV_ALLOWED = (".env.example", ".env.sample", ".env.template", ".env.dist")
 
-# Литеральные секреты в ТЕКСТЕ сообщения (в конфигах допустимы только ссылки env:/secret:).
+
 _SECRET_PATTERNS = (
     re.compile(r"\bsk-[A-Za-z0-9_\-]{16,}"),                    # OpenAI-совместимые ключи
     re.compile(r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{20,}"),  # GitHub-токены
@@ -71,7 +71,7 @@ _SECRET_PATTERNS = (
 _PLACEHOLDER_MESSAGES = ("wip", "fix", "fixes", "фикс", "update", "updates", "обновление", "правка",
                          "tmp", "temp", "test", "тест", "asdf", ".", "..", "минор", "мелочь")
 
-# Мягкие пороги по умолчанию (калибруются на реальных прогонах).
+
 DEFAULTS = {
     "enforce": "advise",            # advise | block — сила МЯГКИХ правил
     "max_files": 40,                # больше — коммит перестаёт быть обозримым в ревью
@@ -81,7 +81,7 @@ DEFAULTS = {
     "require_evidence": True,       # ссылка на доказательство (PR/SHA/отчёт/selftest)
 }
 
-# Типы задач, для которых мягкие правила про WorkItem/evidence вообще применяются.
+
 _TRACKED_TASK_TYPES = ("ENGINEERING", "AI_FEATURE", "PRODUCT", "CRITICAL")
 
 _WORKITEM_RE = re.compile(r"\b(?:WI|WP|RR|DP|EV)-\d+\b", re.IGNORECASE)
@@ -157,7 +157,7 @@ def check_commit(files, message="", workitem=None, task_type="ENGINEERING",
     msg = (message or "").strip()
     hard, soft = [], []
 
-    # --- ЖЁСТКИЕ инварианты -----------------------------------------------------------------------
+    
     if not files:
         hard.append({"rule": "empty_commit", "detail": "нет файлов — коммит не создаётся"})
 
@@ -201,14 +201,14 @@ def check_commit(files, message="", workitem=None, task_type="ENGINEERING",
         hard.append({"rule": "placeholder_message",
                      "detail": f"сообщение '{msg or '—'}' не объясняет ни что, ни зачем"})
 
-    # --- МЯГКИЕ правила ---------------------------------------------------------------------------
+    
     if len(files) > pol["max_files"]:
         soft.append({"rule": "large_commit",
                      "detail": f"{len(files)} файлов > порога {pol['max_files']} — ревью такого "
                                f"коммита вырождается в формальность"})
 
-    # Считаем именно КАТАЛОГИ: файлы в корне (VERSION, CHANGELOG.md, README.md…) — это один бакет,
-    # иначе релизный коммит, честно правящий корневые доки, выглядел бы «размазанным по 14 каталогам».
+    
+    
     top = {seg[0] for f in files if len(seg := _norm(f).split("/")) > 1}
     root_files = any(len(_norm(f).split("/")) == 1 for f in files)
     if len(top) > pol["max_top_level_dirs"]:

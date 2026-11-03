@@ -24,9 +24,9 @@ from __future__ import annotations
 from typing import Any, Literal, Optional, TypedDict
 
 
-# ============================================================================
-# Usage Ledger
-# ============================================================================
+
+
+
 
 class UsageRecord(TypedDict, total=False):
     """Одна запись учёта модельного/runtime-вызова.
@@ -48,7 +48,7 @@ class UsageRecord(TypedDict, total=False):
     cost_status: Literal["measured", "estimated", "unavailable"]
     latency: Optional[float]            # секунды
     trigger: Literal["initial", "retry", "review", "escalation", "fallback", "reevaluate"]
-    # v3.24.0 контекстные поля
+    
     task_type: Optional[str]
     workflow: Optional[str]
     risk: Optional[str]
@@ -59,14 +59,14 @@ class UsageRecord(TypedDict, total=False):
     architecture_impact: Optional[str]
 
 
-# ============================================================================
-# Preflight
-# ============================================================================
+
+
+
 
 class PreflightCheck(TypedDict):
     """Одна проверка preflight."""
     ok: bool
-    # Дополнительные поля зависят от проверки (task_type, artifact_present, ...)
+    
 
 
 class PreflightResult(TypedDict):
@@ -82,9 +82,9 @@ class PreflightResult(TypedDict):
     reasons: list[str]                  # человеческие описания блоков
 
 
-# ============================================================================
-# Gate Result V2
-# ============================================================================
+
+
+
 
 class GateCheck(TypedDict):
     """Одна проверка внутри quality gate."""
@@ -126,9 +126,9 @@ class GateResultV2(TypedDict, total=False):
     human_handoff: bool
 
 
-# ============================================================================
-# Execution Pipeline Report
-# ============================================================================
+
+
+
 
 class RunReportCheck(TypedDict, total=False):
     """Одна проверка в отчёте прогона."""
@@ -150,8 +150,8 @@ class RunReportGates(TypedDict, total=False):
     met: list[str]
     unmet: list[str]
     not_applicable: list[str]
-    # Кто закрыл каждый гейт: validator | judge | writer | human. «Зелёное» от машины и «зелёное»
-    # по мнению судьи — разные утверждения, и отчёт обязан их различать.
+    
+    
     closure: dict[str, Any]
 
 
@@ -161,41 +161,41 @@ class RunReport(TypedDict, total=False):
     Основной контракт между pipeline и вызывающим (ai_ops_run, CLI).
     ready_for_pr=True -> можно открывать draft PR.
     """
-    # Идентификация
+    
     workitem_id: str
     run_id: str
     task: str
 
-    # Статус
+    
     overall_status: str                 # done|blocked|blocked-preflight|error
     ready_for_pr: bool
     error: Optional[str]
 
-    # Проверки
+    
     checks: dict[str, RunReportCheck]
     reviews: list[RunReportReview]
     gates: RunReportGates
 
-    # Evidence
+    
     security_scan: dict[str, Any]
     evidence: dict[str, Any]
     changed_files: list[str]
     committed_sha: Optional[str]
 
-    # Delivery
+    
     delivery: dict[str, Any]
     handoff: dict[str, Any]
 
-    # Cost
+    
     total_cost_usd: Optional[float]
     total_tokens_in: Optional[int]
     total_tokens_out: Optional[int]
     call_count: int
 
 
-# ============================================================================
-# Delivery
-# ============================================================================
+
+
+
 
 class DeliveryIntent(TypedDict, total=False):
     """Намерение доставки (PR) — записывается ДО открытия PR."""
@@ -236,9 +236,9 @@ class DeliveryReceipt(TypedDict, total=False):
     checks_verified: Optional[bool]      # True только при found + 0 упавших + 0 незавершённых
 
 
-# ============================================================================
-# Context
-# ============================================================================
+
+
+
 
 class ContextBundle(TypedDict, total=False):
     """Пакет контекста для WorkItem (ai_ops_kit/context/context_compiler.py).
@@ -257,9 +257,9 @@ class ContextBundle(TypedDict, total=False):
     text: str                           # compiled payload
 
 
-# ============================================================================
-# WorkItem
-# ============================================================================
+
+
+
 
 class WorkItemState(TypedDict, total=False):
     """Состояние WorkItem — единая сущность задачи."""
@@ -277,9 +277,9 @@ class WorkItemState(TypedDict, total=False):
     pr_url: Optional[str]
 
 
-# ============================================================================
-# Kernel Events (v3.38, trustworthy-core Wave 3)
-# ============================================================================
+
+
+
 
 class KernelEvent(TypedDict, total=False):
     """Событие ядра — контракт между ядром и спутниками.
@@ -301,25 +301,25 @@ class KernelEvent(TypedDict, total=False):
     event_type: str
     workitem_id: str
     timestamp: str
-    # run_completed
+    
     status: str
     report: dict[str, Any]
     child_root: str
-    # gate_evaluated
+    
     gate_results: list[dict[str, Any]]
     tested_revision: str
-    # delivery_completed
+    
     receipt: dict[str, Any]
 
 
-# Запуск скриптом ОБЪЯСНЯЕТ модуль, а не молчит (ревизия 2026-08-11).
-#
-# Здесь стояло `sys.exit(selftest())`, а сама функция удалена в v3.30 вместе с переносом
-# селфтестов в pytest: любой запуск падал с `NameError`. Просто убрать блок — тоже неверно:
-# `tools/contracts.py` остаётся объявленной точкой входа, и молчаливый выход с кодом 0 — тот
-# самый дефект, который ловит `tests/unit/test_alias_entry_points.py` («ноль и есть симптом»).
-# Поэтому вход делает осмысленную работу — печатает назначение модуля, как `invariants.py`.
-# Проверки модуля — в `tests/unit/`.
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     print(__doc__)
     print("Проверки этого модуля — в tests/unit/ (pytest), отдельного --selftest нет с v3.30.")

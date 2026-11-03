@@ -13,14 +13,14 @@ from __future__ import annotations
 import fnmatch
 from pathlib import Path
 
-# Каталоги, которые НЕ являются продуктом: внутренности кита, вендор, сборка, бэкапы. Поиск
-# сигнального пути обязан их пропускать, иначе кит принимает свои же файлы за факт о продукте.
-# Обкатка на wow-repo (стек node/react/astro): контур архитектуры заявлял `not_changed`, потому что
-# нашёл Dockerfile в `.ai/runtime/backups/3.27.6/.ai/managed/containers/` — бэкапе СОБСТВЕННОГО
-# managed-слоя. Это подмена признания утверждением: честный ответ был `unknown`. Тот же класс, что
-# доказательства, указывавшие внутрь `.claude/worktrees/*`.
-# `.ai/project/` и `.ai/custom/` из-под запрета выведены отдельно (см. _under_excluded): там лежит
-# правда РЕПОЗИТОРИЯ, а не кита.
+
+
+
+
+
+
+
+
 _NOT_PRODUCT = (".git", ".ai", ".claude", "node_modules", "dist", "build", "target", "vendor",
                 ".venv", "venv", "__pycache__", ".next", ".mypy_cache", ".pytest_cache",
                 ".ruff_cache")
@@ -80,10 +80,10 @@ def _matches(rel_path: str, pattern: str) -> bool:
     паттернов-каталогов, чтобы `schemas/` не требовал писать `schemas/**`.
     """
     rel = rel_path.replace("\\", "/")
-    # НЕ lstrip("./"): это снятие НАБОРА символов, а не префикса, и `.ai-ops.yaml` превращался в
-    # `ai-ops.yaml`. Следствие было тяжёлым: ни один dot-путь не совпадал со своим же сигнальным
-    # паттерном, поэтому изменение исполняемой части контракта (protected_paths, approvals) и
-    # CI-конвейера проходило гейт связности как согласованное. Снимаем ровно префикс `./`.
+    
+    
+    
+    
     while rel.startswith("./"):
         rel = rel[2:]
     pat = (pattern or "").replace("\\", "/")
@@ -93,10 +93,10 @@ def _matches(rel_path: str, pattern: str) -> bool:
         return rel.startswith(pat)
     if fnmatch.fnmatch(rel, pat):
         return True
-    # `context/product/**` обязан покрывать и сам `context/product/x.md`, и вложенное глубже.
+    
     if pat.endswith("/**") and rel.startswith(pat[:-3] + "/"):
         return True
-    # `**/models/**` для пути без ведущих сегментов (`models/user.py`).
+    
     if pat.startswith("**/") and fnmatch.fnmatch(rel, pat[3:]):
         return True
     return False
@@ -116,7 +116,7 @@ def _product_dirs(child_root: Path):
     root = Path(child_root)
     for cur, dirnames, filenames in os.walk(root, topdown=True):
         rel = Path(cur).relative_to(root)
-        # Подрезка НА МЕСТЕ: os.walk не пойдёт в удалённые из dirnames каталоги.
+        
         dirnames[:] = [d for d in dirnames
                        if not _under_excluded(str(rel / d) if str(rel) != "." else d)]
         yield Path(cur), filenames
@@ -143,14 +143,14 @@ def _repo_has_signal(child_root: Path, patterns: list) -> bool:
                 continue                               # сигнал, указывающий внутрь кита/вендора
             if (root / head).exists():
                 return True
-            # `context/product/MetricCatalog.md` мог уехать в project/custom-оверлей
+            
             if _resolve(root, head):
                 return True
             continue
-        # Паттерн без якоря (`**/models.py`, `**/*.proto`, `**/migrations/**`) — ищем ограниченно.
-        # Хвост берём ПОСЛЕДНИМ ЗНАЧАЩИМ сегментом: у `**/migrations/**` последний сегмент — `**`,
-        # а `rglob("**")` возвращает сам корень, то есть сигнал «есть» в любом каталоге. Из-за этого
-        # `unknown` сворачивался в `not_changed` — главный инвариант модели нарушался везде.
+        
+        
+        
+        
         segs = [s for s in pat.split("/") if s and s != "**"]
         if not segs:
             continue                               # паттерн из одних `**` не является сигналом
@@ -158,8 +158,8 @@ def _repo_has_signal(child_root: Path, patterns: list) -> bool:
 
     if not unanchored:
         return False
-    # ОДИН подрезанный обход на все безякорные паттерны: прежде их было до восьми, и каждый гнал
-    # свой полный rglob по дереву.
+    
+    
     import fnmatch as _fn
     try:
         for cur, filenames in _product_dirs(root):
@@ -195,8 +195,8 @@ def signals_present(child_root: Path, patterns_by_contour: dict) -> set:
                     anchored = True
                     break
                 continue
-            # Хвост берём ПОСЛЕДНИМ ЗНАЧАЩИМ сегментом: у `**/migrations/**` последний сегмент —
-            # `**`, и он совпал бы с любым каталогом, свернув `unknown` в `not_changed`.
+            
+            
             segs = [s for s in pat.split("/") if s and s != "**"]
             if segs:
                 tails.append(segs[-1])

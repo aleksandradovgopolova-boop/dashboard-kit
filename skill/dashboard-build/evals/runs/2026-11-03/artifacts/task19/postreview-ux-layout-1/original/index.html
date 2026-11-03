@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Работа служб · оператор</title><link rel="icon" href="kit/icons/favicon.svg" type="image/svg+xml">
+<!-- dashboard-kit: base, table, modal, dashboard-data, select, tile, page-header, widget-header, widget, segment, glass, export. Собрано: python3 tools/kit.py head table modal dashboard-data select tile page-header widget-header widget segment glass export -->
+<script src="kit/js/dk-theme.js"></script>
+<link rel="stylesheet" href="kit/css/tokens.primitives.css">
+<link rel="stylesheet" href="kit/css/tokens.semantic.css">
+<link rel="stylesheet" href="kit/css/components.css">
+<link rel="stylesheet" href="kit/css/glass.css">
+<script src="kit/js/dk-util.js"></script>
+<script src="kit/js/dk-icons.js" defer></script>
+<script src="kit/vendor/echarts.min.js" defer></script>
+<script src="kit/js/dk-chart-theme.js" defer></script>
+<script src="kit/js/dk-charts.js" defer></script>
+<script src="kit/js/dk-select.js" defer></script>
+<script src="kit/js/dk-modal.js" defer></script>
+<script src="kit/js/dk-table.js" defer></script>
+<script src="kit/js/dk-workspace.js" defer></script>
+<script src="kit/js/dk-dashboard.js" defer></script>
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+
+<link rel="stylesheet" href="operations.css"><script src="operations.js" defer></script></head>
+<body class="dk-page dk-glass" data-dk-screen="operations">
+<main class="dk-wrap ops-page" id="reference-dashboard">
+<header class="dk-head"><div class="dk-head__titles"><h1 class="dk-head__title">Работа служб</h1></div><div class="dk-head__actions"><div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div></div></header>
+<p id="ref-source" class="dk-caption">Учебный источник · загрузка</p>
+<div class="dk-toolbar" aria-label="Фильтры наблюдений"><div class="dk-toolbar__group"><div id="ref-region"></div><div id="ref-service"></div><div id="ref-period"></div><button type="button" class="dk-iconbtn" id="ref-reset" aria-label="Сбросить фильтры" hidden><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div><button type="button" class="dk-btn" id="ref-refresh">Обновить</button></div>
+<p id="ref-context" class="dk-caption"></p>
+<div class="ops-status" id="ref-feedback"><p id="ref-status" role="status" aria-live="polite">Загрузка данных…</p><button type="button" class="dk-btn" id="ref-retry" hidden>Повторить загрузку</button></div>
+<div class="dk-grid" id="ref-content" aria-busy="true" hidden>
+<section class="dk-widget dk-col--full" aria-labelledby="ref-table-title"><header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title" id="ref-table-title">Служба × день</h2><p id="ref-count" class="dk-widget__meta"></p></div><div class="dk-widget__actions"><button type="button" class="dk-btn dk-btn--ghost" id="ref-export" disabled>CSV этой страницы</button></div></header>
+<div class="dk-widget__body"><div class="dk-tablewrap" id="ref-table-scroll" tabindex="0" role="region" aria-label="Наблюдения служб"><table class="dk-table dk-table--cards dk-table--ruled" id="ref-table"><caption class="dk-vh">Город × служба × дата поступления; агрегированные наблюдения</caption><thead><tr><th scope="col">Город и служба</th><th scope="col">Дата поступления</th><th scope="col" class="dk-td-num">Поступило, работ</th><th scope="col" class="dk-td-num">Выполнено из поступивших, работ</th><th scope="col">Учебное поручение</th></tr></thead><tbody id="ref-rows"></tbody></table></div>
+<nav class="ops-pagination" aria-label="Страницы наблюдений"><button type="button" class="dk-iconbtn" id="ref-prev" aria-label="Предыдущая страница"><svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-left"/></svg></button><span id="ref-page-number" class="dk-caption"></span><button type="button" class="dk-iconbtn" id="ref-next" aria-label="Следующая страница"><svg class="dk-i" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button><button type="button" class="dk-btn" id="ref-first" hidden>На первую страницу</button></nav></div></section>
+<div class="dk-col--full ops-metrics" id="ref-metrics" aria-label="Итоги всего выбранного среза"></div></div>
+<section class="dk-empty" id="ref-empty" hidden><h2 class="dk-empty__t">Нет наблюдений</h2><button type="button" class="dk-btn" id="ref-empty-reset">Сбросить фильтры</button></section>
+<dialog class="dk-modal dk-modal--detail" id="ref-detail" aria-labelledby="ref-detail-title"><form method="dialog" class="dk-modal__form"><header class="dk-modal__head"><h2 class="dk-modal__title" id="ref-detail-title">Наблюдение</h2><button type="button" class="dk-iconbtn dk-modal__close" data-modal-close aria-label="Закрыть детали"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></header><div class="dk-modal__body" id="ref-detail-body"></div><footer class="dk-modal__foot"><p id="ref-action-status" role="status" aria-live="polite" hidden></p><button class="dk-btn dk-btn--ghost" value="close">Закрыть</button><button type="button" class="dk-btn dk-btn--primary" id="ref-action">Создать учебное поручение</button></footer></form></dialog>
+<noscript><p>Для работы с сервером нужен JavaScript.</p></noscript>
+</main>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  var root = document.getElementById('reference-dashboard');
+  referenceDashboard(root, {table:dkTable(document.getElementById('ref-table'))});
+});
+</script></body></html>

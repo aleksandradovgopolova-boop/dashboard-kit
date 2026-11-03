@@ -1,0 +1,71 @@
+{
+  "results": [
+    {
+      "name": "numeric-model",
+      "command": [
+        "node",
+        "tools/check-numeric-data.mjs"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "static-final",
+      "command": [
+        "python3",
+        "tools/check.py",
+        "--fast"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "release-final",
+      "command": [
+        "python3",
+        "tools/check-release.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "descriptor-final",
+      "command": [
+        "python3",
+        "tools/kit-release.py",
+        "--check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "evals-final",
+      "command": [
+        "python3",
+        "tools/check-evals.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "browser-syntax",
+      "command": [
+        "node",
+        "--check",
+        "tools/check-numeric-browser.mjs"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "sha256": {
+    "js/dk-analysis.js": "81483dde0c9c0540adb7daca86fb067b6a6171414619b4dbfe98cd3e14e7ec54",
+    "tools/check-numeric-browser.mjs": "db9fe4ac3ddf54d21765f4901a16843fde6334f1504982db2a5d74ba0da408bd",
+    "tools/check-numeric-data.mjs": "87091fee786dbaa075ba5f31506659e52006c776f3e124e4e379faf9b4d0feb7",
+    "kit-manifest.json": "48c20a94ca7e5cf9312f73ef741d71867f7a00823dc1469e9db3a8ae31de397c",
+    "kit-release.json": "e08d48217d16b9d3603be068edcc5d90b47c4e161cfcf0c3e8f18844881bde14"
+  }
+}
