@@ -35,6 +35,7 @@ stacks:
   - tools/check-named-metrics.mjs
   - tools/check-popover.mjs
   - tools/check-screen-policy.py
+  - tools/check-kit-update.py
   - tools/check-component-contracts.py
   - tools/check-screen-spec.py
   - tools/check-screen-builder.mjs

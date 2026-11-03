@@ -1,0 +1,733 @@
+{
+  "schemaVersion": 1,
+  "mode": "dry-run",
+  "status": "review-required",
+  "current": {
+    "version": "0.1.0-rc.7",
+    "channel": "candidate",
+    "contentDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20"
+  },
+  "target": {
+    "version": "0.1.0-rc.8",
+    "channel": "candidate",
+    "contentDigest": "sha256:91b096814b8139c501f3dc859a90c57c2e63b284970a28130177384deb6d07c4"
+  },
+  "files": {
+    "added": [],
+    "removed": [],
+    "changed": [
+      "docs/releases.md"
+    ]
+  },
+  "conflicts": [],
+  "contracts": {
+    "data": {
+      "before": 1,
+      "after": 1
+    },
+    "parametersVersion": {
+      "before": 1,
+      "after": 1
+    },
+    "components": [],
+    "compatibility": "unknown; runtime behavior requires consumer tests"
+  },
+  "dependencies": {
+    "before": {
+      "css": [
+        {
+          "file": "vendor/air-datepicker.css",
+          "when": "только с выбором периода; до components.css"
+        },
+        {
+          "file": "css/tokens.primitives.css",
+          "when": "всегда"
+        },
+        {
+          "file": "css/tokens.semantic.css",
+          "when": "всегда"
+        },
+        {
+          "file": "css/components.css",
+          "when": "всегда"
+        },
+        {
+          "file": "css/chrome.css",
+          "when": "только если кит рисует всю страницу"
+        },
+        {
+          "file": "css/glass.css",
+          "when": "страницы и контейнеры с классом dk-glass; после chrome.css"
+        },
+        {
+          "file": "css/page.regions.css",
+          "when": "только пример regions.html; после chrome.css"
+        },
+        {
+          "file": "css/page.dashboard.css",
+          "when": "только пример dashboard.html; после chrome.css"
+        },
+        {
+          "file": "css/page.family-mortgage.css",
+          "when": "только пример family-mortgage.html; после components.css"
+        },
+        {
+          "file": "css/page.grid.css",
+          "when": "только эталон сетки grid.html; после components.css"
+        },
+        {
+          "file": "css/reference-dashboard.css",
+          "when": "только эталон reference-dashboard.html; после components.css"
+        },
+        {
+          "file": "css/kit2-preview.css",
+          "when": "только оболочка kit2-preview.html; после components.css"
+        },
+        {
+          "file": "css/kit2-preview-frame.css",
+          "when": "только iframe kit2-preview.html; после стилей потребителя; предложения не являются контрактом"
+        }
+      ],
+      "scripts": [
+        {
+          "file": "js/dk-theme.js",
+          "how": "без defer, первым в <head>",
+          "defer": false,
+          "requires": []
+        },
+        {
+          "file": "js/dk-util.js",
+          "how": "без defer, до всех dk-*",
+          "defer": false,
+          "requires": []
+        },
+        {
+          "file": "js/dk-icons.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-focus-trap.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-touch.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-card-scroll.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-onboarding.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-focus-trap.js"
+          ]
+        },
+        {
+          "file": "vendor/echarts.min.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-chart-theme.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "vendor/echarts.min.js"
+          ]
+        },
+        {
+          "file": "js/dk-charts.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-chart-theme.js",
+            "js/dk-util.js",
+            "vendor/echarts.min.js"
+          ]
+        },
+        {
+          "file": "js/dk-select.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-chips.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "vendor/air-datepicker.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-period.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js",
+            "vendor/air-datepicker.js"
+          ]
+        },
+        {
+          "file": "js/dk-chrome.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-modal.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-calendar.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-pager.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-table.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-form.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-map.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-chart-theme.js",
+            "js/dk-util.js",
+            "vendor/echarts.min.js"
+          ]
+        },
+        {
+          "file": "js/dk-notify.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-uptime.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-car.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-context.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-popover.js",
+          "how": "defer, интерактивный немодальный контекст",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-analysis.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-context.js",
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-workspace.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-dashboard.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-metrics.js",
+          "how": "defer, после dk-dashboard.js; именованные производные метрики",
+          "defer": true,
+          "requires": [
+            "js/dk-dashboard.js"
+          ]
+        },
+        {
+          "file": "js/dk-screen.js",
+          "how": "defer, после компонентов и контракта данных; runtime screen-spec/1",
+          "defer": true,
+          "requires": [
+            "js/dk-charts.js",
+            "js/dk-context.js",
+            "js/dk-dashboard.js",
+            "js/dk-metrics.js",
+            "js/dk-modal.js",
+            "js/dk-popover.js",
+            "js/dk-select.js",
+            "js/dk-table.js",
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-tree.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-layout-editor.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/reference-dashboard.js",
+          "how": "defer, только эталон reference-dashboard.html",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/family-mortgage-data.js",
+          "how": "defer, учебная модель family-mortgage.html; после dk-dashboard.js",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/family-mortgage.js",
+          "how": "defer, только family-mortgage.html; после компонентов и модели данных",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/kit2-preview.js",
+          "how": "defer, только kit2-preview.html; изолированный просмотр предложений, не API компонента",
+          "defer": true,
+          "requires": []
+        }
+      ],
+      "rule": "Подключать только то, что есть в include частей на странице, в этом порядке. Основа (часть base) — всегда."
+    },
+    "after": {
+      "css": [
+        {
+          "file": "vendor/air-datepicker.css",
+          "when": "только с выбором периода; до components.css"
+        },
+        {
+          "file": "css/tokens.primitives.css",
+          "when": "всегда"
+        },
+        {
+          "file": "css/tokens.semantic.css",
+          "when": "всегда"
+        },
+        {
+          "file": "css/components.css",
+          "when": "всегда"
+        },
+        {
+          "file": "css/chrome.css",
+          "when": "только если кит рисует всю страницу"
+        },
+        {
+          "file": "css/glass.css",
+          "when": "страницы и контейнеры с классом dk-glass; после chrome.css"
+        },
+        {
+          "file": "css/page.regions.css",
+          "when": "только пример regions.html; после chrome.css"
+        },
+        {
+          "file": "css/page.dashboard.css",
+          "when": "только пример dashboard.html; после chrome.css"
+        },
+        {
+          "file": "css/page.family-mortgage.css",
+          "when": "только пример family-mortgage.html; после components.css"
+        },
+        {
+          "file": "css/page.grid.css",
+          "when": "только эталон сетки grid.html; после components.css"
+        },
+        {
+          "file": "css/reference-dashboard.css",
+          "when": "только эталон reference-dashboard.html; после components.css"
+        },
+        {
+          "file": "css/kit2-preview.css",
+          "when": "только оболочка kit2-preview.html; после components.css"
+        },
+        {
+          "file": "css/kit2-preview-frame.css",
+          "when": "только iframe kit2-preview.html; после стилей потребителя; предложения не являются контрактом"
+        }
+      ],
+      "scripts": [
+        {
+          "file": "js/dk-theme.js",
+          "how": "без defer, первым в <head>",
+          "defer": false,
+          "requires": []
+        },
+        {
+          "file": "js/dk-util.js",
+          "how": "без defer, до всех dk-*",
+          "defer": false,
+          "requires": []
+        },
+        {
+          "file": "js/dk-icons.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-focus-trap.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-touch.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-card-scroll.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-onboarding.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-focus-trap.js"
+          ]
+        },
+        {
+          "file": "vendor/echarts.min.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-chart-theme.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "vendor/echarts.min.js"
+          ]
+        },
+        {
+          "file": "js/dk-charts.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-chart-theme.js",
+            "js/dk-util.js",
+            "vendor/echarts.min.js"
+          ]
+        },
+        {
+          "file": "js/dk-select.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-chips.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "vendor/air-datepicker.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-period.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js",
+            "vendor/air-datepicker.js"
+          ]
+        },
+        {
+          "file": "js/dk-chrome.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-modal.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-calendar.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-pager.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-table.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-form.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-map.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-chart-theme.js",
+            "js/dk-util.js",
+            "vendor/echarts.min.js"
+          ]
+        },
+        {
+          "file": "js/dk-notify.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-uptime.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-car.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-context.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-popover.js",
+          "how": "defer, интерактивный немодальный контекст",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-analysis.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-context.js",
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-workspace.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-dashboard.js",
+          "how": "defer",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/dk-metrics.js",
+          "how": "defer, после dk-dashboard.js; именованные производные метрики",
+          "defer": true,
+          "requires": [
+            "js/dk-dashboard.js"
+          ]
+        },
+        {
+          "file": "js/dk-screen.js",
+          "how": "defer, после компонентов и контракта данных; runtime screen-spec/1",
+          "defer": true,
+          "requires": [
+            "js/dk-charts.js",
+            "js/dk-context.js",
+            "js/dk-dashboard.js",
+            "js/dk-metrics.js",
+            "js/dk-modal.js",
+            "js/dk-popover.js",
+            "js/dk-select.js",
+            "js/dk-table.js",
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-tree.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/dk-layout-editor.js",
+          "how": "defer",
+          "defer": true,
+          "requires": [
+            "js/dk-util.js"
+          ]
+        },
+        {
+          "file": "js/reference-dashboard.js",
+          "how": "defer, только эталон reference-dashboard.html",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/family-mortgage-data.js",
+          "how": "defer, учебная модель family-mortgage.html; после dk-dashboard.js",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/family-mortgage.js",
+          "how": "defer, только family-mortgage.html; после компонентов и модели данных",
+          "defer": true,
+          "requires": []
+        },
+        {
+          "file": "js/kit2-preview.js",
+          "how": "defer, только kit2-preview.html; изолированный просмотр предложений, не API компонента",
+          "defer": true,
+          "requires": []
+        }
+      ],
+      "rule": "Подключать только то, что есть в include частей на странице, в этом порядке. Основа (часть base) — всегда."
+    }
+  },
+  "inventory": {
+    "status": "provided",
+    "components": [
+      "tile",
+      "chart",
+      "table",
+      "screen"
+    ],
+    "unknownComponents": []
+  },
+  "impact": [
+    {
+      "path": "docs/releases.md",
+      "components": [],
+      "relation": "unknown"
+    }
+  ],
+  "writes": []
+}

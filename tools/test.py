@@ -44,6 +44,7 @@ def main():
     run(['python3', 'tools/check-reference-server.py'])
     run([node, 'tools/check-reference-contract.mjs'])
     run(['python3', 'tools/check-release.py'])
+    run(['python3', 'tools/check-kit-update.py'])
     run(['python3', 'tools/check-screen-policy.py'])
     run(['python3', 'tools/check-component-contracts.py'])
     run(['python3', 'tools/check-screen-spec.py'])
