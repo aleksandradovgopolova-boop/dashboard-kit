@@ -1,0 +1,86 @@
+{
+  "origin": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/",
+  "views": [
+    {
+      "theme": "dark",
+      "width": 1366,
+      "height": 768,
+      "url": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/index.html?theme=dark",
+      "overflow": false,
+      "cta": [
+        44,
+        44
+      ],
+      "icons": [
+        32,
+        32,
+        32
+      ],
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "staticImage": 1663,
+      "cards": 4,
+      "taskForm": true
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "height": 1347,
+      "url": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/index.html?theme=dark",
+      "overflow": false,
+      "cta": [
+        44,
+        44
+      ],
+      "icons": [
+        44,
+        44,
+        44
+      ],
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "staticImage": 1663,
+      "cards": 4,
+      "taskForm": true
+    },
+    {
+      "theme": "light",
+      "width": 1366,
+      "height": 768,
+      "url": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/index.html?theme=light",
+      "overflow": false,
+      "cta": [
+        44,
+        44
+      ],
+      "icons": [
+        32,
+        32,
+        32
+      ],
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "staticImage": 1663,
+      "cards": 4,
+      "taskForm": true
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "height": 1347,
+      "url": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/index.html?theme=light",
+      "overflow": false,
+      "cta": [
+        44,
+        44
+      ],
+      "icons": [
+        44,
+        44,
+        44
+      ],
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "staticImage": 1663,
+      "cards": 4,
+      "taskForm": true
+    }
+  ],
+  "errors": []
+}

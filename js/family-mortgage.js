@@ -145,7 +145,7 @@
         var valueRow = node('div',null,'dk-tile__row'); valueRow.append(node('span',value,'dk-metric-lg'));
         if (unit) valueRow.append(node('span',unit,'dk-tile__unit'));
         card.append(node('div',label,'dk-tile__label'),valueRow);
-        if (context) {
+        if (context && context !== value) {
           var note = node('div',context,'dk-caption');
           if (meaning) note.style.color = dkMeaning(meaning,'text');
           card.append(note);

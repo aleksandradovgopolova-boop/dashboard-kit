@@ -4,7 +4,7 @@
 2026-11-02T13:48:30.5090579Z node:internal/modules/run_main:123
 2026-11-02T13:48:30.5136783Z     triggerUncaughtException(
 2026-11-02T13:48:30.5176951Z     ^
-2026-11-02T13:48:30.5178657Z 
+2026-11-02T13:48:30.5178657Z
 2026-11-02T13:48:30.5225812Z AssertionError [ERR_ASSERTION]: UI explanation Escape
 2026-11-02T13:48:30.5227105Z     at file:///home/runner/work/dashboard-kit/dashboard-kit/tools/check-numeric-browser.mjs:101:29 {
 2026-11-02T13:48:30.5256311Z   generatedMessage: false,
@@ -14,7 +14,7 @@
 2026-11-02T13:48:30.5344023Z   operator: '==',
 2026-11-02T13:48:30.5377003Z   diff: 'simple'
 2026-11-02T13:48:30.5409078Z }
-2026-11-02T13:48:30.5416914Z 
+2026-11-02T13:48:30.5416914Z
 2026-11-02T13:48:30.5417085Z Node.js v22.23.4
 2026-11-02T13:48:30.5666142Z Traceback (most recent call last):
 2026-11-02T13:48:30.5696320Z   File "/home/runner/work/dashboard-kit/dashboard-kit/tools/test.py", line 61, in <module>

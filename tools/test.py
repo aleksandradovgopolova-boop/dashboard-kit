@@ -45,7 +45,7 @@ def main():
     run(['python3', 'tools/check-release.py'])
     run(['python3', 'tools/kit-release.py', '--check'])
     run(['python3', 'tools/check.py'], timeout=600)
-    for name in ['numeric-browser', 'docs', 'reference-dashboard', 'family-mortgage', 'select', 'chips', 'meaning', 'advanced', 'runtime', 'filter-context', 'dashboard-overview', 'composition', 'region-focus', 'sdk-snippets']:
+    for name in ['numeric-browser', 'docs', 'reference-dashboard', 'family-mortgage', 'select', 'chips', 'meaning', 'advanced', 'runtime', 'filter-context', 'dashboard-overview', 'composition', 'region-focus', 'example-shell', 'sdk-snippets']:
         print('RUN: browser/' + name, flush=True)
         run([node, f'tools/check-{name}.mjs'], timeout=600 if name == 'docs' else 240)
     from tempfile import gettempdir
