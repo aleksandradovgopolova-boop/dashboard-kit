@@ -14,7 +14,7 @@
       if (!snapshot.metrics || snapshot.metrics.length !== 2 || snapshot.metrics.some(function (metric,i) { return metric.id !== ['received','completed'][i] || metric.unit !== 'работ' || metric.aggregation !== 'sum'; })) throw Error('Unexpected reference metric contract');
       return snapshot;
     }, mode:serverMode ? 'server' : 'local', timeoutMs:15000});
-    var controls = [], releases = [], chart = null, stopped = false, current = null;
+    var controls = [], releases = [], chart = null, chartNoteTip = null, stopped = false, current = null;
     var command = null, actionKey = null, actionRow = null, actionPending = false, actionDone = false;
     var demoCommands = new Map(), attempts = new Map();
     function el(id) { return root.querySelector('#' + id); }
@@ -56,7 +56,7 @@
         var total = view.totals[metric.id], tile = node('section',null,'dk-widget dk-widget--s dk-tile dk-tile--compact');
         tile.append(node('h2',metric.label + ', ' + metric.unit,'dk-tile__label'));
         var value = node('div',null,'dk-tile__row'); value.append(node('span',number(total.value),'dk-metric-lg')); tile.append(value);
-        var coverage = total.observed === 0 ? 'Сведения отсутствуют во всех наблюдениях' : total.partial ? 'Неполные данные: сумма по ' + total.observed + ' из ' + total.total + ' наблюдений' : '';
+        var coverage = total.observed === 0 ? 'Нет данных' : total.partial ? 'Частичные данные · ' + total.observed + ' из ' + total.total + ' наблюдений' : '';
         if (coverage) tile.append(node('p',coverage,'dk-caption')); tile.dataset.metric = metric.id; box.append(tile);
       });
     }
@@ -70,7 +70,8 @@
         view.metrics.forEach(function (metric) { tr.append(node('td',number(row.values[metric.id]),'dk-td-num')); }); rows.append(tr);
       });
       var from = view.rows.length ? (view.query.page - 1) * view.query.pageSize + 1 : 0;
-      el('ref-count').textContent = view.rows.length ? 'Наблюдения ' + from + '–' + (from + view.rows.length - 1) + ' из ' + view.rowCount : 'На этой странице наблюдений нет';
+      var filtered = !!view.query.period || Object.keys(view.query.filters).some(function (key) { return view.query.filters[key].length; });
+      el('ref-count').textContent = filtered ? 'Найдено наблюдений: ' + view.rowCount : ''; el('ref-count').hidden = !filtered;
       el('ref-prev').disabled = view.query.page <= 1;
       el('ref-next').disabled = view.query.page * view.query.pageSize >= view.rowCount;
       el('ref-first').hidden = view.rows.length > 0 || view.rowCount === 0;
@@ -78,12 +79,13 @@
     }
     function drawChart(view) {
       var partial = false;
-      var spec = {type:'bar',label:'Поступившие и выполненные работы по дате поступления',unit:'работ',categories:view.series.map(function (point) { return date(point.date); }),series:view.metrics.map(function (metric) {
+      var spec = {type:'bar',label:'Поступившие и выполненные работы по дате поступления, работ',unit:'',categories:view.series.map(function (point) { return date(point.date); }),series:view.metrics.map(function (metric) {
         return {name:metric.label,data:view.series.map(function (point) { var c = point.coverage[metric.id]; if (c.observed < c.total) { partial = true; return null; } return point.values[metric.id]; })};
       })};
       if (chart) chart.update(spec); else chart = window.dkChart(el('ref-chart'),spec);
-      el('ref-chart-note').textContent = partial ? 'Неполные столбцы пропущены. Доступные значения — в таблице; частичная сумма отмечена в КПЭ.' : '';
-      el('ref-chart-note').hidden = !partial;
+      var note = el('ref-chart-note'); note.textContent = partial ? 'Частичные данные' : ''; note.hidden = !partial;
+      if (partial && !chartNoteTip) chartNoteTip = window.dkTooltip(note, {text:'Столбцы с неполными данными пропущены. Известные значения доступны в таблице; у частичного итога указано покрытие.'});
+      if (!partial && chartNoteTip) { var focused = document.activeElement === note; chartNoteTip.destroy(); chartNoteTip = null; if (focused) { var target = el('ref-chart'); target.tabIndex = -1; target.focus(); target.addEventListener('blur',function () { target.removeAttribute('tabindex'); },{once:true}); } }
     }
     function render(snapshot) {
       if (stopped) return;
@@ -114,9 +116,10 @@
       var attempt = attempts.get(attemptId);
       actionRow = row; actionKey = attempt.key; actionPending = false; actionDone = attempt.done;
       el('ref-detail-title').textContent = row.label;
-      var body = el('ref-detail-body'); body.replaceChildren(node('p','Дата поступления: ' + date(row.date)));
-      current.view.metrics.forEach(function (metric) { body.append(node('p',metric.label + ': ' + number(row.values[metric.id]) + (row.values[metric.id] === null ? '' : ' ' + metric.unit)),node('p',metric.description,'dk-caption')); });
-      body.append(node('p','Демо-поручение проверяет действие на учебных данных. В рабочую систему ничего не отправляется.','dk-caption'));
+      var body = el('ref-detail-body'); body.replaceChildren(node('p',current.view.source.kind === 'demo' ? 'Учебные данные' : current.view.source.label,'dk-caption'),node('p','Дата поступления: ' + date(row.date)));
+      var method = node('details',null,'dk-data-summary'); method.append(node('summary','Показатели и демонстрация'));
+      current.view.metrics.forEach(function (metric) { body.append(node('p',metric.label + ': ' + number(row.values[metric.id]) + (row.values[metric.id] === null ? '' : ' ' + metric.unit))); method.append(node('p',metric.description)); });
+      method.append(node('p','Учебное поручение хранится до закрытия страницы. В рабочую систему ничего не отправляется.')); body.append(method);
       el('ref-action').disabled = actionDone; el('ref-action-status').textContent = attempt.message;
       detail.open();
     }
@@ -169,7 +172,7 @@
     var destroy = window.dkOwn(root,function () {
       stopped = true; unsubscribe(); session.destroy(); if (command) command.abort(); detail.close();
       releases.forEach(function (off) { off(); }); controls.forEach(function (control) { control.destroy(); });
-      if (chart) chart.destroy(); root.referenceDashboard = null;
+      if (chart) chart.destroy(); if (chartNoteTip) chartNoteTip.destroy(); root.referenceDashboard = null;
     });
     var api = {session:session,destroy:destroy}; root.referenceDashboard = api;
     syncControls(); run(false); return api;

@@ -87,6 +87,8 @@ def runtime_files(root):
     # Older pinned packages predate the optional named-metric module.
     if (root / "js/dk-metrics.js").exists():
         names.add("docs/named-metrics.md")
+    if (root / "js/dk-screen.js").exists():
+        names.add("docs/screen-spec.md")
     names.update(p.relative_to(root).as_posix() for p in (root / "js").glob("dk-*.js"))
     for folder in ("vendor", "icons", "assets"):
         for path in (root / folder).rglob("*"):

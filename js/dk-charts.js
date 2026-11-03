@@ -247,6 +247,7 @@
       // Системную настройку «меньше движения» уважает и график: у ECharts своя
       // анимация, и токены кита до неё не дотягиваются. Для части людей движение
       // вызывает тошноту и головокружение — это не предпочтение, а причина.
+      animation: !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches),
       animationDuration: window.matchMedia &&
         window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260,
       legend: multi ? { bottom: 0, left: 'center', itemGap: 12, padding: [4, 0, 0, 0] } : { show: false },

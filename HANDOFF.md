@@ -1,5 +1,25 @@
 # Где мы остановились
 
+## Контракты и первая декларативная сборка · 03.11.2026
+
+#65 готов в PR74 (fab9e75), полный Chrome+MCP CI41611976943 PASS.
+Popover #22 готов в PR75 (406cd89), полный Chrome+MCP CI41612419473 PASS.
+Оба PR открыты ready, не слиты и не опубликованы.
+
+Следующий пакет #37/#67/#68: structural scope/KPI/slot checks, четыре общие
+схемы параметров через CLI/MCP/manifest/skill, закрытый plan-fact compiler.
+Адресные fixtures, 12 Chrome представлений нового экрана и 148 представлений
+семи примеров PASS; независимые analyst и UX/editorial reviews APPROVE.
+Исправлены partial chart/grain, скрытые multi-фильтры, 200% header, подписи
+деталей, reduced-motion charts и ложное empty статичного mobile. Mobile
+остаётся статичным учебным примером; несвязанные фильтры отключены честно.
+Полный CI этого пакета предстоит; адресные проверки его не заменяют.
+Протокол: features/epic63-next-20261103/screen-contract.md.
+
+Далее #69 readonly consumer diff и реальные fresh-context Codex evals #70.
+Claude по прямому ответу владельца отложен, не PASS. Ничего не сливать или
+публиковать автоматически; AI Ops managed/config/workflows не трогать.
+
 ## Продолжаем очередь #63 · 03.11.2026
 
 Новое прямое поручение владельца: закончить оставшиеся нарезанные задачи.

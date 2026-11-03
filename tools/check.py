@@ -1882,6 +1882,9 @@ def check_manifest() -> None:
         no("kit-manifest.json не собран — python3 tools/build-manifest.py")
     elif out.read_text("utf-8") != fresh:
         no("kit-manifest.json разошёлся с кодом — пересобери: python3 tools/build-manifest.py")
+    reference = ROOT / "skill/dashboard-build/references/component-parameters.md"
+    if not reference.exists() or reference.read_text("utf-8") != mod.build_schema_reference():
+        no("component-parameters.md разошёлся с контрактами — python3 tools/build-manifest.py")
     m = json.loads(fresh)
     MP = mod.MP
     parts = m["parts"]
@@ -2567,12 +2570,21 @@ def check_page(path: Path) -> None:
 
 
 def main() -> int:
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print("Usage: python3 tools/check.py [--fast] [--page PATH]\n"
+              "Without --page: check the kit. --page: check a static consumer.\n"
+              "--fast skips browser checks; help never starts checks or a server.")
+        return 0
     if "--page" in sys.argv:
         i = sys.argv.index("--page")
         if i + 1 >= len(sys.argv):
             print("--page без пути: python3 tools/check.py --page путь/к/странице.html", file=sys.stderr)
             return 2
         check_page(Path(sys.argv[i + 1]).resolve())
+        from screen_policy import review_html
+        target = Path(sys.argv[i + 1]).resolve()
+        for issue in review_html(str(target), target.read_text("utf-8")):
+            fail("КОМПОЗИЦИЯ", f"{issue['path']} [{issue['code']}] {issue['message']}")
         print()
         for n in notes:
             print(f"  ✓ {n}")
@@ -2601,6 +2613,10 @@ def main() -> int:
         print("нет ни одного файла слоя компонентов в css/", file=sys.stderr)
         return 1
 
+    from screen_policy import review_html, review_page_css
+    for issue in review_page_css(ROOT) + [issue for name, html in pages for issue in review_html(name, html)]:
+        fail("КОМПОЗИЦИЯ", f"{issue['path']} [{issue['code']}] {issue['message']}")
+    notes.append("КОМПОЗИЦИЯ · явная область обзора, самостоятельные КПЭ, пустые слоты, сброс и page.css; редакционная приёмка отдельно")
     check_layers(primitives, semantic, layers)
     check_raw_values(semantic, layers)
     check_unknown(primitives, semantic, layers, pages, scripts)

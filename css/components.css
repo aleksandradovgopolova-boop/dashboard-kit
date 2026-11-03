@@ -5251,3 +5251,16 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-menu__search > .dk-i{ margin-inline-start:var(--space-4); }
 /* Keep the 48px selection column and its sticky offset in agreement. */
 .dk-table :is(.dk-td-pick,.dk-th-pick) .dk-check{ width:44px; min-width:44px; justify-content:center; }
+
+/* Screen-spec uses the same kit grid, headers and controls. */
+.dk-page > .dk-screen { padding:var(--page-pad); }
+.dk-screen > .dk-head { flex-wrap:wrap; align-items:center; }
+.dk-screen > .dk-head > .dk-head__titles { min-width:min-content; max-width:100%; flex:1 1 max-content; }
+.dk-screen > .dk-head > .dk-head__actions { flex:0 0 auto; }
+.dk-screen__meta { display:flex; gap:var(--space-4); align-items:center; }
+.dk-screen__meta > p { min-width:0; flex:1; margin:0; }
+.dk-screen__filters { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-4); }
+.dk-screen__filter { flex:1 1 200px; min-width:0; max-width:320px; }
+.dk-screen__table { max-height:480px; }
+
+.dk-screen__detail .dk-modal__metrics { grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr)); }

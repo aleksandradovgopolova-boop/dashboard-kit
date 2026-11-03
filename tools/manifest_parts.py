@@ -48,6 +48,7 @@ ORDER = [
     ("js/dk-workspace.js", "defer"),
     ("js/dk-dashboard.js", "defer"),
     ("js/dk-metrics.js", "defer, после dk-dashboard.js; именованные производные метрики"),
+    ("js/dk-screen.js", "defer, после компонентов и контракта данных; runtime screen-spec/1"),
     ("js/dk-tree.js", "defer"),
     ("js/dk-layout-editor.js", "defer"),
     ("js/reference-dashboard.js", "defer, только эталон reference-dashboard.html"),
@@ -85,6 +86,16 @@ DOCS_ONLY = ["js/docs.js", "js/docs-index.js", "js/docs-overview.js", "css/docs.
 # скилл читал их одинаково. owns — префиксы классов; правило совпадения то же,
 # что у раздела «Токены» на страницах (docs.js, owns): по границе имени блока.
 PARTS = [
+    {
+        "id": "screen", "title": "Статическая сборка экрана", "kind": "инструмент", "group": "Разработка", "status": "экспериментальный",
+        "purpose": "Исполняет проверенный screen-spec/1: локальный план/факт, общий фильтр, КПЭ, график и региональные детали.",
+        "use_when": ["Нужен воспроизводимый статический экран из существующих компонентов, без вложенного агента."],
+        "instead": [], "owns": ["dk-screen"], "css": ["css/components.css"], "scripts": ["js/dk-screen.js"], "js": ["dkScreen"],
+        "docs": ["docs/screen-spec.md"],
+        "rules": ["Первая композиция — plan-fact/overview, полный local snapshot до 1000 наблюдений.", "Параметры и привязки проверяет tools/build-screen.py до записи артефактов.", "Нет произвольного JS, HTML из данных, remote write или скрытого latest-update."],
+        "api": [{"name": "dkScreen(root, compiledConfig)", "type": "controller", "what": "Запустить нормализованный конфиг статического компилятора."}, {"name": "setFilters(filters) / reset() / getSnapshot() / destroy()", "type": "methods", "what": "Один срез для всех блоков; очистка lifecycle и возврат из деталей."}],
+        "example": "<!-- python3 tools/build-screen.py examples/spec/plan-fact.json --out /tmp/plan-fact-preview -->",
+    },
     {
         "id": "named-metrics", "title": "Именованные метрики", "kind": "основа", "group": "Разработка",
         "status": "экспериментальный", "purpose": "Одно определение доли или взвешенного среднего, вычисляемого из исходных величин до пагинации.",
