@@ -4,21 +4,27 @@
 #r-page .dk-focus-layout { --grid-gap: var(--space-6); }
 #r-page .dk-focus-layout__primary { min-height: 680px; }
 #r-page .dk-focus-layout__primary > .dk-widget__head { align-items: flex-start; }
-#r-page .dk-focus-layout__primary .dk-head__title { font: var(--type-overview-title); }
 #r-page .r-map-body { flex: 1; justify-content: center; }
 #r-page #r-map .dk-map__canvas { height: auto; max-height: none; aspect-ratio: 1.9; }
 #r-page #r-map .dk-map__legend { display: none; }
 #r-page .dk-map__zoom { border: 0; }
 #r-page .dk-map__zoom button + button { border-top: 0; }
-#r-page .r-map-note { width: 100%; background: var(--surface-2); border-radius: var(--radius-lg); padding: var(--space-6); }
-#r-page .r-map-note summary { cursor: pointer; min-height: var(--control-sm); font: var(--type-h3); }
+#r-page .r-map-note { width: 100%; background: var(--glass-chip); border-radius: var(--radius-lg); padding: var(--space-6); }
+#r-page .r-map-note summary { cursor: pointer; min-height: var(--control-sm); font: var(--type-h3); display: flex; align-items: center; gap: var(--space-3); list-style: none; }
+/* Нативный треугольник ▶ у <details> убран — вместо него шеврон кита, который
+   поворачивается при раскрытии. Один язык иконок во всём ките. */
+#r-page .r-map-note summary::-webkit-details-marker,
+#r-page .r-fold summary::-webkit-details-marker { display: none; }
+#r-page .r-fold summary { cursor: pointer; display: flex; align-items: center; gap: var(--space-3); list-style: none; font: var(--type-body-bold); }
+#r-page .r-fold-caret { flex: none; color: var(--ink-3); transition: transform var(--duration-fast) var(--ease-out); }
+#r-page .r-map-note[open] summary .r-fold-caret,
+#r-page .r-fold[open] summary .r-fold-caret { transform: rotate(90deg); }
 #r-page .r-map-note p { margin-bottom: 0; }
 #r-page #r-period { flex: 1 1 100%; }
 #r-page .dk-top__tools { margin-left: auto; }
 #r-page #r-results:empty { display: none; }
 #r-page .r-summary-panel { flex: 1; min-height: 0; gap: var(--space-7); }
-#r-page .r-summary-panel > .dk-widget__head .dk-widget__title { font: var(--type-panel-title); }
-#r-page .r-risk-summary { background: var(--surface-2); border-radius: var(--radius-lg); padding: var(--space-7); }
+#r-page .r-risk-summary { background: var(--glass-chip); border-radius: var(--radius-lg); padding: var(--space-7); }
 #r-page .r-risk-summary > p { margin: 0; }
 #r-page .r-risk-value { display: flex; align-items: baseline; gap: var(--space-4); margin-block: var(--space-7); }
 #r-page .r-risk-value strong { font: var(--type-metric-xl); color: var(--crit-ink); }
@@ -31,7 +37,7 @@
 #r-page .r-risk-legend { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-6); font: var(--type-caption); }
 #r-page .r-risk-legend > span { flex: 1; white-space: nowrap; }
 #r-page .r-risk-context { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-6); font: var(--type-caption); color: var(--ink-2); }
-#r-page .r-focus-rank { overflow: auto; min-height: 0; background: var(--surface-2); border-radius: var(--radius-lg); }
+#r-page .r-focus-rank { overflow: auto; min-height: 0; background: var(--glass-chip); border-radius: var(--radius-lg); }
 #r-page .r-focus-rank .dk-rank__head { display: none; }
 #r-page .r-focus-rank .dk-rank__row { grid-template-columns: 24px minmax(0, 1fr) auto; padding: var(--space-6); border: 0; gap: var(--space-4); align-items: start; }
 #r-page .r-focus-rank .dk-rank__name { white-space: normal; overflow: visible; font: var(--type-body-bold); }
@@ -52,12 +58,24 @@
 @media (max-width: 767px) {
   #r-page .r-mobile-top { display: flex; }
   #r-page .dk-focus-layout__primary > .dk-widget__head { flex-wrap: wrap; }
-  #r-page .dk-focus-layout__primary .dk-head__title { font: var(--type-h2); }
   #r-page #r-map .dk-map__canvas { height: auto; }
   #r-page .r-map-note summary { min-height: 44px; }
+  /* Липкий поиск+фильтры (по продакшн-референсу): панель поиска/фильтра держится
+     у верха при прокрутке. Вешаем на .r-filter-panel, а не на вложенную строку:
+     sticky работает, пока виден КОНТЕЙНЕР, а на ≤1199 .r-filter-panel —
+     прямой ребёнок focus-layout (aside: display contents), контейнер высокий.
+     Липнет только панель поиска/фильтра, не высокая шапка со статусом/составом —
+     решение 06.10 про «липкую высокую шапку» сохраняется. */
+  #r-page .r-filter-panel {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg);
+    padding-block: var(--space-4);
+    margin-block: calc(var(--space-4) * -1);
+  }
 }
 
-#r-page .dk-main { background: var(--bg); }
 #r-page .r-thresholds { font: var(--type-caption); color: var(--ink-2); margin: var(--space-5) 0 0; }
 #r-page .r-summary-panel > .dk-widget__footer { flex: none; }
 #r-page .r-focus-rank { scrollbar-width: thin; }

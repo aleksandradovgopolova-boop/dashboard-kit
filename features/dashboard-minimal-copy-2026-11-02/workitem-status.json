@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "workitem-status",
+  "workflow": "ENGINEERING",
+  "status": "blocked",
+  "action": "заблокировано — чинить провал гейта/консистентность артефактов",
+  "lifecycle_intent": "implementation",
+  "blocked": true,
+  "unmet_gates": [
+    "implementation_verification"
+  ],
+  "real_fail": [
+    "implementation_verification"
+  ],
+  "human_unmet": [],
+  "evidence_missing": [],
+  "blueprint_verdict": "OK"
+}

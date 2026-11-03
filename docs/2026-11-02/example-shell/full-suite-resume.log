@@ -1,0 +1,61 @@
+RUN: browser/select
+PASS: поиск, выделение, фокус, клавиатура, пустой результат, multi/single, API, повторное открытие
+RUN: browser/chips
+PASS: ChipsInput/Select normalization, IME, duplicates, focus, disabled, safe text, reinit/destroy
+RUN: browser/meaning
+PASS: meaning roles/rejection, dark/light solid no-data, isolated roots, no canvas hatching, uptime
+RUN: browser/advanced
+PASS: DOM charts, comparison edges, tree keyboard/search/parent, state, saved views/migration/storage, density, layout, CSV/SVG, tooltip, fullscreen fallback, details, lifecycle
+RUN: browser/runtime
+PASS: real pages, 200% font tokens, 320px reflow, named AX controls, mobile hierarchy, reduced-motion environment, PNG/solid no-data
+{"page":"dashboard.html","duplicate":[],"dangling":[],"width":390,"viewport":390,"chartTop":1480.109375,"sticky":"static","fullscreen":"native","largeText":{"width":390,"viewport":390},"reflow320":{"width":320,"viewport":320,"textOverflow":[{"text":"Аналитика","cls":""},{"text":"Календарь","cls":""}],"overflow":[{"cls":"dk-seg","scroll":359,"width":290,"overflow":"auto"},{"cls":"dk-tablewrap","scroll":616,"width":258,"overflow":"auto"},{"cls":"dk-table dk-table--events","scroll":616,"width":520,"overflow":"visible"},{"cls":"","scroll":616,"width":520,"overflow":"visible"},{"cls":"","scroll":616,"width":520,"overflow":"visible"},{"cls":"","scroll":539,"width":520,"overflow":"visible"},{"cls":"","scroll":539,"width":520,"overflow":"visible"},{"cls":"","scroll":522,"width":520,"overflow":"visible"},{"cls":"","scroll":522,"width":520,"overflow":"visible"},{"cls":"dk-tabbar","scroll":430,"width":292,"overflow":"auto"}],"culprit":[{"tag":"BUTTON","cls":"","parent":"dk-seg","text":"Аналитика"},{"tag":"A","cls":"dk-tabbar__item","parent":"dk-tabbar","text":"Календарь"},{"tag":"svg","cls":{},"parent":"dk-tabbar__item","text":""},{"tag":"use","cls":{},"parent":{},"text":""},{"tag":"SPAN","cls":"","parent":"dk-tabbar__item","text":"Календарь"}]},"axNamedControls":true}
+RUN: browser/filter-context
+PASS: empty scope, null reset, view persistence, no-data distinction, real-page KPI/map/table/rank agreement, details context/focus, shared-source KPI reset
+PASS: regions.html honest unavailable navigation/action, available calendar destination
+PASS: accidents.html honest unavailable navigation/action, available calendar destination
+PASS: accidents widget alignment/reflow and 24-hour readable chart at 1366px (chart 585px)
+PASS: accidents widget alignment/reflow and 24-hour readable chart at 1024px (chart 414px)
+PASS: accidents widget alignment/reflow and 24-hour readable chart at 390px (chart 328px)
+PASS: regions 10px grid gutters, 20px inner padding, equal adjacent heights and no horizontal overflow at 1366px
+PASS: regions 10px grid gutters, 20px inner padding, equal adjacent heights and no horizontal overflow at 1024px
+PASS: regions 10px grid gutters, 16px inner padding, equal adjacent heights and no horizontal overflow at 390px
+PASS: dashboard.html/dark/320 5 KPI two columns + full-width fifth, full labels and leading values
+PASS: dashboard.html/dark/390 5 KPI two columns + full-width fifth, full labels and leading values
+PASS: dashboard.html/dark/768 5 KPI one row, full labels and leading values
+PASS: dashboard.html/dark/1024 5 KPI one row, full labels and leading values
+PASS: dashboard.html/dark/1366 5 KPI one row, full labels and leading values
+PASS: dashboard.html/light/320 5 KPI two columns + full-width fifth, full labels and leading values
+PASS: dashboard.html/light/390 5 KPI two columns + full-width fifth, full labels and leading values
+PASS: dashboard.html/light/768 5 KPI one row, full labels and leading values
+PASS: dashboard.html/light/1024 5 KPI one row, full labels and leading values
+PASS: dashboard.html/light/1366 5 KPI one row, full labels and leading values
+PASS: accidents.html/dark/320 4 KPI 2×2, full labels and leading values
+PASS: accidents.html/dark/390 4 KPI 2×2, full labels and leading values
+PASS: accidents.html/dark/768 4 KPI one row, full labels and leading values
+PASS: accidents.html/dark/1024 4 KPI one row, full labels and leading values
+PASS: accidents.html/dark/1366 4 KPI one row, full labels and leading values
+PASS: accidents.html/light/320 4 KPI 2×2, full labels and leading values
+PASS: accidents.html/light/390 4 KPI 2×2, full labels and leading values
+PASS: accidents.html/light/768 4 KPI one row, full labels and leading values
+PASS: accidents.html/light/1024 4 KPI one row, full labels and leading values
+PASS: accidents.html/light/1366 4 KPI one row, full labels and leading values
+RUN: browser/dashboard-overview
+PASS: reference overview at 1536px, five KPI, six panels, shared map counts, status demo/type totals, keyboard views, genuine work rows, both themes, mobile reflow and enlarged analytics
+RUN: browser/composition
+PASS: three composition components, both themes, 320/390/1536px, complete headings and working link targets
+RUN: browser/region-focus
+PASS: region focus composition, map aspect, visible context, shared risk totals, both themes and phone widths
+RUN: browser/example-shell
+{
+  "views": 148,
+  "errors": []
+}
+PASS: seven examples, both themes, 320/390/713/859/860/1023/1024/1280/1470/1920px, folded/expanded rail, compact desktop headers and concise copy
+RUN: browser/sdk-snippets
+PASS: 13 published SDK examples assembled on 6 clean pages; static rules, deferred loading, real actions, 390/1280, dark/light
+снимок: /private/tmp/kit-example-full-suite-20261102/dashboard-dark.png 390×844 dark
+PASS: deliberate manual/computed JS tokens are rejected
+PASS: UI/UX policy rejects invented mappings and incomplete coverage
+PASS: UX patterns reference actual component pages
+PASS: 13 new SDK entries, dependency closure, examples, anti-patterns, accessibility and skill task coverage; AI execution not assessed
+PASS: remaining full-suite checks after isolated mortgage retry

@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "runs": [
+    {
+      "task": 16,
+      "runtime": "Codex native collaboration; fresh fork_turns=none; inherited model; no override",
+      "kitCommit": "c05b74dea7854dd6e26cd94cb403063a2ef84b5e",
+      "kitVersion": "0.1.0-rc.7",
+      "kitDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20",
+      "artifact": "artifacts/task16/app/index.html",
+      "firstCompleteReview": "fail; see original reports/evidence",
+      "finalStatic": "pass",
+      "finalChrome": "pass (four views)",
+      "finalEditorialUX": "approve",
+      "postFirstCompleteCorrections": {
+        "data": 0,
+        "UX": 2,
+        "technical": 0
+      },
+      "files": {
+        "files.txt": "55229a51db2591fc3ed358e5ea449cb40d3cb1e1e8ecafde023cf04c9a101078",
+        "report.md": "625174b438048b8676d5b2c689e9ffdddea04d4e367a5b24198ed84648ec34f6",
+        "consumer-lock.json": "ee97ff821e89c33bd47f295b0f8254e8edb2f0106ab199e78f250ff0c0dd2f13",
+        "check-model.mjs": "dfb97ca8c26d80350f164893bdd0c6911aaa4227e6a863cc4edd9133bdd6bff8",
+        "verification.json": "31da74c0002b1e281c9b51200a82b9d648932417f4a1dc7db2f1ea18aa404214",
+        "app/index.html": "dc5ba9298aef6cdc775c38f8b34f48d80b489812e1e37badbf80d0371999da9a",
+        "app/app.js": "e0cb77392bf769202a6a15d9c673dbf3f544e2522e87f1acbd309dc61ddbf41a",
+        "post-review-ux-layout-correction-2/original-sha256.json": "9779e6401efe70326a381d31827fb2a367885242b7e77104796699ac1b8d967b",
+        "post-review-ux-layout-correction-2/quick-checks.json": "a9543e6f9422401284ce8d409ba3aed3f85e559166fa3d538192494394627450",
+        "first-complete/index.html": "80bafc48dba5dd29572f3e5d64c1408aec629c26d520c6b69914bd62d8e676d0",
+        "first-complete/app.js": "e0cb77392bf769202a6a15d9c673dbf3f544e2522e87f1acbd309dc61ddbf41a",
+        "post-review-ux-layout-correction-1/original-sha256.json": "de916ec631318aeaad0e6a9a3ca999dc675da12c0d8fa5a6d7542bb4b0ab5f8c",
+        "post-review-ux-layout-correction-1/quick-checks.json": "a9543e6f9422401284ce8d409ba3aed3f85e559166fa3d538192494394627450",
+        "post-review-ux-layout-correction-1/original/index.html": "80bafc48dba5dd29572f3e5d64c1408aec629c26d520c6b69914bd62d8e676d0",
+        "post-review-ux-layout-correction-1/original/app.js": "e0cb77392bf769202a6a15d9c673dbf3f544e2522e87f1acbd309dc61ddbf41a",
+        "post-review-ux-layout-correction-2/original/index.html": "63d0d6e88919f812e61c94a03b4b0d9527d3d719a855304317dba007051b5320",
+        "post-review-ux-layout-correction-2/original/app.js": "e0cb77392bf769202a6a15d9c673dbf3f544e2522e87f1acbd309dc61ddbf41a",
+        "app/data/mortgage-source.json": "17b2b10a6ef92767afcbc50a37a4cdd757a4ce07dfdd338e5ae86e7ed82d1774",
+        "app/data/source.js": "039081d8e4440fc95c8f6565b1a58a8f19ee93532d45918314d91740996becab"
+      },
+      "Claude": {
+        "status": "blocked/deferred",
+        "reason": "Owner: с клодом чуть позже разберемся; not authenticated, no run"
+      }
+    },
+    {
+      "task": 17,
+      "runtime": "Codex native collaboration; fresh fork_turns=none; inherited model; no override",
+      "kitCommit": "c05b74dea7854dd6e26cd94cb403063a2ef84b5e",
+      "kitVersion": "0.1.0-rc.7",
+      "kitDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20",
+      "artifact": "artifacts/task17/app/index.html",
+      "firstCompleteReview": "fail; see original reports/evidence",
+      "finalStatic": "pass",
+      "finalChrome": "pass (four views)",
+      "finalEditorialUX": "approve",
+      "postFirstCompleteCorrections": {
+        "data": 0,
+        "UX": 0,
+        "technical": 1
+      },
+      "files": {
+        "build.py": "0b3acca64d9aeac0af769705e6bdc9d4c30a680c84472f53d2d5d6171c7f0abd",
+        "report.md": "050e35319e0e96cfc229d754acfc6131c2ac5fb6614884d1297c344d3c3c19c8",
+        "test-model.cjs": "8502fc3290b93f8e87a389b18358a1f91edef904666002132d0590e9c1be1352",
+        "head.html": "752c6dab66482759fde52ab32a38c466650b984fee6fa21260b037b2f029278b",
+        "app/index.html": "ae11cf7fa870e938f19cf3334f35ca3fbb293cae21e13e42980ffcf97373315b",
+        "app/source.json": "17b2b10a6ef92767afcbc50a37a4cdd757a4ce07dfdd338e5ae86e7ed82d1774",
+        "app/kit-lock.json": "ec13b978b1bb34ef2327995cbd2ec81f2a51193b01fb81fbfa82be5ebd3d6e63",
+        "app/app.css": "0436076a7d251789165c23881bf67434e5eb32011769a50c234f7b26fe7caf29",
+        "app/source.js": "ae09caa7432f9b1e8c6af241fd2af8a165d89e96c87ad62c38ace07daec9f356",
+        "app/model.js": "d5df3596ac2e9114cc125f9126415c4c078df5ca0c2857512cc464b3ce1c17f6",
+        "app/app.js": "0529f7740258a26e62f8740814d82f36b17e53eb337a1fca90d99d321c0f6d5f",
+        "first-pass/index.html": "f5a1fedadba4b64c6e94d00ad53324b0ceca06731d1abe4299ce14a67072903d",
+        "first-pass/app.css": "0436076a7d251789165c23881bf67434e5eb32011769a50c234f7b26fe7caf29",
+        "first-pass/model.js": "d5df3596ac2e9114cc125f9126415c4c078df5ca0c2857512cc464b3ce1c17f6",
+        "first-pass/app.js": "0529f7740258a26e62f8740814d82f36b17e53eb337a1fca90d99d321c0f6d5f",
+        "report/initial/index.html": "f5a1fedadba4b64c6e94d00ad53324b0ceca06731d1abe4299ce14a67072903d",
+        "report/initial/sha256.json": "bd067dd2b41bf744fecc3f8634778d2652713f671465d07e1f71c9758de2c2bf"
+      },
+      "Claude": {
+        "status": "blocked/deferred",
+        "reason": "Owner: с клодом чуть позже разберемся; not authenticated, no run"
+      }
+    },
+    {
+      "task": 18,
+      "runtime": "Codex native collaboration; fresh fork_turns=none; inherited model; no override",
+      "kitCommit": "c05b74dea7854dd6e26cd94cb403063a2ef84b5e",
+      "kitVersion": "0.1.0-rc.7",
+      "kitDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20",
+      "artifact": "artifacts/task18/app/index.html",
+      "firstCompleteReview": "fail; see original reports/evidence",
+      "finalStatic": "pass",
+      "finalChrome": "pass (four views)",
+      "finalEditorialUX": "approve",
+      "postFirstCompleteCorrections": {
+        "data": 0,
+        "UX": 1,
+        "technical": 1
+      },
+      "files": {
+        "build.py": "eeccb774ae4728b5ba800369d75baf35d988fbabcea4e3a0171c793a0855c1e1",
+        "report.md": "80252935671665bc237054fd3e1505a939c16497e54508d734f94a2d270c6791",
+        "model.test.cjs": "cc15c60c7bfcba5025cdd7ed957f9d2da03cfe1f5657dd6e1e898f495eae686a",
+        "initial-app-digests.json": "313ac117fc317dd45fb0e3ccfc6784448b3e84762c35866f60fec7bf29f893b5",
+        "initial-PIN.json": "b96531efebe6ed8a69c0d9318c6365ecc61c1fc00da8e8008a0ae5b51f50c66b",
+        "static.test.py": "04646dc7aff426d48c66a81384fec1c7d42268108f2d918f89044d8bb1e44075",
+        "app/index.html": "4b941e2749f249bc6d0ddd90de069460c64716eeaf1a2b58fe371a7024b6f092",
+        "app/source.json": "b5241fdd2bc48dc6fb24cfba3f48e97199e89fe9cf1493682f84c5cc77790364",
+        "app/head.fragment.html": "2335ccb7a5dca0d0a6a952a310f79cb3fa689267b58f165be4f12e22b7a86cdc",
+        "app/app.css": "52b1b2b29d862613772288d7a4917c204ccf427cedd271d5356d39a895d75e85",
+        "app/data.js": "1a4b57c87fca8c15e0d58f5d2f59a39bc258546987788ad882e23e00678da0bc",
+        "app/model.js": "8ec803e5a046c80a374655dac588dfe608f53165fd6fb3b95c8fa563037212c6",
+        "app/app.js": "40b8891f04a06bd2d538516645dbf38557449f6b70d7d9d48e77e80be80e671d",
+        "pre-layout-correction-1/index.html": "f92fc7f39fa00c6a5fd9a264a86928c89c60dfff682f3b628209076bd9b090c5",
+        "pre-layout-correction-1/SHA256.json": "96d449fd6dae09edc860ffd95040bc6787f7fbae5703ce9fd92a6072b6737431",
+        "pre-layout-correction-1/app.css": "52b1b2b29d862613772288d7a4917c204ccf427cedd271d5356d39a895d75e85",
+        "pre-layout-correction-1/app.js": "b05f405be374e2f0dd5f0658fc19b72c2c4f9a0d8bd12f567d36aeaa4f609fd4"
+      },
+      "Claude": {
+        "status": "blocked/deferred",
+        "reason": "Owner: с клодом чуть позже разберемся; not authenticated, no run"
+      }
+    },
+    {
+      "task": 19,
+      "runtime": "Codex native collaboration; fresh fork_turns=none; inherited model; no override",
+      "kitCommit": "c05b74dea7854dd6e26cd94cb403063a2ef84b5e",
+      "kitVersion": "0.1.0-rc.7",
+      "kitDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20",
+      "artifact": "artifacts/task19/app/index.html",
+      "firstCompleteReview": "fail; see original reports/evidence",
+      "finalStatic": "pass",
+      "finalChrome": "pass (four views)",
+      "finalEditorialUX": "approve",
+      "postFirstCompleteCorrections": {
+        "data": 0,
+        "UX": 2,
+        "technical": 0
+      },
+      "files": {
+        "report.md": "d6bbaebe8895bc9b206f119d64ba5f89bf0c1e71125c98f12dd6a8db0b703df2",
+        "kit-lock.json": "cf036ed4300d01f197643b96b5d2ec3af1027de73a2313c55f4e1c108292e413",
+        "serve.py": "08e89943fbd33ac75f6c2e9fb2f8bc2bbb66df6fca5b43e1bae7efea82b67a1f",
+        "check_static.py": "a814083e90e11b57a704af044a3ab3cd78dac766ad1584be6f6c641c8549ae22",
+        "postreview-ux-layout-2/changes.json": "c0b11a68ab80f1901fdb93442e951c898e34576ccf3be1d65480b2ba0ddcdb37",
+        "app/index.html": "59544d005477381f62ef4190c870de14d66a52125839db85aaeac67105445a3c",
+        "app/operations.js": "aab03a3761a6e8cf33e0e65a9740140d022760272c2e230c8658895cbbb960ba",
+        "app/operations.css": "b3faaafa8b00c9fcefa09ada7058e521eb6cfda4ce5448acf50d6083678baedf",
+        "postreview-ux-layout-1/changes.json": "d8b37012f22514163447804b25fda8d37bb311a6bb638402bcdd44a716c35de3",
+        "postreview-ux-layout-1/original/index.html": "59544d005477381f62ef4190c870de14d66a52125839db85aaeac67105445a3c",
+        "postreview-ux-layout-1/original/sha256.json": "6c5bb82e32397ad50005b7f051e2cd1a937b06813604c74820baf27c50087571",
+        "postreview-ux-layout-1/original/operations.css": "2a8499314f9a64374170ba2cb492d2cf3a0975b844e15c89d13580efc81ea886",
+        "postreview-ux-layout-2/original/sha256.json": "7a7f7d96b94513ab66246e0cc9d4781d04c88e755ad3f050c4c802fc882b7a59",
+        "postreview-ux-layout-2/original/operations.js": "3f6e837490b3b25d01a94a96b8371625fbc336191167e86d5c0c6671638edd53"
+      },
+      "Claude": {
+        "status": "blocked/deferred",
+        "reason": "Owner: с клодом чуть позже разберемся; not authenticated, no run"
+      }
+    },
+    {
+      "task": 20,
+      "runtime": "Codex native collaboration; fresh fork_turns=none; inherited model; no override",
+      "kitCommit": "c05b74dea7854dd6e26cd94cb403063a2ef84b5e",
+      "kitVersion": "0.1.0-rc.7",
+      "kitDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20",
+      "artifact": "artifacts/task20/app/index.html",
+      "firstCompleteReview": "fail; see original reports/evidence",
+      "finalStatic": "pass",
+      "finalChrome": "pass (four views)",
+      "finalEditorialUX": "approve",
+      "postFirstCompleteCorrections": {
+        "data": 0,
+        "UX": 0,
+        "technical": 1
+      },
+      "files": {
+        "initial-subset-pin.json": "0f208d546f1c1f240e2e7a5dbe59218fb3304f9a0fd5c4288513404bc233f8ee",
+        "report.md": "d93cc2580edd37dd380342c1684499d670f52a2e64bab013ec3d782e523806fc",
+        "checks.log": "9b69c8b97c38537df1be2da40264a454a3efa53dcbc7b7d261944413a034438e",
+        "input.txt": "157d02df1db620b6d13a85c6845d630212b7077e44b6ca50ddce1962066863be",
+        "app/index.html": "2cef24868a9044d7621f4ed1ced7de6c70c7f0c3181d9dfc7eb076a2fbec78a6",
+        "app/widget.js": "d7ab19b800a54f5de7dad3456842cad6a1a62af13a5de573e4aa7b764b34fec0",
+        "app/widget.css": "f28d8164bf91ddab5e71d001733b2e719a047dafb97b1219af46817779caf965"
+      },
+      "Claude": {
+        "status": "blocked/deferred",
+        "reason": "Owner: с клодом чуть позже разберемся; not authenticated, no run"
+      }
+    },
+    {
+      "task": 21,
+      "runtime": "Codex native collaboration; fresh fork_turns=none; inherited model; no override",
+      "kitCommit": "c05b74dea7854dd6e26cd94cb403063a2ef84b5e",
+      "kitVersion": "0.1.0-rc.7",
+      "kitDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20",
+      "artifact": "artifacts/task21/accepted/index.html",
+      "firstCompleteReview": "fail; see original reports/evidence",
+      "finalStatic": "pass",
+      "finalChrome": "pass (four views)",
+      "finalEditorialUX": "approve",
+      "postFirstCompleteCorrections": {
+        "data": 0,
+        "UX": 0,
+        "technical": 1
+      },
+      "files": {
+        "spec.json": "7e31505db5c159562da0d3a28e063254c95810e2669777c0ccd2a16acbf4c001",
+        "input-digests.json": "057f3ae57b0a7c39ac67f5472b24019218cf397895dd3593c03b834b8cc655ef",
+        "report.md": "6d96fe8132a32756d0649685a9df08f1af51f9df5a99662452f36a57078c49d1",
+        "recheck-static.log": "ed1f2cf00049ae2521a45c716d52616b4acd7dd56ca0570dae986d66d77351d1",
+        "model-check.mjs": "09897e1791f5beaec0555683fd086aa4f91375044f7ee2ede9d71f533ed9a2ee",
+        "artifact-digests.json": "973d36e40ec2da407042f48324c731f9211938e6e5a3b54c28982aa894f94a46",
+        "app/screen-input.json": "25cf6f8924183b9f9f386fb8724be6b79f475513d81e59ff62ba1277b53df559",
+        "app/index.html": "d178c1e048807ede4160e9641f06031ce38d5d96b0a198bc9d239c49735b0d24",
+        "accepted/screen-input.json": "25cf6f8924183b9f9f386fb8724be6b79f475513d81e59ff62ba1277b53df559",
+        "accepted/index.html": "50e5e99d7e20ee101f445d1af61f39b62e228f1cd4c0abcb39fb881aab379181"
+      },
+      "Claude": {
+        "status": "blocked/deferred",
+        "reason": "Owner: с клодом чуть позже разберемся; not authenticated, no run"
+      }
+    },
+    {
+      "task": 22,
+      "runtime": "Codex native collaboration; fresh fork_turns=none; inherited model; no override",
+      "kitCommit": "3add79c0cbb2feb19af9de3356df1e232dd04d2d",
+      "kitVersion": "0.1.0-rc.7",
+      "kitDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20",
+      "artifact": "artifacts/task22/app/index.html",
+      "firstCompleteReview": "pass",
+      "finalStatic": "pass",
+      "finalChrome": "pass (four views)",
+      "finalEditorialUX": "approve",
+      "postFirstCompleteCorrections": {
+        "data": 0,
+        "UX": 0,
+        "technical": 0
+      },
+      "files": {
+        "spec.json": "0d19f674d925b18086ee09fa2f3639dc1421dc1cad5c7ca0daa851632de5d967",
+        "static-check.log": "ed1f2cf00049ae2521a45c716d52616b4acd7dd56ca0570dae986d66d77351d1",
+        "policy-check.json": "f239672e5e887ec9636779ba9c01b05e81efc81627366eaddf146d44fa88b46f",
+        "report.md": "e8ece74da6359b4b853b4f71941f5097fcd91a71c5b3d50caa2c69734b0020b5",
+        "hashes.json": "1a72fe02a578aa2e548eb96904bdc400f7f1a973d60f909b45b83b085e31e415",
+        "prompt.txt": "608c94dab0cb3ab8a87ef8eb49850642c9af9756f9981814f92340034d6d07ec",
+        "compiler-validation.json": "e69f2b58b1557ff180ec3139f4888347397c968b571e6d999c0ec1e2c62ca07c",
+        "model-check.mjs": "4167f1e52362632f3c9253e0d78188458243ec4c3263cdb9a81eb7c62b99d25d",
+        "typed-check.log": "f3b303a984082475d655680f2d1b05ce4233446f7b2c659a2247a229c546ae9f",
+        "model-check.log": "ea185acedfbe61b927ea56d9f3326ea78768243479ae1b281f2d5463bad73356",
+        "app/screen-input.json": "93edda2e93937754bd7ae0bd05f1d9c58d44847c300c93790cf110f3d004ab41",
+        "app/index.html": "37b19b6d1d54cfcefa64c27693cd37da3d4d94cd0fae6b299e3ef3a9214001d2"
+      },
+      "Claude": {
+        "status": "blocked/deferred",
+        "reason": "Owner: с клодом чуть позже разберемся; not authenticated, no run"
+      }
+    }
+  ],
+  "sharedToolingCorrections": [
+    {
+      "technical": 1,
+      "issue": "check.py --help started full suite instead of help; four workers recorded EPERM before browser; fixed in3add79c"
+    }
+  ],
+  "correctionCounting": "Causal corrections after first-complete; self corrections before first artifact separately in authored reports. Task21 template fix counted once in its row; shared help fix counted once globally.",
+  "limitations": [
+    "Native runtime model version not separately exposed; not a Codex CLI execution",
+    "Recipes reference existing numeric fixture also shown by numeric-checks; only task22 used new blind numbers",
+    "No real screenreader or physical-device checks",
+    "Claude explicitly deferred; #70 not fully closed",
+    "No new push/PR/remote CI/merge/deploy: automatic approval rejected remote action"
+  ]
+}

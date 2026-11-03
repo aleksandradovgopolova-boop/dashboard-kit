@@ -93,6 +93,12 @@
 
   // Кнопка с data-modal открывает окно сама — странице не нужен свой код.
   document.addEventListener('click', function (e) {
+    var closeButton = e.target.closest('[data-modal-close]');
+    if (closeButton) {
+      var dialog = closeButton.closest('dialog.dk-modal');
+      if (dialog && dialog.open) { e.preventDefault(); dialog.close('cancel'); }
+      return;
+    }
     var b = e.target.closest('[data-modal]');
     if (!b) return;
     var m = window.dkModal(b.getAttribute('data-modal'));

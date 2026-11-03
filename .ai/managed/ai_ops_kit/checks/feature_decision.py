@@ -17,7 +17,7 @@ from pathlib import Path
 
 import yaml
 
-# Допустимые направления движения метрики к target.
+
 DIRECTIONS = {"increase", "decrease", "hold"}
 
 

@@ -51,8 +51,8 @@ def parse_date(s):
 
 def assess(fm: dict, today: date):
     """Вернуть (status, detail) для документа с frontmatter."""
-    # v3.12.0 Startup Context Budget: шаблоны кита (template: true) НЕ проверяются на свежесть —
-    # у них зашита дата-заглушка, они не «протухают» (протухает копия в репозитории, а не шаблон).
+    
+    
     if fm.get("template") is True:
         return None
     stab = fm.get("stability")

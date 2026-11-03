@@ -40,8 +40,8 @@ _BRANCH_KEYS = ("enforce", "branch_prefix", "protected_refs", "base_drift_adviso
 
 def _load_tool_defaults():
     """DEFAULTS из обоих инструментов. -> (commit_defaults, branch_defaults)."""
-    # Корень на путь кладём сами: в script-режиме его там нет, а имена нужны пакетные —
-    # плоские сюда уже привели бы к тому же ModuleNotFoundError после pip install.
+    
+    
     sys.path.insert(0, str(PKG))
     from ai_ops_kit.engops import branch_policy, commit_policy
     return dict(commit_policy.DEFAULTS), dict(branch_policy.DEFAULTS)
@@ -49,7 +49,7 @@ def _load_tool_defaults():
 
 _ENV_KINDS = ("local", "ci", "preview", "staging", "production", "unknown")
 _SECRET_NAME_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
-# Литеральные секреты: в конфиге допустимы только ИМЕНА и ссылки env:/secret:, никогда значения.
+
 _SECRET_VALUE_HINTS = (re.compile(r"\bsk-[A-Za-z0-9_\-]{16,}"),
                        re.compile(r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{20,}"),
                        re.compile(r"\bAKIA[0-9A-Z]{16}\b"))
@@ -146,9 +146,9 @@ def _check_economics(eco):
     mh = eco.get("min_history_tasks")
     if mh is not None and (isinstance(mh, bool) or not isinstance(mh, int) or mh < 1):
         errs.append(f"economics.min_history_tasks={mh!r}: ожидалось целое ≥ 1")
-    # require_estimate блокирует ЛЮБОЙ первый прогон в репозитории (истории ещё нет). Это законный
-    # выбор, но он должен быть осознанным: молча включённым он выглядит как «строгость», а работает
-    # как «здесь нельзя запустить ничего».
+    
+    
+    
     if req is True and enf != "block":
         errs.append("economics.require_estimate=true при enforce != block: отсутствие истории будет "
                     "блокировать первый прогон, хотя политика заявлена как советующая — противоречие")

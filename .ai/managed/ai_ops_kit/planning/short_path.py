@@ -54,7 +54,7 @@ from pathlib import Path
 
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401
 
-# Минимум, без которого короткого пути нет. Порядок — порядок вопросов человека к работе.
+
 MINIMUM = ("goal", "acceptance_criteria", "affected_paths")
 
 HUMAN_NAME = {
@@ -63,13 +63,13 @@ HUMAN_NAME = {
     "affected_paths": "где править",
 }
 
-# Разделы спеки, которыми закрываются пункты минимума (affected_paths — ещё и `write_scope` плана).
+
 _SPEC_SECTION = {"goal": "goal", "acceptance_criteria": "acceptance_criteria",
                  "affected_paths": "affected_files"}
 
-# ЗАЯВЛЕНИЕ ВЛАДЕЛЬЦА. Список намеренно короткий и буквальный: широкий список превратил бы любую
-# уверенную формулировку задачи в заявление «это уже описано», а цена ошибки здесь — пропущенное
-# описание там, где оно было нужно. Сигнал `already_described` — тот же ответ, только машинный.
+
+
+
 _DECLARATION_SIGNAL = "already_described"
 _DECLARATION_PHRASES = (
     r"уже\s+опис", r"уже\s+специфиц", r"описан[оа]?\s+заранее", r"спек[аи]\s+готов",
@@ -82,7 +82,7 @@ DECISION_REF = "решение владельца 2026-08-17 (короткий �
 DECLINE_NOTE = ("declined коротким путём: работа описана вне кита, минимум (цель, критерии "
                 "готовности, где править) проверен — " + DECISION_REF)
 
-# Шаги, которые короткий путь снимает. `run` в списке НЕТ: исполнение никуда не девается.
+
 SKIPPED_STEPS = ("discuss", "specify", "plan")
 
 
@@ -164,7 +164,7 @@ def minimum(child_root, wid, signals=None, task=None):
     def _res(present, source, detail):
         return {"present": present, "source": source, "detail": detail}
 
-    # 1) ЦЕЛЬ. Сигнал -> раздел спеки -> заголовок работы плана.
+    
     if str(signals.get("goal") or "").strip():
         out["goal"] = _res(True, "signals", "goal передан сигналом")
     else:
@@ -180,7 +180,7 @@ def minimum(child_root, wid, signals=None, task=None):
         else:
             out["goal"] = _res(False, None, "цель не названа ни сигналом, ни спекой, ни планом")
 
-    # 2) КРИТЕРИИ ГОТОВНОСТИ. Засчитываются только РАЗОБРАННЫМИ в список — см. шапку модуля.
+    
     from ai_ops_kit.engine import acceptance_verify
     sig_crit = signals.get("acceptance_criteria")
     parsed_sig = acceptance_verify.parse_criteria(sig_crit) if sig_crit else []
@@ -198,7 +198,7 @@ def minimum(child_root, wid, signals=None, task=None):
             out["acceptance_criteria"] = _res(
                 False, None, "критериев готовности нет: раздел пуст или не разбирается в пункты")
 
-    # 3) ГДЕ ПРАВИТЬ. Сигнал -> `write_scope` работы плана -> раздел спеки.
+    
     sig_paths = signals.get("write_scope") or signals.get("affected_files")
     if isinstance(sig_paths, str):
         sig_paths = [p for p in re.split(r"[,\s]+", sig_paths) if p]
@@ -358,7 +358,7 @@ def _content_for(key, info, signals, child_root, wid):
         if key == "goal":
             return str(item.get("title") or "").strip()
         return "\n".join(f"- {p}" for p in (item.get("write_scope") or []))
-    # source == "spec" — содержимое уже в спеке, переписывать нечего
+    
     return ""
 
 

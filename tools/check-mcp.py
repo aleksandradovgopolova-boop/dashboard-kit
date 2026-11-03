@@ -14,13 +14,19 @@ async def main():
             await session.initialize()
             catalog = await session.list_tools()
             assert {t.name for t in catalog.tools} == {
-                "list_components", "get_component", "search_components", "get_chart_guidance", "get_includes"}
+                "list_components", "get_component", "search_components", "get_chart_guidance", "get_includes", "get_component_schema", "validate_component_parameters"}
             for name, args in [
                 ("list_components", {}), ("get_component", {"components": ["table"]}),
                 ("search_components", {"query": "таблица"}), ("get_chart_guidance", {}),
             ]:
                 result = await session.call_tool(name, args)
                 assert not result.isError and result.content, name
+            schema = await session.call_tool("get_component_schema", {"component": "chart"})
+            assert not schema.isError and '"schemaVersion": 1' in schema.content[0].text
+            valid = await session.call_tool("validate_component_parameters", {"component": "chart", "parameters": {"type": "bar", "title": "Выдачи", "metrics": ["issued"]}})
+            assert not valid.isError and '"orientation": "vertical"' in valid.content[0].text
+            invalid = await session.call_tool("validate_component_parameters", {"component": "chart", "parameters": {"type": "line", "orientation": "horizontal", "title": "Выдачи", "metrics": ["issued"]}})
+            assert invalid.isError
             result = await session.call_tool("get_includes", {"components": ["table"]})
             tags = result.content[0].text
             assert tags.index("dk-theme.js") < tags.index("tokens.primitives.css")
@@ -41,7 +47,7 @@ async def main():
                 pass
             else:
                 raise AssertionError("Unknown resource must fail")
-    print("MCP: handshake, 5 tools, asset order, embed, resources and errors passed")
+    print("MCP: handshake, 7 tools, parameter contracts, asset order, embed, resources and errors passed")
 
 
 if __name__ == "__main__":

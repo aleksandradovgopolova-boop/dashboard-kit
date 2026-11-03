@@ -191,10 +191,10 @@
     host.innerHTML =
       '<div class="dk-cal__head">' +
         '<button type="button" class="dk-iconbtn dk-iconbtn--sm" data-go="-1" title="Назад" aria-label="Назад">' +
-          '<svg class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg></button>' +
+          '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-left"/></svg></button>' +
         '<div class="dk-cal__month" aria-live="polite"></div>' +
         '<button type="button" class="dk-iconbtn dk-iconbtn--sm" data-go="1" title="Вперёд" aria-label="Вперёд">' +
-          '<svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button>' +
+          '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button>' +
         '<button type="button" class="dk-btn dk-btn--sm" data-go="today">Сегодня</button>' +
         '<div class="dk-seg dk-seg--sm" role="group" aria-label="Вид календаря">' +
           '<button type="button" data-view="month" aria-pressed="true">Месяц</button>' +
@@ -513,10 +513,11 @@
     }
     listen(agendaMedia, 'change', onAgendaChange);
     var destroy = window.dkOwn(host, function () {
-      stopped = true; releases.forEach(function (off) { off(); }); host.replaceChildren();
+      stopped = true; stableView.destroy(); releases.forEach(function (off) { off(); }); host.replaceChildren();
     });
     setEvents(opts.events);
     render();
+    var stableView = window.dkStableView(host, bodyEl);
 
     return {
       destroy: destroy,

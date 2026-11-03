@@ -70,7 +70,7 @@ def collect(work_root, commit_sha, run_npm=True, timeout=600) -> dict:
         except (subprocess.SubprocessError, OSError) as e:
             errors.append(f"{type(e).__name__}: {str(e)[:160]}")
     meta = write_meta(root, commit_sha)   # SHA-binding пишем ВСЕГДA (даже если UI-CI частично упал —
-    #                                        build_bundle сам решит по наличию/статусу сырых *.json)
+    
     return {"skipped": False, "commit_sha": commit_sha, "ran": ran, "errors": errors,
             "meta": str(meta.relative_to(root))}
 

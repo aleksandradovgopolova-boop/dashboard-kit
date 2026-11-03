@@ -1,0 +1,2 @@
+PASS: genuine full-slice and sorted regional CSV files saved/read, UTF-8 BOM, six monthly rows and focus return
+PASS: mortgage consumer, full-slice totals, pages, filters/history, region details/focus, empty/error/retry/remount, themes/mobile/AX names

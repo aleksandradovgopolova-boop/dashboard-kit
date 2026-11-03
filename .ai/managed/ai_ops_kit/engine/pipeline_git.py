@@ -80,7 +80,7 @@ def _tree_clean_after_checks(root):
         if not ln.strip():
             continue
         code, path = ln[:2], ln[3:]
-        # игнорируем ТОЛЬКО untracked (??) тул-кэши; tracked-правки и прочий untracked = грязь
+        
         if code == "??" and _TOOL_CACHE_RE.search(path):
             continue
         return False
@@ -125,9 +125,9 @@ def _head_advanced(root, base_sha):
     return (head != str(base_sha).strip() and bool(head)), (head or None)
 
 
-# K5 (2026-09-10): тело резолвера базы переехало в shared/gitio.resolve_base (чистый git-запрос,
-# его звали и engine, и lifecycle через границу пакета). Здесь — алиас: внутренние вызовы engine
-# (execution_pipeline, pipeline_setup, review_branch) не меняются, а lifecycle зовёт shared напрямую.
+
+
+
 def _resolve_base(root, base_ref):
     from ai_ops_kit.shared import gitio
     return gitio.resolve_base(root, base_ref)
@@ -291,14 +291,14 @@ def _change_context_range(work_root, base_revision, head_revision, max_chars=140
         parts.append("\nCombined unified-дифф base..head:\n" + body)
     return "\n".join(parts) + "\n"
 
-# Запуск скриптом ОБЪЯСНЯЕТ модуль, а не молчит (ревизия 2026-08-11).
-#
-# Здесь стояло `sys.exit(selftest())`, а сама функция удалена в v3.30 вместе с переносом
-# селфтестов в pytest: любой запуск падал с `NameError`. Просто убрать блок — тоже неверно:
-# модуль остаётся запускаемой точкой входа (`python3 -m ai_ops_kit.engine.pipeline_git`), и молчаливый
-# выход с кодом 0 — тот самый дефект «ноль и есть симптом».
-# Поэтому вход делает осмысленную работу — печатает назначение модуля, как `invariants.py`.
-# Проверки модуля — в `tests/unit/`.
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     print(__doc__)
     print("Проверки этого модуля — в tests/unit/ (pytest), отдельного --selftest нет с v3.30.")

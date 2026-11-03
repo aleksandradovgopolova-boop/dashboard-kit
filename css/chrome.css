@@ -259,12 +259,14 @@
   display: flex;
   align-items: center;
   gap: var(--gap-group);
-  padding: var(--space-5) var(--page-pad);
+  /* Отступ сверху равен боковому (--page-pad): заголовок не должен быть прижат
+     к верху, когда по бокам воздух. Один инсет на верх и на бока. */
+  padding: var(--page-pad);
   /* Липкая шапка прилипает к верху окна, и при запуске с главного экрана
      (PWA) это верх под строкой состояния — часы и заряд легли бы поверх
      заголовка. Отступ внутри шапки, а не top: иначе в щель над ней было бы
      видно уезжающее содержимое. */
-  padding-top: max(var(--space-5), env(safe-area-inset-top, 0px));
+  padding-top: max(var(--page-pad), env(safe-area-inset-top, 0px));
   background: var(--bg);
   min-width: 0;
 }
@@ -393,8 +395,10 @@
 }
 
 /* Внутри каркаса обёртка уже не центрируется по ширине экрана: её центрирует
-   сама колонка содержимого, а верхний отступ забирает шапка. */
-.dk-app .dk-wrap { padding-top: 0; }
+   сама колонка содержимого. Верхний отступ равен боковому (--page-pad): между
+   шапкой и первым блоком нужен такой же зазор, как по бокам, иначе контент
+   прижимается к шапке вплотную. */
+.dk-app .dk-wrap { padding-top: var(--page-pad); }
 
 /* --- ссылка «к содержимому» ------------------------------------------------
    Первая цель табуляции. Без неё человек, работающий с клавиатуры, проходит
@@ -584,7 +588,7 @@
     -webkit-backdrop-filter: blur(18px);
     backdrop-filter: blur(18px);
     border: 0;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-2xl);
     box-shadow: none;
   }
 
@@ -653,6 +657,23 @@
 }
 
 /* Необязательная панель с иконками и меню профиля. */
+.dk-app--rail { --page-pad:var(--space-6); }
+.dk-app--rail .dk-top { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"title tools"; gap:var(--space-4); padding:var(--page-pad); padding-top:max(var(--page-pad),env(safe-area-inset-top,0px)); }
+.dk-app--rail .dk-top__titles { grid-area:title; order:0; min-width:0; }
+.dk-app--rail .dk-top__title { white-space:normal; overflow:visible; text-overflow:clip; overflow-wrap:anywhere; }
+.dk-app--rail .dk-top__tools { display:flex; grid-area:tools; margin:0; padding:0; flex-wrap:nowrap; }
+.dk-app--rail .dk-top__tools > :not(.dk-seg) { margin:0; }
+.dk-app--rail .dk-top:has(.dk-top__at) { grid-template-areas:"title tools" "at tools"; }
+@media(max-width:1023px) {
+ .dk-app--rail .dk-top { grid-template-columns:auto minmax(0,1fr) auto; grid-template-areas:"burger title tools"; }
+ .dk-app--rail .dk-top__burger { grid-area:burger; }
+ .dk-app--rail .dk-top:has(.dk-top__at) { grid-template-areas:"burger title tools" "burger at tools"; }
+}
+@media(max-width:639px) {
+ .dk-app--rail .dk-top__tools { display:contents; }
+ .dk-app--rail .dk-top__tools > .dk-seg { grid-area:tools; }
+ .dk-app--rail .dk-top__tools > :not(.dk-seg) { grid-column:1 / -1; margin-top:var(--space-3); }
+}
 .dk-side__profile { position: relative; }
 .dk-side__profile > summary { display: flex; justify-content: center; align-items: center; min-height: var(--control-lg); cursor: pointer; list-style: none; border-radius: var(--radius-xl); }
 .dk-side__profile summary::-webkit-details-marker { display: none; }
@@ -663,12 +684,15 @@
 .dk-side__profile-rule { height: var(--hairline); background: var(--rule); margin: var(--space-4) 0; }
 .dk-side__profile-themes { display: flex; flex-wrap: wrap; gap: var(--space-3); padding: var(--space-4) 0; }
 @media (min-width: 1024px) {
-  .dk-app--rail[data-nav="folded"] { --dk-side: calc(var(--control-lg) + var(--space-5) * 2 + var(--space-6) * 2); }
-  .dk-app--rail .dk-side { top: var(--space-6); height: calc(100dvh - var(--space-6) * 2); margin: var(--space-6); padding: var(--space-5); border-radius: var(--radius-lg); box-sizing: border-box; }
-  .dk-app--rail[data-nav="folded"] .dk-side { width: calc(var(--control-lg) + var(--space-5) * 2); }
-  .dk-app--rail[data-nav="folded"] .dk-side__item { justify-content: center; align-self: center; padding: 0; width: var(--control-lg); height: var(--control-lg); min-height: var(--control-lg); flex-shrink: 0; box-sizing: border-box; border-radius: var(--radius-md); }
+  /* The app owns the outside inset; the content owns the one menu-to-content gap. */
+  .dk-app--rail:not([data-nav-place="top"]) { padding-left:var(--space-6); }
+  .dk-app--rail .dk-wrap { max-width:none; }
+  .dk-app--rail[data-nav="folded"] { --dk-side: calc(var(--rail-control) + var(--space-5) * 2); }
+  .dk-app--rail .dk-side { top: var(--space-6); height: calc(100dvh - var(--space-6) * 2); margin: var(--space-6) 0; padding: var(--space-5); border-radius: var(--radius-lg); box-sizing: border-box; }
+  .dk-app--rail[data-nav="folded"] .dk-side { width: calc(var(--rail-control) + var(--space-5) * 2); }
+  .dk-app--rail[data-nav="folded"] .dk-side__item { justify-content: center; align-self: center; padding: 0; width: var(--rail-control); height: var(--rail-control); min-height: var(--rail-control); flex-shrink: 0; box-sizing: border-box; border-radius: var(--radius-md); }
   .dk-app--rail[data-nav="folded"] .dk-side__head .dk-iconbtn,
-  .dk-app--rail[data-nav="folded"] .dk-side__profile > summary { width: var(--control-lg); height: var(--control-lg); min-height: var(--control-lg); padding: 0; box-sizing: border-box; }
+  .dk-app--rail[data-nav="folded"] .dk-side__profile > summary { width: var(--rail-control); height: var(--rail-control); min-height: var(--rail-control); padding: 0; box-sizing: border-box; }
   .dk-app--rail .dk-side__foot { border-top: var(--hairline) solid var(--rule); padding-top: var(--space-4); }
 }
 @media (max-width: 1023px) {

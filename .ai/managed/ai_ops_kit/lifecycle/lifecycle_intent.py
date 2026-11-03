@@ -35,7 +35,7 @@ from __future__ import annotations
 import json
 import sys
 
-# Lifecycle stages
+
 LIFECYCLE_STAGES = (
     "discovery",
     "implementation",
@@ -44,7 +44,7 @@ LIFECYCLE_STAGES = (
     "completed",
 )
 
-# Terminal states
+
 TERMINAL_STATES = (
     "cancelled",
     "superseded",
@@ -70,33 +70,33 @@ def derive(workitem_status: str, has_evidence: bool = False, has_pr: bool = Fals
     Returns:
         lifecycle_intent: одна из LIFECYCLE_STAGES или TERMINAL_STATES
     """
-    # Терминальные состояния имеют приоритет
+    
     if terminal_state and terminal_state in TERMINAL_STATES:
         return terminal_state
 
-    # completed — есть DeliveryReceipt
+    
     if has_receipt:
         return "completed"
 
-    # delivery — PR смержен, но нет receipt
+    
     if pr_merged:
         return "delivery"
 
-    # review — PR открыт, ожидает review
+    
     if has_pr:
         return "review"
 
-    # needs_human_decision — ожидает approval (это форма review)
+    
     if workitem_status == "needs_human_decision":
         return "review"
 
-    # implementation — есть evidence или статус done/needs_more_evidence
-    # blocked без evidence → discovery (застрял на старте)
-    # blocked с evidence → implementation (застрял в процессе)
+    
+    
+    
     if has_evidence or workitem_status in ("done", "needs_more_evidence"):
         return "implementation"
 
-    # discovery — по умолчанию для draft/blocked без evidence
+    
     return "discovery"
 
 
@@ -115,19 +115,19 @@ def validate_transition(from_stage: str, to_stage: str) -> bool:
     if from_stage not in ALL_STATES or to_stage not in ALL_STATES:
         return False
 
-    # Из терминальных состояний переходы запрещены
+    
     if from_stage in TERMINAL_STATES:
         return False
 
-    # В completed можно перейти из любого нетерминального
+    
     if to_stage == "completed":
         return from_stage in LIFECYCLE_STAGES
 
-    # В терминальные можно перейти из любого нетерминального
+    
     if to_stage in TERMINAL_STATES:
         return from_stage in LIFECYCLE_STAGES
 
-    # Обычные переходы
+    
     valid_transitions = {
         "discovery": {"implementation", "cancelled", "abandoned"},
         "implementation": {"review", "delivery", "completed", "cancelled", "superseded", "abandoned"},
@@ -158,10 +158,10 @@ def intent_to_lifecycle(cli_intent: str) -> str | None:
 
 
 if __name__ == "__main__":
-    # Ветки `--selftest` здесь нет (ревизия 2026-08-11): функция удалена в v3.30 вместе с
-    # переносом селфтестов в pytest, а вызов остался и мог только упасть с `NameError`.
+    
+    
 
-    # CLI
+    
     status = None
     has_evidence = False
     has_pr = False

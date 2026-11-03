@@ -39,13 +39,13 @@ import yaml
 
 from ai_ops_kit.planning import architecture_invariants, artifact_sections, drift, standard
 
-# ── Четыре состояния строки отчёта (сумма равна общему числу, §3.2). ──
+
 PASS = "pass"
 VIOLATED = "violated"
 NOT_APPLICABLE = "not_applicable"
 NOT_CHECKED = "not_checked"
 
-# ── Кто закрыл строку — тот же словарь, что у гейтов кита (quality/gates.yaml -> closed_by), SR-20.
+
 CLOSED_BY = ("validator", "judge", "writer", "human")
 
 SCHEMA_VERSION = 1
@@ -169,7 +169,7 @@ def _apply_overrides(rows: list, overrides: list, today: _dt.date) -> tuple[list
                                  "address": f"{CONFIG_REL} standard.overrides", "detail": detail})
         echo.append(entry)
 
-    # Погасить строки требований, отключённых АКТИВНЫМ override (по точному имени или префиксу path::).
+    
     suppress = {req for req, _ in active_targets}
 
     def _covered(requirement: str) -> bool:
@@ -177,7 +177,7 @@ def _apply_overrides(rows: list, overrides: list, today: _dt.date) -> tuple[list
 
     kept = [r for r in rows if not _covered(r["requirement"])]
 
-    # Ровно одна строка not_applicable на каждый активный override (гарантирует равенство SR-23).
+    
     na_rows = [{"requirement": req, "status": NOT_APPLICABLE, "closed_by": "human",
                 "reason": reason} for req, reason in active_targets]
 
@@ -224,11 +224,11 @@ def build(child_root, today: _dt.date | None = None, pkg_root: Path | None = Non
         "counts": counts,
         "overrides": overrides_echo,
         "rows": rows,
-        # Архитектурные инварианты (SR-9..13) — ОТДЕЛЬНЫЙ advisory-блок: он приблизителен (§5.2),
-        # его нельзя складывать с четырьмя числами структурного факта (§3.2 остаётся неизменным).
+        
+        
         "architecture": architecture_invariants.report(root, deps=deps),
-        # Расхождение (SR-14..16) — ВТОРОЙ РОД находки, отдельный от нарушения: код и описание
-        # разошлись, чинить нельзя, только показать. Меряется на диффе (SR-15), тоже advisory.
+        
+        
         "drift": drift.report(root, changed_files=changed_files),
     }
 

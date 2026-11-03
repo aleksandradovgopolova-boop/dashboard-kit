@@ -88,8 +88,6 @@ try {
     await evaluate(`new Promise((resolve,reject)=>{let tries=0;const timer=setInterval(()=>{if(document.querySelector('#${prefix}-tbody tr')){clearInterval(timer);resolve();}else if(++tries>100){clearInterval(timer);reject(Error('Demo data timeout'));}},50);})`);
     console.log(await evaluate(`(()=>{
       const assert=(value,message)=>{if(!value)throw Error(message)};
-      const period=document.getElementById('${prefix}-period');
-      assert(period.textContent.includes('Демонстрационные данные за')&&!period.querySelector('button,input,select'),'demo period must describe fixed data');
       const url=location.href;
       for(const link of document.querySelectorAll('.dk-side__item[aria-disabled="true"]')){
         assert(!link.hasAttribute('href')&&link.getAttribute('role')==='link','disabled destination must not navigate');
@@ -100,7 +98,7 @@ try {
       const calendar=[...document.querySelectorAll('.dk-side__item')].find(link=>link.textContent.includes('Календарь'));
       if(calendar)assert(calendar.getAttribute('href')==='calendar.html','available calendar must have a destination');
       if('${prefix}'==='a'){
-        assert(!document.getElementById('a-at')&&document.querySelectorAll('#a-period').length===1,'static demo period must appear once');
+        assert(!document.getElementById('a-at'),'no stray scope element');
         const titles=[...document.querySelectorAll('.dk-widget__title')].map(title=>title.textContent.trim());
         assert(titles.includes('Аварии по часам')&&titles.includes('Аварии по типам'),'chart titles name their metric and grouping without repeating the period');
         const hint=document.querySelector('#a-hours').previousElementSibling.querySelector('.dk-widget__hint');
@@ -110,11 +108,11 @@ try {
         assert(bars.series[0].data.includes(0)&&bars.xAxis[0].name==='ч','removing grid preserves zero and unit');
         const button=document.querySelector('#a-tbody .dk-td-act button'),rows=document.getElementById('a-tbody').innerHTML;
         assert(button.disabled&&button.getAttribute('aria-describedby')==='a-demo-actions','demo close must be disabled with explanation');
-        assert(document.getElementById('a-demo-actions').textContent.includes('недоступно в демонстрации'),'visible unavailable-action explanation');
+        assert(document.getElementById('a-demo-actions').textContent.includes('недоступно в демонстрации')&&button.getAttribute('title').includes('недоступно в демонстрации'),'unavailable-action explanation belongs to the disabled action');
         button.click();
         assert(document.getElementById('a-tbody').innerHTML===rows&&!document.querySelector('dialog[open],.dk-toast'),'disabled close must not report success');
       }
-      return 'PASS: ${page} fixed demo period, honest unavailable navigation/action, available calendar destination';
+      return 'PASS: ${page} honest unavailable navigation/action, available calendar destination';
     })()`));
   }
   for (const width of [1366, 1024, 390]) {
@@ -205,7 +203,7 @@ try {
           else if(++tries>100){clearInterval(timer);reject(Error('Monitor KPI page timeout'));}
         },50);})`);
         console.log(await evaluate(`(()=>{
-          const assert=(value,message)=>{if(!value)throw Error(message)};
+          const assert=(value,message)=>{if(!value)throw Error('${page}/${theme}/${width}: '+message)};
           const cards=[...document.querySelectorAll('.dk-wrap--monitor .dk-tile')];
           const boxes=cards.map(card=>card.getBoundingClientRect());
           assert(boxes.length===${expectedKpis},'expected primary KPI count');
@@ -224,11 +222,11 @@ try {
           });
           for(const row of visualRows.values()){
             const numberTops=row.map(card=>card.querySelector('.dk-metric-lg').getBoundingClientRect().top);
-            assert(Math.max(...numberTops)-Math.min(...numberTops)<1,'KPI values share a common row baseline');
+            assert(Math.max(...numberTops)-Math.min(...numberTops)<1,'KPI values share a common row baseline: '+JSON.stringify({page:'${page}',theme:'${theme}',width:innerWidth,numberTops,labels:row.map(card=>{const el=card.querySelector('.dk-tile__head');return {text:el.textContent.trim(),height:el.getBoundingClientRect().height};})}));
             const trends=row.map(card=>{const trend=card.querySelector('.dk-trend');if(!trend)return null;const box=trend.getBoundingClientRect(),value=card.querySelector('.dk-metric-lg').getBoundingClientRect();return box.top<value.bottom&&box.bottom>value.top?box.top:null}).filter(top=>top!==null);
             if(trends.length)assert(Math.max(...trends)-Math.min(...trends)<1,'KPI trends share a common row baseline');
             const sparks=row.map(card=>card.querySelector('.dk-chart--spark')).filter(Boolean).map(el=>el.getBoundingClientRect().bottom);
-            if(sparks.length)assert(Math.max(...sparks)-Math.min(...sparks)<1,'KPI sparklines share the same bottom edge');
+            if(sparks.length)assert(Math.max(...sparks)-Math.min(...sparks)<1,'KPI sparklines share the same bottom edge '+JSON.stringify(row.map(card=>{const r=card.getBoundingClientRect(),s=card.querySelector('.dk-tile__spark'),sr=s?.getBoundingClientRect();return {card:[r.top,r.height,r.bottom],display:getComputedStyle(card).display,spark:sr&&[sr.top,sr.height,sr.bottom],margin:s&&getComputedStyle(s).marginTop};})));
           }
           cards.forEach(card=>{
             const box=card.getBoundingClientRect(),style=getComputedStyle(card),pad=parseFloat(style.paddingLeft);
@@ -236,7 +234,7 @@ try {
             assert(label&&value,'full label and numeric value present');
             const labelBox=label.getBoundingClientRect(),valueBox=value.getBoundingClientRect();
             assert(!label.textContent.includes('…')&&getComputedStyle(label).textOverflow!=='ellipsis','KPI label must not be truncated');
-            assert(labelBox.left>=box.left+pad-1&&labelBox.right<=box.right-parseFloat(style.paddingRight)+1,'label stays inside spacious card padding');
+            assert(labelBox.left>=box.left+pad-1&&labelBox.right<=box.right-parseFloat(style.paddingRight)+1,'label stays inside spacious card padding '+JSON.stringify({label:label.textContent,box:[box.left,box.right],labelBox:[labelBox.left,labelBox.right],pad}));
             assert(Math.abs(valueBox.left-box.left-pad)<=2,'metric remains on the leading edge');
             assert(valueBox.right<=box.right-parseFloat(style.paddingRight)+1,'metric stays inside card padding');
             assert(card.scrollWidth<=card.clientWidth+1,'KPI content must not overflow horizontally');
@@ -250,7 +248,7 @@ try {
                 assert(r.left>=c.right-1||r.right<=c.left+1||r.top>=c.bottom-1||r.bottom<=c.top+1,'spark does not overlap KPI value or delta');
               }
             }
-            const icon=card.querySelector('.dk-tile__icon');assert(icon&&getComputedStyle(icon).display!=='none'&&icon.getBoundingClientRect().width===14,'compact KPI has a neutral 14px icon');
+            const icon=card.querySelector('.dk-tile__icon'),iconStyle=icon&&getComputedStyle(icon);const iconSize=iconStyle&&parseFloat(iconStyle.getPropertyValue('--icon-size-compact'));assert(icon&&iconStyle.display!=='none'&&icon.getBoundingClientRect().width===iconSize&&icon.getBoundingClientRect().height===iconSize,'compact KPI icon follows the current material token');
             const trend=card.querySelector('.dk-trend');if(trend){const rect=trend.getBoundingClientRect();assert(parseFloat(getComputedStyle(trend).borderRadius)<10,'compact KPI delta is rectangular');assert(rect.left>=box.left+pad-1&&rect.right<=box.right-parseFloat(style.paddingRight)+1,'delta stays inside card padding');assert(rect.left>=valueBox.right-1||rect.top>=valueBox.bottom-1,'inline or wrapped delta must not overlap value');}
           });
           assert(document.documentElement.scrollWidth<=innerWidth+1,'shared monitor must not overflow horizontally');

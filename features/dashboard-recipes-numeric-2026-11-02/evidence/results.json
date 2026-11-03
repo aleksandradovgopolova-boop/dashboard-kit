@@ -1,0 +1,39 @@
+[
+  {
+    "name": "fast",
+    "command": [
+      "python3",
+      "tools/check.py",
+      "--fast"
+    ],
+    "exit_code": 0,
+    "status": "pass"
+  },
+  {
+    "name": "evals",
+    "command": [
+      "python3",
+      "tools/check-evals.py"
+    ],
+    "exit_code": 0,
+    "status": "pass"
+  },
+  {
+    "name": "full",
+    "command": [
+      "python3",
+      "tools/test.py"
+    ],
+    "exit_code": 1,
+    "status": "fail"
+  },
+  {
+    "name": "numeric-browser",
+    "command": [
+      "node",
+      "tools/check-numeric-browser.mjs"
+    ],
+    "exit_code": 1,
+    "status": "fail"
+  }
+]

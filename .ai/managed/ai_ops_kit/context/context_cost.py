@@ -98,7 +98,7 @@ def estimate(child_root, budget=None):
     budget = budget if budget is not None else _budget_from_config(root)
     items = []
 
-    # 1) ярус 1 контекста (read_tier == 1)
+    
     croot = _context_root(root)
     if croot:
         for p in sorted(croot.rglob("*.md")):
@@ -109,13 +109,13 @@ def estimate(child_root, budget=None):
                               if root in p.parents or p.is_relative_to(root) else p.name,
                               "tokens": estimate_tokens(txt)})
 
-    # 2) CLAUDE.md
+    
     cl = root / "CLAUDE.md"
     if cl.is_file():
         items.append({"bucket": "claude_md", "path": "CLAUDE.md",
                       "tokens": estimate_tokens(cl.read_text(encoding="utf-8", errors="replace"))})
 
-    # 3) описания экспортируемой поверхности: скиллы (description) + команды (краткое описание)
+    
     sroot = _skills_root(root)
     if sroot:
         for sk in sorted(sroot.glob("*/SKILL.md")):

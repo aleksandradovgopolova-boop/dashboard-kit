@@ -46,11 +46,11 @@
 (function () {
   'use strict';
 
-  var ICON_CAL   = '<svg class="dk-i dk-i--sm"><use href="#ti-calendar"/></svg>';
-  var ICON_X     = '<svg class="dk-i dk-i--sm"><use href="#ti-x"/></svg>';
-  var ICON_CHECK = '<svg class="dk-i dk-menu__mark"><use href="#ti-check"/></svg>';
-  var ICON_PREV  = '<svg class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg>';
-  var ICON_NEXT  = '<svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg>';
+  var ICON_CAL   = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-calendar"/></svg>';
+  var ICON_X     = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-x"/></svg>';
+  var ICON_CHECK = '<svg class="dk-i dk-menu__mark" aria-hidden="true"><use href="#ti-check"/></svg>';
+  var ICON_PREV  = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-left"/></svg>';
+  var ICON_NEXT  = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg>';
 
   var DAY = 86400000;
 
@@ -192,7 +192,7 @@
         '<span class="dk-select__label">' + esc(text) + '</span>' +
         (value
           ? '<span class="dk-select__clear" role="button" tabindex="0" aria-label="Сбросить период">' + ICON_X + '</span>'
-          : '<svg class="dk-i dk-i--sm dk-select__caret"><use href="#ti-chevron-down"/></svg>');
+          : '<svg class="dk-i dk-i--sm dk-select__caret" aria-hidden="true"><use href="#ti-chevron-down"/></svg>');
 
       // Пресет на кнопке — это имя, а не даты. Точные даты нужны всё равно:
       // отдаём их скринридеру и всплывающей подсказке, не занимая места.

@@ -60,11 +60,11 @@ def from_subsession_decision(decision: dict) -> dict:
             summary=(decision or {}).get("reason") or "Продолжаю здесь.",
             next_steps=["продолжаю"], technical=tech)
 
-    # Отказы. Формулировка зависит от кода: разное лечение — разные слова.
+    
     if code == "no_ceiling":
-        # Спрашивать «сколько можно потратить» и не предлагать числа значило бы требовать решения,
-        # для которого у человека нет данных: цену вызова видел только кит. Поэтому вопрос идёт
-        # ВМЕСТЕ с посчитанной суммой и её основанием — владельцу остаётся согласиться.
+        
+        
+        
         sug = n.get("suggested_usd")
         why = n.get("suggestion_reason")
         tech["предложено $"] = sug if sug is not None else "нет замера"
@@ -149,15 +149,15 @@ def from_session_economy(snapshot: dict, rec: dict) -> dict:
     outcome = (rec or {}).get("outcome")
     spend = (rec or {}).get("session_spend") or "н/д"
     turns = snapshot.get("turns")
-    # Внутренняя причина остаётся В ДЕТАЛЯХ: в ней живут имена вроде `WorkItem`, которым наружу
-    # хода нет, а отлаживать по ней надо.
+    
+    
     tech = {"контекст": ctx, "статус измерения": status,
             "источник": snapshot.get("context_source") or "—",
             "ходов": turns, "источник ходов": snapshot.get("turns_source") or "—",
             "расход сессии": spend, "состояние расхода": (rec or {}).get("spend_state") or "—",
             "исход": outcome, "причина": (rec or {}).get("reason") or "—",
-            # Путь — В ДЕТАЛЯХ (наружу путям хода нет), но САМ ФАКТ идёт в текст ниже: уйти из
-            # сессии, не записав её состояние, — это потеря труда, а не деталь реализации.
+            
+            
             "handoff сессии": (rec or {}).get("handoff") or "—",
             "последняя компакция": snapshot.get("last_compaction_at") or "не обнаружена"}
 
@@ -193,13 +193,13 @@ def from_session_economy(snapshot: dict, rec: dict) -> dict:
                       "recommendation": advice,
                       "on_approve": "выполни команду ниже и повтори задачу",
                       "on_reject": "продолжу здесь — решение твоё, я не блокирую"},
-            # Состояние handoff — ПЕРВЫЙ шаг, а не приписка: если состояние сессии не записано,
-            # уходить из неё нечем, и это важнее самой команды выхода.
+            
+            
             next_steps=[(rec or {}).get("handoff") or "состояние сессии не проверено",
                         (rec or {}).get("command") or "продолжаю здесь"],
             technical=tech)
-    # `attention` — не «всё хорошо»: сказать «история дешёвая» при растущем счёте значило бы
-    # успокаивать там, где кит как раз обязан предупредить.
+    
+    
     growing = "attention" in ((rec or {}).get("context_state"), (rec or {}).get("spend_state"))
     return message(
         status="ok",
@@ -247,7 +247,7 @@ def from_first_hour(res: dict) -> dict:
             technical={"classification": cls, "blocking_questions": n_block,
                        "conflicts": ", ".join(c.get("category", "") for c in conflicts) or "—"})
 
-    # ready — ответов хватает.
+    
     boot = res.get("bootstrap") or {}
     wi = boot.get("work_items")
     n_work = len(wi) if isinstance(wi, list) else (wi or 0)
@@ -272,6 +272,9 @@ def from_first_hour(res: dict) -> dict:
     else:
         steps.append("спроси «что дальше» — предложу работу по собранному плану")
     steps.append("детали по любой работе — по запросу")
+    offer = res.get("dashboard_offer")
+    if isinstance(offer, dict) and isinstance(offer.get("message"), str):
+        steps.append(offer["message"])
     return message(
         status="ok", headline="Первый час пройден",
         summary=f"Понял проект, собрал направление и план ({n_work} "
@@ -308,9 +311,9 @@ def from_bootstrap(rep: dict, applied=False) -> dict:
                 summary="Создавать было нечего: направление и план в проекте уже есть.",
                 next_steps=["спроси «что дальше» — предложу работу по существующему плану"],
                 technical={"пропущено": ", ".join(s["path"] for s in skipped) or "—"})
-        # СКОЛЬКО ИЗ НИХ МОЖНО НАЧАТЬ БЕЗ МЕНЯ — РАЗНЫЕ ОТВЕТЫ. Если каждая работа начинается с
-        # ответа владельца, обещать «спроси что дальше — назову первую работу» нельзя: там будет
-        # «ждёт решения человека», и это ровно тот разрыв обещания, из-за которого правится тир 4.
+        
+        
+        
         doable = rep.get("ready_without_human")
         waiting = rep.get("awaiting_human") or 0
         tech = {"создано": ", ".join(w["path"] for w in wrote),
@@ -379,8 +382,8 @@ def from_intake_gap(missing, hint_command=None) -> dict:
     names = {"size": "насколько большая задача", "risk": "насколько рискованная",
              "task_type": "какого рода работа"}
     human = [names.get(m.get("signal"), m.get("signal")) for m in miss]
-    # Человеку — не «ответь этим JSON», а «скопируй строку, а если задача крупнее — поменяй два
-    # слова». Механизм тот же (--signals), но подан так, чтобы не знать его формат было не нужно.
+    
+    
     if hint_command:
         steps = ["если задача небольшая и обычная — просто скопируй эту строку в команду:  "
                  + hint_command,
@@ -522,7 +525,7 @@ def from_kit_feedback_recorded(path, created, errors, has_evidence, declared_cla
                    "улики": "есть" if has_evidence else "нет"})
 
 
-# Состояние строки doctor -> насколько это плохо. Порядок важен: вердикт следует за ХУДШЕЙ строкой.
+
 _DOCTOR_RANK = {"ok": 0, "info": 0, "unknown": 1, "gap": 1, "warn": 1, "fail": 2, "blocked": 2}
 
 
@@ -544,9 +547,9 @@ def from_doctor(lines) -> dict:
                        technical={"проверок": len(rows)})
     n = len(gaps)
     if worst >= 2:
-        # БЛОКИРУЮЩЕЕ СЧИТАЕМ ОТДЕЛЬНО ОТ ЗАМЕЧАНИЙ. Общий счётчик называл «проблемами, из-за
-        # которых работать нельзя» и обычные предупреждения — число врало в сторону паники, а это
-        # такая же неправда, как зелёный вердикт на красном выводе.
+        
+        
+        
         nb = len(blocking)
         rest = n - nb
         return message(
@@ -566,3 +569,37 @@ def from_doctor(lines) -> dict:
         why_it_matters="Работать можно; замечания стоит закрыть, чтобы проверки говорили полную правду.",
         next_steps=[r.get("text", "") for r in gaps][:2],
         technical={r.get("id", f"строка{i}"): r.get("text") for i, r in enumerate(rows)})
+
+
+
+
+
+
+
+_STYLE_LINTER = {"python": "Ruff", "node": "ESLint", "go": "golangci-lint"}
+_STYLE_LANG = {"python": "Python", "node": "JavaScript/TypeScript", "go": "Go"}
+CODE_STYLE_POLICIES = ("advisory", "required")
+
+
+def code_style_unguarded(languages, policy="advisory", declared=None) -> str:
+    """Находка «линтера нет» — одна фраза для отчёта гейта, сводки прогона и онбординга.
+
+    `policy` — значение `.ai-ops.yaml -> standard.lint`: `advisory` (по умолчанию) сообщает,
+    `required` отказывает в приёмке, незнакомое значение отказывает тоже (fail-closed) и называет,
+    что именно не понято. «Не нашёл» — не «нет»: судим по репозиторию, чужую машину не видим.
+    """
+    langs = [str(x) for x in (languages or [])]
+    offer = ", ".join(f"для {_STYLE_LANG.get(x, x)} — {_STYLE_LINTER[x]}"
+                      for x in langs if x in _STYLE_LINTER)
+    offer = (f"Предлагаю поставить набор правил под язык проекта: {offer}." if offer
+             else "Предлагаю поставить набор правил под язык проекта.")
+    found = "в репозитории я не нашёл ни линтера, ни его настроек"
+    if policy == "advisory":
+        return (f"Стиль кода в проекте никто не проверяет: {found}, поэтому каждый агент пишет "
+                f"по-своему — имена, оформление и границы модулей расходятся от правки к правке. {offer}")
+    if policy == "required":
+        return (f"Работу принять не могу: в .ai-ops.yaml проверка стиля объявлена обязательной "
+                f"(standard.lint: required), а {found} — проверить стиль нечем. {offer}")
+    return (f"Не понимаю настройку standard.lint = «{declared}» в .ai-ops.yaml: допустимо "
+            f"{' или '.join(CODE_STYLE_POLICIES)}. Пока она не исправлена, считаю проверку стиля "
+            f"обязательной, а {found}, — поэтому работу не принимаю. Исправьте значение.")

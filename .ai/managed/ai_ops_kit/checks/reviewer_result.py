@@ -46,9 +46,9 @@ def check(data: dict, gate_ids=None, allow_empty_checks=False):
         if c["status"] == "fail":
             any_fail = True
 
-    # v3.0-rc11 (finding живого прогона kimi): warn на блокирующем гейте БЛОКИРУЕТ (v2.85) — значит
-    # это тоже блокирующий вердикт и обязан назвать конкретику. Contentless warn = «блок без причины»
-    # (унфальсифицируемый). Симметрия честности: fail и warn одинаково требуют непустой blockers.
+    
+    
+    
     if data.get("status") in ("fail", "warn") and not (data.get("blockers")):
         errors.append(f"status={data.get('status')} требует непустой blockers (блокирующий вердикт без причины)")
     if any_fail and data.get("status") == "pass":

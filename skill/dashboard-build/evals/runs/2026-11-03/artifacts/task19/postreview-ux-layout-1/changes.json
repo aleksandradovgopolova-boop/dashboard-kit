@@ -1,0 +1,16 @@
+{
+  "correction": "postreview UX/layout correction 1",
+  "before": {
+    "app/index.html": "59544d005477381f62ef4190c870de14d66a52125839db85aaeac67105445a3c",
+    "app/operations.css": "2a8499314f9a64374170ba2cb492d2cf3a0975b844e15c89d13580efc81ea886"
+  },
+  "after": {
+    "app/index.html": "59544d005477381f62ef4190c870de14d66a52125839db85aaeac67105445a3c",
+    "app/operations.css": "b3faaafa8b00c9fcefa09ada7058e521eb6cfda4ce5448acf50d6083678baedf"
+  },
+  "changedFiles": [
+    "app/operations.css"
+  ],
+  "scope": "mobile toolbar group layout only",
+  "browserRetest": "PENDING"
+}

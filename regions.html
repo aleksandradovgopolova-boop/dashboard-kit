@@ -14,13 +14,14 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
 <link rel="stylesheet" href="css/chrome.css">
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 <link rel="stylesheet" href="css/page.regions.css">
 
 <!-- Помощники (экранирование) — первыми: остальные компоненты падают без них,
      и это правильно. Молча собранная без экранирования разметка хуже ошибки. -->
-<script src="js/dk-util.js"></script>
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
 <script src="js/dk-icons.js" defer></script>
 <!-- defer, а не блокирующая загрузка. Три файла графиков весят 1148 КБ, и
      без defer разбор страницы вставал на них целиком: до первой отрисовки
@@ -35,12 +36,12 @@
 <script src="js/dk-period.js" defer></script>
 <script src="js/dk-chrome.js" defer></script>
 <script src="js/dk-modal.js" defer></script>
-<script src="js/dk-map.js" defer></script>
+<script src="js/dk-map.js?v=20261028-stable-size" defer></script>
 <script src="js/dk-table.js" defer></script>
 <script src="js/dk-pager.js" defer></script>
 </head>
 
-<body id="r-page" class="dk-page">
+<body data-dk-screen="overview" id="r-page" class="dk-page dk-glass">
 <a class="dk-skip" href="#main">К содержимому</a>
 
 <div class="dk-app dk-app--rail" data-nav="folded">
@@ -94,7 +95,7 @@
         <div class="dk-side__profile-menu">
           <a class="dk-menu__item" href="index.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg>Помощь</a>
           <details><summary class="dk-menu__item"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg>Настройки</summary>
-            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button class="dk-btn dk-btn--sm" type="button" data-theme-set="light">Светлая</button><button class="dk-btn dk-btn--sm" type="button" data-theme-set="dark">Тёмная</button></div>
+            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
           </details>
           <div class="dk-side__profile-rule"></div>
           <button class="dk-menu__item" type="button" disabled title="Гостевой просмотр"><svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg>Выйти</button>
@@ -117,7 +118,7 @@
 <section class="dk-widget dk-focus-layout__primary" aria-labelledby="r-map-title">
   <header class="dk-widget__head"><h1 class="dk-head__title" id="r-map-title">Риски ЖКХ и инфраструктуры</h1><div class="dk-widget__actions" id="r-map-controls"></div></header>
   <div class="dk-widget__body r-map-body"><div id="r-map"></div></div>
-  <footer class="dk-widget__footer"><details class="r-map-note"><summary>Как читать карту</summary><p class="dk-caption">Высокий риск ≥78 · средний 60–77 · низкий &lt;60 баллов. Нажмите на регион, чтобы открыть детали. Затемнённые регионы не входят в выбранный срез.</p></details></footer>
+  <footer class="dk-widget__footer"><details class="r-map-note"><summary><svg class="dk-i dk-i--sm r-fold-caret" aria-hidden="true"><use href="#ti-chevron-right"/></svg>Как читать карту</summary><p class="dk-caption">Высокий риск ≥78 · средний 60–77 · низкий &lt;60 баллов. Затемнённые регионы не входят в выбранный срез.</p></details></footer>
 </section>
 <aside class="dk-focus-layout__aside" aria-label="Сводка и регионы">
 <div class="r-filter-panel"><div class="dk-region-tools dk-region-tools--stacked" role="search" aria-label="Поиск и фильтр регионов">
@@ -136,7 +137,7 @@
 <p class="dk-region-result" id="r-results" role="status" aria-live="polite" aria-atomic="true"></p>
 </div>
 <section class="dk-widget r-summary-panel" aria-labelledby="r-summary-title">
-<header class="dk-widget__head"><div class="dk-widget__heading"><p class="dk-widget__meta" id="r-scope">Сводка по стране</p><h2 class="dk-widget__title" id="r-summary-title">Российская Федерация</h2><span class="dk-caption" id="r-period">Демонстрационные данные за 30 дней</span></div></header>
+<header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title" id="r-summary-title">Российская Федерация</h2></div></header>
 <div class="r-risk-summary">
 <p class="dk-caption">Регионов с высоким риском</p>
 <div class="r-risk-value"><strong id="r-k-crit">—</strong><span>из <span id="r-k-total">89</span></span></div>
@@ -144,7 +145,7 @@
 <div class="r-risk-legend"><span>Высокий <b id="r-count-crit">—</b></span><span>Средний <b id="r-k-high">—</b></span><span>Низкий <b id="r-k-low">—</b></span></div>
 <p class="r-thresholds">Высокий ≥78 · средний 60–77 · низкий &lt;60</p><div class="r-risk-context"><span>Средний балл <b id="r-k-avg">—</b> / 100</span><span>Без данных <b id="r-k-nodata">—</b></span></div>
 </div>
-<header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title" id="r-title">Регионы</h2><p class="dk-widget__meta" id="r-rank-caption">Наибольший риск в выборке</p></div></header>
+<header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title" id="r-title">Регионы с наибольшим риском</h2></div></header>
 <div class="dk-rank r-focus-rank" id="r-rank" tabindex="0" role="region" aria-label="Регионы по убыванию риска"></div><footer class="dk-widget__footer"><a class="dk-btn dk-btn--ghost dk-btn--sm" id="r-all-results" href="#r-table">Все регионы</a></footer>
 </section>
 </aside>
@@ -195,7 +196,7 @@
 
 <dialog class="dk-modal" id="r-details" aria-labelledby="r-details-title" aria-describedby="r-details-note">
 <form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="r-details-title">Регион</h2></div>
-<div class="dk-modal__body"><p id="r-details-note">Демонстрационный показатель; не использовать для оперативных решений.</p><dl class="dk-details"><dt>Округ</dt><dd id="r-details-fd"></dd><dt>Балл риска</dt><dd id="r-details-score"></dd><dt>Уровень риска</dt><dd id="r-details-state"></dd></dl><p>Высокий риск — от 78 баллов. Проверьте причины и свежесть данных перед действием.</p></div><div class="dk-modal__foot"><button class="dk-btn" value="close" autofocus>Закрыть детали</button></div></form></dialog>
+<div class="dk-modal__body"><p id="r-details-note">Учебные данные</p><dl class="dk-details"><dt>Округ</dt><dd id="r-details-fd"></dd><dt>Балл риска</dt><dd id="r-details-score"></dd><dt>Уровень риска</dt><dd id="r-details-state"></dd></dl><details class="dk-data-summary"><summary>Шкала риска</summary><p>Высокий риск — от 78 баллов, средний — 60–77, низкий — менее 60</p></details></div><div class="dk-modal__foot"><button class="dk-btn" value="close" autofocus>Закрыть детали</button></div></form></dialog>
 <script>
 
 
@@ -390,10 +391,8 @@
         document.getElementById('r-k-low').textContent = nLow;
         document.getElementById('r-k-total').textContent = all.length;
         document.getElementById('r-k-nodata').textContent = (query || riskValue) ? 0 : tiles.tiles.length - source.length;
-        document.getElementById('r-all-results').textContent = 'Все результаты: ' + all.length;
-        document.getElementById('r-scope').textContent = query || riskValue ? 'Выбранный срез' : 'Сводка по стране';
+        document.getElementById('r-all-results').textContent = query || riskValue ? 'Все результаты' : 'Все регионы';
         document.getElementById('r-summary-title').textContent = query || riskValue ? 'Результаты отбора' : 'Российская Федерация';
-        document.getElementById('r-rank-caption').textContent = 'Наибольший риск · ' + Math.min(14, all.length) + ' регионов';
         ['crit','high','low'].forEach(function(key,i) { document.getElementById('r-share-'+key).style.flexGrow = [nCrit,nHigh,nLow][i]; });
 
         document.getElementById('r-k-avg').textContent = all.length ? Math.round(all.reduce(function (n,x) { return n+x.v; },0)/all.length) : '—';
@@ -412,7 +411,7 @@
 <dialog class="dk-modal" id="r-settings" aria-labelledby="r-settings-title">
 <form method="dialog" class="dk-modal__form">
 <div class="dk-modal__head"><h2 class="dk-modal__title" id="r-settings-title">Настройки экрана</h2><button class="dk-iconbtn" value="close" aria-label="Закрыть настройки" title="Закрыть настройки"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div>
-<div class="dk-modal__body"><p>Тема оформления</p><div class="dk-seg" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="light" aria-pressed="false">Светлая</button><button type="button" data-theme-set="dark" aria-pressed="true">Тёмная</button></div><details><summary>О показателе риска</summary><p>Балл риска — от 0 до 100. Высокий — от 78, средний — от 60 до 77, низкий — менее 60. В примере используются демонстрационные данные.</p></details></div>
+<div class="dk-modal__body"><p>Тема оформления</p><div class="dk-seg" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div><details class="r-fold"><summary><svg class="dk-i dk-i--sm r-fold-caret" aria-hidden="true"><use href="#ti-chevron-right"/></svg>О показателе риска</summary><p>Балл риска — от 0 до 100. Высокий — от 78, средний — от 60 до 77, низкий — менее 60. В примере используются демонстрационные данные.</p></details></div>
 </form></dialog>
 <dialog class="dk-modal" id="risk-info" aria-labelledby="risk-info-title">
   <form method="dialog" class="dk-modal__form">

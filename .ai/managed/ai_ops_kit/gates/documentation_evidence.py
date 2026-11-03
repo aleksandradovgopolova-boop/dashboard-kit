@@ -43,13 +43,13 @@ from ai_ops_kit.gates.regression_evidence import is_doc_path
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401
 from ai_ops_kit.shared.gitio import git  # noqa: E402
 
-# Фрагмент — файл вида <что-это>.<тип>.md. Типы читаем из того же pyproject, если он есть;
-# запасной набор — типы towncrier по умолчанию в этом репозитории.
+
+
 _FALLBACK_TYPES = ("feat", "fix", "quality", "chore")
 
 
 def _git(root, *args):
-    # Единый вход к git с таймаутом (см. shared/gitio): та же сигнатура (rc, out, err).
+    
     return git(root, *args)
 
 
@@ -128,7 +128,7 @@ def assess(root, base=None, files=None) -> dict:
     docs_ok = bool(res["docs_changed"])
     res["checks"].append({"id": "docs_touched", "status": "pass" if docs_ok else "fail"})
     if frag_dir is None:
-        # Репозиторий не объявлял, где держит историю. Это НЕ нарушение — это незнание.
+        
         res["checks"].append({"id": "release_notes_dir_not_declared", "status": "warn"})
         notes = "unknown"
     else:
@@ -167,7 +167,7 @@ def gate_evidence(assessment, docs_not_needed=None):
                 "evidence": [f"документация: {', '.join(a['docs_changed'][:3])}",
                              f"запись истории: {', '.join(a['fragments'][:3])}"]}
     if st == "unverifiable":
-        # Гейт advisory: непроверяемое даёт warn с причиной, а не pass и не блок.
+        
         return {"status": "warn", "checks": checks,
                 "warnings": [a.get("reason") or "проверить нечем"]}
     if st == "partly":

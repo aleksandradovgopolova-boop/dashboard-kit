@@ -24,7 +24,7 @@ import sys
 
 CLASSES = ("same_task", "continuation", "adjacent_subtask", "new_independent_task", "new_product")
 
-# лексические маркеры «это продолжение» в тексте новой задачи
+
 _CONT_MARKERS = ("продолж", "дожми", "доделай", "доведи", "continue", "то же", "тот же",
                  "follow-up", "followup", "next step", "следующий шаг", "закончи")
 
@@ -37,20 +37,20 @@ def classify(current_workitem=None, new_task="", new_workitem=None, repo_changed
     if repo_changed:
         return "new_product", "изменился репозиторий/продукт — физически иная работа"
 
-    # явный тот же WorkItem
+    
     if new_workitem and current_workitem and new_workitem == current_workitem:
         return "same_task", f"тот же WorkItem {current_workitem}"
 
-    # явное указание продолжения (флаг) или лексический маркер, без нового id
+    
     marker = continues is True or (continues is None and any(m in txt for m in _CONT_MARKERS))
     if marker and current_workitem and not new_workitem:
         return "continuation", "логическое продолжение текущего WorkItem (явная ссылка/маркер)"
 
-    # соседняя подзадача: тот же репо, пересекается scope/требования, но иной фокус
+    
     if (scope_overlap or related_requirements) and current_workitem:
         return "adjacent_subtask", "тот же репозиторий, пересекающийся scope/требования, иной фокус"
 
-    # по умолчанию — новая независимая задача (безопасно для гигиены: отдельная сессия)
+    
     return "new_independent_task", "нет признаков продолжения/пересечения — самостоятельная задача"
 
 

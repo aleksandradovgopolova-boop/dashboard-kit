@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "kind": "ExecutionPreview",
+  "intent": "run",
+  "understood": {
+    "task": "Рецепты #30 и независимые числовые проверки #66",
+    "task_type": "ENGINEERING",
+    "workflow": "ENGINEERING",
+    "classification_confidence": "normal",
+    "spec_level": "L1 ENGINEERING"
+  },
+  "will_do": {
+    "stages": [
+      "intake_completeness",
+      "concurrency_preflight",
+      "requirements",
+      "specification",
+      "event_contract_consistency",
+      "plan_readiness",
+      "implementation_verification",
+      "code_review",
+      "security",
+      "architecture_review",
+      "deploy_readiness",
+      "ux_review",
+      "design_system_usage",
+      "accessibility_review",
+      "visual_regression"
+    ],
+    "tracks": [
+      "VISUAL"
+    ],
+    "auto_flags": {
+      "engine": "pipeline",
+      "sandbox": true,
+      "baseline_diff": true,
+      "review": true,
+      "author": true
+    }
+  },
+  "data_used": {
+    "agents": [
+      "accessibility-reviewer",
+      "architecture-reviewer",
+      "code-reviewer",
+      "design-system-reviewer",
+      "devops-engineer",
+      "final-verifier",
+      "implementation-integrator",
+      "intake-classifier",
+      "plan-reviewer",
+      "repository-memory-curator",
+      "requirements-reviewer",
+      "requirements-writer",
+      "security-reviewer",
+      "solution-architect",
+      "task-planner",
+      "ux-reviewer"
+    ],
+    "rules": [
+      "core",
+      "design",
+      "engineering",
+      "quality",
+      "thinking"
+    ],
+    "estimated_tokens": 17249,
+    "context_budget": 120000,
+    "context_error": null
+  },
+  "approvals_needed": [],
+  "decomposition_advised": false,
+  "expected_result": "проверю изменение и открою черновой pull request, если все проверки пройдут",
+  "will_execute_now": false
+}

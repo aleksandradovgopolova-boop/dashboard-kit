@@ -88,8 +88,8 @@ def _author_with_retry(author_proposer, base_prompt, check_fn, bud, attempts=3):
 
 def _run_spec_authoring(author_proposer, work_root, gate_ev, wid, task, bud, openspec_validate):
     """v2.89: произвести OpenSpec change для гейта specification."""
-    # Проверка формы и рендер СОДЕРЖИМОГО живут ВНИЗ, в пакете `checks` (слой primitives): движок
-    # зовёт их вниз, без восходящего ребра engine -> validation (лента №5). Запись файлов — ниже.
+    
+    
     from ai_ops_kit.checks import spec_artifact as vsa
     prompt = (
         "Ты автор OpenSpec-изменения (spec-change) для задачи. Верни ТОЛЬКО YAML со схемой:\n"
@@ -119,8 +119,8 @@ def _run_spec_authoring(author_proposer, work_root, gate_ev, wid, task, bud, ope
         if raw_tail:
             entry["author_output_tail"] = raw_tail
         return gate_ev, entry
-    # Запись (I/O) — забота движка: чистая render_content строит содержимое, движок пишет файлы под
-    # openspec-корень. Так рендер живёт вниз (в `checks`), а запись остаётся в слое ядра.
+    
+    
     _openspec_root = Path(work_root) / "openspec"
     for _rel, _content in vsa.render_content(data, wid):
         _target = _openspec_root / _rel
@@ -158,9 +158,9 @@ def _run_authoring(author_proposer, work_root, gate_ids, gate_ev, wid, task, bud
             f"Артефакт должен точно отражать задачу ниже. Требования/пакеты — конкретные и "
             f"тестируемые, не общие слова.\n\n=== ЗАДАЧА ===\n{task}")
 
-        # `mod=mod` связывает модуль ЗДЕСЬ, а не в момент вызова: сейчас `_check` зовётся
-        # синхронно в этой же итерации и потому работает, но замыкание на переменную цикла
-        # ломается молча, если вызов когда-нибудь станет отложенным (ревизия 2026-08-11).
+        
+        
+        
         def _check(data, mod=mod):
             return mod.check(data) if isinstance(data, dict) else ["author не вернул валидный YAML артефакта"]
 
@@ -250,10 +250,10 @@ def contour_consistency_evidence(child_root, wid, changed_files, timeout=120):
         return {"status": "warn", "provided": [], "report": None,
                 "evidence": [f"сверка контуров не выполнена ({type(e).__name__}) — "
                              f"проверка НЕ проведена"]}
-    # КОД ВОЗВРАТА ОБЯЗАТЕЛЕН. Прежде он игнорировался, и недостоверный реестр (ModelCorrupt внутри
-    # подпроцесса) давал пустой stdout -> дальше срабатывала ветка «изменений не предъявлено», хотя
-    # файлы изменены. Битый реестр становился неотличим от пустого диффа: признание подменялось
-    # утверждением. Сбой проверки — это `warn` с честной причиной, а не молчание про дифф.
+    
+    
+    
+    
     if r.returncode != 0:
         why = ((r.stderr or r.stdout or "").strip().splitlines() or ["без сообщения"])[0][:200]
         return {"status": "warn", "provided": [], "report": None,

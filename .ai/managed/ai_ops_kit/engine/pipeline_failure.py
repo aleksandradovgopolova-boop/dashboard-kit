@@ -302,14 +302,14 @@ def _security_verdict_errors(res, revision, applicable_domains, vrr, reviewer_re
                             errs += _evidence_ref_errors(dom, _all_ev, reviewer_reads)
     return errs
 
-# Запуск скриптом ОБЪЯСНЯЕТ модуль, а не молчит (ревизия 2026-08-11).
-#
-# Здесь стояло `sys.exit(selftest())`, а сама функция удалена в v3.30 вместе с переносом
-# селфтестов в pytest: любой запуск падал с `NameError`. Просто убрать блок — тоже неверно:
-# модуль остаётся запускаемой точкой входа (`python3 -m ai_ops_kit.engine.pipeline_failure`), и молчаливый
-# выход с кодом 0 — тот самый дефект «ноль и есть симптом».
-# Поэтому вход делает осмысленную работу — печатает назначение модуля, как `invariants.py`.
-# Проверки модуля — в `tests/unit/`.
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     print(__doc__)
     print("Проверки этого модуля — в tests/unit/ (pytest), отдельного --selftest нет с v3.30.")

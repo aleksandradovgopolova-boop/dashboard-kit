@@ -34,7 +34,7 @@
 (function () {
   'use strict';
 
-  var ICON_SORT = '<svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg>';
+  var ICON_SORT = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-up"/></svg>';
 
   /* Значение для сортировки. Возвращается пара «тип, значение»: сравнивать
      число с текстом нельзя, а раньше именно это и происходило.

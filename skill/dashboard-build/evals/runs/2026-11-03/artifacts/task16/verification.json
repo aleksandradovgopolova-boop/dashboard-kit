@@ -1,0 +1,119 @@
+{
+  "entrypoint": "app/index.html",
+  "recipe": "monitoring",
+  "requiredViewports": [
+    {
+      "width": 1280,
+      "height": 900
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "browserChecked": false,
+  "selectors": {
+    "districtTrigger": "#district .dk-select__trigger",
+    "districtOptions": "#district [role=\"option\"]",
+    "attention": "#attention",
+    "noAssessment": "#assessment",
+    "completion": "#performance",
+    "issuedPlan": "#issued",
+    "regionRows": "#region-rows > tr",
+    "openSpb": "[data-open-region=\"spb\"]",
+    "openAltai": "[data-open-region=\"altai-rep\"]",
+    "dialog": "#detail",
+    "detailTitle": "#detail-title",
+    "detailStatus": "#detail-status",
+    "detailCompletion": "#detail-performance",
+    "detailLag": "#detail-lag",
+    "monthlyRows": "#month-rows > tr",
+    "back": "#back",
+    "close": "[data-modal-close]",
+    "method": "#method",
+    "theme": "#theme",
+    "monthlyScroll": "#months-scroll"
+  },
+  "api": {
+    "object": "window.monitoring",
+    "read": [
+      "state",
+      "view"
+    ],
+    "methods": {
+      "selectDistrict": [
+        "all",
+        "СЗФО",
+        "СФО"
+      ],
+      "openRegion": [
+        "spb",
+        "altai-rep"
+      ],
+      "closeDetail": [],
+      "load": "validated mortgage-source object"
+    }
+  },
+  "literalExpectations": {
+    "all": {
+      "attention": "2 из 2 регионов",
+      "noAssessment": "Без оценки: 0",
+      "completion": "50,0%",
+      "issuedPlan": "100 из 200 кредитов",
+      "rowOrder": [
+        "altai-rep",
+        "spb"
+      ]
+    },
+    "СЗФО": {
+      "attention": "1 из 1 региона",
+      "completion": "80,0%",
+      "issuedPlan": "40 из 50 кредитов",
+      "rows": [
+        "spb"
+      ],
+      "status": "Сильно отстаёт",
+      "lag": "20,0"
+    },
+    "СФО": {
+      "completion": "40,0%",
+      "issuedPlan": "60 из 150 кредитов",
+      "rows": [
+        "altai-rep"
+      ],
+      "status": "Сильно отстаёт",
+      "lag": "60,0"
+    },
+    "altaiMay": {
+      "issued": "0",
+      "plan": "50",
+      "completion": "0,0",
+      "lag": "100,0",
+      "status": "Сильно отстаёт"
+    }
+  },
+  "postReviewCorrections": [
+    {
+      "id": 1,
+      "kind": "UX/layout",
+      "finding": "P1 detail KPI overlap at 390 Dark",
+      "change": "#detail-metrics adds dk-grid parent for subgrid tiles; retains two columns",
+      "browserRecheck": "pending coordinator",
+      "originalHashes": "post-review-ux-layout-correction-1/original-sha256.json",
+      "quickChecks": "post-review-ux-layout-correction-1/quick-checks.json"
+    },
+    {
+      "id": 2,
+      "kind": "UX/layout",
+      "finding": "P2 detail month heading text runs together at 390",
+      "change": "Monthly dk-tablewrap minimum 1120px; table auto column widths; named tabindex=0 scroll region",
+      "browserRecheck": "pending coordinator header-nonoverlap and screenshots",
+      "originalHashes": "post-review-ux-layout-correction-2/original-sha256.json",
+      "quickChecks": "post-review-ux-layout-correction-2/quick-checks.json"
+    }
+  ]
+}

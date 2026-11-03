@@ -1,0 +1,28 @@
+{
+  "checked_head_sha": "dd87a91a227f6a5ecb240af1d43c7015358d5567",
+  "checked_merge_sha": "d042b1d8269b0d92c41798b40230364b2bfbb14c",
+  "run_id": 41457051676,
+  "job_id": 125316276378,
+  "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/actions/runs/41457051676",
+  "conclusion": "success",
+  "full_suite": "PASS",
+  "numeric_model_tests": 22,
+  "numeric_ui": {
+    "themes": [
+      "dark",
+      "light"
+    ],
+    "widths": [
+      390,
+      1280
+    ],
+    "result": "PASS"
+  },
+  "mcp": "PASS",
+  "artifact_id": 13148296094,
+  "artifact_sha256": "1c5d85e379cc62d21707e8f831f728e9274d44d17bd73480608b26e1f6d18873",
+  "artifact_expires_at": "2026-11-16T14:03:30Z",
+  "manual_screenshot_review": "pending: archive download unavailable locally",
+  "first_failure_run_id": 41455989928,
+  "first_failure_root_cause": "not proven; input isolation and stable Escape assertion added; repeat full run passed"
+}

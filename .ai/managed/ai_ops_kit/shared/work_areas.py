@@ -25,8 +25,8 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import Any
 
-# Честный ответ «зоны неизвестны». Значение ОСТАЁТСЯ — но неизвестность не является пересечением,
-# и это стережёт `active_work.classify` (там же — почему).
+
+
 UNSPECIFIED = "unspecified"
 
 

@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import re
 
-# Имена якорей — замкнутый словарь [a-z][a-z_]*: разбор однозначен.
+
 _NAME = re.compile(r"^[a-z][a-z_]*$")
 
 

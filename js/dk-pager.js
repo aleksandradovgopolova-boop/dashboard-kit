@@ -30,8 +30,8 @@
 (function () {
   'use strict';
 
-  var ICON_PREV = '<svg class="dk-i dk-i--sm"><use href="#ti-chevron-left"/></svg>';
-  var ICON_NEXT = '<svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg>';
+  var ICON_PREV = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-left"/></svg>';
+  var ICON_NEXT = '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg>';
 
   function plural(n, one, few, many) {
     var m = n % 100;
@@ -152,7 +152,7 @@
         '<button type="button" class="dk-iconbtn dk-iconbtn--sm" data-step="1"' +
         (page === last ? ' disabled' : '') + ' title="Следующая страница" aria-label="Следующая страница">' +
         ICON_NEXT + '</button>' +
-        '<span class="dk-pager__short">' + page + ' из ' + last + '</span>' +
+        '<span class="dk-pager__short" aria-label="Страница ' + page + ' из ' + last + '">' + page + '/' + last + '</span>' +
         '</div>';
 
       // Правило 5: если размер можно менять — он стоит рядом, а не в настройках.

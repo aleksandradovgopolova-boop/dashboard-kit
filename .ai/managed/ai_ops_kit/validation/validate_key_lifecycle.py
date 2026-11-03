@@ -18,7 +18,7 @@ import yaml
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
 DEFAULT = PKG / "examples" / "key-lifecycle-demo" / "KLP-001.yaml"
-# эвристика «похоже на секрет-значение» (не имя env, а сам ключ)
+
 _SECRETISH = re.compile(r"sk-[A-Za-z0-9]{12,}|gho_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN")
 
 
@@ -51,7 +51,7 @@ def check(data):
                 e.append(f"{nm}: ttl_days должен быть > 0 (дедлайн ротации)")
             if k.get("rotation_owner") not in ("human", "automated"):
                 e.append(f"{nm}: rotation_owner ∈ [human, automated]")
-            # значение ключа НЕ должно попадать в политику
+            
             blob = " ".join(str(v) for v in k.values())
             if _SECRETISH.search(blob):
                 e.append(f"{nm}: похоже на ЗНАЧЕНИЕ секрета в политике — только env_ref, не сам ключ")
