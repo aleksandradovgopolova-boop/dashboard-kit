@@ -9,5 +9,6 @@
   "ai-ops-secret-scan.yml": "ada26559b08f5b62fbabdf0fc2927333635f3c7758efdfceea2051e3a40012dd",
   "ai-ops-sbom.yml": "a8cb86b1f7edcad2e8fc0f56e8720110b6a75ee31d0da40c79527465f265a27f",
   "ai-ops-scorecard.yml": "e74b865a5c7d5979f10f702d572c9b4c3dc141678cb91abe1ec8a9dcda298311",
-  "ai-ops-feature-catalog.yml": "a0ac7c336cb457c86b769dbbf6d9ae8b585674b5cbc992505dbf6c773fac684f"
+  "ai-ops-feature-catalog.yml": "a0ac7c336cb457c86b769dbbf6d9ae8b585674b5cbc992505dbf6c773fac684f",
+  "ai-ops-lint.yml": "2c28770c6017fc91a098c62e6cb4ac5fcf0a900529b6adfe7be9609d3e4ba346"
 }

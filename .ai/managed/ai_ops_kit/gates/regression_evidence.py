@@ -27,21 +27,23 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401
+from ai_ops_kit.shared import argv_command  # noqa: E402
 from ai_ops_kit.shared.gitio import git  # noqa: E402
 
-# Пути, которые считаем тестами. Намеренно широко: язык не угадываем, ориентируемся на
-# общепринятые соглашения именования. Ложноположительное «это тест» безопаснее обратного —
-# оно лишь смягчает гейт до обычной проверки прогоном на базе.
+
+
+
 _TEST_MARKERS = ("test_", "_test.", ".test.", ".spec.", "_spec.")
 _TEST_DIRS = ("tests/", "test/", "__tests__/", "spec/")
 
-# Документация поведения не меняет — требовать на неё регрессионный тест бессмысленно. Список
-# намеренно узкий: конфиги и манифесты сюда НЕ входят, они поведение менять умеют.
+
+
 _DOC_SUFFIXES = (".md", ".markdown", ".rst", ".txt", ".adoc")
 _DOC_NAMES = ("LICENSE", "NOTICE", "CODEOWNERS")
 
@@ -78,8 +80,8 @@ def classify_changed(files):
 
 
 def _git(root, *args):
-    # Единый вход к git с таймаутом (см. shared/gitio): та же сигнатура (rc, out, err),
-    # но зависший субпроцесс не вешает прогон — вместо блокировки rc=124.
+    
+    
     return git(root, *args)
 
 
@@ -129,8 +131,29 @@ def prove(root, base_sha, head_sha, profile, changed_files=None, runner=None, ti
         result["reason"] = "нет base_sha/head_sha — не от чего отсчитывать «до правки»"
         return result
 
-    # Временное дерево на БАЗОВОЙ ревизии + только тестовые файлы из коммита: изолируем вопрос
-    # «ловит ли новый тест старую ошибку» от всего остального содержимого правки.
+    
+    
+    
+    
+    if runner is None:
+        try:
+            argv, env_extra = argv_command.split(cmd)
+        except argv_command.NeedsShell as e:
+            result["status"] = "unverifiable"
+            result["reason"] = (f"команда тестов требует оболочки ({e}) — кит запускает её только "
+                                "списком аргументов; прогона не было, и это не доказательство")
+            return result
+        env = {**os.environ, **env_extra}
+
+        def runner(_cmd, cwd):
+            try:
+                return argv_command.run(argv, cwd=cwd, env=env, timeout=timeout,
+                                        text=False).returncode
+            except subprocess.TimeoutExpired:
+                return "timeout"
+
+    
+    
     import tempfile
     wt = Path(tempfile.mkdtemp(prefix="ai-ops-regression-"))
     rc_add, _, err_add = _git(root, "worktree", "add", "--detach", str(wt), base_sha)
@@ -139,19 +162,12 @@ def prove(root, base_sha, head_sha, profile, changed_files=None, runner=None, ti
         result["reason"] = f"не удалось создать дерево на базовой ревизии: {err_add[:200]}"
         return result
     try:
-        # ШАГ 0 (обязательный): набор тестов должен отрабатывать на базе САМ ПО СЕБЕ. Без этого
-        # ненулевой код после подсадки теста ничего не значит.
-        # Поймано живым прогоном на ии-среде: во временном дереве нет node_modules, `npm run test`
-        # вернул 127 «command not found», и это было засчитано за «тест падает на базе» —
-        # сфабрикованное доказательство ровно того класса, который кит обязан не допускать.
-        if runner is not None:
-            rc_clean = runner(cmd, str(wt))
-        else:
-            try:
-                rc_clean = subprocess.run(cmd, shell=True, cwd=str(wt), capture_output=True,
-                                          timeout=timeout).returncode
-            except subprocess.TimeoutExpired:
-                rc_clean = "timeout"
+        
+        
+        
+        
+        
+        rc_clean = runner(cmd, str(wt))
         result["checks"].append({"id": "suite_runs_on_base", "command": cmd,
                                  "returncode": rc_clean,
                                  "status": "pass" if rc_clean == 0 else "fail"})
@@ -168,16 +184,11 @@ def prove(root, base_sha, head_sha, profile, changed_files=None, runner=None, ti
             result["status"] = "unverifiable"
             result["reason"] = f"не удалось перенести тесты на базовую ревизию: {err_co[:200]}"
             return result
-        if runner is not None:
-            rc_test = runner(cmd, str(wt))
-        else:
-            try:
-                rc_test = subprocess.run(cmd, shell=True, cwd=str(wt), capture_output=True,
-                                         timeout=timeout).returncode
-            except subprocess.TimeoutExpired:
-                result["status"] = "unverifiable"
-                result["reason"] = f"прогон тестов на базовой ревизии не уложился в {timeout}с"
-                return result
+        rc_test = runner(cmd, str(wt))
+        if rc_test == "timeout":
+            result["status"] = "unverifiable"
+            result["reason"] = f"прогон тестов на базовой ревизии не уложился в {timeout}с"
+            return result
         result["checks"].append({"id": "test_fails_on_base", "command": cmd,
                                  "returncode": rc_test,
                                  "status": "pass" if rc_test != 0 else "fail"})

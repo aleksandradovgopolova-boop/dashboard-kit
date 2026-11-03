@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "program-plan-fact",
+  "title": "Выдачи и выполнение плана",
+  "question": "Как выполняется план выдач по регионам и каналам за 1–2 октября 2026 года?",
+  "recipe": "plan-fact",
+  "kind": "overview",
+  "source": {
+    "file": "source.json",
+    "registry": "registry.json",
+    "grain": {"time": "day", "dimensions": ["region"]},
+    "coverage": {"expectedRows": 4}
+  },
+  "bindings": [
+    {"id": "issued", "kind": "source", "field": "issued"},
+    {"id": "plan", "kind": "source", "field": "plan"},
+    {"id": "execution", "kind": "named", "field": "execution"},
+    {"id": "weighted-rate", "kind": "named", "field": "rate"}
+  ],
+  "filters": [
+    {"id": "region-filter", "component": "select", "props": {"dimension": "region", "label": "Регион"}},
+    {"id": "channel-filter", "component": "select", "props": {"dimension": "channel", "label": "Канал выдачи"}}
+  ],
+  "widgets": [
+    {"id": "issued-kpi", "component": "tile", "props": {"metric": "issued"}},
+    {"id": "execution-kpi", "component": "tile", "props": {"metric": "execution"}},
+    {"id": "rate-kpi", "component": "tile", "props": {"metric": "weighted-rate"}},
+    {"id": "daily-chart", "component": "chart", "props": {"title": "Выдачи и план по дням", "type": "bar", "metrics": ["issued", "plan"]}},
+    {"id": "region-table", "component": "table", "props": {"title": "Выполнение плана по регионам", "dimension": "region", "metrics": ["execution", "issued", "plan", "weighted-rate"], "details": true}}
+  ],
+  "actions": [
+    {"id": "reset-filters", "type": "clear-filters"},
+    {"id": "region-details", "type": "open-details", "target": "region-table"}
+  ],
+  "responsive": {"desktop": "balanced", "mobile": "stack"}
+}

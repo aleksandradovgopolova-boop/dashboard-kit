@@ -76,7 +76,7 @@ def check(data: dict):
         e.append("delivery_allowed должен быть bool")
     if "human_handoff" in data and not isinstance(data["human_handoff"], bool):
         e.append("human_handoff должен быть bool")
-    # согласованность калиброванной семантики:
+    
     st = data.get("status")
     enf = data.get("enforcement")
     if st == "not_applicable" and data.get("applicability") != "not_applicable":

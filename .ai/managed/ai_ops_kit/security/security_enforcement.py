@@ -23,10 +23,10 @@ from pathlib import Path
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401 — кладёт validation/ в sys.path
-                                         # ДО плоских импортов ниже; повторный импорт того же
-                                         # модуля ниже удалён ревизией 2026-08-11 как дубль
-# v3.38 (лента №4): чистая проверка вынесена вниз в `checks` (слой primitives). Импорт отсюда —
-# в СВОЙ слой, а не вверх в `validation` (entrypoints): восходящее ребро security -> validation снято.
+                                         
+                                         
+
+
 from ai_ops_kit.checks import memory_governance as _mgp   # noqa: E402
 
 
@@ -37,7 +37,7 @@ def verify_artifact(data: bytes, entry: dict):
     iv = entry.get("install_verify")
     kind = entry.get("kind")
     if not iv:
-        # исполняемый код без верификации недопустим; model (не код) — допустимо
+        
         return (kind == "model"), ("model без install_verify — допустимо" if kind == "model"
                                    else f"{kind}: нет install_verify — установка запрещена")
     method, value = iv.get("method"), str(iv.get("value", ""))
@@ -45,7 +45,7 @@ def verify_artifact(data: bytes, entry: dict):
         got = hashlib.sha256(data or b"").hexdigest()
         ok = bool(value) and got == value
         return ok, ("sha256 совпал" if ok else f"sha256 НЕ совпал: got {got[:12]}… != pinned {value[:12]}…")
-    # signature/sigstore требуют внешнего верификатора -> офлайн НЕ доказуемо -> block (fail-closed)
+    
     return False, f"{method}: офлайн-проверка недоступна -> block (нужен внешний verifier)"
 
 
@@ -54,7 +54,7 @@ def enforce_memory_entry(entry: dict, policy_meta=None):
     wrap = {"schema_version": 1, "kind": "MemoryGovernancePolicy",
             "policy_id": (policy_meta or {}).get("policy_id", "MGP-000"), "entries": [entry]}
     errs = _mgp.check(wrap)
-    # оставляем только ошибки уровня записи (не policy_id-обёртки)
+    
     errs = [e for e in errs if "policy_id" not in e and "schema_version" not in e and "kind должен" not in e]
     return (not errs), errs
 
@@ -93,7 +93,7 @@ def main(argv):
         return argv[argv.index(n) + 1] if n in argv else d
 
     if "--key-preflight" in argv:
-        # реальный runtime-preflight: наличие объявленных ключей в env; --critical -> block на отсутствии
+        
         klp = yaml.safe_load(Path(_opt("--key-preflight")).read_text(encoding="utf-8"))
         rep = key_preflight(klp, dict(os.environ), critical=("--critical" in argv))
         for w in rep["warnings"]:
@@ -104,7 +104,7 @@ def main(argv):
         return 0 if rep["ready"] else 1
 
     if "--verify-artifact" in argv:
-        # реальная sha256-проверка скачанного файла против ожидаемого hash
+        
         path, expected = _opt("--verify-artifact"), _opt("--expect-sha256")
         data = Path(path).read_bytes()
         ok, reason = verify_artifact(data, {"kind": "skill",

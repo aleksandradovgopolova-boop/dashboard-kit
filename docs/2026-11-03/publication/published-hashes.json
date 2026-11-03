@@ -1,0 +1,186 @@
+{
+  "origin": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/",
+  "sha": "e869cfd9293c33305aa9e8e2cb20b7830d3ea535",
+  "files": [
+    {
+      "file": "family-mortgage.html",
+      "expected": "fd991358c839d922d344b5dc118b76de592888c955ca4de107463dab96202da7",
+      "actual": "fd991358c839d922d344b5dc118b76de592888c955ca4de107463dab96202da7",
+      "status": 200
+    },
+    {
+      "file": "css/page.family-mortgage.css",
+      "expected": "97648fae3aa69ca10f9a13c9e707b2605d992bac0de5192f2b5637147a8ec9b0",
+      "actual": "97648fae3aa69ca10f9a13c9e707b2605d992bac0de5192f2b5637147a8ec9b0",
+      "status": 200
+    },
+    {
+      "file": "js/family-mortgage.js",
+      "expected": "03887de16c8c08107969df013aa7cc46d788d8f66f0f5b125b43c40da9e19295",
+      "actual": "03887de16c8c08107969df013aa7cc46d788d8f66f0f5b125b43c40da9e19295",
+      "status": 200
+    },
+    {
+      "file": "js/family-mortgage-data.js",
+      "expected": "f6a67c043beb2526cc48ad401fa378646c055ef17277caa4d2ae34f29fecaa33",
+      "actual": "f6a67c043beb2526cc48ad401fa378646c055ef17277caa4d2ae34f29fecaa33",
+      "status": 200
+    },
+    {
+      "file": "js/dk-analysis.js",
+      "expected": "81483dde0c9c0540adb7daca86fb067b6a6171414619b4dbfe98cd3e14e7ec54",
+      "actual": "81483dde0c9c0540adb7daca86fb067b6a6171414619b4dbfe98cd3e14e7ec54",
+      "status": 200
+    },
+    {
+      "file": "kit-manifest.json",
+      "expected": "48c20a94ca7e5cf9312f73ef741d71867f7a00823dc1469e9db3a8ae31de397c",
+      "actual": "48c20a94ca7e5cf9312f73ef741d71867f7a00823dc1469e9db3a8ae31de397c",
+      "status": 200
+    },
+    {
+      "file": "component-period-comparison.html",
+      "expected": "401c3409c70ec9e48e251a514c5921692d2f98bd1ec87d760a86695c51690cbb",
+      "actual": "401c3409c70ec9e48e251a514c5921692d2f98bd1ec87d760a86695c51690cbb",
+      "status": 200
+    },
+    {
+      "file": "component-period-comparison.md",
+      "expected": "2c03785012197ac29b6426f928fc5ae17f1da2c8b4136364a105a3dcc00802da",
+      "actual": "2c03785012197ac29b6426f928fc5ae17f1da2c8b4136364a105a3dcc00802da",
+      "status": 200
+    },
+    {
+      "file": "skill/dashboard-build/references/recipes.md",
+      "expected": "f52d12ada6f9629c78eee08e3f8274f9c6b56e87de6dc87e5f96cc801ffe8e5c",
+      "actual": "f52d12ada6f9629c78eee08e3f8274f9c6b56e87de6dc87e5f96cc801ffe8e5c",
+      "status": 200
+    },
+    {
+      "file": "skill/dashboard-build/references/numeric-checks.md",
+      "expected": "b6e265bce15ea43de077d6f5ed5e70f98bbf2b0a51540e697b8feb23a4d901e8",
+      "actual": "b6e265bce15ea43de077d6f5ed5e70f98bbf2b0a51540e697b8feb23a4d901e8",
+      "status": 200
+    },
+    {
+      "file": "assets/examples/family-mortgage-dark.png",
+      "expected": "a1cffceda8725d3783bc4e9f21a25eaca261290b85d64eae574e688821963eaf",
+      "actual": "a1cffceda8725d3783bc4e9f21a25eaca261290b85d64eae574e688821963eaf",
+      "status": 200
+    },
+    {
+      "file": "assets/examples/family-mortgage-light.png",
+      "expected": "8ba910e42f906cbc0a520569abc34aceb9be42e44ff9a4c92b8faf8ea66b3550",
+      "actual": "8ba910e42f906cbc0a520569abc34aceb9be42e44ff9a4c92b8faf8ea66b3550",
+      "status": 200
+    },
+    {
+      "file": "index.html",
+      "expected": "e5db35c0fe9404b9f5354c83dda6d8b82dcbeb9b38528c8c5272fd447a0d770e",
+      "actual": "e5db35c0fe9404b9f5354c83dda6d8b82dcbeb9b38528c8c5272fd447a0d770e",
+      "status": 200
+    },
+    {
+      "file": "regions.html",
+      "expected": "7f4f5b1227ca52beddd261a04ea3ed7d76baad1461f8b04f049c13f2ccd67b89",
+      "actual": "7f4f5b1227ca52beddd261a04ea3ed7d76baad1461f8b04f049c13f2ccd67b89",
+      "status": 200
+    },
+    {
+      "file": "accidents.html",
+      "expected": "c787a2f5892f461d6a4b670893a9c6e7a3f990daee812caa670fb253ad7dc4d5",
+      "actual": "c787a2f5892f461d6a4b670893a9c6e7a3f990daee812caa670fb253ad7dc4d5",
+      "status": 200
+    },
+    {
+      "file": "calendar.html",
+      "expected": "a40a6cb08540b07068e8b39e2b294b124be0cf1e29fdf4c97bea578ac5ee4cb9",
+      "actual": "a40a6cb08540b07068e8b39e2b294b124be0cf1e29fdf4c97bea578ac5ee4cb9",
+      "status": 200
+    },
+    {
+      "file": "dashboard.html",
+      "expected": "64b27ed8cd9d6e0441938bfd50926289eadce86badd8fdf0c41369dd58ec0a38",
+      "actual": "64b27ed8cd9d6e0441938bfd50926289eadce86badd8fdf0c41369dd58ec0a38",
+      "status": 200
+    },
+    {
+      "file": "reference-dashboard.html",
+      "expected": "2269a0255add4faa1b9d5d360219229cb7dad7eab489fdf79723284eb8bf33e6",
+      "actual": "2269a0255add4faa1b9d5d360219229cb7dad7eab489fdf79723284eb8bf33e6",
+      "status": 200
+    },
+    {
+      "file": "component-table.html",
+      "expected": "f4a29e5e5604de54ea6b987d5b55c42fa254ba89afeb93302338d158c54d7534",
+      "actual": "f4a29e5e5604de54ea6b987d5b55c42fa254ba89afeb93302338d158c54d7534",
+      "status": 200
+    },
+    {
+      "file": "component-table.md",
+      "expected": "c318dd2a9e01975d148122eeb987a0698c5df1961fc734e84451e06de29509bc",
+      "actual": "c318dd2a9e01975d148122eeb987a0698c5df1961fc734e84451e06de29509bc",
+      "status": 200
+    },
+    {
+      "file": "css/components.css",
+      "expected": "f4c8e70d4d5736994768668d5c3e2d03699a8ac41989ffdb9f90fc3b469234c5",
+      "actual": "f4c8e70d4d5736994768668d5c3e2d03699a8ac41989ffdb9f90fc3b469234c5",
+      "status": 200
+    },
+    {
+      "file": "css/chrome.css",
+      "expected": "2df09fd6afc92b421183bfcdc80be36327b787b20c636c64279df8a6d4e4b7cf",
+      "actual": "2df09fd6afc92b421183bfcdc80be36327b787b20c636c64279df8a6d4e4b7cf",
+      "status": 200
+    },
+    {
+      "file": "css/glass.css",
+      "expected": "dc4319158349da59c093d11a63976f66feb6d6cd1c4159232864184ae699a7e0",
+      "actual": "dc4319158349da59c093d11a63976f66feb6d6cd1c4159232864184ae699a7e0",
+      "status": 200
+    },
+    {
+      "file": "css/page.dashboard.css",
+      "expected": "3da454cb0b0a4d36505e723fb729805757b5cc795e033fcf4d93a28ca23aa5d4",
+      "actual": "3da454cb0b0a4d36505e723fb729805757b5cc795e033fcf4d93a28ca23aa5d4",
+      "status": 200
+    },
+    {
+      "file": "css/page.regions.css",
+      "expected": "ae5f9e7618dbbad40dcaf7e5c489f577c39b5a5599a32cd7664569ed13f11c04",
+      "actual": "ae5f9e7618dbbad40dcaf7e5c489f577c39b5a5599a32cd7664569ed13f11c04",
+      "status": 200
+    },
+    {
+      "file": "css/reference-dashboard.css",
+      "expected": "6276914a450daee250109e28b2fbb953565a3b91592ad206ccf76811fd87d82c",
+      "actual": "6276914a450daee250109e28b2fbb953565a3b91592ad206ccf76811fd87d82c",
+      "status": 200
+    },
+    {
+      "file": "js/reference-dashboard.js",
+      "expected": "f5d1100836562eb3f0da861f71322d099e19259342a88f23aa7fcadf5a29b438",
+      "actual": "f5d1100836562eb3f0da861f71322d099e19259342a88f23aa7fcadf5a29b438",
+      "status": 200
+    },
+    {
+      "file": "docs/assembly-rules.md",
+      "expected": "270d5e09d0d80784eda7d809620e4a81209fbacaca0a56ec172718d3e2e6dc0c",
+      "actual": "270d5e09d0d80784eda7d809620e4a81209fbacaca0a56ec172718d3e2e6dc0c",
+      "status": 200
+    },
+    {
+      "file": "skill/dashboard-build/references/data.md",
+      "expected": "4869b5e9101ab8b65bd7d88dce1e2b024d18ae54fabd07c89be4e03d7590cf97",
+      "actual": "4869b5e9101ab8b65bd7d88dce1e2b024d18ae54fabd07c89be4e03d7590cf97",
+      "status": 200
+    },
+    {
+      "file": "assets/examples/regions-dark.png",
+      "expected": "f1d30b73a2193f6afe27601afe869252f8b6f45669686ecdeb8abeef91507133",
+      "actual": "f1d30b73a2193f6afe27601afe869252f8b6f45669686ecdeb8abeef91507133",
+      "status": 200
+    }
+  ]
+}

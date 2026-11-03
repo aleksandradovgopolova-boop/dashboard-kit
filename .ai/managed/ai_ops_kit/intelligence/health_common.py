@@ -24,7 +24,7 @@ YELLOW = "yellow"
 RED = "red"
 UNKNOWN = "unknown"
 
-# severity для свёртки: чем больше, тем «хуже». UNKNOWN=0 — он не участвует в выборе худшего.
+
 _SEVERITY = {RED: 3, YELLOW: 2, GREEN: 1, UNKNOWN: 0}
 _VALID = set(_SEVERITY)
 

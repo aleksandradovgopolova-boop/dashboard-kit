@@ -1,0 +1,110 @@
+✔ validation clones and deeply freezes data without freezing caller data (10.489334ms)
+✔ one filter and period derive rows, sums and means from the same snapshot (2.079375ms)
+✔ unknown filter values and empty input produce empty results, never fabricated zeros (2.083875ms)
+✔ malformed metadata, dates, duplicates, unknown fields and invalid numbers fail closed (4.130208ms)
+✔ dangerous keys and invalid queries cannot enter the data model (3.395667ms)
+✔ overflow is rejected while finite large means remain computable (1.185667ms)
+✔ late success cannot overwrite the latest query, even when loader ignores abort (4.84925ms)
+✔ late error and current error never restore or relabel stale data (2.292916ms)
+✔ timeout settles an ignored abort and retry retains the filter (17.33025ms)
+✔ destroy aborts work, disconnects subscribers and permits independent remount (1.608125ms)
+✔ unsubscribe and consumer mutation cannot corrupt the store or later renderers (1.006333ms)
+✔ reentrant subscribers can supersede or destroy a load before its loader starts (0.787458ms)
+✔ invalid queries never reach loader; invalid payload and empty payload have distinct states (0.97175ms)
+✔ fetch adapter propagates signal, checks HTTP and hides response parsing errors (3.113083ms)
+✔ local pagination never changes KPI or chart aggregates (0.614541ms)
+✔ server mode keeps whole-slice totals and charts with only one returned page (2.341833ms)
+✔ server contract supports 50000 matching rows without downloading those rows (0.630125ms)
+✔ server response rejects query mismatch, partial pages, inconsistent totals and coverage (16.680792ms)
+✔ server means are weighted by observed count and all-null remains missing (1.493958ms)
+✔ server aggregation overflow and table/series disagreement fail closed (1.2525ms)
+✔ fetch server mode posts normalized query and limits streamed response bytes (40.723375ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 128.482
+✔ one immutable demo source covers 89 regions and six full months (74.335417ms)
+✔ region and month sums reconcile to every additive total (42.705666ms)
+✔ ratios and average interest use whole-slice weights, not means of percentages (37.913458ms)
+✔ district, month and region search filter every block consistently (16.620459ms)
+✔ pagination and table ordering never change KPI, chart, ranking or map data (204.45875ms)
+✔ unknown selections and no matches stay empty, not silently reset to all (43.761375ms)
+✔ one missing measurement invalidates its total and dependent ratio only (41.661708ms)
+✔ zero is an observation; zero denominators are undefined ratios (42.239333ms)
+✔ status thresholds use the unrounded percentage-point shortfall (160.659375ms)
+✔ malformed or semantically ambiguous source data fails closed (191.584667ms)
+✔ unknown or malformed queries fail instead of changing filter meaning (198.679292ms)
+✔ unsafe aggregate sums are rejected even if individual rows are safe (17.094584ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1082.857375
+PASS: 20,000 observations, full-slice totals/series independent of pagination, null/zero/empty, query limits, concurrent idempotency, HTTP/body/origin/static boundaries (no socket opened)
+PASS: Python full-slice aggregates, page boundaries and JS contract agree for seven queries
+PASS: reproducible runtime package, external version pin, corruption/path/symlink rejection, isolated upgrade and rollback packages
+PASS: 0.1.0-rc.2 (candidate), 95 files, sha256:0ed45ca0e6ba8e53c603010876b76e5ec0e237ea0da80843c0932402120e6373
+
+  ✓ СЛОИ · компоненты читают только семантику (200 примитивов скрыто за 207 именами смысла)
+  ✓ СЫРЫЕ · ни одного цвета значением вне примитивов
+  ✓ ОПЕЧАТКИ · все используемые токены объявлены, селекторы браузер примет
+  ✓ ПАРАМЕТРЫ · у входных параметров компонентов есть значения по умолчанию
+  ✓ DYNAMIC MEANING · динамический смысл только через dkMeaning с явной ролью
+  ✓ РОЛЬ · смысл, поставленный в текст, читается как текст
+  ✓ ЭКРАН · разметка собирается через общее экранирование
+  ✓ РАЗМЕРЫ · где у кита есть шкала, значения берутся из неё
+  ✓ ЧЁТНОСТЬ · все размеры в пикселях чётные
+  ✓ НАВЕДЕНИЕ · стили наведения закрыты от тача
+  ✓ КОНТРАСТ · текст читается на своих поверхностях в обеих темах
+  ✓ СТУПЕНИ · соседние поверхности различимы в обеих темах
+  ✓ СМЫСЛ · акцент не путается со смыслом, в том числе при дальтонизме
+  ✓ ПЯТНО · заливка смысла видна на поверхности
+  ✓ КНОПКА · подпись и силуэт читаются на всех акцентах
+  ✓ ШКАЛА · все ступени карты видны на своей доске
+  ✓ ПАЛИТРА · различимость серий измерена в обеих темах
+  ✓ СБОРКА · тема графиков собрана из текущих токенов
+  ✓ ДВИЖОК · в урезанном движке ровно то, что просит код (7 типов серий, 9 модулей, 1 без записи в реестре — по отметке сборки)
+  ✓ НОЛЬ · движок не создаётся и не пересчитывается в контейнере без размера
+  ✓ ТИШИНА · управление тише данных: акцент только на фокусе, основной кнопке и в поимённых исключениях
+  ✓ UI/UX: реестр и десять эвристик согласованы; ручное ревью отдельно
+  ✓ СТРАНИЦЫ · 57 страниц компонентов собраны скриптом, все 10 блоков на месте
+  ✓ МАНИФЕСТ · 65 частей описывают все 508 классов и 47 функций; порядок подключения сходится с кодом; 12 типов графиков, 2 пробела помечены; читатель отвечает на все части
+  ✓ КЛАССЫ · 6437 употреблений классов и 686 ссылок на иконки в страницах, скриптах и README — все существуют (0 зацепка без стиля по списку)
+  ✓ ЗНАЧОК · 3 файлов иконок на месте, размеры сходятся, иконка iPhone и маскируемая непрозрачны
+  ✓ ТЕЛЕФОН · 69 страниц в 3 размерах: не шире экрана, цели от 44 px, поля не зумятся, вырез обойдён
+  ✓ ДОСТУП · 4 дашбордов: контролы достижимы с клавиатуры с видимым фокусом, у контролов есть имена, каркас страниц на месте (речь скринридера на живом устройстве — ручной шаг)
+
+  Система цела.
+
+RUN: browser/docs
+PASS: overview/routes/menu, 56 component pages, both themes at 320/768/1280/1536px, native wheel chaining and keyboard table scroll
+RUN: browser/reference-dashboard
+PASS: reference server + consumer, pagination/full-slice totals, filters, empty/error/retry, actions, remount, themes, mobile and AX names
+RUN: browser/family-mortgage
+file:///Users/sasad/dashboard-kit/tools/browser-harness.mjs:61
+    const timer = setTimeout(() => { wait.delete(n); no(new Error(method + ': Chrome не ответил за 30 с')); }, 30000);
+                                                        ^
+
+Error: Runtime.evaluate: Chrome не ответил за 30 с
+    at Timeout._onTimeout (file:///Users/sasad/dashboard-kit/tools/browser-harness.mjs:61:57)
+    at listOnTimeout (node:internal/timers:685:17)
+    at process.processTimers (node:internal/timers:618:7)
+
+Node.js v26.7.0
+Traceback (most recent call last):
+  File "/Users/sasad/dashboard-kit/tools/test.py", line 60, in <module>
+    main()
+    ~~~~^^
+  File "/Users/sasad/dashboard-kit/tools/test.py", line 49, in main
+    run([node, f'tools/check-{name}.mjs'], timeout=600 if name == 'docs' else 240)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sasad/dashboard-kit/tools/test.py", line 31, in run
+    raise subprocess.CalledProcessError(code, args)
+subprocess.CalledProcessError: Command '['/opt/homebrew/bin/node', 'tools/check-family-mortgage.mjs']' returned non-zero exit status 1.

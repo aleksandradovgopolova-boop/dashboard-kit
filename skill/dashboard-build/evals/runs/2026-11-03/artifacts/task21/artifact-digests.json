@@ -1,0 +1,12 @@
+{
+  "inputs": {
+    "examples/spec/plan-fact-source.json": "3ec660d2f9d79f850ae821128137e26785b4ad3838381991ac36d9ec01b312f2",
+    "tools/fixtures/named-metrics/registry.json": "5ec7cdd21b0788dffe4ce5c02ebe3e55ce462e79e5bffd70999c0599f4e1802b"
+  },
+  "artifacts": {
+    "spec.json": "7e31505db5c159562da0d3a28e063254c95810e2669777c0ccd2a16acbf4c001",
+    "app/index.html": "d178c1e048807ede4160e9641f06031ce38d5d96b0a198bc9d239c49735b0d24",
+    "app/screen-input.json": "25cf6f8924183b9f9f386fb8724be6b79f475513d81e59ff62ba1277b53df559"
+  },
+  "compilerInputsDigest": "6c19a26236cb09159c80833d47ec95927cd8b0a4df39678a8d3538988065d92d"
+}

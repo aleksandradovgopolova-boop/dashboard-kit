@@ -34,6 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 
 import manifest_parts as MP  # noqa: E402
+from component_contracts import contract, CONTRACTS, VERSION as PARAMETER_VERSION, reference as build_schema_reference
 
 OUT = ROOT / "kit-manifest.json"
 CSS_FILES = ["css/components.css", "css/chrome.css", "css/glass.css"]
@@ -178,6 +179,8 @@ def build() -> str:
     css_rank = {f: i for i, (f, _) in enumerate(MP.CSS_ORDER)}
     parts = [from_page(p) for p in pages] + [dict(p) for p in MP.PARTS]
     for part in parts:
+        if part["id"] in CONTRACTS:
+            part["parameterContract"] = contract(part["id"])
         # Поля у всех частей одни и те же: скилл не должен гадать, отсутствие
         # поля — это «нет» или «забыли».
         for k, empty in (("data", []), ("api", []), ("example", ""), ("rules", []), ("avoid", []),
@@ -207,6 +210,7 @@ def build() -> str:
             "rule": "Подключать только то, что есть в include частей на странице, в этом порядке. "
                     "Основа (часть base) — всегда.",
         },
+        "parameterSchemaVersion": PARAMETER_VERSION,
         "parts": parts,
         "charts": {"types": MP.CHART_TYPES, "choose": MP.CHART_CHOOSE,
                    "doc": "README.md#Какой график выбрать"},
@@ -220,6 +224,7 @@ def build() -> str:
 
 def main() -> int:
     OUT.write_text(build(), "utf-8")
+    (ROOT / "skill/dashboard-build/references/component-parameters.md").write_text(build_schema_reference(), "utf-8")
     print("собрано:", OUT.relative_to(ROOT))
     return 0
 

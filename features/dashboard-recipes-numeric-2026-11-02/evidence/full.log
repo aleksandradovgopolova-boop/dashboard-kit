@@ -1,0 +1,146 @@
+✔ validation clones and deeply freezes data without freezing caller data (2.02475ms)
+✔ one filter and period derive rows, sums and means from the same snapshot (0.560875ms)
+✔ unknown filter values and empty input produce empty results, never fabricated zeros (0.50925ms)
+✔ malformed metadata, dates, duplicates, unknown fields and invalid numbers fail closed (0.871333ms)
+✔ dangerous keys and invalid queries cannot enter the data model (0.796458ms)
+✔ overflow is rejected while finite large means remain computable (0.208125ms)
+✔ late success cannot overwrite the latest query, even when loader ignores abort (1.399292ms)
+✔ late error and current error never restore or relabel stale data (0.549958ms)
+✔ timeout settles an ignored abort and retry retains the filter (16.511208ms)
+✔ destroy aborts work, disconnects subscribers and permits independent remount (0.378083ms)
+✔ unsubscribe and consumer mutation cannot corrupt the store or later renderers (0.210958ms)
+✔ reentrant subscribers can supersede or destroy a load before its loader starts (0.205667ms)
+✔ invalid queries never reach loader; invalid payload and empty payload have distinct states (0.197291ms)
+✔ fetch adapter propagates signal, checks HTTP and hides response parsing errors (0.891792ms)
+✔ local pagination never changes KPI or chart aggregates (0.202708ms)
+✔ server mode keeps whole-slice totals and charts with only one returned page (0.790625ms)
+✔ server contract supports 50000 matching rows without downloading those rows (0.178459ms)
+✔ server response rejects query mismatch, partial pages, inconsistent totals and coverage (3.343792ms)
+✔ server means are weighted by observed count and all-null remains missing (0.466208ms)
+✔ server aggregation overflow and table/series disagreement fail closed (0.446958ms)
+✔ fetch server mode posts normalized query and limits streamed response bytes (11.496041ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45.167333
+✔ one immutable demo source covers 89 regions and six full months (27.524958ms)
+✔ region and month sums reconcile to every additive total (14.684917ms)
+✔ ratios and average interest use whole-slice weights, not means of percentages (13.589167ms)
+✔ district, month and region search filter every block consistently (5.574417ms)
+✔ pagination and table ordering never change KPI, chart, ranking or map data (66.1735ms)
+✔ unknown selections and no matches stay empty, not silently reset to all (14.258209ms)
+✔ one missing measurement invalidates its total and dependent ratio only (12.498583ms)
+✔ zero is an observation; zero denominators are undefined ratios (12.413167ms)
+✔ status thresholds use the unrounded percentage-point shortfall (49.294583ms)
+✔ malformed or semantically ambiguous source data fails closed (59.223916ms)
+✔ unknown or malformed queries fail instead of changing filter meaning (60.414792ms)
+✔ unsafe aggregate sums are rejected even if individual rows are safe (5.183958ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 344.445333
+✔ MODEL hand-checked mortgage: all (7.455791ms)
+✔ MODEL hand-checked mortgage: district (0.389083ms)
+✔ MODEL hand-checked mortgage: region (0.28575ms)
+✔ MODEL hand-checked mortgage: month (0.286667ms)
+✔ MODEL hand-checked mortgage: intersection (0.244042ms)
+✔ MODEL hand-checked mortgage: zero (0.224833ms)
+✔ MODEL hand-checked mortgage: empty (0.170125ms)
+✔ MODEL hand-checked mortgage: partial (0.316417ms)
+✔ MODEL hand-checked mortgage: no-data (0.308625ms)
+✔ MODEL independent detail, pagination and boundaries (0.371583ms)
+✔ MODEL omission is invalid, partial calendar period is rejected, zero plan is not missing data (0.811ms)
+✔ MODEL explicit comparison: decrease (0.190542ms)
+✔ MODEL explicit comparison: zero (0.040625ms)
+✔ MODEL explicit comparison: previous-zero (0.040542ms)
+✔ MODEL explicit comparison: missing (0.035333ms)
+✔ MODEL explicit comparison: partial (0.040916ms)
+✔ MODEL explicit comparison: unequal (0.030584ms)
+✔ MODEL explicit comparison: calendar (0.032541ms)
+✔ MODEL explicit comparison: small-base (0.029291ms)
+✔ MODEL explicit comparison: explicit-small-base (0.031917ms)
+✔ MODEL metadata is atomic, dates and policies fail closed (0.326416ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15.343167
+PASS: 20,000 observations, full-slice totals/series independent of pagination, null/zero/empty, query limits, concurrent idempotency, HTTP/body/origin/static boundaries (no socket opened)
+PASS: Python full-slice aggregates, page boundaries and JS contract agree for seven queries
+PASS: reproducible runtime package, external version pin, corruption/path/symlink rejection, isolated upgrade and rollback packages
+PASS: 0.1.0-rc.4 (candidate), 95 files, sha256:a305bc3fca5898aa616f037f45930d8d3a413a04bc18b448664e0788a0c6b4fd
+
+  ✓ СЛОИ · компоненты читают только семантику (200 примитивов скрыто за 207 именами смысла)
+  ✓ СЫРЫЕ · ни одного цвета значением вне примитивов
+  ✓ ОПЕЧАТКИ · все используемые токены объявлены, селекторы браузер примет
+  ✓ ПАРАМЕТРЫ · у входных параметров компонентов есть значения по умолчанию
+  ✓ DYNAMIC MEANING · динамический смысл только через dkMeaning с явной ролью
+  ✓ РОЛЬ · смысл, поставленный в текст, читается как текст
+  ✓ ЭКРАН · разметка собирается через общее экранирование
+  ✓ РАЗМЕРЫ · где у кита есть шкала, значения берутся из неё
+  ✓ ЧЁТНОСТЬ · все размеры в пикселях чётные
+  ✓ НАВЕДЕНИЕ · стили наведения закрыты от тача
+  ✓ КОНТРАСТ · текст читается на своих поверхностях в обеих темах
+  ✓ СТУПЕНИ · соседние поверхности различимы в обеих темах
+  ✓ СМЫСЛ · акцент не путается со смыслом, в том числе при дальтонизме
+  ✓ ПЯТНО · заливка смысла видна на поверхности
+  ✓ КНОПКА · подпись и силуэт читаются на всех акцентах
+  ✓ ШКАЛА · все ступени карты видны на своей доске
+  ✓ ПАЛИТРА · различимость серий измерена в обеих темах
+  ✓ СБОРКА · тема графиков собрана из текущих токенов
+  ✓ ДВИЖОК · в урезанном движке ровно то, что просит код (7 типов серий, 9 модулей, 1 без записи в реестре — по отметке сборки)
+  ✓ НОЛЬ · движок не создаётся и не пересчитывается в контейнере без размера
+  ✓ ТИШИНА · управление тише данных: акцент только на фокусе, основной кнопке и в поимённых исключениях
+  ✓ UI/UX: реестр и десять эвристик согласованы; ручное ревью отдельно
+  ✓ СТРАНИЦЫ · 57 страниц компонентов собраны скриптом, все 10 блоков на месте
+  ✓ МАНИФЕСТ · 65 частей описывают все 508 классов и 47 функций; порядок подключения сходится с кодом; 12 типов графиков, 2 пробела помечены; читатель отвечает на все части
+  ✓ КЛАССЫ · 6450 употреблений классов и 686 ссылок на иконки в страницах, скриптах и README — все существуют (0 зацепка без стиля по списку)
+  ✓ ЗНАЧОК · 3 файлов иконок на месте, размеры сходятся, иконка iPhone и маскируемая непрозрачны
+  ✗ [ТЕЛЕФОН] tools/check-mobile.mjs не отработал: list index out of range; ode:internal/process/task_queues:90:21)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:2412:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1'
+}
+
+Node.js v26.7.0
+
+  ✗ [ДОСТУП] tools/check-a11y.mjs не отработал: list index out of range; ode:internal/process/task_queues:90:21)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:2412:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1'
+}
+
+Node.js v26.7.0
+
+
+  Нарушений: 2. Система разъезжается — почини до коммита.
+
+Traceback (most recent call last):
+  File "/private/tmp/dashboard-kit-recipes-20261102/tools/test.py", line 61, in <module>
+    main()
+    ~~~~^^
+  File "/private/tmp/dashboard-kit-recipes-20261102/tools/test.py", line 47, in main
+    run(['python3', 'tools/check.py'], timeout=600)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/dashboard-kit-recipes-20261102/tools/test.py", line 31, in run
+    raise subprocess.CalledProcessError(code, args)
+subprocess.CalledProcessError: Command '['python3', 'tools/check.py']' returned non-zero exit status 1.

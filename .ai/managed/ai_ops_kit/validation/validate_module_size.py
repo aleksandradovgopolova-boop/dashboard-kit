@@ -37,9 +37,9 @@ import yaml
 
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
            Path(__file__).resolve().parents[1])
-# ДВА корня, а не один (F-06 внешнего аудита): installer/ai_ops.py — крупнейший файл репозитория и
-# единственный код, который пользователь запускает ДО появления кита, а SOURCE_ROOT="ai_ops_kit"
-# оставлял его вне гейта. Ключи baseline остаются относительными к pkg_root (installer/ai_ops.py).
+
+
+
 SOURCE_ROOTS = ("ai_ops_kit", "installer")
 BASELINE_FILE = PKG / "packages" / "module-size-baseline.yaml"
 

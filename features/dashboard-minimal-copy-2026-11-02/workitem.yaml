@@ -1,0 +1,18 @@
+schema_version: 1
+kind: workitem
+id: dashboard-minimal-copy-2026-11-02
+task: 'Реализовать согласованное правило минимального текста: ноль постоянных поясняющих
+  предложений на рабочих дашбордах; пояснения по запросу; синхронизировать правила
+  и dashboard-build, привести ипотечный пример и проверить доступность подсказок.
+  Нарезать остальные результаты исследования на связанные задачи.'
+workflow: ENGINEERING
+route_reasons:
+- task_type 'feature' -> ENGINEERING (selection_criteria)
+human_approval_required: false
+paths:
+  blueprint: features/dashboard-minimal-copy-2026-11-02/blueprint.yaml
+  run_state: .ai/runtime/workitems/dashboard-minimal-copy-2026-11-02/TaskState.yaml
+  workitem: features/dashboard-minimal-copy-2026-11-02/workitem.yaml
+status: blocked
+lifecycle_intent: implementation
+affects: {}

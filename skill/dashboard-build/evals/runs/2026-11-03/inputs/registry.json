@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "metrics": [
+    {
+      "id": "execution",
+      "label": "Выполнение плана",
+      "unit": "%",
+      "aggregation": "ratio-of-sums",
+      "inputs": {
+        "numerator": "issued",
+        "denominator": "plan"
+      },
+      "scale": 100,
+      "format": {
+        "type": "percent",
+        "digits": 1
+      },
+      "better": "increase",
+      "grain": {
+        "time": "day",
+        "dimensions": [
+          "region"
+        ]
+      }
+    },
+    {
+      "id": "rate",
+      "label": "Средняя ставка",
+      "unit": "%",
+      "aggregation": "weighted-mean",
+      "inputs": {
+        "value": "rate",
+        "weight": "volume"
+      },
+      "scale": 1,
+      "format": {
+        "type": "percent",
+        "digits": 1
+      },
+      "better": "neutral",
+      "grain": {
+        "time": "day",
+        "dimensions": [
+          "region"
+        ]
+      }
+    },
+    {
+      "id": "approval",
+      "label": "Одобрение заявок",
+      "unit": "%",
+      "aggregation": "ratio-of-sums",
+      "inputs": {
+        "numerator": "approved",
+        "denominator": "applied"
+      },
+      "scale": 100,
+      "format": {
+        "type": "percent",
+        "digits": 1
+      },
+      "better": "increase",
+      "grain": {
+        "time": "day",
+        "dimensions": [
+          "region"
+        ]
+      }
+    }
+  ]
+}

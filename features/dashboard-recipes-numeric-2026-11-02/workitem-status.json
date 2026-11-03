@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "kind": "workitem-status",
+  "workflow": "ENGINEERING",
+  "status": "needs_more_evidence",
+  "action": "требуется доказательство (evidence для гейта)",
+  "lifecycle_intent": "implementation",
+  "blocked": true,
+  "unmet_gates": [
+    "intake_completeness",
+    "requirements",
+    "specification",
+    "plan_readiness",
+    "implementation_verification",
+    "code_review",
+    "security"
+  ],
+  "real_fail": [],
+  "human_unmet": [],
+  "evidence_missing": [
+    "intake_completeness",
+    "requirements",
+    "specification",
+    "plan_readiness",
+    "implementation_verification",
+    "code_review",
+    "security"
+  ],
+  "blueprint_verdict": "OK"
+}

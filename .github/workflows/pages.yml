@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir -p _site
           cp -- *.html *.md kit-manifest.json LICENSE THIRD_PARTY_NOTICES.txt _site/
-          cp -R -- css js icons data vendor docs skill _site/
+          cp -R -- css js icons data vendor docs skill assets _site/
       - name: Upload static site
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:

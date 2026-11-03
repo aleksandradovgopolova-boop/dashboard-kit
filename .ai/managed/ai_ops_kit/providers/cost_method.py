@@ -48,7 +48,7 @@ def advise(signals, snapshot=None, child_root=None):
         """
         add(priority, category, f"НЕ ОЦЕНЕНО: {category} — {type(exc).__name__}: {exc}"[:300])
 
-    # 1. Гигиена сессии/контекста
+    
     try:
         from ai_ops_kit.engops import session_guardrails as _sg
         pol = _sg.load_policy(child_root or ".")
@@ -65,9 +65,9 @@ def advise(signals, snapshot=None, child_root=None):
         elif state == "unknown":
             add(1, "session_hygiene", "объём контекста неизвестен — передайте `--context N` из /context рантайма "
                                       "для точной оценки")
-        # Потолок РАСХОДА СЕССИИ, а не только текущего контекста (2026-08-13). Названо отдельной
-        # строкой намеренно: после компакции контекст возвращается в «норму», и совет по контексту
-        # молчит — а сессия к этому моменту уже оплатила перечитывание истории десятки раз.
+        
+        
+        
         spend = _sg.classify_session_spend((snapshot or {}).get("session_total_tokens"), pol)
         if spend == "over_budget":
             add(1, "session_hygiene", "сессия исчерпала потолок расхода (session_token_budget) — "
@@ -79,7 +79,7 @@ def advise(signals, snapshot=None, child_root=None):
     except Exception as _e:  # noqa: BLE001 — совет не роняет прогон; пропуск НАЗЫВАЕТСЯ, см. skipped()
         skipped(1, "session_hygiene", _e)
 
-    # 2. Делегирование разведки
+    
     try:
         from ai_ops_kit.engops import delegation_advisor as _da
         for d in _da.advise(s):
@@ -87,13 +87,13 @@ def advise(signals, snapshot=None, child_root=None):
     except Exception as _e:  # noqa: BLE001 — см. skipped()
         skipped(2, "delegation", _e)
 
-    # 3. Ограничение бесполезных итераций
+    
     attempts = int(s.get("fix_attempts") or 0)
     if attempts >= FIX_LOOP_LIMIT:
         add(3, "iteration_limit", f"уже {attempts} безуспешных fix-итераций — остановить fix-loop; "
                                   "эскалировать writer'а (сильнее) или вынести на человека, а не жечь попытки")
 
-    # 4. Выбор runtime
+    
     try:
         from ai_ops_kit.providers import model_router as _mr
         wt = _mr.writer_tier(s)
@@ -104,7 +104,7 @@ def advise(signals, snapshot=None, child_root=None):
     except Exception as _e:  # noqa: BLE001 — см. skipped()
         skipped(4, "runtime", _e)
 
-    # 5. Effort и краткость
+    
     tt = str(s.get("task_type") or "").upper()
     if tt in ("QUICK", "") or s.get("mechanical"):
         add(5, "effort", "механическая/простая задача — low effort и краткий ответ достаточно")
@@ -113,7 +113,7 @@ def advise(signals, snapshot=None, child_root=None):
     else:
         add(5, "effort", f"{tt} — medium effort; краткость ответа без потери сути")
 
-    # частные советы
+    
     if s.get("small_change") or s.get("baseline_diff"):
         add(3, "tests", "малое изменение — сначала affected tests, полный прогон не обязателен сейчас")
     if s.get("needs_repo_read") and not s.get("exploration_files"):

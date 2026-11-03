@@ -99,8 +99,8 @@ def open_request(root, gate_id, *, checklist, reviewed_revision, changed_files, 
             f"(заполняет независимый оркестратор), после чего resume закроет гейт")
     ev = {"status": "fail" if blocking else "warn", "checks": [],
           "evidence": [f"awaiting_reviewer @ {gate_id}: handoff-запрос записан ({rpath.name})"],
-          # human_handoff (а не pending_human) — отдельный признак: гейт ЖДЁТ ревью оркестратора, а
-          # не нашёл дефект. gate_executor разворачивает оба флага в awaiting_human=True.
+          
+          
           "human_handoff": True}
     if blocking:
         ev["blockers"] = [text]

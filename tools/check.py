@@ -432,7 +432,7 @@ def theme_tables(primitives: str, semantic: str) -> dict[str, dict[str, str]]:
         if 'data-theme="light"' in sel:
             target = [light]
         elif ('data-theme="dark"' in sel
-              or sel.strip().startswith(".dk-root,") or sel.strip() == ".dk-root"):
+              or re.search(r"(^|,)\s*(?:\.dk-root|:root)\s*(?:,|$)", sel)):
             target = [dark] if 'data-theme="dark"' in sel else [dark, light]
         for name, value in declarations(body):
             for t in target:
@@ -444,7 +444,10 @@ def check_contrast(primitives: str, semantic: str) -> None:
     # Требования: основной и вторичный текст — 4.5:1, третичный и штрихи — 3:1.
     pairs = [("--ink", "--surface", 4.5), ("--ink-2", "--surface", 4.5),
              ("--ink-3", "--surface", 3.0), ("--ink", "--bg", 4.5),
-             ("--ink-2", "--surface-2", 4.5)]
+             ("--ink-2", "--surface-2", 4.5),
+             ("--risk-label-low", "--risk-area-low", 4.5),
+             ("--risk-label-medium", "--risk-area-medium", 4.5),
+             ("--risk-label-high", "--risk-area-high", 4.5)]
     ok = True
     for theme, table in theme_tables(primitives, semantic).items():
         for fg, bg, need in pairs:
@@ -1879,6 +1882,9 @@ def check_manifest() -> None:
         no("kit-manifest.json не собран — python3 tools/build-manifest.py")
     elif out.read_text("utf-8") != fresh:
         no("kit-manifest.json разошёлся с кодом — пересобери: python3 tools/build-manifest.py")
+    reference = ROOT / "skill/dashboard-build/references/component-parameters.md"
+    if not reference.exists() or reference.read_text("utf-8") != mod.build_schema_reference():
+        no("component-parameters.md разошёлся с контрактами — python3 tools/build-manifest.py")
     m = json.loads(fresh)
     MP = mod.MP
     parts = m["parts"]
@@ -2483,6 +2489,8 @@ def check_page(path: Path) -> None:
     for base in ("css/tokens.primitives.css", "css/tokens.semantic.css", "css/components.css"):
         if base not in css_seen:
             fail(L, f"{path.name}: не подключён {base}")
+    if any(cls == "dk-glass" for _, cls in _used_classes(text)) and "css/glass.css" not in css_seen:
+        fail(L, f"{path.name}: dk-glass без css/glass.css — подключите glass через kit.py head")
     if "vendor/air-datepicker.js" in js_files and "vendor/air-datepicker.css" not in css_seen:
         fail(L, f"{path.name}: календарь периода без vendor/air-datepicker.css — нарисуется голым списком")
 
@@ -2564,12 +2572,21 @@ def check_page(path: Path) -> None:
 
 
 def main() -> int:
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print("Usage: python3 tools/check.py [--fast] [--page PATH]\n"
+              "Without --page: check the kit. --page: check a static consumer.\n"
+              "--fast skips browser checks; help never starts checks or a server.")
+        return 0
     if "--page" in sys.argv:
         i = sys.argv.index("--page")
         if i + 1 >= len(sys.argv):
             print("--page без пути: python3 tools/check.py --page путь/к/странице.html", file=sys.stderr)
             return 2
         check_page(Path(sys.argv[i + 1]).resolve())
+        from screen_policy import review_html
+        target = Path(sys.argv[i + 1]).resolve()
+        for issue in review_html(str(target), target.read_text("utf-8")):
+            fail("КОМПОЗИЦИЯ", f"{issue['path']} [{issue['code']}] {issue['message']}")
         print()
         for n in notes:
             print(f"  ✓ {n}")
@@ -2598,6 +2615,10 @@ def main() -> int:
         print("нет ни одного файла слоя компонентов в css/", file=sys.stderr)
         return 1
 
+    from screen_policy import review_html, review_page_css
+    for issue in review_page_css(ROOT) + [issue for name, html in pages for issue in review_html(name, html)]:
+        fail("КОМПОЗИЦИЯ", f"{issue['path']} [{issue['code']}] {issue['message']}")
+    notes.append("КОМПОЗИЦИЯ · явная область обзора, самостоятельные КПЭ, пустые слоты, сброс и page.css; редакционная приёмка отдельно")
     check_layers(primitives, semantic, layers)
     check_raw_values(semantic, layers)
     check_unknown(primitives, semantic, layers, pages, scripts)

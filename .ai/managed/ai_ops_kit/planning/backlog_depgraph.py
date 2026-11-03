@@ -175,7 +175,7 @@ def graph_from_backlog(repo_or_root: str = ".", state: str = "open", client=None
     return build(rep.items)
 
 
-# ── CLI ───────────────────────────────────────────────────────────────────────────────────────
+
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="backlog_depgraph.py")

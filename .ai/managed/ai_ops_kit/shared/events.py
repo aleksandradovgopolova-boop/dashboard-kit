@@ -24,7 +24,7 @@ from typing import Any, Callable
 
 logger = logging.getLogger(__name__)
 
-# Глобальный реестр подписчиков: event_type -> [handler, ...]
+
 _subscribers: dict[str, list[Callable]] = {}
 
 

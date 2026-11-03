@@ -54,8 +54,8 @@ def _hidden(rel: str) -> bool:
 
 
 def _git(root, *args):
-    # Единый вход к git с таймаутом (см. shared/gitio). OSError (нет git/битый репозиторий)
-    # по-прежнему глушим в «git unavailable»; таймаут gitio сам вернёт как rc!=0.
+    
+    
     try:
         return git(root, *args, timeout=20)
     except (OSError, subprocess.SubprocessError):
@@ -175,7 +175,7 @@ def build_context(child_root, query, role, *, sha, afp, dcp=None, budget_tokens=
         raise ValueError("context_engine: без точного SHA view не строится (exact-revision binding)")
     root = Path(child_root)
 
-    # --- ДОКАЗАТЕЛЬСТВО snapshot (перед любым чтением файлов) ---
+    
     snapshot_verified = False
     if require_snapshot:
         oks, sreason = verify_snapshot(root, sha)
@@ -186,22 +186,22 @@ def build_context(child_root, query, role, *, sha, afp, dcp=None, budget_tokens=
     allowed = cr.role_allowed_classes(afp, role) if afp else set()   # deny-by-default
     exclude = set(cr.SCAN_EXCLUDE_DIRS) | _gitignore_dirs(root)      # vendored/build + .gitignore-aware
 
-    # --- ACCESS PRE-FILTER (v3.7.0-fix): классификация ПО ПУТИ (без чтения содержимого) -> роль видит
-    # ТОЛЬКО разрешённые пути. Denied-путь НЕ передаётся в full-text/graph/semantic (не читается, имя не
-    # раскрывается role-facing). Content-scanner потом может ТОЛЬКО повысить класс. Privileged-audit ведёт
-    # список pre_filtered (знать denied-файлы можно только привилегированному слою, не role-facing).
+    
+    
+    
+    
     def _allowed_path(rel):
         pc = cr.classify("", path=rel, policy=dcp)   # path-based класс (content="" -> без scanner/marker)
         return pc != "secret" and (bool(allowed) and pc in allowed)
     pre_filtered_denied = sorted(p for p in _list_rel_paths(root, exclude) if not _allowed_path(p))
 
-    # --- источник 1: обязательный контекст v1 (policy/spec/decisions) — нельзя потерять (НЕ pre-filter'ится;
-    #     доступ проверяется при чтении: denied mandatory -> excluded_access -> view invalid) ---
+    
+    
     cand = {}   # rel -> {"file","sources":set,"score","mandatory"}
     for rel in (v1_mandatory or []):
         cand[rel] = {"file": rel, "sources": {"mandatory-v1"}, "score": 10_000, "mandatory": True}
 
-    # --- источник 2: full-text ТОЛЬКО по разрешённым путям (denied не читается) ---
+    
     ft = cr.full_text_search(root, query, subdirs=("",), exclude_dirs=exclude, path_filter=_allowed_path)
     for r in ft:
         c = cand.setdefault(r["file"], {"file": r["file"], "sources": set(), "score": 0, "mandatory": False})
@@ -209,22 +209,21 @@ def build_context(child_root, query, role, *, sha, afp, dcp=None, budget_tokens=
         c["score"] = max(c["score"], r["score"]) if not c["mandatory"] else c["score"]
     deterministic_count = len([1 for r in ft])
 
-    # --- источник 3: Repository Graph augmentation (граф строится ТОЛЬКО по разрешённым .py) ---
+    
     graph_added = 0
-    graph_reason = None
+    python_candidates = [r["file"] for r in ft if r["file"].endswith(".py")]
+    graph_reason = None if python_candidates else "нет Python-кандидатов для расширения графом"
     try:
-        graph = repo_graph.build_graph(root, subdirs=("",), path_filter=_allowed_path)
-    # СБОЙ СБОРКИ ГРАФА НАЗЫВАЕТСЯ (срез ратчета, 2026-08-12). Прежде он давал пустой граф, и
-    # `graph_added` оставался 0 — неотличимо от «граф построен, добавить было нечего». Отчёт
-    # контекста говорил «0», а правда была «не смог посчитать»: тот же инвариант, что
-    # `unavailable != 0` в учёте стоимости и `unknown != not_changed` в контурах.
+        graph = (repo_graph.build_graph(root, subdirs=("",), path_filter=_allowed_path)
+                 if python_candidates else {"import_edges": {}})
+    
+    
+    
+    
     except Exception as _ge:  # noqa: BLE001 — граф не роняет сборку контекста, но молчать не вправе
         graph = {"import_edges": {}}
         graph_reason = f"граф не построен: {type(_ge).__name__}: {_ge}"[:200]
-    ft_files = [r["file"] for r in ft]
-    for rel in ft_files:
-        if not rel.endswith(".py"):
-            continue
+    for rel in python_candidates:
         neighbors = set(graph.get("import_edges", {}).get(rel, []))   # forward: что импортит rel
         neighbors |= set(repo_graph.impact(graph, rel))               # reverse: кто зависит от rel
         for nb in neighbors:
@@ -233,7 +232,7 @@ def build_context(child_root, query, role, *, sha, afp, dcp=None, budget_tokens=
             cand[nb] = {"file": nb, "sources": {"graph"}, "score": 0, "mandatory": False}
             graph_added += 1
 
-    # --- источник 4: УСЛОВНЫЙ semantic-lite (индекс ТОЛЬКО по разрешённым путям) ---
+    
     semantic_used, semantic_reason = False, "детерминированный recall достаточен"
     if deterministic_count < semantic_recall_floor:
         semantic_used = True
@@ -253,7 +252,7 @@ def build_context(child_root, query, role, *, sha, afp, dcp=None, budget_tokens=
         except Exception as _se:  # noqa: BLE001 — semantic не роняет сборку; причина называется точно
             semantic_reason += f" (semantic-индекс не построен: {type(_se).__name__}: {_se})"[:220]
 
-    # --- access-filter (AFP роли + DataClassificationPolicy child) + классификация ---
+    
     included, excl_access, excl_budget, mandatory_missing = [], [], [], []
     resolved = []
     for rel, c in cand.items():
@@ -273,10 +272,10 @@ def build_context(child_root, query, role, *, sha, afp, dcp=None, budget_tokens=
                          "score": c["score"], "data_class": data_class,
                          "tokens": cr._tokens(content), "content_hash": _hash(content), "sha": sha})
 
-    # --- rerank: обязательные первыми (стабильно), затем по score desc, файл для детерминизма ---
+    
     resolved.sort(key=lambda x: (0 if x["mandatory"] else 1, -x["score"], x["file"]))
 
-    # --- budget: обязательные включаются ВСЕГДА (даже сверх бюджета -> флаг); остальное до лимита ---
+    
     total = 0
     for item in resolved:
         item = dict(item)

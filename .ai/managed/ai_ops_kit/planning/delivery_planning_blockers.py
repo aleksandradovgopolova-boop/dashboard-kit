@@ -105,7 +105,7 @@ def delivery_signals(tasks, milestone_id, today=None):
     else:
         sig["overdue_unavailable"] = "нет даты 'сегодня' или due у задач — просрочка не определена"
 
-    # Заблокированные внутри milestone: открытая задача с открытой зависимостью.
+    
     open_ids = {t.get("id") for t in _open(in_ms)}
     blocked = [t.get("id") for t in _open(in_ms)
                if any(d in open_ids for d in (t.get("dependencies") or []))]

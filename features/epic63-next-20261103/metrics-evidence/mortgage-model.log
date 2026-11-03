@@ -1,0 +1,20 @@
+✔ one immutable demo source covers 89 regions and six full months (82.252292ms)
+✔ region and month sums reconcile to every additive total (28.452417ms)
+✔ ratios and average interest use whole-slice weights, not means of percentages (27.082042ms)
+✔ district, month and region search filter every block consistently (10.5155ms)
+✔ pagination and table ordering never change KPI, chart, ranking or map data (148.909541ms)
+✔ unknown selections and no matches stay empty, not silently reset to all (41.900583ms)
+✔ one missing measurement invalidates its total and dependent ratio only (30.912792ms)
+✔ zero is an observation; zero denominators are undefined ratios (31.390583ms)
+✔ status thresholds use the unrounded percentage-point shortfall (116.599334ms)
+✔ malformed or semantically ambiguous source data fails closed (151.026208ms)
+✔ unknown or malformed queries fail instead of changing filter meaning (140.875459ms)
+✔ unsafe aggregate sums are rejected even if individual rows are safe (10.649333ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 827.677792

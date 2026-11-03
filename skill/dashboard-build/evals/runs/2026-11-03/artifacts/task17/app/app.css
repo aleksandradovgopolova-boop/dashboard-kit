@@ -1,0 +1,34 @@
+.summary { margin-block:var(--space-6); }
+.metric-panel { display:flex; flex-direction:column; gap:var(--space-5); }
+.metric-panel h2,.metric-panel h3 { margin:0; font:var(--type-panel-title); }
+.metric-panel .dk-metric-xl { white-space:normal; overflow-wrap:anywhere; }
+.metric-values { display:flex; flex-wrap:wrap; gap:var(--space-6); margin:0; }
+.metric-values > div { flex:1; min-width:100px; }
+.metric-values dt { color:var(--ink-2); font:var(--type-caption); }
+.metric-values dd { margin:0; font:var(--type-body-bold); }
+.metric-panel .dk-progress { margin-top:auto; }
+.dk-progress__track { flex:1; }
+.metric-foot { color:var(--ink-2); font:var(--type-caption); }
+.records .secondary { display:block; color:var(--ink-2); font:var(--type-caption); margin-top:var(--space-2); }
+.records td,.records th { white-space:normal; }
+.records td:first-child { min-width:180px; }
+.records button { text-align:left; white-space:normal; }
+.definitions { display:grid; gap:var(--space-4); margin:0; }
+.definitions dt { font:var(--type-body-bold); }
+.definitions dd { margin:0; overflow-wrap:anywhere; }
+.detail-heading { margin-block:var(--space-6); }
+#status { margin-top:var(--space-4); }
+.dk-modal--detail #detail-summary > section { background:transparent; border:0; padding:0; }
+@media(max-width:767px){
+ .records,.dk-modal--detail .records { min-width:0; }
+ .records thead { display:none; }
+ .records,.records tbody,.records tr,.records td { display:block; width:100%; }
+ .records tr { padding:var(--space-4); border-bottom:1px solid var(--glass-edge); }
+ .records td { padding:var(--space-2); border:0; text-align:right; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--space-4); }
+ .records td::before { content:attr(data-label); text-align:left; color:var(--ink-2); font:var(--type-caption); }
+ .records td:first-child { display:block; text-align:left; min-width:0; }
+ .records td:first-child::before { display:none; }
+ .records td .secondary { grid-column:2; }
+ .records button { max-width:100%; }
+ .metric-values > div { min-width:80px; }
+}

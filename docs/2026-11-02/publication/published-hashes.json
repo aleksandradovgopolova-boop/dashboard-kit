@@ -1,0 +1,132 @@
+{
+  "origin": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/",
+  "sha": "362bcd49a57fc07008db42e9cd8cafba5dec3531",
+  "files": [
+    {
+      "file": "index.html",
+      "expected": "a30420a2ea4384e05a3d1ea679f040e771a4e55646c17644074f8b8dfa3a1176",
+      "actual": "a30420a2ea4384e05a3d1ea679f040e771a4e55646c17644074f8b8dfa3a1176",
+      "status": 200
+    },
+    {
+      "file": "regions.html",
+      "expected": "7f4f5b1227ca52beddd261a04ea3ed7d76baad1461f8b04f049c13f2ccd67b89",
+      "actual": "7f4f5b1227ca52beddd261a04ea3ed7d76baad1461f8b04f049c13f2ccd67b89",
+      "status": 200
+    },
+    {
+      "file": "accidents.html",
+      "expected": "c787a2f5892f461d6a4b670893a9c6e7a3f990daee812caa670fb253ad7dc4d5",
+      "actual": "c787a2f5892f461d6a4b670893a9c6e7a3f990daee812caa670fb253ad7dc4d5",
+      "status": 200
+    },
+    {
+      "file": "calendar.html",
+      "expected": "a40a6cb08540b07068e8b39e2b294b124be0cf1e29fdf4c97bea578ac5ee4cb9",
+      "actual": "a40a6cb08540b07068e8b39e2b294b124be0cf1e29fdf4c97bea578ac5ee4cb9",
+      "status": 200
+    },
+    {
+      "file": "dashboard.html",
+      "expected": "64b27ed8cd9d6e0441938bfd50926289eadce86badd8fdf0c41369dd58ec0a38",
+      "actual": "64b27ed8cd9d6e0441938bfd50926289eadce86badd8fdf0c41369dd58ec0a38",
+      "status": 200
+    },
+    {
+      "file": "reference-dashboard.html",
+      "expected": "2269a0255add4faa1b9d5d360219229cb7dad7eab489fdf79723284eb8bf33e6",
+      "actual": "2269a0255add4faa1b9d5d360219229cb7dad7eab489fdf79723284eb8bf33e6",
+      "status": 200
+    },
+    {
+      "file": "component-table.html",
+      "expected": "f4a29e5e5604de54ea6b987d5b55c42fa254ba89afeb93302338d158c54d7534",
+      "actual": "f4a29e5e5604de54ea6b987d5b55c42fa254ba89afeb93302338d158c54d7534",
+      "status": 200
+    },
+    {
+      "file": "component-table.md",
+      "expected": "c318dd2a9e01975d148122eeb987a0698c5df1961fc734e84451e06de29509bc",
+      "actual": "c318dd2a9e01975d148122eeb987a0698c5df1961fc734e84451e06de29509bc",
+      "status": 200
+    },
+    {
+      "file": "css/components.css",
+      "expected": "cc361393126455dd167a7d27d335ce618966a1711cd8333c1c00f566d7355c5a",
+      "actual": "cc361393126455dd167a7d27d335ce618966a1711cd8333c1c00f566d7355c5a",
+      "status": 200
+    },
+    {
+      "file": "css/chrome.css",
+      "expected": "2df09fd6afc92b421183bfcdc80be36327b787b20c636c64279df8a6d4e4b7cf",
+      "actual": "2df09fd6afc92b421183bfcdc80be36327b787b20c636c64279df8a6d4e4b7cf",
+      "status": 200
+    },
+    {
+      "file": "css/glass.css",
+      "expected": "dc4319158349da59c093d11a63976f66feb6d6cd1c4159232864184ae699a7e0",
+      "actual": "dc4319158349da59c093d11a63976f66feb6d6cd1c4159232864184ae699a7e0",
+      "status": 200
+    },
+    {
+      "file": "css/page.dashboard.css",
+      "expected": "3da454cb0b0a4d36505e723fb729805757b5cc795e033fcf4d93a28ca23aa5d4",
+      "actual": "3da454cb0b0a4d36505e723fb729805757b5cc795e033fcf4d93a28ca23aa5d4",
+      "status": 200
+    },
+    {
+      "file": "css/page.regions.css",
+      "expected": "ae5f9e7618dbbad40dcaf7e5c489f577c39b5a5599a32cd7664569ed13f11c04",
+      "actual": "ae5f9e7618dbbad40dcaf7e5c489f577c39b5a5599a32cd7664569ed13f11c04",
+      "status": 200
+    },
+    {
+      "file": "css/reference-dashboard.css",
+      "expected": "6276914a450daee250109e28b2fbb953565a3b91592ad206ccf76811fd87d82c",
+      "actual": "6276914a450daee250109e28b2fbb953565a3b91592ad206ccf76811fd87d82c",
+      "status": 200
+    },
+    {
+      "file": "js/reference-dashboard.js",
+      "expected": "f5d1100836562eb3f0da861f71322d099e19259342a88f23aa7fcadf5a29b438",
+      "actual": "f5d1100836562eb3f0da861f71322d099e19259342a88f23aa7fcadf5a29b438",
+      "status": 200
+    },
+    {
+      "file": "docs/assembly-rules.md",
+      "expected": "7d7411f2b16552e2be9216c069d984dc22e1c636f1ea2d138d7b232c3a922e4b",
+      "actual": "7d7411f2b16552e2be9216c069d984dc22e1c636f1ea2d138d7b232c3a922e4b",
+      "status": 200
+    },
+    {
+      "file": "skill/dashboard-build/references/data.md",
+      "expected": "4869b5e9101ab8b65bd7d88dce1e2b024d18ae54fabd07c89be4e03d7590cf97",
+      "actual": "4869b5e9101ab8b65bd7d88dce1e2b024d18ae54fabd07c89be4e03d7590cf97",
+      "status": 200
+    },
+    {
+      "file": "assets/examples/regions-dark.png",
+      "expected": "f1d30b73a2193f6afe27601afe869252f8b6f45669686ecdeb8abeef91507133",
+      "actual": "f1d30b73a2193f6afe27601afe869252f8b6f45669686ecdeb8abeef91507133",
+      "status": 200
+    },
+    {
+      "file": "data/regions.topojson",
+      "status": 200,
+      "expected": "a8d17bd7017f9a1bd115c82596a17a1b77e89fc7d45af408420c23fbe7d265b4",
+      "actual": "a8d17bd7017f9a1bd115c82596a17a1b77e89fc7d45af408420c23fbe7d265b4"
+    },
+    {
+      "file": "data/regions-tiles.json",
+      "status": 200,
+      "expected": "0d00d82e37f415fed67035b0995d9c20c78365e6763c1fad986cb9cf12d52e0b",
+      "actual": "0d00d82e37f415fed67035b0995d9c20c78365e6763c1fad986cb9cf12d52e0b"
+    },
+    {
+      "file": "data/monitor-demo.json",
+      "status": 200,
+      "expected": "b47252d2c779f0b81dea33da271bba6a2126eae39c3f2b7cd3158864b0d93251",
+      "actual": "b47252d2c779f0b81dea33da271bba6a2126eae39c3f2b7cd3158864b0d93251"
+    }
+  ]
+}

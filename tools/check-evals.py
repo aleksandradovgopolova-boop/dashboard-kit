@@ -16,4 +16,9 @@ for name in required:
     assert any(name in e.get('components',[]) for e in evals), 'missing skill task: '+name
     subprocess.run(['python3','tools/kit.py','head',name],cwd=ROOT,check=True,stdout=subprocess.DEVNULL)
 assert len({e['id'] for e in evals})==len(evals),'duplicate eval ids'
-print('PASS: 13 new SDK entries, dependency closure, examples, anti-patterns, accessibility and skill task coverage; AI execution not assessed')
+recipes=(ROOT/'skill/dashboard-build/references/recipes.md').read_text()
+for recipe in ['monitoring','plan-fact','portfolio','operations']:
+    assert '## '+recipe in recipes, 'missing recipe: '+recipe
+    assert any(e.get('recipe')==recipe for e in evals), 'missing recipe eval: '+recipe
+assert (ROOT/'skill/dashboard-build/references/numeric-checks.md').is_file()
+print('PASS: four recipes and eval tasks; 13 SDK entries, dependency closure, examples, anti-patterns, accessibility and skill task coverage; AI execution not assessed')

@@ -20,7 +20,7 @@ from pathlib import Path
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
 
-# Import from sibling submodules
+
 from ai_ops_kit.providers.orchestrator_http import _http_post_json
 from ai_ops_kit.providers.orchestrator_usage import _record_call
 from ai_ops_kit.providers.response_contract import (
@@ -40,7 +40,7 @@ from ai_ops_kit.providers.provider_errors import (
 from ai_ops_kit.providers.provider_writer_lock import _writer_serialization_lock
 
 
-# --- провайдеры ---
+
 
 def mock_provider(role_prompt: str) -> str:
     """Детерминированный офлайн-провайдер: возвращает структурированную заглушку.
@@ -55,22 +55,22 @@ def mock_provider(role_prompt: str) -> str:
             f"Результат стадии подготовлен согласно контракту роли.")
 
 
-# --- живые провайдеры (v2.18): реальная модель по ключу из env ---
-# Секреты НЕ в репо: ключ читается ТОЛЬКО из переменной окружения. Сеть — через
-# системный прокси (urllib берёт HTTPS_PROXY автоматически). Без ключа — честная
-# ошибка, не тихий фолбэк на mock (иначе «живой» прогон был бы фикцией).
+
+
+
+
 DEFAULT_MODELS = {"anthropic": "claude-sonnet-5", "openai": "gpt-4o"}
-# v3.0-rc7 (finding живого прогона kimi): reasoning-модели (kimi-k3 и т.п.) тратят большой бюджет на
-# внутренний reasoning ПЕРЕД контентом. При 2048 весь бюджет уходил в reasoning -> finish_reason=length,
-# content пустой. 8192 даёт место reasoning + артефакт. Обычные модели стопятся раньше по stop (без вреда).
-#
-# ОДНО ЧИСЛО НА ВСЕ МОДЕЛИ И ВСЕ РОЛИ — это по-прежнему так, и это названо (аудит 19.08.2026). Что
-# изменилось в v3.37 (C2): упереться в него больше НЕ ЗНАЧИТ тихо отдать огрызок за ответ. Там, где
-# ответ становится вердиктом (запрошен контракт формы), `stop_reason=max_tokens` /
-# `finish_reason=length` — это ОТКАЗ с названной причиной, а не полвердикта в разборе.
-# Таблицы «модель -> потолок» здесь нет намеренно: её нельзя написать по памяти, а замера длин
-# ответов по ролям и моделям у нас нет. Выдуманные числа хуже одного честного — они выглядят как
-# знание. Число двинется, когда появится замер, и причина будет записана рядом, как здесь.
+
+
+
+
+
+
+
+
+
+
+
 _MAX_TOKENS = 8192
 
 
@@ -86,7 +86,7 @@ def _anthropic_call(prompt, model, contract=None):
     body = {"model": model, "max_tokens": _MAX_TOKENS,
             "messages": [{"role": "user", "content": prompt}]}
     if contract is not None:
-        # Structured outputs: ответ приходит одним текстовым блоком с валидным по схеме JSON.
+        
         body["output_config"] = {"format": {"type": "json_schema",
                                             "schema": contract.wire_schema}}
     _t0 = time.monotonic()
@@ -99,10 +99,10 @@ def _anthropic_call(prompt, model, contract=None):
     text = "\n".join(parts).strip()
     stop = data.get("stop_reason")
     if contract is not None:
-        # ОБРЕЗАННЫЙ ОТВЕТ — НЕ ОТВЕТ. Потолок `max_tokens` один на все модели и все роли (замер
-        # kimi, см. `_MAX_TOKENS`), и вердикт, срезанный на нём, прежде доезжал до разбора куском:
-        # JSON не закрыт, вердикта нет, гейт краснел с формулировкой «нет заключения reviewer» —
-        # правда по существу и ложь по причине.
+        
+        
+        
+        
         if stop == "max_tokens":
             raise ProviderRefusal("truncated", f"потолок {_MAX_TOKENS} токенов", "anthropic", model)
         if stop == "refusal":
@@ -145,9 +145,9 @@ def _openai_call(prompt, model, base_url="https://api.openai.com/v1/chat/complet
                          "Задайте ключ в окружении или используйте --provider mock (офлайн).")
     import time
     rf, _mode = _response_format_for(vendor, contract)
-    # v3.0-rc5 (finding живого прогона kimi): перегруженный провайдер отдаёт HTTP 200 с ПУСТЫМ content
-    # (не 429 — _http_post_json его не ловит). Для author/review это фатально (артефакт «не вернулся»).
-    # Ретраим пустой ответ с бэкоффом; часть моделей кладёт текст в reasoning_content — используем и его.
+    
+    
+    
     for attempt in range(3):
         _t0 = time.monotonic()
         # v3.0-rc7: reasoning-модели медленные (kimi-k3) — 120с не хватало -> 300с default.
@@ -165,8 +165,8 @@ def _openai_call(prompt, model, base_url="https://api.openai.com/v1/chat/complet
         if content:
             _u = data.get("usage") or {}   # v3.1 trace v0.2: OpenAI-совместимый usage
             _record_call(model, _u.get("prompt_tokens"), _u.get("completion_tokens"), time.monotonic() - _t0)
-            # Обрезанный ответ не отдаём за ответ ТОЛЬКО там, где он становится вердиктом: у
-            # writer-ролей на обрезке стоит своя механика ретрая с нуджем, и ломать её нельзя.
+            
+            
             if contract is not None and _choice.get("finish_reason") == "length":
                 raise ProviderRefusal("truncated", f"потолок {_MAX_TOKENS} токенов", vendor, model)
             return content
@@ -178,13 +178,13 @@ def _openai_call(prompt, model, base_url="https://api.openai.com/v1/chat/complet
     return "(пустой ответ модели)"
 
 
-# v3.28.x (review 2026-08-06, P2-7): имена провайдеров из registry/providers.yaml, которые технически
-# являются OpenAI-совместимыми (protocols: [rest, openai-compatible]). Раньше `--provider qwen` падал
-# «неизвестный провайдер», хотя реестр его объявляет — registry и код расходились.
-# ИСТОЧНИК ИСТИНЫ — registry/providers.yaml (key_env) и registry/models.yaml (default_model);
-# соответствие проверяется тестом tests/unit/test_provider_resolution.py (registry-consistency).
-# base_url — те же проверенные эндпоинты, что в ai_ops_kit/providers/provider_endpoints.py; переопределяется env.
-# Секрет НИКОГДА не в коде: здесь только ИМЯ переменной окружения.
+
+
+
+
+
+
+
 OPENAI_COMPATIBLE_VENDORS = {
     "deepseek": {"key_env": "DEEPSEEK_API_KEY", "base_url_env": "DEEPSEEK_BASE_URL",
                  "base_url": "https://api.deepseek.com/chat/completions",
@@ -197,8 +197,8 @@ OPENAI_COMPATIBLE_VENDORS = {
              "default_model": "kimi-k2.7-code-highspeed"},
 }
 
-# Объявлены в registry/providers.yaml, но НЕ реализованы адаптером движка. Честная ошибка с причиной
-# лучше и «неизвестного провайдера» (реестр их знает), и тихого фолбэка на mock.
+
+
 DECLARED_NOT_IMPLEMENTED = {
     "google": "нет REST-адаптера Gemini (registry: kind hosted-api, protocols [rest])",
     "gigachat": "нужен OAuth-адаптер NGW (registry: adoption_status planned-future)",
@@ -244,7 +244,7 @@ def make_provider(name: str, model: str = None, contract=None):
         return _tagged(lambda prompt: _openai_call(prompt, m, contract=contract, vendor="openai"),
                        name, m, contract)
     if name == "openai-compatible":
-        # DeepSeek / local / любой OpenAI-совместимый: base_url + ключ из env (provider-agnostic).
+        
         base = os.environ.get("OPENAI_COMPATIBLE_BASE_URL")
         if not base:
             raise SystemExit("OPENAI_COMPATIBLE_BASE_URL не задан — для openai-совместимого "
@@ -257,12 +257,12 @@ def make_provider(name: str, model: str = None, contract=None):
                                                    contract=contract, vendor=name),
                        name, model, contract)
     if name in ("claude-cli", "claude-code-local"):
-        # v3.9.0 First-class Claude Code Adapter: локальный `claude -p` как СИЛЬНЫЙ writer.
-        # Формат ответа CLI не параметризуется: контракт сюда не едет, и метка говорит `unsupported`.
+        
+        
         return _tagged(make_claude_cli_provider(model), name, model, contract)
     if name in OPENAI_COMPATIBLE_VENDORS:
-        # qwen/deepseek/kimi — openai-совместимые вендоры реестра: base_url по умолчанию + ключ
-        # СТРОГО из env вендора. Ключа нет -> честная ошибка внутри _openai_call (не тихий mock).
+        
+        
         v = OPENAI_COMPATIBLE_VENDORS[name]
         base = os.environ.get(v["base_url_env"]) or v["base_url"]
         m = model or v["default_model"]
@@ -307,8 +307,8 @@ def _human_error(text):
     import json as _json
     try:
         d = _json.loads(text)
-    # Узкий тип (срез providers, 2026-08-12): ожидаемый отказ — «это не JSON», и тогда отдаём
-    # текст как есть. Любой другой тип здесь — дефект разбора, и он обязан всплыть.
+    
+    
     except (ValueError, TypeError):
         return (text or "").strip()[:2000]
     parts = []
@@ -323,9 +323,9 @@ def _human_error(text):
 
 def _transient(text):
     t = (text or "").lower()
-    # 19.08.2026 (заявка #160): список стал ЕДИНСТВЕННЫМ основанием повторять, поэтому в нём
-    # обязано быть и само слово. Сообщение, прямо называющее себя транзиентным, повторять
-    # можно; поймано существующим селфтестом провайдеров, чей образец так и звучал.
+    
+    
+    
     return any(s in t for s in ("overloaded", "529", "429", "rate limit", "rate_limit",
                                 "500", "502", "503", "504", "internal server error",
                                 "temporarily", "transient", "server_error",
@@ -371,17 +371,17 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
     есть — поэтому `--review`/`--author`/`--reevaluate-only` были недоступны с провайдером claude-cli,
     а обычный прогон работал. Разделитель снимает класс целиком: после `--` любой текст — позиционный
     аргумент, чем бы он ни начинался."""
-    # `claude_binary` / `claude_missing_message` живут в фасаде (кластер резолва провайдера), а этот
-    # вызов — в provider_calls. Импортируем их ЛЕНИВО, внутри функции: на уровне модуля обращения к
-    # фасаду нет (цикла импортов не возникает), а к моменту первого вызова фасад уже загружен. Так
-    # `claude_binary остаётся в фасаде`, а исполнение по-прежнему берёт путь ровно оттуда.
+    
+    
+    
+    
     from ai_ops_kit.providers.orchestrator_providers import claude_binary, claude_missing_message
-    # ИСПОЛНЯЕМ ТЕМ ЖЕ, ЧТО ПРОВЕРЯЛИ (поле 13.08 и 15.08.2026, ИИ-Среда). Здесь стояло короткое имя
-    # `claude`, а присутствие проверял `resolve_provider` через `which` — два разных решения, между
-    # которыми помещалось расхождение PATH: прогон падал сырым `FileNotFoundError: 'claude'`, и по
-    # нему нельзя было отличить «бинаря нет» от «бинарь не в PATH этого процесса». Теперь путь
-    # вычисляется один раз и им же исполняется, а отсутствие — названная причина, не трейсбек.
-    # Инъекция runner (офлайн-selftest) в бинаре не нуждается и имя не меняет: там запуска нет.
+    
+    
+    
+    
+    
+    
     binary = "claude"
     if runner is None:
         binary = claude_binary()
@@ -396,16 +396,16 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
     import json as _json
     import time
     import random
-    # runner заменяет subprocess.run (не весь вызов) — production-path проходит в selftest
+    
     _run = runner if runner is not None else (lambda c: subprocess.run(c, capture_output=True, text=True, timeout=timeout))
 
     last = ""
     for _attempt in range(max_attempts):
         _t0 = time.monotonic()
         try:
-            # Сериализуем ТОЛЬКО реальный subprocess-путь (runner=None). Инъекция runner (offline-
-            # selftest) писателя не вызывает — замок ей не нужен и оставил бы тесты медленными/
-            # зависящими от fcntl. Замок держится на время вызова, снимается на backoff (ниже).
+            
+            
+            
             if runner is None:
                 with _writer_serialization_lock(notify=lambda m: sys.stderr.write(m + "\n")):
                     r = _run(cmd)
@@ -416,9 +416,9 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
             if _attempt + 1 >= max_attempts:
                 break
             _backoff(_attempt); continue
-        # ЗАПУСК НЕ СОСТОЯЛСЯ — это НЕ транзиент и ретраить нечего: файл не появится от повтора.
-        # Ловим здесь, а не только до цикла, потому что между проверкой и запуском проходит время
-        # (обновление claude, смена PATH, съёмный диск), и владелец в этом случае получал трейсбек.
+        
+        
+        
         except FileNotFoundError:
             raise RuntimeError(claude_missing_message(
                 extra=f"путь был проверен и исчез до запуска: {cmd[0]}")) from None
@@ -440,7 +440,7 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
                 # детерминированный: повтор его не лечит. Наружу — последствие и оба выхода фразой.
                 if _env_unavailable_envelope(d):
                     raise ProviderEnvUnavailableError("claude-cli", last)
-                # ЛИМИТ СЕССИИ/КВОТЫ — не транзиент: повтор бессмыслен, отвечаем человеку фразой.
+                
                 if _session_limit(last):
                     raise ProviderLimitError("claude-cli", last, _reset_hint(last))
                 if _transient(last) and _attempt + 1 < max_attempts:
@@ -450,10 +450,10 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
             _record_call(d.get("model") or model or "claude-code-local",
                          u.get("input_tokens"), u.get("output_tokens"), time.monotonic() - _t0,
                          provider="claude-cli", cost=d.get("total_cost_usd"))
-            # ПУСТОЙ РЕЗУЛЬТАТ — НЕ ОТВЕТ. Прежде пустой `result` (rc=0) сворачивался в "" и доезжал
-            # до разбора куском без вердикта: судья «не выносил вердикт», гейт краснел «нет заключения
-            # reviewer» — правда по существу, ложь по причине. Приводим claude-cli к тому же контракту,
-            # что и API-провайдеры (anthropic/openai уже так делают): пустое — названный отказ.
+            
+            
+            
+            
             result = d.get("result") or ""
             if not result.strip():
                 raise ProviderRefusal("empty_answer", "claude -p вернул пустой result (rc=0)",
@@ -468,26 +468,26 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
             _env_d = None
         if _env_unavailable_envelope(_env_d):
             raise ProviderEnvUnavailableError("claude-cli", last)
-        # ЛИМИТ СЕССИИ/КВОТЫ РАСПОЗНАЁТСЯ ПЕРВЫМ (obs 99aa67ef): его текст несёт «429», и без этой
-        # ветки он попал бы в `_transient` и был бы повторён пять раз впустую, а затем упал бы
-        # трейсбеком. Здесь — немедленная человеческая фраза и код возврата на границе CLI.
+        
+        
+        
         if _session_limit(last):
             raise ProviderLimitError("claude-cli", last, _reset_hint(last))
-        # ПОВТОР ТОЛЬКО ТАМ, ГДЕ ОТКАЗ ТРАНЗИЕНТНЫЙ (заявка #160, 19.08.2026).
-        #
-        # Здесь стоял безусловный ретрай: при ЛЮБОМ ненулевом коде делалось пять попыток с
-        # экспоненциальным backoff. Замер поля: `claude-cli` внутри активной сессии Claude Code не
-        # работает СТРУКТУРНО — отказ детерминированный, и пятый повтор не делает систему
-        # надёжнее, он делает её медленнее ровно в пять раз плюс сумма пауз (до ~60 секунд).
-        #
-        # ГРАНИЦА, КОТОРУЮ НЕЛЬЗЯ ПЕРЕЙТИ: backoff на транзиентном 529 введён замером поля (F-011,
-        # квалификация 3.27.7), и снимать его нельзя — иначе вернётся дефект, стоивший раунда
-        # квалификации. Поэтому правка ОТЛИЧАЕТ ДВА КЛАССА, а не отменяет повтор: список
-        # транзиентных признаков (`_transient`) остаётся единственным основанием повторять, и 529,
-        # 429, 5xx, таймауты и сетевые сбои в нём есть.
-        #
-        # Тот же признак уже применялся к синтетическому конверту `is_error` выше — ветка rc!=0
-        # просто осталась без него. Расхождение двух веток одного решения и есть дефект.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if not _transient(last):
             raise RuntimeError(
                 "claude -p отказал структурно (код %s), повтор не назначен — он не сделал бы "

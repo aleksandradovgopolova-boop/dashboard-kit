@@ -1,0 +1,26 @@
+file:///private/tmp/dashboard-kit-recipes-20261102/tools/check-numeric-browser.mjs:21
+    server.on('exit',code=>{clearTimeout(timeout);reject(Error('Server exited '+code+' '+output));});
+                                                         ^
+
+Error: Server exited 1 Traceback (most recent call last):
+  File "/private/tmp/dashboard-kit-recipes-20261102/tools/reference-server.py", line 333, in <module>
+    main()
+    ~~~~^^
+  File "/private/tmp/dashboard-kit-recipes-20261102/tools/reference-server.py", line 321, in main
+    server = ReferenceServer(("127.0.0.1", args.port), handler_factory(snapshot))
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py", line 148, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted
+
+    at ChildProcess.<anonymous> (file:///private/tmp/dashboard-kit-recipes-20261102/tools/check-numeric-browser.mjs:21:58)
+    at ChildProcess.emit (node:events:514:20)
+    at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+
+Node.js v26.7.0

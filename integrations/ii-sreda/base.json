@@ -1,0 +1,12 @@
+{
+  "baseCommit": "2ca5b09971b5c676ddc545e058a57177242ae518",
+  "baseFilesSha256": {
+    "src/shared/lib/dashboard-kit/react.tsx": null,
+    "src/shared/lib/dashboard-kit/runtime.ts": "a835909600919be36a70474af415d5c3397d1744f4545c165885db8471e08d96",
+    "src/features/dashboard-management/kit/DashboardKitView.tsx": "7fc3f0c26676380eded47edc728a1af6bd7465de98f6f8bb947231af4b31bd7e",
+    "src/features/dashboard-management/kit/DashboardKitView.test.tsx": "a48dde9f9ac36936705e8bd585e323854f6d7e03ebef388552f31c04dabc30d9",
+    "docs/architecture/decisions/ADR-152-DASHBOARD-KIT-RENDERER.md": "eb38be4de81aae7fb8a4bd719bb1d64b3b7aba50ecfa2b272089a3e29719cf21"
+  },
+  "appliedToSource": false,
+  "published": false
+}

@@ -1,0 +1,778 @@
+{
+  "schema_version": 1,
+  "workflow": "ENGINEERING",
+  "evaluated_gates": [
+    "intake_completeness",
+    "concurrency_preflight",
+    "requirements",
+    "specification",
+    "event_contract_consistency",
+    "plan_readiness",
+    "implementation_verification",
+    "code_review",
+    "security",
+    "architecture_review",
+    "deploy_readiness",
+    "ux_review",
+    "design_system_usage",
+    "accessibility_review",
+    "visual_regression",
+    "documentation_updated"
+  ],
+  "policy_restored_gates": [],
+  "policy_floor_workflow": "ENGINEERING",
+  "policy_floor_fallback": false,
+  "gate_kinds": {
+    "intake_completeness": "deterministic",
+    "concurrency_preflight": "deterministic",
+    "requirements": "deterministic",
+    "specification": "deterministic",
+    "event_contract_consistency": "deterministic",
+    "plan_readiness": "deterministic",
+    "implementation_verification": "deterministic",
+    "code_review": "ai-review",
+    "security": "ai-review",
+    "architecture_review": "ai-review",
+    "deploy_readiness": "deterministic",
+    "ux_review": "ai-review",
+    "design_system_usage": "ai-review",
+    "accessibility_review": "ai-review",
+    "visual_regression": "ai-review",
+    "documentation_updated": "deterministic"
+  },
+  "claim_origins": {
+    "intake_completeness": {
+      "kind": "FACT",
+      "description": "факт проверки"
+    },
+    "concurrency_preflight": {
+      "kind": "FACT",
+      "description": "факт проверки"
+    },
+    "requirements": {
+      "kind": "FACT",
+      "description": "факт проверки"
+    },
+    "specification": {
+      "kind": "FACT",
+      "description": "факт проверки"
+    },
+    "event_contract_consistency": {
+      "kind": null,
+      "description": "источник не подтверждён"
+    },
+    "plan_readiness": {
+      "kind": "FACT",
+      "description": "факт проверки"
+    },
+    "implementation_verification": {
+      "kind": "FACT",
+      "description": "факт проверки"
+    },
+    "code_review": {
+      "kind": "JUDGMENT",
+      "description": "оценка AI"
+    },
+    "security": {
+      "kind": "JUDGMENT",
+      "description": "оценка AI"
+    },
+    "architecture_review": {
+      "kind": "FACT",
+      "description": "факт проверки"
+    },
+    "deploy_readiness": {
+      "kind": "FACT",
+      "description": "факт проверки"
+    },
+    "ux_review": {
+      "kind": "JUDGMENT",
+      "description": "оценка AI"
+    },
+    "design_system_usage": {
+      "kind": "JUDGMENT",
+      "description": "оценка AI"
+    },
+    "accessibility_review": {
+      "kind": "JUDGMENT",
+      "description": "оценка AI"
+    },
+    "visual_regression": {
+      "kind": "JUDGMENT",
+      "description": "оценка AI"
+    },
+    "documentation_updated": {
+      "kind": "FACT",
+      "description": "факт проверки"
+    }
+  },
+  "closure": {
+    "counts": {
+      "validator": 9,
+      "judge": 7,
+      "writer": 0,
+      "human": 0
+    },
+    "by_gate": {
+      "intake_completeness": "validator",
+      "concurrency_preflight": "validator",
+      "requirements": "validator",
+      "specification": "validator",
+      "event_contract_consistency": "validator",
+      "plan_readiness": "validator",
+      "implementation_verification": "validator",
+      "code_review": "judge",
+      "security": "judge",
+      "architecture_review": "judge",
+      "deploy_readiness": "validator",
+      "ux_review": "judge",
+      "design_system_usage": "judge",
+      "accessibility_review": "judge",
+      "visual_regression": "judge",
+      "documentation_updated": "validator"
+    },
+    "machine_checked": [
+      "concurrency_preflight",
+      "deploy_readiness",
+      "documentation_updated",
+      "event_contract_consistency",
+      "implementation_verification",
+      "intake_completeness",
+      "plan_readiness",
+      "requirements",
+      "specification"
+    ],
+    "judged_or_human": [
+      "accessibility_review",
+      "architecture_review",
+      "code_review",
+      "design_system_usage",
+      "security",
+      "ux_review",
+      "visual_regression"
+    ],
+    "by_source": {
+      "intake_completeness": "deterministic",
+      "concurrency_preflight": "deterministic",
+      "requirements": "deterministic",
+      "specification": "deterministic",
+      "event_contract_consistency": "deterministic",
+      "plan_readiness": "deterministic",
+      "implementation_verification": "deterministic",
+      "code_review": "ai_judgment",
+      "security": "ai_judgment",
+      "architecture_review": "ai_judgment",
+      "deploy_readiness": "deterministic",
+      "ux_review": "ai_judgment",
+      "design_system_usage": "ai_judgment",
+      "accessibility_review": "ai_judgment",
+      "visual_regression": "ai_judgment",
+      "documentation_updated": "deterministic"
+    },
+    "deterministic": [
+      "concurrency_preflight",
+      "deploy_readiness",
+      "documentation_updated",
+      "event_contract_consistency",
+      "implementation_verification",
+      "intake_completeness",
+      "plan_readiness",
+      "requirements",
+      "specification"
+    ],
+    "ai_judgment": [
+      "accessibility_review",
+      "architecture_review",
+      "code_review",
+      "design_system_usage",
+      "security",
+      "ux_review",
+      "visual_regression"
+    ],
+    "human": []
+  },
+  "evidence_verdict": {
+    "verified": true,
+    "deterministic": [
+      "concurrency_preflight",
+      "documentation_updated",
+      "implementation_verification",
+      "intake_completeness",
+      "plan_readiness",
+      "requirements",
+      "specification"
+    ],
+    "ai_judgment": [
+      "accessibility_review",
+      "code_review",
+      "design_system_usage",
+      "security",
+      "ux_review",
+      "visual_regression"
+    ],
+    "advisory": [
+      "accessibility_review",
+      "code_review",
+      "design_system_usage",
+      "security",
+      "ux_review",
+      "visual_regression"
+    ],
+    "human": [],
+    "unknown": [],
+    "reason": "есть детерминированная опора (concurrency_preflight, documentation_updated, implementation_verification, intake_completeness, plan_readiness, requirements, specification) — verified"
+  },
+  "gate_results": [
+    {
+      "provenance": "FACT",
+      "schema_version": 1,
+      "gate": "intake_completeness",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "classified_type",
+          "status": "pass",
+          "detail": "Original controller signals are recorded and fields validated; classification feature/small/low."
+        },
+        {
+          "id": "size",
+          "status": "pass",
+          "detail": "Original controller signals are recorded and fields validated; classification feature/small/low."
+        },
+        {
+          "id": "risk",
+          "status": "pass",
+          "detail": "Original controller signals are recorded and fields validated; classification feature/small/low."
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "evidence": [
+        "intake.json",
+        "run-plan.yaml"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "intake-classifier",
+      "review_mode": "writer",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "FACT",
+      "schema_version": 1,
+      "gate": "concurrency_preflight",
+      "status": "pass",
+      "blocking": false,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "checked_paths",
+          "status": "pass",
+          "detail": "Git preflight had no base changes; all five initial open PR file lists were checked through GitHub connector and only touched workflows. CLI PR lookup limitation is recorded."
+        },
+        {
+          "id": "verdict",
+          "status": "pass",
+          "detail": "Git preflight had no base changes; all five initial open PR file lists were checked through GitHub connector and only touched workflows. CLI PR lookup limitation is recorded."
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "evidence": [
+        "implementation-plan.md: Маршрут и доставка"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "intake-classifier",
+      "review_mode": "writer",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "FACT",
+      "schema_version": 1,
+      "gate": "requirements",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "testable_requirements",
+          "status": "pass",
+          "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+        },
+        {
+          "id": "acceptance_scenarios",
+          "status": "pass",
+          "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+        }
+      ],
+      "blockers": [],
+      "warnings": [
+        "Confirms artifact form and strict spec validity; implementation and user-facing behavior require separate tests/review."
+      ],
+      "evidence": [
+        "features/dashboard-minimal-copy-2026-11-02/artifact-validation.json: requirements"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "requirements-reviewer",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "FACT",
+      "schema_version": 1,
+      "gate": "specification",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "requirements_covered",
+          "status": "pass",
+          "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+        },
+        {
+          "id": "openspec_valid",
+          "status": "pass",
+          "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+        }
+      ],
+      "blockers": [],
+      "warnings": [
+        "Confirms artifact form and strict spec validity; implementation and user-facing behavior require separate tests/review."
+      ],
+      "evidence": [
+        "features/dashboard-minimal-copy-2026-11-02/artifact-validation.json: spec_structure, openspec_change_guard, openspec_strict"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "final-verifier",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": null,
+      "schema_version": 1,
+      "gate": "event_contract_consistency",
+      "status": "warn",
+      "blocking": false,
+      "awaiting_human": false,
+      "checks": [],
+      "blockers": [],
+      "warnings": [
+        "валидатор 'validate-event-catalog' не запущен или evidence не предоставлен"
+      ],
+      "evidence": [],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "solution-architect",
+      "review_mode": "writer",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "FACT",
+      "schema_version": 1,
+      "gate": "plan_readiness",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "work_packages",
+          "status": "pass",
+          "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+        },
+        {
+          "id": "dependencies",
+          "status": "pass",
+          "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+        },
+        {
+          "id": "write_scope",
+          "status": "pass",
+          "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+        }
+      ],
+      "blockers": [],
+      "warnings": [
+        "Confirms artifact form and strict spec validity; implementation and user-facing behavior require separate tests/review."
+      ],
+      "evidence": [
+        "features/dashboard-minimal-copy-2026-11-02/artifact-validation.json: plan_readiness"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "plan-reviewer",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "FACT",
+      "schema_version": 1,
+      "gate": "implementation_verification",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "lint_passed",
+          "status": "pass",
+          "detail": "Actual static and complete product suite exit 0 on identical product tree cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+        },
+        {
+          "id": "tests_passed",
+          "status": "pass",
+          "detail": "Actual static and complete product suite exit 0 on identical product tree cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+        },
+        {
+          "id": "tested_revision",
+          "status": "pass",
+          "detail": "Actual static and complete product suite exit 0 on identical product tree cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+        }
+      ],
+      "blockers": [],
+      "warnings": [
+        "Product build and TypeScript typecheck are not applicable to this static core; no PASS flags are fabricated. Profile API uses explicit not_applicable; lifecycle CLI does not propagate it.",
+        "освобождено (Static HTML/CSS/JavaScript core: product build and TypeScript typecheck are not applicable under the existing repository profile; real lint/test/browser checks passed.): build_passed, typecheck_passed"
+      ],
+      "evidence": [
+        "implementation-verification.json",
+        "evidence/static-fast.log",
+        "evidence/full-test.log"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "final-verifier",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "JUDGMENT",
+      "schema_version": 1,
+      "gate": "code_review",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "reviewed_revision",
+          "status": "pass",
+          "detail": "Independent reviewer approved the 30-file product diff; tree and diff hash bind verdict to cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+        },
+        {
+          "id": "blockers_closed",
+          "status": "pass",
+          "detail": "Independent reviewer approved the 30-file product diff; tree and diff hash bind verdict to cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "evidence": [
+        "reviewer-result.json"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "code-reviewer",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "JUDGMENT",
+      "schema_version": 1,
+      "gate": "security",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "no_secrets",
+          "status": "pass",
+          "detail": "Independent source review and scanner functions found no secrets/injection flags/new dependencies in the product diff."
+        },
+        {
+          "id": "no_injection_surface",
+          "status": "pass",
+          "detail": "Independent source review and scanner functions found no secrets/injection flags/new dependencies in the product diff."
+        },
+        {
+          "id": "deps_approved",
+          "status": "pass",
+          "detail": "Independent source review and scanner functions found no secrets/injection flags/new dependencies in the product diff."
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "evidence": [
+        "reviewer-result.json: security"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "security-reviewer",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "FACT",
+      "schema_version": 1,
+      "gate": "architecture_review",
+      "status": "pass",
+      "blocking": false,
+      "awaiting_human": false,
+      "scope": [
+        "not_applicable"
+      ],
+      "checks": [],
+      "blockers": [],
+      "warnings": [
+        "гейт неприменим: нет ни одного сигнала ['architecture_change', 'new_service', 'cross_boundary_change', 'breaking_api', 'data_migration', 'new_integration', 'deployment_change'] — не оценивался (honest skip)"
+      ],
+      "evidence": [],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "architecture-reviewer",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "FACT",
+      "schema_version": 1,
+      "gate": "deploy_readiness",
+      "status": "pass",
+      "blocking": false,
+      "awaiting_human": false,
+      "scope": [
+        "not_applicable"
+      ],
+      "checks": [],
+      "blockers": [],
+      "warnings": [
+        "гейт неприменим: нет ни одного сигнала ['deployment_change', 'new_service', 'infrastructure_change'] — не оценивался (honest skip)"
+      ],
+      "evidence": [],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "devops-engineer",
+      "review_mode": "writer",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "JUDGMENT",
+      "schema_version": 1,
+      "gate": "ux_review",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "ux_flow",
+          "status": "pass",
+          "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+        },
+        {
+          "id": "screen_states",
+          "status": "pass",
+          "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+        },
+        {
+          "id": "device_matrix_defined",
+          "status": "pass",
+          "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+        },
+        {
+          "id": "responsive_checked",
+          "status": "pass",
+          "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+        },
+        {
+          "id": "copy_reviewed",
+          "status": "pass",
+          "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "evidence": [
+        "verification.md",
+        "evidence/full-test.log",
+        "reviewer-result.json"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "ux-reviewer",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "JUDGMENT",
+      "schema_version": 1,
+      "gate": "design_system_usage",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "components_from_design_system",
+          "status": "pass",
+          "detail": "Existing Tooltip/fold/modal/button/icon and semantic tokens reused; no new common component."
+        },
+        {
+          "id": "new_components_justified",
+          "status": "pass",
+          "detail": "Existing Tooltip/fold/modal/button/icon and semantic tokens reused; no new common component."
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "evidence": [
+        "reviewer-result.json"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "design-system-reviewer",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "JUDGMENT",
+      "schema_version": 1,
+      "gate": "accessibility_review",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "keyboard_operable",
+          "status": "pass",
+          "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+        },
+        {
+          "id": "focus_visible",
+          "status": "pass",
+          "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+        },
+        {
+          "id": "contrast_aa",
+          "status": "pass",
+          "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+        },
+        {
+          "id": "screen_reader_labels",
+          "status": "pass",
+          "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+        },
+        {
+          "id": "no_color_only_state",
+          "status": "pass",
+          "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+        }
+      ],
+      "blockers": [],
+      "warnings": [
+        "Physical device and actual screen-reader speech are untested."
+      ],
+      "evidence": [
+        "verification.md",
+        "evidence/full-test.log",
+        "evidence/detail-explanation-method-dark-1280.png"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "accessibility-reviewer",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "JUDGMENT",
+      "schema_version": 1,
+      "gate": "visual_regression",
+      "status": "pass",
+      "blocking": true,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "baseline_snapshots",
+          "status": "pass",
+          "detail": "Root manually compared same-viewport baseline/current screenshots and inspected partial/detail states; only intended content changes observed. No pixel-diff automation claimed."
+        },
+        {
+          "id": "screens_diffed",
+          "status": "pass",
+          "detail": "Root manually compared same-viewport baseline/current screenshots and inspected partial/detail states; only intended content changes observed. No pixel-diff automation claimed."
+        },
+        {
+          "id": "unintended_diffs_none_or_approved",
+          "status": "pass",
+          "detail": "Root manually compared same-viewport baseline/current screenshots and inspected partial/detail states; only intended content changes observed. No pixel-diff automation claimed."
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "evidence": [
+        "verification.md: Визуальная и редакционная приёмка",
+        "evidence/baseline-light-390.png",
+        "evidence/current-light-390.png",
+        "evidence/baseline-dark-1280.png",
+        "evidence/current-dark-1280.png"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "final-verifier",
+      "review_mode": "read-only",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    },
+    {
+      "provenance": "FACT",
+      "schema_version": 1,
+      "gate": "documentation_updated",
+      "status": "pass",
+      "blocking": false,
+      "awaiting_human": false,
+      "checks": [
+        {
+          "id": "docs_updated_or_explicit_none",
+          "status": "pass",
+          "detail": "Canonical rules, skill, release note and regenerated component pages are changed and their reproduction checks passed."
+        },
+        {
+          "id": "release_notes_entry",
+          "status": "pass",
+          "detail": "Canonical rules, skill, release note and regenerated component pages are changed and their reproduction checks passed."
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "evidence": [
+        "docs/assembly-rules.md",
+        "docs/releases.md",
+        "skill/dashboard-build/SKILL.md",
+        "evidence/full-test.log"
+      ],
+      "tested_revision": "cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a",
+      "owner": "documentation-steward",
+      "review_mode": "writer",
+      "created_at": null,
+      "expires_at": null,
+      "override": null
+    }
+  ],
+  "unmet_gates": [],
+  "blocked": false
+}

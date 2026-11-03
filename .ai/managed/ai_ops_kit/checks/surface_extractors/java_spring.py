@@ -34,40 +34,40 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface
 
-# ─── индикатор Spring-веба ──────────────────────────────────────────────────────────────────────
-# Файл считается Spring-контроллером только при явном индикаторе — иначе одноимённая чужая аннотация
-# `@GetMapping`/`@RequestMapping` другого фреймворка дала бы ложный маршрут (симметрия с import-сужением
-# питон-/go-/js-экстракторов). Индикатор: импорт пакета аннотаций Spring ИЛИ сама аннотация контроллера.
+
+
+
+
 _SPRING_INDICATOR_RE = re.compile(
     r"org\.springframework\.web\.bind\.annotation"
     r"|@RestController\b"
     r"|@Controller\b")
 
-# method-аннотации маршрутов Spring. `@RequestMapping` — и на методе, и на классе (различаем позицией,
-# см. class-level ниже). Остальные (@GetMapping/@PostMapping/…) — только на методах. Скобки либо
-# ЗАКРЫТЫ (`(…)`), либо их нет вовсе (аннотация без аргументов): незакрытая `(` (обрыв файла) — не матч,
-# чтобы битый исходник не породил фантомный корневой маршрут.
+
+
+
+
 _MAPPING_RE = re.compile(
     r"@(Get|Post|Put|Delete|Patch|Request)Mapping\b"
     r"(?:\s*\(([^)]*)\)|\s*(?=[^(]|$))")
 
-# class-уровневый `@RequestMapping(...)`: аннотация, за которой до объявления `class`/`interface`/`enum`
-# нет ни `{`, ни `}`, ни `;` (то есть мы всё ещё в блоке аннотаций объявления типа, а не в теле метода).
-# Метод-уровневый `@RequestMapping` до `class` не дотянется — за ним идёт сигнатура метода с `{`.
+
+
+
 _CLASS_LEVEL_MAPPING_RE = re.compile(
     r"@RequestMapping\b\s*(?:\(([^)]*)\))?"
     r"[^{};]*?"
     r"\b(?:class|interface|enum)\b")
 
-# путь из аргументов аннотации: позиционный строковый литерал В НАЧАЛЕ (`"…"`) либо именованный
-# атрибут `value`/`path` = `"…"`. Java-строки — двойные кавычки. `{`-массив под эти паттерны не подходит.
+
+
 _POS_PATH_RE = re.compile(r'^\s*"([^"\n]*)"')
 _ATTR_PATH_LIT_RE = re.compile(r'\b(?:value|path)\s*=\s*"([^"\n]*)"')
 _ATTR_PATH_ANY_RE = re.compile(r'\b(?:value|path)\s*=')          # слот пути есть (литерал или нет)
 _NAMED_ARG_HEAD_RE = re.compile(r'^\s*\w+\s*=')                  # аргументы начинаются с `имя=`
 
-# Результаты разбора аргументов метод-аннотации: "lit" — доказанный литеральный путь; "prefix" — пути
-# нет, маршрут сводится к префиксу класса/корню; "skip" — слот пути есть, но путь НЕ литерал → пропуск.
+
+
 _PREFIX = ("prefix", "")
 
 
@@ -137,8 +137,8 @@ def extract_spring_routes(parsed: ParsedFile) -> list:
     src = parsed.source
     if not _SPRING_INDICATOR_RE.search(src):
         return []
-    # (позиция → префикс) всех class-уровневых @RequestMapping — чтобы привязать метод к ближайшему до
-    # него (несколько контроллеров в одном файле разводятся по позиции). Сам префикс — не route.
+    
+    
     class_levels = [(m.start(), _class_prefix(m.group(1)))
                     for m in _CLASS_LEVEL_MAPPING_RE.finditer(src)]
     class_starts = {pos for pos, _ in class_levels}
@@ -148,8 +148,8 @@ def extract_spring_routes(parsed: ParsedFile) -> list:
             continue   # это class-@RequestMapping (префикс), а не эндпоинт-метод
         kind, sub = _method_path(m.group(2))
         if kind == "skip":
-            # слот пути есть, но путь НЕ литерал (переменная/константа/массив) → не выдаём префикс за
-            # доказанный маршрут там, где реальный путь скрыт за нелитералом.
+            
+            
             continue
         prefix = ""
         for pos, pfx in class_levels:

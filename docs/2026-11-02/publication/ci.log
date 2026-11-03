@@ -1,0 +1,682 @@
+static-check	Set up job	﻿2026-11-02T13:31:58.5084172Z Current runner version: '2.338.2'
+static-check	Set up job	2026-11-02T13:31:58.5110543Z ##[group]Runner Image Provisioner
+static-check	Set up job	2026-11-02T13:31:58.5111812Z Hosted Compute Agent
+static-check	Set up job	2026-11-02T13:31:58.5112434Z Version: 20261021.618
+static-check	Set up job	2026-11-02T13:31:58.5113081Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+static-check	Set up job	2026-11-02T13:31:58.5113936Z Build Date: 2026-10-21T00:45:21Z
+static-check	Set up job	2026-11-02T13:31:58.5114623Z Worker ID: {437b6433-b58b-41b4-a9d9-1dd13beed53a}
+static-check	Set up job	2026-11-02T13:31:58.5115363Z Region: westus
+static-check	Set up job	2026-11-02T13:31:58.5115929Z Cloud: Azure
+static-check	Set up job	2026-11-02T13:31:58.5116486Z ##[endgroup]
+static-check	Set up job	2026-11-02T13:31:58.5118044Z ##[group]Operating System
+static-check	Set up job	2026-11-02T13:31:58.5118694Z Ubuntu
+static-check	Set up job	2026-11-02T13:31:58.5119318Z 26.04.1
+static-check	Set up job	2026-11-02T13:31:58.5119838Z LTS
+static-check	Set up job	2026-11-02T13:31:58.5120372Z ##[endgroup]
+static-check	Set up job	2026-11-02T13:31:58.5120969Z ##[group]Runner Image
+static-check	Set up job	2026-11-02T13:31:58.5121759Z Image: ubuntu-26.04
+static-check	Set up job	2026-11-02T13:31:58.5122332Z Version: 20261025.179.1
+static-check	Set up job	2026-11-02T13:31:58.5123456Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261025.179/images/ubuntu/Ubuntu2604-Readme.md
+static-check	Set up job	2026-11-02T13:31:58.5125669Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261025.179
+static-check	Set up job	2026-11-02T13:31:58.5126675Z ##[endgroup]
+static-check	Set up job	2026-11-02T13:31:58.5127833Z ##[group]GITHUB_TOKEN Permissions
+static-check	Set up job	2026-11-02T13:31:58.5129965Z Contents: read
+static-check	Set up job	2026-11-02T13:31:58.5130657Z Metadata: read
+static-check	Set up job	2026-11-02T13:31:58.5131310Z ##[endgroup]
+static-check	Set up job	2026-11-02T13:31:58.5133648Z Secret source: Actions
+static-check	Set up job	2026-11-02T13:31:58.5134723Z Cache mode: write
+static-check	Set up job	2026-11-02T13:31:58.5135447Z Prepare workflow directory
+static-check	Set up job	2026-11-02T13:31:58.5476414Z Prepare all required actions
+static-check	Set up job	2026-11-02T13:31:58.5527612Z Getting action download info
+static-check	Set up job	2026-11-02T13:31:58.8889418Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+static-check	Set up job	2026-11-02T13:31:59.0308619Z Download action repository 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97' (SHA:5fda3b95a4ea91299a34e894583c3862153e4b97)
+static-check	Set up job	2026-11-02T13:31:59.1458476Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+static-check	Set up job	2026-11-02T13:31:59.2551368Z Download action repository 'actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f' (SHA:b7c566a772e6b6bfb58ed0dc250532a479d7789f)
+static-check	Set up job	2026-11-02T13:31:59.5012030Z Complete job name: static-check
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	﻿2026-11-02T13:31:59.5926620Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5927798Z with:
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5928294Z   persist-credentials: false
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5928950Z   repository: aleksandradovgopolova-boop/dashboard-kit
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5933491Z   token: ***
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5933980Z   ssh-strict: true
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5934447Z   ssh-user: git
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5934907Z   clean: true
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5935378Z   sparse-checkout-cone-mode: true
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5935934Z   fetch-depth: 1
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5936409Z   fetch-tags: false
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5936886Z   show-progress: true
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5937407Z   lfs: false
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5937851Z   submodules: false
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5938355Z   set-safe-directory: true
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5938897Z   allow-unsafe-pr-checkout: false
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.5939740Z ##[endgroup]
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8690911Z Syncing repository: aleksandradovgopolova-boop/dashboard-kit
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8693894Z ##[group]Getting Git version info
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8695694Z Working directory is '/home/runner/work/dashboard-kit/dashboard-kit'
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8697331Z [command]/usr/bin/git version
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8719359Z git version 2.56.0
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8742404Z ##[endgroup]
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8753950Z Temporarily overriding HOME='/home/runner/work/_temp/ee4cdd13-a333-491a-b7bf-4d85e4574719' before making global git config changes
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8756814Z Adding repository directory to the temporary git global config as a safe directory
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8759619Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/dashboard-kit/dashboard-kit
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8830193Z Deleting the contents of '/home/runner/work/dashboard-kit/dashboard-kit'
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8833536Z ##[group]Determining repository object format
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8835129Z ##[endgroup]
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8836952Z ##[group]Initializing the repository
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8839417Z [command]/usr/bin/git init /home/runner/work/dashboard-kit/dashboard-kit
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8963646Z hint: Using 'master' as the name for the initial branch. This default branch name
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8965591Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8968504Z hint: to use in all of your new repositories, which will suppress this warning,
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8970140Z hint: call:
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8971414Z hint:
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8973070Z hint: 	git config --global init.defaultBranch <name>
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8974201Z hint:
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8975372Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8977177Z hint: 'development'. The just-created branch can be renamed via this command:
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8978566Z hint:
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8979304Z hint: 	git branch -m <name>
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8980168Z hint:
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8981284Z hint: Disable this message with "git config set advice.defaultBranchName false"
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.8983501Z Initialized empty Git repository in /home/runner/work/dashboard-kit/dashboard-kit/.git/
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9003152Z [command]/usr/bin/git remote add origin https://github.com/aleksandradovgopolova-boop/dashboard-kit
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9056519Z ##[endgroup]
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9058578Z ##[group]Disabling automatic garbage collection
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9060339Z [command]/usr/bin/git config --local gc.auto 0
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9094421Z ##[endgroup]
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9096293Z ##[group]Setting up auth
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9097496Z Removing SSH command configuration
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9099887Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9137467Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9617482Z Removing HTTP extra header
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9623794Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9659110Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9928357Z Removing includeIf entries pointing to credentials config files
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9934142Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:31:59.9968655Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:00.0253851Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:00.0296744Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git.path /home/runner/work/_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:00.0329711Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:00.0365881Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:00.0398667Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:00.0429253Z ##[endgroup]
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:00.0430681Z ##[group]Fetching the repository
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:00.0436080Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e42ad66c6fedb56f9f64b43bd1599b294cf5912a:refs/remotes/origin/codex/kit-example-shell-2026-11-02
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3849750Z From https://github.com/aleksandradovgopolova-boop/dashboard-kit
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3850943Z  * [new ref]         e42ad66c6fedb56f9f64b43bd1599b294cf5912a -> origin/codex/kit-example-shell-2026-11-02
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3859465Z [command]/usr/bin/git branch --list --remote origin/codex/kit-example-shell-2026-11-02
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3887956Z   origin/codex/kit-example-shell-2026-11-02
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3896815Z [command]/usr/bin/git rev-parse refs/remotes/origin/codex/kit-example-shell-2026-11-02
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3922047Z e42ad66c6fedb56f9f64b43bd1599b294cf5912a
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3926408Z ##[endgroup]
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3927164Z ##[group]Determining the checkout info
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3927987Z ##[endgroup]
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3932157Z [command]/usr/bin/git sparse-checkout disable
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.3984399Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.4016836Z ##[group]Checking out the ref
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.4021142Z [command]/usr/bin/git checkout --progress --force -B codex/kit-example-shell-2026-11-02 refs/remotes/origin/codex/kit-example-shell-2026-11-02
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9472554Z Switched to a new branch 'codex/kit-example-shell-2026-11-02'
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9479056Z branch 'codex/kit-example-shell-2026-11-02' set up to track 'origin/codex/kit-example-shell-2026-11-02'.
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9517402Z ##[endgroup]
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9569176Z [command]/usr/bin/git log -1 --format=%H
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9599421Z e42ad66c6fedb56f9f64b43bd1599b294cf5912a
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9615626Z ##[group]Removing auth
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9616503Z Removing SSH command configuration
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9617682Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9655597Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9934689Z Removing HTTP extra header
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9938351Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:03.9971830Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0248908Z Removing includeIf entries pointing to credentials config files
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0342479Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0343828Z includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git.path
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0344474Z includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git/worktrees/*.path
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0345022Z includeif.gitdir:/github/workspace/.git.path
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0345472Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0346608Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git.path
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0347350Z /home/runner/work/_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0348774Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-63c2c639\-5ab3\-4d0a\-aad1\-90cf1b519abf\.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0375577Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git/worktrees/*.path
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0400010Z /home/runner/work/_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0409077Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-63c2c639\-5ab3\-4d0a\-aad1\-90cf1b519abf\.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0446443Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0471385Z /github/runner_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0481426Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-63c2c639\-5ab3\-4d0a\-aad1\-90cf1b519abf\.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0522259Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0545282Z /github/runner_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0554547Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-63c2c639\-5ab3\-4d0a\-aad1\-90cf1b519abf\.config
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0589232Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0865080Z Removing credentials config '/home/runner/work/_temp/git-credentials-63c2c639-5ab3-4d0a-aad1-90cf1b519abf.config'
+static-check	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:32:04.0873984Z ##[endgroup]
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	﻿2026-11-02T13:32:04.1129177Z ##[group]Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.1129609Z with:
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.1129818Z   python-version: 3.12
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.1130063Z   check-latest: false
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.1133124Z   token: ***
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.1133358Z   update-environment: true
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.1133611Z   allow-prereleases: false
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.1133870Z   freethreaded: false
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.1134087Z ##[endgroup]
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.2362015Z ##[group]Installed versions
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.2466988Z Successfully set up CPython (3.12.15)
+static-check	Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	2026-11-02T13:32:04.2467923Z ##[endgroup]
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	﻿2026-11-02T13:32:04.2682857Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2683526Z with:
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2683830Z   node-version: 22
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2684164Z   check-latest: false
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2689111Z   token: ***
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2689467Z   package-manager-cache: true
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2689859Z env:
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2690265Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2691003Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2691933Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2692584Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2693231Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2693918Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.2694458Z ##[endgroup]
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.4105578Z Found in cache @ /opt/hostedtoolcache/node/22.23.4/x64
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.4109561Z ##[group]Environment details
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.8224174Z node: v22.23.4
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.8224665Z npm: 10.9.9
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.8224986Z yarn: 1.22.22
+static-check	Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	2026-11-02T13:32:04.8226163Z ##[endgroup]
+static-check	Полная проверка SDK и браузерных действий	﻿2026-11-02T13:32:04.8370322Z ##[group]Run python3 tools/test.py
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8370692Z ^[[36;1mpython3 tools/test.py^[[0m
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8467331Z shell: /usr/bin/bash -e {0}
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8467642Z env:
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8467956Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8468493Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8469043Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8469519Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8470198Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8470677Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8471088Z   DK_EVIDENCE_DIR: artifacts
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:04.8471363Z ##[endgroup]
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7235212Z TAP version 13
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7249480Z # Subtest: validation clones and deeply freezes data without freezing caller data
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7254452Z ok 1 - validation clones and deeply freezes data without freezing caller data
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7255494Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7255983Z   duration_ms: 3.593049
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7256545Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7257000Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7258009Z # Subtest: one filter and period derive rows, sums and means from the same snapshot
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7259518Z ok 2 - one filter and period derive rows, sums and means from the same snapshot
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7260461Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7260915Z   duration_ms: 1.516451
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7261429Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7262072Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7263200Z # Subtest: unknown filter values and empty input produce empty results, never fabricated zeros
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7264943Z ok 3 - unknown filter values and empty input produce empty results, never fabricated zeros
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7265973Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7266410Z   duration_ms: 1.565332
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7266913Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7267359Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7268509Z # Subtest: malformed metadata, dates, duplicates, unknown fields and invalid numbers fail closed
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7270300Z ok 4 - malformed metadata, dates, duplicates, unknown fields and invalid numbers fail closed
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7271145Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7271493Z   duration_ms: 2.880668
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7272116Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7272455Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7273127Z # Subtest: dangerous keys and invalid queries cannot enter the data model
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7274113Z ok 5 - dangerous keys and invalid queries cannot enter the data model
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7274735Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7275063Z   duration_ms: 2.839502
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7275453Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7275782Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7276448Z # Subtest: overflow is rejected while finite large means remain computable
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7277436Z ok 6 - overflow is rejected while finite large means remain computable
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7277901Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7278098Z   duration_ms: 0.698565
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7278318Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7278511Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7288425Z # Subtest: late success cannot overwrite the latest query, even when loader ignores abort
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7289657Z ok 7 - late success cannot overwrite the latest query, even when loader ignores abort
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7290357Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7290574Z   duration_ms: 7.541421
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7290805Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7291010Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7311083Z # Subtest: late error and current error never restore or relabel stale data
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7312332Z ok 8 - late error and current error never restore or relabel stale data
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7313001Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7313345Z   duration_ms: 2.136048
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7313736Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7314075Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7488321Z # Subtest: timeout settles an ignored abort and retry retains the filter
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7489706Z ok 9 - timeout settles an ignored abort and retry retains the filter
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7490093Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7490307Z   duration_ms: 15.761469
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7490565Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7490794Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7959065Z # Subtest: destroy aborts work, disconnects subscribers and permits independent remount
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7960500Z ok 10 - destroy aborts work, disconnects subscribers and permits independent remount
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7962104Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7962518Z   duration_ms: 2.587632
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7962991Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7963374Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7964275Z # Subtest: unsubscribe and consumer mutation cannot corrupt the store or later renderers
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7965622Z ok 11 - unsubscribe and consumer mutation cannot corrupt the store or later renderers
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7966465Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7966855Z   duration_ms: 1.073946
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7967338Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7967859Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7968748Z # Subtest: reentrant subscribers can supersede or destroy a load before its loader starts
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7970138Z ok 12 - reentrant subscribers can supersede or destroy a load before its loader starts
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7971000Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7971391Z   duration_ms: 0.736576
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7972086Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7972464Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7973481Z # Subtest: invalid queries never reach loader; invalid payload and empty payload have distinct states
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7975075Z ok 13 - invalid queries never reach loader; invalid payload and empty payload have distinct states
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7975979Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7976380Z   duration_ms: 0.850087
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7976817Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7977195Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7978117Z # Subtest: fetch adapter propagates signal, checks HTTP and hides response parsing errors
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7979510Z ok 14 - fetch adapter propagates signal, checks HTTP and hides response parsing errors
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7980370Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7980763Z   duration_ms: 2.406944
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7981208Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7981807Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7982525Z # Subtest: local pagination never changes KPI or chart aggregates
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7983521Z ok 15 - local pagination never changes KPI or chart aggregates
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7984194Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7984573Z   duration_ms: 0.634445
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7985025Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7985397Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7986234Z # Subtest: server mode keeps whole-slice totals and charts with only one returned page
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7987543Z ok 16 - server mode keeps whole-slice totals and charts with only one returned page
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7992410Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7993029Z   duration_ms: 3.068139
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7993651Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7994321Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7995263Z # Subtest: server contract supports 50000 matching rows without downloading those rows
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7996651Z ok 17 - server contract supports 50000 matching rows without downloading those rows
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7997501Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7997878Z   duration_ms: 0.907535
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7998329Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7998713Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.7999729Z # Subtest: server response rejects query mismatch, partial pages, inconsistent totals and coverage
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8001281Z ok 18 - server response rejects query mismatch, partial pages, inconsistent totals and coverage
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8002461Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8002839Z   duration_ms: 10.268052
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8003291Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8003529Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8003969Z # Subtest: server means are weighted by observed count and all-null remains missing
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8004606Z ok 19 - server means are weighted by observed count and all-null remains missing
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8005702Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8006076Z   duration_ms: 1.204709
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8006474Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8006836Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8007611Z # Subtest: server aggregation overflow and table/series disagreement fail closed
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8008777Z ok 20 - server aggregation overflow and table/series disagreement fail closed
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8009493Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8009749Z   duration_ms: 1.345522
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8009983Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8010444Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8010901Z # Subtest: fetch server mode posts normalized query and limits streamed response bytes
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8011568Z ok 21 - fetch server mode posts normalized query and limits streamed response bytes
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8012571Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8012931Z   duration_ms: 23.499056
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8013301Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8013615Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8036933Z 1..21
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8053062Z # tests 21
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8053643Z # suites 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8054069Z # pass 21
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8054562Z # fail 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8054958Z # cancelled 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8055355Z # skipped 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8055706Z # todo 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:06.8056091Z # duration_ms 100.204803
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6487354Z TAP version 13
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6502667Z # Subtest: one immutable demo source covers 89 regions and six full months
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6507810Z ok 1 - one immutable demo source covers 89 regions and six full months
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6508786Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6509222Z   duration_ms: 66.069972
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6510636Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6510984Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6511847Z # Subtest: region and month sums reconcile to every additive total
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6513500Z ok 2 - region and month sums reconcile to every additive total
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6514090Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6514429Z   duration_ms: 34.278603
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6514819Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6515066Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6515870Z # Subtest: ratios and average interest use whole-slice weights, not means of percentages
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6518036Z ok 3 - ratios and average interest use whole-slice weights, not means of percentages
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6518873Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6519214Z   duration_ms: 27.956951
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6519602Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6519871Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6520517Z # Subtest: district, month and region search filter every block consistently
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6522025Z ok 4 - district, month and region search filter every block consistently
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6522688Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6523011Z   duration_ms: 12.454144
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6523378Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6523629Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6524398Z # Subtest: pagination and table ordering never change KPI, chart, ranking or map data
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6525557Z ok 5 - pagination and table ordering never change KPI, chart, ranking or map data
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6526212Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6526555Z   duration_ms: 150.742961
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6527039Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6527352Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6527774Z # Subtest: unknown selections and no matches stay empty, not silently reset to all
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6528940Z ok 6 - unknown selections and no matches stay empty, not silently reset to all
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6529552Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6529746Z   duration_ms: 30.705441
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6529980Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6530340Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6531079Z # Subtest: one missing measurement invalidates its total and dependent ratio only
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6532342Z ok 7 - one missing measurement invalidates its total and dependent ratio only
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6532923Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6533254Z   duration_ms: 30.775803
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6533644Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6533967Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6534624Z # Subtest: zero is an observation; zero denominators are undefined ratios
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6535894Z ok 8 - zero is an observation; zero denominators are undefined ratios
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6536516Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6536834Z   duration_ms: 28.901062
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6537212Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6537538Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6538081Z # Subtest: status thresholds use the unrounded percentage-point shortfall
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6538631Z ok 9 - status thresholds use the unrounded percentage-point shortfall
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6539558Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6539881Z   duration_ms: 105.736415
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6540285Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6540615Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6541270Z # Subtest: malformed or semantically ambiguous source data fails closed
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6542277Z ok 10 - malformed or semantically ambiguous source data fails closed
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6542628Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6542817Z   duration_ms: 138.972775
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6543156Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6543498Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6543897Z # Subtest: unknown or malformed queries fail instead of changing filter meaning
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6544636Z ok 11 - unknown or malformed queries fail instead of changing filter meaning
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6545139Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6545337Z   duration_ms: 135.613849
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6545567Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6545755Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6546663Z # Subtest: unsafe aggregate sums are rejected even if individual rows are safe
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6547597Z ok 12 - unsafe aggregate sums are rejected even if individual rows are safe
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6548097Z   ---
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6548312Z   duration_ms: 12.311595
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6548543Z   type: 'test'
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6548730Z   ...
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6595828Z 1..12
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6615101Z # tests 12
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6615603Z # suites 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6616104Z # pass 12
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6616466Z # fail 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6616814Z # cancelled 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6617188Z # skipped 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6617398Z # todo 0
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:07.6617647Z # duration_ms 791.749419
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:08.7652539Z PASS: 20,000 observations, full-slice totals/series independent of pagination, null/zero/empty, query limits, concurrent idempotency, HTTP/body/origin/static boundaries (no socket opened)
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:09.2836228Z PASS: Python full-slice aggregates, page boundaries and JS contract agree for seven queries
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:09.5043409Z PASS: reproducible runtime package, external version pin, corruption/path/symlink rejection, isolated upgrade and rollback packages
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:32:09.6056746Z PASS: 0.1.0-rc.2 (candidate), 95 files, sha256:ba5b49ea1e774ebc11eadf50e3eb7de9d1e98685c8f02c9aa926d1ce28b82377
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3084313Z
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3085731Z   ✓ СЛОИ · компоненты читают только семантику (200 примитивов скрыто за 207 именами смысла)
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3086669Z   ✓ СЫРЫЕ · ни одного цвета значением вне примитивов
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3087667Z   ✓ ОПЕЧАТКИ · все используемые токены объявлены, селекторы браузер примет
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3088931Z   ✓ ПАРАМЕТРЫ · у входных параметров компонентов есть значения по умолчанию
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3090929Z   ✓ DYNAMIC MEANING · динамический смысл только через dkMeaning с явной ролью
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3091984Z   ✓ РОЛЬ · смысл, поставленный в текст, читается как текст
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3092748Z   ✓ ЭКРАН · разметка собирается через общее экранирование
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3093775Z   ✓ РАЗМЕРЫ · где у кита есть шкала, значения берутся из неё
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3094697Z   ✓ ЧЁТНОСТЬ · все размеры в пикселях чётные
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3095336Z   ✓ НАВЕДЕНИЕ · стили наведения закрыты от тача
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3096109Z   ✓ КОНТРАСТ · текст читается на своих поверхностях в обеих темах
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3097015Z   ✓ СТУПЕНИ · соседние поверхности различимы в обеих темах
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3097982Z   ✓ СМЫСЛ · акцент не путается со смыслом, в том числе при дальтонизме
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3099126Z   ✓ ПЯТНО · заливка смысла видна на поверхности
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3100474Z   ✓ КНОПКА · подпись и силуэт читаются на всех акцентах
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3101213Z   ✓ ШКАЛА · все ступени карты видны на своей доске
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3102223Z   ✓ ПАЛИТРА · различимость серий измерена в обеих темах
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3102957Z   ✓ СБОРКА · тема графиков собрана из текущих токенов
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3104064Z   ✓ ДВИЖОК · в урезанном движке ровно то, что просит код (7 типов серий, 9 модулей, 1 без записи в реестре — по отметке сборки)
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3105500Z   ✓ НОЛЬ · движок не создаётся и не пересчитывается в контейнере без размера
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3106635Z   ✓ ТИШИНА · управление тише данных: акцент только на фокусе, основной кнопке и в поимённых исключениях
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3107545Z   ✓ UI/UX: реестр и десять эвристик согласованы; ручное ревью отдельно
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3108474Z   ✓ СТРАНИЦЫ · 57 страниц компонентов собраны скриптом, все 10 блоков на месте
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3109869Z   ✓ МАНИФЕСТ · 65 частей описывают все 508 классов и 47 функций; порядок подключения сходится с кодом; 12 типов графиков, 2 пробела помечены; читатель отвечает на все части
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3111530Z   ✓ КЛАССЫ · 6437 употреблений классов и 686 ссылок на иконки в страницах, скриптах и README — все существуют (0 зацепка без стиля по списку)
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3113234Z   ✓ ЗНАЧОК · 3 файлов иконок на месте, размеры сходятся, иконка iPhone и маскируемая непрозрачны
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3114180Z   ✓ ТЕЛЕФОН · 69 страниц в 3 размерах: не шире экрана, цели от 44 px, поля не зумятся, вырез обойдён
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3115740Z   ✓ ДОСТУП · 4 дашбордов: контролы достижимы с клавиатуры с видимым фокусом, у контролов есть имена, каркас страниц на месте (речь скринридера на живом устройстве — ручной шаг)
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3116498Z
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3116691Z   Система цела.
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3116890Z
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:33:15.3545188Z RUN: browser/docs
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:15.0524699Z PASS: overview/routes/menu, 56 component pages, both themes at 320/768/1280/1536px, native wheel chaining and keyboard table scroll
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:15.2489619Z RUN: browser/reference-dashboard
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:20.6440035Z PASS: reference server + consumer, pagination/full-slice totals, filters, empty/error/retry, actions, remount, themes, mobile and AX names
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:20.7482380Z RUN: browser/family-mortgage
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:56.5293921Z PASS: genuine full-slice and sorted regional CSV files saved/read, UTF-8 BOM, six monthly rows and focus return
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:57.5684064Z PASS: mortgage consumer, full-slice totals, pages, filters/history, region details/focus, empty/error/retry/remount, themes/mobile/AX names
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:57.7229967Z RUN: browser/select
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:58.2590912Z PASS: поиск, выделение, фокус, клавиатура, пустой результат, multi/single, API, повторное открытие
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:58.3420277Z RUN: browser/chips
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:58.8865544Z PASS: ChipsInput/Select normalization, IME, duplicates, focus, disabled, safe text, reinit/destroy
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:59.0120247Z RUN: browser/meaning
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:59.5747192Z PASS: meaning roles/rejection, dark/light solid no-data, isolated roots, no canvas hatching, uptime
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:37:59.6785086Z RUN: browser/advanced
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:00.3808695Z PASS: DOM charts, comparison edges, tree keyboard/search/parent, state, saved views/migration/storage, density, layout, CSV/SVG, tooltip, fullscreen fallback, details, lifecycle
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:00.4976478Z RUN: browser/runtime
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:40.5905406Z PASS: real pages, 200% font tokens, 320px reflow, named AX controls, mobile hierarchy, reduced-motion environment, PNG/solid no-data
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:40.5929104Z {"page":"dashboard.html","duplicate":[],"dangling":[],"width":390,"viewport":390,"chartTop":1480.109375,"sticky":"static","fullscreen":"native","largeText":{"width":390,"viewport":390},"reflow320":{"width":320,"viewport":320,"textOverflow":[{"text":"Аналитика","cls":""},{"text":"Календарь","cls":""}],"overflow":[{"cls":"dk-seg","scroll":359,"width":290,"overflow":"auto"},{"cls":"dk-tablewrap","scroll":616,"width":258,"overflow":"auto"},{"cls":"dk-table dk-table--events","scroll":616,"width":520,"overflow":"visible"},{"cls":"","scroll":616,"width":520,"overflow":"visible"},{"cls":"","scroll":616,"width":520,"overflow":"visible"},{"cls":"","scroll":539,"width":520,"overflow":"visible"},{"cls":"","scroll":539,"width":520,"overflow":"visible"},{"cls":"","scroll":522,"width":520,"overflow":"visible"},{"cls":"","scroll":522,"width":520,"overflow":"visible"},{"cls":"dk-tabbar","scroll":430,"width":292,"overflow":"auto"}],"culprit":[{"tag":"BUTTON","cls":"","parent":"dk-seg","text":"Аналитика"},{"tag":"A","cls":"dk-tabbar__item","parent":"dk-tabbar","text":"Календарь"},{"tag":"svg","cls":{},"parent":"dk-tabbar__item","text":""},{"tag":"use","cls":{},"parent":{},"text":""},{"tag":"SPAN","cls":"","parent":"dk-tabbar__item","text":"Календарь"}]},"axNamedControls":true}
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:40.7255266Z RUN: browser/filter-context
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:42.0972267Z PASS: empty scope, null reset, view persistence, no-data distinction, real-page KPI/map/table/rank agreement, details context/focus, shared-source KPI reset
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:42.3383611Z PASS: regions.html honest unavailable navigation/action, available calendar destination
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:42.5922050Z PASS: accidents.html honest unavailable navigation/action, available calendar destination
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:42.8972858Z PASS: accidents widget alignment/reflow and 24-hour readable chart at 1366px (chart 585px)
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:43.1892514Z PASS: accidents widget alignment/reflow and 24-hour readable chart at 1024px (chart 414px)
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:43.5001125Z PASS: accidents widget alignment/reflow and 24-hour readable chart at 390px (chart 328px)
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:44.1080527Z PASS: regions 10px grid gutters, 20px inner padding, equal adjacent heights and no horizontal overflow at 1366px
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:44.4533823Z PASS: regions 10px grid gutters, 20px inner padding, equal adjacent heights and no horizontal overflow at 1024px
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:44.7921940Z PASS: regions 10px grid gutters, 16px inner padding, equal adjacent heights and no horizontal overflow at 390px
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:45.3690449Z PASS: dashboard.html/dark/320 5 KPI two columns + full-width fifth, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:45.9588199Z PASS: dashboard.html/dark/390 5 KPI two columns + full-width fifth, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:46.6035495Z PASS: dashboard.html/dark/768 5 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:47.2251391Z PASS: dashboard.html/dark/1024 5 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:47.9232840Z PASS: dashboard.html/dark/1366 5 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:48.5618875Z PASS: dashboard.html/light/320 5 KPI two columns + full-width fifth, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:49.1525974Z PASS: dashboard.html/light/390 5 KPI two columns + full-width fifth, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:49.7892037Z PASS: dashboard.html/light/768 5 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:50.4030228Z PASS: dashboard.html/light/1024 5 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:51.0855404Z PASS: dashboard.html/light/1366 5 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:51.6684836Z PASS: accidents.html/dark/320 4 KPI 2×2, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:52.1388866Z PASS: accidents.html/dark/390 4 KPI 2×2, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:52.6447355Z PASS: accidents.html/dark/768 4 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:53.1679211Z PASS: accidents.html/dark/1024 4 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:53.8516492Z PASS: accidents.html/dark/1366 4 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:54.4255087Z PASS: accidents.html/light/320 4 KPI 2×2, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:54.9185119Z PASS: accidents.html/light/390 4 KPI 2×2, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:55.4513286Z PASS: accidents.html/light/768 4 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:55.9948227Z PASS: accidents.html/light/1024 4 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:56.5646579Z PASS: accidents.html/light/1366 4 KPI one row, full labels and leading values
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:38:56.7217900Z RUN: browser/dashboard-overview
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:39:12.5608931Z PASS: reference overview at 1536px, five KPI, six panels, shared map counts, status demo/type totals, keyboard views, genuine work rows, both themes, mobile reflow and enlarged analytics
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:39:12.7009099Z RUN: browser/composition
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:39:26.0140667Z PASS: three composition components, both themes, 320/390/1536px, complete headings and working link targets
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:39:26.1866616Z RUN: browser/region-focus
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:39:30.9081511Z PASS: region focus composition, map aspect, visible context, shared risk totals, both themes and phone widths
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:39:31.0252165Z RUN: browser/example-shell
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:05.3024971Z {
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:05.3026353Z   "views": 148,
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:05.3026994Z   "errors": []
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:05.3027382Z }
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:05.3028703Z PASS: seven examples, both themes, 320/390/713/859/860/1023/1024/1280/1470/1920px, folded/expanded rail, compact desktop headers and concise copy
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:05.4687099Z RUN: browser/sdk-snippets
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:22.1095483Z PASS: 13 published SDK examples assembled on 6 clean pages; static rules, deferred loading, real actions, 390/1280, dark/light
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:24.8133242Z снимок: /home/runner/work/dashboard-kit/dashboard-kit/artifacts/dashboard-dark.png 390×844 dark
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:24.9305980Z PASS: deliberate manual/computed JS tokens are rejected
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:24.9306954Z PASS: UI/UX policy rejects invented mappings and incomplete coverage
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:24.9307753Z PASS: UX patterns reference actual component pages
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:28.5601501Z PASS: 13 new SDK entries, dependency closure, examples, anti-patterns, accessibility and skill task coverage; AI execution not assessed
+static-check	Полная проверка SDK и браузерных действий	2026-11-02T13:41:29.0150914Z PASS: complete static, generated files, mobile, browser, runtime, SDK fixture checks
+static-check	Проверка протокола MCP	﻿2026-11-02T13:41:29.0251021Z ##[group]Run python3 -m pip install -r tools/mcp-requirements.txt
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0251832Z ^[[36;1mpython3 -m pip install -r tools/mcp-requirements.txt^[[0m
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0252237Z ^[[36;1mpython3 tools/check-mcp.py^[[0m
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0282559Z shell: /usr/bin/bash -e {0}
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0282812Z env:
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0283089Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0283542Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0283979Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0284358Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0284751Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0285132Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+static-check	Проверка протокола MCP	2026-11-02T13:41:29.0285455Z ##[endgroup]
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.5663164Z Collecting mcp==1.30.0 (from -r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6035401Z   Downloading mcp-1.30.0-py3-none-any.whl.metadata (9.3 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6216376Z Collecting anyio>=4.5 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6255238Z   Downloading anyio-4.16.0-py3-none-any.whl.metadata (4.7 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6350849Z Collecting httpx-sse>=0.4 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6384855Z   Downloading httpx_sse-0.4.3-py3-none-any.whl.metadata (9.7 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6546748Z Collecting httpx<1.0.0,>=0.27.1 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6582760Z   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6775695Z Collecting jsonschema>=4.20.0 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6808284Z   Downloading jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.6995171Z Collecting pydantic-settings>=2.5.2 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.7028290Z   Downloading pydantic_settings-2.16.2-py3-none-any.whl.metadata (4.0 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.8172418Z Collecting pydantic<3.0.0,>=2.11.0 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.8206184Z   Downloading pydantic-2.14.2-py3-none-any.whl.metadata (137 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.8449142Z Collecting pyjwt>=2.10.1 (from pyjwt[crypto]>=2.10.1->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.8482162Z   Downloading pyjwt-2.15.1-py3-none-any.whl.metadata (3.5 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.8607338Z Collecting python-multipart>=0.0.9 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.8642484Z   Downloading python_multipart-0.0.33-py3-none-any.whl.metadata (6.3 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.8809202Z Collecting sse-starlette>=1.6.1 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.8839759Z   Downloading sse_starlette-3.6.0-py3-none-any.whl.metadata (15 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9094546Z Collecting starlette>=0.27 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9127519Z   Downloading starlette-1.10.0-py3-none-any.whl.metadata (6.6 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9276841Z Collecting typing-extensions>=4.9.0 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9312521Z   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9405426Z Collecting typing-inspection>=0.4.1 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9438274Z   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9700975Z Collecting uvicorn>=0.31.1 (from mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9732906Z   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9920889Z Collecting certifi (from httpx<1.0.0,>=0.27.1->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:30.9952740Z   Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.0093732Z Collecting httpcore==1.* (from httpx<1.0.0,>=0.27.1->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.0125545Z   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.0276426Z Collecting idna (from httpx<1.0.0,>=0.27.1->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.0308444Z   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.0421167Z Collecting h11>=0.16 (from httpcore==1.*->httpx<1.0.0,>=0.27.1->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.0452573Z   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.0551893Z Collecting annotated-types>=0.6.0 (from pydantic<3.0.0,>=2.11.0->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.0587020Z   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.7420824Z Collecting pydantic-core==2.50.2 (from pydantic<3.0.0,>=2.11.0->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.7455049Z   Downloading pydantic_core-2.50.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (6.5 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.7624919Z Collecting attrs>=22.2.0 (from jsonschema>=4.20.0->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.7656786Z   Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.7772458Z Collecting jsonschema-specifications>=2023.03.6 (from jsonschema>=4.20.0->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.7800730Z   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.7979895Z Collecting referencing>=0.28.4 (from jsonschema>=4.20.0->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:31.8011459Z   Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.0525608Z Collecting rpds-py>=0.25.0 (from jsonschema>=4.20.0->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.0562143Z   Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.0856892Z Collecting python-dotenv>=1.2.2 (from pydantic-settings>=2.5.2->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.0889610Z   Downloading python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.2691312Z Collecting cryptography>=3.4.0 (from pyjwt[crypto]>=2.10.1->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.2726523Z   Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.3946700Z Collecting cffi>=2.0.0 (from cryptography>=3.4.0->pyjwt[crypto]>=2.10.1->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.3987827Z   Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4102543Z Collecting pycparser (from cffi>=2.0.0->cryptography>=3.4.0->pyjwt[crypto]>=2.10.1->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4137633Z   Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4409725Z Collecting click>=7.0 (from uvicorn>=0.31.1->mcp==1.30.0->-r tools/mcp-requirements.txt (line 2))
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4444139Z   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4526681Z Downloading mcp-1.30.0-py3-none-any.whl (234 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4590615Z Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4645239Z Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4696576Z Downloading pydantic-2.14.2-py3-none-any.whl (490 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4760638Z Downloading pydantic_core-2.50.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.2 MB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4858507Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 286.4 MB/s  0:00:00
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4891241Z Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4939422Z Downloading anyio-4.16.0-py3-none-any.whl (134 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.4990843Z Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5094682Z Downloading httpx_sse-0.4.3-py3-none-any.whl (9.0 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5139711Z Downloading idna-3.20-py3-none-any.whl (69 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5191911Z Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5247447Z Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5297405Z Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5345965Z Downloading pydantic_settings-2.16.2-py3-none-any.whl (81 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5396140Z Downloading pyjwt-2.15.1-py3-none-any.whl (33 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5445308Z Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5630236Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 279.1 MB/s  0:00:00
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5665252Z Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5724932Z Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5773211Z Downloading python_multipart-0.0.33-py3-none-any.whl (32 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5825025Z Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5886927Z Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (371 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.5950181Z Downloading sse_starlette-3.6.0-py3-none-any.whl (17 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.6000370Z Downloading starlette-1.10.0-py3-none-any.whl (80 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.6054498Z Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.6103678Z Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.6223627Z Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.6281848Z Downloading click-8.5.0-py3-none-any.whl (125 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.6341985Z Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.6393634Z Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+static-check	Проверка протокола MCP	2026-11-02T13:41:32.8997952Z Installing collected packages: typing-extensions, rpds-py, python-multipart, python-dotenv, pyjwt, pycparser, idna, httpx-sse, h11, click, certifi, attrs, annotated-types, uvicorn, typing-inspection, referencing, pydantic-core, httpcore, cffi, anyio, starlette, pydantic, jsonschema-specifications, httpx, cryptography, sse-starlette, pydantic-settings, jsonschema, mcp
+static-check	Проверка протокола MCP	2026-11-02T13:41:34.5630940Z
+static-check	Проверка протокола MCP	2026-11-02T13:41:34.5674330Z Successfully installed annotated-types-0.8.0 anyio-4.16.0 attrs-26.1.0 certifi-2026.10.23 cffi-2.1.1 click-8.5.0 cryptography-50.0.2 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 httpx-sse-0.4.3 idna-3.20 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 mcp-1.30.0 pycparser-3.12 pydantic-2.14.2 pydantic-core-2.50.2 pydantic-settings-2.16.2 pyjwt-2.15.1 python-dotenv-1.2.4 python-multipart-0.0.33 referencing-0.37.0 rpds-py-2026.9.1 sse-starlette-3.6.0 starlette-1.10.0 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
+static-check	Проверка протокола MCP	2026-11-02T13:41:36.1002801Z Processing request of type ListToolsRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:36.1020733Z Processing request of type CallToolRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:36.3497169Z Processing request of type CallToolRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:36.5901573Z Processing request of type CallToolRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:36.8312843Z Processing request of type CallToolRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:37.0742947Z Processing request of type CallToolRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:37.5636499Z Processing request of type CallToolRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:38.0240331Z Processing request of type CallToolRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:38.2536640Z Processing request of type CallToolRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:38.4930807Z Processing request of type CallToolRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:38.4945120Z Processing request of type ReadResourceRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:38.4963220Z Processing request of type ReadResourceRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:38.4980022Z Processing request of type ReadResourceRequest
+static-check	Проверка протокола MCP	2026-11-02T13:41:38.5613129Z MCP: handshake, 5 tools, asset order, embed, resources and errors passed
+static-check	Сохранить проверяемые результаты runtime	﻿2026-11-02T13:41:38.6325335Z ##[group]Run actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6325808Z with:
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6326146Z   name: dashboard-runtime-e42ad66c6fedb56f9f64b43bd1599b294cf5912a
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6326540Z   path: artifacts/
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6326771Z   if-no-files-found: warn
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6327002Z   retention-days: 14
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6327216Z   compression-level: 6
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6327434Z   overwrite: false
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6327647Z   include-hidden-files: false
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6327877Z env:
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6328132Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6328585Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6329023Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6329420Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6329816Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6330244Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.6330574Z ##[endgroup]
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.8218722Z With the provided path, there will be 139 files uploaded
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.8224951Z Artifact name is valid!
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:38.8225655Z Root directory input is valid!
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:39.2638370Z Beginning upload of artifact content to blob storage
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:40.4575208Z Uploaded bytes 8388608
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:40.8076009Z Uploaded bytes 16777216
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:41.1145591Z Uploaded bytes 25165824
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:41.2049891Z Uploaded bytes 25607470
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:41.2764146Z Finished uploading artifact content to blob storage!
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:41.2772268Z SHA256 digest of uploaded artifact zip is 43a47ea444729da404de720c827cea3c6c938ed5c53849a48ef2e3948e8dcfa6
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:41.2774682Z Finalizing artifact upload
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:41.9019401Z Artifact dashboard-runtime-e42ad66c6fedb56f9f64b43bd1599b294cf5912a.zip successfully finalized. Artifact ID 13146856152
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:41.9022095Z Artifact dashboard-runtime-e42ad66c6fedb56f9f64b43bd1599b294cf5912a has been successfully uploaded! Final size is 25607470 bytes. Artifact ID is 13146856152
+static-check	Сохранить проверяемые результаты runtime	2026-11-02T13:41:41.9027082Z Artifact download URL: https://github.com/aleksandradovgopolova-boop/dashboard-kit/actions/runs/41453771044/artifacts/13146856152
+static-check	Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020	﻿2026-11-02T13:41:41.9270995Z Post job cleanup.
+static-check	Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97	﻿2026-11-02T13:41:42.0577605Z Post job cleanup.
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	﻿2026-11-02T13:41:42.2112357Z Post job cleanup.
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3119616Z [command]/usr/bin/git version
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3169409Z git version 2.56.0
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3244117Z Temporarily overriding HOME='/home/runner/work/_temp/ec0f82e5-b0c9-4acd-8a6c-aa534e4054f1' before making global git config changes
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3246063Z Adding repository directory to the temporary git global config as a safe directory
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3249178Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/dashboard-kit/dashboard-kit
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3286315Z Removing SSH command configuration
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3294771Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3336004Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3692160Z Removing HTTP extra header
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3693706Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.3752143Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.4121818Z Removing includeIf entries pointing to credentials config files
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.4129063Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+static-check	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-02T13:41:42.4175133Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+static-check	Complete job	﻿2026-11-02T13:41:42.4597393Z Cleaning up orphan processes

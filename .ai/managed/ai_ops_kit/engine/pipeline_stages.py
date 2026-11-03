@@ -14,6 +14,7 @@ from pathlib import Path
 
 from ai_ops_kit.engine import tool_broker
 from ai_ops_kit.gates import gate_executor
+from ai_ops_kit.shared import gate_dimensions
 from ai_ops_kit.engine.pipeline_readiness import _assess_readiness
 from ai_ops_kit.engine.pipeline_failure import _diff_checks, _env_proven_ok
 from ai_ops_kit.engine.pipeline_git import _committed_changed_files
@@ -149,16 +150,22 @@ def _pipeline_run_gates(plan, gate_ev, committed_sha, signals, not_applicable, e
                                    gate_ids=_gate_ids, tested_revision=committed_sha,
                                    signals=signals, not_applicable=not_applicable,
                                    exempt_reason=exempt_reason)
-    # КТО ЗАКРЫЛ — ЧЕЛОВЕКУ, А НЕ ТОЛЬКО В JSON. Замер 19.08.2026: 19 гейтов из 35 не имеют
-    # исполняемого валидатора, и в выводе прогона это ничем не отличалось от проверенного машиной.
-    # Строка печатается всегда: молчать о ней там, где мнения нет, значило бы приучать к тому, что
-    # её отсутствие ничего не значит.
-    _cl = gates.get("closure") or {}
-    _cnt = _cl.get("counts") or {}
-    _opinion = _cl.get("judged_or_human") or []
-    print(f"  гейты: проверено машиной {_cnt.get('validator', 0)} из {len(_gate_ids)}"
-          + (f"; остальное — мнение: {', '.join(_opinion)}" if _opinion else "; мнением не закрыт ни один"))
-    # веха 4.2 (#588): вердикт честности evidence — «зелёное» без детерминированной опоры advisory.
+    
+    
+    
+    
+    
+    
+    
+    _ev = gates.get("evidence_verdict") or {}
+    _readout = gate_dimensions.knowledge_readout(_ev)
+    if gate_dimensions.knowledge_has_known(_ev):
+        print("  Проверено — вот что уже известно о работе:")
+    else:
+        print("  Проверено — подтверждать пока нечего; вот граница знания:")
+    for _line in _readout:
+        print(f"    · {_line}")
+    
     _ev = gates.get("evidence_verdict") or {}
     if _ev and not _ev.get("verified") and _ev.get("advisory"):
         print(f"  evidence: {_ev.get('reason')}")
@@ -172,12 +179,12 @@ def _pipeline_run_gates(plan, gate_ev, committed_sha, signals, not_applicable, e
             import json as _json
             _passed = {gid: ev for gid, ev in gate_ev.items()
                        if gid != "security" and isinstance(ev, dict) and ev.get("status") == "pass"}
-            # пишем в child_root/.ai (репо-корень), ВНЕ worktree-дерева -> не грязним committed_sha
+            
             (Path(child_root) / ".ai").mkdir(parents=True, exist_ok=True)
             (Path(child_root) / ".ai" / f"reevaluate-evidence-{wid}.json").write_text(
                 _json.dumps({"sha": committed_sha, "gate_ev": _passed}, ensure_ascii=False), encoding="utf-8")
-        # ЗАПИСЬ того же кеша — симметрично чтению: не записали, значит следующий прогон
-        # пересчитает. Вердикт не зависит от наличия файла (ревизия 2026-08-11).
+        
+        
         except Exception:  # noqa: BLE001,S110 — потеря кеша не меняет вердикт, пересчитаем
             pass
     return gates
@@ -191,12 +198,12 @@ def _pipeline_assess_readiness(gates, coll, signals, plan, child_root, wid, work
     """Фаза 8-вердикт: собирает готовность прогона к PR — evidence-ревизия, spec-depth, baseline-diff,
     квалификация окружения, перепроверка одобрений после диффа, связность контуров и итоговый ready.
     Возвращает dict полей, которые далее проецируются в отчёт и в список not_yet."""
-    # честность evidence: ревизия сбора совпадает с зафиксированным SHA (если коммитили)
+    
     evidence_revision = coll.get("revision")
     revision_matches = (committed_sha is not None and evidence_revision == committed_sha)
 
-    # v2.106 ready-критерии уровня спеки: spec-depth enforcement + Real Spec-First + сверка критериев
-    #    приёмки (B2-14) + context-budget overflow -> _assess_readiness (K6).
+    
+    
     _rd = _assess_readiness(gates, coll, signals, plan, child_root, wid, work_root,
                             baseline_diff=baseline_diff, baseline_checks=baseline_checks,
                             committed_sha=committed_sha, base_sha=base_sha,
@@ -210,45 +217,45 @@ def _pipeline_assess_readiness(gates, coll, signals, plan, child_root, wid, work
     acceptance_criteria = _rd["acceptance_criteria"]
     context_overflow = _rd["context_overflow"]
 
-    # baseline-diff (finding живого прогона): что правка сломала/починила против базы
+    
     regressions, fixed = _diff_checks(baseline_checks, coll["checks"]) if baseline_diff else ([], [])
     no_regressions = (len(regressions) == 0) if baseline_diff else None
-    # P0.1 (аудит v2.79): baseline-режим делает baseline-осведомлённым ТОЛЬКО
-    # implementation_verification (красная база не должна блокировать). ВСЕ ОСТАЛЬНЫЕ блокирующие
-    # гейты (requirements/specification/plan/code_review/security/треки) остаются обязательными —
-    # иначе baseline-diff обходит их и выдаёт ложный ready. unmet_gates уже только блокирующие.
+    
+    
+    
+    
     other_blocking_unmet = [g for g in gates["unmet_gates"] if g != "implementation_verification"]
 
-    # finding аудита (P0.5): ready_for_pr ТРЕБУЕТ реального коммита (committed_sha),
-    # evidence на точном SHA и чистого дерева до/после проверок. dry-run (commit=False) НИКОГДА
-    # не бывает ready — нет ревизии, к которой привязать draft PR.
+    
+    
+    
     tree_ok = bool(tree_clean_before_checks) and (tree_clean_after_checks is not False)
-    # P0.6 + v2.118/v2.121 (P1.4): окружение квалифицировано, если install прошёл ЛИБО хотя бы одна
-    # проверка реально отработала (нет симптомов неподготовленного окружения). Нет проверок вовсе
-    # ИЛИ все падения — env-симптомы -> НЕ квалифицировано.
+    
+    
+    
     env_qualified = prepare_ok or _env_proven_ok(coll["checks"])
 
-    # v2.121 (P1.2, п.4): ПОСЛЕ диффа перепроверяем, что человеко-одобрение покрывает РЕАЛЬНО
-    # изменённые пути. Preflight проверил наличие одобрения ДО правок; здесь — что scope одобрения
-    # накрыл то, что модель реально тронула. scope не покрывает изменения -> одобрено не то -> НЕ ready.
+    
+    
+    
     approval_recheck = {"ok": True, "uncovered": []}
     contour_consistency = None
     if commit and committed_sha:
         try:
             from ai_ops_kit.gates import approvals as _appr
             _changed = _committed_changed_files(work_root, committed_sha)
-            # v3.35 Product Operating Model: гейт `contour_consistency` ИСПОЛНЯЕТСЯ здесь — на том
-            # же diff коммита, что и recheck одобрений. Advisory: несогласованность даёт warn.
+            
+            
             contour_consistency = contour_consistency_evidence(child_root, wid, _changed)
             gate_ev["contour_consistency"] = {
                 "status": contour_consistency["status"],
                 "provided": contour_consistency["provided"],
                 "evidence": contour_consistency["evidence"]}
-            # v3.0-rc2 (P0.5): recheck по ЭФФЕКТИВНЫМ сигналам (намерение + findings-derived), а не только
-            # входным — иначе scope одобрения для НАЙДЕННОЙ зависимости/секрета не перепроверяется на дифф.
+            
+            
             approval_recheck = _appr.recheck_after_diff(child_root, wid, _changed, signals=effective_approval_signals)
-            # v3.0-rc5 (P1.2): SEMANTIC dependency approval — каждая НОВАЯ зависимость из диффа должна
-            # покрываться ApprovalRecord с covers_packages для ИМЕННО этого пакета (не только путём файла).
+            
+            
             _dep_findings = [f for r in ((security_pack_result or {}).get("results") or [])
                              for f in (r.get("findings") or []) if f.get("type") == "new_dependency"]
             if _dep_findings:
@@ -258,24 +265,24 @@ def _pipeline_assess_readiness(gates, coll, signals, plan, child_root, wid, work
                                         "uncovered": (approval_recheck.get("uncovered") or []) + _dep_rc["uncovered"],
                                         "dependency_uncovered": _dep_rc["uncovered"]}
         except Exception as _e:  # noqa: BLE001 — v2.123 (P0.2b): approval FAIL-CLOSED. Сбой recheck НЕ
-            # трактуется как «покрыто»: для одобрения безопаснее заблокировать, чем пропустить непроверенное.
+            
             approval_recheck = {"ok": False, "uncovered": [{"domain": "*", "reason": f"recheck упал: {_e}"}],
                                 "error": str(_e)}
     approvals_cover_ok = bool(approval_recheck.get("ok"))
 
-    # v3.8.4 (finding живой квалификации): reevaluate-only — легитимно завершённый прогон (0 шагов,
-    # переоценка существующего committed HEAD после человеко-одобрения). Остальные условия base_ok
-    # (committed_sha/revision/tree/env/approvals) по-прежнему строги.
+    
+    
+    
     base_ok = (loop["stopped"] in ("done", "reevaluate-only")) and (committed_sha is not None) \
         and revision_matches and tree_ok and env_qualified and approvals_cover_ok
-    # ПРИЁМКА КАК УСЛОВИЕ READY: B2-30 (сверка состоялась, критерий не выполнен) И
-    # green-means-checked (судья поднят и отработал, но сверка не установлена — 0 reads / рубер-штамп,
-    # прежде давало READY_FOR_PR на QUICK). Разбор и граница #176 — в предикате.
+    
+    
+    
     acceptance_block, acceptance_block_reason = acceptance_blocks_ready(acceptance_criteria)
     if baseline_diff:
-        # критерий «no-regressions»: implementation_verification baseline-осведомлён (красная база
-        # не блокирует), НО все ОСТАЛЬНЫЕ блокирующие гейты обязательны (P0.1). require_fix (для
-        # fix-задач): дополнительно требуем, чтобы правка РЕАЛЬНО починила падавшую проверку.
+        
+        
+        
         ready = base_ok and not acceptance_block and no_regressions and (not other_blocking_unmet) \
             and (not require_fix or len(fixed) > 0) and spec_depth_ok and (not context_overflow) \
             and spec_complete_ok

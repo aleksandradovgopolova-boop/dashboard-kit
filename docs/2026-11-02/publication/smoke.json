@@ -1,0 +1,291 @@
+{
+  "origin": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/",
+  "sha": "362bcd49a57fc07008db42e9cd8cafba5dec3531",
+  "views": [
+    {
+      "file": "index",
+      "theme": "dark",
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 4,
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "buttons": [
+        44,
+        44
+      ],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "index",
+      "theme": "dark",
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 4,
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "buttons": [
+        44,
+        44
+      ],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "regions",
+      "theme": "dark",
+      "width": 1470,
+      "height": 836,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": 14,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "dataReady": true,
+      "data": {
+        "tiles": 89,
+        "high": 18,
+        "total": 89,
+        "rank": 14,
+        "overflow": false
+      }
+    },
+    {
+      "file": "accidents",
+      "theme": "dark",
+      "width": 713,
+      "height": 836,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": [
+        37,
+        37,
+        37
+      ],
+      "sortHeaders": [
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ]
+      ]
+    },
+    {
+      "file": "index",
+      "theme": "light",
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 4,
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "buttons": [
+        44,
+        44
+      ],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "index",
+      "theme": "light",
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 4,
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "buttons": [
+        44,
+        44
+      ],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "regions",
+      "theme": "light",
+      "width": 1470,
+      "height": 836,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": 14,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "dataReady": true,
+      "data": {
+        "tiles": 89,
+        "high": 18,
+        "total": 89,
+        "rank": 14,
+        "overflow": false
+      }
+    },
+    {
+      "file": "accidents",
+      "theme": "light",
+      "width": 713,
+      "height": 836,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": [
+        37,
+        37,
+        37
+      ],
+      "sortHeaders": [
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ]
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,69 @@
+region-filter: {
+  "schemaVersion": 1,
+  "component": "select",
+  "parameters": {
+    "dimension": "region",
+    "label": "Регион",
+    "mode": "single"
+  }
+}
+channel-filter: {
+  "schemaVersion": 1,
+  "component": "select",
+  "parameters": {
+    "dimension": "channel",
+    "label": "Канал выдачи",
+    "mode": "single"
+  }
+}
+issued-kpi: {
+  "schemaVersion": 1,
+  "component": "tile",
+  "parameters": {
+    "metric": "issued"
+  }
+}
+execution-kpi: {
+  "schemaVersion": 1,
+  "component": "tile",
+  "parameters": {
+    "metric": "execution"
+  }
+}
+rate-kpi: {
+  "schemaVersion": 1,
+  "component": "tile",
+  "parameters": {
+    "metric": "weighted-rate"
+  }
+}
+daily-chart: {
+  "schemaVersion": 1,
+  "component": "chart",
+  "parameters": {
+    "title": "Выдачи и план по дням",
+    "type": "bar",
+    "metrics": [
+      "issued",
+      "plan"
+    ],
+    "orientation": "vertical",
+    "groupBy": "date"
+  }
+}
+region-table: {
+  "schemaVersion": 1,
+  "component": "table",
+  "parameters": {
+    "title": "Выполнение плана по регионам",
+    "dimension": "region",
+    "metrics": [
+      "execution",
+      "issued",
+      "plan",
+      "weighted-rate"
+    ],
+    "details": true,
+    "sort": "asc"
+  }
+}

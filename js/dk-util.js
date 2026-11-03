@@ -408,6 +408,50 @@
   };
   // Compatibility helper: no-data is now solid, without hatching.
   dkMeaning.decal = function () { return null; };
+  // Keep a multi-view widget at the default view's configured dimensions.
+  // An inert, invisible baseline is measured only for real layout-width changes.
+  // Current view, focus, scroll and chart instances are never changed to measure it.
+  window.dkStableView = function (host, body) {
+    var template = host.cloneNode(true), disposed = false, width = -1;
+    var previous = host.style.getPropertyValue('--view-frame-height');
+    function refresh(force) {
+      if (disposed || !host.isConnected) return;
+      var rect = host.getBoundingClientRect();
+      if (rect.width <= 0) return;
+      if (!force && Math.abs(rect.width - width) < 0.5) return;
+      var probe = template.cloneNode(true);
+      probe.setAttribute('aria-hidden', 'true'); probe.inert = true;
+      Object.assign(probe.style, {position:'absolute', visibility:'hidden',
+        pointerEvents:'none', width:rect.width + 'px', boxSizing:'border-box',
+        left:'0', top:'0', margin:'0'});
+      var height;
+      try {
+        host.parentNode.appendChild(probe);
+        height = probe.getBoundingClientRect().height;
+      } finally { probe.remove(); }
+      if (!(height > 0)) return;
+      width = rect.width;
+      host.style.setProperty('--view-frame-height', height + 'px');
+      host.classList.add('dk-widget--stable-view');
+      body.classList.add('dk-widget__viewport');
+    }
+    var observer = new ResizeObserver(function () { refresh(false); });
+    observer.observe(host);
+    // A viewport-height change can alter svh/clamp baselines without changing
+    // the widget width. Representation changes still use the same snapshot.
+    function viewportResize() { refresh(true); }
+    window.addEventListener('resize', viewportResize);
+    refresh(true);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { refresh(true); });
+    return {refresh: function () { refresh(true); }, destroy: function () {
+      disposed = true; observer.disconnect();
+      window.removeEventListener('resize', viewportResize);
+      host.classList.remove('dk-widget--stable-view'); body.classList.remove('dk-widget__viewport');
+      if (previous) host.style.setProperty('--view-frame-height', previous);
+      else host.style.removeProperty('--view-frame-height');
+    }};
+  };
+
   window.dkMeaning = dkMeaning;
 
   window.dkAnchor = dkAnchor;

@@ -152,7 +152,7 @@
         '<button type="button" class="dk-iconbtn dk-iconbtn--sm" data-step="1"' +
         (page === last ? ' disabled' : '') + ' title="Следующая страница" aria-label="Следующая страница">' +
         ICON_NEXT + '</button>' +
-        '<span class="dk-pager__short">' + page + ' из ' + last + '</span>' +
+        '<span class="dk-pager__short" aria-label="Страница ' + page + ' из ' + last + '">' + page + '/' + last + '</span>' +
         '</div>';
 
       // Правило 5: если размер можно менять — он стоит рядом, а не в настройках.

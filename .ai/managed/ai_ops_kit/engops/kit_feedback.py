@@ -50,21 +50,21 @@ from ai_ops_kit.shared.gitio import git  # noqa: E402
 
 OBSERVATION_CLASSES = ("defect", "friction", "question", "idea")
 SEVERITIES = ("p0", "p1", "p2")
-# Состояния наблюдения. `new` живёт в дочке, `delivered` ставит сборка, остальные — решение по киту.
+
 STATES = ("new", "delivered", "accepted", "became_work", "rejected")
 EVIDENCE_KINDS = ("file", "command", "note")
 
-# ЯРЛЫКИ СОСТОЯНИЙ ЕДУТ В ОТЧЁТЕ. Слой человеческого языка (`ui/presenter`) лежит НИЖЕ ядра и
-# импортировать его отсюда нельзя, а он не вправе импортировать нас — поэтому названия несёт сам
-# отчёт. Без этого владелец читал бы `became_work`/`rejected` внутренними словами: первая же проба
-# канала напечатала их человеку в ответе «что стало с твоими замечаниями».
+
+
+
+
 STATE_NAMES = {"new": "записано", "delivered": "дошло до кита",
                "accepted": "принято", "became_work": "стало работой",
                "rejected": "отклонено"}
 
-# Класс, для которого улика ОБЯЗАТЕЛЬНА. Остальные классы — законные без улик: трение и вопрос это
-# впечатление и незнание, им нечего цитировать, и требовать от них доказательство значило бы просто
-# запретить о них говорить.
+
+
+
 _CLASS_REQUIRES_EVIDENCE = ("defect",)
 
 CHILD_DIR = Path(".ai") / "kit-feedback"
@@ -102,7 +102,7 @@ def _kit_version(root):
 
 
 def _git_head(root):
-    # Единый вход к git с таймаутом (см. shared/gitio). OSError (нет git) по-прежнему -> None.
+    
     try:
         rc, out, _ = git(root, "rev-parse", "HEAD", timeout=20)
     except (OSError, subprocess.SubprocessError):
@@ -153,11 +153,11 @@ def check(obs):
     if not st:
         e.append("statement пуст: наблюдение без утверждения — это не наблюдение")
     elif _looks_like_path(st):
-        # ПРОБА КАНАЛА НА ЖИВОЙ ДОЧКЕ (18.08.2026): `./ai-ops feedback .` записала наблюдение с
-        # содержанием «.» и ответила «записал». Разбор позиционных отдал путь репозитория в текст, а
-        # запись его приняла. Отказ живёт ЗДЕСЬ, а не только в CLI: канал наполняют и модулем, и
-        # командой, а запись, которой нельзя верить, хуже отсутствующей — она попадает в сборку,
-        # тратит решение по себе и учит не доверять каналу.
+        
+        
+        
+        
+        
         e.append(f"statement похож на путь, а не на наблюдение ({st!r}): "
                  "скажите, ЧТО кит сделал не так — путь репозитория он подставляет сам")
     cls = obs.get("observation_class")
@@ -296,7 +296,7 @@ def collect(kit_root, child_roots, *, dry_run=False):
                                           "child": obs.get("child", {}).get("name")})
                 continue
             if not evidenced(obs):
-                # Не отказ и не тишина: наблюдение доедет, но названо тем, что оно есть.
+                
                 report["unevidenced"].append({"id": obs["id"],
                                               "statement": obs["statement"][:120]})
             if dry_run:
@@ -323,8 +323,8 @@ def set_state(kit_root, child_root, obs_id, state, reason=None, work_item=None):
     kp, cp = kit_path(kit_root, obs_id), child_path(child_root, obs_id)
     src = kp if kp.is_file() else cp
     if not src.is_file():
-        # Отдельная ветка, а не «не разобран»: тут человек скорее всего ошибся в id, и сообщение
-        # обязано вести к опечатке, а не к поиску порчи файла.
+        
+        
         return None, [f"наблюдения {obs_id} нет ни в ките, ни в дочке — проверь id "
                       f"(`kit_feedback.py status <дочка>` покажет настоящие)"]
     doc, err = _load(src)

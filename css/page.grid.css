@@ -6,7 +6,7 @@
 #grid-ref .gr-topbar { background: var(--surface-2); border-bottom: 1px solid var(--rule); }
 #grid-ref .gr-topbar__inner {
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
-  height: 68px; max-width: var(--page-max); margin-inline: auto; padding-inline: var(--page-pad);
+  min-height: 68px; flex-wrap: wrap; padding-block: var(--space-4); max-width: var(--page-max); margin-inline: auto; padding-inline: var(--page-pad);
 }
 #grid-ref .gr-brand { display: flex; align-items: center; gap: var(--space-5); min-width: 0; }
 #grid-ref .gr-brand__mark {
