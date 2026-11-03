@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.0-rc.7",
+  "version": "0.1.0-rc.8",
   "channel": "candidate",
   "dataContractVersion": 1,
   "files": {
@@ -40,7 +40,7 @@
     "docs/family-mortgage.md": "04692554c26bb81bc4595eba11096bc1b8798007052e09cf8956001248fe9771",
     "docs/named-metrics.md": "20886783cd3314757776ead1fc6e9194687ff14ae1d43f9e291026135f284834",
     "docs/reference-server.md": "5a9ff2ec2ed8e84114f6ca48e1a70dc9cffd2339deed0b649cb43d7c207a756d",
-    "docs/releases.md": "528f30b669ec4b11a708e97cb67791f6d4e32e754a98fd1ba175628feed10edf",
+    "docs/releases.md": "e7ebb20b240a5626a5b992833390b429d2164fff9769739a1dce6612a3520c49",
     "docs/screen-spec.md": "be2ac8e24556e01de9f01d9786761388dfaeab2bea347a2008b711ac26a35cc2",
     "family-mortgage.html": "159b9430f630a63e4c8d8698aef5fb342c5ce8a993a4adf85333cf0daf20fcf3",
     "icons/apple-touch-icon.png": "11d35853bab7b756d693b044964a73dc08468a5192ef5e2f183e1d9100828c31",
@@ -105,5 +105,5 @@
     "vendor/licenses/Golos-Text-OFL.txt": "ff532f9e8789f09a9fdffc3c0954eedfb0a48be77b2e2eb90f5f82e4f347f50c",
     "vendor/licenses/Tabler-Icons-MIT.txt": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
   },
-  "contentDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20"
+  "contentDigest": "sha256:91b096814b8139c501f3dc859a90c57c2e63b284970a28130177384deb6d07c4"
 }

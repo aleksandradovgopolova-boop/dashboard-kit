@@ -1,5 +1,24 @@
 # Где мы остановились
 
+## Локальная доставка #63 · 03.11.2026
+
+#37/#67/#68 сохранены c05b74d, найденные реальными evals технические исправления
+compiler empty class/check.py --help — 3add79c. #69 read-only update preview
+реализован, quick tests и read-only review APPROVE; протокол update-preview.md
+в features/epic63-next-20261103. Полный локальный tools/test.py с Chrome PASS,
+MCP stdio с7tools PASS. Адресный compiler recheck после исправления также PASS.
+
+ВАЖНО: push/remote CI нового пакета auto-review отклонил со ссылкой на прежний
+запрет пользователя. Не обходить. Новые #37/#67/#68/#69 не отправлены/не слиты/
+не опубликованы. PR74/75 уже открыты ready и имеют полный remote CI PASS.
+Их также не сливали. Публикация старых PR71/73 остаётся прежней.
+
+#70: семь настоящих fresh-context native Codex artifacts сохранены в
+/tmp/kit-evals-20261103/task16..22. RootfunctionalChrome28views PASS, отдельный
+UXreview выявил overlap/details/missingdependency в16–19; corrections/recheck
+идут. Не считать functional PASS общей визуальной приёмкой. Claude отложен
+самим владельцем. Итог и portable evidence сохранятся в skill/evals/runs.
+
 ## Контракты и первая декларативная сборка · 03.11.2026
 
 #65 готов в PR74 (fab9e75), полный Chrome+MCP CI41611976943 PASS.
