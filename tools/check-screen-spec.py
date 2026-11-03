@@ -71,6 +71,12 @@ with tempfile.TemporaryDirectory(prefix="dk-screen-spec-") as directory:
     build(ROOT/"examples/spec/plan-fact.json",a);build(ROOT/"examples/spec/plan-fact.json",b)
     page = subprocess.run([sys.executable,str(ROOT/'tools/check.py'),'--fast','--page',str(a/'index.html')],text=True,capture_output=True)
     assert page.returncode == 0, 'Generated consumer must pass the real kit page checker: '+page.stdout+page.stderr
+    missing_glass = a/'missing-glass.html'
+    missing_glass.write_text((a/'index.html').read_text().replace('<link rel="stylesheet" href="kit/css/glass.css">', ''), 'utf-8')
+    assert 'href="kit/css/glass.css"' not in missing_glass.read_text()
+    broken = subprocess.run([sys.executable,str(ROOT/'tools/check.py'),'--fast','--page',str(missing_glass)],text=True,capture_output=True)
+    assert broken.returncode != 0 and 'dk-glass без css/glass.css' in broken.stdout
+    missing_glass.unlink()
     assert {p.relative_to(a):p.read_bytes() for p in a.rglob('*') if p.is_file()} == {p.relative_to(b):p.read_bytes() for p in b.rglob('*') if p.is_file()}
     pin=read_json(a/"kit/kit-release.json")["contentDigest"]
     try:

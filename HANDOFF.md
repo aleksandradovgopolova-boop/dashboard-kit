@@ -1,5 +1,33 @@
 # Где мы остановились
 
+## Готовая локальная очередь #63 · 03.11.2026
+
+Реализация и локальная приёмка неотложенной очереди завершены. #65 — PR74
+fab9e75, #22 — PR75 406cd89: оба open/ready/mergeable, их полный remote
+Chrome/MCP CI PASS (41611976943/41612419473). Не слиты и не опубликованы.
+
+#37/#67/#68: c05b74d + исправления compiler/help 3add79c. #69 — c577d20.
+Сохранены отдельные локальные ветки. Полный локальный tools/test.py с Chrome
+PASS; реальный MCP7tools PASS. Финальные checker/recipe/compiler fixtures,
+пакеты/pins/dry-run и consumer page checks PASS. Runtime остаётся rc8candidate,
+не stable; никаких SDK consumers не обновляли.
+
+#70 Codex: семь настоящих fork_turns=none сборок16–22, новый blind input22.
+28финальных Chromeviews390/1280 Dark/Light +4view table recheck16, независимое
+UX/editorial APPROVE всем7. Первые failures/corrections не затёрты. Результат,
+все авторские исходники/отчёты, inputs, checksum, initial/final evidence и
+проверенный rehydrate/replay: skill/dashboard-build/evals/runs/2026-11-03/README.md.
+Новые guardrails: generated consumer page check, safe --help, missing Glass,
+metrics/toolbar/header geometry и уточнённый skill reference. Claude cases
+blocked/deferred по прямому решению владельца, не PASS; #70 целиком не закрывать.
+
+ДОСТАВКА ЗАБЛОКИРОВАНА: automatic approval отклонил push/remote workflow со
+ссылкой на прежний запрет «не делай push, PR, merge или deploy». Не обходить.
+Новые ветки только локальны, новых PR/remote CI/merge/deploy нет. Для отправки
+нужно новое подтверждение. Готовые описания PR лежат в
+features/epic63-next-20261103/pr-*.md. AI Ops и другие проекты не затронуты.
+Предыдущая опубликованная версия по-прежнему e869cfd (PR71/73). Preview8771.
+
 ## Локальная доставка #63 · 03.11.2026
 
 #37/#67/#68 сохранены c05b74d, найденные реальными evals технические исправления

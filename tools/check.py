@@ -2489,6 +2489,8 @@ def check_page(path: Path) -> None:
     for base in ("css/tokens.primitives.css", "css/tokens.semantic.css", "css/components.css"):
         if base not in css_seen:
             fail(L, f"{path.name}: не подключён {base}")
+    if any(cls == "dk-glass" for _, cls in _used_classes(text)) and "css/glass.css" not in css_seen:
+        fail(L, f"{path.name}: dk-glass без css/glass.css — подключите glass через kit.py head")
     if "vendor/air-datepicker.js" in js_files and "vendor/air-datepicker.css" not in css_seen:
         fail(L, f"{path.name}: календарь периода без vendor/air-datepicker.css — нарисуется голым списком")
 
