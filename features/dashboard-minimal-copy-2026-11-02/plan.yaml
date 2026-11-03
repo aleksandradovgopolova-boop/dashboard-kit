@@ -1,0 +1,44 @@
+schema_version: 1
+kind: plan-artifact
+workitem_id: dashboard-minimal-copy-2026-11-02
+source: implementation-plan.md
+work_packages:
+  - id: rules
+    summary: Синхронизировать канонические редакционные правила, продуктовую UI/UX-политику и dashboard-build.
+    depends_on: []
+  - id: mortgage
+    summary: Перенести пояснения существующего ипотечного примера в доступные сведения по запросу, сохранив краткие статусы.
+    depends_on: []
+  - id: generated-resources
+    summary: Перегенерировать справочник и manifest, подготовить следующий кандидат без публикации.
+    depends_on: [rules, mortgage]
+  - id: verification
+    summary: Выполнить адресные и полные продуктовые проверки, посмотреть снимки и получить независимое ревью.
+    depends_on: [generated-resources]
+  - id: evidence
+    summary: Записать реальные результаты и оставшиеся ограничения; подготовить PR без merge/deploy.
+    depends_on: [verification]
+write_scope:
+  - docs/assembly-rules.md
+  - docs/current-state.md
+  - docs/releases.md
+  - docs/2026-10-28/DASHBOARD-DETAIL-MODAL-001.md
+  - UIUX.md
+  - DESIGN-UX-ACCESSIBILITY.md
+  - DECISIONS.md
+  - HANDOFF.md
+  - .ai/project/uiux-policy.json
+  - skill/dashboard-build/
+  - family-mortgage.html
+  - js/family-mortgage.js
+  - css/page.family-mortgage.css
+  - tools/check-family-mortgage.mjs
+  - tools/component_pages/p5_feedback.py
+  - tools/component_pages/p6_advanced.py
+  - tools/component_pages/p7_composition.py
+  - index.html
+  - component-*.html
+  - component-*.md
+  - kit-manifest.json
+  - kit-release.json
+  - features/dashboard-minimal-copy-2026-11-02/

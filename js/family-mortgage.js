@@ -9,6 +9,7 @@
     var snapshot = null, view = null, stopped = false, controls = [], charts = [], releases = [];
     var map = null, mapFiles = null, mapPending = false, mapFailed = false, mapAttempt = 0;
     var mapAbort = new AbortController(), searchTimer = null;
+    var coverageTip = null, detailTips = [];
     var useURL = options.url !== false;
     function el(id) { return root.querySelector('#' + id); }
     function node(tag, text, cls) { var n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
@@ -35,6 +36,27 @@
     function pct(value) { return value == null ? 'Нет данных' : dkFmt.pct(value, 1); }
     function billion(value) { return value == null ? 'Нет данных' : dkFmt.num(value / 1000, 2); }
     function date(value) { return value.split('-').reverse().join('.'); }
+    function partialCoverage(record) { return Object.keys(record.coverage).some(function (key) { return record.coverage[key].partial; }); }
+    function coverageReason(records) {
+      var reasons = [];
+      if (records.some(partialCoverage)) reasons.push('Неполные показатели обозначены «Нет данных»; это не ноль.');
+      if (records.some(function (r) { return r.issued == null || r.issuedPlan == null; })) reasons.push('Для оценки выполнения нужны полный факт и план.');
+      if (records.some(function (r) { return r.issuedPlan === 0; })) reasons.push('При нулевом плане выполнение не рассчитывается.');
+      return reasons.join(' ');
+    }
+    function labelCoverage(button, label, reason) {
+      button.replaceChildren(node('span',label),dkIcon.el('info-circle'));
+      button.setAttribute('aria-label',label + ': пояснение');
+      return dkTooltip(button,{text:reason});
+    }
+    function clearCoverage() {
+      if (coverageTip) coverageTip.destroy(); coverageTip = null;
+      var button = el('fm-coverage');
+      if (document.activeElement === button) root.querySelector('.fm-overview').focus({preventScroll:true});
+      button.hidden = true; button.replaceChildren(); button.removeAttribute('aria-label');
+    }
+    function clearDetailTips() { detailTips.forEach(function (tip) { tip.destroy(); }); detailTips = []; }
+    function closeDetail() { clearDetailTips(); detail.close(); }
     function defaults() { return {district:'all', region:'all', month:'all', search:'', page:1, pageSize:12, sort:'lag'}; }
     function readQuery() {
       var q = defaults(); if (!useURL) return q;
@@ -72,7 +94,7 @@
       // Validate the whole query before changing the URL or any visible value.
       var nextView = snapshot ? familyMortgageData.select(snapshot,next) : null;
       query = nextView ? nextView.query : next;
-      detail.close(); syncControls(); storeQuery(push !== false);
+      closeDetail(); syncControls(); storeQuery(push !== false);
       if (nextView) render(nextView);
     }
     function reset() { setQuery(defaults()); }
@@ -106,19 +128,24 @@
       if (!region) { text('fm-status','Регион не соответствует выбранным фильтрам. Измените округ или поиск, чтобы открыть его показатели.'); return; }
       text('fm-detail-title',region.name);
       text('fm-detail-context',region.fdName + ' федеральный округ');
+      clearDetailTips();
       var body = el('fm-detail-body'); body.replaceChildren();
       var updated = new Intl.DateTimeFormat('ru-RU',{dateStyle:'short',timeStyle:'short'}).format(new Date(view.source.updatedAt));
       text('fm-detail-period','Период: ' + date(view.period.from) + '–' + date(view.period.to));
-      body.append(node('p','Обновлено: ' + updated,'dk-caption'));
-      var partial = Object.keys(region.coverage).some(function (key) { return region.coverage[key].partial; });
-      if (partial) body.append(node('p','Часть показателей отсутствует. «Нет данных» не означает нулевое значение.','dk-caption'));
+      body.append(node('p','Учебные данные · Обновлено: ' + updated,'dk-caption'));
+      var partial = partialCoverage(region);
+      var coverageButton = null;
+      if (partial || region.status === 'missing') {
+        coverageButton = node('button',null,'dk-btn dk-btn--ghost dk-btn--sm fm-coverage');
+        coverageButton.type = 'button'; coverageButton.id = 'fm-detail-coverage'; body.append(coverageButton);
+      }
       var metrics = node('div',null,'dk-grid dk-modal__metrics'); metrics.id = 'fm-detail-kpis';
       function metric(label,value,context,meaning,unit) {
         var card = node('section',null,'dk-tile dk-tile--compact');
         var valueRow = node('div',null,'dk-tile__row'); valueRow.append(node('span',value,'dk-metric-lg'));
         if (unit) valueRow.append(node('span',unit,'dk-tile__unit'));
         card.append(node('div',label,'dk-tile__label'),valueRow);
-        if (context) {
+        if (context && context !== value) {
           var note = node('div',context,'dk-caption');
           if (meaning) note.style.color = dkMeaning(meaning,'text');
           card.append(note);
@@ -160,7 +187,10 @@
       });
       table.append(rows); wrap.append(table);
       dkTable(table); header.firstChild.setAttribute('aria-sort','ascending');
-      var note = node('div',null,'dk-banner'); note.append(dkIcon.el('info-circle'),node('span','Источник: ' + view.source.label + '. Отклонение = факт − план; выполнение = факт / план × 100%. Полоса ограничена целью 100%, подпись показывает точное выполнение. Сравнение не устанавливает причины отклонений.'));
+      var note = node('details',null,'dk-fold dk-fold--plain'); note.id = 'fm-detail-method';
+      var summary = node('summary',null,'dk-fold__head'); summary.tabIndex = 0;
+      summary.append(node('span','Данные и методика','dk-fold__title'),dkIcon.el('chevron-down'));
+      note.append(summary,node('div','Источник: ' + view.source.label + '. Отклонение = факт − план; выполнение = факт / план × 100%. Полоса ограничена целью 100%, подпись показывает точное выполнение. Сравнение не устанавливает причины отклонений.','dk-fold__body'));
       if (region.monthly.length) body.append(wrap);
       else body.append(node('div','За выбранный период помесячных данных нет.','dk-empty'));
       body.append(note);
@@ -168,6 +198,8 @@
       detailCSV = region.monthly.map(function (m) { return {region:region.name,month:m.month,issued:m.issued,plan:m.issuedPlan,planPct:m.planPct,volume:m.volume,source:view.source.label,updatedAt:view.source.updatedAt}; });
       detailFile = 'family-mortgage-' + region.id + '-' + view.period.from + '-' + view.period.to;
       detail.open();
+      // Mount after insertion/open so the tooltip belongs to this dialog.
+      if (coverageButton) detailTips.push(labelCoverage(coverageButton,partial ? 'Частичные данные' : 'Без оценки выполнения',coverageReason([region])));
     }
     function renderRows(v) {
       var body = el('fm-tbody'); body.replaceChildren();
@@ -189,7 +221,7 @@
         Array.from(row.children).forEach(function (td,i) { td.dataset.label = ['Регион','ФО','Выдано','Объём, млрд ₽','План, %','Ставка, %','Статус'][i]; });
         body.append(row);
       });
-      if (!v.rows.length) { var empty = node('tr'); var cell = addCell(empty,'На этой странице регионов нет. Перейдите на первую.'); cell.colSpan = 7; body.append(empty); }
+      if (!v.rows.length) { var empty = node('tr'); var cell = addCell(empty,'На этой странице регионов нет'); cell.colSpan = 7; body.append(empty); }
       text('fm-page-number',query.page + '/' + v.pageCount);
       text('fm-page-announcement','Страница ' + query.page + ' из ' + v.pageCount);
       el('fm-prev').disabled = query.page <= 1;
@@ -234,18 +266,22 @@
     }
     function render(v) {
       view = v; query = v.query;
-      clearCharts();
+      clearCharts(); clearCoverage();
       root.dataset.status = v.rowCount ? 'ready' : 'empty';
       el('fm-content').hidden = !v.rowCount; el('fm-empty').hidden = !!v.rowCount;
       el('fm-content').setAttribute('aria-busy','false'); el('fm-retry').hidden = true;
       el('fm-export').disabled = !v.rowCount;
       text('fm-status','');
       if (!v.rowCount) { if (map) map.setScope([]); return; }
+      text('fm-context','Учебные данные · ' + date(v.period.from) + '–' + date(v.period.to));
       var k = v.kpis, c = v.counts;
       text('fm-hero-n',num(c.behind)); text('fm-hero-total','из ' + num(c.total));
       text('fm-k-high',num(c.crit)); text('fm-k-medium',num(c.high)); text('fm-k-low',num(c.calm));
-      var incomplete = Object.keys(k.coverage).some(function (key) { return k.coverage[key].partial; });
-      text('fm-coverage',(c.missing ? 'Без оценки выполнения: ' + c.missing + ' регионов (нет полного факта/плана или план равен нулю). Они не включены в цветную полосу. ' : '') + (incomplete ? 'Для показателей с неполным покрытием показано «Нет данных».' : ''));
+      var incomplete = partialCoverage(k);
+      if (c.missing || incomplete) {
+        var coverageButton = el('fm-coverage'); coverageButton.hidden = false;
+        coverageTip = labelCoverage(coverageButton,c.missing ? 'Без оценки: ' + num(c.missing) : 'Частичные данные',coverageReason(v.regions));
+      }
       el('fm-hero').style.setProperty('--accent',dkMeaning(c.crit ? 'crit' : c.high ? 'high' : c.missing ? 'nodata' : 'calm','text'));
       [['high',c.crit],['medium',c.high],['low',c.calm]].forEach(function (pair) { el('fm-seg-' + pair[0]).style.setProperty('--share',pair[1]); });
       el('fm-split').setAttribute('aria-label','Сильно отстают: ' + c.crit + ', отстают: ' + c.high + ', по плану: ' + c.calm + ', нет данных: ' + c.missing);
@@ -272,7 +308,7 @@
         var bar = node('span'); bar.style.setProperty('--value',Math.max(0,Math.min(100,r.lag / rankScale * 100)) + '%'); bar.style.setProperty('--fill',dkMeaning(r.status,'fill')); meter.append(bar);
         row.append(node('span',String(i + 1).padStart(2,'0'),'dk-rank__i'),node('span',r.name,'dk-rank__name'),meter,val); rank.append(row);
       });
-      if (!ranked.length) rank.append(node('p',c.missing ? 'В регионах с полными данными отставания нет.' : 'Все выбранные регионы выполнили план.','dk-caption'));
+      if (!ranked.length) rank.append(node('p',c.missing === c.total ? 'Нет данных об отставании' : c.missing ? 'Нет отставания · по доступным оценкам' : 'Отставания нет','dk-caption'));
       renderRows(v); renderMap(); el('fm-table-widget').setAttribute('aria-busy','false');
     }
     function exportSlice() {
@@ -294,7 +330,7 @@
         try { mountControls(); setQuery(query,false); }
         catch (error) { showFailure(); }
       } else {
-        view = null; clearCharts(); root.dataset.status = state.status;
+        view = null; clearCharts(); clearCoverage(); closeDetail(); root.dataset.status = state.status;
         el('fm-content').hidden = true; el('fm-empty').hidden = true; el('fm-export').disabled = true;
         el('fm-content').setAttribute('aria-busy',state.status === 'loading' ? 'true' : 'false');
         el('fm-retry').hidden = state.status !== 'error';
@@ -309,6 +345,7 @@
     }
     function showFailure() {
       loadingState(false);
+      clearCoverage(); closeDetail();
       view = null; root.dataset.status = 'error'; el('fm-content').hidden = true; el('fm-empty').hidden = true; el('fm-export').disabled = true; el('fm-retry').hidden = false;
       el('fm-content').setAttribute('aria-busy','false'); text('fm-status','Не удалось показать данные. Проверьте фильтры или повторите загрузку.');
     }
@@ -317,6 +354,7 @@
       var ordered = Array.from(el('fm-detail-body').querySelectorAll('tbody tr[data-month]')).map(function (row) { return detailCSV.find(function (item) { return item.month === row.dataset.month; }); }).filter(Boolean);
       dkExport.csv(ordered,[['region','Регион'],['month','Месяц'],['issued','Факт, кредитов'],['plan','План, кредитов'],['planPct','Выполнение, %'],['volume','Объём, млн ₽'],['source','Источник'],['updatedAt','Обновлено']].map(function (c) { return {key:c[0],label:c[1]}; }),detailFile);
     });
+    listen(detail.el,'close',function () { if (!detail.el.open) clearDetailTips(); });
     listen(el('fm-reset'),'click',reset); listen(el('fm-empty-reset'),'click',reset);
     listen(el('fm-retry'),'click',function () { snapshot = null; session.retry(); });
     listen(el('fm-prev'),'click',function () { setQuery({page:Math.max(1,query.page - 1)}); });
@@ -327,10 +365,10 @@
       var button = event.target.closest('[data-region]'); if (button) openRegion(button.dataset.region);
       if (event.target.closest('[data-map-retry]')) { mapFailed = false; mapAbort = new AbortController(); renderMap(); }
     });
-    if (useURL) listen(window,'popstate',function () { clearTimeout(searchTimer); query = readQuery(); detail.close(); syncControls(); if (snapshot) { try { render(familyMortgageData.select(snapshot,query)); } catch (error) { showFailure(); } } });
+    if (useURL) listen(window,'popstate',function () { clearTimeout(searchTimer); query = readQuery(); closeDetail(); syncControls(); if (snapshot) { try { render(familyMortgageData.select(snapshot,query)); } catch (error) { showFailure(); } } });
     var destroy = dkOwn(root,function () {
       loadingState(false);
-      stopped = true; clearTimeout(searchTimer); unsubscribe(); session.destroy(); detail.close();
+      stopped = true; clearTimeout(searchTimer); unsubscribe(); session.destroy(); closeDetail(); clearCoverage();
       mapAttempt++; mapAbort.abort(); if (map) map.destroy(); clearCharts(); controls.forEach(function (c) { c.destroy(); }); releases.forEach(function (release) { release(); });
       view = null; snapshot = null; root.dataset.status = 'destroyed'; el('fm-content').hidden = true; el('fm-export').disabled = true;
     });

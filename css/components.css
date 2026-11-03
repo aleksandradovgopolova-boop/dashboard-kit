@@ -5199,7 +5199,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-modal--detail .dk-modal__metrics { grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--space-5); }
 .dk-modal--detail .dk-modal__metrics > .dk-tile { padding:var(--space-6); background:var(--glass-chip); border:1px solid var(--glass-edge); border-radius:var(--radius-md); }
 .dk-modal--detail .dk-modal__metrics .dk-tile__label { font:var(--type-body); color:var(--ink-2); }
-.dk-modal--detail .dk-modal__metrics .dk-metric-lg { font:var(--type-metric-lg); color:var(--ink); }
+.dk-modal--detail .dk-modal__metrics .dk-metric-lg { font:var(--type-metric-lg); color:var(--ink); min-width:0; max-width:100%; white-space:normal; }
 .dk-modal--detail .dk-table caption { text-align:left; padding-block:var(--space-5); color:var(--ink); font:var(--type-body-bold); }
 .dk-modal--detail .dk-table { min-width:640px; }
 .dk-modal--detail .dk-banner { display:flex; align-items:flex-start; gap:var(--space-4); padding:var(--space-6); font:var(--type-caption); }

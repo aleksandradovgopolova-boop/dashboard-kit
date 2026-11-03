@@ -1,0 +1,60 @@
+schema_version: 1
+kind: run-plan
+workitem_id: dashboard-minimal-copy-2026-11-02
+task_hash: 46b028d949e9
+base_workflow: ENGINEERING
+required_tracks:
+- track: VISUAL
+  reason: user-facing UI изменён — нужны состояния экранов, дизайн-система, доступность
+  gates:
+  - ux_review
+  - design_system_usage
+  - accessibility_review
+  - visual_regression
+- track: DOCUMENTATION
+  reason: изменение видно пользователю — нужна пользовательская документация
+  gates:
+  - documentation_updated
+conditional_tracks: []
+skipped_tracks:
+- track: ANALYTICS
+  reason: измеримое поведение не заявлено в сигналах задачи — трек аналитики не активирован
+- track: SECURITY
+  reason: изменение границы безопасности не заявлено в сигналах задачи — security-трек
+    не активирован
+- track: EVENTS
+  reason: изменение событий не заявлено в сигналах задачи — трек событий не активирован
+- track: AI
+  reason: AI-компонент не заявлен в сигналах задачи — трек AI-оценки не активирован
+- track: FEATURE_DECISIONS
+  reason: 'фича-решение не заявлено в сигналах задачи — трек фича-решений не активирован
+    (не факт о коде: план строится до правок)'
+- track: RELEASE
+  reason: изменение релизного контура не заявлено в сигналах задачи — трек релиза
+    не активирован
+gates:
+- intake_completeness
+- concurrency_preflight
+- requirements
+- specification
+- event_contract_consistency
+- plan_readiness
+- implementation_verification
+- code_review
+- security
+- architecture_review
+- deploy_readiness
+- ux_review
+- design_system_usage
+- accessibility_review
+- visual_regression
+- documentation_updated
+route_reasons:
+- task_type 'feature' -> ENGINEERING (selection_criteria)
+classification_confidence: normal
+classification_provisional: false
+escalation_disclosure: null
+execution_budget:
+  max_model_calls: null
+  max_cost: null
+  max_duration: null

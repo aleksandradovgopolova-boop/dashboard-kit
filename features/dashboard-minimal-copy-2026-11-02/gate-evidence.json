@@ -1,0 +1,433 @@
+{
+  "requirements": {
+    "status": "pass",
+    "source": "deterministic",
+    "provenance": "FACT",
+    "provided": [
+      "testable_requirements",
+      "acceptance_scenarios"
+    ],
+    "checks": [
+      {
+        "id": "testable_requirements",
+        "status": "pass",
+        "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+      },
+      {
+        "id": "acceptance_scenarios",
+        "status": "pass",
+        "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+      }
+    ],
+    "evidence": [
+      "features/dashboard-minimal-copy-2026-11-02/artifact-validation.json: requirements"
+    ],
+    "warnings": [
+      "Confirms artifact form and strict spec validity; implementation and user-facing behavior require separate tests/review."
+    ]
+  },
+  "specification": {
+    "status": "pass",
+    "source": "deterministic",
+    "provenance": "FACT",
+    "provided": [
+      "requirements_covered",
+      "openspec_valid"
+    ],
+    "checks": [
+      {
+        "id": "requirements_covered",
+        "status": "pass",
+        "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+      },
+      {
+        "id": "openspec_valid",
+        "status": "pass",
+        "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+      }
+    ],
+    "evidence": [
+      "features/dashboard-minimal-copy-2026-11-02/artifact-validation.json: spec_structure, openspec_change_guard, openspec_strict"
+    ],
+    "warnings": [
+      "Confirms artifact form and strict spec validity; implementation and user-facing behavior require separate tests/review."
+    ]
+  },
+  "plan_readiness": {
+    "status": "pass",
+    "source": "deterministic",
+    "provenance": "FACT",
+    "provided": [
+      "work_packages",
+      "dependencies",
+      "write_scope"
+    ],
+    "checks": [
+      {
+        "id": "work_packages",
+        "status": "pass",
+        "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+      },
+      {
+        "id": "dependencies",
+        "status": "pass",
+        "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+      },
+      {
+        "id": "write_scope",
+        "status": "pass",
+        "detail": "Confirmed by actual validator exit 0; artifact hashes in artifact-validation.json"
+      }
+    ],
+    "evidence": [
+      "features/dashboard-minimal-copy-2026-11-02/artifact-validation.json: plan_readiness"
+    ],
+    "warnings": [
+      "Confirms artifact form and strict spec validity; implementation and user-facing behavior require separate tests/review."
+    ]
+  },
+  "intake_completeness": {
+    "status": "pass",
+    "source": "deterministic",
+    "provenance": "FACT",
+    "provided": [
+      "classified_type",
+      "size",
+      "risk"
+    ],
+    "checks": [
+      {
+        "id": "classified_type",
+        "status": "pass",
+        "detail": "Original controller signals are recorded and fields validated; classification feature/small/low."
+      },
+      {
+        "id": "size",
+        "status": "pass",
+        "detail": "Original controller signals are recorded and fields validated; classification feature/small/low."
+      },
+      {
+        "id": "risk",
+        "status": "pass",
+        "detail": "Original controller signals are recorded and fields validated; classification feature/small/low."
+      }
+    ],
+    "evidence": [
+      "intake.json",
+      "run-plan.yaml"
+    ]
+  },
+  "concurrency_preflight": {
+    "status": "pass",
+    "source": "deterministic",
+    "provenance": "FACT",
+    "provided": [
+      "checked_paths",
+      "verdict"
+    ],
+    "checks": [
+      {
+        "id": "checked_paths",
+        "status": "pass",
+        "detail": "Git preflight had no base changes; all five initial open PR file lists were checked through GitHub connector and only touched workflows. CLI PR lookup limitation is recorded."
+      },
+      {
+        "id": "verdict",
+        "status": "pass",
+        "detail": "Git preflight had no base changes; all five initial open PR file lists were checked through GitHub connector and only touched workflows. CLI PR lookup limitation is recorded."
+      }
+    ],
+    "evidence": [
+      "implementation-plan.md: Маршрут и доставка"
+    ]
+  },
+  "implementation_verification": {
+    "status": "pass",
+    "source": "deterministic",
+    "provenance": "FACT",
+    "provided": [
+      "lint_passed",
+      "tests_passed",
+      "tested_revision"
+    ],
+    "checks": [
+      {
+        "id": "lint_passed",
+        "status": "pass",
+        "detail": "Actual static and complete product suite exit 0 on identical product tree cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+      },
+      {
+        "id": "tests_passed",
+        "status": "pass",
+        "detail": "Actual static and complete product suite exit 0 on identical product tree cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+      },
+      {
+        "id": "tested_revision",
+        "status": "pass",
+        "detail": "Actual static and complete product suite exit 0 on identical product tree cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+      }
+    ],
+    "evidence": [
+      "implementation-verification.json",
+      "evidence/static-fast.log",
+      "evidence/full-test.log"
+    ],
+    "warnings": [
+      "Product build and TypeScript typecheck are not applicable to this static core; no PASS flags are fabricated. Profile API uses explicit not_applicable; lifecycle CLI does not propagate it."
+    ]
+  },
+  "code_review": {
+    "status": "pass",
+    "source": "ai_judgment",
+    "provenance": "JUDGMENT",
+    "provided": [
+      "reviewed_revision",
+      "blockers_closed"
+    ],
+    "checks": [
+      {
+        "id": "reviewed_revision",
+        "status": "pass",
+        "detail": "Independent reviewer approved the 30-file product diff; tree and diff hash bind verdict to cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+      },
+      {
+        "id": "blockers_closed",
+        "status": "pass",
+        "detail": "Independent reviewer approved the 30-file product diff; tree and diff hash bind verdict to cfce7f4eb21d5a062aad0cdb355f6c11c0ee7b8a"
+      }
+    ],
+    "evidence": [
+      "reviewer-result.json"
+    ]
+  },
+  "security": {
+    "status": "pass",
+    "source": "ai_judgment",
+    "provenance": "JUDGMENT",
+    "provided": [
+      "no_secrets",
+      "no_injection_surface",
+      "deps_approved"
+    ],
+    "checks": [
+      {
+        "id": "no_secrets",
+        "status": "pass",
+        "detail": "Independent source review and scanner functions found no secrets/injection flags/new dependencies in the product diff."
+      },
+      {
+        "id": "no_injection_surface",
+        "status": "pass",
+        "detail": "Independent source review and scanner functions found no secrets/injection flags/new dependencies in the product diff."
+      },
+      {
+        "id": "deps_approved",
+        "status": "pass",
+        "detail": "Independent source review and scanner functions found no secrets/injection flags/new dependencies in the product diff."
+      }
+    ],
+    "evidence": [
+      "reviewer-result.json: security"
+    ]
+  },
+  "architecture_review": {
+    "status": "pass",
+    "source": "ai_judgment",
+    "provenance": "JUDGMENT",
+    "provided": [
+      "reviewed_revision",
+      "architecture_boundaries_ok"
+    ],
+    "checks": [
+      {
+        "id": "reviewed_revision",
+        "status": "pass",
+        "detail": "Existing components, model and static architecture preserved; no integration/migration/deployment changes."
+      },
+      {
+        "id": "architecture_boundaries_ok",
+        "status": "pass",
+        "detail": "Existing components, model and static architecture preserved; no integration/migration/deployment changes."
+      }
+    ],
+    "evidence": [
+      "reviewer-result.json"
+    ]
+  },
+  "ux_review": {
+    "status": "pass",
+    "source": "ai_judgment",
+    "provenance": "JUDGMENT",
+    "provided": [
+      "ux_flow",
+      "screen_states",
+      "device_matrix_defined",
+      "responsive_checked",
+      "copy_reviewed"
+    ],
+    "checks": [
+      {
+        "id": "ux_flow",
+        "status": "pass",
+        "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+      },
+      {
+        "id": "screen_states",
+        "status": "pass",
+        "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+      },
+      {
+        "id": "device_matrix_defined",
+        "status": "pass",
+        "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+      },
+      {
+        "id": "responsive_checked",
+        "status": "pass",
+        "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+      },
+      {
+        "id": "copy_reviewed",
+        "status": "pass",
+        "detail": "Independent copy/state review combined with actual browser transitions, device matrix and inspected screen captures."
+      }
+    ],
+    "evidence": [
+      "verification.md",
+      "evidence/full-test.log",
+      "reviewer-result.json"
+    ]
+  },
+  "design_system_usage": {
+    "status": "pass",
+    "source": "ai_judgment",
+    "provenance": "JUDGMENT",
+    "provided": [
+      "components_from_design_system",
+      "new_components_justified"
+    ],
+    "checks": [
+      {
+        "id": "components_from_design_system",
+        "status": "pass",
+        "detail": "Existing Tooltip/fold/modal/button/icon and semantic tokens reused; no new common component."
+      },
+      {
+        "id": "new_components_justified",
+        "status": "pass",
+        "detail": "Existing Tooltip/fold/modal/button/icon and semantic tokens reused; no new common component."
+      }
+    ],
+    "evidence": [
+      "reviewer-result.json"
+    ]
+  },
+  "accessibility_review": {
+    "status": "pass",
+    "source": "ai_judgment",
+    "provenance": "JUDGMENT",
+    "provided": [
+      "keyboard_operable",
+      "focus_visible",
+      "contrast_aa",
+      "screen_reader_labels",
+      "no_color_only_state"
+    ],
+    "checks": [
+      {
+        "id": "keyboard_operable",
+        "status": "pass",
+        "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+      },
+      {
+        "id": "focus_visible",
+        "status": "pass",
+        "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+      },
+      {
+        "id": "contrast_aa",
+        "status": "pass",
+        "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+      },
+      {
+        "id": "screen_reader_labels",
+        "status": "pass",
+        "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+      },
+      {
+        "id": "no_color_only_state",
+        "status": "pass",
+        "detail": "Actual keyboard/touch/AX-name checks, existing token contrast checks, inspected visible focus, and text states; no physical screen-reader claim."
+      }
+    ],
+    "evidence": [
+      "verification.md",
+      "evidence/full-test.log",
+      "evidence/detail-explanation-method-dark-1280.png"
+    ],
+    "warnings": [
+      "Physical device and actual screen-reader speech are untested."
+    ]
+  },
+  "visual_regression": {
+    "status": "pass",
+    "source": "ai_judgment",
+    "provenance": "JUDGMENT",
+    "provided": [
+      "baseline_snapshots",
+      "screens_diffed",
+      "unintended_diffs_none_or_approved"
+    ],
+    "checks": [
+      {
+        "id": "baseline_snapshots",
+        "status": "pass",
+        "detail": "Root manually compared same-viewport baseline/current screenshots and inspected partial/detail states; only intended content changes observed. No pixel-diff automation claimed."
+      },
+      {
+        "id": "screens_diffed",
+        "status": "pass",
+        "detail": "Root manually compared same-viewport baseline/current screenshots and inspected partial/detail states; only intended content changes observed. No pixel-diff automation claimed."
+      },
+      {
+        "id": "unintended_diffs_none_or_approved",
+        "status": "pass",
+        "detail": "Root manually compared same-viewport baseline/current screenshots and inspected partial/detail states; only intended content changes observed. No pixel-diff automation claimed."
+      }
+    ],
+    "evidence": [
+      "verification.md: Визуальная и редакционная приёмка",
+      "evidence/baseline-light-390.png",
+      "evidence/current-light-390.png",
+      "evidence/baseline-dark-1280.png",
+      "evidence/current-dark-1280.png"
+    ]
+  },
+  "documentation_updated": {
+    "status": "pass",
+    "source": "deterministic",
+    "provenance": "FACT",
+    "provided": [
+      "docs_updated_or_explicit_none",
+      "release_notes_entry"
+    ],
+    "checks": [
+      {
+        "id": "docs_updated_or_explicit_none",
+        "status": "pass",
+        "detail": "Canonical rules, skill, release note and regenerated component pages are changed and their reproduction checks passed."
+      },
+      {
+        "id": "release_notes_entry",
+        "status": "pass",
+        "detail": "Canonical rules, skill, release note and regenerated component pages are changed and their reproduction checks passed."
+      }
+    ],
+    "evidence": [
+      "docs/assembly-rules.md",
+      "docs/releases.md",
+      "skill/dashboard-build/SKILL.md",
+      "evidence/full-test.log"
+    ]
+  }
+}
