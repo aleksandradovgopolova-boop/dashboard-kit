@@ -92,7 +92,7 @@ jobs:
           fi
       - name: Приложить свежий каталог артефактом (история PR)
         if: github.event_name == 'pull_request' && steps.reg.outputs.path != ''
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: ai-ops-feature-catalog
           path: docs/feature-catalog.md
