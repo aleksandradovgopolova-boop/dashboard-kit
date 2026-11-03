@@ -176,7 +176,7 @@ def render(config, kit_root=ROOT):
 <header class="dk-head"><div class="dk-head__titles"><h1 class="dk-head__title">{escape(spec['title'])}</h1></div><div class="dk-head__actions"><div class="dk-seg" aria-label="Тема"><button data-theme-set="dark" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button data-theme-set="light" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div></div></header>
 <div class="dk-screen__meta"><p class="dk-caption" data-screen-source></p><button class="dk-iconbtn dk-iconbtn--sm" type="button" data-screen-info aria-label="Данные и методика" title="Данные и методика"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg></button></div><div class="dk-screen__filters" data-screen-filters></div>
 <div class="dk-caption" role="status" data-screen-status hidden></div>
-<section class="dk-empty" data-screen-empty hidden><h2 class="dk-empty__title">Нет результатов</h2></section>
+<section class="dk-empty" data-screen-empty hidden><h2 class="dk-empty__t">Нет результатов</h2></section>
 <div class="dk-sections" data-screen-content><div class="dk-grid dk-grid--balanced" data-screen-kpis></div><div class="dk-grid dk-grid--balanced" data-screen-panels></div></div>
 </main><script type="application/json" id="{escape(config_id)}">{safe_json(config)}</script><!-- screen-spec/1 inputs:{digest} --></body></html>\n'''
 

@@ -4,6 +4,8 @@ from copy import deepcopy
 import json
 from pathlib import Path
 import tempfile
+import subprocess
+import sys
 from screen_spec import ROOT, build, read_json, render, validate
 
 example = read_json(ROOT/"examples/spec/plan-fact.json")
@@ -67,6 +69,8 @@ assert 'data-dk-screen-config="screen-config-config"' in render(validate(reserve
 with tempfile.TemporaryDirectory(prefix="dk-screen-spec-") as directory:
     root = Path(directory); a=root/"a"; b=root/"b"
     build(ROOT/"examples/spec/plan-fact.json",a);build(ROOT/"examples/spec/plan-fact.json",b)
+    page = subprocess.run([sys.executable,str(ROOT/'tools/check.py'),'--fast','--page',str(a/'index.html')],text=True,capture_output=True)
+    assert page.returncode == 0, 'Generated consumer must pass the real kit page checker: '+page.stdout+page.stderr
     assert {p.relative_to(a):p.read_bytes() for p in a.rglob('*') if p.is_file()} == {p.relative_to(b):p.read_bytes() for p in b.rglob('*') if p.is_file()}
     pin=read_json(a/"kit/kit-release.json")["contentDigest"]
     try:

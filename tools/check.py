@@ -2570,6 +2570,11 @@ def check_page(path: Path) -> None:
 
 
 def main() -> int:
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print("Usage: python3 tools/check.py [--fast] [--page PATH]\n"
+              "Without --page: check the kit. --page: check a static consumer.\n"
+              "--fast skips browser checks; help never starts checks or a server.")
+        return 0
     if "--page" in sys.argv:
         i = sys.argv.index("--page")
         if i + 1 >= len(sys.argv):
