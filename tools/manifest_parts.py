@@ -46,6 +46,7 @@ ORDER = [
     ("js/dk-analysis.js", "defer"),
     ("js/dk-workspace.js", "defer"),
     ("js/dk-dashboard.js", "defer"),
+    ("js/dk-metrics.js", "defer, после dk-dashboard.js; именованные производные метрики"),
     ("js/dk-tree.js", "defer"),
     ("js/dk-layout-editor.js", "defer"),
     ("js/reference-dashboard.js", "defer, только эталон reference-dashboard.html"),
@@ -83,6 +84,16 @@ DOCS_ONLY = ["js/docs.js", "js/docs-index.js", "js/docs-overview.js", "css/docs.
 # скилл читал их одинаково. owns — префиксы классов; правило совпадения то же,
 # что у раздела «Токены» на страницах (docs.js, owns): по границе имени блока.
 PARTS = [
+    {
+        "id": "named-metrics", "title": "Именованные метрики", "kind": "основа", "group": "Разработка",
+        "status": "экспериментальный", "purpose": "Одно определение доли или взвешенного среднего, вычисляемого из исходных величин до пагинации.",
+        "use_when": ["Доля рассчитывается как отношение сумм, а не среднее процентов.", "Среднее имеет неодинаковые веса; источник подтверждает дневную гранулярность и охват."],
+        "instead": [], "owns": [], "css": [], "scripts": ["js/dk-dashboard.js", "js/dk-metrics.js"], "js": ["dkMetrics"],
+        "docs": ["docs/named-metrics.md"],
+        "rules": ["Контракт dkMetrics v1 дополняет dkDashboard v1, не меняя sum/mean.", "Первый контракт принимает полный local snapshot, не серверную страницу.", "Недостаточный или неизвестный охват, null, нулевой знаменатель и несовместимая гранулярность не превращаются в ноль.", "Distinct и свободные выражения не поддерживаются."],
+        "api": [{"name": "dkMetrics.validate(registry, snapshot)", "type": "object", "what": "Проверить именованные определения и ссылки на исходные поля."}, {"name": "dkMetrics.select(snapshot, registry, query, {grain, coverage})", "type": "object", "what": "Рассчитать именованные итоги из полного среза до пагинации."}],
+        "example": "<script>\nvar result = dkMetrics.select(snapshot, registry, {filters: {}}, {grain: {time: 'day', dimensions: ['region']}, coverage: {expectedRows: 4}});\n// result.totals.execution.value и code; формат — из result.metrics\n</script>",
+    },
     {
         "id": "dashboard-data", "title": "Данные и состояние дашборда", "kind": "основа", "group": "Разработка",
         "status": "экспериментальный",

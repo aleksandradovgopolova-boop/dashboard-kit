@@ -1,0 +1,19 @@
+✔ literal independent totals and weighted result, not mean of regional percentages (7.09525ms)
+✔ null of one operand blocks only dependent named metrics; legacy partial sum is unchanged (0.6205ms)
+✔ zero numerator, zero denominator, null and empty are distinct states (0.9425ms)
+✔ missing rows and unknown coverage never silently become complete, including filtered slices (2.237ms)
+✔ grain is explicit, exact, declared and unique; month input cannot pass as day (1.225667ms)
+✔ registry rejects unsupported versions, parameters, references, distinct and non-additive ratios (1.407833ms)
+✔ server responses, paginated views and missing values are rejected rather than reaggregated (0.291375ms)
+✔ weights are nonnegative; product and scale overflow yield explicit null state (1.079083ms)
+✔ results are immutable, source and registry remain caller-owned (0.342333ms)
+✔ JS callers cannot smuggle falsy options or hidden/computed/inherited required fields (1.347542ms)
+✔ optional inherited getters are rejected before access (0.484208ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22.449208

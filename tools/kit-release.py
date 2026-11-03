@@ -20,7 +20,7 @@ FIXED_FILES = {
     "css/chrome.css", "css/glass.css", "js/dk-dashboard.js",
     "reference-dashboard.html", "css/reference-dashboard.css",
     "js/reference-dashboard.js", "data/reference-dashboard.json",
-    "docs/dashboard-data.md", "docs/releases.md", "docs/reference-server.md",
+    "docs/dashboard-data.md", "docs/named-metrics.md", "docs/releases.md", "docs/reference-server.md",
     "tools/reference-server.py",
     "family-mortgage.html", "js/family-mortgage-data.js", "js/family-mortgage.js",
     "data/family-mortgage-observations.json", "data/regions.topojson", "data/regions-tiles.json",
