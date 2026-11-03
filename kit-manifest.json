@@ -242,6 +242,14 @@
     ]
    },
    {
+    "file": "js/dk-popover.js",
+    "how": "defer, интерактивный немодальный контекст",
+    "defer": true,
+    "requires": [
+     "js/dk-util.js"
+    ]
+   },
+   {
     "file": "js/dk-analysis.js",
     "how": "defer",
     "defer": true,
@@ -5281,6 +5289,82 @@
    ]
   },
   {
+   "id": "popover",
+   "title": "Всплывающие сведения",
+   "kind": "компонент",
+   "group": "Обратная связь",
+   "status": "экспериментальный",
+   "purpose": "Открывает дополнительные сведения и действия рядом с кнопкой.",
+   "use_when": [
+    "Нужны ссылки, настройки или длинное объяснение по запросу."
+   ],
+   "instead": [
+    {
+     "when": "Короткий неинтерактивный текст — Подсказка. Большая задача — отдельный экран или диалог.",
+     "use": "tooltip"
+    }
+   ],
+   "owns": [
+    "dk-pop",
+    "dk-popover",
+    "dk-popover__head",
+    "dk-popover__title",
+    "dk-popover__body"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-popover.js"
+   ],
+   "data": [],
+   "js": [
+    "dkPopover"
+   ],
+   "docs": [
+    "component-popover.html"
+   ],
+   "api": [
+    {
+     "name": "dkPopover(trigger,{label,content,placement})",
+     "type": "API",
+     "what": "trigger — button, label — доступное название, content — текст или HTMLElement; placement: auto/top/bottom."
+    },
+    {
+     "name": "open()/close()/toggle()/update()/destroy()",
+     "type": "методы",
+     "what": "open возвращает Promise после завершения входной анимации родительского dialog. Ожидание отменяется close/destroy/уходом фокуса. Один открытый Popover; update сохраняет фокус, destroy очищает обработчики и ARIA."
+    }
+   ],
+   "example": "<button class=\"dk-btn dk-btn--sm\" type=\"button\" id=\"context-info\">Данные и методика</button>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\nvar content=document.createElement('div'); content.innerHTML='<p>Учебные наблюдения. Выполнение = сумма факта / сумма плана × 100%.</p><a href=\"docs/named-metrics.md\">Контракт метрик</a>'; dkPopover(document.getElementById('context-info'),{label:'Данные и методика',content:content});\n});\n</script>",
+   "rules": [
+    "Конкретное название: «Данные и методика», «Настройки периода»."
+   ],
+   "avoid": [
+    "Ссылка или поле внутри Tooltip; неясное «Подробнее» без контекста."
+   ],
+   "a11y": [
+    "При открытии фокус в содержимом, Tab выходит в обычный порядок страницы; Escape/Закрыть возвращают фокус кнопке. Внешний клик не перехватывает фокус. Не модальный: фон доступен. В native dialog панель принадлежит тому же диалогу.",
+    "Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон."
+   ],
+   "related": [
+    "table"
+   ],
+   "classes": [
+    "dk-pop",
+    "dk-pop--tip",
+    "dk-pop__title",
+    "dk-popover",
+    "dk-popover__body",
+    "dk-popover__head",
+    "dk-popover__title"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "js/dk-popover.js"
+   ]
+  },
+  {
    "id": "page-header",
    "title": "Заголовок страницы",
    "kind": "компонент",
@@ -6095,49 +6179,6 @@
    "include": []
   },
   {
-   "id": "popover",
-   "title": "Всплывающий слой",
-   "kind": "компонент",
-   "group": "Обратная связь",
-   "status": "только стиль: скрипта и страницы нет",
-   "purpose": "Подсказка рядом с тем, что она объясняет: онбординг, пояснение к числу.",
-   "use_when": [
-    "Объяснение, которое сопровождает работу, а не останавливает её."
-   ],
-   "instead": [
-    {
-     "when": "нужно решение человека до продолжения работы",
-     "use": "modal"
-    }
-   ],
-   "owns": [
-    "dk-pop"
-   ],
-   "css": [
-    "css/components.css"
-   ],
-   "scripts": [],
-   "js": [],
-   "docs": [
-    "README.md#Онбординг"
-   ],
-   "rules": [
-    "Открывать, ставить рядом и закрывать — забота страницы: у слоя нет своего скрипта."
-   ],
-   "data": [],
-   "api": [],
-   "example": "",
-   "avoid": [],
-   "a11y": [],
-   "related": [],
-   "classes": [
-    "dk-pop",
-    "dk-pop--tip",
-    "dk-pop__title"
-   ],
-   "include": []
-  },
-  {
    "id": "app-icons",
    "title": "Иконки приложения, фавикон и логотип",
    "kind": "инструмент",
@@ -6339,8 +6380,8 @@
  "hooks": {},
  "counts": {
   "parts": 66,
-  "classes": 508,
-  "functions": 48,
+  "classes": 512,
+  "functions": 49,
   "chart_types": 12
  }
 }

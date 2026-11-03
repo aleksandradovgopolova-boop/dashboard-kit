@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0-rc.6",
   "channel": "candidate",
   "dataContractVersion": 1,
   "files": {
@@ -18,7 +18,7 @@
     "assets/graphite-dark.png": "d212df2d6f3f6d41befd4b11ca743d791db767188120508b873966494cde8a5d",
     "assets/graphite-light.png": "cd330a9ef8bb163f2ffd1fb86e78a875c06e0638eaacf8bba082c191ae6d4d72",
     "css/chrome.css": "2df09fd6afc92b421183bfcdc80be36327b787b20c636c64279df8a6d4e4b7cf",
-    "css/components.css": "f4c8e70d4d5736994768668d5c3e2d03699a8ac41989ffdb9f90fc3b469234c5",
+    "css/components.css": "8e73cc1e84f2014aefaba7575d8752b9c3b2077bfbf85a356ec67a701157d0b2",
     "css/glass.css": "dc4319158349da59c093d11a63976f66feb6d6cd1c4159232864184ae699a7e0",
     "css/kit2-preview-frame.css": "3230716ea0c33b5eb50fc3eb57d756898caa2ec59f88cb1dc0667fa1522a99ef",
     "css/kit2-preview.css": "aa44c4d6145b5d80239ea86ffd821e6dba322c7d43d37ab4c7366c2c95bdabf1",
@@ -69,6 +69,7 @@
     "js/dk-onboarding.js": "a56280882187562c76bc13ad87a6246c2ffe4baf3d5c3e086db8998cd1b4345b",
     "js/dk-pager.js": "be7ef856e738e0a7d6ee1380a2e7e541d7666cb7ed103241b2f46bd271bd6268",
     "js/dk-period.js": "43eaeaa1c6974b12d254d9f25a1be14a03cd8095bfea38f140017fdd7da09d04",
+    "js/dk-popover.js": "bcefa5ddcd10ff5e179b86742c15679877c315b58ff2a3871db1180a2bd6e451",
     "js/dk-select.js": "3d333b4e03d7793fc52cac11228d4970ec46495ed6af014784b7e3c99152b46d",
     "js/dk-table.js": "e5b75840a74be1133150596c2fc55fed26c47dbb34fa39510eb540ad33050659",
     "js/dk-theme.js": "712e8aa734c8c76e0502a42161fbd4577d62787aa9b5ba77920b23679e0ed78e",
@@ -81,7 +82,7 @@
     "js/family-mortgage.js": "03887de16c8c08107969df013aa7cc46d788d8f66f0f5b125b43c40da9e19295",
     "js/kit2-preview.js": "7725d975b8cc741f38c96633f13b4acf50dd1323e177127f40632f5a62a1687e",
     "js/reference-dashboard.js": "f5d1100836562eb3f0da861f71322d099e19259342a88f23aa7fcadf5a29b438",
-    "kit-manifest.json": "729d0f57289dd038e44aca55fae05b685b923e92ccf41348c2f268475e297d40",
+    "kit-manifest.json": "487d2627a6b4e072bcd70b76c49299f88f8e39b9965321d237858203fde75669",
     "reference-dashboard.html": "2269a0255add4faa1b9d5d360219229cb7dad7eab489fdf79723284eb8bf33e6",
     "tools/reference-server.py": "31a9b6c531f46d523776199447e030c55c5d439d4146a57e9a468ea77809cddf",
     "vendor/air-datepicker.css": "110391f897ba0abc6c563bc8d1e7afa135b26955ae57a5fc0a1228e79c394f73",
@@ -102,5 +103,5 @@
     "vendor/licenses/Golos-Text-OFL.txt": "ff532f9e8789f09a9fdffc3c0954eedfb0a48be77b2e2eb90f5f82e4f347f50c",
     "vendor/licenses/Tabler-Icons-MIT.txt": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
   },
-  "contentDigest": "sha256:ceb73ca73146d93ac9a67845ae1069222983a74321d4f96c802713081577213c"
+  "contentDigest": "sha256:5f902d291c080d1fc376644e0a7d459ddde1664cd9fef72b83ee911bb9e00d2e"
 }

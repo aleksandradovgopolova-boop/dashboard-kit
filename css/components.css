@@ -4648,6 +4648,15 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-map__tip-v { display: flex; align-items: center; gap: var(--space-3); color: var(--ink-2); font: var(--type-caption); }
 .dk-map__tip-dot { width: 10px; height: 10px; border-radius: var(--radius-sm); flex: none; }
 .dk-tooltip[hidden] { display: none; }
+/* Interactive context: one nonmodal layer, native top layer when available. */
+.dk-popover { position:fixed; inset:auto; margin:0; z-index:var(--z-modal); box-sizing:border-box; width:360px; max-width:calc(100vw - var(--space-4) * 2); max-height:calc(100dvh - var(--space-4) * 2); overflow:auto; overscroll-behavior:contain; padding:var(--space-6); border:var(--hairline) solid var(--rule); border-radius:var(--radius-md); background:var(--surface-2); color:var(--ink); box-shadow:none; font:var(--type-body); overflow-wrap:anywhere; }
+.dk-popover[hidden] { display:none; }
+.dk-popover__head { display:flex; align-items:flex-start; gap:var(--space-4); margin-bottom:var(--space-4); }
+.dk-popover__title { flex:1; min-width:0; margin:0; font:var(--type-panel-title); }
+.dk-popover__body { display:grid; gap:var(--space-4); min-width:0; }
+.dk-popover__body > * { min-width:0; max-width:100%; margin:0; }
+.dk-popover:focus-visible { outline:var(--focus-width) solid var(--brand); outline-offset:var(--focus-offset-tight); }
+
 /* Sidebar is a modal drill-down on narrow screens, with the same focus model. */
 .dk-modal.dk-sidebar { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; width: min(480px, 100%); max-width: 100%; border-radius: 0; }
 @media (pointer: coarse) { .dk-breadcrumbs a { min-height: 44px; } }
