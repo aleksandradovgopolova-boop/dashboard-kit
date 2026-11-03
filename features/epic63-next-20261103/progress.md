@@ -13,8 +13,11 @@ AI Ops managed/config/workflows и потребители SDK не входят 
 | #67 Схемы компонентов | Четыре canonical adapter schemas, CLI/MCP/reference, positive/negative PASS; локальный MCP7tools PASS; удалённыйCI заблокирован auto-review |
 | #68 Screen spec | Первый plan-fact собран; deterministic/invalid fixtures и 12 Chrome views PASS; analyst/UX APPROVE, полный локальный tools/test.py PASS; удалённыйCI заблокирован auto-review |
 | #69 Dry-run обновления | Реализован read-only CLI, text/JSON/inventory/conflicts; fixtures/реальныйpackdiff PASS, review APPROVE |
-| #70 Реальные evals | Семь fresh Codex artifacts; functional28views PASS, visual defects исправляются и перепроверяются; Claude отложен владельцем |
+| #70 Реальные evals | Семь fresh Codex artifacts; final28views+4view recheck и независимый UX/editorial APPROVE всем7; original failures/corrections сохранены; Claude отложен владельцем |
 
 Код основы: опубликованный e869cfd плюс сохранённый протокол 006cba8.
 Работа в отдельных feature-ветках, существующие изменения сохраняются.
 Связанные #25/#29/#31 не закрываются без своей отдельной приёмки.
+
+Финальная передача: skill/dashboard-build/evals/runs/2026-11-03/README.md.
+Новые push/PR/remoteCI заблокированы auto-review; не объявлять опубликованными.

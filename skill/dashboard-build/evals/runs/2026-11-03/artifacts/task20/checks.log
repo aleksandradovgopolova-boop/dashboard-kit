@@ -1,0 +1,24 @@
+$ python3 /tmp/kit-evals-20261103/source/tools/check.py --page /private/tmp/kit-evals-20261103/task20/app/index.html --fast
+
+  ✓ СТРАНИЦА · index.html: классы и иконки есть в ките, подключено всё нужное и по порядку, экранирование, таблицы и токены в порядке
+  ? СТРАНИЦА · index.html: ширина, цели касания и вырез не проверены — --fast
+
+  По правилам кита страница цела; проверено не всё — см. «?».
+
+exit=0
+
+$ node --check /private/tmp/kit-evals-20261103/task20/app/widget.js
+exit=0
+
+PASS: 7 exact weekday/value pairs; one widget; embed boundary; all HTML/CSS resource references local and present; 22 pinned kit files match SHA-256. Arithmetic control: sum190, maximumThursday40, minimumSunday9. No browser run.
+
+POST-REVIEW TECHNICAL CORRECTION 1
+$ kit-release.py --pack /tmp/kit-evals-20261103/task20/official-runtime-pack
+PASS: 0.1.0-rc.7 (candidate), 100 files, sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20
+exit=0
+$ kit-release.py --verify official-runtime-pack --expect sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20
+PASS: 0.1.0-rc.7 (candidate), 100 files, sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20
+exit=0
+$ kit-release.py --verify app/kit --expect sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20
+PASS: 0.1.0-rc.7 (candidate), 100 files, sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20
+exit=0

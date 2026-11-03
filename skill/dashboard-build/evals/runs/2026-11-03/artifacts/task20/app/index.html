@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Обращения за неделю</title>
+<!-- dashboard-kit: base, chart, tooltip, widget, widget-header, table, button, layout. Собрано: python3 tools/kit.py head chart tooltip widget widget-header table button layout -->
+<script src="kit/js/dk-util.js"></script>
+<link rel="stylesheet" href="kit/css/tokens.primitives.css">
+<link rel="stylesheet" href="kit/css/tokens.semantic.css">
+<link rel="stylesheet" href="kit/css/components.css">
+<script src="kit/js/dk-icons.js" defer></script>
+<script src="kit/vendor/echarts.min.js" defer></script>
+<script src="kit/js/dk-chart-theme.js" defer></script>
+<script src="kit/js/dk-charts.js" defer></script>
+<script src="kit/js/dk-table.js" defer></script>
+<script src="kit/js/dk-context.js" defer></script>
+<!-- встроенный кит: обёртка <div class="dk-root" data-theme="dark|light" data-accent="blue"> вокруг блоков; dk-page и каркас не ставить -->
+
+<link rel="stylesheet" href="widget.css">
+<script src="widget.js" defer></script>
+</head>
+<body>
+<!-- Host demonstration: no dk-page, global theme manager, navigation or dashboard chrome. -->
+<main id="weekly-requests-root" class="dk-root" data-theme="dark" data-accent="blue">
+<script>document.currentScript.parentElement.dataset.theme = new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark';</script>
+<div class="dk-grid">
+<section id="weekly-requests-widget" class="dk-widget dk-col--full" aria-labelledby="weekly-requests-title">
+  <header class="dk-widget__head">
+    <div class="dk-widget__heading">
+      <h2 id="weekly-requests-title" class="dk-widget__title">Обращения за неделю</h2>
+      <p class="dk-widget__meta">Пн–Вс · обращений</p>
+    </div>
+    <div class="dk-widget__actions">
+      <button id="weekly-requests-method" type="button" class="dk-iconbtn dk-iconbtn--sm" aria-label="Методика и источник данных">
+        <svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"></use></svg>
+      </button>
+    </div>
+  </header>
+  <div class="dk-widget__body weekly-content">
+    <div id="weekly-requests-chart" class="dk-chart"></div>
+    <div class="dk-tablewrap" style="--table-min:0px">
+      <table id="weekly-requests-table" class="dk-table" aria-label="Количество обращений по дням недели">
+        <colgroup><col style="width:58%"><col style="width:42%"></colgroup>
+        <thead><tr><th scope="col">День</th><th scope="col" class="dk-td-num">Обращений</th></tr></thead>
+        <tbody>
+          <tr data-day="Пн"><th scope="row">Понедельник</th><td class="dk-td-num" data-value="34">34</td></tr>
+          <tr data-day="Вт"><th scope="row">Вторник</th><td class="dk-td-num" data-value="28">28</td></tr>
+          <tr data-day="Ср"><th scope="row">Среда</th><td class="dk-td-num" data-value="31">31</td></tr>
+          <tr data-day="Чт"><th scope="row">Четверг</th><td class="dk-td-num" data-value="40">40</td></tr>
+          <tr data-day="Пт"><th scope="row">Пятница</th><td class="dk-td-num" data-value="36">36</td></tr>
+          <tr data-day="Сб"><th scope="row">Суббота</th><td class="dk-td-num" data-value="12">12</td></tr>
+          <tr data-day="Вс"><th scope="row">Воскресенье</th><td class="dk-td-num" data-value="9">9</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+</div>
+</main>
+</body>
+</html>

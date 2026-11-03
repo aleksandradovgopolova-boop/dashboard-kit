@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Выполнение плана программы</title>
+<!-- dashboard-kit: base, page-header, widget-header, widget, layout, segment, badge, table, modal, tooltip, button, glass. Собрано: python3 tools/kit.py head page-header widget-header widget layout segment badge table modal tooltip button glass -->
+<script src="kit/js/dk-theme.js"></script>
+<link rel="stylesheet" href="kit/css/tokens.primitives.css">
+<link rel="stylesheet" href="kit/css/tokens.semantic.css">
+<link rel="stylesheet" href="kit/css/components.css">
+<link rel="stylesheet" href="kit/css/glass.css">
+<script src="kit/js/dk-util.js"></script>
+<script src="kit/js/dk-icons.js" defer></script>
+<script src="kit/js/dk-modal.js" defer></script>
+<script src="kit/js/dk-table.js" defer></script>
+<script src="kit/js/dk-context.js" defer></script>
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+
+<link rel="stylesheet" href="app.css">
+<script src="source.js" defer></script><script src="model.js" defer></script><script src="app.js" defer></script>
+</head>
+<body class="dk-page dk-glass"><main class="dk-wrap" data-dk-screen="overview">
+<header class="dk-head"><div class="dk-head__titles"><h1 class="dk-head__title">Выполнение плана программы</h1><div class="dk-head__subtitle">Учебные данные · <time datetime="2025-06-01">Обновлено 1 июня 2025</time></div></div>
+<div class="dk-head__actions"><div class="dk-seg" role="group" aria-label="Тема"><button type="button" data-theme-set="dark">Dark</button><button type="button" data-theme-set="light">Light</button></div><button class="dk-btn dk-btn--ghost" id="method">Методика и источник</button></div></header>
+<div class="dk-toolbar"><div class="dk-toolbar__group"><div class="dk-seg" id="months" role="group" aria-label="Месяц для всех показателей"><button type="button" data-month="all" aria-pressed="true">Апрель–май 2025</button><button type="button" data-month="2025-04" aria-pressed="false">Апрель</button><button type="button" data-month="2025-05" aria-pressed="false">Май</button></div></div></div>
+<div id="status" role="status" class="dk-caption" hidden></div>
+<div class="dk-grid dk-grid--equal summary" id="summary"></div>
+<section class="dk-widget" aria-labelledby="regions-title"><header class="dk-widget__head"><h2 class="dk-widget__title" id="regions-title">Отклонения по регионам</h2><span class="dk-caption">Факт / план</span></header><div class="dk-widget__body"><div class="dk-tablewrap"><table class="dk-table dk-table--zebra records" id="regions-table"><thead><tr><th scope="col">Регион</th><th scope="col" class="dk-td-num">Выдачи, кредитов</th><th scope="col" class="dk-td-num">Отклонение, кредитов</th><th scope="col" class="dk-td-num">Бюджет, млн ₽</th><th scope="col" class="dk-td-num">Отклонение, млн ₽</th></tr></thead><tbody id="regions"></tbody></table></div></div></section>
+</main>
+<dialog class="dk-modal dk-modal--detail dk-modal--wide" id="detail" aria-labelledby="detail-title" data-dk-screen="detail"><div class="dk-modal__head"><div class="dk-stack"><h2 class="dk-modal__title" id="detail-title"></h2><div class="dk-caption" id="detail-period"></div></div><button type="button" class="dk-iconbtn dk-modal__close" data-modal-close aria-label="Закрыть детали"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div><div class="dk-modal__body"><div class="dk-grid dk-grid--equal summary" id="detail-summary"></div><h3 class="dk-widget__title detail-heading">Помесячные детали</h3><div class="dk-tablewrap"><table class="dk-table dk-table--zebra records" id="monthly-table"><thead><tr><th scope="col">Месяц</th><th scope="col" class="dk-td-num">Выдачи, кредитов<br>Факт / план</th><th scope="col" class="dk-td-num">Отклонение, кредитов</th><th scope="col" class="dk-td-num">Бюджет, млн ₽<br>Факт / план</th><th scope="col" class="dk-td-num">Отклонение, млн ₽</th></tr></thead><tbody id="monthly"></tbody></table></div></div><div class="dk-modal__foot"><button type="button" class="dk-btn dk-btn--ghost" data-modal-close>Вернуться к регионам</button></div></dialog>
+<dialog class="dk-modal" id="method-dialog" aria-labelledby="method-title"><div class="dk-modal__head"><h2 class="dk-modal__title" id="method-title">Методика и источник</h2><button type="button" class="dk-iconbtn dk-modal__close" data-modal-close aria-label="Закрыть методику"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></div><div class="dk-modal__body"><dl class="definitions"><dt>Источник</dt><dd>Учебный контрольный набор · numeric-oracle<br>tools/fixtures/numeric/mortgage-source.json</dd><dt>Выполнение плана</dt><dd>Сумма факта / сумма плана × 100% в выбранном периоде. Нулевой план: процент не определён.</dd><dt>Отклонение</dt><dd>Факт − план в единице показателя. Знак не является оценкой эффективности расходов.</dd><dt>Бюджет</dt><dd>План относится к выбранному периоду. Лимиты в этом учебном наборе месячные и складываются. Остаток лимита = лимит − расходы.</dd><dt>Неполные данные</dt><dd>Неизвестное значение не равно нулю. При null суммарный показатель и зависимые расчёты не определяются.</dd><dt>План и охват</dt><dd>2 региона · апрель–май 2025. Версия и дата утверждения плана не указаны в источнике.</dd></dl></div><div class="dk-modal__foot"><button class="dk-btn dk-btn--ghost" type="button" data-modal-close>Закрыть</button></div></dialog>
+</body></html>

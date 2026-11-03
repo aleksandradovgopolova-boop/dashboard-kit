@@ -1,0 +1,5 @@
+PASS: native agent artifact 16 dark 390
+PASS: native agent artifact 16 dark 1280
+PASS: native agent artifact 16 light 390
+PASS: native agent artifact 16 light 1280
+PASS: 1 real Codex artifacts, both themes, 390/1280, independent data/interaction acceptance

@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "numeric-oracle",
+    "label": "Учебный контрольный набор",
+    "kind": "demo",
+    "updatedAt": "2025-06-01T00:00:00Z"
+  },
+  "period": {
+    "from": "2025-04-01",
+    "to": "2025-05-31"
+  },
+  "dimensions": [
+    {
+      "id": "region",
+      "label": "region"
+    },
+    {
+      "id": "regionName",
+      "label": "regionName"
+    },
+    {
+      "id": "district",
+      "label": "district"
+    },
+    {
+      "id": "districtName",
+      "label": "districtName"
+    }
+  ],
+  "metrics": [
+    {
+      "id": "issued",
+      "label": "issued",
+      "unit": "кредитов",
+      "aggregation": "sum",
+      "description": "Контрольное значение"
+    },
+    {
+      "id": "issuedPlan",
+      "label": "issuedPlan",
+      "unit": "кредитов",
+      "aggregation": "sum",
+      "description": "Контрольное значение"
+    },
+    {
+      "id": "volume",
+      "label": "volume",
+      "unit": "млн ₽",
+      "aggregation": "sum",
+      "description": "Контрольное значение"
+    },
+    {
+      "id": "rateWeight",
+      "label": "rateWeight",
+      "unit": "б.п.·млн ₽",
+      "aggregation": "sum",
+      "description": "Контрольное значение"
+    },
+    {
+      "id": "applied",
+      "label": "applied",
+      "unit": "заявок",
+      "aggregation": "sum",
+      "description": "Контрольное значение"
+    },
+    {
+      "id": "approved",
+      "label": "approved",
+      "unit": "заявок",
+      "aggregation": "sum",
+      "description": "Контрольное значение"
+    },
+    {
+      "id": "budgetSpent",
+      "label": "budgetSpent",
+      "unit": "млн ₽",
+      "aggregation": "sum",
+      "description": "Контрольное значение"
+    },
+    {
+      "id": "budgetPlan",
+      "label": "budgetPlan",
+      "unit": "млн ₽",
+      "aggregation": "sum",
+      "description": "Контрольное значение"
+    },
+    {
+      "id": "budgetLimit",
+      "label": "budgetLimit",
+      "unit": "млн ₽",
+      "aggregation": "sum",
+      "description": "Контрольное значение"
+    }
+  ],
+  "rows": [
+    {
+      "id": "spb-2025-04",
+      "label": "Санкт-Петербург · 2025-04",
+      "date": "2025-04-01",
+      "dimensions": {
+        "region": "spb",
+        "regionName": "Санкт-Петербург",
+        "district": "СЗФО",
+        "districtName": "Северо-Западный"
+      },
+      "values": {
+        "issued": 10,
+        "issuedPlan": 20,
+        "volume": 100,
+        "rateWeight": 60000,
+        "applied": 40,
+        "approved": 20,
+        "budgetSpent": 5,
+        "budgetPlan": 10,
+        "budgetLimit": 20
+      }
+    },
+    {
+      "id": "spb-2025-05",
+      "label": "Санкт-Петербург · 2025-05",
+      "date": "2025-05-01",
+      "dimensions": {
+        "region": "spb",
+        "regionName": "Санкт-Петербург",
+        "district": "СЗФО",
+        "districtName": "Северо-Западный"
+      },
+      "values": {
+        "issued": 30,
+        "issuedPlan": 30,
+        "volume": 300,
+        "rateWeight": 120000,
+        "applied": 60,
+        "approved": 30,
+        "budgetSpent": 15,
+        "budgetPlan": 20,
+        "budgetLimit": 30
+      }
+    },
+    {
+      "id": "altai-rep-2025-04",
+      "label": "Республика Алтай · 2025-04",
+      "date": "2025-04-01",
+      "dimensions": {
+        "region": "altai-rep",
+        "regionName": "Республика Алтай",
+        "district": "СФО",
+        "districtName": "Сибирский"
+      },
+      "values": {
+        "issued": 60,
+        "issuedPlan": 100,
+        "volume": 600,
+        "rateWeight": 480000,
+        "applied": 100,
+        "approved": 90,
+        "budgetSpent": 30,
+        "budgetPlan": 40,
+        "budgetLimit": 50
+      }
+    },
+    {
+      "id": "altai-rep-2025-05",
+      "label": "Республика Алтай · 2025-05",
+      "date": "2025-05-01",
+      "dimensions": {
+        "region": "altai-rep",
+        "regionName": "Республика Алтай",
+        "district": "СФО",
+        "districtName": "Сибирский"
+      },
+      "values": {
+        "issued": 0,
+        "issuedPlan": 50,
+        "volume": 0,
+        "rateWeight": 0,
+        "applied": 0,
+        "approved": 0,
+        "budgetSpent": 0,
+        "budgetPlan": 10,
+        "budgetLimit": 20
+      }
+    }
+  ]
+}

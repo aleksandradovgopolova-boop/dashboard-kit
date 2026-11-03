@@ -1,0 +1,19 @@
+{
+  "kitCommitProvided": "3add79c",
+  "kitContentDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20",
+  "hashAlgorithm": "SHA-256",
+  "files": {
+    "/tmp/kit-evals-20261103/blind-input/source.json": "847e17ed0724e9f0a04b7878e3b284ac970c54e601b91e2b8c0e09fea977ad81",
+    "/tmp/kit-evals-20261103/blind-input/registry.json": "5ec7cdd21b0788dffe4ce5c02ebe3e55ce462e79e5bffd70999c0599f4e1802b",
+    "/tmp/kit-evals-20261103/source-v2/kit-release.json": "d46ab286c6cb582f8e53b2d847a7f5f9df91e574918009ee1980b02fe164bc6d",
+    "/tmp/kit-evals-20261103/source-v2/kit-manifest.json": "03059ae7c5cc9b21a506d5bd2c98cf06f2c23b19eb4ee817f86c81fe91203f2e",
+    "/tmp/kit-evals-20261103/source-v2/tools/build-screen.py": "d9e7615fa4500c95a2eee32a9b2342d251c9506c7ca4ad1191c8837e809601a4",
+    "/tmp/kit-evals-20261103/source-v2/tools/screen_spec.py": "efb774acaaea1a229f5aaad3ed1a1eb0a3aef38d16e3dbfe30742f4a414fb8c9",
+    "/tmp/kit-evals-20261103/source-v2/js/dk-screen.js": "c70c8813261e6ee144c74465ec9037360d71bf4883bac5dbc2180203ec6cabbd",
+    "/tmp/kit-evals-20261103/source-v2/js/dk-dashboard.js": "de3eba24df18553235ebf1afb2dc1b089ea8a7bd684b445c2353f667ea5cffaf",
+    "/tmp/kit-evals-20261103/source-v2/js/dk-metrics.js": "dc5a7440893181603fdd49be16ce7a98eed54ebefba90d096b5b0d9958378beb",
+    "/tmp/kit-evals-20261103/task22/spec.json": "0d19f674d925b18086ee09fa2f3639dc1421dc1cad5c7ca0daa851632de5d967",
+    "/tmp/kit-evals-20261103/task22/app/index.html": "37b19b6d1d54cfcefa64c27693cd37da3d4d94cd0fae6b299e3ef3a9214001d2",
+    "/tmp/kit-evals-20261103/task22/app/screen-input.json": "93edda2e93937754bd7ae0bd05f1d9c58d44847c300c93790cf110f3d004ab41"
+  }
+}
