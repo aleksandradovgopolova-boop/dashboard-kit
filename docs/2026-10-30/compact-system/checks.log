@@ -1,0 +1,147 @@
+✔ validation clones and deeply freezes data without freezing caller data (12.9535ms)
+✔ one filter and period derive rows, sums and means from the same snapshot (1.397042ms)
+✔ unknown filter values and empty input produce empty results, never fabricated zeros (1.76025ms)
+✔ malformed metadata, dates, duplicates, unknown fields and invalid numbers fail closed (2.658583ms)
+✔ dangerous keys and invalid queries cannot enter the data model (2.090666ms)
+✔ overflow is rejected while finite large means remain computable (0.57325ms)
+✔ late success cannot overwrite the latest query, even when loader ignores abort (3.320459ms)
+✔ late error and current error never restore or relabel stale data (1.678333ms)
+✔ timeout settles an ignored abort and retry retains the filter (17.817125ms)
+✔ destroy aborts work, disconnects subscribers and permits independent remount (1.202875ms)
+✔ unsubscribe and consumer mutation cannot corrupt the store or later renderers (0.485ms)
+✔ reentrant subscribers can supersede or destroy a load before its loader starts (0.459459ms)
+✔ invalid queries never reach loader; invalid payload and empty payload have distinct states (0.424459ms)
+✔ fetch adapter propagates signal, checks HTTP and hides response parsing errors (2.627584ms)
+✔ local pagination never changes KPI or chart aggregates (0.520291ms)
+✔ server mode keeps whole-slice totals and charts with only one returned page (1.746208ms)
+✔ server contract supports 50000 matching rows without downloading those rows (0.394667ms)
+✔ server response rejects query mismatch, partial pages, inconsistent totals and coverage (8.72725ms)
+✔ server means are weighted by observed count and all-null remains missing (1.195792ms)
+✔ server aggregation overflow and table/series disagreement fail closed (1.040875ms)
+✔ fetch server mode posts normalized query and limits streamed response bytes (27.482708ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 98.595583
+✔ one immutable demo source covers 89 regions and six full months (59.333292ms)
+✔ region and month sums reconcile to every additive total (32.867167ms)
+✔ ratios and average interest use whole-slice weights, not means of percentages (27.612209ms)
+✔ district, month and region search filter every block consistently (11.4155ms)
+✔ pagination and table ordering never change KPI, chart, ranking or map data (144.703583ms)
+✔ unknown selections and no matches stay empty, not silently reset to all (31.346208ms)
+✔ one missing measurement invalidates its total and dependent ratio only (27.021709ms)
+✔ zero is an observation; zero denominators are undefined ratios (26.055459ms)
+✔ status thresholds use the unrounded percentage-point shortfall (133.077375ms)
+✔ malformed or semantically ambiguous source data fails closed (132.622541ms)
+✔ unknown or malformed queries fail instead of changing filter meaning (138.764917ms)
+✔ unsafe aggregate sums are rejected even if individual rows are safe (11.738833ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 784.146333
+PASS: 20,000 observations, full-slice totals/series independent of pagination, null/zero/empty, query limits, concurrent idempotency, HTTP/body/origin/static boundaries (no socket opened)
+PASS: Python full-slice aggregates, page boundaries and JS contract agree for seven queries
+PASS: reproducible runtime package, external version pin, corruption/path/symlink rejection, isolated upgrade and rollback packages
+PASS: 0.1.0-rc.2 (candidate), 95 files, sha256:5bb5838beb26b3741f5942824149eaeb04703401dddc65d1a983ece4836bfc45
+
+  ✓ СЛОИ · компоненты читают только семантику (200 примитивов скрыто за 207 именами смысла)
+  ✓ СЫРЫЕ · ни одного цвета значением вне примитивов
+  ✓ ОПЕЧАТКИ · все используемые токены объявлены, селекторы браузер примет
+  ✓ ПАРАМЕТРЫ · у входных параметров компонентов есть значения по умолчанию
+  ✓ DYNAMIC MEANING · динамический смысл только через dkMeaning с явной ролью
+  ✓ РОЛЬ · смысл, поставленный в текст, читается как текст
+  ✓ ЭКРАН · разметка собирается через общее экранирование
+  ✓ РАЗМЕРЫ · где у кита есть шкала, значения берутся из неё
+  ✓ ЧЁТНОСТЬ · все размеры в пикселях чётные
+  ✓ НАВЕДЕНИЕ · стили наведения закрыты от тача
+  ✓ КОНТРАСТ · текст читается на своих поверхностях в обеих темах
+  ✓ СТУПЕНИ · соседние поверхности различимы в обеих темах
+  ✓ СМЫСЛ · акцент не путается со смыслом, в том числе при дальтонизме
+  ✓ ПЯТНО · заливка смысла видна на поверхности
+  ✓ КНОПКА · подпись и силуэт читаются на всех акцентах
+  ✓ ШКАЛА · все ступени карты видны на своей доске
+  ✓ ПАЛИТРА · различимость серий измерена в обеих темах
+  ✓ СБОРКА · тема графиков собрана из текущих токенов
+  ✓ ДВИЖОК · в урезанном движке ровно то, что просит код (7 типов серий, 9 модулей, 1 без записи в реестре — по отметке сборки)
+  ✓ НОЛЬ · движок не создаётся и не пересчитывается в контейнере без размера
+  ✓ ТИШИНА · управление тише данных: акцент только на фокусе, основной кнопке и в поимённых исключениях
+  ✓ UI/UX: реестр и десять эвристик согласованы; ручное ревью отдельно
+  ✓ СТРАНИЦЫ · 57 страниц компонентов собраны скриптом, все 10 блоков на месте
+  ✓ МАНИФЕСТ · 65 частей описывают все 508 классов и 47 функций; порядок подключения сходится с кодом; 12 типов графиков, 2 пробела помечены; читатель отвечает на все части
+  ✓ КЛАССЫ · 6443 употреблений классов и 686 ссылок на иконки в страницах, скриптах и README — все существуют (0 зацепка без стиля по списку)
+  ✓ ЗНАЧОК · 3 файлов иконок на месте, размеры сходятся, иконка iPhone и маскируемая непрозрачны
+  ✓ ТЕЛЕФОН · 69 страниц в 3 размерах: не шире экрана, цели от 44 px, поля не зумятся, вырез обойдён
+  ✓ ДОСТУП · 4 дашбордов: контролы достижимы с клавиатуры с видимым фокусом, у контролов есть имена, каркас страниц на месте (речь скринридера на живом устройстве — ручной шаг)
+
+  Система цела.
+
+RUN: browser/docs
+PASS: overview/routes/menu, 56 component pages, both themes at 320/768/1280/1536px, native wheel chaining and keyboard table scroll
+RUN: browser/reference-dashboard
+PASS: reference server + consumer, pagination/full-slice totals, filters, empty/error/retry, actions, remount, themes, mobile and AX names
+RUN: browser/family-mortgage
+PASS: genuine full-slice and sorted regional CSV files saved/read, UTF-8 BOM, six monthly rows and focus return
+PASS: mortgage consumer, full-slice totals, pages, filters/history, region details/focus, empty/error/retry/remount, themes/mobile/AX names
+RUN: browser/select
+PASS: поиск, выделение, фокус, клавиатура, пустой результат, multi/single, API, повторное открытие
+RUN: browser/chips
+PASS: ChipsInput/Select normalization, IME, duplicates, focus, disabled, safe text, reinit/destroy
+RUN: browser/meaning
+PASS: meaning roles/rejection, dark/light solid no-data, isolated roots, no canvas hatching, uptime
+RUN: browser/advanced
+PASS: DOM charts, comparison edges, tree keyboard/search/parent, state, saved views/migration/storage, density, layout, CSV/SVG, tooltip, fullscreen fallback, details, lifecycle
+RUN: browser/runtime
+PASS: real pages, 200% font tokens, 320px reflow, named AX controls, mobile hierarchy, reduced-motion environment, PNG/solid no-data
+{"page":"dashboard.html","duplicate":[],"dangling":[],"width":390,"viewport":390,"chartTop":1558.609375,"sticky":"static","fullscreen":"native","largeText":{"width":390,"viewport":390},"reflow320":{"width":320,"viewport":320,"textOverflow":[{"text":"Календарь","cls":""}],"overflow":[{"cls":"dk-tablewrap","scroll":616,"width":238,"overflow":"auto"},{"cls":"dk-table dk-table--events","scroll":616,"width":520,"overflow":"visible"},{"cls":"","scroll":616,"width":520,"overflow":"visible"},{"cls":"","scroll":616,"width":520,"overflow":"visible"},{"cls":"","scroll":539,"width":520,"overflow":"visible"},{"cls":"","scroll":539,"width":520,"overflow":"visible"},{"cls":"","scroll":522,"width":520,"overflow":"visible"},{"cls":"","scroll":522,"width":520,"overflow":"visible"},{"cls":"dk-tabbar","scroll":430,"width":272,"overflow":"auto"}],"culprit":[{"tag":"A","cls":"dk-tabbar__item","parent":"dk-tabbar","text":"Календарь"},{"tag":"svg","cls":{},"parent":"dk-tabbar__item","text":""},{"tag":"use","cls":{},"parent":{},"text":""},{"tag":"SPAN","cls":"","parent":"dk-tabbar__item","text":"Календарь"}]},"axNamedControls":true}
+RUN: browser/filter-context
+PASS: empty scope, null reset, view persistence, no-data distinction, real-page KPI/map/table/rank agreement, details context/focus, shared-source KPI reset
+PASS: regions.html honest unavailable navigation/action, available calendar destination
+PASS: accidents.html honest unavailable navigation/action, available calendar destination
+PASS: accidents widget alignment/reflow and 24-hour readable chart at 1366px (chart 556px)
+PASS: accidents widget alignment/reflow and 24-hour readable chart at 1024px (chart 393px)
+PASS: accidents widget alignment/reflow and 24-hour readable chart at 390px (chart 308px)
+PASS: regions 10px grid gutters, 20px inner padding, equal adjacent heights and no horizontal overflow at 1366px
+PASS: regions 10px grid gutters, 20px inner padding, equal adjacent heights and no horizontal overflow at 1024px
+PASS: regions 10px grid gutters, 16px inner padding, equal adjacent heights and no horizontal overflow at 390px
+PASS: dashboard.html/dark/320 5 KPI two columns + full-width fifth, full labels and leading values
+PASS: dashboard.html/dark/390 5 KPI two columns + full-width fifth, full labels and leading values
+PASS: dashboard.html/dark/768 5 KPI one row, full labels and leading values
+PASS: dashboard.html/dark/1024 5 KPI one row, full labels and leading values
+PASS: dashboard.html/dark/1366 5 KPI one row, full labels and leading values
+PASS: dashboard.html/light/320 5 KPI two columns + full-width fifth, full labels and leading values
+PASS: dashboard.html/light/390 5 KPI two columns + full-width fifth, full labels and leading values
+PASS: dashboard.html/light/768 5 KPI one row, full labels and leading values
+PASS: dashboard.html/light/1024 5 KPI one row, full labels and leading values
+PASS: dashboard.html/light/1366 5 KPI one row, full labels and leading values
+PASS: accidents.html/dark/320 4 KPI 2×2, full labels and leading values
+PASS: accidents.html/dark/390 4 KPI 2×2, full labels and leading values
+PASS: accidents.html/dark/768 4 KPI one row, full labels and leading values
+PASS: accidents.html/dark/1024 4 KPI one row, full labels and leading values
+PASS: accidents.html/dark/1366 4 KPI one row, full labels and leading values
+PASS: accidents.html/light/320 4 KPI 2×2, full labels and leading values
+PASS: accidents.html/light/390 4 KPI 2×2, full labels and leading values
+PASS: accidents.html/light/768 4 KPI one row, full labels and leading values
+PASS: accidents.html/light/1024 4 KPI one row, full labels and leading values
+PASS: accidents.html/light/1366 4 KPI one row, full labels and leading values
+RUN: browser/dashboard-overview
+PASS: reference overview at 1536px, five KPI, six panels, shared map counts, status demo/type totals, keyboard views, genuine work rows, both themes, mobile reflow and enlarged analytics
+RUN: browser/composition
+PASS: three composition components, both themes, 320/390/1536px, complete headings and working link targets
+RUN: browser/region-focus
+PASS: region focus composition, map aspect, visible context, shared risk totals, both themes and phone widths
+RUN: browser/sdk-snippets
+PASS: 13 published SDK examples assembled on 6 clean pages; static rules, deferred loading, real actions, 390/1280, dark/light
+снимок: /Users/sasad/dashboard-kit/docs/2026-10-30/compact-system/full-suite/dashboard-dark.png 390×844 dark
+PASS: deliberate manual/computed JS tokens are rejected
+PASS: UI/UX policy rejects invented mappings and incomplete coverage
+PASS: UX patterns reference actual component pages
+PASS: 13 new SDK entries, dependency closure, examples, anti-patterns, accessibility and skill task coverage; AI execution not assessed
+PASS: complete static, generated files, mobile, browser, runtime, SDK fixture checks

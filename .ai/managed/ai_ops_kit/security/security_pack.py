@@ -67,22 +67,22 @@ def _is_prose(path: str) -> bool:
     return p.endswith(PROSE_SUFFIXES) or any(seg in p for seg in PROSE_DIRS)
 
 
-# ЗАМЕР 19.08.2026 (180 настоящих коммитов трёх живых продуктов: niti, ii-sreda, msh_news_bot_v2).
-# Класс «домен применим, находок ноль, закрыть нечем» — 126 прогонов из 180. Из них в 95 (53% ВСЕХ
-# прогонов) КАЖДЫЙ такой домен поднят ТОЛЬКО совпадением по содержимому: подстрока без границ слова
-# в файле, чей путь домену не соответствует. Это не находка и не сигнал — это догадка.
-#
-# РАЗВИЛКА БЫЛА НАЗВАНА В ОТЧЁТЕ ПРОГОНА (B2-24) И РЕШЕНА ЗАМЕРОМ, А НЕ ВКУСОМ:
-#   (а) поднимать security-судью на QUICK — цена: судья на 7 из 10 мелких правок (126/180);
-#   (б) домен, поднятый ТОЛЬКО содержимым и БЕЗ находок, предупреждает, а не блокирует — цена:
-#       окно для настоящего дефекта в файле, чей путь не матчит.
-# Выбрано (б). Окно ограничено и названо: детерминированные проверки (secret/injection/dependency)
-# объявлены шаблоном `.*` и применимы ВСЕГДА, поэтому секрет и инъекция в таком файле ловятся
-# по-прежнему. Теряется только требование СУЖДЕНИЯ по домену, который никто не подтвердил ничем,
-# кроме подстроки.
-#
-# ИНВАРИАНТ НЕ ТРОНУТ: домен с находками critical/high блокирует. Домен, поднятый ПУТЁМ или
-# СИГНАЛОМ, остаётся needs_review — там основание настоящее (правка Dockerfile это правка Dockerfile).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def _content_only(reasons) -> bool:
     """Домен применён ТОЛЬКО совпадением по содержимому — ни пути, ни сигнала, ни «всегда»."""
     rs = list(reasons or [])
@@ -115,7 +115,7 @@ def _applies(domain, signals, files_content):
         for f, content in files_content.items():
             if rx.search(f):
                 hit = f"файл {f}"; break
-            # матч по содержимому — только для файлов, которые могут РЕАЛИЗОВЫВАТЬ поведение
+            
             if content and not _is_prose(f) and rx.search(content):
                 hit = f"содержимое {f}"; break
         if hit:
@@ -131,8 +131,8 @@ def _root_commit_files(root, base):
     if not m:
         return None
     sha = m.group(1)
-    # родителя нет -> это корень; у любого другого коммита `<sha>^` разрешается.
-    # Единый вход к git с таймаутом (см. shared/gitio): зависший git не вешает сбор security-пакета.
+    
+    
     if git(root, "rev-parse", "--verify", "--quiet", f"{sha}^")[0] == 0:
         return None
     rc, out, _ = git(root, "diff-tree", "--root", "--no-commit-id", "--name-only", "-r", sha)
@@ -165,15 +165,67 @@ def _scan_scope(child_root, base):
         return changed, {"mode": "diff", "base": str(base)}
     root_files = _root_commit_files(child_root, base)
     if root_files is not None:
-        # первый коммит репозитория: сравнивать не с чем, и охват «файлы этого коммита» — точный,
-        # а не «весь репозиторий по случайности совпал».
+        
+        
         return root_files, {"mode": "initial-commit", "base": str(base)}
-    # v3.0.11 (finding аудита P1): git-энумерация упала -> FAIL-CLOSED (raise), НЕ changed=[].
-    # Прежде rc!=0 -> [] -> нет находок -> overall='clear': реальная правка при git-сбое
-    # признавалась чистой. Исключение ловит вызывающий (_security_scan_error -> security=fail).
+    
+    
+    
     raise RuntimeError(
         f"база сравнения '{base}' не разрешается в {child_root}: диф не получен, и это не первый "
         f"коммит — файлы для security-скана определить нечем — fail-closed")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _vendor_section(child_root, base, vendor, files_content):
+    """Раздел поставки для доменного вердикта: разметка прибытий, версии кита и подпись адресата.
+
+    ДО ЭТОГО РАЗМЕТКИ ЗДЕСЬ НЕ БЫЛО ВОВСЕ (нашло независимое ревью): поле `arrived` числилось в
+    белом списке проекции отчёта, но `run_pack` его не проставлял — то есть в `run-report.json`,
+    куда гейт отправляет человека, адреса приходили без ответа на главный вопрос «это привёз кит
+    своим обновлением или было и раньше». Возможность жила только в текстовом выводе CLI.
+    """
+    compared = bool(child_root and base)
+    if compared and vendor:
+        vendor = security_scan._vendor_arrivals(child_root, base, vendor, files_content)
+    before, after = (security_scan._vendor_version(child_root, base, files_content)
+                     if child_root else (None, None))
+    приехало = sum(1 for f in vendor if f.get("arrived"))
+    return {"vendor_flags": vendor, "vendor_compared": compared,
+            "vendor_note": security_scan._arrivals_note(before, after, приехало, len(vendor),
+                                                        compared)}
+
+
+def _domain_findings(domain, secrets, injections, new_deps_detailed):
+    """Находки домена по его `deterministic_checks`. Домен берёт только то, что объявил.
+
+    Вынесено из `run_pack` разрезом, а не подъёмом потолка: функция стояла РОВНО на потолке
+    func-size, а ратчет ходит только вниз. Поведение не менялось — тот же порядок, те же поля."""
+    checks = set(domain.get("deterministic_checks", []) or [])
+    findings = []
+    if "secret_scan" in checks:
+        findings += [{"type": "secret", "path": s["path"], "line": s["line"], "id": s["id"]} for s in secrets]
+    if "injection_scan" in checks:
+        findings += [{"type": "injection", "path": i["path"], "line": i["line"], "id": i["id"]} for i in injections]
+    if "dependency_diff" in checks:
+        
+        
+        
+        findings += [{"type": "new_dependency", "name": dd["name"], "version": dd.get("version"),
+                      "manifest": dd.get("manifest"), "operation": dd.get("operation", "add")}
+                     for dd in new_deps_detailed]
+    return findings
 
 
 def run_pack(child_root=None, base=None, signals=None, files_content=None):
@@ -184,7 +236,7 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
     signals = dict(signals or {})
     domains, allowed = load_domains()
 
-    # источник изменённых файлов: переданная карта (тест) или git diff коммита
+    
     scan_scope = {"mode": "given", "base": None}
     if files_content is None:
         files_content = {}
@@ -193,13 +245,14 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
             changed, scan_scope = _scan_scope(child_root, base)
             files_content = security_scan._read_files(child_root, changed)
 
-    # детерминированные находки (один раз)
+    
     secrets = security_scan.scan_secrets(files_content)
-    injections = security_scan.scan_injection(files_content)
+    injections, vendor_injections = security_scan._vendor_split(   # см. комментарий над _domain_findings
+        security_scan.scan_injection(files_content))
     mani = {p: c for p, c in files_content.items() if Path(p).name in security_scan.DEP_MANIFESTS}
     before = {p: (security_scan._git_show(child_root, base, p) if (child_root and base) else "") for p in mani}
-    # `new_deps` (недетальный вариант) снят ревизией 2026-08-11: результат не использовался с
-    # перехода на `new_deps_detailed` в v3.0-rc5 — считался лишний проход по манифестам.
+    
+    
     new_deps_detailed = security_scan.new_dependencies_detailed(before, mani)   # v3.0-rc5 (P1.2): fingerprint
 
     results, blocking, needs_review, advisory = [], [], [], []
@@ -207,25 +260,12 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
         reasons = _applies(d, signals, files_content)
         if not reasons:
             continue
-        checks = set(d.get("deterministic_checks", []) or [])
-        findings = []
-        if "secret_scan" in checks:
-            findings += [{"type": "secret", "path": s["path"], "line": s["line"], "id": s["id"]} for s in secrets]
-        if "injection_scan" in checks:
-            findings += [{"type": "injection", "path": i["path"], "line": i["line"], "id": i["id"]} for i in injections]
-        if "dependency_diff" in checks:
-            # v3.0-rc5 (P1.2): finding несёт fingerprint (manifest/package/version/operation) — approval
-            # supply-chain привязывается к нему, а не к пути файла (иначе одобрение одной зависимости
-            # покрыло бы любую другую в том же requirements.txt/package.json).
-            findings += [{"type": "new_dependency", "name": dd["name"], "version": dd.get("version"),
-                          "manifest": dd.get("manifest"), "operation": dd.get("operation", "add")}
-                         for dd in new_deps_detailed]
-
+        findings = _domain_findings(d, secrets, injections, new_deps_detailed)
         req = set(d.get("required_evidence", []) or [])
         severity = (d.get("severity_policy", {}) or {}).get("default", "medium")
-        # статус домена. ИНВАРИАНТ (finding аудита v2.104->исправлен): status=fail НИКОГДА не даёт
-        # overall=clear. critical/high -> blocking (reviewer не переопределяет); medium/low ->
-        # needs_review (нужен судья/человек — напр. новая зависимость требует одобрения).
+        
+        
+        
         if findings:
             status = "fail"
             if severity in ("critical", "high"):
@@ -233,10 +273,10 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
             else:
                 needs_review.append(d["id"])
         elif req and req <= DETERMINISTIC:
-            # всё required_evidence — детерминированное и прошло чисто -> можно авто-закрыть
+            
             status = "pass"
         elif _content_only(reasons):
-            # догадка по подстроке, ничем не подтверждённая -> предупреждение, а не ворота (замер выше)
+            
             status = "advisory"
             advisory.append(d["id"])
         else:
@@ -255,15 +295,16 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
         "results": results,
         "blocking": sorted(set(blocking)),
         "needs_review": sorted(set(needs_review)),
-        # ПРЕДУПРЕЖДЕНИЕ — ОТДЕЛЬНЫЙ ВЕРДИКТ, А НЕ `clear`: «проверено и чисто» и «домен подняли
-        # догадкой, проверять было нечего» обязаны выглядеть по-разному, иначе это ложный зелёный.
+        
+        
         "advisory": sorted(set(advisory)),
         "overall": ("blocked" if blocking else
                     ("needs_review" if needs_review else
                      ("advisory" if advisory else "clear"))),
-        # ОХВАТ РЯДОМ С ВЕРДИКТОМ: что сравнивалось. Вердикт без охвата непроверяем — заявка #139
-        # читалась как «блокирует без находок» именно потому, что охват был не назван нигде.
+        
+        
         "scan_scope": scan_scope,
+        **_vendor_section(child_root, base, vendor_injections, files_content),
         "allowed_evidence_sources": allowed,
     }
 
@@ -280,7 +321,12 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
 # значение: отчёт лежит в репозитории и уезжает в PR, поэтому секрет в нём был бы вынесенным секретом.
 # Список полей — БЕЛЫЙ (не «удалим лишнее»): новое поле находки, если оно однажды принесёт значение,
 # в отчёт не попадёт само по себе — его придётся внести здесь осознанно.
-FINDING_REPORT_FIELDS = ("type", "path", "line", "id", "name", "version", "manifest", "operation")
+FINDING_REPORT_FIELDS = ("type", "path", "line", "id", "name", "version", "manifest", "operation",
+                         # область и «приехало с обновлением» (#1147) — внесены в белый список
+                         # ОСОЗНАННО: ни то, ни другое не несёт значения, только адресата и
+                         # происхождение адреса. Без них раздел поставки дошёл бы до отчёта
+                         # безымянным, а именно в отчёт гейт отправляет человека.
+                         "area", "arrived")
 
 
 def for_report(result):
@@ -288,22 +334,31 @@ def for_report(result):
     секретов; с находками, основаниями применимости домена и охватом скана. None -> None."""
     if not result:
         return None
-    # .get, а не [] — на путях деградации вердикт бывает формы {"overall": "error"}, и проекция
-    # обязана донести ЭТО, а не упасть: упавшая проекция вернула бы отчёт вообще без security.
+    
+    
     return {
         "overall": result.get("overall"),
         "applicable_domains": result.get("applicable_domains") or [],
         "blocking": result.get("blocking") or [],
         "needs_review": result.get("needs_review") or [],
         "advisory": result.get("advisory") or [],
-        # охват рядом с вердиктом (`absent-base-is-resolved-or-refused`): вердикт без охвата
-        # непроверяем — «clear» по пустому дифу и «clear» по проверенному дифу выглядят одинаково
+        
+        
         "scan_scope": result.get("scan_scope"),
+        # РАЗДЕЛ ПОСТАВКИ ДОХОДИТ ДО ОТЧЁТА (#1147). Он не влияет на `overall` — и именно поэтому
+        # обязан быть виден: невидимое и непроверяемое «не судим» неотличимо от «прощаем». Тот же
+        # класс, что заявка #139: гейт отправляет человека в отчёт, а находок в отчёте нет.
+        "vendor_flags": [{k: f[k] for k in FINDING_REPORT_FIELDS if k in f}
+                         for f in (result.get("vendor_flags") or [])],
+        
+        
+        "vendor_note": result.get("vendor_note"),
+        "vendor_compared": result.get("vendor_compared"),
         "domain_results": [{
             "domain": r["domain"],
             "status": r["status"],
             "severity": r["severity"],
-            # ПОЧЕМУ домен вообще применён — иначе непонятно, откуда взялся блокирующий домен
+            
             "applies_because": r.get("applies_because") or [],
             "findings": [{k: f[k] for k in FINDING_REPORT_FIELDS if k in f}
                          for f in (r.get("findings") or [])],
@@ -319,7 +374,7 @@ def main(argv):
     ap.add_argument("--signals", default="{}")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args(argv)
-    # ОТКАЗ НАЗЫВАЕТ ПРИЧИНУ, а не показывает человеку стек: без базы охват определить нечем.
+    
     try:
         res = run_pack(Path(a.child_root), base=a.base, signals=json.loads(a.signals))
     except RuntimeError as e:

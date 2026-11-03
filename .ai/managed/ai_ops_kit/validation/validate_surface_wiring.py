@@ -39,20 +39,20 @@ def check(manifest):
     client = list(manifest.get("client") or [])
     if not wrappers:
         errors.append("нет обёрток (wrappers) — нечему обслуживать маршруты ядра")
-    # (1) core ⊆ каждая обёртка
+    
     for name, mounted in wrappers.items():
         mset = set(mounted or [])
         for r in core:
             if r not in mset:
                 errors.append(f"маршрут ядра '{r}' НЕ смонтирован в обёртке '{name}' (core<->wrapper drift)")
-    # (2) client ⊆ union(обёртки)
+    
     union = set()
     for mounted in wrappers.values():
         union |= set(mounted or [])
     for p in client:
         if not _covered(p, union):
             errors.append(f"клиент вызывает '{p}', но путь не обслуживается ни одной обёрткой (client<->wrapper drift)")
-    # (3) смонтировано, но никто не вызывает -> advisory
+    
     for r in sorted(union):
         if not any(_covered(c, [r]) for c in client):
             advisories.append(f"смонтировано, но никто не вызывает: '{r}' (забытый мусор или незаконченная работа)")

@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "^apply_patch$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$(git rev-parse --show-toplevel 2>/dev/null)/.ai/managed/templates/runtime/lint_hook.py\"; [ -f \"$f\" ] || exit 0; exec \"${AI_OPS_PYTHON:-python3}\" \"$f\" hook  # ai-ops-kit:lint-hook",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

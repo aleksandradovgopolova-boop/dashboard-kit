@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html class="dk-root" lang="ru" data-theme="dark" data-accent="blue">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Всплывающие сведения · dashboard-kit</title>
+<!-- СОБРАНО СКРИПТОМ tools/build-component-pages.py, РУКАМИ НЕ ПРАВИТЬ.
+     Содержание — tools/component_pages/p6_advanced.py. Проверка СТРАНИЦЫ
+     в tools/check.py сверяет этот файл с тем, что собирает скрипт. -->
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="js/dk-theme.js"></script>
+<link rel="stylesheet" href="vendor/air-datepicker.css">
+<link rel="stylesheet" href="css/tokens.primitives.css">
+<link rel="stylesheet" href="css/tokens.semantic.css">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
+<link rel="stylesheet" href="css/docs.css?v=20261030-compact">
+<script src="js/dk-util.js?v=20261028-stable-responsive"></script>
+<script src="js/dk-icons.js?v=20261006-menu" defer></script>
+<script src="js/dk-popover.js" defer></script>
+<script src="js/docs-index.js?v=20261026-editorial" defer></script>
+<script src="js/docs.js?v=20261030-compact" defer></script>
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
+</head>
+<body class="dk-page dk-glass">
+
+<header class="sc-bar">
+  <a class="sc-brand" href="index.html">
+    <span class="sc-brand__t">dashboard-kit</span>
+  </a>
+  <div class="sc-ctl">
+    <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
+  </div>
+</header>
+
+<div class="sc-shell sc-shell--closed">
+<nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
+
+<div class="dk-wrap" id="top">
+
+  <header class="sc-hero sc-hero--component">
+    <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Обратная связь</p>
+      <details class="sc-share"><summary>Поделиться <svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary>
+        <div class="sc-share__items">
+          <button type="button" data-doc-action="link">Скопировать ссылку</button>
+          <a href="component-popover.md" target="_blank" rel="noopener">Открыть как Markdown ↗</a>
+          <button type="button" data-doc-action="chatgpt">Открыть в ChatGPT ↗</button>
+          <button type="button" data-doc-action="claude">Открыть в Claude ↗</button>
+          <button type="button" data-doc-action="claude-code">Скопировать Claude Code команду</button>
+          <button type="button" data-doc-action="codex">Скопировать Codex команду</button>
+        </div>
+      </details>
+    </div><p class="sc-share-status" role="status"></p>
+    <h1><span class="sc-doc-emoji" aria-hidden="true">🪟</span>Всплывающие сведения</h1>
+    <p class="sc-hero__lead">Открывает дополнительные сведения и действия рядом с кнопкой.</p>
+    <div class="sc-meta">
+      <span class="sc-meta__i">Статус: экспериментальный</span>
+      <a href="#zhivoy-primer">Пример</a><a href="#kogda-ispolzovat">Как выбрать</a><a href="#svyazannoe">С чем сочетать</a><a href="#kod">Код и API</a>
+    </div>
+  </header>
+
+  <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
+    <h2>В работе</h2>
+    <p>Внутри могут быть ссылки и настройки. Короткое объяснение без действий остаётся подсказкой.</p><div class="sc-playground"><div class="sc-playground__canvas"><button class="dk-btn dk-btn--sm" type="button" id="context-info">Данные и методика</button></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
+  </section>
+  <section class="sc-sec" id="kogda-ispolzovat">
+    <h2>Когда использовать</h2>
+    <div class="sc-cols"><div class="sc-note"><b>Когда использовать</b><ul class="sc-list"><li>Нужны ссылки, настройки или длинное объяснение по запросу.</li></ul></div><div class="sc-note"><b>Когда выбрать другое</b><ul class="sc-list"><li>Короткий неинтерактивный текст — <a href="component-tooltip.html">Подсказка</a>. Большая задача — отдельный экран или диалог.</li></ul></div></div>
+  </section>
+  <section class="sc-sec" id="anatomiya">
+    <h2>Из чего состоит</h2>
+    <ol class="sc-anatomy__list"><li><b>Контекст</b> — Открывает дополнительные сведения и действия рядом с кнопкой.</li><li><b>Данные и действие</b> — Живой пример показывает контракт подключения; демонстрационные данные не являются производственным срезом.</li></ol>
+  </section>
+  <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
+    <h2>Варианты и размеры</h2>
+    <p>Ширина до 360 px, высота ограничена доступным окном; поля равны с четырёх сторон, длинное содержимое прокручивается.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dkPopover(trigger,{label,content,placement})</code></td><td>Разметка и параметры компонента.</td><td>При задаче, описанной выше.</td></tr></tbody></table></div>
+  </section>
+  <section class="sc-sec" id="sostoyaniya">
+    <h2>Состояния</h2>
+    <p>Закрыто, открыто, содержимое обновлено, закрытие по Escape или внешнему действию. После destroy обработчики и ARIA восстановлены.</p><details class="dk-data-summary"><summary>Ограничения и подключение</summary><p>Строка content вставляется как текст; HTMLElement передаётся во владение компонента. Скрипт/HTML из данных не выполняются. На scroll/resize положение пересчитывается, длинное содержимое прокручивается. В старом WebView без Popover API используется fixed fallback. Старые классы dk-pop сохраняют только прежний стиль и не запускают контроллер автоматически. Вложенные Popover не поддерживаются; Tooltip и Onboarding остаются отдельными компонентами. Нативный механизм: <a href="https://html.spec.whatwg.org/multipage/popover.html">HTML Popover</a>.</p></details>
+  </section>
+  <section class="sc-sec" id="kontent">
+    <h2>Текст и подписи</h2>
+    <div class="sc-cols"><div class="sc-note sc-note--ok"><b>Понятно</b><ul class="sc-list"><li>Конкретное название: «Данные и методика», «Настройки периода».</li></ul></div><div class="sc-note sc-note--bad"><b>Вызывает вопросы</b><ul class="sc-list"><li>Ссылка или поле внутри Tooltip; неясное «Подробнее» без контекста.</li></ul></div></div>
+  </section>
+  <section class="sc-sec" id="dostupnost">
+    <h2>Доступность</h2>
+    <ul class="sc-list sc-list--wide"><li>При открытии фокус в содержимом, Tab выходит в обычный порядок страницы; Escape/Закрыть возвращают фокус кнопке. Внешний клик не перехватывает фокус. Не модальный: фон доступен. В native dialog панель принадлежит тому же диалогу.</li><li>Dark/light берутся из ближайшего dk-root; reduced motion не требует анимации. Проверки DOM/клавиатуры не заменяют живой скринридер или физический телефон.</li></ul>
+  </section>
+  <section class="sc-sec" id="svyazannoe">
+    <h2>С чем сочетать</h2>
+    <ul class="sc-list sc-list--wide"><li><a href="component-table.html">Таблица</a> — точные числа</li><li><a href="README.md">Подключение</a> — dk-theme первым, dk-util до компонента</li></ul>
+  </section>
+  <section class="sc-sec" id="tokeny" data-group="Разработка">
+    <h2>Токены оформления</h2>
+    <p>Токены компонента из <code>css/components.css</code> для текущей темы. </p><ul class="sc-tokens" data-tokens="dk-pop,dk-popover,dk-popover__head,dk-popover__title,dk-popover__body"><li class="sc-tokens__wait">Загружаем токены…</li></ul>
+  </section>
+  <section class="sc-sec" id="kod">
+    <h2>Код и API</h2>
+    <p class="sc-source">Исходники: <a href="css/components.css"><code>css/components.css</code></a> · <a href="js/dk-popover.js"><code>js/dk-popover.js</code></a></p><pre class="sc-code"><code>&lt;button class=&quot;dk-btn dk-btn--sm&quot; type=&quot;button&quot; id=&quot;context-info&quot;&gt;Данные и методика&lt;/button&gt;
+&lt;script&gt;
+document.addEventListener(&quot;DOMContentLoaded&quot;, function(){
+var content=document.createElement(&#x27;div&#x27;); content.innerHTML=&#x27;&lt;p&gt;Учебные наблюдения. Выполнение = сумма факта / сумма плана × 100%.&lt;/p&gt;&lt;a href=&quot;docs/named-metrics.md&quot;&gt;Контракт метрик&lt;/a&gt;&#x27;; dkPopover(document.getElementById(&#x27;context-info&#x27;),{label:&#x27;Данные и методика&#x27;,content:content});
+});
+&lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkPopover(trigger,{label,content,placement})</code></td><td>API</td><td>trigger — button, label — доступное название, content — текст или HTMLElement; placement: auto/top/bottom.</td></tr><tr><td><code>open()/close()/toggle()/update()/destroy()</code></td><td>методы</td><td>open возвращает Promise после завершения входной анимации родительского dialog. Ожидание отменяется close/destroy/уходом фокуса. Один открытый Popover; update сохраняет фокус, destroy очищает обработчики и ARIA.</td></tr></tbody></table></div>
+  </section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+document.addEventListener("DOMContentLoaded", function(){var content=document.createElement('div'); content.innerHTML='<p>Учебные наблюдения. Выполнение = сумма факта / сумма плана × 100%.</p><a href="docs/named-metrics.md">Контракт метрик</a>'; dkPopover(document.getElementById('context-info'),{label:'Данные и методика',content:content});});
+})();
+</script>
+</body>
+</html>

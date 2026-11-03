@@ -29,14 +29,14 @@ PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is
             Path(__file__).resolve().parents[1])
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401
 
-# _CALL_STATS читаем ЖИВЫМ (drain пересоздаёт список); модуль ре-экспортируется — часть кода
-# импортирует `orchestrator_usage` именно отсюда.
+
+
 from ai_ops_kit.providers import orchestrator_usage  # noqa: E402,F401
 
-# --- Ре-экспорт публичной поверхности из сателлитов ------------------------------------------
-# Явный перечень (не `import *`): фасад обязан отдавать КАЖДОЕ перенесённое имя как свой атрибут —
-# внешние импортёры используют их как `orchestrator_providers.X`, в т.ч. приватные с `_`, которые
-# импортируются извне (`_anthropic_call`, `_openai_call`, `_claude_cli_call`, `_MAX_TOKENS`, …).
+
+
+
+
 from ai_ops_kit.providers.provider_errors import (  # noqa: E402,F401
     ProviderEnvUnavailableError,
     ProviderLimitError,
@@ -95,8 +95,8 @@ PROVIDER_AUTORESOLVE_ENV = "AI_OPS_PROVIDER_AUTORESOLVE"
 _FALSY = {"0", "false", "no", "off", "none", ""}
 _TRUTHY = {"1", "true", "yes", "on"}
 
-# Имя env-переменной с ключом по провайдеру — ИЗ registry/providers.yaml (auth.env[0]).
-# Используется только когда child-конфиг не задал credentials_ref явно.
+
+
 PROVIDER_KEY_ENV = {
     "anthropic": "ANTHROPIC_API_KEY",
     "openai": "OPENAI_API_KEY",
@@ -241,11 +241,11 @@ def resolve_provider(explicit=None, root=None, env=None, which=None):
     checked = []
 
     if explicit:
-        # ЯВНЫЙ ВЫБОР ЧЕЛОВЕКА НЕ ОСПАРИВАЕТСЯ, НО И НЕ ОСТАЁТСЯ НЕПРОВЕРЕННЫМ (поле 13.08 и
-        # 15.08.2026, ИИ-Среда). Прежде здесь не проверялось ничего: `--provider claude-cli` без
-        # бинаря доводил прогон до вызова модели и ронял его сырым `FileNotFoundError`, уже после
-        # разбора, плана и подготовки дерева. Провайдер остаётся тем, что назвал человек — меняется
-        # только то, что об отсутствии сказано ДО прогона, а не трейсбеком посреди него.
+        
+        
+        
+        
+        
         warning = None
         if explicit == "claude-cli" and not claude_binary(env=env, which=which):
             warning = ("выбран claude-cli, но исполняемый файл `claude` не найден — прогон дойдёт "
@@ -278,14 +278,14 @@ def resolve_provider(explicit=None, root=None, env=None, which=None):
         else:
             checked.append(f".ai-ops.yaml providers.default={default}: {key_env} отсутствует в env")
 
-    # АВТОВЫБОР СПРАШИВАЕТ ТО ЖЕ, ЧЕМ БУДЕТ ЗАПУСКАТЬ (замер 18.08.2026). Здесь стоял голый
-    # `which("claude")` — тот самый второй взгляд, который `claude_lookup` заводился устранить, и
-    # расхождение осталось живым ровно на пути автовыбора (явный `--provider claude-cli` проверялся
-    # с 17.08, PR #141). Замерено два направления, и оба врали человеку:
-    #   · назван рабочий путь, claude вне PATH (запуск из venv/планировщика) -> `which` пусто ->
-    #     «живого провайдера не нашлось» и mock, то есть «правок не будет» при живом исполнителе;
-    #   · claude в PATH, назван битый путь -> `which` есть -> claude-cli без предупреждения, работа
-    #     зарегистрирована, дерево подготовлено, и прогон умирает на первом вызове модели.
+    
+    
+    
+    
+    
+    
+    
+    
     _look = claude_lookup(env=env, which=which)
     if _look["path"]:
         return {"provider": "claude-cli",
@@ -295,10 +295,10 @@ def resolve_provider(explicit=None, root=None, env=None, which=None):
     checked.append(f"{CLAUDE_BIN_ENV}={env.get(CLAUDE_BIN_ENV)} — файла нет или он не исполняемый"
                    if _look["where"] == "named" else "claude CLI не найден в PATH")
 
-    # СОВЕТ ПО ПРИЧИНЕ, А НЕ ОДИН НА ВСЕ СЛУЧАИ: «установите claude CLI» человеку, у которого CLI
-    # стоит и назван, а сломан путь, отправляет чинить не то. Названный путь сильнее PATH осознанно
-    # (иначе кит молча пошёл бы другим исполнителем, чем ему сказали), поэтому здесь именно отказ с
-    # причиной — до прогона, а не посреди него.
+    
+    
+    
+    
     warning = (f"назван {CLAUDE_BIN_ENV}={env.get(CLAUDE_BIN_ENV)}, но файла нет или он не "
                "исполняемый → правок не будет; поправьте путь или уберите переменную, чтобы "
                "искать claude в PATH") if _look["where"] == "named" else NO_LIVE_PROVIDER_WARNING
@@ -312,10 +312,10 @@ def print_provider_resolution(res, printer=print):
     if not isinstance(res, dict):
         return
     if res.get("warning"):
-        # ИМЯ ПРОВАЙДЕРА БЕРЁТСЯ ИЗ РЕШЕНИЯ, а не вписано «mock» намертво: предупреждение бывает и
-        # у живого выбора (явный claude-cli без бинаря), и тогда жёсткая строка сообщала владельцу
-        # неправду о том, чем пойдёт прогон. Для прежнего случая (fallback) провайдер и есть mock,
-        # поэтому вывод там не изменился.
+        
+        
+        
+        
         printer(f"⚠ провайдер: {res.get('provider')} — {res['warning']}")
         for c in res.get("checked") or []:
             printer(f"  · {c}")

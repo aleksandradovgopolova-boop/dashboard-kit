@@ -47,5 +47,5 @@ def _on_run_completed(data: dict) -> None:
         pass
 
 
-# Регистрация при импорте модуля
+
 subscribe("run_completed", _on_run_completed)

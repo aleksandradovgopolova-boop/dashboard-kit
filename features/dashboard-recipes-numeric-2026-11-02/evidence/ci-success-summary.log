@@ -1,0 +1,108 @@
+2026-11-02T13:54:49.0134655Z # tests 21
+2026-11-02T13:54:49.0136243Z # pass 21
+2026-11-02T13:54:49.0136589Z # fail 0
+2026-11-02T13:54:49.9051282Z # tests 12
+2026-11-02T13:54:49.9065035Z # pass 12
+2026-11-02T13:54:49.9065397Z # fail 0
+2026-11-02T13:54:50.0371403Z # tests 22
+2026-11-02T13:54:50.0372129Z # pass 22
+2026-11-02T13:54:50.0372504Z # fail 0
+2026-11-02T13:54:50.8324332Z PASS: 20,000 observations, full-slice totals/series independent of pagination, null/zero/empty, query limits, concurrent idempotency, HTTP/body/origin/static boundaries (no socket opened)
+2026-11-02T13:54:51.3876360Z PASS: Python full-slice aggregates, page boundaries and JS contract agree for seven queries
+2026-11-02T13:54:51.5545097Z PASS: reproducible runtime package, external version pin, corruption/path/symlink rejection, isolated upgrade and rollback packages
+2026-11-02T13:54:51.6797042Z PASS: 0.1.0-rc.4 (candidate), 95 files, sha256:ba96784670c9fd5fd4599d2049a1ba84078b8ed15282e33391a5a171db164e31
+2026-11-02T13:55:58.2130286Z   ✓ СЛОИ · компоненты читают только семантику (200 примитивов скрыто за 207 именами смысла)
+2026-11-02T13:55:58.2131441Z   ✓ СЫРЫЕ · ни одного цвета значением вне примитивов
+2026-11-02T13:55:58.2132452Z   ✓ ОПЕЧАТКИ · все используемые токены объявлены, селекторы браузер примет
+2026-11-02T13:55:58.2134927Z   ✓ ПАРАМЕТРЫ · у входных параметров компонентов есть значения по умолчанию
+2026-11-02T13:55:58.2136564Z   ✓ DYNAMIC MEANING · динамический смысл только через dkMeaning с явной ролью
+2026-11-02T13:55:58.2138069Z   ✓ РОЛЬ · смысл, поставленный в текст, читается как текст
+2026-11-02T13:55:58.2139320Z   ✓ ЭКРАН · разметка собирается через общее экранирование
+2026-11-02T13:55:58.2140240Z   ✓ РАЗМЕРЫ · где у кита есть шкала, значения берутся из неё
+2026-11-02T13:55:58.2141185Z   ✓ ЧЁТНОСТЬ · все размеры в пикселях чётные
+2026-11-02T13:55:58.2142073Z   ✓ НАВЕДЕНИЕ · стили наведения закрыты от тача
+2026-11-02T13:55:58.2142940Z   ✓ КОНТРАСТ · текст читается на своих поверхностях в обеих темах
+2026-11-02T13:55:58.2144055Z   ✓ СТУПЕНИ · соседние поверхности различимы в обеих темах
+2026-11-02T13:55:58.2145040Z   ✓ СМЫСЛ · акцент не путается со смыслом, в том числе при дальтонизме
+2026-11-02T13:55:58.2145969Z   ✓ ПЯТНО · заливка смысла видна на поверхности
+2026-11-02T13:55:58.2146818Z   ✓ КНОПКА · подпись и силуэт читаются на всех акцентах
+2026-11-02T13:55:58.2147692Z   ✓ ШКАЛА · все ступени карты видны на своей доске
+2026-11-02T13:55:58.2148627Z   ✓ ПАЛИТРА · различимость серий измерена в обеих темах
+2026-11-02T13:55:58.2149565Z   ✓ СБОРКА · тема графиков собрана из текущих токенов
+2026-11-02T13:55:58.2150929Z   ✓ ДВИЖОК · в урезанном движке ровно то, что просит код (7 типов серий, 9 модулей, 1 без записи в реестре — по отметке сборки)
+2026-11-02T13:55:58.2152613Z   ✓ НОЛЬ · движок не создаётся и не пересчитывается в контейнере без размера
+2026-11-02T13:55:58.2154107Z   ✓ ТИШИНА · управление тише данных: акцент только на фокусе, основной кнопке и в поимённых исключениях
+2026-11-02T13:55:58.2155156Z   ✓ UI/UX: реестр и десять эвристик согласованы; ручное ревью отдельно
+2026-11-02T13:55:58.2156097Z   ✓ СТРАНИЦЫ · 57 страниц компонентов собраны скриптом, все 10 блоков на месте
+2026-11-02T13:55:58.2157779Z   ✓ МАНИФЕСТ · 65 частей описывают все 508 классов и 47 функций; порядок подключения сходится с кодом; 12 типов графиков, 2 пробела помечены; читатель отвечает на все части
+2026-11-02T13:55:58.2159698Z   ✓ КЛАССЫ · 6452 употреблений классов и 686 ссылок на иконки в страницах, скриптах и README — все существуют (0 зацепка без стиля по списку)
+2026-11-02T13:55:58.2161001Z   ✓ ЗНАЧОК · 3 файлов иконок на месте, размеры сходятся, иконка iPhone и маскируемая непрозрачны
+2026-11-02T13:55:58.2162323Z   ✓ ТЕЛЕФОН · 69 страниц в 3 размерах: не шире экрана, цели от 44 px, поля не зумятся, вырез обойдён
+2026-11-02T13:55:58.2164004Z   ✓ ДОСТУП · 4 дашбордов: контролы достижимы с клавиатуры с видимым фокусом, у контролов есть имена, каркас страниц на месте (речь скринридера на живом устройстве — ручной шаг)
+2026-11-02T13:55:58.2411829Z RUN: browser/numeric-browser
+2026-11-02T13:56:03.2828175Z PASS: numeric UI binding dark 390
+2026-11-02T13:56:09.4623426Z PASS: numeric UI binding dark 1280
+2026-11-02T13:56:14.1625331Z PASS: numeric UI binding light 390
+2026-11-02T13:56:19.4005483Z PASS: numeric UI binding light 1280
+2026-11-02T13:56:19.4006576Z PASS: literal UI oracle, filters/details/return, zero/partial/no-data, comparison policies and tooltip lifecycle
+2026-11-02T13:56:19.5149850Z RUN: browser/docs
+2026-11-02T14:00:24.6372600Z PASS: overview/routes/menu, 56 component pages, both themes at 320/768/1280/1536px, native wheel chaining and keyboard table scroll
+2026-11-02T14:00:24.8458499Z RUN: browser/reference-dashboard
+2026-11-02T14:00:30.6731559Z PASS: reference server + consumer, pagination/full-slice totals, filters, empty/error/retry, actions, remount, themes, mobile and AX names
+2026-11-02T14:00:30.7924175Z RUN: browser/family-mortgage
+2026-11-02T14:01:20.5595984Z PASS: genuine full-slice and sorted regional CSV files saved/read, UTF-8 BOM, six monthly rows and focus return
+2026-11-02T14:01:21.5761961Z PASS: mortgage consumer, full-slice totals, pages, filters/history, region details/focus, empty/error/retry/remount, themes/mobile/AX names
+2026-11-02T14:01:21.7269901Z RUN: browser/select
+2026-11-02T14:01:22.2588505Z PASS: поиск, выделение, фокус, клавиатура, пустой результат, multi/single, API, повторное открытие
+2026-11-02T14:01:22.3447190Z RUN: browser/chips
+2026-11-02T14:01:22.8814161Z PASS: ChipsInput/Select normalization, IME, duplicates, focus, disabled, safe text, reinit/destroy
+2026-11-02T14:01:23.0136862Z RUN: browser/meaning
+2026-11-02T14:01:23.5862677Z PASS: meaning roles/rejection, dark/light solid no-data, isolated roots, no canvas hatching, uptime
+2026-11-02T14:01:23.6838225Z RUN: browser/advanced
+2026-11-02T14:01:24.4105714Z PASS: DOM charts, comparison edges, tree keyboard/search/parent, state, saved views/migration/storage, density, layout, CSV/SVG, tooltip, fullscreen fallback, details, lifecycle
+2026-11-02T14:01:24.5531625Z RUN: browser/runtime
+2026-11-02T14:02:05.1527943Z PASS: real pages, 200% font tokens, 320px reflow, named AX controls, mobile hierarchy, reduced-motion environment, PNG/solid no-data
+2026-11-02T14:02:05.2997137Z RUN: browser/filter-context
+2026-11-02T14:02:06.7591357Z PASS: empty scope, null reset, view persistence, no-data distinction, real-page KPI/map/table/rank agreement, details context/focus, shared-source KPI reset
+2026-11-02T14:02:06.9596950Z PASS: regions.html honest unavailable navigation/action, available calendar destination
+2026-11-02T14:02:07.2188327Z PASS: accidents.html honest unavailable navigation/action, available calendar destination
+2026-11-02T14:02:07.5283796Z PASS: accidents widget alignment/reflow and 24-hour readable chart at 1366px (chart 556px)
+2026-11-02T14:02:07.8242046Z PASS: accidents widget alignment/reflow and 24-hour readable chart at 1024px (chart 393px)
+2026-11-02T14:02:08.1369655Z PASS: accidents widget alignment/reflow and 24-hour readable chart at 390px (chart 308px)
+2026-11-02T14:02:08.7748334Z PASS: regions 10px grid gutters, 20px inner padding, equal adjacent heights and no horizontal overflow at 1366px
+2026-11-02T14:02:09.1537043Z PASS: regions 10px grid gutters, 20px inner padding, equal adjacent heights and no horizontal overflow at 1024px
+2026-11-02T14:02:09.5267129Z PASS: regions 10px grid gutters, 16px inner padding, equal adjacent heights and no horizontal overflow at 390px
+2026-11-02T14:02:10.3052511Z PASS: dashboard.html/dark/320 5 KPI two columns + full-width fifth, full labels and leading values
+2026-11-02T14:02:10.9377589Z PASS: dashboard.html/dark/390 5 KPI two columns + full-width fifth, full labels and leading values
+2026-11-02T14:02:11.6342389Z PASS: dashboard.html/dark/768 5 KPI one row, full labels and leading values
+2026-11-02T14:02:12.2925238Z PASS: dashboard.html/dark/1024 5 KPI one row, full labels and leading values
+2026-11-02T14:02:12.9971224Z PASS: dashboard.html/dark/1366 5 KPI one row, full labels and leading values
+2026-11-02T14:02:13.6706871Z PASS: dashboard.html/light/320 5 KPI two columns + full-width fifth, full labels and leading values
+2026-11-02T14:02:14.3090142Z PASS: dashboard.html/light/390 5 KPI two columns + full-width fifth, full labels and leading values
+2026-11-02T14:02:14.9809734Z PASS: dashboard.html/light/768 5 KPI one row, full labels and leading values
+2026-11-02T14:02:15.6450266Z PASS: dashboard.html/light/1024 5 KPI one row, full labels and leading values
+2026-11-02T14:02:16.3466438Z PASS: dashboard.html/light/1366 5 KPI one row, full labels and leading values
+2026-11-02T14:02:16.9725313Z PASS: accidents.html/dark/320 4 KPI 2×2, full labels and leading values
+2026-11-02T14:02:17.4704519Z PASS: accidents.html/dark/390 4 KPI 2×2, full labels and leading values
+2026-11-02T14:02:18.0579315Z PASS: accidents.html/dark/768 4 KPI one row, full labels and leading values
+2026-11-02T14:02:18.6090489Z PASS: accidents.html/dark/1024 4 KPI one row, full labels and leading values
+2026-11-02T14:02:19.1957883Z PASS: accidents.html/dark/1366 4 KPI one row, full labels and leading values
+2026-11-02T14:02:19.7987923Z PASS: accidents.html/light/320 4 KPI 2×2, full labels and leading values
+2026-11-02T14:02:20.3035361Z PASS: accidents.html/light/390 4 KPI 2×2, full labels and leading values
+2026-11-02T14:02:20.8510992Z PASS: accidents.html/light/768 4 KPI one row, full labels and leading values
+2026-11-02T14:02:21.3944895Z PASS: accidents.html/light/1024 4 KPI one row, full labels and leading values
+2026-11-02T14:02:21.9717270Z PASS: accidents.html/light/1366 4 KPI one row, full labels and leading values
+2026-11-02T14:02:22.1129803Z RUN: browser/dashboard-overview
+2026-11-02T14:02:38.1169679Z PASS: reference overview at 1536px, five KPI, six panels, shared map counts, status demo/type totals, keyboard views, genuine work rows, both themes, mobile reflow and enlarged analytics
+2026-11-02T14:02:38.2507551Z RUN: browser/composition
+2026-11-02T14:02:51.8592608Z PASS: three composition components, both themes, 320/390/1536px, complete headings and working link targets
+2026-11-02T14:02:52.0342683Z RUN: browser/region-focus
+2026-11-02T14:02:56.8496105Z PASS: region focus composition, map aspect, visible context, shared risk totals, both themes and phone widths
+2026-11-02T14:02:56.9787926Z RUN: browser/sdk-snippets
+2026-11-02T14:03:13.9684539Z PASS: 13 published SDK examples assembled on 6 clean pages; static rules, deferred loading, real actions, 390/1280, dark/light
+2026-11-02T14:03:16.9484989Z PASS: deliberate manual/computed JS tokens are rejected
+2026-11-02T14:03:16.9486015Z PASS: UI/UX policy rejects invented mappings and incomplete coverage
+2026-11-02T14:03:16.9486800Z PASS: UX patterns reference actual component pages
+2026-11-02T14:03:20.7849140Z PASS: four recipes and eval tasks; 13 SDK entries, dependency closure, examples, anti-patterns, accessibility and skill task coverage; AI execution not assessed
+2026-11-02T14:03:21.2330616Z PASS: complete static, generated files, mobile, browser, runtime, SDK fixture checks
+2026-11-02T14:03:30.2198258Z MCP: handshake, 5 tools, asset order, embed, resources and errors passed

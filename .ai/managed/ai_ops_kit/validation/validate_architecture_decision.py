@@ -27,9 +27,9 @@ try:                                          # v3.38 (лента №5): вал�
     from ai_ops_kit.validation import _bootstrap   # noqa: F401 — импорт пакетом (после pip install)
 except ImportError:                                # запуск скриптом: корня на пути ещё нет,
     import _bootstrap                              # noqa: F401 — и положить его может только он сам
-# Структурная проверка одного ADR вынесена ВНИЗ (пакет `checks`, слой primitives): её зовёт
-# `checks.adr_registry` в своём слое, и через реестр — рантайм, без ребра intelligence -> validation.
-# check и вокабуляры ре-экспортируются для обратной совместимости.
+
+
+
 from ai_ops_kit.checks.architecture_decision import (   # noqa: E402,F401
     QA_ATTR, QA_EFFECT, STATUS, UI_IMPACT, check)
 

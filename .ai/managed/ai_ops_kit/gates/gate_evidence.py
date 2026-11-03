@@ -17,14 +17,16 @@ from pathlib import Path
 
 import yaml
 
+from ai_ops_kit.shared.claim_provenance import KINDS
+
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
-# `pending_human`/`human_handoff` — часть формы evidence, а не приписка сбоку: гейт, который ждёт
-# ЧЕЛОВЕКА, отличается от гейта, который нашёл дефект. Без объявления здесь такой признак в
-# загруженном evidence считался бы «неизвестным полем».
+
+
+
 _EVIDENCE_KEYS = {"status", "source", "provided", "checks", "evidence", "warnings", "blockers",
-                  "override", "pending_human", "human_handoff"}
-# веха 4.2 (#588): допустимые значения самодекларации источника доказательства.
+                  "override", "pending_human", "human_handoff", "provenance"}
+
 _EVIDENCE_SOURCE_KINDS = ("deterministic", "ai_judgment", "human")
 
 
@@ -41,6 +43,8 @@ def validate_evidence(evidence) -> list:
             errs.append(f"{gid}.status: '{e.get('status')}' вне [pass, warn, fail]")
         if "source" in e and e["source"] not in _EVIDENCE_SOURCE_KINDS:
             errs.append(f"{gid}.source: '{e['source']}' вне {list(_EVIDENCE_SOURCE_KINDS)}")
+        if "provenance" in e and e["provenance"] not in KINDS:
+            errs.append(f"{gid}.provenance: неизвестный тип")
         for k in ("provided", "evidence", "warnings", "blockers"):
             if k in e and not (isinstance(e[k], list) and all(isinstance(x, str) for x in e[k])):
                 errs.append(f"{gid}.{k}: должен быть списком строк")
@@ -72,16 +76,16 @@ def load_evidence(path):
     return data
 
 
-# вердикт reviewer-стадии в ПРОЗЕ: строка вида "Recommendation: pass" / "status: passed" /
-# "Вердикт: fail" / "Recommendation: needs_work". Якорь на начало строки намеренный: слово внутри
-# фразы («passed the tests») вердиктом не считается.
+
+
+
 _VERDICT_PASS = re.compile(
     r"(?:^|\n)\s*(?:recommendation|verdict|вердикт|status|итог)\s*[:=]?\s*\(?\s*"
     r"(pass|passed|approved|одобрено|принято)\b", re.I)
-# needs_work / warn — ОТДЕЛЬНЫЙ класс, а не «почти pass»: на блокирующем гейте downstream
-# превращает его в блок (как структурный warn), поэтому терять его в фолбэке нельзя. Живой
-# code-reviewer часто заканчивает именно «Recommendation: needs_work» — раньше это не матчило ни
-# один из двух паттернов и давало no-verdict на валидном заключении.
+
+
+
+
 _VERDICT_WARN = re.compile(
     r"(?:^|\n)\s*(?:recommendation|verdict|вердикт|status|итог)\s*[:=]?\s*\(?\s*"
     r"(warn|warning|needs[_\s-]?work|нужны\s+правки|доработать|доработка|замечани)\b", re.I)
@@ -156,12 +160,12 @@ def extract_reviewer_json(text):
 def evidence_from_reviewer_result(gate: dict, rr: dict, source: str) -> dict:
     """Структурный вердикт судьи -> evidence одного гейта (источник истины, не regex по прозе)."""
     if rr["status"] == "fail":
-        return {"status": "fail",
+        return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "fail",
                 "blockers": rr.get("blockers") or [f"reviewer FAIL @ {source}"],
                 "evidence": [source]}
-    # pass/warn: та же дисциплина — required_evidence авто-даём только ai-review
+    
     prov = list(gate.get("required_evidence", []) or []) if classify(gate) == "ai-review" else []
-    return {"status": rr["status"], "provided": prov,
+    return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": rr["status"], "provided": prov,
             "checks": rr.get("checks", []), "evidence": [source]}
 
 
@@ -172,12 +176,12 @@ def evidence_from_markdown(gate: dict, text: str, source: str):
     if verdict is None:
         return None
     if verdict == "fail":
-        return {"status": "fail", "blockers": [f"reviewer verdict FAIL @ {source}"],
+        return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "fail", "blockers": [f"reviewer verdict FAIL @ {source}"],
                 "evidence": [source]}
     if verdict == "warn":
-        # warn/needs_work ревьюера — то же, что структурный warn: на блокирующем гейте downstream
-        # (evaluate_gate/_run_reviews) превращает его в блок. Тихим pass это не становится.
-        return {"status": "warn", "warnings": [f"reviewer verdict NEEDS_WORK/WARN @ {source}"],
+        
+        
+        return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "warn", "warnings": [f"reviewer verdict NEEDS_WORK/WARN @ {source}"],
                 "evidence": [source]}
     # pass:
     # Дисциплина evidence (v2.16): «pass» ревьюера — доказательство ТОЛЬКО для
@@ -185,15 +189,15 @@ def evidence_from_markdown(gate: dict, text: str, source: str):
     # слово ревьюера НЕ фабрикует required_evidence (build_passed/tests_passed/…):
     # их закрывают реальные валидаторы/факты, иначе «evidence» снова = «поверьте на слово».
     if classify(gate) == "ai-review":
-        return {"status": "pass", "provided": list(gate.get("required_evidence", []) or []),
+        return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "pass", "provided": list(gate.get("required_evidence", []) or []),
                 "evidence": [f"reviewer verdict @ {source}"]}
-    # provided пуст -> при наличии required_evidence evaluate_gate честно даст fail
-    return {"status": "pass", "evidence": [f"reviewer verdict @ {source}"]}
+    
+    return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "pass", "evidence": [f"reviewer verdict @ {source}"]}
 
 
-# Отказ провайдера, у которого причина «человеческая»: модель отказалась отвечать — тут нужен
-# человек. Пустой или обрезанный ответ — не человеческий случай: его чинит повтор с другим
-# потолком, и помечать его ожиданием человека значило бы звать не того.
+
+
+
 _REFUSAL_NEEDS_HUMAN = {"refused_by_model"}
 
 
@@ -284,9 +288,9 @@ def collect_evidence(workflow_id: str, run_dir) -> dict:
                         None)
         if not stage_id:
             continue
-        # ОТКАЗ ЧИТАЕТСЯ ПЕРВЫМ (v3.37, C2): если судья вердикта не вынес и провайдер назвал
-        # причину, эта причина и есть то, что человеку надо знать. Разбирать после отказа нечего —
-        # артефакт стадии содержит объяснение отказа, а не заключение.
+        
+        
+        
         rfl = run_dir / f"stage-{stage_id}.refusal.json"
         if rfl.exists():
             try:
@@ -395,15 +399,15 @@ def classify(gate: dict, signals: dict = None) -> str:
     return "writer-check"
 
 
-# КТО ЗАКРЫВАЕТ ГЕЙТ — четыре ответа, а не три (работа `gate-map-says-who-closes-it`).
-#
-# Замер 19.08.2026: из 35 гейтов 19 не имеют исполняемого валидатора. Их «зелёное» — не результат
-# машины, и дочка об этом не знала: в отчёте прогона все гейты выглядели одинаково.
-#
-# ЧЕТВЁРТОЕ ЗНАЧЕНИЕ (`writer`) добавлено НЕ для полноты таксономии. Гейт с `review_mode: writer`
-# и без валидатора закрывает СВОЯ ЖЕ стадия — тот, кто произвёл работу, объявляет её проверенной.
-# Назвать это `judge` значило бы напечатать в отчёте ровно то утверждение, против которого стоит
-# инвариант «writer ≠ judge».
+
+
+
+
+
+
+
+
+
 CLOSED_BY = {
     "deterministic": "validator",   # машина: детерминированный валидатор
     "ai-review":     "judge",       # мнение независимого судьи-роли (read-only)
@@ -412,19 +416,19 @@ CLOSED_BY = {
 }
 CLOSED_BY_VALUES = tuple(dict.fromkeys(CLOSED_BY.values()))
 
-# ИСТОЧНИК ДОКАЗАТЕЛЬСТВА — БИНАРНАЯ ЧЕСТНОСТЬ ПОВЕРХ ЧЕТЫРЁХ «КТО ЗАКРЫВАЕТ» (веха 4.2, #588).
-#
-# Замер `closed_by` уже различает validator/judge/writer/human. Но вопрос вехи 4.2 другой и грубее:
-# «этому МОЖНО ВЕРИТЬ как доказательству, или это МНЕНИЕ?». Ответов ровно три:
-#   - `deterministic` — тест/lint/CI/schema-валидатор: воспроизводимо, тот же вход даёт тот же ответ;
-#   - `ai_judgment`   — заключение AI-судьи ИЛИ самозаявление писателя: advisory-мнение, НЕ доказательство
-#                       (если evidence генерит AI, а проверяет другой AI — ground truth нет);
-#   - `human`         — решение человека, ответственность названа поимённо.
-#
-# Писатель и судья схлопываются в `ai_judgment` НАМЕРЕННО: оба — суждение, ни одно не воспроизводимо;
-# для вопроса «можно ли верить» они по одну сторону от машины. `closed_by` сохраняет их различие
-# (writer ≠ judge), эта карта отвечает на более грубый вопрос доверия. Отличать от `evidence_mode`
-# в gate-result-v2 (это ПОЛИТИКА — как гейт СЛЕДУЕТ оценивать); здесь — ФАКТИЧЕСКИЙ источник закрытия.
+
+
+
+
+
+
+
+
+
+
+
+
+
 EVIDENCE_SOURCE = {
     "validator": "deterministic",
     "judge":     "ai_judgment",

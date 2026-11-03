@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "kind": "artifact-validation",
+  "workitem_id": "dashboard-minimal-copy-2026-11-02",
+  "recorded_at": "2026-11-02T12:37:54+00:00",
+  "base_revision": "0e6e75a2d7e6cc3ebe60b91cf120ab596846398a",
+  "scope": "Artifact structure and strict OpenSpec validation; not implementation or UI acceptance",
+  "tooling": {
+    "openspec_version": "1.16.0",
+    "openspec_integrity": "sha512-WQVhZoIR5PoacH/H0qh84VKMcXFbKCIKuAI96arHS3KiKYhJStlRrjUKGxLqLYKLym0j+2hAAY5MZUrPE5qXIA==",
+    "node_version": "v24.22.1"
+  },
+  "artifact_sha256": {
+    "implementation-plan.md": "8422b7701d1e9452ab1879657e4bfd17fbf82e531ad4139c92488c479064aa8a",
+    "requirements.yaml": "586daf52f2fafc80c962e30d542b5b2bac3be62eef38f73e3cc5638e8755a4da",
+    "spec-change.yaml": "f4215543c9f59a0800aca0a36c59421c366df6802094e148f7bc177655d58720",
+    "plan.yaml": "f7b577ba79b2096ebfc04a6b6d209ee69d6909211977e4d244ebd140569c5525",
+    "openspec/changes/dashboard-minimal-copy-2026-11-02/proposal.md": "d3e580dcb0a72f2332e7b2890d3522afde4a662e5c283d540ba000919b80ea32",
+    "openspec/changes/dashboard-minimal-copy-2026-11-02/specs/dashboard-minimal-copy/spec.md": "7392be47dadf34c874e0f6e773d59edf012db66cb41a4789131d626112d4597b",
+    "openspec/changes/dashboard-minimal-copy-2026-11-02/tasks.md": "fdc22cb651b9de22ed4dac665684f760b99dc6583336165a3e5f715d2c5b7232"
+  },
+  "requirement_ids": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6"
+  ],
+  "results": {
+    "requirements": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "ai_ops_kit.validation.validate_requirements_artifact",
+        "/workspace/scratch/c09492d3355a/dashboard-kit/features/dashboard-minimal-copy-2026-11-02/requirements.yaml"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "stdout": "REQUIREMENTS-ARTIFACT-OK: форма подтверждена (testable_requirements + acceptance_scenarios).",
+      "stderr": ""
+    },
+    "spec_structure": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "ai_ops_kit.validation.validate_spec_artifact",
+        "/workspace/scratch/c09492d3355a/dashboard-kit/features/dashboard-minimal-copy-2026-11-02/spec-change.yaml"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "stdout": "SPEC-ARTIFACT-OK: структура spec-change валидна (openspec_valid подтверждает CLI отдельно).",
+      "stderr": ""
+    },
+    "plan_readiness": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "ai_ops_kit.validation.validate_plan_artifact",
+        "/workspace/scratch/c09492d3355a/dashboard-kit/features/dashboard-minimal-copy-2026-11-02/plan.yaml"
+      ],
+      "cwd": ".",
+      "executed_at": "2026-11-02T12:40:53+00:00",
+      "exit_code": 0,
+      "stdout": "PLAN-ARTIFACT-OK: форма подтверждена (work_packages + dependencies + write_scope).",
+      "stderr": ""
+    },
+    "openspec_change_guard": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "ai_ops_kit.validation.validate_openspec_change",
+        "/workspace/scratch/c09492d3355a/dashboard-kit/features/dashboard-minimal-copy-2026-11-02"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "stdout": "OK: OpenSpec change-пакеты валидны (1 active change, parallel-merge guard чист).",
+      "stderr": ""
+    },
+    "openspec_strict": {
+      "command": [
+        "node",
+        ".validation-tools/node_modules/@fission-ai/openspec/bin/openspec.js",
+        "validate",
+        "dashboard-minimal-copy-2026-11-02",
+        "--strict"
+      ],
+      "cwd": "features/dashboard-minimal-copy-2026-11-02",
+      "exit_code": 0,
+      "stdout": "Change 'dashboard-minimal-copy-2026-11-02' is valid",
+      "stderr": ""
+    }
+  }
+}

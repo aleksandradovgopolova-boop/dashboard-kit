@@ -13,9 +13,9 @@
 <link rel="stylesheet" href="vendor/air-datepicker.css">
 <link rel="stylesheet" href="css/tokens.primitives.css">
 <link rel="stylesheet" href="css/tokens.semantic.css">
-<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/components.css?v=20261030-compact">
 <link rel="stylesheet" href="css/chrome.css">
-<link rel="stylesheet" href="css/glass.css">
+<link rel="stylesheet" href="css/glass.css?v=20261030-compact">
 
 <script src="js/dk-util.js"></script>
 <script src="js/dk-icons.js" defer></script>
@@ -32,7 +32,7 @@
 <script src="js/dk-notify.js" defer></script>
 </head>
 
-<body class="dk-page dk-glass">
+<body data-dk-screen="operations" class="dk-page dk-glass">
 <a class="dk-skip" href="#main">К содержимому</a>
 
 <div class="dk-app dk-app--rail" data-nav="folded">
@@ -82,7 +82,7 @@
         <div class="dk-side__profile-menu">
           <a class="dk-menu__item" href="index.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-info-circle"/></svg>Помощь</a>
           <details><summary class="dk-menu__item"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg>Настройки</summary>
-            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button class="dk-btn dk-btn--sm" type="button" data-theme-set="light">Светлая</button><button class="dk-btn dk-btn--sm" type="button" data-theme-set="dark">Тёмная</button></div>
+            <div class="dk-side__profile-themes" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
           </details>
           <div class="dk-side__profile-rule"></div>
           <button class="dk-menu__item" type="button" disabled title="Гостевой просмотр"><svg class="dk-i" aria-hidden="true"><use href="#ti-external-link"/></svg>Выйти</button>
@@ -98,15 +98,11 @@
       </button>
 
       <div class="dk-top__titles">
-        <div class="dk-top__path">Мониторинг · ЖКХ</div>
         <h1 class="dk-top__title">Аварии</h1>
       </div>
 
       <div class="dk-top__tools">
-        <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
-          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-sun"/></svg></button>
-          <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg aria-hidden="true" class="dk-i"><use href="#ti-moon"/></svg></button>
-        </div>
+        <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
       </div>
     </header>
 
@@ -244,7 +240,7 @@
                   <button class="dk-iconbtn dk-iconbtn--sm" type="button" title="Развернуть" aria-label="Развернуть"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-external-link"/></svg></button>
                 </div>
               </div>
-              <p class="dk-caption" id="a-demo-actions">Закрытие аварий недоступно в демонстрации.</p>
+              <p class="dk-vh" id="a-demo-actions">Закрытие аварий недоступно в демонстрации</p>
               <!-- Шесть колонок: пол по умолчанию рассчитан на четыре-пять,
                    этой таблице нужно больше, иначе название аварии сожмётся
                    до многоточия раньше, чем включится прокрутка. -->
@@ -349,7 +345,7 @@
         '<td class="dk-td-num">' + dkEsc(String(a.людей).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')) + '</td>' +
         '<td class="dk-td-act">' +
           '<button class="dk-iconbtn dk-iconbtn--sm" type="button" disabled aria-describedby="a-demo-actions"' +
-          ' title="Недоступно в демонстрации" aria-label="Закрыть аварию ' + dkEsc(a.имя) + '">' +
+          ' title="Закрытие недоступно в демонстрации" aria-label="Закрыть аварию ' + dkEsc(a.имя) + ' — недоступно в демонстрации">' +
           '<svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg></button>' +
         '</td>' +
       '</tr>';

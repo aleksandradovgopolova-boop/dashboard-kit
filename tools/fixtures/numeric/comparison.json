@@ -1,0 +1,270 @@
+[
+  {
+    "id": "decrease",
+    "current": 10,
+    "previous": 20,
+    "better": "decrease",
+    "comparison": {
+      "currentPeriod": {
+        "from": "2025-05-01",
+        "to": "2025-05-31",
+        "complete": true,
+        "sampleSize": 40
+      },
+      "previousPeriod": {
+        "from": "2025-03-01",
+        "to": "2025-03-31",
+        "complete": true,
+        "sampleSize": 100
+      },
+      "baseLabel": "заявок"
+    },
+    "expected": {
+      "delta": -10,
+      "percent": -50,
+      "meaning": "calm",
+      "comparable": true,
+      "code": null
+    },
+    "dom": "Снижение: −10; −50,0%"
+  },
+  {
+    "id": "zero",
+    "current": 0,
+    "previous": 20,
+    "better": "decrease",
+    "comparison": {
+      "currentPeriod": {
+        "from": "2025-05-01",
+        "to": "2025-05-31",
+        "complete": true,
+        "sampleSize": 40
+      },
+      "previousPeriod": {
+        "from": "2025-03-01",
+        "to": "2025-03-31",
+        "complete": true,
+        "sampleSize": 100
+      },
+      "baseLabel": "заявок"
+    },
+    "expected": {
+      "delta": -20,
+      "percent": -100,
+      "meaning": "calm",
+      "comparable": true,
+      "code": null
+    },
+    "dom": "Снижение: −20; −100,0%"
+  },
+  {
+    "id": "previous-zero",
+    "current": 10,
+    "previous": 0,
+    "better": "decrease",
+    "comparison": {
+      "currentPeriod": {
+        "from": "2025-05-01",
+        "to": "2025-05-31",
+        "complete": true,
+        "sampleSize": 40
+      },
+      "previousPeriod": {
+        "from": "2025-03-01",
+        "to": "2025-03-31",
+        "complete": true,
+        "sampleSize": 100
+      },
+      "baseLabel": "заявок"
+    },
+    "expected": {
+      "delta": 10,
+      "percent": null,
+      "comparable": true,
+      "code": "zero-baseline"
+    },
+    "dom": "Процент недоступен",
+    "reasonContains": "Предыдущее значение равно нулю"
+  },
+  {
+    "id": "missing",
+    "current": null,
+    "previous": 20,
+    "better": "decrease",
+    "comparison": {
+      "currentPeriod": {
+        "from": "2025-05-01",
+        "to": "2025-05-31",
+        "complete": true,
+        "sampleSize": 40
+      },
+      "previousPeriod": {
+        "from": "2025-03-01",
+        "to": "2025-03-31",
+        "complete": true,
+        "sampleSize": 100
+      },
+      "baseLabel": "заявок"
+    },
+    "expected": {
+      "delta": null,
+      "percent": null,
+      "meaning": "nodata",
+      "comparable": false,
+      "code": "no-data"
+    },
+    "dom": "Нет данных",
+    "reasonContains": "отсутствие наблюдения не равно нулю"
+  },
+  {
+    "id": "partial",
+    "current": 10,
+    "previous": 20,
+    "better": "decrease",
+    "comparison": {
+      "currentPeriod": {
+        "from": "2025-05-01",
+        "to": "2025-05-15",
+        "complete": false,
+        "sampleSize": 40
+      },
+      "previousPeriod": {
+        "from": "2025-03-01",
+        "to": "2025-03-31",
+        "complete": true,
+        "sampleSize": 100
+      },
+      "baseLabel": "заявок"
+    },
+    "expected": {
+      "delta": null,
+      "percent": null,
+      "meaning": "nodata",
+      "comparable": false,
+      "code": "incomplete"
+    },
+    "dom": "Неполный период",
+    "reasonContains": "не завершён или данные за него неполны"
+  },
+  {
+    "id": "unequal",
+    "current": 10,
+    "previous": 20,
+    "better": "decrease",
+    "comparison": {
+      "currentPeriod": {
+        "from": "2025-05-01",
+        "to": "2025-05-31",
+        "complete": true,
+        "sampleSize": 40
+      },
+      "previousPeriod": {
+        "from": "2025-04-01",
+        "to": "2025-04-30",
+        "complete": true,
+        "sampleSize": 100
+      },
+      "baseLabel": "заявок"
+    },
+    "expected": {
+      "delta": null,
+      "percent": null,
+      "meaning": "nodata",
+      "comparable": false,
+      "code": "duration"
+    },
+    "dom": "Несопоставимые периоды",
+    "reasonContains": "Длительность периодов различается"
+  },
+  {
+    "id": "calendar",
+    "current": 10,
+    "previous": 20,
+    "better": "decrease",
+    "comparison": {
+      "currentPeriod": {
+        "from": "2025-05-01",
+        "to": "2025-05-31",
+        "complete": true,
+        "sampleSize": 40
+      },
+      "previousPeriod": {
+        "from": "2025-04-01",
+        "to": "2025-04-30",
+        "complete": true,
+        "sampleSize": 100
+      },
+      "baseLabel": "заявок",
+      "duration": "calendar-month"
+    },
+    "expected": {
+      "delta": -10,
+      "percent": -50,
+      "meaning": "calm",
+      "comparable": true,
+      "code": null
+    },
+    "dom": "Снижение: −10; −50,0%"
+  },
+  {
+    "id": "small-base",
+    "current": 10,
+    "previous": 20,
+    "better": "decrease",
+    "comparison": {
+      "currentPeriod": {
+        "from": "2025-05-01",
+        "to": "2025-05-31",
+        "complete": true,
+        "sampleSize": 40
+      },
+      "previousPeriod": {
+        "from": "2025-03-01",
+        "to": "2025-03-31",
+        "complete": true,
+        "sampleSize": 100
+      },
+      "baseLabel": "заявок",
+      "minBase": 50
+    },
+    "expected": {
+      "delta": null,
+      "percent": null,
+      "meaning": "nodata",
+      "comparable": false,
+      "code": "base"
+    },
+    "dom": "Недостаточная база",
+    "reasonContains": "не меньше 50 (заявок)"
+  },
+  {
+    "id": "explicit-small-base",
+    "current": 10,
+    "previous": 20,
+    "better": "decrease",
+    "comparison": {
+      "currentPeriod": {
+        "from": "2025-05-01",
+        "to": "2025-05-31",
+        "complete": true,
+        "sampleSize": 2
+      },
+      "previousPeriod": {
+        "from": "2025-03-01",
+        "to": "2025-03-31",
+        "complete": true,
+        "sampleSize": 3
+      },
+      "baseLabel": "заявок",
+      "minBase": 2
+    },
+    "expected": {
+      "delta": -10,
+      "percent": -50,
+      "meaning": "calm",
+      "comparable": true,
+      "code": null
+    },
+    "dom": "Снижение: −10; −50,0%"
+  }
+]

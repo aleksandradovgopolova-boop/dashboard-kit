@@ -1,0 +1,12 @@
+/* Host owns the page; component styles and tokens stay inside .dk-root. */
+body { margin: 0; padding: 16px; background: #eceef1; }
+#weekly-requests-root { min-width: 0; }
+#weekly-requests-root .weekly-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+  align-items: center;
+  gap: var(--space-6);
+}
+@media (max-width: 767px) {
+  #weekly-requests-root .weekly-content { grid-template-columns: minmax(0, 1fr); }
+}

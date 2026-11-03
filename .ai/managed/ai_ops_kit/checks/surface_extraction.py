@@ -75,92 +75,92 @@ __all__ = [
     "Surface", "ParsedFile", "Extractor", "extract_surfaces", "DEFAULT_EXTRACTORS",
 ]
 
-# Служебные/чужие каталоги — не код продукта. Обход в них не заходит (шум и чужой исходник).
+
 _SKIP_DIRS = frozenset({
     ".git", ".ai", ".hg", ".svn", "node_modules", "venv", ".venv", "env", ".env",
     "__pycache__", ".tox", ".nox", "build", "dist", ".mypy_cache", ".pytest_cache",
     ".ruff_cache", "site-packages", ".eggs",
 })
 
-# Расширения фронтенда, к которым применимы screen-экстракторы (только UI-роуты). Это МЕТАДАННЫЕ
-# реестра (к каким файлам применим экстрактор), а не логика разбора — потому живут у сборки
-# Extractor'ов, а не в js_ui.py (там разбор идёт по содержимому, не по расширению).
+
+
+
 _SCREEN_JS_SUFFIXES = frozenset({".jsx", ".tsx", ".js", ".ts"})
 _SCREEN_VUE_SUFFIXES = frozenset({".vue", ".js", ".ts"})
-# Angular объявляет маршруты-экраны в TypeScript (const routes: Routes / RouterModule.forRoot) —
-# исходник это .ts (не .tsx/.js: Angular-роутинг живёт в TS-модулях). Метаданные реестра (к каким
-# файлам применим экстрактор) держим у сборки Extractor'ов, а разбор идёт по содержимому (js_ui.py).
+
+
+
 _SCREEN_ANGULAR_SUFFIXES = frozenset({".ts"})
-# Серверные JS/TS-бэкенды (route). Express — обычный JS/TS; Nest — TS-декораторы (+ .tsx); Next —
-# файловый роутинг по .js/.ts/.jsx/.tsx. Это МЕТАДАННЫЕ реестра (к каким файлам применим экстрактор),
-# потому живут у сборки Extractor'ов, а разбор идёт по содержимому/раскладке (js_server.py).
+
+
+
 _SERVER_JS_SUFFIXES = frozenset({".js", ".ts", ".mjs", ".cjs"})
 _NEST_JS_SUFFIXES = frozenset({".ts", ".js", ".mjs", ".cjs", ".tsx"})
 _NEXT_JS_SUFFIXES = frozenset({".js", ".ts", ".jsx", ".tsx", ".mjs", ".cjs"})
-# Серверные Go-бэкенды (route). Разбор ТЕКСТОМ по .go (stdlib ast к Go неприменим) — net/http, gin,
-# chi, echo, gorilla/mux. Метаданные реестра (к каким файлам применим экстрактор) держим у сборки
-# Extractor'ов, а разбор идёт по содержимому/импортам (go_web.py).
+
+
+
 _SERVER_GO_SUFFIXES = frozenset({".go"})
-# Серверные Spring-бэкенды (route). Разбор ТЕКСТОМ по .java (stdlib ast к Java неприменим) —
-# аннотации @GetMapping/@PostMapping/…/@RequestMapping + class-префикс @RestController/@Controller.
-# Метаданные реестра (к каким файлам применим экстрактор) держим у сборки Extractor'ов, а разбор идёт
-# по содержимому/аннотациям (java_spring.py).
+
+
+
+
 _SERVER_JAVA_SUFFIXES = frozenset({".java"})
-# GraphQL-схемы (SDL, вид api). Разбор ТЕКСТОМ по .graphql/.gql (не GraphQL-парсер, без исполнения) —
-# поля корневых типов Query/Mutation/Subscription (+ extend). Метаданные реестра (к каким файлам
-# применим экстрактор) держим у сборки Extractor'ов, а разбор идёт по содержимому (graphql_api.py).
+
+
+
 _GRAPHQL_SDL_SUFFIXES = frozenset({".graphql", ".gql"})
-# gRPC-контракты (Protocol Buffers, вид api). Разбор ТЕКСТОМ по .proto (не protobuf-парсер, без
-# исполнения) — объявления rpc внутри блоков service. Метаданные реестра (к каким файлам применим
-# экстрактор) держим у сборки Extractor'ов, а разбор идёт по содержимому (grpc_proto.py).
+
+
+
 _GRPC_PROTO_SUFFIXES = frozenset({".proto"})
-# tRPC-роутеры (TypeScript, вид api). Разбор ТЕКСТОМ по .ts (не TS-парсер, без исполнения) —
-# процедуры .query/.mutation/.subscription как ключи объекта роутера createTRPCRouter/t.router.
-# .ts УЖЕ в union суффиксов (js-экстракторы), новый суффикс не нужен. Метаданные реестра (к каким
-# файлам применим экстрактор) держим у сборки Extractor'ов, а разбор идёт по содержимому (trpc_router.py).
+
+
+
+
 _TRPC_TS_SUFFIXES = frozenset({".ts"})
-# Серверные Rails-бэкенды (route). Разбор ТЕКСТОМ по .rb (stdlib ast к Ruby неприменим) — DSL
-# config/routes.rb: get/post/… + resources/resource + root + namespace/scope-префиксы. Метаданные
-# реестра (к каким файлам применим экстрактор) держим у сборки Extractor'ов, а разбор идёт по
-# содержимому/индикатору (ruby_rails.py).
+
+
+
+
 _RUBY_RB_SUFFIXES = frozenset({".rb"})
-# Серверные ASP.NET Core-бэкенды (route). Разбор ТЕКСТОМ по .cs (stdlib ast к C# неприменим) —
-# attribute routing (@[HttpGet]/…/[Route] + class-[Route]-префикс с токеном [controller]) и Minimal
-# APIs (app.MapGet/…). Метаданные реестра (к каким файлам применим экстрактор) держим у сборки
-# Extractor'ов, а разбор идёт по содержимому/индикатору (dotnet_aspnet.py).
+
+
+
+
 _DOTNET_CS_SUFFIXES = frozenset({".cs"})
-# OpenAPI/Swagger-спеки (route). Разбор СТРУКТУРНЫЙ по тексту .yaml/.yml/.json (yaml.safe_load /
-# json.loads, БЕЗ исполнения и сети) — пары путь+метод из секции `paths`. Эти расширения ОЧЕНЬ
-# распространены (package.json, конфиги), потому экстрактор сужен индикатором top-level
-# `openapi:`/`swagger:` в самом ПОДМОДУЛЕ (openapi_spec.py), а не расширением. Метаданные реестра (к
-# каким файлам применим экстрактор) держим у сборки Extractor'ов; сам разбор — по содержимому.
+
+
+
+
+
 _OPENAPI_SPEC_SUFFIXES = frozenset({".yaml", ".yml", ".json"})
-# Серверные Phoenix-бэкенды (route). Разбор ТЕКСТОМ по .ex (stdlib ast к Elixir неприменим) — DSL
-# модуля router.ex: get/post/… + resources + scope-префиксы. Метаданные реестра (к каким файлам
-# применим экстрактор) держим у сборки Extractor'ов, а разбор идёт по содержимому/индикатору
-# (phoenix_router.py).
+
+
+
+
 _PHOENIX_EX_SUFFIXES = frozenset({".ex"})
-# Серверные Laravel-бэкенды (route). Разбор ТЕКСТОМ по .php (stdlib ast к PHP неприменим) — фасад
-# `Route::get/post/…`, `Route::resource`/`apiResource` и `prefix`-группы в routes/*.php. Метаданные
-# реестра (к каким файлам применим экстрактор) держим у сборки Extractor'ов, а разбор идёт по
-# содержимому/индикатору (laravel_routes.py).
+
+
+
+
 _LARAVEL_PHP_SUFFIXES = frozenset({".php"})
-# Серверные Ktor-бэкенды (route). Разбор ТЕКСТОМ по .kt (stdlib ast к Kotlin неприменим) — DSL
-# `routing { … }`: method-вызовы get/post/… с литеральным путём + блоки `route("/prefix") { … }`
-# (вложенность — балансом скобок). Метаданные реестра (к каким файлам применим экстрактор) держим у
-# сборки Extractor'ов, а разбор идёт по содержимому/индикатору (ktor_routing.py).
+
+
+
+
 _KTOR_KT_SUFFIXES = frozenset({".kt"})
-# AsyncAPI-спеки (api). Разбор СТРУКТУРНЫЙ по тексту .yaml/.yml/.json (yaml.safe_load / json.loads,
-# БЕЗ исполнения и сети) — событийные операции: пары канал+publish/subscribe (2.x) и top-level
-# `operations` (3.x). Те же расширения, что и у openapi-spec, ОЧЕНЬ распространены — потому экстрактор
-# сужен индикатором top-level `asyncapi:` в самом ПОДМОДУЛЕ (asyncapi_spec.py), а не расширением (это
-# разводит его и с OpenAPI, у которого индикатор `openapi:`/`swagger:`). Метаданные реестра (к каким
-# файлам применим экстрактор) держим у сборки Extractor'ов; сам разбор — по содержимому.
+
+
+
+
+
+
 _ASYNCAPI_SPEC_SUFFIXES = frozenset({".yaml", ".yml", ".json"})
 
 
-# Экстрактор = адаптер под ОДИН стек. Регистрация записью делает добавление стека вопросом
-# «функция + запись», а не форком обхода — точка расширения кита.
+
+
 @dataclass(frozen=True)
 class Extractor:
     id: str                                   # id из surface-extractors.yaml
@@ -169,11 +169,11 @@ class Extractor:
     confidence: str                           # уверenность метода (verified | inferred)
     extract: Callable[[ParsedFile], list]     # (ParsedFile) -> list[Surface]
     needs_ast: bool = True                    # True — экстрактору нужен разобранный AST (.py);
-    #                                           False — работает по сырому тексту (TOML/INI и т.п.)
+    
 
 
-# Реестр реализованных экстракторов. Порядок ключей — порядок применения (детерминизм). Добавление
-# нового стека = ещё одна запись здесь + честная декларация в surface-extractors.yaml.
+
+
 PYTHON_WEB_ROUTES = Extractor(
     id="python-web-routes",
     suffixes=frozenset({".py"}),
@@ -422,7 +422,7 @@ DEFAULT_EXTRACTORS: tuple = (
 )
 
 
-# ─── Ядро обхода ─────────────────────────────────────────────────────────────────────────────────
+
 
 def _iter_source_files(root: Path, suffixes: frozenset) -> Iterator[Path]:
     """Детерминированный обход исходников дочки с нужными расширениями, минуя служебные каталоги."""

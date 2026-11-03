@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import ast
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -30,70 +31,79 @@ PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is
 DEFAULT_SUBDIRS = ("ai_ops_kit",)
 JS_TS_EXTENSIONS = (".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs")
 
-# `.ai/` — ОБЛАСТЬ КИТА В ДОЧКЕ, А НЕ КОД ПРОДУКТА (F-022, корень).
-#
-# Прежде каталога здесь не было, и в дочке граф разбирал доставленную копию кита, ЕЁ БЭКАПЫ
-# (`.ai/runtime/backups/<версия>/`) и копии дерева в `.ai/worktrees/<работа>/` наравне с продуктом.
-# ЗАМЕР на niti (Next.js/Turborepo, собственного Python нет вовсе):
-#   Python  4094 файла в графе, из них 4094 внутри `.ai/` — 100%: 1891 бэкапы, 1650 один worktree,
-#           241 managed. То есть весь «граф кода продукта» состоял из кита, отражённого в себя;
-#   JS/TS   2507 в графе, 1625 (64%) — копии в `.ai/worktrees`, то есть каждый реальный файл
-#           продукта считался примерно трижды.
-# Цена не косметическая: по этому графу считаются `impact()` и `affected_tests()` — «какие тесты
-# задеты правкой». На таком входе ответ либо про чужие файлы, либо пустой.
-# Видимым это стало через предупреждение из СТАРОЙ копии кита (`.ai/managed/tools/context_hybrid.py`
-# версии 3.27.7, где докстринг ещё не был raw-строкой): `<unknown>:11: invalid escape sequence`.
-# Свой докстринг кит починил 08.08 (8f6aac4), но у дочки лежала копия ДО этой правки — и он
-# исправно разбирал её как код продукта.
-PY_SKIP_DIRS = (".git", "node_modules", "venv", ".venv", "__pycache__", ".ai")
-JS_SKIP_DIRS = ("node_modules", "dist", "build", ".next", "coverage", ".ai")
 
 
-def _py_files(root: Path, subdirs=None, path_filter=None):
-    """Найти Python файлы. Если subdirs=None — искать во всём репо."""
+
+
+
+
+
+
+
+
+
+
+
+
+
+PY_SKIP_DIRS = (".git", "node_modules", "venv", ".venv", "__pycache__", ".ai", ".claude", "build", "dist", "coverage")
+JS_SKIP_DIRS = ("node_modules", "dist", "build", ".next", "coverage", ".ai", ".git", ".venv", "venv", ".claude")
+
+
+def _source_files(root: Path, subdirs, extensions, skip_dirs, path_filter, uncertainties=None):
+    """Prune generated/dependency trees BEFORE traversal; never follow directory symlinks."""
     out = []
-    search_dirs = [root / sd for sd in subdirs] if subdirs else [root]
-    for d in search_dirs:
-        if not d.is_dir():
+    def uncertain(path):
+        if uncertainties is not None:
+            uncertainties.append(str(path.relative_to(root)))
+    def walk_error(exc):
+        uncertain(Path(exc.filename) if exc.filename else root)
+    for base in ([root / sd for sd in subdirs] if subdirs else [root]):
+        if any(part in skip_dirs for part in base.relative_to(root).parts):
             continue
-        for p in sorted(d.rglob("*.py")):
-            # v3.7.0: access pre-filter — denied-путь НЕ читается для графа
-            if path_filter is not None and not path_filter(str(p.relative_to(root))):
-                continue
-            parts = p.relative_to(root).parts
-            if any(skip in parts for skip in PY_SKIP_DIRS):
-                continue
-            out.append(p)
-    return out
-
-
-def _js_ts_files(root: Path, subdirs=None, path_filter=None):
-    """v3.26.0: найти JS/TS файлы в указанных директориях (или во всём репо если subdirs=None)."""
-    out = []
-    search_dirs = [root / sd for sd in (subdirs or [""])] if subdirs else [root]
-    for d in search_dirs:
-        if not d.is_dir():
+        if base != root and base.is_symlink():
+            uncertain(base)
             continue
-        for ext in JS_TS_EXTENSIONS:
-            for p in sorted(d.rglob(f"*{ext}")):
-                parts = p.relative_to(root).parts
-                if any(skip in parts for skip in JS_SKIP_DIRS):
+        if not base.is_dir():
+            continue
+        for directory, dirs, names in os.walk(base, followlinks=False, onerror=walk_error):
+            kept = []
+            for d in sorted(dirs):
+                if d in skip_dirs:
                     continue
-                if path_filter is not None and not path_filter(str(p.relative_to(root))):
+                path = Path(directory) / d
+                if path.is_symlink():
+                    uncertain(path)
+                else:
+                    kept.append(d)
+            dirs[:] = kept
+            for name in names:
+                path = Path(directory) / name
+                if path.suffix not in extensions:
                     continue
-                out.append(p)
-    return out
+                if path_filter is None or path_filter(str(path.relative_to(root))):
+                    out.append(path)
+    return sorted(set(out))
 
 
-def _analyze(path: Path):
+def _py_files(root: Path, subdirs=None, path_filter=None, uncertainties=None):
+    return _source_files(root, subdirs, (".py",), PY_SKIP_DIRS, path_filter, uncertainties)
+
+
+def _js_ts_files(root: Path, subdirs=None, path_filter=None, uncertainties=None):
+    return _source_files(root, subdirs, JS_TS_EXTENSIONS, JS_SKIP_DIRS, path_filter, uncertainties)
+
+
+def _analyze(path: Path, *, tree=None):
     """(symbols, imported_module_stems) Python-файла через ast; все Import/ImportFrom (вкл. в функциях)."""
     try:
         # ИМЯ ФАЙЛА ОБЯЗАТЕЛЬНО (F-022). `ast.parse` без него подписывает предупреждения
         # интерпретатора как `<unknown>`, и владелец получал в вывод прогона строку
         # `<unknown>:11: invalid escape sequence`, по которой нельзя ни починить, ни осознанно
         # пропустить: непонятно даже, чей это файл — его продукта или кита.
-        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-    except (SyntaxError, OSError):
+        if tree is None:
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    except (SyntaxError, OSError, UnicodeError):
         return [], set()
     symbols = [n.name for n in tree.body
                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))]
@@ -102,17 +112,26 @@ def _analyze(path: Path):
         if isinstance(n, ast.Import):
             for a in n.names:
                 mods.add(_stem(a.name.split(".")))
+                mods.update(a.name.split("."))
         elif isinstance(n, ast.ImportFrom):
-            if n.module and n.level == 0:
+            if n.module:
                 parts = n.module.split(".")
-                # `from ai_ops_kit.<пакет> import <модуль>, ...` — модули перечислены в names,
-                # а не в module. Без этой ветки все внутренние связи схлопывались бы в один узел
-                # `ai_ops_kit`, и --impact терял бы РЕАЛЬНЫХ импортёров (v3.33; тот же класс,
-                # что уже ловил переезд в v3.31 — тогда граф видел только алиасы).
+                mods.update(parts)
+                mods.update(a.name for a in n.names)
+                
+                
+                
+                
                 if parts[0] == "ai_ops_kit" and len(parts) == 2:
                     mods.update(a.name for a in n.names)
                 else:
                     mods.add(_stem(parts))
+            else:
+                mods.update(a.name for a in n.names)
+    
+    
+    for target in _known_file_spec_targets(path, tree)[0]:
+        mods.add(target.stem)
     return symbols, mods
 
 
@@ -122,12 +141,13 @@ def _stem(parts):
     return parts[-1] if parts[0] == "ai_ops_kit" and len(parts) >= 3 else parts[0]
 
 
-def _analyze_js(path: Path):
+def _analyze_js(path: Path, *, content=None):
     """v3.26.0: (symbols, imported_module_stems) JS/TS файла через regex.
     Парсит: import ... from '...', import '...', require('...'), export function/class."""
     try:
-        content = path.read_text(encoding="utf-8")
-    except OSError:
+        if content is None:
+            content = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError):
         return [], set()
 
     # Symbols: export function/class/const
@@ -136,11 +156,12 @@ def _analyze_js(path: Path):
 
     # Imports: import ... from 'module', import 'module', require('module')
     mods = set()
-    # ES modules: import ... from '...'
-    for m in re.findall(r'''import\s+(?:.*?\s+from\s+)?['"]([^'"]+)['"]''', content):
-        # Берём только relative imports (начинаются с . или ..) или внутренние модули
+    
+    
+    specifiers = set(re.findall(r"\bimport\s*['\"]([^'\"]+)['\"]", content))
+    specifiers.update(re.findall(r"\bfrom\s*['\"]([^'\"]+)['\"]", content))
+    for m in specifiers:
         if m.startswith(".") or (not m.startswith("/") and not m.startswith("@")):
-            # Извлекаем имя модуля (без расширения и пути)
             mod_name = Path(m).stem if "/" in m else m.split("/")[0]
             mods.add(mod_name)
     # CommonJS: require('...')
@@ -152,38 +173,247 @@ def _analyze_js(path: Path):
     return symbols, mods
 
 
+_FILE_SPEC_NAME = "spec_from_file_location"
+
+
+class _UnresolvablePath(Exception):
+    """Путь загрузки не сводится статически к известному файлу репозитория."""
+
+
+def _collect_assignments(tree):
+    """Только однозначные module-level bindings; другие scope не подменяют путь."""
+    writes = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Name) and isinstance(node.ctx, (ast.Store, ast.Del)):
+            writes[node.id] = writes.get(node.id, 0) + 1
+        elif isinstance(node, ast.arg):
+            writes[node.arg] = writes.get(node.arg, 0) + 1
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            writes[node.name] = writes.get(node.name, 0) + 1
+        elif isinstance(node, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar)) and node.name:
+            writes[node.name] = writes.get(node.name, 0) + 1
+        elif isinstance(node, ast.MatchMapping) and node.rest:
+            writes[node.rest] = writes.get(node.rest, 0) + 1
+        elif isinstance(node, (ast.Import, ast.ImportFrom)):
+            for alias in node.names:
+                name = alias.asname or alias.name.split(".")[0]
+                writes[name] = writes.get(name, 0) + 1
+    return {
+        node.targets[0].id: node.value
+        for node in tree.body
+        if isinstance(node, ast.Assign) and len(node.targets) == 1
+        and isinstance(node.targets[0], ast.Name)
+        and writes.get(node.targets[0].id) == 1
+    }
+
+
+def _eval_file_path(node, selfpath: Path, assigns, _depth=0) -> Path:
+    """Статически вычислить `Path(__file__)[.resolve()]{.parent|.parents[N]}{ / "seg"}` → абсолютный
+    путь. Любая другая форма (вызов, вычисляемый сегмент, неизвестное имя) — _UnresolvablePath."""
+    if _depth > 24:
+        raise _UnresolvablePath
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        right = node.right
+        if not (isinstance(right, ast.Constant) and isinstance(right.value, str)):
+            raise _UnresolvablePath
+        return _eval_file_path(node.left, selfpath, assigns, _depth + 1) / right.value
+    if isinstance(node, ast.Call):
+        func = node.func
+        if (isinstance(func, ast.Name) and func.id == "Path" and len(node.args) == 1
+                and isinstance(node.args[0], ast.Name) and node.args[0].id == "__file__"):
+            return selfpath
+        if isinstance(func, ast.Attribute) and func.attr == "resolve":
+            return _eval_file_path(func.value, selfpath, assigns, _depth + 1)
+        raise _UnresolvablePath
+    if isinstance(node, ast.Attribute) and node.attr == "parent":
+        return _eval_file_path(node.value, selfpath, assigns, _depth + 1).parent
+    if (isinstance(node, ast.Subscript) and isinstance(node.value, ast.Attribute)
+            and node.value.attr == "parents"):
+        idx = node.slice
+        if not (isinstance(idx, ast.Constant) and isinstance(idx.value, int)):
+            raise _UnresolvablePath
+        return _eval_file_path(node.value.value, selfpath, assigns, _depth + 1).parents[idx.value]
+    if isinstance(node, ast.Name):
+        if node.id in assigns:
+            return _eval_file_path(assigns[node.id], selfpath, assigns, _depth + 1)
+        raise _UnresolvablePath
+    raise _UnresolvablePath
+
+
+def _known_file_spec_targets(path: Path, tree, *, known_paths=None) -> tuple[set[Path], bool]:
+    """Разрешённые по `__file__`-пути цели `spec_from_file_location` — это ИЗВЕСТНЫЕ рёбра импорта,
+    а не непрослеживаемая динамика (их потребитель и цель статически определены).
+
+    -> (targets_abs, fully_resolvable). fully_resolvable=False, если загрузчик вызван с
+    непрослеживаемым путём, целью вне репозитория, без location, импортирован под алиасом или
+    использован мимо прямого вызова (алиас/хранение/передача) — тогда граф неполон и файл динамичен.
+    """
+    targets: set[Path] = set()
+    if tree is None:
+        return targets, True
+    nodes = list(ast.walk(tree))
+    
+    
+    if not any(
+        isinstance(n, ast.Attribute) and n.attr == _FILE_SPEC_NAME
+        or isinstance(n, ast.Name) and n.id == _FILE_SPEC_NAME
+        or isinstance(n, ast.ImportFrom) and any(a.name == _FILE_SPEC_NAME for a in n.names)
+        for n in nodes
+    ):
+        return targets, True
+    resolvable = True
+    assigns = _collect_assignments(tree)
+    selfpath = path.resolve()
+    call_func_ids: set[int] = set()
+    for n in nodes:
+        if isinstance(n, ast.Call):
+            func = n.func
+            is_spec = ((isinstance(func, ast.Attribute) and func.attr == _FILE_SPEC_NAME)
+                       or (isinstance(func, ast.Name) and func.id == _FILE_SPEC_NAME))
+            if is_spec:
+                call_func_ids.add(id(func))
+                loc = n.args[1] if len(n.args) >= 2 else None
+                if loc is None:
+                    loc = next((kw.value for kw in n.keywords if kw.arg == "location"), None)
+                if loc is None:
+                    resolvable = False
+                    continue
+                try:
+                    target = _eval_file_path(loc, selfpath, assigns)
+                except (_UnresolvablePath, IndexError):
+                    resolvable = False
+                    continue
+                if (target.is_file() and not target.is_symlink()
+                        and (known_paths is None or target.resolve() in known_paths)):
+                    targets.add(target)
+                else:
+                    resolvable = False
+    
+    for n in nodes:
+        if isinstance(n, ast.Attribute) and n.attr == _FILE_SPEC_NAME and id(n) not in call_func_ids:
+            resolvable = False
+        elif isinstance(n, ast.Name) and n.id == _FILE_SPEC_NAME and id(n) not in call_func_ids:
+            resolvable = False
+        elif isinstance(n, ast.ImportFrom):
+            if any(a.name == _FILE_SPEC_NAME and a.asname and a.asname != _FILE_SPEC_NAME
+                   for a in n.names):
+                resolvable = False
+    return targets, resolvable
+
+
+def _dependency_uncertainty(path: Path, *, text=None, tree=None, known_paths=None) -> str | None:
+    """Динамический потребитель известен; непрочитанное дерево ограничить нельзя."""
+    if path.is_symlink():
+        return "unreadable"
+    try:
+        if text is None:
+            text = path.read_text(encoding="utf-8")
+        if path.suffix == ".py":
+            if tree is None:
+                tree = ast.parse(text, filename=str(path))
+            
+            if any(isinstance(n, ast.Name) and isinstance(n.ctx, ast.Store)
+                   and n.id == "pytest_plugins" for n in ast.walk(tree)):
+                return "test-hook"
+            dynamic_names = {"__import__", "eval", "exec", "import_module",
+                             "run_path", "run_module"}
+            
+            if any(isinstance(n, ast.Name) and isinstance(n.ctx, ast.Load)
+                   and n.id in ("__import__", "eval", "exec") for n in ast.walk(tree)):
+                return "dynamic"
+            
+            
+            if any(isinstance(n, ast.Attribute) and n.attr in dynamic_names
+                   for n in ast.walk(tree)):
+                return "dynamic"
+            if any(isinstance(n, ast.ImportFrom) and any(
+                    a.name in dynamic_names for a in n.names) for n in ast.walk(tree)):
+                return "dynamic"
+            dynamic = any(isinstance(n, ast.Call) and (
+                isinstance(n.func, ast.Name) and n.func.id in ("__import__", "eval", "exec") or
+                isinstance(n.func, ast.Attribute) and n.func.attr in
+                ("import_module", "run_path", "run_module")) for n in ast.walk(tree))
+            if dynamic:
+                return "dynamic"
+            
+            
+            
+            
+            if not _known_file_spec_targets(path, tree, known_paths=known_paths)[1]:
+                return "dynamic"
+            return None
+        dynamic = re.search(r"\bimport\s*\(|\brequire\s*\((?!\s*['\"])|"
+                            r"\brequire\s*\(\s*['\"](?:@|/)|"
+                            r"(?:from\s*|import\s*)['\"](?:@|/)|\bexport\s+.*?\bfrom\s", text)
+        
+        return "unbounded" if dynamic else None
+    except (SyntaxError, OSError, UnicodeError):
+        return "unreadable"
+
+
+def _uncertain_dependency(path: Path) -> bool:
+    return _dependency_uncertainty(path) is not None
+
+
 def build_graph(root=PKG, subdirs=DEFAULT_SUBDIRS, path_filter=None, include_js=True) -> dict:
     """Построить граф зависимостей. v3.26.0: include_js=True добавляет JS/TS файлы."""
     root = Path(root)
-    py_files = _py_files(root, subdirs, path_filter=path_filter)
-    js_files = _js_ts_files(root, subdirs, path_filter=path_filter) if include_js else []
+    uncertainties = []
+    py_files = _py_files(root, subdirs, path_filter=path_filter, uncertainties=uncertainties)
+    js_files = _js_ts_files(root, subdirs, path_filter=path_filter, uncertainties=uncertainties) if include_js else []
     all_files = py_files + js_files
 
-    stem_to_rel = {}
+    stem_to_rels = {}
     rels = []
     for f in all_files:
         rel = str(f.relative_to(root))
         rels.append((f, rel))
-        stem_to_rel[f.stem] = rel   # плоское имя модуля -> путь
+        stem_to_rels.setdefault(f.stem, set()).add(rel)
+        if f.name == "__init__.py" or (f.suffix in JS_TS_EXTENSIONS and f.stem == "index"):
+            stem_to_rels.setdefault(f.parent.name, set()).add(rel)
 
-    file_info, symbol_index, import_edges, tests = {}, {}, {}, {}
+    known_rels = {rel for _, rel in rels}
+    
+    
+    known_paths = {f.resolve() for f, _ in rels if not f.is_symlink()}
+    file_info, symbol_index, import_edges, tests, kinds = {}, {}, {}, {}, {}
     for f, rel in rels:
-        # Выбираем анализатор по расширению
-        if f.suffix in JS_TS_EXTENSIONS:
-            syms, mods = _analyze_js(f)
-        else:
-            syms, mods = _analyze(f)
+        
+        
+        try:
+            content = f.read_text(encoding="utf-8")
+            tree = ast.parse(content, filename=str(f)) if f.suffix == ".py" else None
+            if f.suffix in JS_TS_EXTENSIONS:
+                syms, mods = _analyze_js(f, content=content)
+            else:
+                syms, mods = _analyze(f, tree=tree)
+            kind = _dependency_uncertainty(f, text=content, tree=tree, known_paths=known_paths)
+        except (SyntaxError, OSError, UnicodeError):
+            syms, mods, kind = [], set(), "unreadable"
+        if kind:
+            kinds[rel] = kind
         file_info[rel] = {"symbols": syms, "imports": sorted(mods), "language": "js" if f.suffix in JS_TS_EXTENSIONS else "py"}
         for s in syms:
             symbol_index.setdefault(s, []).append(rel)
-        internal = sorted({stem_to_rel[m] for m in mods if m in stem_to_rel and stem_to_rel[m] != rel})
+        internal = {target for m in mods for target in stem_to_rels.get(m, ()) if target != rel}
+        if f.suffix == ".py":
+            
+            
+            for parent in Path(rel).parents:
+                initializer = str(parent / "__init__.py")
+                if initializer in known_rels:
+                    if initializer != rel:
+                        internal.add(initializer)
+        internal = sorted(internal)
         import_edges[rel] = internal
         stem = Path(rel).stem
         if stem.startswith("test_") or stem.endswith("_test") or stem.endswith(".test") or stem.endswith(".spec"):
             tests[rel] = internal
+    kinds.update({rel: "unreadable" for rel in uncertainties})
     return {"kind": "repository-graph", "root": str(root), "subdirs": list(subdirs) if subdirs else ["*"],
             "file_count": len(rels), "files": file_info, "symbol_index": symbol_index,
             "import_edges": import_edges, "tests": tests,
+            "uncertainties": sorted(kinds), "uncertainty_kinds": kinds,
             "languages": {"python": len(py_files), "javascript": len(js_files)}}
 
 
@@ -193,18 +423,16 @@ def affected_tests(graph: dict, changed_files: list) -> list:
     Возвращает список тест-файлов, которые импортируют изменённые файлы (транзитивно)."""
     if not changed_files:
         return []
-    # Собираем все затронутые файлы (прямые + транзитивные через impact)
-    all_affected = set(changed_files)
-    for cf in changed_files:
-        all_affected.update(impact(graph, cf))
-    # Находим тесты, которые импортируют затронутые файлы
+    
+    all_affected = set(changed_files) | _impact_many(graph, changed_files)
+    
     tests = graph.get("tests", {})
     result = []
     for test_file, test_imports in tests.items():
-        # Тест затронут, если любой из его импортов в all_affected
+        
         if any(imp in all_affected for imp in test_imports):
             result.append(test_file)
-        # Или если сам тест-файл в changed_files
+        
         elif test_file in changed_files:
             result.append(test_file)
     return sorted(set(result))
@@ -212,23 +440,28 @@ def affected_tests(graph: dict, changed_files: list) -> list:
 
 def impact(graph: dict, changed_rel: str) -> list:
     """Файлы, которые (транзитивно) импортируют changed_rel — обратный обход рёбер импорта."""
+    return sorted(_impact_many(graph, [changed_rel]))
+
+
+def _impact_many(graph: dict, changed_files) -> set:
+    """Один обратный граф и обход для всей группы, а не повтор на каждый загрузчик."""
     edges = graph.get("import_edges", {})
     reverse = {}
     for src, dsts in edges.items():
         for d in dsts:
             reverse.setdefault(d, set()).add(src)
-    seen, stack = set(), [changed_rel]
+    seen, stack = set(), list(changed_files)
     while stack:
         cur = stack.pop()
         for dep in reverse.get(cur, ()):
             if dep not in seen:
                 seen.add(dep)
                 stack.append(dep)
-    return sorted(seen)
+    return seen
 
 
 def main(argv):
-    # позиционные аргументы, ИСКЛЮЧАЯ флаги и значение --impact/--affected-tests
+    
     skip = set()
     for flag in ("--impact", "--affected-tests"):
         if flag in argv:
@@ -246,7 +479,7 @@ def main(argv):
         return 0
     if "--affected-tests" in argv:
         idx = argv.index("--affected-tests")
-        # Собираем все пути после --affected-tests до следующего флага или конца
+        
         changed_files = []
         for i in range(idx + 1, len(argv)):
             if argv[i].startswith("--"):

@@ -37,7 +37,7 @@ CI = PKG / "validation"
 CHILD_CONFIG = REPO_ROOT / ".ai-ops.yaml"
 AI_DIR = REPO_ROOT / ".ai"
 MANAGED = AI_DIR / "managed"
-# PKG определён выше (корень пакета)
+
 
 CRED_RE = re.compile(r"^(env:|secret:)")
 
@@ -53,7 +53,7 @@ def main():
         print("нет .ai-ops.yaml — репозиторий не является child; пропуск.")
         return 0
 
-    # 1-2. конфиг
+    
     try:
         cfg = yaml.safe_load(CHILD_CONFIG.read_text(encoding="utf-8"))
     except yaml.YAMLError as e:
@@ -71,7 +71,7 @@ def main():
             if v and not CRED_RE.match(str(v)):
                 fail(".ai-ops.yaml", f"provider '{p.get('id')}': {key} '{v}' не secret-reference (env:/secret:)")
 
-    # 3. версии
+    
     inst = str((cfg.get("parent") or {}).get("installed_version", ""))
     prov_file = MANAGED / ".provenance.json"
     if prov_file.exists():
@@ -99,12 +99,12 @@ def main():
         if pkg_v != inst:
             fail("VERSION", f"версия пакета '{pkg_v}' != установленной '{inst}' (обнови managed-слой)")
 
-    # 4. зоны
+    
     for zone in ("managed", "project", "custom", "generated", "runtime"):
         if not (AI_DIR / zone).exists():
             fail(".ai", f"нет зоны {zone}/")
 
-    # 5. целостность managed
+    
     if not (MANAGED / ".checksums.json").exists():
         fail(".ai/managed", "нет .checksums.json")
     else:
@@ -116,14 +116,14 @@ def main():
                 rc = amc.verify(MANAGED)
             if rc != 0:
                 fail(".ai/managed", "drift: managed-слой изменён вручную (см. ai_managed_checksums verify .ai/managed)")
-        # Причина подавления (2026-08-12): отказ ПРЕВРАЩАЕТСЯ В НАХОДКУ с текстом
-        # исключения — валидатор не глотает ошибку, а сообщает её как провал проверки
-        # целостности. Тип широкий намеренно: сюда попадает всё, чем может ответить чужой
-        # модуль checksums, и любой такой отказ обязан дать красный вердикт, а не пропуск.
+        
+        
+        
+        
         except Exception as e:  # noqa: BLE001 — отказ становится находкой, а не тишиной
             fail(".ai/managed", f"не удалось проверить целостность: {e}")
 
-    # 6. провайдеры известны реестру
+    
     prov_reg_file = PKG / "registry" / "providers.yaml"
     if prov_reg_file.exists():
         known = set(yaml.safe_load(prov_reg_file.read_text(encoding="utf-8")).get("providers", {}))
@@ -134,7 +134,7 @@ def main():
             if p not in known:
                 fail(".ai-ops.yaml", f"fallback provider '{p}' не найден в реестре")
 
-    # 7. blocking gates известны
+    
     gates_file = PKG / "quality" / "gates.yaml"
     if gates_file.exists():
         known_gates = set(yaml.safe_load(gates_file.read_text(encoding="utf-8")).get("gates", {}))

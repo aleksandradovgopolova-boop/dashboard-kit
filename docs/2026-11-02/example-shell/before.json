@@ -1,0 +1,179 @@
+{
+  "rows": [
+    {
+      "file": "regions",
+      "theme": "dark",
+      "width": 1470,
+      "state": "initial",
+      "overflow": false,
+      "rail": {
+        "left": 14,
+        "right": 74,
+        "top": 14,
+        "bottom": 822,
+        "width": 60,
+        "height": 808
+      },
+      "content": {
+        "left": 124,
+        "right": 1015,
+        "top": 14,
+        "bottom": 822,
+        "width": 891,
+        "height": 808
+      },
+      "gap": 50,
+      "head": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 0,
+        "width": 0,
+        "height": 0
+      },
+      "headPadding": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "obsoletePath": false,
+      "text": [
+        "Высокий риск ≥78 · средний 60–77 · низкий <60 баллов. Нажмите на регион, чтобы открыть детали. Затемнённые регионы не входят в выбранный срез.",
+        "Сводка по стране",
+        "Регионов с высоким риском",
+        "Наибольший риск · 14 регионов"
+      ]
+    },
+    {
+      "file": "accidents",
+      "theme": "dark",
+      "width": 1470,
+      "state": "initial",
+      "overflow": false,
+      "rail": {
+        "left": 14,
+        "right": 74,
+        "top": 14,
+        "bottom": 822,
+        "width": 60,
+        "height": 808
+      },
+      "content": {
+        "left": 124,
+        "right": 1434,
+        "top": 156,
+        "bottom": 218,
+        "width": 1310,
+        "height": 62
+      },
+      "gap": 50,
+      "head": {
+        "left": 88,
+        "right": 1470,
+        "top": 0,
+        "bottom": 120,
+        "width": 1382,
+        "height": 120
+      },
+      "headPadding": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "obsoletePath": true,
+      "text": [
+        "Закрытие аварий недоступно в демонстрации."
+      ]
+    },
+    {
+      "file": "calendar",
+      "theme": "dark",
+      "width": 1470,
+      "state": "initial",
+      "overflow": false,
+      "rail": {
+        "left": 14,
+        "right": 74,
+        "top": 14,
+        "bottom": 822,
+        "width": 60,
+        "height": 808
+      },
+      "content": {
+        "left": 124,
+        "right": 1434,
+        "top": 156,
+        "bottom": 1349.46875,
+        "width": 1310,
+        "height": 1193.46875
+      },
+      "gap": 50,
+      "head": {
+        "left": 88,
+        "right": 1470,
+        "top": 0,
+        "bottom": 120,
+        "width": 1382,
+        "height": 120
+      },
+      "headPadding": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "obsoletePath": true,
+      "text": [
+        "Цвет обозначает вид работы или завершение. Название и подпись сохраняют смысл без опоры на цвет."
+      ]
+    },
+    {
+      "file": "dashboard",
+      "theme": "dark",
+      "width": 1470,
+      "state": "initial",
+      "overflow": false,
+      "rail": {
+        "left": 14,
+        "right": 74,
+        "top": 14,
+        "bottom": 822,
+        "width": 60,
+        "height": 808
+      },
+      "content": {
+        "left": 124,
+        "right": 988,
+        "top": 96,
+        "bottom": 186,
+        "width": 864,
+        "height": 90
+      },
+      "gap": 50,
+      "head": {
+        "left": 88,
+        "right": 1470,
+        "top": 0,
+        "bottom": 88,
+        "width": 1382,
+        "height": 88
+      },
+      "headPadding": [
+        14,
+        36,
+        14,
+        36
+      ],
+      "obsoletePath": true,
+      "text": [
+        "Мониторинг рисков в жилищно-коммунальном хозяйстве",
+        "Высокий ≥78Средний 60–77Низкий <60 баллов",
+        "За сутки",
+        "30 дней · демо"
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -49,8 +49,8 @@ def build_handoff(report, work_root=None):
     if loop.get("applied_writes"):
         completed.append(f"применено правок через брокера: {loop['applied_writes']}")
     elif commit.get("sha") and commit.get("changed_files"):
-        # Работа произведена другим каналом (writer своими инструментами, shell, свой коммит
-        # модели). Промолчать здесь значило бы передать исполнителю «сделано ничего».
+        
+        
         completed.append(f"изменено файлов: {len(commit['changed_files'])} "
                          f"({commit.get('produced_by') or 'не через брокера'})")
     if commit.get("sha"):
@@ -96,9 +96,9 @@ def build_handoff(report, work_root=None):
         "schema_version": 1, "kind": "RunHandoff",
         "run_id": f"{wid}@{sha[:12]}" if sha else wid,
         "workitem_id": wid,
-        # v3.0.10 (finding аудита P0): RunHandoff несёт ИСХОДНЫЙ BaseBinding (base_ref+base_sha+mode+source)
-        # прогона. Это источник истины для resume: точная база, от которой форкнута работа, а не «текущий
-        # SHA той же ветки». Без него resume не мог отличить force-push/пересоздание базы от fast-forward.
+        
+        
+        
         "base_binding": rep.get("base_binding") or {},
         "completed": completed,
         "decisions": rep.get("decisions") or [],
@@ -149,12 +149,12 @@ def resume_preflight(child_root, wid, base="main"):
     child_root = Path(child_root)
     reasons, revalidation, base_rewritten, base_moved = [], False, False, False
     hp = child_root / "features" / wid / "run-handoff.yaml"
-    # v3.0.12 (finding аудита блок B): FAIL-CLOSED чтение. Прежде safe_load(...) or {} на битом/пустом
-    # handoff давал {} -> sha=None -> ВСЕ проверки устаревания (база ушла/переписана, ревизия пропала)
-    # пропускались -> preflight отвечал «can_resume=True, ревалидация не нужна» на пустом состоянии —
-    # ровно тот ложный «resume безопасен», который модуль обязан предотвращать. Теперь: битый -> отказ.
-    # require kind+workitem_id (структурная целостность); resume_from_revision МОЖЕТ быть null легитимно
-    # (прогон без коммита) — это не «повреждён», а «нет точки резюме», и обрабатывается ниже как sha=None.
+    
+    
+    
+    
+    
+    
     _g = _ls.load_guarded(hp, required_keys=("kind", "workitem_id"))
     if _g["state"] == "absent":
         return {"can_resume": False, "revalidation_needed": False, "base_rewritten": False,
@@ -166,13 +166,13 @@ def resume_preflight(child_root, wid, base="main"):
     handoff = _g["data"]
     sha = handoff.get("resume_from_revision")
     saved_base_sha = ((handoff.get("base_binding") or {}).get("base_sha")) or None
-    # v3.8.3 (finding живого resume): base не передан явно (--base опущен) -> резолвим из handoff
-    # (base_binding.base_sha) либо 'main'. Иначе `git rev-parse --verify None` роняет preflight (None не str).
+    
+    
     if not base:
         base = saved_base_sha or "main"
     branch = f"ai-ops/{wid}"
 
-    # ветка/worktree на месте?
+    
     rc_b, _, _ = _git(child_root, "rev-parse", "--verify", branch)
     branch_exists = rc_b == 0
     if not branch_exists:
@@ -182,7 +182,7 @@ def resume_preflight(child_root, wid, base="main"):
     if not wt.is_dir():
         reasons.append(f"worktree {wt.relative_to(child_root)} отсутствует — будет пересоздан")
 
-    # base-ветку вообще можно разрешить? Иначе устаревание НЕ проверить — честно отметим (не молчим).
+    
     rc_base, _, _ = _git(child_root, "rev-parse", "--verify", base)
     base_resolvable = rc_base == 0
     if not base_resolvable:
@@ -190,7 +190,7 @@ def resume_preflight(child_root, wid, base="main"):
                        f"проверено; укажи --base явно. Требуется ревалидация из осторожности")
         revalidation = True
 
-    # изменился ли base с момента handoff? (main ушёл вперёд относительно ревизии прогона)
+    
     if sha:
         rc_h, _, _ = _git(child_root, "rev-parse", "--verify", sha)
         if rc_h != 0:
@@ -226,11 +226,11 @@ def resume_preflight(child_root, wid, base="main"):
                 revalidation = True
                 base_rewritten = True
             else:
-                # v3.0.14 (finding аудита #1, вариант B): FAST-FORWARD — сохранённый base_sha ПРЕДОК текущего
-                # HEAD (база ушла вперёд A->B). Старый worktree/ветка WorkItem построены от A и НЕ
-                # интегрированы с B; baseline считался на A. Отдать PR против B нельзя — работа не проверена
-                # на интеграции с B. force_resume это НЕ снимает; нужен явный replan (свежий прогон от B).
-                # Авто-интеграция+ревалидация (rebase onto B + повтор проверок) — v3.1.
+                
+                
+                
+                
+                
                 reasons.append(f"base '{base}' ушёл вперёд (fast-forward) с {saved_base_sha[:12]} до "
                                f"{cur_base_sha[:12]}: работа построена от старой базы и НЕ интегрирована с "
                                "новой. resume против сдвинувшейся базы запрещён — нужен явный replan "
@@ -239,7 +239,7 @@ def resume_preflight(child_root, wid, base="main"):
                 revalidation = True
                 base_moved = True
 
-    # устаревшие решения (ссылки на прошлую версию)
+    
     for d in handoff.get("decisions") or []:
         if isinstance(d, dict) and d.get("stale"):
             reasons.append(f"решение {d.get('id')} помечено устаревшим — пересмотреть")

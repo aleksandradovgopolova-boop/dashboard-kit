@@ -19,19 +19,26 @@
    три страницы — в dk-theme, и тема между ними не переносилась вовсе: человек
    выбирал светлую в каталоге компонентов, шёл на дашборд и снова видел тёмную.
 
-   АКЦЕНТ — НАСТРОЙКА ПРОДУКТА, А НЕ ЧЕЛОВЕКА. Он ставится один раз в
-   разметке: <html data-accent="blue">. Раньше выбор акцента запоминался в
-   хранилище, как тема, — и сохранённый в витрине фиолетовый перекрывал синий
-   любого дашборда на этой машине. Тема — дело человека (свет в комнате),
-   акцент — дело продукта (узнаваемость), и хранить их одинаково было ошибкой.
-   Решение: DECISIONS.md, пункт 5.
+   Два режима: Dark / Light, оба со стеклом. Акцент фиксирован: синий.
+   Старый Glass переходит в Dark; статусные цвета данных не меняются.
    ========================================================================== */
 
 (function () {
   'use strict';
 
   var KEY_THEME = 'dk-theme';
-  var KEY_ACCENT = 'dk-accent';   // только чтобы стереть: см. шапку, «акцент — настройка продукта»
+  var KEY_STYLE = 'dk-style';
+  function validStyle(v) { return v === 'dark' || v === 'light'; }
+  function tone(v) { return v === 'light' ? 'light' : 'dark'; }
+  function applyStyle(v) {
+    if (v === 'glass') v = 'dark'; // совместимость со старыми ссылками и хостами
+    if (!validStyle(v)) return;
+    if (root.getAttribute('data-style') !== v) root.setAttribute('data-style', v);
+    if (root.getAttribute('data-theme') !== tone(v)) root.setAttribute('data-theme', tone(v));
+  }
+  function applyAccent() {
+    if (root.getAttribute('data-accent') !== 'blue') root.setAttribute('data-accent', 'blue');
+  }
   var root = document.documentElement;
 
   function read(key) {
@@ -41,8 +48,7 @@
     try { localStorage.setItem(key, value); } catch (e) { /* приватный режим */ }
   }
 
-  /* Что выбрано человеком → что просит система → тёмная. Именно в таком
-     порядке: системную настройку уважаем, но выбор в интерфейсе главнее. */
+  /* Хост → сохранённая тема → Dark. data-theme остаётся тоном графиков. */
   /* ТЕМА ОТ ПРИЛОЖЕНИЯ. Страница, открытая внутри мобильного приложения
      (WebView), не выбирает тему сама: её выбрал человек в настройках
      приложения, и дашборд обязан совпасть с экраном вокруг. ?theme=dark или
@@ -52,28 +58,40 @@
      выбор человека на этой странице, а условие, в котором страницу открыли.
      Сменить на лету — dkTheme.theme = 'light' из приложения. */
   var fromHost = null;
-  try { fromHost = new URLSearchParams(location.search).get('theme'); } catch (e) { /* старый движок */ }
-  if (fromHost !== 'dark' && fromHost !== 'light') fromHost = null;
-
-  var theme = fromHost || read(KEY_THEME);
-  if (!theme && window.matchMedia) {
-    theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-  }
-  root.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
-
-  // Старый сохранённый акцент больше не читается — и не должен лежать:
-  // иначе однажды его прочитает чей-то отладочный код и удивится.
-  try { localStorage.removeItem(KEY_ACCENT); } catch (e) { /* приватный режим */ }
+  try {
+    var params = new URLSearchParams(location.search);
+    fromHost = params.get('style') || params.get('theme');
+  } catch (e) { /* старый движок */ }
+  if (fromHost === 'glass') fromHost = 'dark';
+  if (!validStyle(fromHost)) fromHost = null;
+  var savedStyle = read(KEY_STYLE);
+  var legacyTheme = read(KEY_THEME);
+  var initialStyle = validStyle(savedStyle) ? savedStyle :
+    (savedStyle === 'glass' ? 'dark' : (validStyle(legacyTheme) ? legacyTheme : 'dark'));
+  applyStyle(fromHost || initialStyle);
+  applyAccent();
+  write('dk-accent-choice', 'blue');
+  if (!fromHost) { write(KEY_STYLE, initialStyle); write(KEY_THEME, initialStyle); }
 
   /* Запоминаем не в обработчике переключателя, а по факту смены атрибута:
      тему меняет и кнопка в шапке, и код страницы, и рука в отладчике. Один
      наблюдатель покрывает все случаи разом. */
   if (window.MutationObserver) {
-    new MutationObserver(function () {
-      if (!fromHost) write(KEY_THEME, root.getAttribute('data-theme') || 'dark');
+    new MutationObserver(function (records) {
+      // Прямое изменение data-theme старым хостом также меняет стиль.
+      if (records.some(function (record) { return record.attributeName === 'data-style'; })) {
+        applyStyle(validStyle(root.getAttribute('data-style')) ? root.getAttribute('data-style') : 'dark');
+      } else if (root.getAttribute('data-theme') !== tone(root.getAttribute('data-style'))) {
+        applyStyle(root.getAttribute('data-theme'));
+      }
+      if (!fromHost) {
+        write(KEY_STYLE, root.getAttribute('data-style'));
+        write(KEY_THEME, root.getAttribute('data-theme'));
+      }
+      applyAccent();
       themeColor();
       syncThemeControls();
-    }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    }).observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-style', 'data-accent'] });
   }
 
   /* ЦВЕТ СТРОКИ СОСТОЯНИЯ И АДРЕСНОЙ СТРОКИ. Safari и Chrome на телефоне
@@ -122,7 +140,7 @@
   }
   function syncThemeControls() {
     document.querySelectorAll('[data-theme-set]').forEach(function (b) {
-      b.setAttribute('aria-pressed', String(b.dataset.themeSet === root.getAttribute('data-theme')));
+      b.setAttribute('aria-pressed', String(b.dataset.themeSet === root.getAttribute('data-style')));
     });
   }
   document.addEventListener('DOMContentLoaded', function () { themeColor(); syncThemeControls(); });
@@ -137,20 +155,22 @@
   document.addEventListener('click', function (e) {
     var choice = e.target.closest && e.target.closest('[data-theme-set]');
     if (choice) {
-      root.setAttribute('data-theme', choice.dataset.themeSet === 'light' ? 'light' : 'dark');
+      applyStyle(choice.dataset.themeSet);
       syncThemeControls();
       return;
     }
     var b = e.target.closest && e.target.closest('#t-theme, [data-act="theme"]');
     if (!b) return;
-    root.setAttribute('data-theme',
-      root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    var styles = ['dark', 'light'];
+    applyStyle(styles[(styles.indexOf(root.getAttribute('data-style')) + 1) % styles.length]);
   });
 
   window.dkTheme = {
     get theme() { return root.getAttribute('data-theme'); },
-    set theme(v) { root.setAttribute('data-theme', v === 'light' ? 'light' : 'dark'); },
+    set theme(v) { applyStyle(v); },
+    get style() { return root.getAttribute('data-style'); },
+    set style(v) { applyStyle(v); },
     get accent() { return root.getAttribute('data-accent'); },
-    set accent(v) { root.setAttribute('data-accent', v); }
+    set accent(v) { applyAccent(v); }
   };
 })();

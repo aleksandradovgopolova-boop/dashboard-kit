@@ -47,23 +47,23 @@ from pathlib import Path
 KIND = "replan-report"
 REPRIORITIZATION_KIND = "replan-reprioritization"
 
-# Куда пишется переприоритизация (класс A). Машинный артефакт РАБОЧЕГО ДЕРЕВА дочки: кит его
-# порождает и перезаписывает, человек видит/удаляет; он регенерируем (обратимость), помечен
-# `actor: replan-loop`, и это НЕ `planning/plan.yaml` — авторский план кит не переписывает.
+
+
+
 REPLAN_DIR_REL = ".ai/project/replan"
 LATEST_REL = ".ai/project/replan/latest.yaml"
 
-# Заглушка автономной записи (тот же инвариант, что у ночного автофикса): env или файл-сигнал.
+
 REPLAN_OFF_ENV = "AI_OPS_REPLAN"                 # =off (любой регистр) -> запись не делается
 REPLAN_OFF_SENTINEL = ".ai/project/replan/off"
 
-# Классы предложений — те же буквы, что у 4-классовой модели ночного обзора: B — предложение к
-# подготовке (кит готовит, мержит человек), C — только рекомендация. Структурная правка плана
-# (закрыть/завести/пометить работу) НИКОГДА не класс A.
+
+
+
 PROPOSAL_CLASS = {"close-to-history": "B", "mark-in-progress": "B"}
 
 
-# ─── Observe ───────────────────────────────────────────────────────────────────────────────────
+
 
 def observe(child_root, *, backlog: bool = True) -> dict:
     """Собрать сигналы расхождения план↔реальность из уже поставляемых источников.
@@ -78,7 +78,7 @@ def observe(child_root, *, backlog: bool = True) -> dict:
 
     from ai_ops_kit.planning import next_work, delivery_plan
 
-    # Битый план — исключение выше (PlanCorrupt); не глушим, «работы нет» ≠ «файл не разбирается».
+    
     nx = next_work.compute(child_root)
     if not nx.get("plan_present"):
         unverified.append(f"план не заполнен: {nx.get('gap') or 'нет planning/plan.yaml'}")
@@ -95,15 +95,15 @@ def observe(child_root, *, backlog: bool = True) -> dict:
 
     ready = list(nx.get("ready") or [])            # УЖЕ ранжировано реальностью (по score)
     in_progress = list(nx.get("in_progress") or [])
-    # Порядок, ОБЪЯВЛЕННЫЙ человеком в плане (для вычисления сдвига). Только среди тех же id.
+    
     plan = delivery_plan.load(child_root)
     declared_order = [w.get("id") for w in delivery_plan.items(plan) if w.get("id")]
 
-    # Расхождение статуса план↔реальность (declared ≠ выведенное из гейтов/графа) — поле drift.
+    
     plan_drift = [{"id": r["id"], "title": r.get("title"), "drift": r["drift"]}
                   for r in (ready + in_progress) if r.get("drift")]
 
-    # Ветка↔ствол: измеренное противоречие (ветка в стволе, а работа открыта; todo, а ветка впереди).
+    
     git = delivery_plan.git_disagreements(plan, child_root)
     if not git.get("measured"):
         unverified.append("состояние работ в git не измерено (ствол не найден) — не «согласовано»")
@@ -152,7 +152,7 @@ def _backlog(child_root, unverified: list) -> dict:
     return {"ok": True, "repo": rep.repo, "count": len(order), "order": order}
 
 
-# ─── Understand → Replan ─────────────────────────────────────────────────────────────────────────
+
 
 def _why_row(row: dict) -> list:
     """Почему работа стоит там, где стоит — из уже посчитанных сигналов её строки (не заново)."""
@@ -230,7 +230,7 @@ def _structural_proposals(observed: dict) -> list:
         proposals.append({"kind": kind, "class": PROPOSAL_CLASS.get(kind, "C"),
                           "rationale": err, "signal": "git: ветка↔ствол",
                           "requires_approval": True})
-    # Расхождение статуса из resolve (drift) — если git его ещё не назвал.
+    
     for d in (observed.get("plan_drift") or []):
         proposals.append({"kind": "reconcile-status", "class": "B", "target": d["id"],
                           "rationale": f"{d['id']}: {d['drift']}",
@@ -253,7 +253,7 @@ def replan_report(child_root, *, backlog: bool = True) -> dict:
         "schema_version": 1,
         "kind": KIND,
         "root": str(child_root),
-        # Граница автономии НАЗВАНА в самом отчёте: переприоритизация — авто, структура — предложением.
+        
         "autonomy": "reprioritize-auto; structure-proposed",
         "plan_present": True,
         "reprioritization": plan_intent["reprioritization"],
@@ -266,7 +266,7 @@ def replan_report(child_root, *, backlog: bool = True) -> dict:
     }
 
 
-# ─── Apply (класс A — обратимая переприоритизация, состав работ НЕ меняет) ────────────────────────
+
 
 class _NoModelBudget:
     """Заявленный инвариант: переприоритизация детерминирована и НЕ зовёт модель."""
@@ -329,7 +329,7 @@ def apply_reprioritization(child_root, *, dry_run: bool = False, backlog: bool =
         return {**result, "status": "disabled",
                 "reason": "policy: replan=suggest — только отчёт, автономную запись не делаю"}
 
-    # Один прогон наблюдения: из него И множество-эталон (готовые работы), И переприоритизация.
+    
     observed = observe(child_root, backlog=backlog)
     if not observed.get("plan_present") or observed.get("plan_is_template"):
         return {**result, "status": "no_change",
@@ -342,9 +342,9 @@ def apply_reprioritization(child_root, *, dry_run: bool = False, backlog: bool =
                 "reason": "готовых работ для переприоритизации нет (пусто — не «согласовано»)",
                 "unverified": observed.get("unverified")}
 
-    # ИНВАРИАНТ СОСТАВА (ii-среда): переприоритизация — ровно те же готовые работы, что наблюдение
-    # дало на входе. Эталон — actionable из observe (а НЕ отфильтрованный по выходу список, иначе
-    # пропажа работы прошла бы незамеченной). Расхождение -> blocked, файл не пишется.
+    
+    
+    
     actionable_ids = [r.get("id") for r in (observed.get("actionable") or [])]
     order_ids = [r.get("id") for r in repri]
     breach = _check_same_work_set(actionable_ids, order_ids)
@@ -394,7 +394,7 @@ def _policy_suggest_only(child_root, policy) -> bool:
         return False
 
 
-# ─── Человеческий отчёт ──────────────────────────────────────────────────────────────────────────
+
 
 def format_report(report: dict) -> str:
     L = ["# Перепланирование (автономное)", ""]

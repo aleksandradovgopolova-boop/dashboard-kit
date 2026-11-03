@@ -18,21 +18,26 @@ PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is
            Path(__file__).resolve().parents[2])
 POLICY = PKG / "registry" / "communication-policy.yaml"
 
-# Аварийные значения — РОВНО на случай недоступного реестра, и в этом случае слой громко говорит,
-# что читает не источник истины (см. `_contract`). Держать здесь вторую копию контракта нельзя:
-# реестр перестаёт быть источником истины для собственной политики, и расхождение обнаруживается
-# только глазами (тир 3 разбора перед квалификацией).
+
+
+
+
 _FALLBACK_AUDIENCES = ("product", "technical", "debug")
 _FALLBACK_STATUS_LABEL = {"ok": "Готово", "needs_input": "Нужно твоё решение",
                           "blocked": "Пока не могу продолжить", "done": "Готово",
                           "degraded": "Готово, но проверено не всё"}
-_CONTRACT = {}          # кэш разобранного контракта: {audiences, labels, default, config_key}
 
-# Глоссарий продуктового языка — аварийная копия РОВНО на случай недоступного реестра (источник
-# истины — `registry/communication-policy.yaml -> product_glossary`). Держать здесь основную копию
-# нельзя по той же причине, что и для статусов: реестр перестал бы быть источником истины для
-# собственной политики. Заголовок работы (`title`) приходит из плана дочки и может быть написан
-# внутренним языком; для аудитории `product` человеческие строки прогоняются через этот словарь.
+
+
+_FALLBACK_MODES = {"founder": "product", "product": "product", "design": "product",
+                   "delivery": "product", "engineering": "technical"}
+_CONTRACT = {}          # кэш разобранного контракта: {audiences, labels, default, config_key, modes}
+
+
+
+
+
+
 _FALLBACK_GLOSSARY = {
     "merge queue": "очередь на слияние", "merge base": "итог слияния",
     "merge-base": "итог слияния", "pull request": "запрос на слияние",
@@ -89,11 +94,17 @@ def _contract(policy=None) -> dict:
             "product")
         if not labels or not auds:
             raise PolicyMissing("в политике коммуникации нет statuses/audiences")
-        out = {"labels": labels, "audiences": auds, "default": default,
+        
+        
+        modes = {str(k): (v or {}).get("audience")
+                 for k, v in (data.get("operating_modes") or {}).items()}
+        modes = {k: a for k, a in modes.items() if a in auds}
+        out = {"labels": labels, "audiences": auds, "default": default, "modes": modes,
                "config_key": data.get("config_key", "communication"), "source": "registry"}
     except PolicyMissing:
         out = {"labels": dict(_FALLBACK_STATUS_LABEL), "audiences": _FALLBACK_AUDIENCES,
-               "default": "product", "config_key": "communication", "source": "fallback"}
+               "default": "product", "modes": dict(_FALLBACK_MODES),
+               "config_key": "communication", "source": "fallback"}
     if policy is None:
         _CONTRACT.clear()
         _CONTRACT.update(out)
@@ -111,10 +122,16 @@ def audiences() -> tuple:
 
 
 def audience_from_config(child_root, policy=None) -> str:
-    """Аудитория из `.ai-ops.yaml -> communication.audience`. По умолчанию — `product`.
+    """Аудитория из `.ai-ops.yaml -> communication.audience`, с режимом-линзой. По умолчанию — `product`.
 
     Default именно `product`: система по умолчанию разговаривает с владельцем продукта, а не с
     отладчиком. Обратный default — то, как внутренний язык и просачивался наружу.
+
+    Режим работы (`communication.mode`: founder/product/design/delivery/engineering) — тонкая ЛИНЗА
+    поверх этих трёх аудиторий, не новый уровень (источник истины — `operating_modes` в реестре).
+    Разрешение: явно заданная `audience` ВСЕГДА побеждает; если аудитория не задана, но задан
+    известный режим — берётся его аудитория по умолчанию; неизвестный/отсутствующий режим -> тот же
+    `default`, что и у неизвестной аудитории. Так режим МЕНЯЕТ вывод, а не остаётся декларацией.
     """
     con = _contract(policy)
     default = con["default"]
@@ -125,8 +142,15 @@ def audience_from_config(child_root, policy=None) -> str:
         data = yaml.safe_load(cfg.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError:
         return default
-    aud = ((data.get(con["config_key"]) or {}).get("audience"))
-    return aud if aud in con["audiences"] else default
+    comm = data.get(con["config_key"]) or {}
+    aud = comm.get("audience")
+    if aud in con["audiences"]:      # явная аудитория сильнее режима
+        return aud
+    if aud is None:                  # аудитория не задана — режим может выбрать уровень
+        mode_aud = (con.get("modes") or {}).get(comm.get("mode"))
+        if mode_aud in con["audiences"]:
+            return mode_aud
+    return default
 
 
 def _glossary(policy=None) -> dict:
@@ -146,7 +170,7 @@ def _glossary(policy=None) -> dict:
             raise PolicyMissing("в политике коммуникации нет product_glossary")
     except PolicyMissing:
         gmap, src = dict(_FALLBACK_GLOSSARY), "fallback"
-    # Длинные ключи первыми, чтобы фраза побеждала входящее в неё слово.
+    
     terms = sorted((str(k) for k in gmap), key=len, reverse=True)
     rx = re.compile("|".join(r"\b" + re.escape(t) + r"\b" for t in terms),
                     re.IGNORECASE) if terms else None
@@ -191,15 +215,15 @@ def message(status, summary, why_it_matters=None, decision=None, next_steps=None
     msg = {"schema_version": 1, "kind": "user-message", "status": status,
            "summary": summary.strip()}
     if headline:
-        # ЯРЛЫК НЕ ДОЛЖЕН ВРАТЬ. Общий ярлык статуса подходит не всякому случаю: `degraded` на
-        # «нечего измерять» печатал «Готово, но проверено не всё» — а готово не было ничего.
-        # Явный заголовок разрешён именно для таких мест; статус при этом не меняется, то есть
-        # машиночитаемая честность сохраняется.
+        
+        
+        
+        
         msg["headline"] = headline.strip()
     if why_it_matters:
         msg["why_it_matters"] = why_it_matters.strip()
     if decision:
-        # Вопрос без рекомендации — переложенная работа: правило recommend-not-enumerate.
+        
         if not decision.get("question"):
             raise ValueError("decision без question")
         msg["decision"] = {"question": decision["question"],
@@ -217,12 +241,12 @@ def render(msg: dict, audience="product", show_technical=False) -> str:
     con = _contract()
     if audience not in con["audiences"]:
         audience = con["default"]
-    # МАСКИРОВКА ЛЕКСИКИ НА ПУТИ К ЧЕЛОВЕКУ. Заголовок работы (`title`) приходит из плана дочки и
-    # вставляется в `summary`/`next`/`why` дословно — если он написан внутренним языком, продакт
-    # получает жаргон. `hide`-список политики объявлял категории, но НИЧТО их не ловило (аудит
-    # 04.09). Фильтр применяется ТОЛЬКО для `product`: `technical`/`debug` имена гейтов и метрик
-    # видят по своему `show`-списку. Технические детали (payload ниже) не трогаются — они и так
-    # открыты по запросу, и там жаргон уместен.
+    
+    
+    
+    
+    
+    
     h = _humanize if audience == "product" else (lambda s, policy=None: s)
     L = []
     label = msg.get("headline") or con["labels"].get(msg.get("status"), msg.get("status", ""))
@@ -247,8 +271,8 @@ def render(msg: dict, audience="product", show_technical=False) -> str:
 
     tech = (msg.get("technical_details") or {})
     if tech.get("available"):
-        # `product` прячет детали за запрос, `technical`/`debug` показывают сразу. Явный
-        # `show_technical=True` — ответ на «покажи технические детали» и работает на любом уровне.
+        
+        
         if audience in ("technical", "debug") or show_technical:
             L.append("")
             L.append("Технические детали:")

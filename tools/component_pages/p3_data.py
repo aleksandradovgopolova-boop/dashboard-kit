@@ -23,12 +23,9 @@ TABLE_ROWS = """[
 PAGES = [
 {
     "slug": "table", "title": "Таблица", "group": "Данные", "status": "стабильный",
-    "purpose": "Сравнить много объектов по нескольким показателям: регионы по баллу и событиям, заявки по сроку и "
-               "исполнителю. Читается по строкам, сортируется по колонке, выбирается для действия.",
+    "purpose": 'Помогает сравнивать объекты по нескольким признакам и находить точные значения.',
     "files": ["css/components.css", "js/dk-table.js"], "scripts": ["dk-table.js"],
-    "live_intro": "Всё, что умеет таблица, в одном месте: закреплённая шапка и первая колонка, сортировка, выбор "
-                  "строк со счётчиком, группы с подытогом, строка итога, числа табличными цифрами. В разметке ни "
-                  "одного числа руками — все через <code>dkFmt</code>.",
+    "live_intro": 'Сортировка помогает найти нужные строки, выбор — выполнить общее действие. В примере используются учебные значения.',
     "live": """<div class="dk-widget">
       <div class="dk-widget__head"><h3 class="dk-widget__title">Регионы · балл риска</h3>
         <div class="dk-chipbar" id="ex-actions"><span class="dk-chipbar__label">Ничего не выбрано — действия появятся здесь</span></div></div>
@@ -90,13 +87,8 @@ PAGES = [
       }
     });
   });""",
-    "when_yes": ["Для последних событий используйте dk-table--events: Время, Событие, Регион, Статус, Пострадавшие. Значок в dk-td-main__icon, численность с единицей чел.; фактические статусы и числа сохраняются.", "Объектов больше семи и у каждого несколько показателей — сравнивать нужно по колонкам.",
-                 "По строке нужно действие: назначить, открыть, снять с контроля.",
-                 "Точное число важнее формы: «73 события», а не «примерно столько же, сколько у соседа»."],
-    "when_no": ["Один показатель по многим объектам, вопрос «у кого хуже» — <a href=\"component-rank.html\">Рейтинг</a>: полоса читается быстрее числа.",
-                "Одно–четыре главных числа — <a href=\"component-tile.html\">KPI-плитки</a>, а не таблица из одной строки.",
-                "Динамика во времени — <a href=\"component-chart.html\">График</a>: таблица покажет числа, но не форму.",
-                "Список с одним значением на строку — <a href=\"component-list.html\">Список</a>, у него меньше шума."],
+    "when_yes": ['Нужно сравнить объекты по нескольким признакам и прочитать точные значения.', 'Сортировка помогает найти отклонения, выбор строк — выполнить общее действие.', 'На телефоне важные поля остаются видимыми; остальные доступны в карточке строки или горизонтальной прокрутке.'],
+    "when_no": ['Один показатель по многим объектам — <a href="component-rank.html">Рейтинг</a>.', 'Несколько главных чисел — <a href="component-tile.html">KPI-плитки</a>.', 'Изменение во времени — <a href="component-chart.html">График</a>.', 'События с коротким описанием — <a href="component-list.html">Список</a>.'],
     "anatomy_html": """<div class="dk-tablewrap" style="--table-min:640px"><table class="dk-table dk-table--zebra">
       <thead><tr><th class="dk-th-pick"><b class="sc-callout">1</b>""" + PICK.format(a="Выбрать все", d="") + """</th>
         <th style="width:40%"><b class="sc-callout">2</b>Регион <button type="button" class="dk-th-sort" aria-label="Сортировать"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg></button><b class="sc-callout">3</b></th>
@@ -117,11 +109,10 @@ PAGES = [
                 ("Значение", "цвет смысла только у чисел, которые сравнивают с порогом."),
                 ("Группа", "строка <code>dk-tr-group</code>: название надписью, подытог числом."),
                 ("Итог", "<code>&lt;tfoot&gt;</code>, в закреплённой таблице прилипает к низу.")],
-    "sizes": "Варианты включаются классами и складываются друг с другом. Размеров у таблицы нет: плотность как "
-             "настройка (<code>data-density</code>) — открытый вопрос в DECISIONS.md, п. 5.",
+    "sizes": 'Ширина зависит от колонок. На узком экране таблица прокручивается внутри своей области. Плотность можно менять компонентом «Плотность данных», сохраняя текст и области нажатия.',
     "variants": [("dk-table", "Без разделителей: шапка поверхностью, строки наведением.", "По умолчанию."),
                  ("dk-table--zebra", "Чередование строк полупрозрачной заливкой.", "Длинная плотная таблица."),
-                 ("dk-table--cards", "На телефоне строка — карточка «подпись — значение», шапка — пилюли сортировки. Нужен dkTable: он ставит подписи.", "Таблица шире экрана телефона: больше трёх колонок."),
+                 ("dk-table--cards", "На телефоне строка — карточка «подпись — значение», шапка — текстовые действия сортировки без круглых плашек. Нужен dkTable: он ставит подписи.", "Таблица шире экрана телефона: больше трёх колонок."),
                  ("dk-table--ruled", "Волосяные линейки между строками.", "Печать и очень плотные данные; включается вручную."),
                  ("dk-table--sticky-head", "Шапка и итог закреплены при прокрутке.", "Обёртка dk-tablewrap--tall с --table-max."),
                  ("dk-table--sticky-col", "Первая колонка (и колонка выбора) закреплены.", "Колонок больше, чем помещается."),
@@ -190,10 +181,9 @@ t.selected; t.clear();
 },
 {
     "slug": "badge", "title": "Бейдж, статус, прогресс", "group": "Данные", "status": "стабильный",
-    "purpose": "Мелкие детали, из которых собраны таблицы и карточки. Бейдж отвечает «сколько» или «что за штука», "
-               "статус — «как дела» и обязан иметь значок и подпись, прогресс — «сколько сделано».",
+    "purpose": 'Обозначает короткую метку, состояние объекта или долю выполненной работы.',
     "files": ["css/components.css"], "scripts": [],
-    "live_intro": "Атомы сами по себе и внутри строки таблицы — ради этого они и нужны.",
+    "live_intro": 'Бейдж обозначает метку, статус — состояние, прогресс — выполненную долю. Цвет дополняет подпись и число.',
     "live": """<div class="dk-panel"><div class="dk-stack">
       <div class="sc-row" style="margin:0"><span class="dk-badge">12</span><span class="dk-badge dk-badge--brand">новое</span><span class="dk-badge dk-badge--crit">23</span><span class="dk-badge dk-badge--high">27</span><span class="dk-badge dk-badge--calm">38</span><span class="dk-badge dk-badge--pill">БПЛА</span></div>
       <div class="sc-row" style="margin:0"><span class="dk-status dk-status--crit"><svg class="dk-i"><use href="#ti-alert-circle"/></svg>Авария</span><span class="dk-status dk-status--high"><svg class="dk-i"><use href="#ti-clock"/></svg>В работе</span><span class="dk-status dk-status--calm"><svg class="dk-i"><use href="#ti-circle-check"/></svg>Устранено</span><span class="dk-status"><svg class="dk-i"><use href="#ti-circle-x"/></svg>Нет данных</span></div>
@@ -205,9 +195,7 @@ t.selected; t.clear();
     "when_yes": ["Бейдж: число или короткая метка рядом с названием — «23» у вкладки, «БПЛА» у региона.",
                  "Статус: состояние объекта в строке таблицы или карточке.",
                  "Прогресс: доля выполненного, когда есть известный конец: устранение, готовность."],
-    "when_no": ["Категория, которую можно снять, — <a href=\"component-legend.html\">чип-фильтр</a>, не бейдж.",
-                "Главное число экрана — <a href=\"component-tile.html\">KPI-плитка</a>, бейдж для этого мелок.",
-                "Доступность во времени — <a href=\"component-uptime.html\">Полоса доступности</a>, не прогресс."],
+    "when_no": ['Удаляемое выбранное значение — <a href="component-chip.html">Чип</a>.', 'Главное число экрана — <a href="component-tile.html">KPI-плитка</a>.', 'Доступность службы во времени — <a href="component-uptime.html">Доступность служб</a>.'],
     "anatomy_html": """<div class="dk-stack">
       <div class="sc-row" style="margin:0"><span class="dk-badge dk-badge--crit"><b class="sc-callout">1</b>23</span><span class="dk-badge dk-badge--pill"><b class="sc-callout">2</b>БПЛА</span></div>
       <div class="sc-row" style="margin:0"><span class="dk-status dk-status--high"><b class="sc-callout">3</b><svg class="dk-i"><use href="#ti-clock"/></svg><b class="sc-callout">4</b>В работе</span></div>
@@ -234,7 +222,7 @@ t.selected; t.clear();
       <div class="dk-progress dk-progress--indeterminate"><span class="dk-progress__track"><span class="dk-progress__fill"></span></span><span class="dk-progress__value">—</span></div>
     </div></div>
     <div class="sc-note"><b>«Нет данных» — отдельное состояние, а не ноль.</b> Статус без модификатора и прогресс с прочерком говорят «не знаем», а не «ничего». Ноль процентов — это ответ.</div>""",
-    "content_ok": ["Статус — одно-два слова о состоянии: «В работе», «Устранено».",
+    "content_ok": ["Статус — одно-два понятных слова: «Отстаёт», «По плану», «Нет данных». Выбирайте самую короткую формулировку, которая сохраняет смысл.",
                    "Метка — существительное-категория: «БПЛА», «Плановое».",
                    "Прогресс с числом рядом и понятным концом: 64% устранения."],
     "content_bad": ["Статус одним цветом или одним значком.",
@@ -268,22 +256,17 @@ t.selected; t.clear();
 },
 {
     "slug": "tile", "title": "KPI-плитка", "group": "Данные", "status": "стабильный",
-    "purpose": "Одно главное число с трендом и формой: сколько сейчас и куда идёт. Размер S — четверть колонки; "
-               "здесь число и спарклайн, а не график с осями.",
+    "purpose": 'Показывает один ключевой показатель, его единицу и изменение за период.',
     "files": ["css/components.css", "js/dk-charts.js"], "scripts": ["vendor/echarts.min.js", "dk-chart-theme.js", "dk-charts.js"],
-    "live_intro": "Четыре плитки в ряд. Цвет тренда — смысл (рост аварий красный, падение времени реакции зелёный), а не направление стрелки.",
+    "live_intro": 'Название, число и единица отвечают на один вопрос. Изменение за период и мини-график добавляются, если помогают оценить результат.',
     "live": """<div class="dk-grid">
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent" style="--accent:var(--crit-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label">Аварии за сутки</span></div><div class="dk-tile__row"><span class="dk-metric-lg">23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div></div></div>
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-file-text"/></svg></span><span class="dk-tile__label">Обращений</span></div><div class="dk-tile__row"><span class="dk-metric-lg">1 284</span><span class="dk-trend" style="--accent:var(--calm-ink)"><svg class="dk-i dk-i--sm"><use href="#ti-arrow-down"/></svg> −6%</span></div></div></div>
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent" style="--accent:var(--high-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-clock"/></svg></span><span class="dk-tile__label">Среднее время реакции</span></div><div class="dk-tile__row"><span class="dk-metric-lg">42 <span class="dk-tile__unit">мин</span></span></div></div></div>
       <div class="dk-col--quarter"><div class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--prominent" style="--accent:var(--calm-ink)"><div class="dk-tile__head"><span class="dk-tile__icon"><svg class="dk-i dk-i--sm"><use href="#ti-user"/></svg></span><span class="dk-tile__label">Бригад в работе</span></div><div class="dk-tile__row"><span class="dk-metric-lg">17</span><span class="dk-trend">без изменений</span></div></div></div>
     </div>""",
-    "when_yes": ["Одно текущее значение, которое смотрят первым: аварий сейчас, время реакции.",
-                 "Важно направление: тренд к прошлому периоду.",
-                 "Плиток две–шесть в ряд; больше — уже таблица."],
-    "when_no": ["Сравнение многих значений — <a href=\"component-chart.html\">График</a> в размере L.",
-                "Значение с планом и дельтой к нему — пока нет компонента; открыто в REVIEW.md («KPI с планом»).",
-                "Один показатель по многим объектам — <a href=\"component-rank.html\">Рейтинг</a>."],
+    "when_yes": ['Нужно быстро оценить один ключевой показатель: текущее значение, единицу и при необходимости изменение.', 'Показатель помогает ответить на основной вопрос экрана. Обычно на обзоре 5 ± 2 ключевых показателя, не больше семи.'],
+    "when_no": ['Нужно сравнить много объектов — <a href="component-rank.html">Рейтинг</a> или <a href="component-table.html">Таблица</a>.', 'Нужно сопоставить факт с целью — <a href="component-bullet-chart.html">Значение и цель</a>.', 'Нужно объяснить состав одного главного показателя — <a href="component-hero.html">Главная карточка</a>.'],
     "anatomy_html": """<div class="dk-grid"><div class="dk-col--half"><div class="dk-widget dk-widget--s dk-tile" style="--accent:var(--crit-ink)">
       <div class="dk-tile__head"><span class="dk-tile__icon"><b class="sc-callout">1</b><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-tile__label"><b class="sc-callout">2</b>Аварии за сутки</span></div>
       <div class="dk-tile__row"><span class="dk-metric-lg"><b class="sc-callout">3</b>23</span><span class="dk-trend" style="--accent:var(--crit-ink)"><b class="sc-callout">4</b><svg class="dk-i dk-i--sm"><use href="#ti-arrow-up"/></svg> +18%</span></div>
@@ -293,10 +276,7 @@ t.selected; t.clear();
                 ("Число", "<code>dk-metric-lg</code>, Golos 600, пропорциональные цифры: число одно и в колонку не встаёт, а табличная единица в «17» дала бы зазор."),
                 ("Тренд", "<code>dk-trend</code>: стрелка и дельта со знаком; цвет — смысл изменения."),
                 ("Спарклайн", "<code>type: 'spark'</code>: форма без осей; шкала не от нуля — единственное место, где это правильно.")],
-    "sizes": "Компактный вариант без спарклайна: поля 20 px на десктопе и 16 px на телефоне, число 28 px, нейтральный значок 14 px; дельта рядом с числом и может переноситься при крупном тексте. Подписи полностью видны. Обычная плитка — это виджет размера S (<code>dk-widget--s</code>): поле в 14 вместо 18, потому что в четверти "
-             "колонки поле в 18 съедает пятую часть ширины. В M и L та же разметка, но там уже график с осями. "
-             "На месте шире 320 px (телефон, половина колонки) плитка перестраивается сама: число с трендом "
-             "слева, спарклайн справа — иначе она растягивается в пустую полосу.",
+    "sizes": 'Поля задаёт --pad-widget: сверху, снизу и по бокам одинаково. Компактный KPI не резервирует место под отсутствующий график. Подпись — Regular 14/20, число — Medium; в ряду из пяти компактных KPI число 28/32.',
     "variants": [("dk-tile--overview", "Значение 40 px на широком экране и 28 px на планшете; полные подписи.", "Пять KPI в dk-grid dk-grid--five; телефон — две колонки и последняя карточка во всю ширину."),
                  ("dk-tile--prominent", "Крупное число в обзорной карточке; обычный размер в узком контейнере.", "Вместе с dk-tile--compact, для первого ряда сводки."),
                  ("dk-tile--compact", "Нейтральный значок, полная подпись, число и прямоугольная дельта в одной строке; без спарклайна.", "Компактный ряд основных KPI."),
@@ -356,12 +336,9 @@ dkChart(document.getElementById('sp'), {
 },
 {
     "slug": "hero", "title": "Главная карточка", "group": "Данные", "status": "стабильный",
-    "purpose": "Одно главное число экрана и то, из чего оно сложено: «25 из 89», метка смысла, полоса состава и "
-               "чипы с изменением. Отвечает сразу на три вопроса — сколько, много ли это и из чего состоит. "
-               "На экране она одна.",
+    "purpose": 'Выделяет главный показатель экрана и объясняет его состав.',
     "files": ["css/components.css"], "scripts": [],
-    "live_intro": "Нейтральная поверхность выделяет главное число типографикой и композицией. "
-                  "Цвет передаёт данные и исключения, а не декоративную важность карточки.",
+    "live_intro": 'Главное число сопровождается базой сравнения и составом. Такой акцент нужен только тогда, когда у экрана есть один главный вопрос.',
     "live": """<div class="dk-grid">
       <div class="dk-col--half"><section class="dk-hero">
         <div class="dk-hero__label">Регионов с высоким риском</div>
@@ -420,7 +397,7 @@ dkChart(document.getElementById('sp'), {
                  ("--share", "Доля отрезка — просто число.", "Абсолютные значения: 25, 35, 29 — складывать заранее не нужно."),
                  ("dk-keys / dk-key", "Чипы легенды с изменением.", "Всегда вместе с полосой."),
                  ("dk-key__d", "Изменение к прошлому периоду.", "Если сравнивать есть с чем.")],
-    "sizes": "Размер один: половина колонки на десктопе, вся ширина на телефоне. Число 56 — меньше не делать: на телефоне это первое, что читают с расстояния руки.",
+    "sizes": 'Ширину задаёт сетка. Крупное число выделяет главный результат; подписи и состав остаются читаемыми на телефоне. Не фиксируйте высоту, если содержимое может вырасти.',
     "states": """<div class="dk-grid--even">
       <div class="dk-hero" aria-busy="true"><span class="dk-vh">Загружаем сводку</span><div class="dk-skel" style="height:14px;width:60%"></div><div class="dk-skel" style="height:56px;width:40%"></div><div class="dk-skel" style="height:10px"></div></div>
       <div class="dk-hero"><div class="dk-hero__label">Регионов с высоким риском</div><div class="dk-hero__row"><div class="dk-hero__value"><span class="dk-hero__n">0</span><span class="dk-hero__of">из 89</span></div><span class="dk-trend" style="--accent:var(--calm-ink)">всё спокойно</span></div><div class="dk-split" role="img" aria-label="Нет данных по составу"><span class="dk-split__seg"></span></div><div class="dk-keys"><span class="dk-key"><i class="dk-key__dot"></i>нет данных</span></div></div>
@@ -462,17 +439,15 @@ dkChart(document.getElementById('sp'), {
 },
 {
     "slug": "car", "title": "Лента карточек", "group": "Данные", "status": "стабильный",
-    "purpose": "Несколько объектов, у каждого своя история: «Резко выросли за день», «В фокусе дня». Карточки стоят в "
-               "ряд и листаются вбок; видна одна история целиком и краешек следующей — подсказка, что их несколько.",
+    "purpose": 'Показывает последовательность карточек, у каждой из которых свой контекст.',
     "files": ["css/components.css", "js/dk-car.js"], "scripts": ["dk-car.js"],
-    "live_intro": "Пролистайте ленту: счётчик и точки идут за текущей карточкой. На экране с мышью в шапке появляются "
-                  "стрелки — колесом вбок листает не каждая мышь.",
+    "live_intro": 'Каждая карточка объясняет отдельное изменение. Лента подходит для последовательного просмотра; сравнивать объекты удобнее в рейтинге или таблице.',
     "live": """<div class="dk-car" id="x-car">
       <div class="dk-car__head"><h3 class="dk-car__title">Резко выросли за день</h3><span class="dk-push dk-car__pos">1 из 3</span>
         <span class="dk-car__nav"><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="prev" aria-label="Предыдущая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-left"/></svg></button><button type="button" class="dk-iconbtn dk-iconbtn--sm" data-car="next" aria-label="Следующая"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button></span></div>
       <ul class="dk-car__track" role="list">
         <li class="dk-car__item" style="--accent:var(--crit)">
-          <span class="dk-car__tags"><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg>+27 за день</span><span class="dk-trend" style="--accent:var(--crit-ink)">средний → высокий</span></span>
+          <span class="dk-car__tags"><span class="dk-trend" style="--accent:var(--crit-ink)"><svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-arrow-up-right"/></svg>+27 за день</span><span class="dk-trend" style="--accent:var(--crit-ink)">балл риска</span></span>
           <span class="dk-car__row"><span class="dk-car__who"><span class="dk-car__name">Санкт-Петербург</span><span class="dk-car__sub">СЗФО</span></span>
             <span class="dk-car__change" aria-label="было 30, стало 57"><span class="dk-car__from" style="--from:var(--high-ink)">30</span><span class="dk-car__arrow" aria-hidden="true">→</span><span class="dk-car__to" style="--to:var(--crit-ink)">57</span></span></span>
           <p class="dk-car__text">Авария теплосети; отключения ГВС и отопления в трёх районах.</p>
@@ -496,8 +471,7 @@ dkChart(document.getElementById('sp'), {
   window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkCar === 'function') dkCar(document.getElementById('x-car'));
   });""",
-    "when_yes": ["Три–семь объектов, и у каждого есть рассказ: было → стало, причина, где.",
-                 "Верх телефонного экрана под главной карточкой: «что изменилось сегодня»."],
+    "when_yes": ['Нужно последовательно рассмотреть несколько значимых изменений, у каждого есть свой контекст.', 'Сравнивать карточки одновременно не требуется. Лента добавляется по задаче, а не как обязательный блок первого экрана.'],
     "when_no": ["Объектов больше семи или их надо сравнивать между собой — <a href=\"component-rank.html\">Рейтинг</a> или <a href=\"component-table.html\">Таблица</a>: в ленте видна одна карточка за раз.",
                 "Одно число с тем, из чего оно сложено — <a href=\"component-hero.html\">Главная карточка</a>.",
                 "Список событий по времени — <a href=\"component-list.html\">Список</a>."],
@@ -522,9 +496,7 @@ dkChart(document.getElementById('sp'), {
     "content_ok": ["Заголовок отвечает, почему эти карточки вместе: «Резко выросли за день».",
                    "Было → стало числами: «30 → 57».",
                    "Рассказ — причина: «авария теплосети», а не «рост показателя»."],
-    "content_bad": ["Лента из одной карточки — это главная карточка.",
-                    "Двадцать карточек: до последней не долистают.",
-                    "Пустая лента без слов, когда изменений нет."],
+    "content_bad": ['Карточки нужно сравнивать, но одновременно видна только одна.', 'Длинная лента без перехода к полному списку.', 'Пустая лента без объяснения, что изменений нет.'],
     "a11y": ["<b>Лента — список</b>: <code>ul role=\"list\"</code>, карточки — пункты; скринридер называет, сколько их.",
              "<b>Позиция словами</b>: счётчик «1 из 3»; точки скрыты от скринридера (<code>aria-hidden</code>).",
              "<b>Было → стало</b> — <code>aria-label</code> на паре чисел: «было 30, стало 57», стрелка скрыта.",
@@ -570,10 +542,9 @@ car.go(2);    // пролистать к третьей
 },
 {
     "slug": "rank", "title": "Рейтинг и сводка", "group": "Данные", "status": "стабильный",
-    "purpose": "Правая колонка дашборда: главное число, тренд и ранжированный список — кто хуже всех. "
-               "Строки разделяются ритмом и наведением, не линейками.",
+    "purpose": 'Располагает объекты по одному показателю, чтобы быстро увидеть лидеров и отстающих.',
     "files": ["css/components.css"], "scripts": [],
-    "live_intro": "Сводка по стране и топ-5 регионов; справа — чипы по уровням риска.",
+    "live_intro": 'Порядок строк помогает найти крайние значения, полосы — оценить разницу. Подпись уточняет показатель и направление сортировки.',
     "live": """<div class="dk-layout"><div class="dk-panel">
       <div class="dk-panel__head"><div><div class="dk-overline">Сводка по стране · 14 дней</div><div class="dk-h2" style="margin-top:var(--space-2)">Российская Федерация</div></div></div>
       <div class="dk-summary" style="--accent:var(--crit-ink)"><div><div class="dk-trend"><svg class="dk-i"><use href="#ti-arrow-up-right"/></svg> негатив растёт в 28</div><div style="font-size:var(--text-caption);color:var(--ink-2);margin-top:var(--space-2)"><b class="dk-num" style="color:var(--ink)">15</b> регионов с событием</div></div><div class="dk-score"><span class="dk-score__v">23</span><span class="dk-score__of">/89</span></div></div>
@@ -600,9 +571,10 @@ car.go(2);    // пролистать к третьей
                 ("Номер", "<code>dk-rank__i</code>: место в списке, две цифры."),
                 ("Название", "переносится и остаётся видимым целиком."),
                 ("Значение", "<code>dk-rank__v</code> табличными цифрами; цвет смысла через <code>--accent</code>.")],
-    "sizes": "Размер один: правая колонка макета <code>dk-layout</code>. Строк — пять или десять; больше — таблица с пагинацией.",
+    "sizes": 'Ширина определяется сеткой виджетов. Показывайте короткий список лидеров; полный набор вынесите в таблицу с сортировкой и пагинацией.',
     "variants": [("dk-summary", "Главное число с трендом.", "Верх правой колонки."),
                  ("dk-rank", "Ранжированный список кнопок.", "Топ-N."),
+                 ("dk-rank__meter", "Необязательная сравнительная полоса; дочерний span получает --value в процентах и --fill из роли заливки. aria-hidden, точное число рядом.", "Общая нулевая шкала для всех строк среза; не выдавать относительную длину за процент выполнения."),
                  ("dk-chip", "Число с подписью.", "Разбивка по категориям под сводкой."),
                  ("--accent на dk-rank__v / dk-chip__n", "Цвет смысла значения.", "Порог: crit-ink, high-ink, calm-ink.")],
     "states": """<div class="dk-grid--even">
@@ -610,12 +582,8 @@ car.go(2);    // пролистать к третьей
       <div class="dk-panel"><div class="dk-overline" style="margin-bottom:var(--space-5)">Ничья и нет данных</div><div class="dk-rank"><button class="dk-rank__row"><span class="dk-rank__i">04</span><span class="dk-rank__name">Новосибирская область</span><span class="dk-rank__v" style="--accent:var(--high-ink)">73</span></button><button class="dk-rank__row"><span class="dk-rank__i">04</span><span class="dk-rank__name">Ростовская область</span><span class="dk-rank__v" style="--accent:var(--high-ink)">73</span></button><button class="dk-rank__row"><span class="dk-rank__i">—</span><span class="dk-rank__name">Чукотский АО</span><span class="dk-rank__v">—</span></button></div></div>
     </div>
     <div class="sc-note"><b>Равные значения делят место.</b> Два региона с баллом 73 — оба четвёртые, следующий шестой. Регион без данных в рейтинг не входит и стоит внизу с прочерком.</div>""",
-    "content_ok": ["Заголовок сводки с периодом: «Сводка по стране · 14 дней».",
-                   "Главное число с «из скольких»: 23/89.",
-                   "Название региона официальное, как в справочнике."],
-    "content_bad": ["Рейтинг из двадцати строк — это таблица.",
-                    "Число без периода и без «из».",
-                    "Цвет значения без порога — «просто красиво»."],
+    "content_ok": ['Заголовок называет показатель и порядок: «Регионы с наибольшим отставанием».', 'У числа есть единица и период; база сравнения указана, если нужна.', 'Полные названия объектов совпадают с источником.'],
+    "content_bad": ['Длина полосы и число показывают разные показатели.', 'Порядок строк не объяснён.', 'Одинаковый цвет обозначает разные уровни риска.'],
     "a11y": ["<b>Строки — кнопки</b>: Tab и Enter открывают объект; кольцо фокуса при навигации с клавиатуры.",
              "<b>Порядок</b> читается числом номера, не только положением.",
              "<b>Значение</b> цветом и числом; цвет — дополнение.",
@@ -644,17 +612,16 @@ car.go(2);    // пролистать к третьей
 },
 {
     "slug": "list", "title": "Список, полосы, раскрытие", "group": "Данные", "status": "стабильный",
-    "purpose": "Три способа показать ряд объектов без таблицы: список событий со значком и значением, полосы "
-               "«доля от самого крупного», раскрывающийся блок с итогом в заголовке.",
+    "purpose": 'Показывает объекты, события или доли без сложной структуры таблицы.',
     "files": ["css/components.css"], "scripts": [],
-    "live_intro": "Список последних событий, полосы по видам обращений, свёрнутые подробности.",
+    "live_intro": 'События читаются по порядку, полосы помогают сравнить значения, раскрытие показывает дополнительные сведения. Выберите вариант под вопрос пользователя.',
     "live": """<div class="dk-grid">
       <div class="dk-col--half"><div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Последние события</h3></div><div class="dk-list">
         <button class="dk-list__row" style="--accent:var(--crit-ink)"><span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-list__text"><span class="dk-list__name">Прорыв теплотрассы</span><span class="dk-list__sub">Новосибирск · 14:20</span></span><span class="dk-list__v" style="--accent:var(--crit-ink)">1 240 чел.</span></button>
         <button class="dk-list__row" style="--accent:var(--high-ink)"><span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-bolt"/></svg></span><span class="dk-list__text"><span class="dk-list__name">Отключение электроснабжения</span><span class="dk-list__sub">Ростовская область · 12:05</span></span><span class="dk-list__v" style="--accent:var(--high-ink)">380 чел.</span></button>
         <button class="dk-list__row" style="--accent:var(--calm-ink)"><span class="dk-list__icon"><svg class="dk-i dk-i--sm"><use href="#ti-circle-check"/></svg></span><span class="dk-list__text"><span class="dk-list__name">Подача восстановлена</span><span class="dk-list__sub">Крым · 09:48</span></span><span class="dk-list__v" style="--accent:var(--calm-ink)">—</span></button>
         <button class="dk-list__more">Показать все <svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button></div></div></div>
-      <div class="dk-col--half"><div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Кто больше жжёт</h3><span class="dk-widget__hint" title="Полоса — доля от самого крупного в списке"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span></div><div class="dk-bars">
+      <div class="dk-col--half"><div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Объём по категориям</h3><span class="dk-widget__hint" title="Полоса — доля от самого крупного в списке"><svg class="dk-i dk-i--sm"><use href="#ti-info-circle"/></svg></span></div><div class="dk-bars">
         <div class="dk-bar" style="--accent:var(--crit-ink)"><div class="dk-bar__head"><span class="dk-bar__name">Отопление</span><span class="dk-bar__v">520</span></div><div class="dk-bar__track"><div class="dk-bar__fill" style="width:100%"></div></div><div class="dk-bar__meta">41% обращений · 1 240 жителей</div></div>
         <div class="dk-bar" style="--accent:var(--high-ink)"><div class="dk-bar__head"><span class="dk-bar__name">Водоснабжение</span><span class="dk-bar__v">344</span></div><div class="dk-bar__track"><div class="dk-bar__fill" style="width:66%"></div></div><div class="dk-bar__meta">27% обращений · 860 жителей</div></div>
         <div class="dk-bar"><div class="dk-bar__head"><span class="dk-bar__name">Электроснабжение</span><span class="dk-bar__v">228</span></div><div class="dk-bar__track"><div class="dk-bar__fill" style="width:44%"></div></div><div class="dk-bar__meta">18% обращений · 410 жителей</div></div></div>
@@ -663,9 +630,7 @@ car.go(2);    // пролистать к третьей
     "when_yes": ["Список: лента событий с одним значением на строку, где важны время и вид.",
                  "Полосы: доля от самого крупного в списке из трёх–семи категорий.",
                  "Раскрытие: подробности, без которых можно понять итог, — и итог стоит в заголовке."],
-    "when_no": ["Несколько показателей на строку — <a href=\"component-table.html\">Таблица</a>.",
-                "Доля от целого — <a href=\"component-chart.html\">пончик</a>: полосы показывают долю от максимума, а не от суммы.",
-                "Ранжирование по одному числу — <a href=\"component-rank.html\">Рейтинг</a>."],
+    "when_no": ['Несколько показателей на строку — <a href="component-table.html">Таблица</a>.', 'Состав целого — <a href="component-chart.html">график состава</a> с явной базой: полосы списка сравниваются с максимумом.', 'Места и ранжирование — <a href="component-rank.html">Рейтинг</a>.'],
     "anatomy_html": """<div class="dk-grid"><div class="dk-col--half"><div class="dk-list">
       <button class="dk-list__row" style="--accent:var(--crit-ink)"><span class="dk-list__icon"><b class="sc-callout">1</b><svg class="dk-i dk-i--sm"><use href="#ti-alert-triangle"/></svg></span><span class="dk-list__text"><span class="dk-list__name"><b class="sc-callout">2</b>Прорыв теплотрассы</span><span class="dk-list__sub"><b class="sc-callout">3</b>Новосибирск · 14:20</span></span><span class="dk-list__v" style="--accent:var(--crit-ink)"><b class="sc-callout">4</b>1 240 чел.</span></button>
       <button class="dk-list__more"><b class="sc-callout">5</b>Показать все <svg class="dk-i dk-i--sm"><use href="#ti-chevron-right"/></svg></button></div></div>
@@ -679,7 +644,7 @@ car.go(2);    // пролистать к третьей
                 ("Значение полосы", "число табличными цифрами — полоса «примерно», число «сколько»."),
                 ("Полоса", "ширина — доля от самого крупного в списке; заливка через <code>--accent</code>."),
                 ("Пояснение", "<code>dk-bar__meta</code>: доля и что за ней стоит.")],
-    "sizes": "Размеры одни: строка списка 56 px, полоса 8 px. Список — в M-виджете, полосы — в M и L.",
+    "sizes": 'Высота строки зависит от текста и действий. Полосы и интервалы используют токены компонента; ширину задаёт сетка виджетов. На телефоне названия сохраняются целиком.',
     "variants": [("dk-list / dk-list__row", "Лента событий; строка — кнопка.", "Верх ленты с «Показать все»."),
                  ("dk-bars / dk-bar", "Полосы от максимума.", "Три–семь категорий."),
                  ("dk-fold", "Раскрывающийся блок на <code>&lt;details&gt;</code>.", "Подробности с итогом в заголовке."),
@@ -730,10 +695,9 @@ car.go(2);    // пролистать к третьей
 },
 {
     "slug": "uptime", "title": "Доступность служб", "group": "Данные", "status": "стабильный",
-    "purpose": "Полоса из делений по времени: работала служба или нет. Легенда стоит всегда, а не только когда "
-               "появился сбой, и «нет данных» не притворяется «работает».",
+    "purpose": 'Показывает доступность службы по временным интервалам, включая сбои и пропуски.',
     "files": ["css/components.css", "js/dk-uptime.js"], "scripts": ["dk-uptime.js"],
-    "live_intro": "Три службы, сутки по получасу. Последние деления — «нет данных»: замер ещё не пришёл.",
+    "live_intro": 'Каждое деление — интервал наблюдения. Легенда отличает нормальную работу, сбой и отсутствие измерений.',
     "live": """<div class="dk-widget"><div class="dk-widget__head"><h3 class="dk-widget__title">Доступность служб · сутки</h3></div><div id="x-uptime"></div></div>""",
     "live_script": """  window.addEventListener('DOMContentLoaded', function () {
     if (typeof dkUptime !== 'function') return;
@@ -755,7 +719,7 @@ car.go(2);    // пролистать к третьей
                 ("Доступность", "процент рабочих делений от известных; «нет данных» в знаменатель не входит."),
                 ("Ось", "подписи краёв: откуда и докуда."),
                 ("Легенда", "всегда, даже когда сбоев нет: в момент первого сбоя человек увидит новый цвет и должен знать, что он значит.")],
-    "sizes": "Размер один: полоса тянется по ширине виджета, деление — доля ширины. Делений до 96 (неделя по два часа); мельче не попасть курсором за подсказкой.",
+    "sizes": 'Полоса занимает ширину виджета; деления соответствуют выбранным интервалам. Для длинного ряда укрупняйте интервалы, чтобы состояния оставались различимы.',
     "variants": [("rows[].data", "Массив состояний: 'up' | 'down' | 'none'.", "Каждая служба."),
                  ("step", "Подпись шага: «30 минут».", "Идёт в подсказку деления."),
                  ("labels", "Подписи краёв оси.", "['24 ч назад', 'сейчас'] по умолчанию иначе.")],
@@ -810,10 +774,10 @@ PAGES.append({'slug': 'avatar',
  'title': 'Аватар',
  'group': 'Данные',
  'status': 'стабильный',
- 'purpose': 'Человек рядом с записью, комментарием или списком участников.',
+ 'purpose': 'Обозначает человека фотографией или инициалами рядом с его данными.',
  'files': ['css/components.css'],
  'scripts': [],
- 'live_intro': 'Примеры в реальном контексте.',
+ 'live_intro': 'Фотография или инициалы помогают узнать участника. Полное имя остаётся рядом или в доступной подписи.',
  'live': '<div class="dk-panel"><div class="dk-stack"><div class="dk-inline"><span class="dk-avatar '
          'dk-avatar--sm" role="img" aria-label="Анна Кузнецова">АК</span><span class="dk-avatar" role="img" '
          'aria-label="Анна Кузнецова">АК</span><span class="dk-avatar dk-avatar--lg" role="img" '
@@ -862,10 +826,10 @@ PAGES.append({'slug': 'counter',
  'title': 'Счётчик',
  'group': 'Данные',
  'status': 'стабильный',
- 'purpose': 'Количество объектов внутри кнопки, вкладки или строки меню.',
+ 'purpose': 'Показывает количество объектов рядом с названием раздела или действия.',
  'files': ['css/components.css'],
  'scripts': [],
- 'live_intro': 'Примеры в реальном контексте.',
+ 'live_intro': 'Счётчик читается вместе с названием: «Сообщения 12». Он дополняет контекст, а не заменяет его.',
  'live': '<div class="dk-panel"><div class="dk-stack"><div class="dk-inline"><button class="dk-btn '
          'dk-btn--sm">Сообщения <span class="dk-counter">12</span></button><span class="dk-counter '
          'dk-counter--sm" aria-label="3 новых сообщения">3</span><span class="dk-counter dk-counter--brand" '
@@ -910,10 +874,10 @@ PAGES.append({'slug': 'chip',
  'title': 'Чип',
  'group': 'Данные',
  'status': 'стабильный',
- 'purpose': 'Отдельное выбранное значение: метка или применённый фильтр. Можно удалить из набора.',
+ 'purpose': 'Показывает отдельное выбранное значение, которое можно удалить из набора.',
  'files': ['css/components.css'],
  'scripts': [],
- 'live_intro': 'Примеры в реальном контексте.',
+ 'live_intro': 'Метка показывает одно выбранное значение. Кнопка удаления относится только к нему; остальные значения сохраняются.',
  'live': '<div class="dk-panel"><div class="dk-stack"><div class="dk-inline" id="x-chip-demo"><span '
          'class="dk-fchip">Email<button type="button" class="dk-fchip__x" aria-label="Убрать фильтр '
          'Email">×</button></span><span class="dk-fchip">В работе<button type="button" class="dk-fchip__x" '
@@ -962,10 +926,10 @@ PAGES.append({'slug': 'accordion',
  'title': 'Аккордеон',
  'group': 'Данные',
  'status': 'стабильный',
- 'purpose': 'Раскрывает подробности по запросу: определения метрик, настройки и ответы на вопросы.',
+ 'purpose': 'Раскрывает дополнительные сведения по запросу: определения, настройки и пояснения.',
  'files': ['css/components.css'],
  'scripts': [],
- 'live_intro': 'Два независимых раздела. Можно раскрыть оба; Enter и пробел работают без JavaScript.',
+ 'live_intro': 'Заголовок называет скрытые сведения и помогает решить, нужны ли они сейчас. Раздел открывается нажатием, Enter или пробелом.',
  'live': '<div class="dk-panel"><div class="dk-stack"><details class="dk-fold "><summary '
          'class="dk-fold__head"><span class="dk-fold__title">Как считается конверсия?</span><svg class="dk-i '
          'dk-i--sm" aria-hidden="true"><use href="#ti-chevron-down"/></svg></summary><div '

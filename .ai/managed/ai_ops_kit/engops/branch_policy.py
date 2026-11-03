@@ -77,7 +77,7 @@ def check_branch(branch, base="main", behind_count=None, workitems=(), engine_de
     pol = _merge_policy(policy)
     hard, soft, unknown = [], [], []
 
-    # --- ЖЁСТКИЕ инварианты -----------------------------------------------------------------------
+    
     if engine_delivery and is_protected(branch, pol["protected_refs"]):
         hard.append({"rule": "direct_commit_to_protected_ref",
                      "detail": f"'{branch}' — защищённая ветка; движок доставляет только через PR "
@@ -88,7 +88,7 @@ def check_branch(branch, base="main", behind_count=None, workitems=(), engine_de
                      "detail": f"ветка доставки должна начинаться с '{pol['branch_prefix']}' — "
                                f"иначе прогон не связать с WorkItem; получено '{branch or '—'}'"})
 
-    # --- ОТСТАВАНИЕ БАЗЫ --------------------------------------------------------------------------
+    
     if behind_count is None:
         unknown.append({"rule": "base_drift", "detail": f"отставание от '{base}' измерить не удалось "
                                                         f"(нет git/базы/upstream) — unavailable, не ноль"})
@@ -110,7 +110,7 @@ def check_branch(branch, base="main", behind_count=None, workitems=(), engine_de
                      "detail": f"сама база '{base}' отстаёт от upstream на {base_behind_upstream} "
                                f"коммитов — ветвление от неё воспроизводит отставание; `git fetch` + обновите базу"})
 
-    # --- прочие мягкие --------------------------------------------------------------------------
+    
     wids = sorted({w.upper() for w in (workitems or ())})
     if pol["one_workitem_per_branch"] and len(wids) > 1:
         soft.append({"rule": "multi_workitem",
@@ -155,7 +155,7 @@ def read_state(root, base="main", branch=None):
         rc, out, _ = git(root, "rev-parse", "--abbrev-ref", "HEAD")
         st["branch"] = out if rc == 0 and out else None
 
-    # существует ли база вообще (локально или как origin/<base>)
+    
     base_ref = None
     for cand in (base, f"origin/{base}"):
         rc, _, _ = git(root, "rev-parse", "--verify", "--quiet", cand)
@@ -171,20 +171,20 @@ def read_state(root, base="main", branch=None):
     if rc == 0 and out.isdigit():
         st["behind_count"] = int(out)
 
-    # рассинхрон самой базы с её upstream (если upstream объявлен)
+    
     rc, up, _ = git(root, "rev-parse", "--abbrev-ref", "--symbolic-full-name", f"{base_ref}@{{upstream}}")
     if rc == 0 and up:
         rc, out, _ = git(root, "rev-list", "--count", f"{base_ref}..{up}")
         if rc == 0 and out.isdigit():
             st["base_behind_upstream"] = int(out)
 
-    # WorkItem'ы в коммитах ветки поверх базы
+    
     rc, out, _ = git(root, "log", "--format=%s", f"{base_ref}..{st['branch']}")
     if rc == 0 and out:
         st["workitems"] = sorted({m.group(0).upper() for line in out.splitlines()
                                   for m in [_WORKITEM_RE.search(line)] if m})
 
-    # возраст ветки = давность её последнего коммита
+    
     rc, out, _ = git(root, "log", "-1", "--format=%ct", st["branch"])
     if rc == 0 and out.isdigit():
         st["branch_age_days"] = max(0.0, (time.time() - int(out)) / _SECONDS_PER_DAY)

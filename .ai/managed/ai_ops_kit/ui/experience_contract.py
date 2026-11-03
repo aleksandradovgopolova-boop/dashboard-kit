@@ -29,17 +29,17 @@ from pathlib import Path
 import yaml
 
 
-# Схема Experience Contract
-# ОБЯЗАТЕЛЬНЫЕ СОСТОЯНИЯ — ОДИН ИСТОЧНИК НА ОБЕ СТОРОНЫ МЕХАНИЗМА (20.08.2026).
-#
-# ЗАМЕР. Сторона ДОКАЗАТЕЛЬСТВА (`ui/storybook_adapter.py`) требует покрытия четырёх состояний
-# (`REQUIRED_STATES`: default/loading/empty/error) и не даёт выдать «нет данных» за «чисто».
-# Сторона СОЗДАНИЯ выводила состояния ИЗ КОНТРАКТА — только те, что владелец перечислил. Связи
-# между половинами не было: контракт, в котором не описали `error`, порождал набор stories,
-# который гейт НЕ МОЖЕТ принять никогда, и узнавалось это на гейте, а не при создании.
-#
-# Это ровно тот класс, против которого стоит кит: две правды об одном вопросе. Здесь их сводим —
-# список берётся у стороны доказательства, а не объявляется второй раз.
+
+
+
+
+
+
+
+
+
+
+
 from ai_ops_kit.ui.storybook_adapter import REQUIRED_STATES
 
 CONTRACT_SCHEMA = {
@@ -95,12 +95,12 @@ def generate_stories(contract: dict) -> list[dict]:
     states = contract.get("states", [])
     roles = contract.get("roles", [])
 
-    # Базовые stories: каждый экран в каждом состоянии
+    
     for screen in screens:
         screen_id = screen.get("id", "unknown")
         screen_name = screen.get("name", screen_id)
 
-        # Default state
+        
         stories.append({
             "id": f"{screen_id}-default",
             "title": f"{screen_name} — Default",
@@ -113,13 +113,13 @@ def generate_stories(contract: dict) -> list[dict]:
             },
         })
 
-        # ОБЯЗАТЕЛЬНЫЕ СОСТОЯНИЯ ВЫВОДЯТСЯ КОДОМ, а не берутся из того, что вспомнил автор.
-        # Прежде состояния приходили ТОЛЬКО из контракта, и если владелец не описал `error`,
-        # story для него не появлялась — а гейт доказательства его требовал. Работа обещает
-        # «обязательные stories выводятся из контракта КОДОМ»; вывод из перечисления — это не
-        # вывод, это переписывание списка.
-        # Описанное владельцем состояние побеждает: у него есть condition/visual, и он знает про
-        # свой продукт больше. Недостающие добавляются заглушкой с пометкой, ОТКУДА они взялись.
+        
+        
+        
+        
+        
+        
+        
         declared = {str(st.get("name")): st for st in states if st.get("name")}
         for req in REQUIRED_STATES:
             declared.setdefault(req, {"name": req, "derived_from": "REQUIRED_STATES",
@@ -138,7 +138,7 @@ def generate_stories(contract: dict) -> list[dict]:
                 },
             })
 
-        # Each role
+        
         for role in roles:
             role_name = role.get("name", "unknown")
             stories.append({
@@ -154,7 +154,7 @@ def generate_stories(contract: dict) -> list[dict]:
                 },
             })
 
-    # Responsive stories
+    
     responsive = contract.get("responsive", [])
     if responsive and screens:
         first_screen = screens[0]
@@ -173,12 +173,12 @@ def generate_stories(contract: dict) -> list[dict]:
                 },
             })
 
-    # ВЫБОР ОПЫТА — ВХОД ДЛЯ STORIES. Если владелец выбрал ОДИН вариант опыта
-    # (`record_experience_choice`), выбор проходит в КАЖДУЮ story: она рисуется под выбранное
-    # решение, а не под «какой-то из предложенных». Пока выбор не сделан — ключа нет, и это видно
-    # (отсутствие ≠ выбран дефолт). Обязательный НАБОР stories при этом не меняется (экран ×
-    # состояние) — детерминированный гейт ux_review остаётся прежним; выбор влияет на СОДЕРЖАНИЕ
-    # story, а не на её наличие.
+    
+    
+    
+    
+    
+    
     choice = chosen_experience_option(contract)
     if choice:
         for st in stories:
@@ -255,16 +255,16 @@ def generate_design_options(contract: dict) -> list[dict]:
 
     UI-UX designer предлагает варианты, а не один «правильный» макет.
     """
-    # ВАРИАНТ ОБЯЗАН БЫТЬ ПРО ЭТОТ КОНТРАКТ (фаза 0, 19.08.2026). Здесь `user_goal` и `flow`
-    # читались и НЕ использовались ни разу — функция возвращала три одинаковых текста на любой
-    # вход. Это поймал линтер (F841: «имя обещает логику, которой нет»), и находка настоящая:
-    # «предложить варианты для контракта» и «напечатать три заготовки» — разные обещания, а
-    # подпись функции и её докстрока обещали первое.
+    
+    
+    
+    
+    
     user_goal = str(contract.get("user_goal") or "").strip()
     flow = contract.get("flow") or []
     goal = user_goal or "цель пользователя в контракте не названа"
     steps = len(flow)
-    # Шаги называем словами контракта, а не выдумываем: без них вопрос остаётся общим и это видно.
+    
     step_names = [str(s.get("name") or s.get("step") or s) if isinstance(s, dict) else str(s)
                   for s in flow]
 
@@ -413,12 +413,12 @@ def process_contract(contract_path: Path) -> dict:
     """Process Experience Contract and generate stories + options."""
     contract = yaml.safe_load(contract_path.read_text(encoding="utf-8"))
 
-    # Validate
+    
     errors = validate_contract(contract)
     if errors:
         return {"error": "Validation failed", "errors": errors}
 
-    # Generate
+    
     stories = generate_stories(contract)
     options = generate_design_options(contract)
 
@@ -431,8 +431,8 @@ def process_contract(contract_path: Path) -> dict:
         "stories": stories,
         "required_stories": [s["id"] for s in required_story_specs(contract)],
         "design_options": options,
-        # Записанный выбор опыта (None, пока владелец не выбрал) — виден в выводе рядом со stories,
-        # которые под этот выбор нарисованы.
+        
+        
         "experience_choice": chosen_experience_option(contract),
         "open_questions": contract.get("open_questions", []),
         "tradeoffs": contract.get("tradeoffs", []),
@@ -504,13 +504,13 @@ def main():
     args = ap.parse_args()
 
     if args.selftest:
-        # ЧЕСТНЫЙ --selftest (фаза 0, 19.08.2026). Здесь печаталась строка о пройденном
-        # селфтесте и три строки «... : OK» — без единого вызова проверяемых функций. То есть
-        # модуль УТВЕРЖДАЛ проверку, которой не было: ровно класс «объявлено, но не
-        # исполняется», против которого стоит весь кит (ср. R-31/R-32 — две фиктивные проверки
-        # в валидаторах). Образец честной формы — devtools/mutation_probe.py: модуль объясняет
-        # себя и называет, где лежат его настоящие проверки. Правило репозитория (AGENTS.md):
-        # тест модуля живёт в tests/, а не в продакшн-модуле, который едет в child-репозиторий.
+        
+        
+        
+        
+        
+        
+        
         print(__doc__)
         print("Проверки модуля — в tests/unit/ (AGENTS.md: selftest не живёт в продакшн-модуле).")
         return 0

@@ -22,15 +22,15 @@ import json
 import sys
 from pathlib import Path
 
-# profile() и проверка реестра ADR (read-only) живут ВНИЗ, в пакете `checks` (слой primitives):
-# зовём их вниз, без восходящего ребра intelligence -> validation (лента №5). Ни sys.path, ни
-# bootstrap больше не нужны — импорт по пакетному имени.
+
+
+
 from ai_ops_kit.checks import adr_registry as reg
 from ai_ops_kit.checks import quality_attributes as qa
 
 DEGRADED = 0.7   # normalized ниже -> метрика деградирует (== порог findings в product_health)
 
-# отображение метрик product_health на quality attributes ADR (ISO-25010-класс)
+
 METRIC_TO_ATTR = {
     "reliability": "reliability",
     "errors": "reliability",

@@ -28,12 +28,12 @@ from ai_ops_kit.planning.canonical_docs import ARCHITECTURE_PATHS as _ARCH
 
 CONFLICTING = "conflicting"
 
-# Максимум символов на документ: источники истины — проза, а не дампы; читать целиком незачем,
-# и защита от случайного гигантского файла в дереве.
+
+
 _MAX_DOC_CHARS = 40000
 
-# Канонические СУБД и как они называются в прозе. Слова с границами (\b), чтобы «my» не ловило
-# mysql и «no» не ловило mongo. Порядок не важен — множество на выходе.
+
+
 _DB_PROSE = {
     "postgres": (r"postgres", r"postgresql", r"\bpg\b"),
     "sqlite": (r"sqlite",),
@@ -44,9 +44,9 @@ _DB_PROSE = {
     "dynamodb": (r"dynamodb", r"dynamo db"),
 }
 
-# Драйверы/пакеты в манифестах зависимостей -> канональная СУБД. Это «голос кода»: не проза о
-# намерении, а факт того, что тянется на исполнение. `sqlite3` НЕ включён — это stdlib Python,
-# его присутствие в коде ничего не доказывает о продукте (ложный голос).
+
+
+
 _DB_DRIVER = {
     "postgres": (r"psycopg2?", r"asyncpg", r"pg-promise", r"\bpg\b", r"node-postgres"),
     "sqlite": (r"better-sqlite3", r"aiosqlite", r"sqlalchemy-sqlite"),
@@ -58,9 +58,9 @@ _DB_DRIVER = {
 }
 
 _README = ("README.md", "README.rst", "README.txt", "README")
-# `_ARCH` (импортирован выше) — единый список частых мест архитектурного документа (canonical_docs):
-# тот же, что использует back-fill установщика, чтобы не сеять черновик поверх реального
-# `docs/architecture/…`.
+
+
+
 _MANIFESTS = ("requirements.txt", "pyproject.toml", "Pipfile", "setup.cfg", "setup.py",
               "package.json", "go.mod", "Gemfile", "pom.xml", "build.gradle", "Cargo.toml")
 
@@ -145,7 +145,7 @@ def detect(child_root) -> list:
     root = Path(child_root)
     out = []
     voices = _sources(root)
-    # Конфликт только при >=2 голосах И доказуемом расхождении (непересекающаяся пара).
+    
     if len(voices) >= 2 and _disjoint_pair(voices):
         named = "; ".join(f"{v['source']}: {', '.join(v['values'])}" for v in voices)
         out.append({

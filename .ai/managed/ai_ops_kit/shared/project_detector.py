@@ -32,12 +32,12 @@ from typing import Callable
 
 import yaml
 
-# Профиль в child-репозитории (его пишет `ai-ops onboard` и обновляет load_or_detect).
+
 PROFILE_REL = Path(".ai") / "repository-profile.yaml"
 
 # Манифесты, от которых зависит РЕЗУЛЬТАТ детекции: изменился состав или содержимое любого —
 # профиль протух (failure mode #3: прогон по устаревшему стеку после правки манифестов).
-_WATCHED_FILES = (
+_WATCHED_FILES: tuple[str, ...] = (
     "package.json", "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "pnpm-workspace.yaml",
     "lerna.json", "turbo.json", "nx.json",
     "pyproject.toml", "requirements.txt", "requirements-dev.txt", "uv.lock",
@@ -49,6 +49,31 @@ _WATCHED_FILES = (
 )
 _WATCHED_GLOBS = ("*/package.json", "apps/*/package.json", "packages/*/package.json",
                   ".github/workflows/*.yml", ".github/workflows/*.yaml")
+
+
+_ESLINT_CONFIGS = tuple(f"eslint.config.{e}" for e in ("js", "mjs", "cjs", "ts", "mts", "cts")) + tuple(
+    ".eslintrc" + e for e in ("", ".js", ".cjs", ".json", ".yaml", ".yml"))
+_BIOME_CONFIGS = ("biome.json", "biome.jsonc")
+_PRETTIER_CONFIGS = tuple(".prettierrc" + e for e in (
+    "", ".json", ".json5", ".yaml", ".yml", ".toml", ".js", ".cjs", ".mjs")) + tuple(
+    f"prettier.config.{e}" for e in ("js", "cjs", "mjs"))
+_WATCHED_FILES += _ESLINT_CONFIGS + _BIOME_CONFIGS + _PRETTIER_CONFIGS + (".ai-ops.yaml",)
+
+
+_NODE_TYPECHECK = ("typecheck", "type-check", "check-types", "check:types", "types:check", "tsc")
+_DECLARED_SRC = ".ai-ops.yaml"
+
+
+SLOTS = ("build", "lint", "typecheck", "test", "format")
+
+
+LINT_DETECTABLE = ("node", "python", "go", "rust")
+
+
+def lint_unguarded(profile: dict) -> list:
+    """Языки стеков, у которых линтер ИСКАЛИ и НЕ НАШЛИ (#1183) — одна правда для гейта и речи."""
+    return [s.get("language") for s in (profile or {}).get("stacks") or []
+            if s.get("language") in LINT_DETECTABLE and not (s.get("commands") or {}).get("lint")]
 
 
 def _read_json(p: Path) -> dict:
@@ -169,12 +194,14 @@ _CI_PATTERNS: dict[str, dict[str, tuple[str, ...]]] = {
         "lint": (r"(?:python3?\s+-m\s+)?ruff\s+check\b", r"(?:python3?\s+-m\s+)?flake8\b"),
         "typecheck": (r"(?:python3?\s+-m\s+)?mypy\b", r"pyright\b"),
         "build": (r"python3?\s+-m\s+build\b",),
+        "format": (r"(?:python3?\s+-m\s+)?ruff\s+format\s+--check\b", r"black\s+--check\b"),
     },
     "node": {
         "build": (r"(?:npm\s+run|yarn|pnpm(?:\s+run)?)\s+build\b",),
         "lint": (r"(?:npm\s+run|yarn|pnpm(?:\s+run)?)\s+lint\b",),
-        "typecheck": (r"(?:npm\s+run|yarn|pnpm(?:\s+run)?)\s+(?:typecheck|type-check)\b",),
+        "typecheck": (r"(?:npm\s+run|yarn|pnpm(?:\s+run)?)\s+(?:typecheck|type-check|check-types)\b",),
         "test": (r"npm\s+(?:run\s+)?test\b", r"(?:yarn|pnpm)\s+(?:run\s+)?test\b"),
+        "format": (r"(?:npx\s+)?prettier\s+(?:.*\s)?--check\b",),
     },
     "go": {"build": (r"go\s+build\b",), "test": (r"go\s+test\b",),
            "typecheck": (r"go\s+vet\b",), "lint": (r"golangci-lint\s+run\b",)},
@@ -224,15 +251,49 @@ def _ci_commands(root: Path) -> dict:
 
 
 _MAKE_ALIASES = {"build": ("build",), "lint": ("lint",),
-                 "typecheck": ("typecheck", "type-check", "types"), "test": ("test", "tests")}
+                 "typecheck": ("typecheck", "type-check", "check-types", "types"), "test": ("test", "tests"),
+                 "format": ("format-check", "fmt-check", "check-format")}
 
 
-def _finalize(stack: dict, root: Path, ci_for_lang: dict | None, make_targets: set, make_file: str | None) -> dict:
+def _declared_commands(root: Path, stacks: list) -> dict:
+    """Команды, которые ОБЪЯВИЛ человек в `.ai-ops.yaml` (`verification.commands`), по языку стека.
+
+    Повод (#1202): вписанный руками ответ жил в `.ai/repository-profile.yaml`, а этот файл — кеш,
+    он в .gitignore и пересобирается при следующем onboard; ответ молча терялся. `.ai-ops.yaml` —
+    конфиг проекта, лежит в git, и объявленное в нём переживает повторный осмотр. Формы две:
+    `{typecheck: "..."}` — только когда стек один (иначе непонятно, чей он); `{node: {typecheck: ...}}`
+    — по языку. Файл-источник есть, поэтому инвариант честности соблюдён: команда не из воздуха.
+    """
+    try:
+        cfg = yaml.safe_load((root / _DECLARED_SRC).read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+    decl = ((cfg.get("verification") or {}) if isinstance(cfg, dict) else {}).get("commands") or {}
+    if not isinstance(decl, dict):
+        return {}
+    langs = [st["language"] for st in stacks]
+    out: dict = {}
+    flat = {k: v for k, v in decl.items() if k in SLOTS and isinstance(v, str) and v.strip()}
+    if flat and len(langs) == 1:
+        out[langs[0]] = flat
+    for lang in langs:
+        per = decl.get(lang)
+        if isinstance(per, dict):
+            out.setdefault(lang, {}).update(
+                {k: v for k, v in per.items() if k in SLOTS and isinstance(v, str) and v.strip()})
+    return out
+
+
+def _finalize(stack: dict, root: Path, ci_for_lang: dict | None, make_targets: set, make_file: str | None,
+              declared: dict | None = None) -> dict:
     """Добить пустые слоты общерепозиторными фактами (Makefile, CI) и запечатать инвариант
-    честности: команда без файла-источника снимается в None."""
+    честности: команда без файла-источника снимается в None. Объявленное человеком в `.ai-ops.yaml`
+    сильнее выведенного: это его прямое слово о своём проекте."""
     cmds = dict(stack.get("commands") or {})
     ev = dict(stack.pop("_command_evidence", None) or {})
-    for slot in ("build", "lint", "typecheck", "test"):
+    for slot, command in (declared or {}).items():
+        cmds[slot], ev[slot] = command.strip(), _DECLARED_SRC
+    for slot in SLOTS:
         if not cmds.get(slot):
             for target in _MAKE_ALIASES[slot]:
                 if target in make_targets and make_file:
@@ -240,13 +301,13 @@ def _finalize(stack: dict, root: Path, ci_for_lang: dict | None, make_targets: s
                     break
         if not cmds.get(slot) and (ci_for_lang or {}).get(slot):
             cmds[slot], ev[slot] = (ci_for_lang or {})[slot]
-        # инвариант честности: нет файла-источника -> команда выдумана, снимаем
+        
         if cmds.get(slot) and not ev.get(slot):
             cmds[slot] = None
         cmds.setdefault(slot, None)
         if not cmds.get(slot):
             ev.pop(slot, None)
-    stack["commands"] = {k: cmds.get(k) for k in ("build", "lint", "typecheck", "test")}
+    stack["commands"] = {k: cmds.get(k) for k in SLOTS}
     stack["command_evidence"] = {k: ev[k] for k in sorted(ev)}
     srcs = list(stack.get("evidence_source") or [])
     for s in sorted(set(ev.values())):
@@ -266,6 +327,27 @@ def _node_pm(d: Path) -> str:
     return "npm"
 
 
+def _first_file(d: Path, names: tuple) -> str | None:
+    return next((n for n in names if (d / n).is_file()), None)
+
+
+def _node_style(d: Path, pkg: dict, pm: str, slots: "_Slots") -> None:
+    """Линтер и форматтер Node по КОНФИГУ инструмента, когда скрипта нет (#1183).
+
+    Прежде линтер находился только через `scripts.lint`: репозиторий с `eslint.config.js`, но без
+    скрипта, получал `lint: None` — и гейт освобождал проверку стиля, хотя правила в проекте
+    объявлены. Бинарь запускается через менеджер пакетов проекта; у npm — `--no-install`: чужой
+    пакет из сети гейт не тянет, нет локального инструмента — честный провал, а не скачивание."""
+    x = {"npm": "npx --no-install", "yarn": "yarn", "pnpm": "pnpm exec"}[pm]
+    biome = _first_file(d, _BIOME_CONFIGS)
+    slots.put("lint", f"{x} eslint .",
+              _first_file(d, _ESLINT_CONFIGS) or ("package.json" if "eslintConfig" in pkg else None))
+    slots.put("lint", f"{x} biome lint .", biome)
+    slots.put("format", f"{x} prettier --check .",
+              _first_file(d, _PRETTIER_CONFIGS) or ("package.json" if "prettier" in pkg else None))
+    slots.put("format", f"{x} biome format .", biome)   # без --write biome только сверяет
+
+
 def _node_stack(d: Path, root: Path) -> dict:
     pkg = _read_json(d / "package.json")
     deps = {**pkg.get("dependencies", {}), **pkg.get("devDependencies", {})}
@@ -283,7 +365,7 @@ def _node_stack(d: Path, root: Path) -> dict:
     slots = _Slots()
 
     def cmd(slot: str, *names: str) -> str | None:
-        # источник — package.json: команда взята из реально объявленного scripts-таргета
+        
         for n in names:
             if n in scripts:
                 slots.put(slot, f"{run} {n}", "package.json")
@@ -297,17 +379,16 @@ def _node_stack(d: Path, root: Path) -> dict:
     install = {"npm": "npm ci" if has_lock else "npm install",
                "yarn": "yarn install --frozen-lockfile" if has_lock else "yarn install",
                "pnpm": "pnpm install --frozen-lockfile" if has_lock else "pnpm install"}[pm]
+    cmd("build", "build"); cmd("lint", "lint"); cmd("test", "test")
+    cmd("typecheck", *_NODE_TYPECHECK)
+    cmd("format", "format:check", "format-check", "check-format", "fmt:check")
+    _node_style(d, pkg, pm, slots)     # конфиг без скрипта; скрипт, если есть, уже занял слот
     return {
         "language": "node",
         "package_manager": pm,
         "frameworks": fw,
         "install_command": install,
-        "commands": {
-            "build": cmd("build", "build"),
-            "lint": cmd("lint", "lint"),
-            "typecheck": cmd("typecheck", "typecheck", "tsc", "type-check"),
-            "test": cmd("test", "test"),
-        },
+        "commands": {k: slots.cmd.get(k) for k in SLOTS},
         "evidence_source": ["package.json"] + ([f"{pm}-lock"] if pm else []),
         "_command_evidence": slots.src,
     }
@@ -326,7 +407,7 @@ def _python_commands(d: Path, dep_src: Callable) -> "_Slots":
     hooks = _precommit_hooks(d)
     PRECOMMIT = ".pre-commit-config.yaml"
 
-    # test
+    
     if _has_section(pyproject, "tool.pytest.ini_options"):
         s.put("test", "pytest", "pyproject.toml")
     if (d / "pytest.ini").is_file():
@@ -340,10 +421,10 @@ def _python_commands(d: Path, dep_src: Callable) -> "_Slots":
     if dep_src("pytest"):
         s.put("test", "pytest", dep_src("pytest"))
     if _has_py_tests(d):
-        # есть настоящие файлы test_*.py — pytest подхватывает и unittest-стиль
+        
         s.put("test", "pytest", "tests/" if (d / "tests").is_dir() else "test_*.py")
 
-    # lint
+    
     if _has_section(pyproject, "tool.ruff") or _has_section(pyproject, "tool.ruff.lint"):
         s.put("lint", "ruff check .", "pyproject.toml")
     for name in (".ruff.toml", "ruff.toml"):
@@ -366,7 +447,7 @@ def _python_commands(d: Path, dep_src: Callable) -> "_Slots":
     if dep_src("flake8"):
         s.put("lint", "flake8", dep_src("flake8"))
 
-    # typecheck
+    
     if _has_section(pyproject, "tool.mypy"):
         s.put("typecheck", "mypy .", "pyproject.toml")
     for name in ("mypy.ini", ".mypy.ini"):
@@ -384,6 +465,20 @@ def _python_commands(d: Path, dep_src: Callable) -> "_Slots":
         s.put("typecheck", "pyright", "pyrightconfig.json")
     if dep_src("pyright"):
         s.put("typecheck", "pyright", dep_src("pyright"))
+
+    # format (#1183): только ОБЪЯВЛЕННЫЙ форматтер. `[tool.ruff]` — это линтер; что проект
+    # форматирует ruff'ом, из него не следует, и «проверка оформления» по догадке была бы выдумкой.
+    if _has_section(pyproject, "tool.ruff.format"):
+        s.put("format", "ruff format --check .", "pyproject.toml")
+    for name in (".ruff.toml", "ruff.toml"):
+        if _has_section(_text(d / name), "format"):
+            s.put("format", "ruff format --check .", name)
+    if "ruff-format" in hooks:
+        s.put("format", "ruff format --check .", PRECOMMIT)
+    if _has_section(pyproject, "tool.black"):
+        s.put("format", "black --check .", "pyproject.toml")
+    if "black" in hooks:
+        s.put("format", "black --check .", PRECOMMIT)
 
     # build: сборку дистрибутива никто не «угадывает» — только явный Makefile/CI (см. _finalize)
     return s
@@ -407,8 +502,8 @@ def _python_stack(d: Path) -> dict:
         if name in low:
             fw.append(name)
     pm = "poetry" if "[tool.poetry]" in deps_text else ("uv" if (d / "uv.lock").exists() else "pip")
-    # install-команда стека (для изолированного worktree). pip: requirements.txt приоритетнее,
-    # иначе editable-install пакета, если есть pyproject; иначе None (нечего ставить).
+    
+    
     if pm == "poetry":
         install = "poetry install"
     elif pm == "uv":
@@ -419,14 +514,14 @@ def _python_stack(d: Path) -> dict:
         install = "pip install -e ."
     else:
         install = None
-    # команды — только по фактам репозитория (детектор не выдумывает несуществующие таргеты)
+    
     slots = _python_commands(d, dep_src)
     return {
         "language": "python",
         "package_manager": pm,
         "frameworks": fw,
         "install_command": install,
-        "commands": {k: slots.cmd.get(k) for k in ("build", "lint", "typecheck", "test")},
+        "commands": {k: slots.cmd.get(k) for k in SLOTS},
         "evidence_source": src,
         "_command_evidence": slots.src,
     }
@@ -453,7 +548,7 @@ def _detect_monorepo(root: Path) -> tuple:
             return True, marker
     sub = (list(root.glob("*/package.json")) + list(root.glob("packages/*/package.json"))
            + list(root.glob("apps/*/package.json")))
-    # уникальные каталоги (glob '*/...' и 'packages/...' могут пересечься)
+    
     dirs = {p.parent.resolve() for p in sub}
     if len(dirs) > 1:
         return True, f"{len(dirs)} package.json в подкаталогах (apps/packages/*)"
@@ -463,13 +558,15 @@ def _detect_monorepo(root: Path) -> tuple:
 def detect(root: Path) -> dict:
     root = Path(root)
     stacks, undetermined = [], []
-    # node
+    
     if (root / "package.json").exists():
         stacks.append(_node_stack(root, root))
-    # python
+    
     if (root / "pyproject.toml").exists() or (root / "requirements.txt").exists():
         stacks.append(_python_stack(root))
-    # go: lint — только при объявленном конфиге golangci-lint (иначе линтера в репо просто нет)
+    # go: lint — только при объявленном конфиге golangci-lint (иначе линтера в репо просто нет).
+    # format у go НЕ выводится: `gofmt -l` возвращает 0 и при неотформатированных файлах — такая
+    # команда зеленила бы гейт вхолостую, а честной проверки без оболочки у тулчейна нет.
     if (root / "go.mod").exists():
         go_stack = _simple_stack("go", ["go.mod"], root,
                                  {"build": "go build ./...", "lint": None,
@@ -494,20 +591,22 @@ def detect(root: Path) -> dict:
         stacks.append(_simple_stack("java", src, root,
                                     {"build": f"{gradle} build", "lint": None,
                                      "typecheck": None, "test": f"{gradle} test"}))
-    # rust
+    
     if (root / "Cargo.toml").exists():
         stacks.append(_simple_stack("rust", ["Cargo.toml"], root,
                                     {"build": "cargo build", "lint": "cargo clippy",
                                      "typecheck": "cargo check", "test": "cargo test"}))
 
-    # добить пустые слоты общерепозиторными фактами (Makefile, GitHub Actions) и запечатать
-    # инвариант честности: каждая оставшаяся команда имеет файл-источник
+    
+    
     ci_cmds = _ci_commands(root)
     make_targets, make_file = _make_targets(root)
+    declared = _declared_commands(root, stacks)
     for s in stacks:
-        _finalize(s, root, ci_cmds.get(s["language"]), make_targets, make_file)
+        _finalize(s, root, ci_cmds.get(s["language"]), make_targets, make_file,
+                  declared.get(s["language"]))
 
-    # monorepo (v2.84): workspaces / pnpm-workspace / lerna / turbo / nx / много package.json
+    
     monorepo, monorepo_reason = _detect_monorepo(root)
 
     ci = []
@@ -519,11 +618,13 @@ def detect(root: Path) -> dict:
     if not stacks:
         undetermined.append("стек не определён — нет известных манифестов (package.json/pyproject/go.mod/…)")
     for s in stacks:
-        miss = [k for k, v in s["commands"].items() if v is None]
+        
+        
+        miss = [k for k, v in s["commands"].items() if v is None and k != "format"]
         if miss:
-            # честная причина: не «не умеем», а «в репозитории нет доказательства команды»
-            # `', '.join(...)`, а не repr списка: строка человекочитаемая, и `['build', 'lint']`
-            # посреди русской фразы читается как выпавший наружу отладочный вывод (так и было).
+            
+            
+            
             undetermined.append(
                 f"{s['language']}: не выведены команды {', '.join(miss)} — нет доказательства в репозитории "
                 "(конфиг инструмента / скрипт / Makefile-цель / шаг CI); задать вручную/подтвердить")
@@ -538,7 +639,7 @@ def detect(root: Path) -> dict:
         "schema_version": 1, "kind": "repository-profile", "status": "draft",
         "monorepo": monorepo, "monorepo_reason": monorepo_reason,
         "stacks": stacks, "ci": ci, "undetermined": undetermined,
-        # хеш манифестов, по которым построен профиль — по нему load_or_detect видит протухание
+        
         "manifest_hash": manifest_fingerprint(root),
     }
 

@@ -31,12 +31,12 @@ import yaml
 from ai_ops_kit.planning import artifact_registry as AR
 from ai_ops_kit.planning import contours, passport_generator, product_templates
 
-# Разделы паспорта, относящиеся к ИДЕНТИЧНОСТИ продукта (остальные — здоровье/milestone — грани
-# health/lifecycle, у них свои вычислители). Берём по известным ключам с .get — если раздел
-# переименован в шаблоне, он просто не попадёт, а не уронит сборку.
+
+
+
 _IDENTITY_SECTIONS = ["Название и описание", "Repository и окружения", "Owner и команда"]
 
-# Порядок ухудшения из artifact-registry.lifecycle_states: 0 — хуже всего.
+
 _STATE_ORDER = {product_templates.MISSING: 0, product_templates.INVALID: 1,
                 product_templates.OUTDATED: 2, product_templates.VALID: 3}
 

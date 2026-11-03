@@ -16,18 +16,18 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-# Ре-экспорт вынесенных обработчиков и хелперов: их резолвят по имени `ai_ops_cli_intents`
-# как `ai_ops_cli` (диспетч/регистрация), так и тесты. Соседи не импортируют этот модуль
-# на верхнем уровне, поэтому цикла нет.
+
+
+
 from ai_ops_kit.cli.ai_ops_cli_product import (  # noqa: F401 — ре-экспорт для вызывающих/тестов
-    build_preview, _print_preview, _BACKLOG_SUBS, _run_backlog, _intent_model, _product_health_report, _product_risks, _intent_contract, _intent_products, _intent_inspect, _intent_delivery, _intent_plan, _intent_session,
+    build_preview, _print_preview, _BACKLOG_SUBS, _run_backlog, _intent_model, _product_health_report, _product_risks, _intent_contract, _intent_products, _intent_inspect, _intent_plan, _intent_session,
 )
 from ai_ops_kit.cli.foundation_proposal import run_intent as _intent_propose  # noqa: F401 — оркестратор `propose`
 from ai_ops_kit.cli.ai_ops_cli_lifecycle import (  # noqa: F401 — ре-экспорт для вызывающих/тестов
     _intent_onboard, _intent_reach, _intent_team, _intent_replan, _intent_governance, _intent_bootstrap, _intent_health, _intent_roadmap, _intent_doctor, _copy_affects_from_plan, _intent_new, _intent_discuss,
 )
 from ai_ops_kit.cli.ai_ops_cli_report import (  # noqa: F401 — ре-экспорт для вызывающих/тестов
-    _EXPLAIN_STATUS_LABEL, _explain_wid, _explain_reconcile, _explain_active, _explain_workitem, _explain_gates, _explain_conflicts, _explain_cost, _explain_blocker, _explain_next, _explain_living_note, _explain_cost_line, _explain_cost_tech, _explain_outcome, _explain_state, _explain_apply_outcome, _explain_message, _intent_explain, _inbox_decisions, _inbox_works, _INBOX_BRIEFS_LATEST_REL, _inbox_insight, _inbox_outcome_candidate, _inbox_findings, _inbox_release_warnings, _inbox_attention, _inbox_collect, _inbox_status, _inbox_counts, _inbox_render, _intent_inbox,
+    _EXPLAIN_STATUS_LABEL, _explain_wid, _explain_reconcile, _explain_active, _explain_workitem, _explain_gates, _explain_conflicts, _explain_cost, _explain_blocker, _explain_next, _explain_next_command, _explain_living_note, _explain_cost_line, _explain_cost_tech, _explain_outcome, _explain_state, _explain_apply_outcome, _explain_message, _intent_explain, _inbox_decisions, _inbox_works, _INBOX_BRIEFS_LATEST_REL, _inbox_insight, _inbox_outcome_candidate, _inbox_findings, _inbox_release_warnings, _inbox_attention, _inbox_collect, _inbox_status, _inbox_counts, _inbox_render, _intent_inbox,
 )
 
 
@@ -44,7 +44,7 @@ def _work_positionals(child_root, a):
     каталогом (подкоманда и id работы каталогами не бывают), и получаем [sub, id] в любом порядке
     вызова. -> (sub, work_id)."""
     def _is_dir(p):
-        # Не-путь (в т.ч. слишком длинный текст) = не каталог; is_dir() кидает OSError, не False (#161).
+        
         try:
             return Path(p).is_dir()
         except OSError:
@@ -64,7 +64,7 @@ def _intent_work(task, child_root, signals, a):
     root = Path(child_root)
     sub, work_id = _work_positionals(root, a)
     if sub not in _WORK_SUBS or not work_id:
-        # Без подкоманды/id — назвать, что умеет, а не молча вернуть успех (тот же принцип, что backlog).
+        
         msg = ("work: единая проекция работы по id (только чтение). Подкоманда:\n"
                "  show <id>   — карточка: стадия, ветка, кто ведёт, области, зависимости, "
                "артефакты, решения — сведено из заявки/реестра/графа/плана\n"
@@ -82,16 +82,16 @@ def _intent_work(task, child_root, signals, a):
     else:
         print(presenter.render(presenter.from_work_view(view),
                                audience=presenter.audience_from_config(root)))
-    # Код возврата — нашлась ли работа хоть в одном источнике: сведено -> 0; ни одного источника -> 2.
+    
     return 0 if view.get("sources") else 2
 
 
 
-# ── ai-ops readout (#545): ЕДИНЫЙ пост-релизный путь одним вызовом ─────────────────────────────────
-# PRR -> verify_analytics_runtime -> outcome-проекция -> один вердикт. Обработчик проб-свободен: он
-# только читает (через оркестратор post_release_loop) и печатает; ничего в дочку не пишет и никакой
-# goal.outcome не флипает. Оркестратор живёт в пакете `cli` осознанно — только слой entrypoints вправе
-# звать И intelligence (event_arrival), И validation (оба валидатора PRR/outcome); см. его докстринг.
+
+
+
+
+
 def _readout_docs(a):
     """Загрузить опциональные OutcomeContract/OutcomeReadout из путей флагов. -> (contract, readout)."""
     from ai_ops_kit.cli import post_release_loop
@@ -123,21 +123,21 @@ def _intent_readout(task, child_root, signals, a):
         if aud != "product":
             print()
             print(post_release_loop.render(result))
-    # Код возврата — ГОТОВНОСТЬ РЕКОМЕНДОВАТЬ ВЫПУСК, а не «всё зелено»: приход событий подтверждён
-    # (partially_verified) -> 0; аналитика ещё не поступила или сигнал негативный -> 1 (честно, что
-    # рекомендовать выпуск нечем). Флип исхода цели ждёт реального выпуска (см. post_release_loop).
+    
+    
+    
     return 0 if result.get("verdict") == "partially_verified" else 1
 
 
-# ── ai-ops graph (Knowledge Graph как ЗАПРАШИВАЕМАЯ технология) ────────────────────────────────────
-# Тонкий слой ПОВЕРХ существующего: сборщик — intelligence/knowledge_graph (ниже, зависимость вниз);
-# целостность — validation/validate_knowledge_graph (тот же слой entrypoints, звать вправе только
-# cli). Обработчик проб-свободен: строит граф из plan.yaml+FL+blueprint и печатает продуктовым
-# языком; в дочку пишет ТОЛЬКО `build --apply` (knowledge/graph.yaml).
-_GRAPH_SUBS = ("build", "trace", "gaps")
 
 
-def _graph_positionals(a):
+
+
+
+_GRAPH_SUBS = ("build", "trace", "gaps", "questions")
+
+
+def _graph_positionals(a, child_root):
     """Позиционные интента `graph` без каталога репозитория: [sub, feature] в любом порядке вызова.
 
     `./ai-ops` подставляет путь то в начало, то в хвост; каталогом ни подкоманда, ни id функции не
@@ -147,7 +147,15 @@ def _graph_positionals(a):
             return Path(p).is_dir()
         except OSError:
             return False
-    args = [x for x in (getattr(a, "rest", None) or []) if not _is_dir(x)]
+    args = list(getattr(a, "rest", None) or [])
+    root = Path(child_root).resolve()
+    for index in reversed(range(len(args))):
+        value = args[index]
+        
+        if (len(args) > 1 or value not in _GRAPH_SUBS) and Path(value).resolve() == root:
+            args.pop(index)
+            break
+    args = [x for x in args if x in _GRAPH_SUBS or not _is_dir(x)]
     sub = (args[0] if args else "").strip().lower()
     feature = args[1] if len(args) > 1 else getattr(a, "feature", None)
     return sub, feature
@@ -181,6 +189,7 @@ def _graph_help(js):
            "Подкоманды:\n"
            "  build             — собрать граф и показать (--apply — записать knowledge/graph.yaml)\n"
            "  trace <feature>   — зачем функция существует: цепочка цель→…→функция→исход + вердикт\n"
+           "  questions <feat>  — десять вопросов жизни фичи из связанной истории (ответ или пробел)\n"
            "  gaps              — что не покрыто измеримым результатом (исходы/метрики/функции)\n"
            "Пример: ./ai-ops graph trace express-checkout .")
     if js:
@@ -190,13 +199,52 @@ def _graph_help(js):
         print(msg)
 
 
+def _feature_measured_outcome(child_root, feature):
+    """РЕАЛЬНЫЙ outcome фичи из её контракта+отчёта: сдвиг метрики после релиза (met/failed ИЗ ЧИСЕЛ)
+    + следующий шаг по уроку. -> (measured_outcome_human|None, next_action|None).
+
+    Композиция живёт на слое CLI СОЗНАТЕЛЬНО: `evaluate_outcome` — из `validation`, а граф знаний
+    (`intelligence`) её не импортирует (это была бы зависимость вверх — тот же инвариант, что у
+    `outcome_insight`). Поэтому «посчитать вердикт из чисел» делает entrypoint, а не сам граф.
+
+    Источник — `features/<id>/outcome-contract.yaml` (+ `outcome-readout.yaml`, если снят замер).
+    Нет контракта -> (None, None): исход из воздуха не выдумываем (no evidence → no claim)."""
+    import yaml as _yaml
+    root = Path(child_root)
+    base = root / "features" / str(feature)
+    cpath = base / "outcome-contract.yaml"
+    if not cpath.is_file():
+        return None, None
+
+    def _load(p):
+        if not p.is_file():
+            return None
+        try:
+            doc = _yaml.safe_load(p.read_text(encoding="utf-8"))
+        except (OSError, _yaml.YAMLError):
+            return None
+        return doc if isinstance(doc, dict) else None
+
+    contract = _load(cpath)
+    if contract is None:
+        return None, None
+    readout = _load(base / "outcome-readout.yaml")
+    from ai_ops_kit.validation import validate_product_objects as vpo
+    from ai_ops_kit.intelligence import outcome_insight
+    evaluation = vpo.evaluate_outcome(contract, readout)
+    human = outcome_insight.build_outcome_readout(contract, readout, evaluation)
+    loop = outcome_insight.from_outcome(contract, readout, evaluation)
+    next_action = (loop or {}).get("next_action")
+    return human, next_action
+
+
 def _intent_graph(task, child_root, signals, a):
     """`ai-ops graph build|trace <feature>|gaps` — один граф из трёх источников, вопрос за проход."""
     js = a.json
     from ai_ops_kit.intelligence import knowledge_graph as kg
     from ai_ops_kit.ui import presenter
     root = Path(child_root)
-    sub, feature = _graph_positionals(a)
+    sub, feature = _graph_positionals(a, root)
     if sub not in _GRAPH_SUBS:
         _graph_help(js)
         return 2
@@ -204,16 +252,32 @@ def _intent_graph(task, child_root, signals, a):
     graph = kg.build_graph(root)
     integrity = _validate_graph_integrity(graph, root)
     if integrity:
-        # Целостность важнее ответа: строить вывод на битом графе — врать. Называем ПОСЛЕДСТВИЕ.
+        
+        
+        
+        
+        
+        
+        from ai_ops_kit.validation import validate_knowledge_graph as vkg
+        skew = vkg.classify_errors(integrity).get("has_type_vocab_error", False)
+        remediation = (
+            "Похоже, установленный реестр типов (registry/entities.yaml) устарел относительно "
+            "сборщика графа — типы/связи, которые кит порождает, реестр ещё не знает. Обнови кит: "
+            "`ai-ops update`. Если граф правил вручную — приведи типы в соответствие с реестром."
+        ) if skew else None
         if js:
-            print(json.dumps({"ok": False, "reason": "граф не прошёл проверку целостности",
-                              "errors": integrity}, ensure_ascii=False, indent=2))
+            payload = {"ok": False, "reason": "граф не прошёл проверку целостности",
+                       "errors": integrity}
+            if remediation:
+                payload["remediation"] = remediation
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
         else:
             print(presenter.render(presenter.message(
                 status="blocked",
                 summary="Собрал граф из плана, обучения и паспортов функций, но он не сошёлся сам с "
                         "собой — отвечать по нему не буду.",
                 why_it_matters="Ответ на битом графе хуже отсутствия ответа: он выглядит как факт.",
+                next_steps=[remediation] if remediation else None,
                 technical={"errors": integrity}), audience=presenter.audience_from_config(root)))
         return 1
 
@@ -239,17 +303,49 @@ def _intent_graph(task, child_root, signals, a):
             _graph_help(js)
             return 2
         result = kg.trace(graph, feature)
+        
+        
+        measured_outcome, next_action = _feature_measured_outcome(root, feature)
+        if measured_outcome is not None:
+            result["measured_outcome"] = measured_outcome
+            if next_action:
+                result["next_action"] = next_action
+            if measured_outcome.get("measured"):
+                
+                result["gaps"] = [g for g in (result.get("gaps") or [])
+                                  if "targets" not in g and "measured-by" not in g]
         if js:
             print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
         else:
             print(presenter.render(presenter.from_graph_trace(result), audience=aud))
-        # Код возврата — есть ли ПРОБЕЛЫ: полная цепочка с измеренным исходом -> 0, иначе 1 (честно,
-        # что ценность функции ещё не подтверждена измеримым результатом). Узла нет в графе -> 2.
+        
+        
         if result.get("verdict") == "unknown":
             return 2
         return 0 if not result.get("gaps") else 1
 
-    # gaps
+    if sub == "questions":
+        if not feature:
+            _graph_help(js)
+            return 2
+        
+        
+        
+        source = kg.feature_life_source(graph, feature, root)
+        measured_outcome, next_action = _feature_measured_outcome(root, feature)
+        result = kg.answer_ten_questions(graph, feature, source=source,
+                                         measured_outcome=measured_outcome,
+                                         next_action=next_action)
+        if js:
+            print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
+        else:
+            print(presenter.render(presenter.from_graph_questions(result), audience=aud))
+        
+        if result.get("verdict") == "unknown":
+            return 2
+        return 0 if result.get("complete") else 1
+
+    
     result = kg.gaps(graph)
     if js:
         print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
@@ -257,3 +353,38 @@ def _intent_graph(task, child_root, signals, a):
         print(presenter.render(presenter.from_graph_gaps(result), audience=aud))
     total = sum(len(v) for v in result.values())
     return 0 if total == 0 else 1
+
+
+def _kit_claim_results(child_root):
+    """Результаты проверки реестра честности (`knowledge/claims.yaml`) для доли покрытия evidence.
+
+    Композиция ЖИВЁТ на слое CLI СОЗНАТЕЛЬНО: `validate_claims` — из `validation` (entrypoints), а
+    `product_scorecard` (`intelligence`) её не импортирует (это была бы зависимость вверх, тот же
+    инвариант, что у графа знаний). Поэтому «прочитать реестр» делает entrypoint, а долю из него
+    считает карта. Нет файла/сбой чтения -> None (метрика 2 честно «не измерено», не выдумка)."""
+    from ai_ops_kit.validation import validate_claims
+    claims_file = Path(child_root) / "knowledge" / "claims.yaml"
+    if not claims_file.is_file():
+        return None
+    try:
+        return validate_claims.build(claims_file)
+    except Exception:  # noqa: BLE001 — один недоступный источник не роняет всю карту
+        return None
+
+
+def _intent_scorecard(task, child_root, signals, a):
+    """`ai-ops scorecard` — единая карта продукта кита из 5 метрик (мерит СЕБЯ как продукт).
+
+    Метрики 1/3 считаются из графа знаний, 2 — из реестра честности (читает этот слой, долю считает
+    карта), 4/5 стоят честным каркасом «не измерено». Только чтение, ничего не пишет."""
+    from ai_ops_kit.intelligence import product_scorecard as ps
+    from ai_ops_kit.ui import presenter
+    root = Path(child_root)
+    scorecard = ps.build_scorecard(root, claim_results=_kit_claim_results(root))
+    if a.json:
+        print(json.dumps(scorecard, ensure_ascii=False, indent=2, default=str))
+    else:
+        print(presenter.render(presenter.from_scorecard(scorecard),
+                               audience=presenter.audience_from_config(root)))
+    
+    return 0 if not scorecard.get("unmeasured_count") else 1

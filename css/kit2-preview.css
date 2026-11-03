@@ -1,0 +1,13 @@
+.kit2-workshop { padding: var(--space-6); max-width: 1500px; margin-inline: auto; }
+.kit2-workshop h1 { font: var(--type-h2); margin: 0 0 var(--space-3); }
+.kit2-intro { color: var(--ink-2); font: var(--type-caption); margin: var(--space-3) 0; }
+.kit2-controls { display: flex; flex-wrap: wrap; gap: var(--space-5); margin-block: var(--space-6); }
+.kit2-controls label { display: grid; gap: var(--space-2); font: var(--type-caption); color: var(--ink-2); }
+.kit2-controls select { font: var(--type-body); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-sm); padding: var(--space-3); min-height: 44px; max-width: 100%; }
+.kit2-controls [hidden] { display: none; }
+.kit2-description { margin-block: var(--space-4); font: var(--type-body); min-height: 2em; max-width: 1050px; }
+.kit2-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block: var(--space-5); }
+.kit2-stage { overflow: auto; background: var(--surface-2); border: 1px solid var(--rule); border-radius: var(--radius-md); }
+.kit2-stage iframe { display: block; border: 0; margin-inline: auto; max-width: none; background: var(--bg); }
+.kit2-stage:focus-visible, .kit2-controls select:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset); }
+@media (max-width: 600px) { .kit2-workshop { padding: var(--space-4); } .kit2-controls label { width: 100%; } }

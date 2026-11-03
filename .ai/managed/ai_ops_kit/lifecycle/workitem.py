@@ -43,11 +43,12 @@ from pathlib import Path
 import yaml
 
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401 — кладёт validation/ в sys.path
-                                         # ДО плоских импортов ниже; повторный импорт того же
-                                         # модуля ниже удалён ревизией 2026-08-11 как дубль
+                                         
+                                         
+from ai_ops_kit.checks.plan_artifact import load_run_plan_gates  # noqa: E402
 from ai_ops_kit.gates import gate_executor          # noqa: E402
 from ai_ops_kit.lifecycle import run_report             # noqa: E402
-# v3.38 (K5): ai_route загружается лениво — lifecycle не импортирует engine.
+
 from ai_ops_kit.lifecycle import lifecycle_intent       # noqa: E402  v3.27.0 WP1
 
 STATUS_ACTION = {
@@ -63,8 +64,18 @@ def wi_path(features_dir, fid):
     return Path(features_dir) / fid / "workitem.yaml"
 
 
-def start(features_dir, fid, task, task_type=None, risk=None):
-    inp = {}
+def start(features_dir, fid, task, task_type=None, risk=None, *, signals=None):
+    """Создать WorkItem по полным routing-сигналам; прежние явные аргументы приоритетны."""
+    wi = build(fid, task, task_type, risk, signals=signals)
+    wi_path(features_dir, fid).parent.mkdir(parents=True, exist_ok=True)
+    wi_path(features_dir, fid).write_text(
+        yaml.safe_dump(wi, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    return wi
+
+
+def build(fid, task, task_type=None, risk=None, *, signals=None):
+    """Pure WorkItem factory, shared by lifecycle start and create-only goal planning."""
+    inp = dict(signals or {})
     if task_type:
         inp["task_type"] = task_type
     if risk:
@@ -72,8 +83,6 @@ def start(features_dir, fid, task, task_type=None, risk=None):
     from ai_ops_kit.shared import ai_route as _ar   # foundation (K5): маршрутизатор — чистая классификация
     r = _ar.route(inp)
     wf = r["workflow"]
-    fdir = Path(features_dir) / fid
-    fdir.mkdir(parents=True, exist_ok=True)
     wi = {
         "schema_version": 1,
         "kind": "workitem",
@@ -89,21 +98,20 @@ def start(features_dir, fid, task, task_type=None, risk=None):
         },
         "status": "draft",
         "lifecycle_intent": "discovery",  # v3.27.0 WP1: начальная стадия
-        # v3.35 Product Operating Model: какие контуры продукта работа изменяет. Три состояния,
-        # и третье не равно второму: changed / not_changed / unknown. Пустой словарь означает «ещё
-        # не определяли», а НЕ «ничего не меняем» — заполняется из diff (`contours.derive_affects`)
-        # либо человеком; сверку делает `contours.reconcile`.
+        
+        
+        
+        
         "affects": {},
     }
-    wi_path(features_dir, fid).write_text(
-        yaml.safe_dump(wi, allow_unicode=True, sort_keys=False), encoding="utf-8")
     return wi
 
 
-def derive_status(workflow, feature_dir, evidence):
+
+def derive_status(workflow, feature_dir, evidence, *, gate_ids=None):
     """Единый статус из gate_executor (гейты) + run_report (здоровье blueprint).
     v3.27.0 WP1: также вычисляет lifecycle_intent детерминированно из состояния."""
-    gates = gate_executor.evaluate(workflow, evidence or {})
+    gates = gate_executor.evaluate(workflow, evidence or {}, gate_ids=gate_ids)
     kinds = gates["gate_kinds"]
     unmet = gates["unmet_gates"]
     human_unmet = [g for g in unmet if kinds.get(g) == "human-approval"]
@@ -115,12 +123,12 @@ def derive_status(workflow, feature_dir, evidence):
     if bp.exists():
         try:
             verdict = run_report.build_report(Path(feature_dir), None)["verdict"]
-        # СРЕЗ lifecycle РАТЧЕТА 2026-08-12: здесь стояло `verdict = None` без записанной причины, и
-        # это ИСКАЖАЛО ВЕРДИКТ. `None` уходил в ветку `else: status = "done"` ниже — то есть
-        # blueprint, здоровье которого оценить НЕ УДАЛОСЬ, был неотличим от blueprint'а, оценённого
-        # как здоровый. Тот же класс, что «битая DeliveryReceipt не равна отсутствующей»
-        # (validate_feature_blueprint, ревизия 2026-08-11): нечитаемая расписка — не отсутствие
-        # проблемы. Теперь неоценённое здоровье БЛОКИРУЕТ и называет причину в отчёте.
+        
+        
+        
+        
+        
+        
         except Exception as _be:  # noqa: BLE001 — любой сбой оценки здоровья -> fail-closed, а не «done»
             verdict, verdict_error = None, f"{type(_be).__name__}: {_be}"[:200]
 
@@ -133,7 +141,7 @@ def derive_status(workflow, feature_dir, evidence):
     else:
         status = "done"
 
-    # v3.27.0 WP1: вычисляем lifecycle_intent детерминированно
+    
     has_evidence = bool(evidence) and not evidence_missing
     li = lifecycle_intent.derive(status, has_evidence=has_evidence)
 
@@ -144,8 +152,8 @@ def derive_status(workflow, feature_dir, evidence):
         "blocked": gates["blocked"], "unmet_gates": unmet,
         "real_fail": real_fail, "human_unmet": human_unmet,
         "evidence_missing": evidence_missing, "blueprint_verdict": verdict,
-        # Пусто, когда оценка прошла. Непусто — значит `blueprint_verdict: None` означает «не смогли
-        # оценить», а не «проблем нет»: эти два состояния обязаны быть различимы наружу.
+        
+        
         **({"blueprint_verdict_error": verdict_error} if verdict_error else {}),
     }
 
@@ -157,12 +165,16 @@ def status_cmd(features_dir, fid, run_dir=None, evidence_file=None):
     wi = yaml.safe_load(p.read_text(encoding="utf-8"))
     wf = wi["workflow"]
     feature_dir = Path(features_dir) / fid
+    try:
+        gate_ids = load_run_plan_gates(feature_dir, fid, wf)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
     evidence = {}
     if run_dir:
         evidence.update(gate_executor.collect_evidence(wf, Path(run_dir)))
     if evidence_file:
         evidence.update(gate_executor.load_evidence(evidence_file))  # явный evidence — приоритет
-    res = derive_status(wf, feature_dir, evidence)
+    res = derive_status(wf, feature_dir, evidence, gate_ids=gate_ids)
     wi["status"] = res["status"]
     wi["lifecycle_intent"] = res["lifecycle_intent"]  # v3.27.0 WP1
     p.write_text(yaml.safe_dump(wi, allow_unicode=True, sort_keys=False), encoding="utf-8")

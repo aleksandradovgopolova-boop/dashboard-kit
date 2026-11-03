@@ -34,15 +34,15 @@ import argparse
 import json
 import sys
 
-# ── Реэкспорт переводчиков, вынесенных в `presenter_formatters.py` ─────────────────────────────
-# Большинство переводчиков (и повседневных команд, и внутренних отчётов) вынесены в модуль-сосед
-# `presenter_formatters.py`, чтобы presenter не рос как god-модуль. Здесь остаётся только фасад:
-# тонкая проводка (`demo`, `main`) и явный ре-экспорт публичной поверхности из ядра и сателлитов.
-#
-# Реэкспорт формата ЛЕНИВЫЙ (PEP 562), а не `from … import …` на верхнем уровне: сосед импортирует
-# `message` и `_q` ИЗ этого модуля, а этот модуль на загрузке НЕ импортирует соседа обратно — иначе
-# при импорте соседа первым получился бы цикл (сосед ещё не определил свои функции, а presenter их
-# уже требует). При обращении к имени `presenter.from_*` формата модуль подгружается по требованию.
+
+
+
+
+
+
+
+
+
 _FORWARDED_FORMATTERS = (
     "from_advice", "from_bootstrap", "from_contour_consistency", "from_discovery_draft",
     "from_doctor", "from_execution_preview", "from_first_hour", "from_intake_gap",
@@ -92,13 +92,13 @@ def main(argv=None):
     return 0
 
 
-# ── Явный ре-экспорт публичной поверхности ────────────────────────────────────────────────────
-# Внешний код делает `from ai_ops_kit.ui import presenter` и зовёт `presenter.X`; кроме того,
-# `presenter_formatters` и `presenter_report_formatters` берут `_q`/`message` через
-# `from ai_ops_kit.ui.presenter import _q, message`. Оба контракта держит явный ре-экспорт ниже —
-# без `import *`, чтобы поверхность была видна глазом. Приватные имена (`_q`, `_humanize`,
-# `_glossary`, `_contract`, `_human_evidence`) перечислены тоже: они — часть контракта соседей и
-# проб.
+
+
+
+
+
+
+
 from ai_ops_kit.ui.presenter_core import (  # noqa: E402
     POLICY,
     PolicyMissing,
@@ -118,8 +118,10 @@ from ai_ops_kit.ui.presenter_core import (  # noqa: E402
 from ai_ops_kit.ui.presenter_graph import (  # noqa: E402
     from_graph_build,
     from_graph_gaps,
+    from_graph_questions,
     from_graph_trace,
     from_kit_feedback_status,
+    from_scorecard,
 )
 from ai_ops_kit.ui.presenter_work import (  # noqa: E402
     _human_evidence,

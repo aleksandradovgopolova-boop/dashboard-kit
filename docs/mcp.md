@@ -68,3 +68,7 @@ python3 tools/check.py --fast
 Проверено 08.10.2026: stdio smoke, HTTP handshake/discovery/get_includes,
 полная tools/check.py (62 страницы, три размера). Протокольный stdio smoke
 включён в dashboard-check CI. SDK: https://py.sdk.modelcontextprotocol.io/v1/.
+
+## Структурированные параметры screen-spec/1
+
+Read-only методы get_component_schema(component) и validate_component_parameters(component,parameters,schema_version=1) используют тот же manifest, что kit.py schema/validate. Поддержанный минимум — tile/chart/table/select; это адаптер screen-spec, не весь JS API. Существующие пять методов сохранены. Источник ограничений один, краткий component-parameters.md генерируется из него.
