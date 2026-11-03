@@ -34,6 +34,10 @@ stacks:
   - tools/check-numeric-data.mjs
   - tools/check-named-metrics.mjs
   - tools/check-popover.mjs
+  - tools/check-screen-policy.py
+  - tools/check-component-contracts.py
+  - tools/check-screen-spec.py
+  - tools/check-screen-builder.mjs
   - tools/check-numeric-browser.mjs
   - tools/check-family-mortgage.mjs
   - tools/check-reference-server.py

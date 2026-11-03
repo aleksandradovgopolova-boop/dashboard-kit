@@ -41,7 +41,7 @@
 <script src="js/dk-pager.js" defer></script>
 </head>
 
-<body id="r-page" class="dk-page dk-glass">
+<body data-dk-screen="overview" id="r-page" class="dk-page dk-glass">
 <a class="dk-skip" href="#main">К содержимому</a>
 
 <div class="dk-app dk-app--rail" data-nav="folded">
@@ -118,7 +118,7 @@
 <section class="dk-widget dk-focus-layout__primary" aria-labelledby="r-map-title">
   <header class="dk-widget__head"><h1 class="dk-head__title" id="r-map-title">Риски ЖКХ и инфраструктуры</h1><div class="dk-widget__actions" id="r-map-controls"></div></header>
   <div class="dk-widget__body r-map-body"><div id="r-map"></div></div>
-  <footer class="dk-widget__footer"><details class="r-map-note"><summary><svg class="dk-i dk-i--sm r-fold-caret" aria-hidden="true"><use href="#ti-chevron-right"/></svg>Как читать карту</summary><p class="dk-caption">Высокий риск ≥78 · средний 60–77 · низкий &lt;60 баллов. Нажмите на регион, чтобы открыть детали. Затемнённые регионы не входят в выбранный срез.</p></details></footer>
+  <footer class="dk-widget__footer"><details class="r-map-note"><summary><svg class="dk-i dk-i--sm r-fold-caret" aria-hidden="true"><use href="#ti-chevron-right"/></svg>Как читать карту</summary><p class="dk-caption">Высокий риск ≥78 · средний 60–77 · низкий &lt;60 баллов. Затемнённые регионы не входят в выбранный срез.</p></details></footer>
 </section>
 <aside class="dk-focus-layout__aside" aria-label="Сводка и регионы">
 <div class="r-filter-panel"><div class="dk-region-tools dk-region-tools--stacked" role="search" aria-label="Поиск и фильтр регионов">
@@ -196,7 +196,7 @@
 
 <dialog class="dk-modal" id="r-details" aria-labelledby="r-details-title" aria-describedby="r-details-note">
 <form method="dialog" class="dk-modal__form"><div class="dk-modal__head"><h2 class="dk-modal__title" id="r-details-title">Регион</h2></div>
-<div class="dk-modal__body"><p id="r-details-note">Демонстрационный показатель; не использовать для оперативных решений.</p><dl class="dk-details"><dt>Округ</dt><dd id="r-details-fd"></dd><dt>Балл риска</dt><dd id="r-details-score"></dd><dt>Уровень риска</dt><dd id="r-details-state"></dd></dl><p>Высокий риск — от 78 баллов. Проверьте причины и свежесть данных перед действием.</p></div><div class="dk-modal__foot"><button class="dk-btn" value="close" autofocus>Закрыть детали</button></div></form></dialog>
+<div class="dk-modal__body"><p id="r-details-note">Учебные данные</p><dl class="dk-details"><dt>Округ</dt><dd id="r-details-fd"></dd><dt>Балл риска</dt><dd id="r-details-score"></dd><dt>Уровень риска</dt><dd id="r-details-state"></dd></dl><details class="dk-data-summary"><summary>Шкала риска</summary><p>Высокий риск — от 78 баллов, средний — 60–77, низкий — менее 60</p></details></div><div class="dk-modal__foot"><button class="dk-btn" value="close" autofocus>Закрыть детали</button></div></form></dialog>
 <script>
 
 

@@ -53,6 +53,17 @@ try {
     assert.equal(snapshot.totals.received.value,85);
     assert.equal(snapshot.totals.completed.value,60);
     assert.equal(snapshot.totals.completed.partial,true);
+    assert(await evaluate("!document.querySelector('#ref-chart-note').hidden&&document.querySelector('#ref-chart-note').textContent==='Частичные данные'"),'Partial chart is a short state');
+    await evaluate("document.querySelector('#ref-chart-note').scrollIntoView({block:'center'})");
+    await evaluate('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+    await evaluate("document.querySelector('#ref-chart-note').focus()");
+    assert(await evaluate("!document.getElementById(document.querySelector('#ref-chart-note').getAttribute('aria-describedby')).hidden"),'Partial reason on focus');
+    await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+    await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+    assert(await evaluate("document.getElementById(document.querySelector('#ref-chart-note').getAttribute('aria-describedby')).hidden&&document.activeElement.id==='ref-chart-note'"),'Partial reason Escape retains focus');
+    await click('#ref-chart-note');
+    assert(await evaluate("!document.getElementById(document.querySelector('#ref-chart-note').getAttribute('aria-describedby')).hidden"),'Partial reason on activation');
+
     assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`),`Overflow ${width} ${theme}`);
     const ax=await send('Accessibility.getFullAXTree');
     assert(!ax.nodes.some(n=>!n.ignored&&['button','combobox','dialog'].includes(n.role?.value)&&!n.name?.value),'Unnamed reference control');
@@ -71,6 +82,8 @@ try {
     const water = await view();
     assert.equal(water.query.page,1); assert.equal(water.rowCount,5); assert.equal(water.totals.received.value,44);
     assert(water.rows.every(row=>row.dimensions.service==='Водоснабжение'));
+    assert(await evaluate("document.querySelector('#ref-chart-note').hidden&&!document.querySelector('#ref-chart-note').hasAttribute('aria-describedby')&&!document.querySelector('.dk-tooltip')"),'Full data removes old partial reason');
+
     await click('#ref-rows [data-row]');
     assert(await evaluate(`document.querySelector('#ref-detail').open`),'Details must open');
     await click('#ref-action');

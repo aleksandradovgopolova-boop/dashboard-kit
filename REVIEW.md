@@ -1,3 +1,11 @@
+## 03.11.2026 · #37/#67/#68, до полного CI
+
+Read-only analyst и UX/editorial reviews APPROVE. Исправлены обнаруженные
+partial chart, grain+coverage, hidden multi-filter, config ID, header200%,
+labels/detail scroll, static mobile false empty и reduced-motion animation.
+Точные проверки, снимки и ограничения:
+features/epic63-next-20261103/screen-contract.md. Полный CI ещё не объявлен PASS.
+
 # Ревью кита: что закрыто и что открыто
 
 ## Опубликованы пакеты исследования #63 · 03.11.2026

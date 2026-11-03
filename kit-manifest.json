@@ -281,6 +281,22 @@
     ]
    },
    {
+    "file": "js/dk-screen.js",
+    "how": "defer, после компонентов и контракта данных; runtime screen-spec/1",
+    "defer": true,
+    "requires": [
+     "js/dk-charts.js",
+     "js/dk-context.js",
+     "js/dk-dashboard.js",
+     "js/dk-metrics.js",
+     "js/dk-modal.js",
+     "js/dk-popover.js",
+     "js/dk-select.js",
+     "js/dk-table.js",
+     "js/dk-util.js"
+    ]
+   },
+   {
     "file": "js/dk-tree.js",
     "how": "defer",
     "defer": true,
@@ -323,6 +339,7 @@
   ],
   "rule": "Подключать только то, что есть в include частей на странице, в этом порядке. Основа (часть base) — всегда."
  },
+ "parameterSchemaVersion": 1,
  "parts": [
   {
    "id": "button",
@@ -939,6 +956,43 @@
     "period",
     "table"
    ],
+   "parameterContract": {
+    "schemaVersion": 1,
+    "target": "screen-spec/1",
+    "component": "select",
+    "dependencies": [
+     "dashboard-data"
+    ],
+    "actions": [
+     "change-filter"
+    ],
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "dimension": {
+       "type": "string",
+       "pattern": "^[a-z][a-z0-9_-]*(?![\\s\\S])",
+       "minLength": 1,
+       "maxLength": 80
+      },
+      "label": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 240
+      },
+      "mode": {
+       "type": "string",
+       "const": "single",
+       "default": "single"
+      }
+     },
+     "required": [
+      "dimension",
+      "label"
+     ],
+     "additionalProperties": false
+    }
+   },
    "classes": [
     "dk-chipbar",
     "dk-chipbar__label",
@@ -1763,6 +1817,66 @@
     "rank",
     "select"
    ],
+   "parameterContract": {
+    "schemaVersion": 1,
+    "target": "screen-spec/1",
+    "component": "table",
+    "dependencies": [
+     "dashboard-data",
+     "named-metrics",
+     "modal"
+    ],
+    "actions": [
+     "sort",
+     "open-details"
+    ],
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "title": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 240
+      },
+      "dimension": {
+       "type": "string",
+       "pattern": "^[a-z][a-z0-9_-]*(?![\\s\\S])",
+       "minLength": 1,
+       "maxLength": 80
+      },
+      "metrics": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_-]*(?![\\s\\S])",
+        "minLength": 1,
+        "maxLength": 80
+       },
+       "minItems": 1,
+       "maxItems": 6,
+       "uniqueItems": true
+      },
+      "details": {
+       "type": "boolean",
+       "default": false
+      },
+      "sort": {
+       "type": "string",
+       "enum": [
+        "asc",
+        "desc"
+       ],
+       "default": "asc"
+      }
+     },
+     "required": [
+      "title",
+      "dimension",
+      "metrics"
+     ],
+     "additionalProperties": false
+    }
+   },
    "classes": [
     "dk-table",
     "dk-table--cards",
@@ -2019,6 +2133,31 @@
     "chart",
     "rank"
    ],
+   "parameterContract": {
+    "schemaVersion": 1,
+    "target": "screen-spec/1",
+    "component": "tile",
+    "dependencies": [
+     "dashboard-data",
+     "named-metrics"
+    ],
+    "actions": [],
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "metric": {
+       "type": "string",
+       "pattern": "^[a-z][a-z0-9_-]*(?![\\s\\S])",
+       "minLength": 1,
+       "maxLength": 80
+      }
+     },
+     "required": [
+      "metric"
+     ],
+     "additionalProperties": false
+    }
+   },
    "classes": [
     "dk-metric",
     "dk-metric-lg",
@@ -3039,6 +3178,79 @@
     "legend",
     "tile"
    ],
+   "parameterContract": {
+    "schemaVersion": 1,
+    "target": "screen-spec/1",
+    "component": "chart",
+    "dependencies": [
+     "dashboard-data"
+    ],
+    "actions": [
+     "toggle-series"
+    ],
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "title": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 240
+      },
+      "type": {
+       "type": "string",
+       "enum": [
+        "bar",
+        "line"
+       ]
+      },
+      "orientation": {
+       "type": "string",
+       "enum": [
+        "vertical",
+        "horizontal"
+       ],
+       "default": "vertical"
+      },
+      "metrics": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_-]*(?![\\s\\S])",
+        "minLength": 1,
+        "maxLength": 80
+       },
+       "minItems": 1,
+       "maxItems": 4,
+       "uniqueItems": true
+      },
+      "groupBy": {
+       "type": "string",
+       "const": "date",
+       "default": "date"
+      }
+     },
+     "required": [
+      "title",
+      "type",
+      "metrics"
+     ],
+     "additionalProperties": false,
+     "if": {
+      "properties": {
+       "type": {
+        "const": "line"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "orientation": {
+        "const": "vertical"
+       }
+      }
+     }
+    }
+   },
    "classes": [
     "dk-chart",
     "dk-chart--lg",
@@ -5613,6 +5825,77 @@
    "include": []
   },
   {
+   "id": "screen",
+   "title": "Статическая сборка экрана",
+   "kind": "инструмент",
+   "group": "Разработка",
+   "status": "экспериментальный",
+   "purpose": "Исполняет проверенный screen-spec/1: локальный план/факт, общий фильтр, КПЭ, график и региональные детали.",
+   "use_when": [
+    "Нужен воспроизводимый статический экран из существующих компонентов, без вложенного агента."
+   ],
+   "instead": [],
+   "owns": [
+    "dk-screen"
+   ],
+   "css": [
+    "css/components.css"
+   ],
+   "scripts": [
+    "js/dk-screen.js"
+   ],
+   "js": [
+    "dkScreen"
+   ],
+   "docs": [
+    "docs/screen-spec.md"
+   ],
+   "rules": [
+    "Первая композиция — plan-fact/overview, полный local snapshot до 1000 наблюдений.",
+    "Параметры и привязки проверяет tools/build-screen.py до записи артефактов.",
+    "Нет произвольного JS, HTML из данных, remote write или скрытого latest-update."
+   ],
+   "api": [
+    {
+     "name": "dkScreen(root, compiledConfig)",
+     "type": "controller",
+     "what": "Запустить нормализованный конфиг статического компилятора."
+    },
+    {
+     "name": "setFilters(filters) / reset() / getSnapshot() / destroy()",
+     "type": "methods",
+     "what": "Один срез для всех блоков; очистка lifecycle и возврат из деталей."
+    }
+   ],
+   "example": "<!-- python3 tools/build-screen.py examples/spec/plan-fact.json --out /tmp/plan-fact-preview -->",
+   "data": [],
+   "avoid": [],
+   "a11y": [],
+   "related": [],
+   "classes": [
+    "dk-screen",
+    "dk-screen__detail",
+    "dk-screen__filter",
+    "dk-screen__filters",
+    "dk-screen__meta",
+    "dk-screen__table"
+   ],
+   "include": [
+    "js/dk-util.js",
+    "vendor/echarts.min.js",
+    "js/dk-chart-theme.js",
+    "js/dk-charts.js",
+    "js/dk-select.js",
+    "js/dk-modal.js",
+    "js/dk-table.js",
+    "js/dk-context.js",
+    "js/dk-popover.js",
+    "js/dk-dashboard.js",
+    "js/dk-metrics.js",
+    "js/dk-screen.js"
+   ]
+  },
+  {
    "id": "named-metrics",
    "title": "Именованные метрики",
    "kind": "основа",
@@ -6379,9 +6662,9 @@
  },
  "hooks": {},
  "counts": {
-  "parts": 66,
-  "classes": 512,
-  "functions": 49,
+  "parts": 67,
+  "classes": 518,
+  "functions": 50,
   "chart_types": 12
  }
 }

@@ -31,10 +31,11 @@
 <!-- данные рядом с китом: data/regions.topojson, data/regions-tiles.json; страница открывается по http -->
 <!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue|violet|indigo" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
 </head>
-<body class="dk-page dk-glass">
+<body data-dk-screen="overview" class="dk-page dk-glass">
 <main class="dk-wrap" id="main" tabindex="-1">
 <div class="dk-seg" role="group" aria-label="Стиль оформления"><button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button><button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button></div>
   <h1 class="dk-vh">Сводка аварийности</h1>
+  <p class="dk-caption" id="mobile-demo-state">Статичный пример · Учебные данные</p>
   <div class="dk-search">
     <svg class="dk-i dk-search__icon" aria-hidden="true"><use href="#ti-search"/></svg>
     <input class="dk-search__input" type="search" placeholder="Регион или округ" aria-label="Найти регион или округ" enterkeyhint="search" autocomplete="off">
@@ -48,7 +49,6 @@
         <div class="dk-hero__label">Регионов с высоким риском</div>
         <div class="dk-hero__row">
           <div class="dk-hero__value"><span class="dk-hero__n">25</span><span class="dk-hero__of">из 89</span></div>
-          <span class="dk-trend" style="--accent:var(--crit-ink)"><svg aria-hidden="true" class="dk-i dk-i--sm"><use href="#ti-arrow-up-right"/></svg>негатив растёт в 7</span>
         </div>
         <div class="dk-split" role="img" aria-label="Высокий 25, средний 35, низкий 29">
           <span class="dk-split__seg" style="--share:25;--swatch:var(--crit)"></span>
@@ -96,7 +96,6 @@
         <div class="dk-chart dk-chart--spark" id="sp"></div>
       </div>
     </div>
-    <div class="dk-col--quarter"><div class="dk-widget"><div class="dk-empty"><div class="dk-empty__t">Ничего не найдено</div><div>Под фильтры не попал ни один регион.</div><div class="dk-empty__do">Снимите фильтр по округу.</div></div></div></div>
     <div class="dk-col--half">
       <div class="dk-widget"><div class="dk-widget__head"><h2 class="dk-widget__title">Аварии по часам</h2></div><div class="dk-chart" id="hours"></div></div>
     </div>
@@ -117,16 +116,21 @@ window.addEventListener('DOMContentLoaded', function () {
   dkSelect(document.getElementById('risk'), { label: 'Риск', options: [{ value: 'h', name: 'Высокий', count: 25 }, { value: 'm', name: 'Средний', count: 35 }], mode: 'multi', value: ['h','m'] });
   dkSelect(document.getElementById('kind'), { label: 'Вид аварии', options: [{ value: 'w', name: 'Вода', count: 7 }], mode: 'single' });
   dkPeriod(document.getElementById('period'), { label: 'Период', value: { preset: 7 } });
+  // This composition has no shared data controller: do not promise filtering.
+  document.querySelectorAll('.dk-toolbar button,.dk-toolbar input,.dk-search input,.dk-search button').forEach(function (control) {
+    control.disabled = true; control.title = 'Фильтрация недоступна в статичном примере'; control.setAttribute('aria-describedby', 'mobile-demo-state');
+  });
+  document.querySelector('.dk-search__clear').hidden = true;
   Promise.all([fetch('data/regions.topojson').then(r => r.json()), fetch('data/regions-tiles.json').then(r => r.json())]).then(function (d) {
     dkMap(document.getElementById('regions-map'), { topo: d[0], object: Object.keys(d[0].objects)[0], tiles: d[1], values: { 'RU-CR': 82, 'RU-NVS': 73 }, unit: 'баллов риска' });
   });
 });
 </script>
 <nav class="dk-tabbar" aria-label="Главные разделы">
-  <a class="dk-tabbar__item" href="#" aria-current="page"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg><span>Сводка</span></a>
-  <a class="dk-tabbar__item" href="#"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg><span>Карта</span></a>
-  <a class="dk-tabbar__item" href="#"><svg class="dk-i" aria-hidden="true"><use href="#ti-alert-triangle"/></svg><span>Аварии</span></a>
-  <a class="dk-tabbar__item" href="#"><svg class="dk-i" aria-hidden="true"><use href="#ti-calendar"/></svg><span>Календарь</span></a>
+  <a class="dk-tabbar__item" href="dashboard.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg><span>Сводка</span></a>
+  <a class="dk-tabbar__item" href="regions.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg><span>Карта</span></a>
+  <a class="dk-tabbar__item" href="accidents.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-alert-triangle"/></svg><span>Аварии</span></a>
+  <a class="dk-tabbar__item" href="calendar.html"><svg class="dk-i" aria-hidden="true"><use href="#ti-calendar"/></svg><span>Календарь</span></a>
 </nav>
 </body>
 </html>

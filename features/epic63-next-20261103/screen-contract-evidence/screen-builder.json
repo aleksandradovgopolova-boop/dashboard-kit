@@ -1,0 +1,1073 @@
+{
+  "views": [
+    {
+      "theme": "dark",
+      "width": 320,
+      "overflow": false,
+      "padding": [
+        "24px",
+        "24px",
+        "24px",
+        "24px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 162,
+      "titleLines": 1,
+      "header": [
+        47,
+        47
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Светлая тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Данные и методика",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 101.078125,
+          "height": 44
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 94.21875,
+          "height": 44
+        },
+        {
+          "label": "Регион",
+          "width": 84.3125,
+          "height": 44
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 150.921875,
+          "height": 44
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 154.90625,
+          "height": 44
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 136.453125,
+          "height": 44
+        },
+        {
+          "label": "Север",
+          "width": 66.28125,
+          "height": 44
+        },
+        {
+          "label": "Юг",
+          "width": 43.75,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 375,
+      "overflow": false,
+      "padding": [
+        "24px",
+        "24px",
+        "24px",
+        "24px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 217,
+      "titleLines": 1,
+      "header": [
+        47,
+        47
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Светлая тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Данные и методика",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 101.078125,
+          "height": 44
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 94.21875,
+          "height": 44
+        },
+        {
+          "label": "Регион",
+          "width": 84.3125,
+          "height": 44
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 150.921875,
+          "height": 44
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 154.90625,
+          "height": 44
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 136.453125,
+          "height": 44
+        },
+        {
+          "label": "Север",
+          "width": 66.28125,
+          "height": 44
+        },
+        {
+          "label": "Юг",
+          "width": 43.75,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "overflow": false,
+      "padding": [
+        "24px",
+        "24px",
+        "24px",
+        "24px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 232,
+      "titleLines": 1,
+      "header": [
+        47,
+        47
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Светлая тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Данные и методика",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 101.078125,
+          "height": 44
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 94.21875,
+          "height": 44
+        },
+        {
+          "label": "Регион",
+          "width": 84.3125,
+          "height": 44
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 150.921875,
+          "height": 44
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 154.90625,
+          "height": 44
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 136.453125,
+          "height": 44
+        },
+        {
+          "label": "Север",
+          "width": 66.28125,
+          "height": 44
+        },
+        {
+          "label": "Юг",
+          "width": 43.75,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "overflow": false,
+      "padding": [
+        "24px",
+        "24px",
+        "24px",
+        "24px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 618,
+      "titleLines": 1,
+      "header": [
+        42,
+        42
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Светлая тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Данные и методика",
+          "width": 32,
+          "height": 32
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 93.078125,
+          "height": 36
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 86.21875,
+          "height": 36
+        },
+        {
+          "label": "Регион",
+          "width": 76.125,
+          "height": 32
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 142.421875,
+          "height": 32
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 146.5,
+          "height": 32
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 127.734375,
+          "height": 32
+        },
+        {
+          "label": "Север",
+          "width": 54.28125,
+          "height": 36
+        },
+        {
+          "label": "Юг",
+          "width": 31.75,
+          "height": 36
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "overflow": false,
+      "padding": [
+        "34.56px",
+        "34.56px",
+        "34.56px",
+        "34.56px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 1108.90625,
+      "titleLines": 1,
+      "header": [
+        52.546875,
+        52.546875
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Светлая тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Данные и методика",
+          "width": 32,
+          "height": 32
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 93.078125,
+          "height": 36
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 86.21875,
+          "height": 36
+        },
+        {
+          "label": "Регион",
+          "width": 76.125,
+          "height": 32
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 142.421875,
+          "height": 32
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 146.5,
+          "height": 32
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 127.734375,
+          "height": 32
+        },
+        {
+          "label": "Север",
+          "width": 54.28125,
+          "height": 36
+        },
+        {
+          "label": "Юг",
+          "width": 31.75,
+          "height": 36
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "overflow": false,
+      "padding": [
+        "36px",
+        "36px",
+        "36px",
+        "36px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 1506,
+      "titleLines": 1,
+      "header": [
+        54,
+        54
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Светлая тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Данные и методика",
+          "width": 32,
+          "height": 32
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 93.078125,
+          "height": 36
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 86.21875,
+          "height": 36
+        },
+        {
+          "label": "Регион",
+          "width": 76.125,
+          "height": 32
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 142.421875,
+          "height": 32
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 146.5,
+          "height": 32
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 127.734375,
+          "height": 32
+        },
+        {
+          "label": "Север",
+          "width": 54.28125,
+          "height": 36
+        },
+        {
+          "label": "Юг",
+          "width": 31.75,
+          "height": 36
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 320,
+      "overflow": false,
+      "padding": [
+        "24px",
+        "24px",
+        "24px",
+        "24px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 162,
+      "titleLines": 1,
+      "header": [
+        47,
+        47
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Светлая тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Данные и методика",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 101.078125,
+          "height": 44
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 94.21875,
+          "height": 44
+        },
+        {
+          "label": "Регион",
+          "width": 84.3125,
+          "height": 44
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 150.921875,
+          "height": 44
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 154.90625,
+          "height": 44
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 136.453125,
+          "height": 44
+        },
+        {
+          "label": "Север",
+          "width": 66.28125,
+          "height": 44
+        },
+        {
+          "label": "Юг",
+          "width": 43.75,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 375,
+      "overflow": false,
+      "padding": [
+        "24px",
+        "24px",
+        "24px",
+        "24px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 217,
+      "titleLines": 1,
+      "header": [
+        47,
+        47
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Светлая тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Данные и методика",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 101.078125,
+          "height": 44
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 94.21875,
+          "height": 44
+        },
+        {
+          "label": "Регион",
+          "width": 84.3125,
+          "height": 44
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 150.921875,
+          "height": 44
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 154.90625,
+          "height": 44
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 136.453125,
+          "height": 44
+        },
+        {
+          "label": "Север",
+          "width": 66.28125,
+          "height": 44
+        },
+        {
+          "label": "Юг",
+          "width": 43.75,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "overflow": false,
+      "padding": [
+        "24px",
+        "24px",
+        "24px",
+        "24px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 232,
+      "titleLines": 1,
+      "header": [
+        47,
+        47
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Светлая тема",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Данные и методика",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 101.078125,
+          "height": 44
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 94.21875,
+          "height": 44
+        },
+        {
+          "label": "Регион",
+          "width": 84.3125,
+          "height": 44
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 150.921875,
+          "height": 44
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 154.90625,
+          "height": 44
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 136.453125,
+          "height": 44
+        },
+        {
+          "label": "Север",
+          "width": 66.28125,
+          "height": 44
+        },
+        {
+          "label": "Юг",
+          "width": 43.75,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "overflow": false,
+      "padding": [
+        "24px",
+        "24px",
+        "24px",
+        "24px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 618,
+      "titleLines": 1,
+      "header": [
+        42,
+        42
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Светлая тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Данные и методика",
+          "width": 32,
+          "height": 32
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 93.078125,
+          "height": 36
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 86.21875,
+          "height": 36
+        },
+        {
+          "label": "Регион",
+          "width": 76.125,
+          "height": 32
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 142.421875,
+          "height": 32
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 146.5,
+          "height": 32
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 127.734375,
+          "height": 32
+        },
+        {
+          "label": "Север",
+          "width": 54.28125,
+          "height": 36
+        },
+        {
+          "label": "Юг",
+          "width": 31.75,
+          "height": 36
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "overflow": false,
+      "padding": [
+        "34.56px",
+        "34.56px",
+        "34.56px",
+        "34.56px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 1108.90625,
+      "titleLines": 1,
+      "header": [
+        52.546875,
+        52.546875
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Светлая тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Данные и методика",
+          "width": 32,
+          "height": 32
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 93.078125,
+          "height": 36
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 86.21875,
+          "height": 36
+        },
+        {
+          "label": "Регион",
+          "width": 76.125,
+          "height": 32
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 142.421875,
+          "height": 32
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 146.5,
+          "height": 32
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 127.734375,
+          "height": 32
+        },
+        {
+          "label": "Север",
+          "width": 54.28125,
+          "height": 36
+        },
+        {
+          "label": "Юг",
+          "width": 31.75,
+          "height": 36
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "overflow": false,
+      "padding": [
+        "36px",
+        "36px",
+        "36px",
+        "36px"
+      ],
+      "kpis": 3,
+      "resetHidden": true,
+      "clearIndicators": 0,
+      "titleWidth": 1506,
+      "titleLines": 1,
+      "header": [
+        54,
+        54
+      ],
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "buttons": [
+        {
+          "label": "Тёмная тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Светлая тема",
+          "width": 36,
+          "height": 26
+        },
+        {
+          "label": "Данные и методика",
+          "width": 32,
+          "height": 32
+        },
+        {
+          "label": "Регион: не выбрано",
+          "width": 93.078125,
+          "height": 36
+        },
+        {
+          "label": "Канал: не выбрано",
+          "width": 86.21875,
+          "height": 36
+        },
+        {
+          "label": "Регион",
+          "width": 76.125,
+          "height": 32
+        },
+        {
+          "label": "Выдано, кредитов",
+          "width": 142.421875,
+          "height": 32
+        },
+        {
+          "label": "Выполнение плана",
+          "width": 146.5,
+          "height": 32
+        },
+        {
+          "label": "Средняя ставка",
+          "width": 127.734375,
+          "height": 32
+        },
+        {
+          "label": "Север",
+          "width": 54.28125,
+          "height": 36
+        },
+        {
+          "label": "Юг",
+          "width": 31.75,
+          "height": 36
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

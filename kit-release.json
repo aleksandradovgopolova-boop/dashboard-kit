@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.0-rc.6",
+  "version": "0.1.0-rc.7",
   "channel": "candidate",
   "dataContractVersion": 1,
   "files": {
@@ -18,7 +18,7 @@
     "assets/graphite-dark.png": "d212df2d6f3f6d41befd4b11ca743d791db767188120508b873966494cde8a5d",
     "assets/graphite-light.png": "cd330a9ef8bb163f2ffd1fb86e78a875c06e0638eaacf8bba082c191ae6d4d72",
     "css/chrome.css": "2df09fd6afc92b421183bfcdc80be36327b787b20c636c64279df8a6d4e4b7cf",
-    "css/components.css": "8e73cc1e84f2014aefaba7575d8752b9c3b2077bfbf85a356ec67a701157d0b2",
+    "css/components.css": "18a3ba9c2549c8652ba04295e88dd624fb43f911fbf056dd931782ffdf698c96",
     "css/glass.css": "dc4319158349da59c093d11a63976f66feb6d6cd1c4159232864184ae699a7e0",
     "css/kit2-preview-frame.css": "3230716ea0c33b5eb50fc3eb57d756898caa2ec59f88cb1dc0667fa1522a99ef",
     "css/kit2-preview.css": "aa44c4d6145b5d80239ea86ffd821e6dba322c7d43d37ab4c7366c2c95bdabf1",
@@ -41,7 +41,8 @@
     "docs/named-metrics.md": "20886783cd3314757776ead1fc6e9194687ff14ae1d43f9e291026135f284834",
     "docs/reference-server.md": "5a9ff2ec2ed8e84114f6ca48e1a70dc9cffd2339deed0b649cb43d7c207a756d",
     "docs/releases.md": "528f30b669ec4b11a708e97cb67791f6d4e32e754a98fd1ba175628feed10edf",
-    "family-mortgage.html": "fd991358c839d922d344b5dc118b76de592888c955ca4de107463dab96202da7",
+    "docs/screen-spec.md": "be2ac8e24556e01de9f01d9786761388dfaeab2bea347a2008b711ac26a35cc2",
+    "family-mortgage.html": "159b9430f630a63e4c8d8698aef5fb342c5ce8a993a4adf85333cf0daf20fcf3",
     "icons/apple-touch-icon.png": "11d35853bab7b756d693b044964a73dc08468a5192ef5e2f183e1d9100828c31",
     "icons/favicon.svg": "884cd77cd185f618b6ce0c987a51047934c1c26da8ff957be6fc7bd545834535",
     "icons/icon-192.png": "15e12cb6b6722944935e356937382ab363c6bdeb0c29e9153cc4bf2509339815",
@@ -53,7 +54,7 @@
     "js/dk-car.js": "94632528f0be9a818f8581118bfed6aec3f3781ad0775ca55f96ccf33093aa92",
     "js/dk-card-scroll.js": "9e36e82e3e2496b79ef125ddf9878a2058f95eac9ec9af94f70c308feed13326",
     "js/dk-chart-theme.js": "16b0c6cff1833ecfde43af0893e7e6c818c917bc037c62d3e4c1f69cff672bdf",
-    "js/dk-charts.js": "260329a55f2496961826f507f0814b262f63279c12cb29e95554fc50bb87eb82",
+    "js/dk-charts.js": "633c75879676dfee7339fad08bd85fb0796454d0785c3f79a1b033ebbc6b7d15",
     "js/dk-chips.js": "8190466a9383c2446f350fd37694f44ea0ddac55fcab708c964ac4d3f13e3ecb",
     "js/dk-chrome.js": "e8e2a5f061277b8d3e2ee50a94b0796b6ed7d855462e5e0d61987d1d9fd39b9a",
     "js/dk-context.js": "a1191301715ef4c0010c177d5b1b4315cedf23e1a5a6de12cae7e6617bdff0e9",
@@ -70,6 +71,7 @@
     "js/dk-pager.js": "be7ef856e738e0a7d6ee1380a2e7e541d7666cb7ed103241b2f46bd271bd6268",
     "js/dk-period.js": "43eaeaa1c6974b12d254d9f25a1be14a03cd8095bfea38f140017fdd7da09d04",
     "js/dk-popover.js": "bcefa5ddcd10ff5e179b86742c15679877c315b58ff2a3871db1180a2bd6e451",
+    "js/dk-screen.js": "c70c8813261e6ee144c74465ec9037360d71bf4883bac5dbc2180203ec6cabbd",
     "js/dk-select.js": "3d333b4e03d7793fc52cac11228d4970ec46495ed6af014784b7e3c99152b46d",
     "js/dk-table.js": "e5b75840a74be1133150596c2fc55fed26c47dbb34fa39510eb540ad33050659",
     "js/dk-theme.js": "712e8aa734c8c76e0502a42161fbd4577d62787aa9b5ba77920b23679e0ed78e",
@@ -81,9 +83,9 @@
     "js/family-mortgage-data.js": "f6a67c043beb2526cc48ad401fa378646c055ef17277caa4d2ae34f29fecaa33",
     "js/family-mortgage.js": "03887de16c8c08107969df013aa7cc46d788d8f66f0f5b125b43c40da9e19295",
     "js/kit2-preview.js": "7725d975b8cc741f38c96633f13b4acf50dd1323e177127f40632f5a62a1687e",
-    "js/reference-dashboard.js": "f5d1100836562eb3f0da861f71322d099e19259342a88f23aa7fcadf5a29b438",
-    "kit-manifest.json": "487d2627a6b4e072bcd70b76c49299f88f8e39b9965321d237858203fde75669",
-    "reference-dashboard.html": "2269a0255add4faa1b9d5d360219229cb7dad7eab489fdf79723284eb8bf33e6",
+    "js/reference-dashboard.js": "56b743dd8d89d55e0a28ddbd2967c880ceb49bedc1a306c4adfd49f24f84d1b5",
+    "kit-manifest.json": "03059ae7c5cc9b21a506d5bd2c98cf06f2c23b19eb4ee817f86c81fe91203f2e",
+    "reference-dashboard.html": "b972bbe89acf785e9f28786bbd48608ebef99a6a61c6be40c378eb658adedd83",
     "tools/reference-server.py": "31a9b6c531f46d523776199447e030c55c5d439d4146a57e9a468ea77809cddf",
     "vendor/air-datepicker.css": "110391f897ba0abc6c563bc8d1e7afa135b26955ae57a5fc0a1228e79c394f73",
     "vendor/air-datepicker.js": "24be9285f8a7b00ec14ca94a954f54383ea6a507067f7d3c3f1c2c2280462185",
@@ -103,5 +105,5 @@
     "vendor/licenses/Golos-Text-OFL.txt": "ff532f9e8789f09a9fdffc3c0954eedfb0a48be77b2e2eb90f5f82e4f347f50c",
     "vendor/licenses/Tabler-Icons-MIT.txt": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
   },
-  "contentDigest": "sha256:5f902d291c080d1fc376644e0a7d459ddde1664cd9fef72b83ee911bb9e00d2e"
+  "contentDigest": "sha256:9802ab4ef705fe01270e6a19b5186c9bf4e81ddc6a429e147aa3b69a360aef20"
 }
