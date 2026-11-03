@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.0-rc.3",
+  "version": "0.1.0-rc.4",
   "channel": "candidate",
   "dataContractVersion": 1,
   "files": {
@@ -18,7 +18,7 @@
     "assets/graphite-dark.png": "d212df2d6f3f6d41befd4b11ca743d791db767188120508b873966494cde8a5d",
     "assets/graphite-light.png": "cd330a9ef8bb163f2ffd1fb86e78a875c06e0638eaacf8bba082c191ae6d4d72",
     "css/chrome.css": "2df09fd6afc92b421183bfcdc80be36327b787b20c636c64279df8a6d4e4b7cf",
-    "css/components.css": "c9b1a79382044951f76614d463faa58209dcdb27b5401b80e4beddf2af864b17",
+    "css/components.css": "f4c8e70d4d5736994768668d5c3e2d03699a8ac41989ffdb9f90fc3b469234c5",
     "css/glass.css": "dc4319158349da59c093d11a63976f66feb6d6cd1c4159232864184ae699a7e0",
     "css/kit2-preview-frame.css": "3230716ea0c33b5eb50fc3eb57d756898caa2ec59f88cb1dc0667fa1522a99ef",
     "css/kit2-preview.css": "aa44c4d6145b5d80239ea86ffd821e6dba322c7d43d37ab4c7366c2c95bdabf1",
@@ -39,7 +39,7 @@
     "docs/dashboard-data.md": "c97afdb33930de54cb3904d991f1efab4eef6eefc0060539086107d4ad85f46a",
     "docs/family-mortgage.md": "04692554c26bb81bc4595eba11096bc1b8798007052e09cf8956001248fe9771",
     "docs/reference-server.md": "5a9ff2ec2ed8e84114f6ca48e1a70dc9cffd2339deed0b649cb43d7c207a756d",
-    "docs/releases.md": "a36017bd342d7aa23a322746d0457f4dcc4c78fe400c28b40cdc29885ef61128",
+    "docs/releases.md": "528f30b669ec4b11a708e97cb67791f6d4e32e754a98fd1ba175628feed10edf",
     "family-mortgage.html": "fd991358c839d922d344b5dc118b76de592888c955ca4de107463dab96202da7",
     "icons/apple-touch-icon.png": "11d35853bab7b756d693b044964a73dc08468a5192ef5e2f183e1d9100828c31",
     "icons/favicon.svg": "884cd77cd185f618b6ce0c987a51047934c1c26da8ff957be6fc7bd545834535",
@@ -47,7 +47,7 @@
     "icons/icon-32.png": "d906cb1167824ea2b3c98dc2c7b5e883ee2e29c7286ec1456b0e6c078f9ff50a",
     "icons/icon-512.png": "dba7a8d290dbfd3ac120936b12b0dbac89dff8c8eb32da08c45d12ab30e1d276",
     "icons/icon-maskable-512.png": "d22205923fb3a8f4240cb26a027b7e65a710d7569e85332f6675e6c7614e56bd",
-    "js/dk-analysis.js": "24587f16088c1f523350d352f4f2e75cc766e39c94961b84afcc7699362ed776",
+    "js/dk-analysis.js": "81483dde0c9c0540adb7daca86fb067b6a6171414619b4dbfe98cd3e14e7ec54",
     "js/dk-calendar.js": "5b822cd5bedc62a43a6dbc4be95126e07abee8815b016218ec269bcfcde891a5",
     "js/dk-car.js": "94632528f0be9a818f8581118bfed6aec3f3781ad0775ca55f96ccf33093aa92",
     "js/dk-card-scroll.js": "9e36e82e3e2496b79ef125ddf9878a2058f95eac9ec9af94f70c308feed13326",
@@ -79,7 +79,7 @@
     "js/family-mortgage.js": "03887de16c8c08107969df013aa7cc46d788d8f66f0f5b125b43c40da9e19295",
     "js/kit2-preview.js": "7725d975b8cc741f38c96633f13b4acf50dd1323e177127f40632f5a62a1687e",
     "js/reference-dashboard.js": "f5d1100836562eb3f0da861f71322d099e19259342a88f23aa7fcadf5a29b438",
-    "kit-manifest.json": "9fdb51403b20985dc61592ba002da31dbfe000c2bdca99576f2c3aa7eea84557",
+    "kit-manifest.json": "48c20a94ca7e5cf9312f73ef741d71867f7a00823dc1469e9db3a8ae31de397c",
     "reference-dashboard.html": "2269a0255add4faa1b9d5d360219229cb7dad7eab489fdf79723284eb8bf33e6",
     "tools/reference-server.py": "31a9b6c531f46d523776199447e030c55c5d439d4146a57e9a468ea77809cddf",
     "vendor/air-datepicker.css": "110391f897ba0abc6c563bc8d1e7afa135b26955ae57a5fc0a1228e79c394f73",
@@ -100,5 +100,5 @@
     "vendor/licenses/Golos-Text-OFL.txt": "ff532f9e8789f09a9fdffc3c0954eedfb0a48be77b2e2eb90f5f82e4f347f50c",
     "vendor/licenses/Tabler-Icons-MIT.txt": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
   },
-  "contentDigest": "sha256:13a18b1a0592c59d53ba21ecab06eda6e29cde3de2cda7fe9994fe764f2d4bef"
+  "contentDigest": "sha256:e806bb460fe44858f1ef1c9f2f4ca2cee4ceed3efa11dc74c68186d7a0cc7746"
 }

@@ -34,11 +34,11 @@
 
 ## Состояния
 
-Оба периода и единицы указаны. Если процент нельзя вычислить, компонент объясняет причину. Ограничения и подключение При previous=0 процент не определён. Нет данных не превращается в ноль. По умолчанию направление нейтрально. Процент считается по модулю предыдущего значения; отрицательная база требует объяснения.
+Оба периода и единицы указаны. Если процент нельзя вычислить, компонент объясняет причину. Ограничения и подключение Без comparison сохраняется прежний API; сопоставимость проверяет приложение. С метаданными неполный период, разная длительность и база ниже явного minBase блокируют дельту/цвет. calendar-month разрешает только два полных календарных месяца без нормализации. Даты и базы видны; причина статуса доступна по наведению, фокусу, нажатию, Escape. При previous=0 доступна только абсолютная дельта. Порог малой базы не задан по умолчанию; sampleSize не означает автоматически число строк. Определения, единицы и одинаковые фильтры подтверждает источник.
 
 ## Варианты
 
-- `dkComparison(current, previous, better)` — Разметка и параметры компонента. При задаче, описанной выше.
+- `dkComparison(current, previous, better, comparison?)` — Разметка и параметры компонента. При задаче, описанной выше.
 
 ## Размеры
 
@@ -50,15 +50,15 @@
 <div id="advanced-comparison"></div>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-dkPeriodComparison(document.getElementById('advanced-comparison'), {label:'Аварии за сутки',current:23,previous:19,better:'decrease'});
+dkPeriodComparison(document.getElementById('advanced-comparison'), {label:'Учебные обращения',unit:'обращений',current:10,previous:20,better:'decrease',comparison:{currentPeriod:{from:'2025-05-01',to:'2025-05-15',complete:false,sampleSize:40},previousPeriod:{from:'2025-04-01',to:'2025-04-30',complete:true,sampleSize:100},baseLabel:'заявок'}});
 });
 </script>
 ```
 
 ## Параметры
 
-- `dkComparison(current, previous, better)` (чистая функция): Возвращает delta, percent, direction, meaning. better: increase/decrease/neutral.
-- `dkPeriodComparison(el, opts)` (API): current, previous, better, label, unit; update(opts), destroy().
+- `dkComparison(current, previous, better, comparison?)` (чистая функция): delta, percent, direction, meaning; с метаданными также comparable, code, status, reason, context. better: increase/decrease/neutral. comparison: currentPeriod/previousPeriod {from,to,complete,sampleSize?}, duration: equal (по умолчанию) или calendar-month, minBase?, baseLabel при переданной базе. Неверные/частичные метаданные вызывают TypeError. Полный контракт — skill/dashboard-build/references/numeric-checks.md.
+- `dkPeriodComparison(el, opts)` (API): current, previous, better, label, unit, comparison?; update(opts) заменяет все параметры, destroy() удаляет причину и обработчики. С метаданными нужны dk-analysis.js и dk-context.js; kit.py head period-comparison включает оба.
 
 ## С чем сочетать
 

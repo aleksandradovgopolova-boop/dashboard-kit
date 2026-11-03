@@ -5,7 +5,7 @@
 также покрывает метаданные. Python нужен сопровождающему для проверки и
 упаковки; в браузере сборка не выполняется.
 
-Текущий пакет — кандидат `0.1.0-rc.3`. Это локальная точка проверки, а не
+Текущий пакет — кандидат `0.1.0-rc.4`. Это локальная точка проверки, а не
 опубликованный стабильный релиз. Имя версии не подтверждает прохождение тестов.
 Обновления выпускаются через PR; слияние, публикация и изменение потребителя
 этими командами не выполняются.
@@ -15,7 +15,7 @@
 После изменения исходников и пересборки `kit-manifest.json`:
 
 ```sh
-python3 tools/kit-release.py --write --version 0.1.0-rc.3 --channel candidate
+python3 tools/kit-release.py --write --version 0.1.0-rc.4 --channel candidate
 python3 tools/kit-release.py --check
 python3 tools/check-release.py
 python3 tools/test.py
@@ -23,7 +23,7 @@ python3 tools/test.py
 
 `--write` пересчитывает дескриптор. Изменение хешей рассматривается вместе с
 исходниками в PR. Для уже выданного потребителю кандидата используйте следующий
-номер, например `0.1.0-rc.4`; не заменяйте пакет под прежним именем.
+номер, например `0.1.0-rc.5`; не заменяйте пакет под прежним именем.
 `--check` обнаруживает изменение содержимого и добавление/удаление runtime-файлов.
 `check-release.py` проверяет целостность и изоляцию пакетов; он не заменяет
 браузерные проверки и приёмку подключённого источника данных.
@@ -31,7 +31,7 @@ python3 tools/test.py
 ## Создание пакета
 
 ```sh
-python3 tools/kit-release.py --pack /tmp/dashboard-kit-0.1.0-rc.3
+python3 tools/kit-release.py --pack /tmp/dashboard-kit-0.1.0-rc.4
 ```
 
 Родительский каталог должен существовать, конечный каталог — отсутствовать.
@@ -65,7 +65,7 @@ python3 tools/kit-release.py --pack /tmp/dashboard-kit-0.1.0-rc.3
 
 ```sh
 python3 /path/to/dashboard-kit/tools/kit-release.py \
-  --verify /path/to/application/vendor/dashboard-kit/0.1.0-rc.3 \
+  --verify /path/to/application/vendor/dashboard-kit/0.1.0-rc.4 \
   --expect sha256:FULL_DIGEST_FROM_REVIEWED_CONSUMER_LOCK
 ```
 
@@ -105,7 +105,7 @@ primitives → semantic → components. Не смешивайте файлы д�
 
 ## Кандидат 02.11.2026
 
-`0.1.0-rc.3` — первый пакет минимального постоянного текста: уточнённые правила
+`0.1.0-rc.4` — первый пакет минимального постоянного текста: уточнённые правила
 сборки и пояснения по запросу в ипотечном примере. Формулы, контракт данных,
 фильтры и Graphite сохраняются. Проверки и ограничения фиксируются в
 `features/dashboard-minimal-copy-2026-11-02/verification.md`; номер кандидата
