@@ -198,6 +198,24 @@ STATE_SUMMARIES = {
  'layout-editor':'Виджеты можно перемещать, скрывать и возвращать. Сброс восстанавливает исходную раскладку.'
 }
 
+SPECS.append((
+ 'popover','Всплывающие сведения','Обратная связь','Открывает дополнительные сведения и действия рядом с кнопкой.',
+ 'Нужны ссылки, настройки или длинное объяснение по запросу.','Короткий неинтерактивный текст — <a href="component-tooltip.html">Подсказка</a>. Большая задача — отдельный экран или диалог.',
+ ['dk-pop','dk-popover','dk-popover__head','dk-popover__title','dk-popover__body'],['dk-popover.js'],
+ '<button class="dk-btn dk-btn--sm" type="button" id="context-info">Данные и методика</button>',
+ "var content=document.createElement('div'); content.innerHTML='<p>Учебные наблюдения. Выполнение = сумма факта / сумма плана × 100%.</p><a href=\"docs/named-metrics.md\">Контракт метрик</a>'; dkPopover(document.getElementById('context-info'),{label:'Данные и методика',content:content});",
+ [('dkPopover(trigger,{label,content,placement})','API','trigger — button, label — доступное название, content — текст или HTMLElement; placement: auto/top/bottom.'),('open()/close()/toggle()/update()/destroy()','методы','open возвращает Promise после завершения входной анимации родительского dialog. Ожидание отменяется close/destroy/уходом фокуса. Один открытый Popover; update сохраняет фокус, destroy очищает обработчики и ARIA.')],
+ 'При открытии фокус в содержимом, Tab выходит в обычный порядок страницы; Escape/Закрыть возвращают фокус кнопке. Внешний клик не перехватывает фокус. Не модальный: фон доступен. В native dialog панель принадлежит тому же диалогу.',
+ 'Строка content вставляется как текст; HTMLElement передаётся во владение компонента. Скрипт/HTML из данных не выполняются. На scroll/resize положение пересчитывается, длинное содержимое прокручивается. В старом WebView без Popover API используется fixed fallback. Старые классы dk-pop сохраняют только прежний стиль и не запускают контроллер автоматически. Вложенные Popover не поддерживаются; Tooltip и Onboarding остаются отдельными компонентами. Нативный механизм: <a href="https://html.spec.whatwg.org/multipage/popover.html">HTML Popover</a>.'
+))
+STATE_SUMMARIES['popover']='Закрыто, открыто, содержимое обновлено, закрытие по Escape или внешнему действию. После destroy обработчики и ARIA восстановлены.'
+READING_GUIDE['popover']={
+ 'purpose':'Открывает дополнительные сведения и действия рядом с кнопкой.',
+ 'live_intro':'Внутри могут быть ссылки и настройки. Короткое объяснение без действий остаётся подсказкой.',
+ 'sizes':'Ширина до 360 px, высота ограничена доступным окном; поля равны с четырёх сторон, длинное содержимое прокручивается.',
+ 'content_ok':['Конкретное название: «Данные и методика», «Настройки периода».'],
+ 'content_bad':['Ссылка или поле внутри Tooltip; неясное «Подробнее» без контекста.']}
+
 PAGES=[]
 for slug,title,group,purpose,yes,no,tokens,scripts,live,init,api,a11y,limits in SPECS:
     PAGES.append(dict(

@@ -33,6 +33,7 @@ stacks:
   - tools/check-family-mortgage-data.mjs
   - tools/check-numeric-data.mjs
   - tools/check-named-metrics.mjs
+  - tools/check-popover.mjs
   - tools/check-numeric-browser.mjs
   - tools/check-family-mortgage.mjs
   - tools/check-reference-server.py

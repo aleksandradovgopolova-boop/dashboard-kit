@@ -7,8 +7,8 @@ AI Ops managed/config/workflows и потребители SDK не входят 
 
 | Задача | Состояние |
 |---|---|
-| #65 Именованные метрики | Реализовано; 11 групп адресных тестов, legacy21/mortgage12/numeric22 PASS; code review APPROVE, полный CI предстоит |
-| #22 Popover | Следующая реализация |
+| #65 Именованные метрики | Реализовано; 11 групп адресных тестов, legacy21/mortgage12/numeric22 PASS; code review APPROVE, полный CI первого head PASS 41609338408; после pin/rollback fix fab9e75 повтор 41611976943 выполняется |
+| #22 Popover | Реализовано; native/fallback × две темы × 320/390/1280, клавиатура/touch/modal/select/lifecycle PASS; полный CI предстоит |
 | #37 Проверки композиции | После #64/#30, оба уже приняты |
 | #67 Схемы компонентов | Перед #68 |
 | #68 Screen spec | После #65/#67, первый рецепт plan-fact |
