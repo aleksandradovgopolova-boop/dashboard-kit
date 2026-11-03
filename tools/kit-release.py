@@ -84,6 +84,9 @@ def digest(document):
 def runtime_files(root):
     """Explicit runtime roots, plus every asset declared by the generated catalog."""
     names = set(FIXED_FILES)
+    # Older pinned packages predate the optional named-metric module.
+    if (root / "js/dk-metrics.js").exists():
+        names.add("docs/named-metrics.md")
     names.update(p.relative_to(root).as_posix() for p in (root / "js").glob("dk-*.js"))
     for folder in ("vendor", "icons", "assets"):
         for path in (root / folder).rglob("*"):

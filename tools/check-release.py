@@ -83,7 +83,11 @@ with tempfile.TemporaryDirectory(prefix="dk-release-test-") as temporary:
     # A consumer can switch back to an untouched package after testing a new one.
     (source / "js/dk-dashboard.js").write_bytes(original + b" second version")
     rejects(lambda: release.check_source(source), "Changed source passed the old descriptor")
+    (source / "js/dk-metrics.js").write_text("window.dkMetrics = {};", encoding="utf-8")
+    (source / "docs/named-metrics.md").write_text("Named metric API", encoding="utf-8")
     second = release.write_descriptor(source, "0.1.0-rc.2")
+    assert "docs/named-metrics.md" not in first["files"]
+    assert "docs/named-metrics.md" in second["files"]
     assert second["contentDigest"] != first["contentDigest"]
     bundle2 = base / "0.1.0-rc.2"
     release.pack(source, bundle2)

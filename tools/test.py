@@ -40,6 +40,7 @@ def main():
     run([node, 'tools/check-dashboard-data.mjs'])
     run([node, 'tools/check-family-mortgage-data.mjs'])
     run([node, 'tools/check-numeric-data.mjs'])
+    run([node, 'tools/check-named-metrics.mjs'])
     run(['python3', 'tools/check-reference-server.py'])
     run([node, 'tools/check-reference-contract.mjs'])
     run(['python3', 'tools/check-release.py'])

@@ -1,0 +1,536 @@
+{
+  "origin": "https://aleksandradovgopolova-boop.github.io/dashboard-kit/",
+  "sha": "e869cfd9293c33305aa9e8e2cb20b7830d3ea535",
+  "views": [
+    {
+      "file": "index",
+      "theme": "dark",
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 4,
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "buttons": [
+        44,
+        44
+      ],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "index",
+      "theme": "dark",
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 4,
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "buttons": [
+        44,
+        44
+      ],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "regions",
+      "theme": "dark",
+      "width": 1470,
+      "height": 836,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": 14,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "accidents",
+      "theme": "dark",
+      "width": 713,
+      "height": 836,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": [
+        37,
+        37,
+        37
+      ],
+      "sortHeaders": [
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ]
+      ]
+    },
+    {
+      "file": "family-mortgage",
+      "theme": "dark",
+      "width": 1280,
+      "height": 900,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "issued": "282 682",
+      "detail": {
+        "open": true,
+        "opacity": "1",
+        "method": true
+      }
+    },
+    {
+      "file": "family-mortgage",
+      "theme": "dark",
+      "width": 390,
+      "height": 900,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "issued": "282 682",
+      "detail": {
+        "open": true,
+        "opacity": "1",
+        "method": true
+      }
+    },
+    {
+      "file": "component-period-comparison",
+      "theme": "dark",
+      "width": 1280,
+      "height": 900,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "comparison": {
+        "text": "Неполный период",
+        "tipVisible": true,
+        "reason": "Один из периодов не завершён или данные за него неполны. Сравнение отключено.",
+        "width": 136.8125,
+        "container": 1202,
+        "delta": false
+      }
+    },
+    {
+      "file": "component-period-comparison",
+      "theme": "dark",
+      "width": 390,
+      "height": 900,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "comparison": {
+        "text": "Неполный период",
+        "tipVisible": true,
+        "reason": "Один из периодов не завершён или данные за него неполны. Сравнение отключено.",
+        "width": 148.8125,
+        "container": 332,
+        "delta": false
+      }
+    },
+    {
+      "file": "index",
+      "theme": "light",
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 4,
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "buttons": [
+        44,
+        44
+      ],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "index",
+      "theme": "light",
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 4,
+      "heroText": "Соберите дашборд с помощью готовых компонентов, визуального языка и примеров. Codex, Claude или другой ИИ-помощник подберёт инструменты под вашу задачу.",
+      "buttons": [
+        44,
+        44
+      ],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "regions",
+      "theme": "light",
+      "width": 1470,
+      "height": 836,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": 14,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": []
+    },
+    {
+      "file": "accidents",
+      "theme": "light",
+      "width": 713,
+      "height": 836,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": [
+        37,
+        37,
+        37
+      ],
+      "sortHeaders": [
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ],
+        [
+          "rgba(0, 0, 0, 0)",
+          "0px"
+        ]
+      ]
+    },
+    {
+      "file": "family-mortgage",
+      "theme": "light",
+      "width": 1280,
+      "height": 900,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "issued": "282 682",
+      "detail": {
+        "open": true,
+        "opacity": "1",
+        "method": true
+      }
+    },
+    {
+      "file": "family-mortgage",
+      "theme": "light",
+      "width": 390,
+      "height": 900,
+      "overflow": false,
+      "titles": [
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ],
+        [
+          "18px",
+          "24px",
+          "500"
+        ]
+      ],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "issued": "282 682",
+      "detail": {
+        "open": true,
+        "opacity": "1",
+        "method": true
+      }
+    },
+    {
+      "file": "component-period-comparison",
+      "theme": "light",
+      "width": 1280,
+      "height": 900,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "comparison": {
+        "text": "Неполный период",
+        "tipVisible": true,
+        "reason": "Один из периодов не завершён или данные за него неполны. Сравнение отключено.",
+        "width": 136.8125,
+        "container": 1202,
+        "delta": false
+      }
+    },
+    {
+      "file": "component-period-comparison",
+      "theme": "light",
+      "width": 390,
+      "height": 900,
+      "overflow": false,
+      "titles": [],
+      "gap": null,
+      "cards": 0,
+      "heroText": "",
+      "buttons": [],
+      "headerRow": null,
+      "sortHeaders": [],
+      "comparison": {
+        "text": "Неполный период",
+        "tipVisible": true,
+        "reason": "Один из периодов не завершён или данные за него неполны. Сравнение отключено.",
+        "width": 148.8125,
+        "container": 332,
+        "delta": false
+      }
+    }
+  ],
+  "errors": []
+}
