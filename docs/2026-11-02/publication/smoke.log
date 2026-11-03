@@ -1,0 +1,12 @@
+Verified published view index dark 1366
+Verified published view index dark 390
+Verified published view regions dark 1470
+Verified published view accidents dark 713
+Verified published view index light 1366
+Verified published view index light 390
+Verified published view regions light 1470
+Verified published view accidents light 713
+PASS: 18 published hashes; eight Chrome views, both themes, overview journey/examples, rail gap, widget titles and mobile table
+Verified complete region data dark { tiles: 89, high: 18, total: 89, rank: 14, overflow: false }
+Verified complete region data light { tiles: 89, high: 18, total: 89, rank: 14, overflow: false }
+PASS: 21 public hashes including data; both region maps fully loaded with 89 tiles, matching high-risk count and ranking

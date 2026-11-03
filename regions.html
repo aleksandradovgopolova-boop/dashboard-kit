@@ -137,7 +137,7 @@
 <p class="dk-region-result" id="r-results" role="status" aria-live="polite" aria-atomic="true"></p>
 </div>
 <section class="dk-widget r-summary-panel" aria-labelledby="r-summary-title">
-<header class="dk-widget__head"><div class="dk-widget__heading"><p class="dk-widget__meta" id="r-scope">Сводка по стране</p><h2 class="dk-widget__title" id="r-summary-title">Российская Федерация</h2></div></header>
+<header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title" id="r-summary-title">Российская Федерация</h2></div></header>
 <div class="r-risk-summary">
 <p class="dk-caption">Регионов с высоким риском</p>
 <div class="r-risk-value"><strong id="r-k-crit">—</strong><span>из <span id="r-k-total">89</span></span></div>
@@ -145,7 +145,7 @@
 <div class="r-risk-legend"><span>Высокий <b id="r-count-crit">—</b></span><span>Средний <b id="r-k-high">—</b></span><span>Низкий <b id="r-k-low">—</b></span></div>
 <p class="r-thresholds">Высокий ≥78 · средний 60–77 · низкий &lt;60</p><div class="r-risk-context"><span>Средний балл <b id="r-k-avg">—</b> / 100</span><span>Без данных <b id="r-k-nodata">—</b></span></div>
 </div>
-<header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title" id="r-title">Регионы</h2><p class="dk-widget__meta" id="r-rank-caption">Наибольший риск в выборке</p></div></header>
+<header class="dk-widget__head"><div class="dk-widget__heading"><h2 class="dk-widget__title" id="r-title">Регионы с наибольшим риском</h2></div></header>
 <div class="dk-rank r-focus-rank" id="r-rank" tabindex="0" role="region" aria-label="Регионы по убыванию риска"></div><footer class="dk-widget__footer"><a class="dk-btn dk-btn--ghost dk-btn--sm" id="r-all-results" href="#r-table">Все регионы</a></footer>
 </section>
 </aside>
@@ -391,10 +391,8 @@
         document.getElementById('r-k-low').textContent = nLow;
         document.getElementById('r-k-total').textContent = all.length;
         document.getElementById('r-k-nodata').textContent = (query || riskValue) ? 0 : tiles.tiles.length - source.length;
-        document.getElementById('r-all-results').textContent = 'Все результаты: ' + all.length;
-        document.getElementById('r-scope').textContent = query || riskValue ? 'Выбранный срез' : 'Сводка по стране';
+        document.getElementById('r-all-results').textContent = query || riskValue ? 'Все результаты' : 'Все регионы';
         document.getElementById('r-summary-title').textContent = query || riskValue ? 'Результаты отбора' : 'Российская Федерация';
-        document.getElementById('r-rank-caption').textContent = 'Наибольший риск · ' + Math.min(14, all.length) + ' регионов';
         ['crit','high','low'].forEach(function(key,i) { document.getElementById('r-share-'+key).style.flexGrow = [nCrit,nHigh,nLow][i]; });
 
         document.getElementById('r-k-avg').textContent = all.length ? Math.round(all.reduce(function (n,x) { return n+x.v; },0)/all.length) : '—';

@@ -30,3 +30,8 @@
   .ref-metrics{ grid-template-columns:minmax(0,1fr); }
   .ref-page .dk-toolbar__group{ width:100%; }
 }
+
+/* The title and theme share one header row; technical documentation lives below. */
+.ref-page > .dk-head{ flex-wrap:nowrap; align-items:center; }
+.ref-page > .dk-head > .dk-head__titles{ flex:1; min-width:0; }
+.ref-page > .dk-head > .dk-head__actions{ flex:0 0 auto; }

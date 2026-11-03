@@ -158,6 +158,11 @@ try {
       await focusHint('#fm-detail-coverage');
       const regionalTip=await tipFor('#fm-detail-coverage');
       assert(regionalTip.visible&&regionalTip.inDialog&&regionalTip.text.includes('полный факт'),'Regional explanation belongs to the active modal: '+JSON.stringify(regionalTip));
+      const metricBounds = await evaluate(`Array.from(document.querySelectorAll('#fm-detail-kpis .dk-tile'),card=>{
+        const value=card.querySelector('.dk-metric-lg'),r=card.getBoundingClientRect(),v=value.getBoundingClientRect(),s=getComputedStyle(card);
+        return {text:value.textContent,left:v.left-r.left-parseFloat(s.paddingLeft),right:r.right-parseFloat(s.paddingRight)-v.right,overflow:value.scrollWidth>value.clientWidth+1};
+      })`);
+      assert(metricBounds.every(v=>v.left>=-1&&v.right>=-1&&!v.overflow),'Regional metric values stay within equal card padding: '+JSON.stringify(metricBounds));
       await escape();
       assert(await evaluate(`document.querySelector('#fm-detail').open`),'First Escape dismisses only the explanation');
       if(width===390) {
