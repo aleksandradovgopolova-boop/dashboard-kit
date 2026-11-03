@@ -46,13 +46,13 @@ import os
 import re
 from pathlib import Path
 
-# Рантайм отдаёт id сессии в ENV. Имя проверено на живой машине: `CLAUDE_CODE_SESSION_ID`.
-# `CLAUDE_SESSION_ID` оставлен как исторический синоним (его ждала прежняя версия модуля).
+
+
 ENV_SESSION_ID_KEYS = ("CLAUDE_CODE_SESSION_ID", "CLAUDE_SESSION_ID")
 ENV_PROJECT_DIR_KEYS = ("CLAUDE_PROJECT_DIR",)
 
-# Строки транскрипта — до сотен килобайт каждая, а нужны нам единицы полей. Дешёвый префильтр по
-# подстроке снимает разбор с записей вида `{"type": "mode", ...}`: 63 МБ / 28k строк -> 0.2 с.
+
+
 _LINE_HINTS = ('"usage"', '"timestamp"')
 
 _SLUG_FORBIDDEN = re.compile(r"[^A-Za-z0-9-]")
@@ -127,7 +127,7 @@ def find_session_file(claude_home: Path, session_id: str | None = None,
             cand = projects_dir / slug / name
             if cand.is_file():
                 return cand, "session-id-in-project"
-        # id уникален: поиск по всем каталогам не может привести к чужой сессии.
+        
         try:
             entries = sorted(projects_dir.iterdir())
         except OSError:
@@ -198,7 +198,7 @@ def parse_session_metadata(session_file: Path) -> dict | None:
                 if project_dir is None and obj.get("cwd"):
                     project_dir = obj["cwd"]
 
-                # Компакция — настоящий маркер рантайма, а не вывод из падения контекста.
+                
                 if obj.get("subtype") == "compact_boundary":
                     compactions += 1
                     last_compaction_at = ts or last_compaction_at
@@ -216,8 +216,8 @@ def parse_session_metadata(session_file: Path) -> dict | None:
                 if not isinstance(usage, dict) or not usage:
                     continue
 
-                # Стриминг пишет один ход несколькими строками с одним `message.id`; последняя
-                # строка хода несёт итоговый usage.
+                
+                
                 key = str(msg.get("id") or obj.get("requestId") or f"line-{lineno}")
                 if key not in turns:
                     order.append(key)
@@ -234,7 +234,7 @@ def parse_session_metadata(session_file: Path) -> dict | None:
         context_peak = max(t["context"] for t in seq)
         context_status = "measured"
     else:
-        # Файл есть, но ни одного завершённого хода модели — размер контекста вывести не из чего.
+        
         context_current = context_peak = None
         context_status = "unavailable"
 

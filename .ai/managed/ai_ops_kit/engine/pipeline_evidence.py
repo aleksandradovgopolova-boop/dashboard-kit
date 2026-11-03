@@ -21,10 +21,10 @@ from ai_ops_kit.engine.pipeline_helpers import (
 from ai_ops_kit.engine.pipeline_git import _change_context
 from ai_ops_kit.engine.pipeline_failure import _security_verdict_errors, _evidence_ref_errors
 
-# Ре-экспорт кластера «авторинг + contour-evidence» — вынесен в сателлит `pipeline_authoring`
-# (разрез монолита при потолке размера). Публичная поверхность неизменна: `execution_pipeline`,
-# `pipeline_stages` и тесты по-прежнему импортируют эти имена из `pipeline_evidence`. Сателлит фасад
-# НЕ импортирует — обратного ребра нет.
+
+
+
+
 from ai_ops_kit.engine.pipeline_authoring import (  # noqa: F401 — публичный ре-экспорт
     _install_dependencies, _raw_author_tail, _author_with_retry, _run_spec_authoring,
     _run_authoring, _authored_context, contour_consistency_evidence,
@@ -48,25 +48,25 @@ def _reevaluate_artifact_evidence(work_root, wid, gate_ids):
             if isinstance(data, dict) and not mod.check(data):
                 ev[gid] = {"status": "pass", "provided": mod.provided_evidence(data),
                            "evidence": [f".ai/runplan/{wid}/{fname} — форма подтверждена (reevaluate, SHA стабилен)"]}
-        # Причина подавления ЗАПИСАНА (срез engine ратчета 2026-08-12): направление отказа
-        # fail-closed. Нечитаемый или невалидный артефакт НЕ попадает в `ev`, а `ev` — единственный
-        # способ этой функции сказать «гейт закрыт». Значит сбой разбора даёт НЕЗАКРЫТЫЙ гейт, а не
-        # закрытый по ошибке: гейт пересчитается обычным путём. Обратное направление здесь
-        # невозможно по построению — `pass` не умеет добавить `status: pass`.
+        
+        
+        
+        
+        
         except Exception:  # noqa: BLE001,S110 — сбой разбора артефакта не закрывает гейт (fail-closed)
             pass
     if "specification" in gate_ids:
         try:
             _avail, _ok, _ = _openspec_validate(work_root, wid)
             if _avail and _ok:
-                # СИММЕТРИЯ С АВТОРИНГОМ (живой прогон 587). Путь авторинга спеки закрывает
-                # `specification` с ОБОИМИ required_evidence — `openspec_valid` И `requirements_covered`
-                # — на одном основании: `openspec validate --strict OK` (см. _run_spec_authoring,
-                # gate_ev["specification"].provided = ["openspec_valid", "requirements_covered"]).
-                # Здесь, на reevaluate, при ТОМ ЖЕ подтверждении отдавалось только `openspec_valid`,
-                # и гейт падал «бездоказательным pass: не подтверждён requirements_covered» — хотя SHA
-                # стабилен и спека валидна ровно как при авторинге. Правка чисто правку кода (без смены
-                # спеки) роняла specification на reevaluate. Отдаём оба — то же основание, что авторинг.
+                
+                
+                
+                
+                
+                
+                
+                
                 ev["specification"] = {"status": "pass",
                                        "provided": ["openspec_valid", "requirements_covered"],
                                        "evidence": ["openspec validate --strict (reevaluate, SHA стабилен)"]}
@@ -135,11 +135,11 @@ def _review_cites_delivered_file(res, delivered, work_root) -> bool:
     return False
 
 
-# СТРУКТУРНО НЕМОЙ ОТВЕТ ПРОВАЙДЕРА-РЕВЬЮЕРА — среда недоступна (вложенный `claude -p` оборвался ДО
-# модели, #160) ИЛИ провайдер вернул ПУСТО (`empty_answer`): вердикта в ответе нет ВОВСЕ, повтор его
-# не родит. Только такой ответ ведёт в handoff (awaiting_reviewer). Это НЕ «дал разбор без вердикта»
-# (проза / `shape_violated` / `refused_by_model`) — тот остаётся НАЗВАННЫМ no-verdict, а не handoff:
-# иначе ЛЮБОЙ no-verdict молча превращался бы в ожидание оркестратора (страж бы ослаб).
+
+
+
+
+
 _PROVIDER_MUTE_REFUSALS = frozenset({"env_unavailable", "empty_answer"})
 
 
@@ -173,11 +173,12 @@ def _gate_ev_from_verdict(gid, g, rv, *, revision, delivered, work_root, valid_i
     entry = {"gate": gid, "stopped": rv.get("stopped"), "reads": rv.get("reads"),
              "denied": rv.get("denied"), "valid": not errs, "source": rv.get("source"),
              "status": (res or {}).get("status") if not errs else None,
+             "provenance": "JUDGMENT" if not errs else None,
              "blockers": (res or {}).get("blockers") if isinstance(res, dict) else None,
              "errors": errs or None}
     if errs:
-        # НЕ тихий пропуск. no-verdict -> НАЗВАННЫЙ отказ в gate_ev (взводит reviewer-blocked),
-        # с причиной, которую человек может разобрать (находка поля P0, obs-2026-08-20).
+        
+        
         ref = gate_executor.evidence_from_no_verdict(
             g, gate_id=gid, stopped=rv.get("stopped"), reads=rv.get("reads"),
             errors=errs, refusal=rv.get("refusal"))
@@ -192,12 +193,12 @@ def _gate_ev_from_verdict(gid, g, rv, *, revision, delivered, work_root, valid_i
     calib_ui = calibrated_enforcement and gid in gate_policy.UI_GATES
     if calib_ui and isinstance(ui_evidence, dict):
         ev_status = (ui_evidence.get(gid) or {}).get("deterministic_status", "not_run")
-    # РУБЕР-ШТАМП ПЕРЕОПРЕДЕЛЁН ЧЕРЕЗ ЭТАЛОН, А НЕ ЧЕРЕЗ read-op СУДЬИ (Fix C для ревьюеров,
-    # 01.09.2026). claude-cli судит из диффа и read-op детерминированно НЕ эмитит — поэтому
-    # вовлечённость определяется тем, СВЕРЕН ли вердикт с ДОСТАВЛЕННЫМ файлом ЧТЕНИЕМ (P0
-    # 04.09.2026): кит сам знает состав правки (`delivered`), САМ читает файл и подтверждает, что
-    # процитированный диапазон строк в нём РЕАЛЕН. Рубер-штампом остаётся pass с И 0 reads, И ни
-    # одной цитатой, подтверждённой чтением доставленного файла. Фабрикация «pass без ничего» — fail.
+    
+    
+    
+    
+    
+    
     if (status == "pass" and blocking and not rv.get("reads")
             and not _review_cites_delivered_file(res, delivered, work_root)):
         entry["closed_as"] = "blocked"
@@ -257,8 +258,8 @@ def _consume_handoff_verdicts(work_root, gate_ids, gate_ev, signals, revision, *
     gate_ev = dict(gate_ev)
     reviews = []
     for gid in _reviewable_gates(gate_ids, signals):
-        # Настоящий pass независимый вердикт не переспоривает; отсутствие/пустой no-verdict — да
-        # (принцип: вердикт-артефакт оркестратора ПЕРЕОПРЕДЕЛЯЕТ пустой no-verdict).
+        
+        
         if (gate_ev.get(gid) or {}).get("status") == "pass":
             continue
         handoff_rr, _ = reviewer_handoff.load_verdict(handoff_root, gid, revision=revision)
@@ -271,6 +272,8 @@ def _consume_handoff_verdicts(work_root, gate_ids, gate_ev, signals, revision, *
             gid, g, rv, revision=revision, delivered=delivered, work_root=work_root,
             valid_ids=valid_ids, signals=signals, calibrated_enforcement=calibrated_enforcement,
             ui_evidence=ui_evidence)
+        if entry.get("valid"):
+            ev["provenance"] = "JUDGMENT"
         gate_ev[gid] = ev
         reviews.append(entry)
     return gate_ev, reviews
@@ -305,33 +308,37 @@ def _run_reviews(reviewer_proposer, work_root, gate_ids, gate_ev, signals, revis
     ro_policy = tool_broker.Policy(level="read-only", child_root=str(work_root))
     reviews = []
     gate_ev = dict(gate_ev)
-    # СРЕЗ engine РАТЧЕТА 2026-08-12: здесь стоял `try: valid_ids = set(gates) except: valid_ids = None`.
-    # Это была ФИКТИВНАЯ защита того же класса, что R-31/R-32: `set()` по словарю бросить не может,
-    # а единственный путь к исключению (`gates: null` в реестре) молча превращал `valid_ids` в None —
-    # и `vrr.check(gate_ids=None)` ПЕРЕСТАВАЛ проверять, существует ли гейт в quality/gates.yaml
-    # (validate_reviewer_result.py:63 — проверка под `gate_ids is not None`). То есть подавление не
-    # спасало от сбоя, а выключало проверку. Сам `load_gates()` выше не обёрнут и падает честно.
+    
+    
+    
+    
+    
+    
     valid_ids = set(gates)
     change_ctx = change_context if change_context is not None else _change_context(work_root, revision)
-    # Fix C для ревьюеров: авторитетный состав доставленной правки (кит, не судья) — для заземления
-    # вердикта, когда read-op не эмитится (claude-cli детерминированно его не даёт).
+    
+    
     delivered = _delivered_files(work_root, revision)
     for gid in _reviewable_gates(gate_ids, signals):
         if gid in gate_ev:
             continue
         g = gates.get(gid) or {}
         req = g.get("required_evidence", []) or []
-        # ARTIFACT-FIRST (#160 handoff): валидный вердикт оркестратора на ТЕКУЩЕМ SHA -> берём его БЕЗ
-        # вызова провайдера. Валидность (форма + gate + reviewed_revision==revision + writer≠judge)
-        # проверяет load_verdict; ЗАЗЕМЛЕНИЕ pass идёт в _gate_ev_from_verdict тем же путём, что
-        # живой вердикт, поэтому здесь не дублируется и не расходится.
+        
+        
+        
+        checklist = _gate_checklist(g, root=work_root, changed_files=delivered or None)
+        
+        
+        
+        
         handoff_rr, _ = reviewer_handoff.load_verdict(handoff_root, gid, revision=revision)
         if handoff_rr is not None:
             rv = {"result": handoff_rr, "stopped": "handoff-artifact", "reads": [], "denied": [],
                   "source": "handoff-artifact"}
         else:
             reviewer = tool_loop.make_reviewer_proposer(
-                reviewer_proposer, gid, checklist=_gate_checklist(g),
+                reviewer_proposer, gid, checklist=checklist,
                 required_evidence=req, reviewed_revision=revision)
             rv = tool_loop.run_review(reviewer, work_root, ro_policy, gid, budget=budget,
                                       max_reads=max_reads, base_context=change_ctx,
@@ -344,19 +351,19 @@ def _run_reviews(reviewer_proposer, work_root, gate_ids, gate_ev, signals, revis
             # Только БЛОКИРУЮЩИЙ гейт: advisory-гейт всё равно не блокирует, ему handoff не нужен (и
             # это сохраняет named refusal у ux_review — «дал разбор без вердикта» не станет awaiting).
             if _provider_structurally_mute(rv) and bool(g.get("blocking")):
-                # причина едет в handoff человеку/оркестратору: пустой ответ провайдера ≠ недоступность
-                # среды, и подменять одну формулировкой другой значило бы врать о причине.
+                
+                
                 cause = ("исполнитель ревьюера недоступен в этой среде (сессия Клода, #160)"
                          if rv.get("stopped") == "env-unavailable"
                          else (rv.get("refusal") or {}).get("reason_text")
                          or "провайдер ревьюера вернул пустой ответ (вердикта нет)")
                 aw = reviewer_handoff.open_request(
-                    handoff_root, gid, checklist=_gate_checklist(g), reviewed_revision=revision,
+                    handoff_root, gid, checklist=checklist, reviewed_revision=revision,
                     changed_files=delivered, blocking=True, required_evidence=req, cause=cause)
                 gate_ev[gid] = aw
-                # entry.status="awaiting_reviewer" (НЕ "fail"): гейт-evidence блокирует (fail), но
-                # это ОЖИДАНИЕ ревью, а не отрицательный вердикт судьи — иначе _hard_stop счёл бы это
-                # reviewer-blocked и остановил бы цепочку.
+                
+                
+                
                 reviews.append({"gate": gid, "stopped": rv.get("stopped"), "reads": rv.get("reads") or [],
                                 "denied": rv.get("denied"), "valid": False, "source": "handoff-request",
                                 "status": "awaiting_reviewer", "closed_as": "awaiting_reviewer",
@@ -366,6 +373,8 @@ def _run_reviews(reviewer_proposer, work_root, gate_ids, gate_ev, signals, revis
             gid, g, rv, revision=revision, delivered=delivered, work_root=work_root,
             valid_ids=valid_ids, signals=signals, calibrated_enforcement=calibrated_enforcement,
             ui_evidence=ui_evidence)
+        if entry.get("valid"):
+            ev["provenance"] = "JUDGMENT"
         gate_ev[gid] = ev
         reviews.append(entry)
     return gate_ev, reviews
@@ -466,14 +475,14 @@ def _human_approval_domains_uncovered(approval_root, wid, changed_files, diff_ro
             uncovered.append(dom)
     return uncovered
 
-# Запуск скриптом ОБЪЯСНЯЕТ модуль, а не молчит (ревизия 2026-08-11).
-#
-# Здесь стояло `sys.exit(selftest())`, а сама функция удалена в v3.30 вместе с переносом
-# селфтестов в pytest: любой запуск падал с `NameError`. Просто убрать блок — тоже неверно:
-# модуль остаётся запускаемой точкой входа (`python3 -m ai_ops_kit.engine.pipeline_evidence`), и молчаливый
-# выход с кодом 0 — тот самый дефект «ноль и есть симптом».
-# Поэтому вход делает осмысленную работу — печатает назначение модуля, как `invariants.py`.
-# Проверки модуля — в `tests/unit/`.
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     print(__doc__)
     print("Проверки этого модуля — в tests/unit/ (pytest), отдельного --selftest нет с v3.30.")

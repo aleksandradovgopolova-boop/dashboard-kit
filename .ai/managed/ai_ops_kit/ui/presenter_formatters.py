@@ -13,13 +13,17 @@
 """
 from __future__ import annotations
 
+from ai_ops_kit.shared import gate_dimensions  # карта gate -> продуктовая фраза (общий нижний слой)
 from ai_ops_kit.ui.presenter import _q, message
+from ai_ops_kit.ui.presenter_ceremony import risk_ceremony_line  # связь риск->церемония (спутник)
 
-# Вторая, более крупная группа переводчиков (ход и решения работы) вынесена в модуль-сосед
-# `presenter_report_formatters.py`, чтобы этот файл держался под потолком размера. Реэкспорт
-# оставляет `presenter_formatters.from_bootstrap(...)` и обращения `presenter.from_*` рабочими,
-# а сам импорт — тот не-тестовый потребитель, без которого сосед был бы «построен, но не проведён».
+
+
+
+
+from ai_ops_kit.shared.project_detector import lint_unguarded  # где «линтера нет» = «не нашёл»
 from ai_ops_kit.ui.presenter_report_formatters import (
+    code_style_unguarded,
     from_bootstrap,
     from_doctor,
     from_first_hour,
@@ -32,12 +36,12 @@ from ai_ops_kit.ui.presenter_report_formatters import (
 )
 
 
-# ── Переводчики повседневных команд ───────────────────────────────────────────────────────────
-# Слой коммуникации существовал для трёх команд из двенадцати. Остальные печатали внутреннее
-# состояние напрямую — `ONBOARD: стек python · профиль записан …`, `SPECIFY: создан …`,
-# `■ intent: run · понял: QUICK -> workflow QUICK · спецификация L0`, — и настройка «с кем ты
-# говоришь» на них не влияла вовсе. Пользовательское ревью назвало это одним дефектом: чаще всего
-# человек видит именно эти команды, и именно в них он читает лог вместо ответа.
+
+
+
+
+
+
 
 def from_execution_preview(pv: dict) -> dict:
     """`build_preview()` -> UserMessage. «Что я собираюсь сделать» до запуска.
@@ -67,9 +71,9 @@ def from_execution_preview(pv: dict) -> dict:
                      "проверить")
 
     if ctx_error:
-        # ДЕГРАДАЦИЯ ВИДНА НА ВСЕХ ТРЁХ УРОВНЯХ. Прежде сбой сборки контекста давал `агентов 0 ·
-        # ~None ток.` — прогон вслепую выглядел как обычный (137 проглоченных исключений, внешнее
-        # ревью). Продакту тем более нельзя показывать это как норму: он не читает числа.
+        
+        
+        
         return message(
             status="degraded", headline="Могу запустить, но материалы проекта не собрались",
             summary=summary,
@@ -99,9 +103,9 @@ def from_execution_preview(pv: dict) -> dict:
                    next_steps=steps or [_default_step], technical=tech)
 
 
-# Внутреннее имя команды -> то, как её называет человек. Нужно потому, что пробел в профиле надо
-# назвать своими словами: в поле продакт прочитал «не выведены команды ['build', 'lint',
-# 'typecheck', 'test']» — repr списка Python посреди русской фразы.
+
+
+
 _CMD_RU = {"build": "сборки", "test": "тестов", "lint": "линтера", "typecheck": "проверки типов",
            "install": "установки зависимостей", "dev": "запуска", "run": "запуска",
            "format": "форматирования", "e2e": "сквозных тестов"}
@@ -139,7 +143,12 @@ def from_onboarding_profile(prof: dict, written: str) -> dict:
             technical=tech)
 
     what = ", ".join(langs)
-    missing_cmds = sorted({k for s in stacks for k, v in (s.get("commands") or {}).items() if not v})
+    
+    missing_cmds = sorted({k for s in stacks for k, v in (s.get("commands") or {}).items()
+                           if not v and k != "format"})
+    # #1183: без линтера — не «не хватает команды», а последствие для кода и совет, что поставить
+    bare = lint_unguarded(prof)
+    style = (" " + code_style_unguarded(bare)) if bare else ""
     notes = []
     if missing_cmds:
         notes.append("команды для " + ", ".join(_CMD_RU.get(k, k) for k in missing_cmds))
@@ -152,13 +161,13 @@ def from_onboarding_profile(prof: dict, written: str) -> dict:
             status="degraded", headline="Разобрался, но не до конца",
             summary=f"Проект написан на {what}.",
             why_it_matters="Чего я не знаю: " + "; ".join(notes) + ". Пока это так, часть проверок "
-                           "я провести не смогу и не буду делать вид, что провела.",
+                           "я провести не смогу и не буду делать вид, что провёл." + style,
             next_steps=["скажи недостающие команды — или спроси «что дальше», и я начну работу "
                         "с тем, что уже знаю"],
             technical=tech)
     if undetermined:
-        # Остались непереведённые пробелы: назвать их своими словами я не умею, но и умолчать о том,
-        # что профиль неполон, не имею права — «не знаю» не превращается в «в порядке».
+        
+        
         n = len(undetermined)
         return message(
             status="degraded", headline="Разобрался, но не до конца",
@@ -213,7 +222,7 @@ def from_specification(path, created, level_name, sections, blocking_missing, ne
                        added=None, add_error=None, spec_provisional=False,
                        sections_if_escalated=None, level_if_escalated=None,
                        answer_command=None, applied=None, unmatched=None,
-                       answer_error=None) -> dict:
+                       answer_error=None, task=None, level_reason=None) -> dict:
     """Спецификация задачи -> UserMessage. Незаполненные разделы — работа человека, и она названа.
 
     F-029: `added` — разделы, ДОПИСАННЫЕ в уже существующий файл под поднявшийся уровень. Без него
@@ -237,7 +246,6 @@ def from_specification(path, created, level_name, sections, blocking_missing, ne
     from ai_ops_kit.shared import spec_answers
     n_missing = len(blocking_missing or [])
     n_added = len(added or [])
-    n_esc = len(sections_if_escalated or [])
     n_applied = len(applied or [])
     tech = {"spec": str(path), "уровень": level_name, "разделов": len(sections or []),
             "не заполнено": ", ".join(blocking_missing or []) or "—",
@@ -247,26 +255,38 @@ def from_specification(path, created, level_name, sections, blocking_missing, ne
     if applied:
         tech["записано в этом ответе"] = ", ".join(sorted(applied))
     if unmatched:
-        tech["не узнала слова"] = ", ".join(unmatched)
+        tech["не узнал слова"] = ", ".join(unmatched)
     if answer_error:
         tech["запись ответа не удалась"] = str(answer_error)
-    # Исход 3: провизорность и точные разделы эскалации — в технические детали (там уместны id
-    # разделов); в summary уходит плоское предупреждение с уровнем и числом разделов.
+    
+    
+    
+    
+    
+    
     _disclosure = ""
     if spec_provisional:
         tech["форма предварительная"] = (
             f"тяжесть (size/risk) не заявлена; при эскалации уровень {level_if_escalated}, "
             f"добавятся разделы: {', '.join(sections_if_escalated or []) or '—'}")
         _disclosure = (
-            f" Форма предварительная: тяжесть задачи (size/risk) не заявлена — при эскалации на "
-            f"прогоне уровень станет {level_if_escalated} и добавится ещё {n_esc} "
-            f"{_q(n_esc, 'раздел', 'раздела', 'разделов')} (какие — в технических деталях). "
-            f"Заявишь размер/риск сразу — и форма выйдет нужного уровня.")
+            " Скажи заодно, насколько задача крупная и рискованная — от этого зависит, "
+            "насколько тщательно я её проведу. Можно просто словами: «небольшая, неопасная» "
+            "или «крупная, рискованная».")
+    # F-032 + #958: слова пользователя — не внутренняя кухня. Кит эхом повторяет, ЧТО он понял,
+    # продуктовым языком, БЕЗ feature id и БЕЗ CLI-флагов. Так текст задачи виден человеку в самом
+    # выводе (а путь репозитория и id остаются в технических деталях), и подтверждение задачи —
+    # лучший UX, чем эхо CLI-команды, которое эту роль раньше нечаянно выполняло.
+    # risk-based-ceremony: человек ВИДИТ, что объём процесса выбран РИСКОМ, а не полнотой, и ПОЧЕМУ.
+    # Провизорность честно проговариваем прямо здесь (в _disclosure — вопрос к человеку; тут — причина).
+    _ceremony = risk_ceremony_line(level_name, level_reason, provisional=spec_provisional)
+    tech["процесс подобран по риску"] = _ceremony
+    _echo = f"Понял: «{task.strip()}». " if (task or "").strip() else ""
     if created:
         _origin = "начата"
     elif n_added:
-        _origin = (f"уже была, стало на {n_added} "
-                   f"{_q(n_added, 'вопрос', 'вопроса', 'вопросов')} больше под {level_name}")
+        
+        _origin = f"уже была — добавила {n_added} {_q(n_added, 'вопрос', 'вопроса', 'вопросов')}"
     else:
         _origin = "уже была"
     if n_missing:
@@ -277,15 +297,20 @@ def from_specification(path, created, level_name, sections, blocking_missing, ne
             ask += f" — и ещё {len(questions) - 4} (полный список в технических деталях)"
         steps = []
         if unmatched:
-            steps.append("несколько слов из ответа я не узнала: " + ", ".join(unmatched)
+            steps.append("несколько слов из ответа я не узнал: " + ", ".join(unmatched)
                         + " — назови их словами из вопросов ниже")
         steps.append("ответь словами, не открывая файл: " + ask)
+        steps.append("потом скажи, что переходим к плану — дальше я работаю сам")
+        
+        
+        
+        
         if answer_command:
-            steps.append(f"так, например: {answer_command}")
-        steps.append(f"потом запускай: {next_command}")
+            tech["ответить командой"] = answer_command
+        tech["следующий шаг"] = next_command
         return message(
             status="needs_input",
-            summary=("Описание задачи " + _origin
+            summary=(_ceremony + " " + _echo + "Описание задачи " + _origin
                      + f"; осталось ответить на {n_missing} "
                        f"{_q(n_missing, 'вопрос', 'вопроса', 'вопросов')}."
                      + (f" Записано в этом ответе: {n_applied}." if n_applied else "")
@@ -297,9 +322,11 @@ def from_specification(path, created, level_name, sections, blocking_missing, ne
                            "файл не обязательно — можно просто сказать словами.",
             next_steps=steps,
             technical=tech)
+    tech["следующий шаг"] = next_command
     return message(status="ok", headline="Описание задачи готово",
-                   summary="Всё, что нужно было описать, описано." + _disclosure,
-                   next_steps=[f"запускай: {next_command}"], technical=tech)
+                   summary=_ceremony + " " + _echo + "Всё, что нужно было описать, описано." + _disclosure,
+                   next_steps=["скажи, что переходим к плану — дальше я работаю сам"],
+                   technical=tech)
 
 
 def from_discovery_draft(path, created) -> dict:
@@ -310,8 +337,34 @@ def from_discovery_draft(path, created) -> dict:
         why_it_matters="Он пустой намеренно: чью боль решаем и как поймём, что помогло, "
                        "я за тебя не придумаю.",
         next_steps=[f"заполни разделы в {path}",
-                    "потом попроси построить описание задачи — дальше я работаю сама"],
+                    "потом попроси построить описание задачи — дальше я работаю сам"],
         technical={"draft": str(path), "создан": bool(created)})
+
+
+
+
+
+
+
+_GATE_PRODUCT_DIMENSION = gate_dimensions.GATE_PRODUCT_DIMENSION
+
+
+def _verified_why(passed_gates) -> tuple:
+    """Свод «что проверено» продуктовыми словами для ветки `ready`. -> (clause, why).
+    ИНВАРИАНТ ЧЕСТНОСТИ (ядро кита, «no false green»): называем ТОЛЬКО реально пройденные измерения и
+    НЕ выдаём мнение за машинную проверку. Источник различаем без запроса в слой гейтов (`ui` не
+    зависит от `gates`): в `ready` попадают ИСКЛЮЧИТЕЛЬНО ai-review гейты (`_reviewable_gates` берёт
+    `classify == "ai-review"`, writer≠judge) — значит измерение здесь заключение НЕЗАВИСИМОГО РЕВЬЮЕРА,
+    не детерминированного валидатора; машинной проверкой это не зовём.
+    """
+    dims = [d for gid in passed_gates for d in (_GATE_PRODUCT_DIMENSION.get(gid),) if d]
+    if not dims:  # пройденные гейты есть, но продуктовых имён нет — измерения не выдумываем
+        return ("Независимая проверка пройдена — смотрел не тот, кто делал работу.", None)
+    clause = ("Независимый ревьюер (не тот, кто делал работу) посмотрел и принял: "
+              + ", ".join(dims) + ".")
+    
+    return clause, ("Это заключение независимого ревьюера, а не автоматических тестов, — но проверял "
+                    "не тот, кто делал работу, и потому «замечаний нет» здесь имеет основание.")
 
 
 def from_review(rep: dict) -> dict:
@@ -332,8 +385,8 @@ def from_review(rep: dict) -> dict:
             "основание": readiness.get("reason") or "—",
             "гейтов на ревью": len(rep.get("reviewable") or []),
             "изменено файлов": changed,
-            # БАЗА РЯДОМ С ЧИСЛОМ: «изменено файлов 0» без базы неотличимо от «база не выбрана»
-            # (заявка #136 — там же справка обещала автоподбор, которого не было).
+            
+            
             "база дифа": (rep.get("base") or "не выбрана")
                          + (f" ({rep['base_source']})" if rep.get("base_source") and rep.get("base") else "")
                          + (f" — {rep['base_note']}" if rep.get("base_note") else ""),
@@ -359,33 +412,39 @@ def from_review(rep: dict) -> dict:
     if verdict == "no-ai-review-gates":
         return message(
             status="ok", headline="Вливать можно, но проверка не проводилась",
-            summary="У этой работы нет мест, которые я обязана отдавать на независимую проверку.",
+            summary="У этой работы нет мест, которые я обязан отдавать на независимую проверку.",
             why_it_matters="Поэтому «замечаний нет» здесь значит «их никто не искал» — "
                            "решение вливать за тобой.",
             next_steps=["можно вливать"], technical=tech)
 
-    # «Вердикта нет» — это либо явный `needs-reviewer`, либо ни одного годного вердикта среди
-    # проведённых ревью. Второй случай важнее: он выглядит как проведённая проверка.
+    
+    
     no_verdict = verdict == "needs-reviewer" or (
         bool(reviews) and all((r.get("status") or "") in ("", "invalid") for r in reviews))
     if no_verdict:
         return message(
             status="degraded", headline="Проверять было некому",
-            summary="Работа сделана, но независимую проверку я не провела.",
+            summary="Работа сделана, но независимую проверку я не провёл.",
             why_it_matters="Своё же изменение я судить не имею права, а живого проверяющего "
                            "здесь не было. Это не «всё хорошо» — это «не проверено».",
             next_steps=["подключи проверяющего — тогда у вердикта появится основание"],
             technical=tech)
 
     if ready:
+        
+        
+        
+        passed_gates = [r.get("gate") for r in reviews
+                        if r.get("status") == "pass" and r.get("valid", True) and r.get("gate")]
+        clause, why = _verified_why(passed_gates)
         return message(
             status="ok", headline="Проверено",
-            summary=f"Независимая проверка прошла: изменений в {changed} "
-                    f"{_q(changed, 'файле', 'файлах', 'файлах')}, замечаний нет.",
+            summary="Вот что именно проверено. " + clause,
+            why_it_matters=why,
             next_steps=["можно вливать"], technical=tech)
 
     if verdict != "needs-changes":
-        # Незнакомый вердикт — не «всё плохо» и тем более не «всё хорошо»: я его не понимаю.
+        
         return message(
             status="degraded", headline="Не понимаю итог проверки",
             summary=f"Проверка вернула незнакомый мне итог: {verdict}.",
@@ -400,43 +459,81 @@ def from_review(rep: dict) -> dict:
 
 
 def from_advice(result: dict) -> dict:
-    """`engineering_advisor.advise()` -> UserMessage. Совет — не исполнение, и это должно быть видно."""
-    recs = list(result.get("recommendations") or [])
-    urgent = [r for r in recs if int(r.get("priority") or 3) == 1]
-    tech = {"repository": result.get("repository"), "task_type": result.get("task_type") or "—",
-            "рекомендаций": len(recs), "сводка": result.get("summary")}
-    tech.update({f"[{r.get('category')}] {i + 1}": f"{r.get('advice')} (источник: {r.get('source')})"
-                 for i, r in enumerate(recs)})
-    if not recs:
-        return message(status="ok", headline="Замечаний по инженерной части нет",
-                       summary="Смотрела окружения, поставку и процесс — советовать нечего.",
-                       next_steps=["спроси «что дальше» — предложу работу"], technical=tech)
-    n = len(recs)
-    if urgent:
+    """`advise` -> UserMessage. ВЕДЁТ с «что нужно ПРОДУКТУ» (#958), инженерная настройка кита —
+    после и явно отделена. Совет — не исполнение, и это должно быть видно.
+
+    Продуктовая часть говорит о продукте пользователя простым языком: возможности, пробелы,
+    следующий шаг. Инженерная часть (окружения/поставка/процесс — про настройку самого кита)
+    уходит в технические детали и в отдельную строку «Дальше», чтобы её не спутать с продуктом.
+    Инвариант честности: нет продуктовых данных → так и говорим, потребность не выдумываем.
+    """
+    pa = result.get("product_advice") or {}
+    precs = list(pa.get("recommendations") or [])
+    enough = pa.get("enough_product_data")
+
+    eng_recs = list(result.get("recommendations") or [])
+
+    
+    
+    tech = {"продуктовых рекомендаций": len(precs)}
+    tech.update({f"продукт · {p.get('kind')} {i + 1}":
+                 f"{p.get('need')} — {p.get('why')} (источник: {p.get('source')})"
+                 for i, p in enumerate(precs)})
+    if pa.get("note"):
+        tech["продукт · примечание"] = pa["note"]
+    tech["— ниже про НАСТРОЙКУ КИТА, не про продукт —"] = (
+        f"{len(eng_recs)} инженерных заметок")
+    tech["repository"] = result.get("repository")
+    tech["task_type"] = result.get("task_type") or "—"
+    tech.update({f"настройка кита · [{r.get('category')}] {i + 1}":
+                 f"{r.get('advice')} (источник: {r.get('source')})"
+                 for i, r in enumerate(eng_recs)})
+
+    
+    eng_line = (f"отдельно есть заметки про настройку самого кита — это не про продукт, "
+                f"покажу по запросу") if eng_recs else None
+
+    if precs:
+        lead = precs[0]
+        needs = "; ".join(p.get("need", "") for p in precs)
+        next_steps = ["возьмусь за первое, если скажешь"]
+        if len(precs) > 1:
+            next_steps.append("остальное по продукту покажу списком")
+        if eng_line:
+            next_steps.append(eng_line)
         return message(
-            status="degraded", headline="Есть то, что стоит починить сначала",
-            summary=f"Нашла {n} {_q(n, 'совет', 'совета', 'советов')} по инженерной части, "
-                    f"из них {len(urgent)} "
-                    f"{_q(len(urgent), 'срочный', 'срочных', 'срочных')}.",
-            why_it_matters="Срочное здесь значит: пока это так, остальная работа будет идти "
-                           "медленнее или её результат будет труднее проверить. "
-                           + urgent[0].get("advice", ""),
-            next_steps=["возьмусь за срочное, если скажешь", "остальное покажу списком"],
-            technical=tech)
+            status="ok", headline="Что нужно продукту",
+            summary=f"Вот что, по-моему, сейчас важно для твоего продукта: {needs}.",
+            why_it_matters=lead.get("why"),
+            next_steps=next_steps, technical=tech)
+
+    
+    if not enough:
+        next_steps = ["заполним продуктовую картину — тогда смогу советовать по продукту"]
+        if eng_line:
+            next_steps.append(eng_line)
+        return message(
+            status="degraded", headline="Пока не могу советовать по продукту",
+            summary="Пока не хватает продуктовых данных, чтобы советовать по продукту.",
+            why_it_matters="Придумывать продуктовую потребность я не буду — это была бы выдумка, "
+                           "а не совет.",
+            next_steps=next_steps, technical=tech)
+
+    next_steps = ["спроси «что дальше» — предложу работу"]
+    if eng_line:
+        next_steps.append(eng_line)
     return message(
-        status="ok", headline="Совет по инженерной части",
-        summary=f"Нашла {n} {_q(n, 'место', 'места', 'мест')}, где можно сделать лучше; "
-                f"срочного нет.",
-        why_it_matters=recs[0].get("advice"),
-        next_steps=["покажу список целиком, если нужно"], technical=tech)
+        status="ok", headline="По продукту сейчас советовать нечего",
+        summary="Продуктовые данные есть, но срочного по продукту сейчас нет.",
+        next_steps=next_steps, technical=tech)
 
 
-# ── Переводчики внутренних отчётов: чтение состояния проекта ───────────────────────────────────
-# Вторая группа, вынесенная из `presenter.py`: переводчики сырых внутренних отчётов. Здесь осталась
-# её читающая-состояние часть — осмотр репозитория, сверка контуров, здоровье продукта; более
-# крупная часть про ход и решения работы (экономика сессии, первый час, bootstrap, doctor и др.)
-# уехала в модуль-сосед `presenter_report_formatters.py` (реэкспорт в шапке).
-# Поведение не меняется — это тот же шов «внутренние имена внутри, наружу выходит смысл».
+
+
+
+
+
+
 
 def from_repository_understanding(rep: dict) -> dict:
     """`repo_audit.run()` -> UserMessage.
@@ -452,8 +549,8 @@ def from_repository_understanding(rep: dict) -> dict:
     known = ", ".join(k.replace("_", " ") for k, v in rep["reconstructed"].items()
                       if v["status"] in ("verified", "inferred") and v.get("value"))
     human_needed = [c["title"] for c in aud["contours"] if c["needs_human"]]
-    # Противоречие источников истины — не «известно» и не «неизвестно»: кит ВИДИТ факт, но источники
-    # спорят. Это отдельная строка доверия, и её нельзя проглотить в числах контуров.
+    
+    
     conflicts = rep.get("conflicts") or []
 
     if cls == "NEW_PRODUCT":
@@ -476,15 +573,15 @@ def from_repository_understanding(rep: dict) -> dict:
         steps.append(f"задам {n_q} "
                      + ("короткий " if n_q % 10 == 1 and n_q % 100 != 11 else "коротких ")
                      + _q(n_q))
-    # ОНБОРДИНГ ЗАКАНЧИВАЕТСЯ РАБОТОЙ. Прежде здесь стояло «соберу недостающие материалы и покажу
-    # их тебе на проверку» — обещание, которого кит не выполнял ничем: BOOTSTRAP существовал строкой
-    # в реестре. Теперь названа команда, которая это делает, и она рядом.
+    
+    
+    
     steps.append("соберу первое направление и план из фактов репозитория: ./ai-ops bootstrap")
     if not n_q:
         steps.append("после этого покажу, какую работу имеет смысл взять первой")
 
-    # Противоречие источников поднимается ДО обычного «нужны ответы»: оно требует решения владельца
-    # (какой источник актуален), а не сбора недостающего. Молчаливого выбора кит не делает.
+    
+    
     conflict_line = None
     if conflicts:
         conflict_line = ("Источники истины противоречат друг другу — сам выбрать актуальный не "
@@ -523,8 +620,8 @@ def from_contour_consistency(rep: dict) -> dict:
     unknown = [f for f in findings if f.get("id") == "unknown_contour"]
 
     if not rep.get("comparable"):
-        # «Сверять нечего» — это не прогресс. Прежде здесь стоял `ok`, и ярлык печатал
-        # «Работа продвинулась» на месте непроведённой проверки.
+        
+        
         return message(
             status="degraded", headline="Сверять нечего",
             summary="Изменений не предъявлено.",

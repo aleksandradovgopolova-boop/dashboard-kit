@@ -22,6 +22,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from ai_ops_kit.shared import lifecycle_store as receipts
+
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401
 
 
@@ -63,8 +65,8 @@ def _base_for_review(child_root, base, branch):
     r = _pg._resolve_base(child_root, None)
     if r.get("resolved"):
         if r.get("base_ref") == branch:
-            # авто дало саму ревьюируемую ветку (человек стоит на ней) — диф против себя пуст.
-            # Молча отдать пустой список значило бы «изменений нет» вместо «база не выбрана».
+            
+            
             return {"base": None, "source": r.get("source"), "resolved": False,
                     "reason": f"авто-база совпала с ревьюируемой веткой {branch} — "
                               f"диф против себя пуст; задай --base <ветка>"}
@@ -73,10 +75,10 @@ def _base_for_review(child_root, base, branch):
             "reason": r.get("reason") or "база не определена автоматически"}
 
 
-# v2.121 (P1.3): review — не диагностика, а событие жизненного цикла. Вердикт ветки пере-считывает
-# готовность к merge и ФИКСИРУЕТСЯ артефактом (features/<wid>/branch-review.yaml), иначе слово
-# ревьюера ни на что не влияет. Готовность честная: ready_for_merge=True только когда вердикт вынесен
-# и он pass (или ai-review гейтов нет). needs-reviewer/needs-changes/no-branch -> НЕ готово.
+
+
+
+
 _READY_VERDICTS = ("pass", "no-ai-review-gates")
 
 
@@ -106,10 +108,13 @@ def _persist_review(child_root, wid, rep):
               "review_statuses": {r["gate"]: (r.get("status") if r.get("valid") else "invalid")
                                   for r in rep.get("reviews") or []},
               "changed_files": rep.get("changed_files") or [],
-              # артефакт обязан нести базу: список изменённых файлов без неё непроверяем
+              
               "base": rep.get("base"), "base_source": rep.get("base_source"),
               "base_note": rep.get("base_note"),
               "readiness": rep.get("readiness"),
+              "inputs": rep.get("inputs"),
+              "reviews": [{k: r[k] for k in ("gate", "status", "valid", "provenance") if k in r}
+                          for r in rep.get("reviews", [])],
               "created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat()}
     path = fdir / "branch-review.yaml"
     path.write_text(yaml.safe_dump(record, allow_unicode=True, sort_keys=False), encoding="utf-8")
@@ -129,7 +134,7 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
         return {"kind": "BranchReview", "workitem_id": wid, "reviewable": False,
                 "reviews": [], "verdict": "no-branch", "readiness": _readiness_for("no-branch"),
                 "note": f"ветка {branch} не найдена — нечего ревьюить (сначала ai-ops run --execute)"}
-    # worktree утерян, но ветка есть -> пере-подключаем (read-only ревью на существующих коммитах)
+    
     reattached = False
     if not wp.is_dir():
         if _wt.add(child_root, wid, branch) != 0:
@@ -140,8 +145,8 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
 
     rc, revision, _ = _git(wp, "rev-parse", "HEAD")
     revision = revision if rc == 0 else None
-    # изменённые файлы ветки против базы (контекст ревью). База подбирается или НАЗЫВАЕТСЯ причиной —
-    # но не падает и не подставляется молча: `_base_for_review`.
+    
+    
     changed = []
     based = _base_for_review(child_root, base, branch)
     if based["resolved"]:
@@ -156,26 +161,60 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
     gate_ids = plan.get("gates") or ["code_review"]
     signals = {"task_type": plan.get("base_workflow", "QUICK")}
     from ai_ops_kit.engine import execution_pipeline as _ep   # внутрипакетно
+    from ai_ops_kit.gates import gate_executor
     reviewable = _ep._reviewable_gates(gate_ids, signals)
 
     reviews = []
-    if reviewable and reviewer_proposer is not None:
+    rc_base, base_sha, _ = _git(wp, "rev-parse", based.get("base") or "HEAD")
+    rc_merge, merge_base, _ = _git(wp, "merge-base", based.get("base") or "HEAD", branch)
+    rc_diff, exact_diff, _ = _git(wp, "diff", "--no-ext-diff", "--no-textconv", "--binary",
+                                 "--full-index", f"{based.get('base') or 'HEAD'}...{branch}")
+    
+    context = {"complete": based["resolved"] and rc_base == rc_merge == rc_diff == 0,
+               "toolchain": receipts.digest([receipts.file_digest(Path(__file__)),
+                                               receipts.file_digest(Path(_ep.__file__))]),
+               "dependencies": receipts.digest([plan, gate_ids, signals, gate_executor.load_gates()]),
+               "environment": receipts.environment_digest()}
+    extra = {"base": base_sha, "merge_base": merge_base, "diff": receipts.digest(exact_diff),
+             "gates": reviewable}
+    inputs, basis = receipts.fingerprint(wp, "branch-review", context, extra=extra, git_context=False)
+    path = child_root / "features" / str(wid) / "branch-review.yaml"
+    import yaml
+    try:
+        previous = yaml.safe_load(path.read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        previous = {}
+    if not isinstance(previous, dict):
+        previous = {}
+    old_reviews = previous.get("reviews") or []
+    reused = bool(inputs and previous.get("inputs") == inputs
+                  and previous.get("created_at") and previous.get("verdict") == "pass"
+                  and isinstance(old_reviews, list)
+                  and all(any(isinstance(r, dict) and r.get("gate") == g and r.get("valid") is True
+                              and r.get("status") == "pass" for r in old_reviews) for g in reviewable))
+    reuse_reason = basis if reused else ("нет применимого review; база, входы или политики изменились")
+    if reused:
+        reviews = old_reviews
+    elif reviewable and reviewer_proposer is not None:
         _, reviews = _ep._run_reviews(reviewer_proposer, wp, gate_ids, {}, signals, revision, budget)
+    after, _ = receipts.fingerprint(wp, "branch-review", context, extra=extra, git_context=False)
+    if after != inputs:
+        inputs = None
 
-    # вердикт ветки: pass только если все ревьюируемые гейты получили pass; иначе needs-changes/blocked
+    
     statuses = {r["gate"]: (r.get("status") if r.get("valid") else "invalid") for r in reviews}
     if not reviewable:
         verdict = "no-ai-review-gates"
-    elif reviewer_proposer is None:
+    elif reviewer_proposer is None and not reused:
         verdict = "needs-reviewer"
     elif all(statuses.get(g) == "pass" for g in reviewable):
         verdict = "pass"
     else:
         verdict = "needs-changes"
 
-    # Соответствие Архитектурной конституции по ИЗМЕНЁННЫМ файлам (#847): рекомендации владельцу,
-    # НЕ блок (советует, не гейтит — writer≠judge вердикт даёт ревьюер выше). Пофайловые статьи по
-    # diff; кросс-файловые дубли — в онбординг-скане. Сбой советчика ревью не роняет.
+    
+    
+    
     constitution_findings = []
     try:
         from ai_ops_kit.checks import constitution_conformance as _cc   # внутрипакетно
@@ -184,13 +223,42 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
         constitution_findings = []
 
     rep = {"kind": "BranchReview", "workitem_id": wid, "branch": branch, "revision": revision,
+           "inputs": inputs, "reused": reused, "reuse_reason": reuse_reason,
+           "reuse_source": str(path) if reused else None,
            "reattached_worktree": reattached, "reviewable": reviewable, "reviews": reviews,
            "verdict": verdict, "readiness": _readiness_for(verdict), "changed_files": changed,
            "constitution_findings": constitution_findings,
-           # база рядом с дифом: без неё «изменённых файлов ноль» неотличимо от «база не выбрана»
+           
            "base": based.get("base"), "base_source": based.get("source")}
     if not based["resolved"]:
         rep["base_note"] = based.get("reason")
     if persist:
         rep["evidence_path"] = _persist_review(child_root, wid, rep)
+        rep["review_verdict_path"] = _persist_review_verdict(child_root, wid, reviews, signals,
+                                                             revision)
     return rep
+
+
+def _persist_review_verdict(child_root, wid, reviews, signals, revision):
+    """Зафиксировать persistent review-вердикт функции — «кто/что проверил» как узел истории.
+
+    ПОЧЕМУ ОТДЕЛЬНО от BranchReview: BranchReview — про готовность ВЕТКИ к merge; review-вердикт — про
+    ЗНАНИЕ о функции (какие измерения приняты и КЕМ), которое читает Knowledge Graph. Содержание берём
+    у `evidence_verdict` (веха 4.2, #588) — новую модель проверки не вводим: гейты-ревью здесь — это
+    независимый судья (`_run_reviews` под read-only reviewer_proposer), поэтому writer≠judge держится.
+    Пишется под `wid` — при ревью паспорта функции (`ai-ops review <feature>`) это её id, и Knowledge
+    Graph резолвит узел review на узел feature. Ничего не проверено -> запись не пишется (persist -> None).
+    Сбой не роняет ревью: вердикт от наличия файла не зависит."""
+    from ai_ops_kit.gates import gate_executor
+    from ai_ops_kit.shared import review_verdict
+    try:
+        gates_map = gate_executor.load_gates()
+        gate_results = [{"gate": r.get("gate"), "status": r.get("status"),
+                         "provenance": r.get("provenance")}
+                        for r in reviews or [] if r.get("valid")]
+        subset = {r["gate"]: gates_map[r["gate"]] for r in gate_results
+                  if r.get("gate") in gates_map}
+        ev = gate_executor.evidence_verdict(gate_results, subset, signals)
+        return review_verdict.persist(child_root, wid, ev, revision=revision)
+    except (OSError, KeyError, TypeError):
+        return None

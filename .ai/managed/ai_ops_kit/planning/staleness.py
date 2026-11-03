@@ -30,20 +30,20 @@ from pathlib import Path
 
 from ai_ops_kit.shared import gitio
 
-#: Где обычно живёт описание продукта. Ищем только то, что человек читает как правду о репозитории.
+
 DOC_CANDIDATES = ("README.md", "ROADMAP.md", "AI-OPS-ONBOARDING.md")
 DOC_DIRS = ("docs", ".ai/project/context")
-#: `npm run <script>` / `make <target>` / `./<script>` — команды, которые документ обещает.
+
 _NPM = re.compile(r"`npm run ([a-z][\w:-]*)`")
 _PATHISH = re.compile(r"`([\w./-]+/[\w./-]+|[\w-]+\.(?:py|js|jsx|ts|tsx|sh|yaml|yml|json|md))`")
-#: Пути, которые заведомо не про этот репозиторий: URL, плейсхолдеры, чужие пакеты.
-#: Абсолютные пути (`/tmp/...`, `/Users/runner`) — примеры из чужих машин, а не ссылки
-#: на этот репозиторий; URL, плейсхолдеры и чужие пакеты — тем более.
+
+
+
 _SKIP = re.compile(r"^(https?:|<|@|/|node_modules/|\.\.)")
-#: Документ ЗАКОННО перечисляет то, чего нет: «удалено», «legacy», «больше не поддерживается».
-#: Полевая проверка на `ai-product-quest`: раздел «Legacy Removed» перечислял удалённые файлы, и
-#: проверка объявила их мёртвыми ссылками. Жаловаться на документ за то, что он документирует
-#: удаление, — верный способ научить владельца пролистывать раздел.
+
+
+
+
 _REMOVAL = re.compile(r"(удал|removed|legacy|deprecat|больше не|устарел|deleted)", re.I)
 
 
@@ -74,21 +74,24 @@ def dead_references(root, limit=5) -> list:
             scripts = set((json.loads(pkg.read_text(encoding="utf-8")).get("scripts") or {}).keys())
         except (OSError, json.JSONDecodeError):
             scripts = set()
-    # Индекс «хвостов» путей: документ законно пишет `ui/storybook_adapter.py`, имея в виду
-    # `ai_ops_kit/ui/storybook_adapter.py`. Сокращение — не ложь, и объявлять его мёртвой ссылкой
-    # значит превратить проверку в шум, а шумную проверку отключают первой.
+    
+    
+    
     tails = set()
+    prefix = root.as_posix().rstrip("/") + "/" if root != Path(".") else ""
     for f in root.rglob("*"):
         if f.is_file() and ".git/" not in f.as_posix():
-            rel = f.relative_to(root).as_posix()
+            
+            
+            rel = f.as_posix()[len(prefix):]
             parts = rel.split("/")
             for i in range(len(parts)):
                 tails.add("/".join(parts[i:]))
-    # ССЫЛКОЙ НА РЕПОЗИТОРИЙ считается только путь, чей ПЕРВЫЙ сегмент существует в корне
-    # (полевая проверка на `ai-product-quest`: три из пяти находок были ложными). `motion/react` —
-    # путь импорта пакета, `.tmp/qa-screens/` документ сам объявляет отсутствующим,
-    # `owner/repo` — имя чужого репозитория. Ни одно из них не про наши файлы, и жаловаться на них
-    # значит учить владельца пролистывать раздел.
+    
+    
+    
+    
+    
     tops = {p.name for p in root.iterdir()} if root.is_dir() else set()
     out = []
     for doc in _docs(root):
@@ -96,8 +99,8 @@ def dead_references(root, limit=5) -> list:
             lines = doc.read_text(encoding="utf-8", errors="replace").splitlines()
         except OSError:
             continue
-        # ближайший предшествующий заголовок — контекст строки: раздел «Legacy Removed» объявляет
-        # отсутствие своим названием, и это относится ко всем его пунктам.
+        
+        
         heading = ""
         for i, line in enumerate(lines, 1):
             if line.lstrip().startswith("#"):
@@ -110,8 +113,8 @@ def dead_references(root, limit=5) -> list:
                                 "ref": f"npm run {script}", "kind": "команда"})
             for ref in _PATHISH.findall(line):
                 cand = ref[2:] if ref.startswith("./") else ref
-                # `./ai-ops` и подобные — КОМАНДЫ дочернего репозитория, а не пути этого; проверять
-                # их существование здесь бессмысленно (их создаёт установка у владельца).
+                
+                
                 if ref.startswith("./") and "." not in cand.split("/")[-1]:
                     continue
                 if _SKIP.match(ref) or (root / cand).exists() or cand in tails:
@@ -136,8 +139,8 @@ def plan_behind_history(root, plan_rel="planning/plan.yaml") -> dict | None:
     plan = root / plan_rel
     if not plan.is_file():
         return None
-    # Форма с `cwd=`, а не `-C`: единый вход к git с таймаутом через gitio.run (см. shared/gitio) —
-    # зависший git не вешает ответ «что дальше».
+    
+    
     try:
         rc, sha, _ = gitio.run(["log", "-1", "--format=%H", "--", plan_rel], cwd=root, timeout=20)
         if rc != 0 or not sha:

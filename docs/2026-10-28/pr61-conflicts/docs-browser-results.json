@@ -1,0 +1,6386 @@
+[
+  {
+    "theme": "dark",
+    "file": "index.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "От вашей задачи к дашборду"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-accordion.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аккордеон"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-adaptive-icons.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Адаптивные иконки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-avatar.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аватар"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-badge.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Бейдж, статус, прогресс"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-banner.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Баннер и уведомление"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-breadcrumbs.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Навигационный путь"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-bullet-chart.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Значение и цель"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-button.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Кнопка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-calendar.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Календарь работ"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-car.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-card-grid.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сетка карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-card-scroll.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-chart.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "График"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-check.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Флажок, радио, тумблер"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-chip.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Чип"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-chips-input.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Ввод нескольких значений · ChipsInput"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-chips-select.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор нескольких значений · ChipsSelect"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-counter.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Счётчик"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-density-controls.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Плотность данных"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-details-sidebar.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Боковые детали"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-empty.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Состояния: загрузка, пусто, ошибка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-export.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Экспорт среза"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-field.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поле и форма"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-flex.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Flex"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-focus-trap.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Удержание фокуса"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-fullscreen.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Полный экран"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-heatmap.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Тепловая карта"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-hero.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Главная карточка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-layout-editor.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Раскладка виджетов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-legend.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтры-легенда"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-list.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Список, полосы, раскрытие"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-map.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Регионы: карта и плитки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-modal.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Модальное окно"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-onboarding.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Онбординг-подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-page-header.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер страницы"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-pager.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Пагинация"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-period-comparison.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сравнение периодов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-period.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Период"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-popout.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Всплывающий слой"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-rank.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Рейтинг и сводка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-saved-views.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сохранённые виды"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-scroll-arrow.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Стрелка прокрутки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-scrollview.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Прокручиваемая область"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-search.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поиск"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-segment.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сегмент"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-select.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтр"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-table.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Таблица"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-tabs.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Вкладки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-tile.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "KPI-плитка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-timeline-annotations.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "События на шкале"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-tooltip.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-touch.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Жесты"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-tree-select.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор в иерархии"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-uptime.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Доступность служб"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-widget-header.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "component-widget.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Каркас виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "dark",
+    "file": "index.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "От вашей задачи к дашборду"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-accordion.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аккордеон"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-adaptive-icons.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Адаптивные иконки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-avatar.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аватар"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-badge.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Бейдж, статус, прогресс"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-banner.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Баннер и уведомление"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-breadcrumbs.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Навигационный путь"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-bullet-chart.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Значение и цель"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-button.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Кнопка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-calendar.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Календарь работ"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-car.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-card-grid.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сетка карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-card-scroll.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-chart.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "График"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-check.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Флажок, радио, тумблер"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-chip.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Чип"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-chips-input.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Ввод нескольких значений · ChipsInput"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-chips-select.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор нескольких значений · ChipsSelect"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-counter.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Счётчик"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-density-controls.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Плотность данных"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-details-sidebar.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Боковые детали"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-empty.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Состояния: загрузка, пусто, ошибка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-export.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Экспорт среза"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-field.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поле и форма"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-flex.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Flex"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-focus-trap.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Удержание фокуса"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-fullscreen.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Полный экран"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-heatmap.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Тепловая карта"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-hero.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Главная карточка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-layout-editor.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Раскладка виджетов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-legend.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтры-легенда"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-list.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Список, полосы, раскрытие"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-map.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Регионы: карта и плитки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-modal.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Модальное окно"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-onboarding.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Онбординг-подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-page-header.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер страницы"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-pager.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Пагинация"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-period-comparison.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сравнение периодов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-period.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Период"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-popout.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Всплывающий слой"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-rank.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Рейтинг и сводка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-saved-views.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сохранённые виды"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-scroll-arrow.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Стрелка прокрутки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-scrollview.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Прокручиваемая область"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-search.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поиск"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-segment.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сегмент"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-select.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтр"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-table.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Таблица"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-tabs.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Вкладки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-tile.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "KPI-плитка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-timeline-annotations.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "События на шкале"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-tooltip.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-touch.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Жесты"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-tree-select.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор в иерархии"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-uptime.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Доступность служб"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-widget-header.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "component-widget.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Каркас виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "dark",
+    "file": "index.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "От вашей задачи к дашборду"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-accordion.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аккордеон"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-adaptive-icons.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Адаптивные иконки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-avatar.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аватар"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-badge.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Бейдж, статус, прогресс"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-banner.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Баннер и уведомление"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-breadcrumbs.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Навигационный путь"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-bullet-chart.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Значение и цель"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-button.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Кнопка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-calendar.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Календарь работ"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-car.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-card-grid.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сетка карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-card-scroll.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-chart.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "График"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-check.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Флажок, радио, тумблер"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-chip.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Чип"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-chips-input.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Ввод нескольких значений · ChipsInput"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-chips-select.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор нескольких значений · ChipsSelect"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-counter.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Счётчик"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-density-controls.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Плотность данных"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-details-sidebar.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Боковые детали"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-empty.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Состояния: загрузка, пусто, ошибка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-export.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Экспорт среза"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-field.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поле и форма"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-flex.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Flex"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-focus-trap.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Удержание фокуса"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-fullscreen.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Полный экран"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-heatmap.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Тепловая карта"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-hero.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Главная карточка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-layout-editor.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Раскладка виджетов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-legend.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтры-легенда"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-list.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Список, полосы, раскрытие"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-map.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Регионы: карта и плитки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-modal.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Модальное окно"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-onboarding.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Онбординг-подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-page-header.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер страницы"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-pager.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Пагинация"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-period-comparison.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сравнение периодов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-period.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Период"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-popout.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Всплывающий слой"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-rank.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Рейтинг и сводка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-saved-views.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сохранённые виды"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-scroll-arrow.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Стрелка прокрутки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-scrollview.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Прокручиваемая область"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-search.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поиск"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-segment.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сегмент"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-select.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтр"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-table.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Таблица"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-tabs.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Вкладки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-tile.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "KPI-плитка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-timeline-annotations.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "События на шкале"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-tooltip.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-touch.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Жесты"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-tree-select.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор в иерархии"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-uptime.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Доступность служб"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-widget-header.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "component-widget.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Каркас виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "file": "index.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "От вашей задачи к дашборду"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-accordion.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аккордеон"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-adaptive-icons.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Адаптивные иконки"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-avatar.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аватар"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-badge.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Бейдж, статус, прогресс"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-banner.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Баннер и уведомление"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-breadcrumbs.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Навигационный путь"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-bullet-chart.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Значение и цель"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-button.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Кнопка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-calendar.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Календарь работ"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-car.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-card-grid.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сетка карточек"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-card-scroll.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-chart.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "График"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-check.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Флажок, радио, тумблер"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-chip.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Чип"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-chips-input.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Ввод нескольких значений · ChipsInput"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-chips-select.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор нескольких значений · ChipsSelect"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-counter.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Счётчик"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-density-controls.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Плотность данных"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-details-sidebar.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Боковые детали"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-empty.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Состояния: загрузка, пусто, ошибка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-export.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Экспорт среза"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-field.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поле и форма"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-flex.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Flex"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-focus-trap.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Удержание фокуса"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-fullscreen.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Полный экран"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-heatmap.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Тепловая карта"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-hero.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Главная карточка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-layout-editor.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Раскладка виджетов"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-legend.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтры-легенда"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-list.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Список, полосы, раскрытие"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-map.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Регионы: карта и плитки"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-modal.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Модальное окно"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-onboarding.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Онбординг-подсказка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-page-header.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер страницы"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-pager.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Пагинация"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-period-comparison.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сравнение периодов"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-period.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Период"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-popout.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Всплывающий слой"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-rank.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Рейтинг и сводка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-saved-views.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сохранённые виды"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-scroll-arrow.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Стрелка прокрутки"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-scrollview.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Прокручиваемая область"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-search.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поиск"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-segment.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сегмент"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-select.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтр"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-table.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Таблица"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-tabs.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Вкладки"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-tile.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "KPI-плитка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-timeline-annotations.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "События на шкале"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-tooltip.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Подсказка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-touch.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Жесты"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-tree-select.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор в иерархии"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-uptime.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Доступность служб"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-widget-header.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер виджета"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "dark",
+    "file": "component-widget.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Каркас виджета"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "index.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "От вашей задачи к дашборду"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-accordion.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аккордеон"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-adaptive-icons.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Адаптивные иконки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-avatar.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аватар"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-badge.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Бейдж, статус, прогресс"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-banner.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Баннер и уведомление"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-breadcrumbs.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Навигационный путь"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-bullet-chart.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Значение и цель"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-button.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Кнопка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-calendar.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Календарь работ"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-car.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-card-grid.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сетка карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-card-scroll.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-chart.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "График"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-check.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Флажок, радио, тумблер"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-chip.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Чип"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-chips-input.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Ввод нескольких значений · ChipsInput"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-chips-select.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор нескольких значений · ChipsSelect"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-counter.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Счётчик"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-density-controls.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Плотность данных"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-details-sidebar.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Боковые детали"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-empty.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Состояния: загрузка, пусто, ошибка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-export.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Экспорт среза"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-field.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поле и форма"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-flex.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Flex"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-focus-trap.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Удержание фокуса"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-fullscreen.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Полный экран"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-heatmap.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Тепловая карта"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-hero.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Главная карточка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-layout-editor.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Раскладка виджетов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-legend.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтры-легенда"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-list.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Список, полосы, раскрытие"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-map.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Регионы: карта и плитки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-modal.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Модальное окно"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-onboarding.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Онбординг-подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-page-header.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер страницы"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-pager.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Пагинация"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-period-comparison.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сравнение периодов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-period.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Период"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-popout.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Всплывающий слой"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-rank.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Рейтинг и сводка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-saved-views.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сохранённые виды"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-scroll-arrow.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Стрелка прокрутки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-scrollview.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Прокручиваемая область"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-search.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поиск"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-segment.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сегмент"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-select.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтр"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-table.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Таблица"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-tabs.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Вкладки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-tile.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "KPI-плитка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-timeline-annotations.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "События на шкале"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-tooltip.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-touch.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Жесты"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-tree-select.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор в иерархии"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-uptime.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Доступность служб"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-widget-header.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "component-widget.html",
+    "doc": 320,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Каркас виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 320
+  },
+  {
+    "theme": "light",
+    "file": "index.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "От вашей задачи к дашборду"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-accordion.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аккордеон"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-adaptive-icons.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Адаптивные иконки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-avatar.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аватар"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-badge.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Бейдж, статус, прогресс"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-banner.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Баннер и уведомление"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-breadcrumbs.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Навигационный путь"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-bullet-chart.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Значение и цель"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-button.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Кнопка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-calendar.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Календарь работ"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-car.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-card-grid.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сетка карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-card-scroll.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-chart.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "График"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-check.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Флажок, радио, тумблер"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-chip.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Чип"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-chips-input.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Ввод нескольких значений · ChipsInput"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-chips-select.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор нескольких значений · ChipsSelect"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-counter.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Счётчик"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-density-controls.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Плотность данных"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-details-sidebar.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Боковые детали"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-empty.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Состояния: загрузка, пусто, ошибка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-export.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Экспорт среза"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-field.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поле и форма"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-flex.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Flex"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-focus-trap.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Удержание фокуса"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-fullscreen.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Полный экран"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-heatmap.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Тепловая карта"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-hero.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Главная карточка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-layout-editor.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Раскладка виджетов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-legend.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтры-легенда"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-list.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Список, полосы, раскрытие"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-map.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Регионы: карта и плитки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-modal.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Модальное окно"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-onboarding.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Онбординг-подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-page-header.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер страницы"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-pager.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Пагинация"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-period-comparison.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сравнение периодов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-period.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Период"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-popout.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Всплывающий слой"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-rank.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Рейтинг и сводка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-saved-views.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сохранённые виды"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-scroll-arrow.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Стрелка прокрутки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-scrollview.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Прокручиваемая область"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-search.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поиск"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-segment.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сегмент"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-select.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтр"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-table.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Таблица"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-tabs.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Вкладки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-tile.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "KPI-плитка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-timeline-annotations.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "События на шкале"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-tooltip.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-touch.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Жесты"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-tree-select.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор в иерархии"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-uptime.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Доступность служб"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-widget-header.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "component-widget.html",
+    "doc": 768,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Каркас виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 768
+  },
+  {
+    "theme": "light",
+    "file": "index.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "От вашей задачи к дашборду"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-accordion.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аккордеон"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-adaptive-icons.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Адаптивные иконки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-avatar.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аватар"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-badge.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Бейдж, статус, прогресс"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-banner.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Баннер и уведомление"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-breadcrumbs.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Навигационный путь"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-bullet-chart.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Значение и цель"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-button.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Кнопка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-calendar.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Календарь работ"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-car.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-card-grid.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сетка карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-card-scroll.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-chart.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "График"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-check.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Флажок, радио, тумблер"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-chip.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Чип"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-chips-input.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Ввод нескольких значений · ChipsInput"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-chips-select.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор нескольких значений · ChipsSelect"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-counter.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Счётчик"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-density-controls.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Плотность данных"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-details-sidebar.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Боковые детали"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-empty.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Состояния: загрузка, пусто, ошибка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-export.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Экспорт среза"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-field.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поле и форма"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-flex.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Flex"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-focus-trap.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Удержание фокуса"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-fullscreen.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Полный экран"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-heatmap.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Тепловая карта"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-hero.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Главная карточка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-layout-editor.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Раскладка виджетов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-legend.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтры-легенда"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-list.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Список, полосы, раскрытие"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-map.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Регионы: карта и плитки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-modal.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Модальное окно"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-onboarding.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Онбординг-подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-page-header.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер страницы"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-pager.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Пагинация"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-period-comparison.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сравнение периодов"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-period.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Период"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-popout.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Всплывающий слой"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-rank.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Рейтинг и сводка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-saved-views.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сохранённые виды"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-scroll-arrow.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Стрелка прокрутки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-scrollview.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Прокручиваемая область"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-search.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поиск"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-segment.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сегмент"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-select.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтр"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-table.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Таблица"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-tabs.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Вкладки"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-tile.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "KPI-плитка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-timeline-annotations.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "События на шкале"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-tooltip.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Подсказка"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-touch.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Жесты"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-tree-select.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор в иерархии"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-uptime.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Доступность служб"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-widget-header.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "component-widget.html",
+    "doc": 1280,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Каркас виджета"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "file": "index.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "От вашей задачи к дашборду"
+    ],
+    "nested": false,
+    "toc": false,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-accordion.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аккордеон"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-adaptive-icons.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Адаптивные иконки"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-avatar.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Аватар"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-badge.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Бейдж, статус, прогресс"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-banner.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Баннер и уведомление"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-breadcrumbs.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Навигационный путь"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-bullet-chart.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Значение и цель"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-button.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Кнопка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-calendar.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Календарь работ"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-car.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-card-grid.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сетка карточек"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-card-scroll.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Лента карточек"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-chart.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "График"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-check.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Флажок, радио, тумблер"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-chip.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Чип"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-chips-input.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Ввод нескольких значений · ChipsInput"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-chips-select.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор нескольких значений · ChipsSelect"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-counter.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Счётчик"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-density-controls.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Плотность данных"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-details-sidebar.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Боковые детали"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-empty.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Состояния: загрузка, пусто, ошибка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-export.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Экспорт среза"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-field.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поле и форма"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-flex.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Flex"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-focus-trap.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Удержание фокуса"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-fullscreen.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Полный экран"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-heatmap.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Тепловая карта"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-hero.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Главная карточка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-layout-editor.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Раскладка виджетов"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-legend.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтры-легенда"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-list.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Список, полосы, раскрытие"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-map.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Регионы: карта и плитки"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-modal.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Модальное окно"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-onboarding.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Онбординг-подсказка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-page-header.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер страницы"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-pager.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Пагинация"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-period-comparison.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сравнение периодов"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-period.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Период"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-popout.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Всплывающий слой"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-rank.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Рейтинг и сводка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-saved-views.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сохранённые виды"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-scroll-arrow.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Стрелка прокрутки"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-scrollview.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Прокручиваемая область"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-search.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Поиск"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-segment.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Сегмент"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-select.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Фильтр"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-table.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Таблица"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-tabs.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Вкладки"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-tile.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "KPI-плитка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-timeline-annotations.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "События на шкале"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-tooltip.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Подсказка"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-touch.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Жесты"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-tree-select.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Выбор в иерархии"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-uptime.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Доступность служб"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-widget-header.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Хедер виджета"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  },
+  {
+    "theme": "light",
+    "file": "component-widget.html",
+    "doc": 1536,
+    "first": "Обзор",
+    "focusableTables": true,
+    "headings": [
+      "Каркас виджета"
+    ],
+    "nested": false,
+    "toc": true,
+    "unnamedButtons": 0,
+    "width": 1536
+  }
+]

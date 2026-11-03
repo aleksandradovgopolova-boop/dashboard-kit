@@ -74,7 +74,7 @@ def merge_preview_tree(root, base_ref: str, head_ref: str) -> dict:
             return {"ok": False, "reason": "git merge-tree не вернул дерево"}
         return {"ok": True, "tree": tree}
     if rc == 1:
-        # rc=1 у merge-tree --write-tree — это КОНФЛИКТ (дерево есть, но со stage'ами).
+        
         return {"ok": False, "reason": "конфликт слияния: итог не является чистым деревом"}
     reason = err or f"git merge-tree завершился с кодом {rc}"
     if "--write-tree" in reason or "usage" in reason.lower():
@@ -106,7 +106,7 @@ def merge_preview_entries(root, tree: str) -> list:
             continue
         meta, path = record.split("\t", 1)
         fields = meta.split()
-        # Формат --long: `<mode> <type> <sha> <size>` — размер только у blob'ов, у gitlink'ов `-`.
+        
         if len(fields) < 4 or fields[1] != "blob" or not fields[3].isdigit():
             continue
         entries.append((path, int(fields[3])))
@@ -194,7 +194,7 @@ def main(argv) -> int:
     args = ap.parse_args(argv)
     result = measure_merge_footprint(args.root, args.base, args.head)
     print(_format_line(result, args.base, args.head))
-    # exit 1 при пробое ИЛИ если превью не удалось (fail-closed); 0 — итог в пределах.
+    
     return 0 if (result.get("ok") and not result.get("breached")) else 1
 
 

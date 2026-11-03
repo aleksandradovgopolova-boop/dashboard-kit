@@ -1,0 +1,63 @@
+schema_version: 1
+kind: feature-blueprint
+feature:
+  id: dashboard-minimal-copy-2026-11-02
+  name: Минимальный текст и пояснения по запросу
+  owner: product-engineering
+  status: in-progress
+  current_stage: delivery
+  profile: full
+links:
+  epic: https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/63
+  stories:
+  - https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/64
+  implementation_plan: implementation-plan.md
+  run_plan: run-plan.yaml
+  verification: verification.md
+artifacts:
+  discovery:
+  - path: implementation-plan.md
+    status: done
+    section: Запрос и принятые решения
+  definition:
+  - path: implementation-plan.md
+    status: done
+    section: Требования и спецификация; Приёмка и доказательства
+  - path: requirements.yaml
+    status: done
+  - path: spec-change.yaml
+    status: done
+  - path: openspec/changes/dashboard-minimal-copy-2026-11-02/specs/dashboard-minimal-copy/spec.md
+    status: done
+  ux:
+  - path: implementation-plan.md
+    status: done
+    section: Требования и спецификация — состояния и доступ к пояснениям
+    note: Завершена спецификация поведения; приёмка реализованного UI ещё ожидается.
+  architecture:
+  - path: implementation-plan.md
+    status: done
+    section: Требования и спецификация — существующие Tooltip и детали, границы изменения
+  delivery:
+  - path: implementation-plan.md
+    status: done
+    section: План реализации; Приёмка и доказательства; Маршрут и доставка
+  - path: plan.yaml
+    status: done
+  - path: artifact-validation.json
+    status: done
+    note: Проверка формы требований/плана и strict OpenSpec; не проверка реализации.
+  - path: verification.md
+    status: done
+  analytics:
+  - path: analytics-not-applicable.md
+    status: declined
+    declined_reason: Новые события, формулы и аналитические метрики не входят в пакет;
+      трек ANALYTICS не активирован в run-plan.yaml.
+  documentation:
+  - path: verification.md
+    status: done
+    section: Согласованность правил и документации
+  retrospective:
+  - path: retrospective.md
+    status: done

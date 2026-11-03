@@ -34,7 +34,7 @@ CONFIDENCE = ("low", "medium", "high")          # калибровка, как �
 _REQUIRED = ("id", "question", "decision", "reason", "reversibility", "date")
 _EXPECTED_OUTCOME_FIELDS = ("metric", "baseline", "target")
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-# начало строки верхнего уровня (не отступ, не комментарий) — граница секции YAML
+
 _TOP_KEY = re.compile(r"^[^\s#]")
 
 
@@ -98,7 +98,7 @@ def _episode_errors(ep: dict) -> list:
         errs.append(f"reversibility '{ep.get('reversibility')}' не в {REVERSIBILITY}")
     if not (isinstance(ep.get("date"), str) and _DATE_RE.match(ep["date"])):
         errs.append("date должен быть строкой YYYY-MM-DD")
-    # опциональная калибровка: проверяем форму, только если поле присутствует
+    
     conf = ep.get("confidence")
     if conf is not None and conf not in CONFIDENCE:
         errs.append(f"confidence '{conf}' не в {CONFIDENCE}")

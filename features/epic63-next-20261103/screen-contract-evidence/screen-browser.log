@@ -1,0 +1,13 @@
+PASS: generated plan-fact dark 320
+PASS: generated plan-fact dark 375
+PASS: generated plan-fact dark 390
+PASS: generated plan-fact dark 768
+PASS: generated plan-fact dark 1280
+PASS: generated plan-fact dark 1920
+PASS: generated plan-fact light 320
+PASS: generated plan-fact light 375
+PASS: generated plan-fact light 390
+PASS: generated plan-fact light 768
+PASS: generated plan-fact light 1280
+PASS: generated plan-fact light 1920
+PASS: standalone generated screen, both themes, 320–1920, literal KPI/detail values, real filters, empty/reset, data transitions, focus, sort and enlarged text

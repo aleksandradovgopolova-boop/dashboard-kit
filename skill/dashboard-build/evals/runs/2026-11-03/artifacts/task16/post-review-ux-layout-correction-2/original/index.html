@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ипотека — внимание к регионам</title>
+<!-- dashboard-kit: base, layout, page-header, widget, tile, table, select, modal, tooltip, glass, button, badge, dashboard-data. Собрано: python3 tools/kit.py head base layout page-header widget tile table select modal tooltip glass button badge dashboard-data -->
+<script src="kit/js/dk-theme.js"></script>
+<link rel="stylesheet" href="kit/css/tokens.primitives.css">
+<link rel="stylesheet" href="kit/css/tokens.semantic.css">
+<link rel="stylesheet" href="kit/css/components.css">
+<link rel="stylesheet" href="kit/css/glass.css">
+<script src="kit/js/dk-util.js"></script>
+<script src="kit/js/dk-icons.js" defer></script>
+<script src="kit/vendor/echarts.min.js" defer></script>
+<script src="kit/js/dk-chart-theme.js" defer></script>
+<script src="kit/js/dk-charts.js" defer></script>
+<script src="kit/js/dk-select.js" defer></script>
+<script src="kit/js/dk-modal.js" defer></script>
+<script src="kit/js/dk-table.js" defer></script>
+<script src="kit/js/dk-context.js" defer></script>
+<script src="kit/js/dk-dashboard.js" defer></script>
+<!-- корень: class="dk-root" data-theme="dark|light" data-accent="blue" на одном элементе — <html> своей страницы или обёртка внутри чужой; dk-page на body — только если кит владеет всей страницей -->
+
+<script src="kit/js/family-mortgage-data.js" defer></script>
+<script src="data/source.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body class="dk-page dk-glass">
+<main class="dk-wrap dk-stack" data-dk-screen="overview" id="main">
+<header class="dk-head">
+ <div class="dk-head__titles"><h1 class="dk-head__title">Ипотека · внимание к регионам</h1><div class="dk-caption">Апрель — май 2025 · Учебные данные</div><div class="dk-caption">Обновлено 01.06.2025 · 00:00 UTC</div></div>
+ <div class="dk-head__actions"><button type="button" class="dk-btn dk-btn--sm" data-act="theme" id="theme">Тема</button><button type="button" class="dk-btn dk-btn--ghost dk-btn--sm" id="method">Методика и источник</button></div>
+</header>
+<div class="dk-toolbar"><div class="dk-toolbar__group"><div id="district"></div><span class="dk-caption" id="result" role="status" hidden></span></div></div>
+<div class="dk-grid dk-grid--balanced" id="metrics" aria-label="Ключевые показатели">
+ <section class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview" aria-labelledby="attention-label"><div class="dk-tile__head"><h2 class="dk-tile__label" id="attention-label">Требуют внимания</h2></div><div class="dk-tile__row"><span class="dk-metric-lg" id="attention">—</span></div><div class="dk-caption" id="assessment">—</div></section>
+ <section class="dk-widget dk-widget--s dk-tile dk-tile--compact dk-tile--overview" aria-labelledby="performance-label"><div class="dk-tile__head"><h2 class="dk-tile__label" id="performance-label">Выполнение плана выдач</h2></div><div class="dk-tile__row"><span class="dk-metric-lg" id="performance">—</span></div><div class="dk-caption" id="issued">—</div></section>
+</div>
+<section class="dk-widget dk-widget--overview" aria-labelledby="regions-title"><header class="dk-widget__head"><h2 class="dk-widget__title" id="regions-title">Приоритет внимания</h2></header><div class="dk-widget__body"><div class="dk-tablewrap" style="--table-min:780px"><table class="dk-table dk-table--cards dk-table--ruled" id="regions"><thead><tr><th scope="col">Регион</th><th scope="col">Статус</th><th scope="col" class="dk-td-num">Выдано / план, кредитов</th><th scope="col" class="dk-td-num">Выполнение, %</th><th scope="col" class="dk-td-num">Недовыполнение, п.п.</th></tr></thead><tbody id="region-rows"></tbody></table></div><div id="empty" class="dk-caption" role="status" hidden>Нет регионов в выбранном округе</div><div id="error" role="alert" hidden>Не удалось прочитать учебные данные</div></div></section>
+</main>
+<dialog class="dk-modal dk-modal--detail" id="detail" aria-labelledby="detail-title" data-dk-screen="detail">
+<form method="dialog" class="dk-modal__form"><header class="dk-modal__head"><div><h2 class="dk-modal__title" id="detail-title"></h2><div class="dk-caption" id="detail-context"></div></div><button type="button" class="dk-iconbtn dk-modal__close" data-modal-close aria-label="Закрыть детали" title="Закрыть детали"><svg class="dk-i" aria-hidden="true"><use href="#ti-x"/></svg></button></header><div class="dk-modal__body dk-stack"><div id="detail-status"></div><div class="dk-grid dk-modal__metrics" id="detail-metrics" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div><section aria-labelledby="months-title"><h3 class="dk-widget__title" id="months-title">Выдачи по месяцам</h3><div class="dk-tablewrap" style="--table-min:600px"><table class="dk-table dk-table--ruled" id="months"><thead><tr><th scope="col">Месяц</th><th scope="col" class="dk-td-num">Выдано, кредитов</th><th scope="col" class="dk-td-num">План, кредитов</th><th scope="col" class="dk-td-num">Выполнение, %</th><th scope="col" class="dk-td-num">Недовыполнение, п.п.</th><th scope="col">Статус</th></tr></thead><tbody id="month-rows"></tbody></table></div></section></div><footer class="dk-modal__foot"><button class="dk-btn" value="back" id="back">К обзору</button></footer></form>
+</dialog>
+<script>document.addEventListener("DOMContentLoaded", function () { dkTable(document.getElementById("regions")); dkTable(document.getElementById("months")); });</script>
+</body></html>

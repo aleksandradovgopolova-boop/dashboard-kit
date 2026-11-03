@@ -1,0 +1,81 @@
+schema_version: 1
+kind: spec-change
+capability: dashboard-minimal-copy
+source: implementation-plan.md
+why: Постоянные пояснения перегружают рабочий обзор; пользователь согласовал перенос практически всех объяснений в подсказки и начало реализации.
+what_changes:
+  - Зафиксировать правило минимального текста в канонических правилах, UI/UX-политике, skill и справочнике.
+  - Перенести пояснения ипотечного примера в существующие компоненты по запросу, сохранив короткие статусы и необходимые подписи.
+  - Проверить переходы покрытия данных, актуальность пояснений, доступность и мобильную карту.
+impact: Только рабочий интерфейс, его редакционные правила и адресные проверки. Формулы, метрики, фильтры, URL state, Graphite и AI Ops managed/config/workflows не меняются.
+tasks:
+  - Синхронизировать правила и ссылки dashboard-build с принятым принципом.
+  - Изменить ипотечный пример с использованием существующих Tooltip и деталей.
+  - Проверить полные/частичные данные, нулевой знаменатель и возвращение к полному покрытию.
+  - Проверить клавиатуру, нажатие, touch-эмуляцию, обе темы и мобильную карту.
+  - Перегенерировать справочник и manifest, подготовить следующий кандидат без публикации.
+  - Выполнить независимое ревью и сохранить фактические доказательства.
+requirements:
+  - name: R1 Minimal visible copy
+    text: The dashboard SHALL show data, labels, units, concise context, statuses and actions in its normal working state while moving explanatory prose to information available on request.
+    scenarios:
+      - name: Full data without explanatory placeholders
+        when: the full dataset is displayed
+        then: required values and labels remain visible and no empty explanatory row, control or reserved space is displayed.
+      - name: Read the primary answer
+        when: the user reads the main metric without opening help
+        then: its meaning and concise status are understandable, while formulas and detailed explanations remain available on request.
+  - name: R2 Accessible explanations
+    text: The dashboard SHALL reuse the existing tooltip or details dialog and provide explanations through pointer interaction, keyboard focus and activation.
+    scenarios:
+      - name: Open and close short help
+        when: the user hovers, focuses or activates the explanation trigger and then presses Escape
+        then: the current short explanation opens and closes without lost focus.
+      - name: Long or interactive help
+        when: the explanation contains long content, links or actions
+        then: it is presented in the existing details or dialog rather than inside a tooltip.
+      - name: Reopen details
+        when: the user closes and reopens regional details
+        then: help reflects the current slice and no extra tooltip nodes or handlers remain.
+  - name: R3 Missing and partial data
+    text: The dashboard SHALL retain concise visible missing or partial data statuses and provide their reasons on request without treating missing data as zero.
+    scenarios:
+      - name: Missing observation
+        when: an observation is unavailable
+        then: a concise status is visible and its explanation identifies incomplete coverage and distinguishes missing data from zero.
+      - name: Zero denominator with full coverage
+        when: observations are complete but the denominator is zero
+        then: the existing undefined assessment remains unchanged and its reason is available on request.
+      - name: Restore full coverage
+        when: the view changes from full to partial or missing data and then back to full coverage, including through a filter change
+        then: stale explanation text, its unnecessary trigger and the space they occupied disappear.
+      - name: Regional and empty states
+        when: the user opens a region with missing values or reaches an empty slice
+        then: reasons remain available for missing values and a working recovery action remains available for the empty slice.
+  - name: R4 Mobile map behavior
+    text: The dashboard SHALL remove the persistent mobile map instruction while preserving map panning, list switching and accessible control names.
+    scenarios:
+      - name: Navigate the mobile map
+        when: the user pans the mobile map and switches to the list
+        then: both actions work without the removed explanatory paragraph and their controls retain accessible names.
+      - name: Report touch evidence
+        when: the map is checked with touch emulation
+        then: the verification report distinguishes emulation from a physical device test.
+  - name: R5 Existing product contracts
+    text: The editorial change SHALL preserve calculations, metrics, filters, URL state and the approved Graphite Dark and Light themes.
+    scenarios:
+      - name: Preserve the existing slice
+        when: existing mortgage data and integration checks run after the change
+        then: formulas, metric values and the linked slice retain their existing results and no new metrics are introduced.
+      - name: Preserve themes and spacing
+        when: the screen is displayed in either supported theme
+        then: it uses existing components and tokens without reserving placeholders for absent explanations.
+  - name: R6 Consistent instructions and honest verification
+    text: The canonical rules, product UI/UX policy, dashboard-build instructions and generated guide SHALL consistently express the accepted minimal-copy rule without mass-editing educational documentation or overstating verification.
+    scenarios:
+      - name: Read the same rule from each entry point
+        when: an implementer reads the rules, skill or generated guide
+        then: ordinary working states do not require explanatory prose, and short labels, units and statuses remain permitted.
+      - name: Scope and verification boundaries
+        when: the implementation is reported
+        then: unchanged educational and agreed introductory text remains outside the mass edit, and skipped checks or untested physical devices are explicitly identified.

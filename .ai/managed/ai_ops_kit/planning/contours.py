@@ -36,9 +36,9 @@ from pathlib import Path
 
 import yaml
 
-# Фундамент «матчинг путей + детект сигналов» вынесен в сателлит `contours_signals`; перенесённые
-# имена ре-экспортируются в конце модуля (там же — модульный импорт, дающий их голым именам, которые
-# зовут `derive_affects`/`reconcile`/`_sot_touched`).
+
+
+
 
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
            Path(__file__).resolve().parents[2])
@@ -46,8 +46,8 @@ MODEL_PATH = PKG / "registry" / "product-operating-model.yaml"
 
 CHANGED, NOT_CHANGED, UNKNOWN = "changed", "not_changed", "unknown"
 
-# Куда репозиторий вправе положить свою копию документа контекста (project/custom-оверлей —
-# механизм 3.12: managed-слой кита отдельно от правды репозитория).
+
+
 _OVERLAYS = ("", ".ai/project/", ".ai/custom/")
 
 class ModelCorrupt(Exception):
@@ -81,15 +81,15 @@ def contour(model: dict, cid: str) -> dict | None:
     return next((c for c in model.get("contours") or [] if c.get("id") == cid), None)
 
 
-# Кэш разобранной конфигурации репозитория по СОСТОЯНИЮ файла (путь, mtime, размер). Прежде
-# `.ai-ops.yaml` разбирался на каждый вызов: до восьми разборов YAML за одно срабатывание гейта
-# (`repo_overrides` + `repo_sot` на каждый контур).
-#
-# ЭТО ПРАВКА ПРОИЗВОДИТЕЛЬНОСТИ, А НЕ СОГЛАСОВАННОСТИ, и путать нельзя: mtime в ключе означает, что
-# изменённый файл ПЕРЕЧИТЫВАЕТСЯ. Именно перечитывание живьём испортило один из замеров обкатки —
-# конфигурацию правили, пока прогон шёл, и находки исчезали посреди выборки. Снимок обязан делать
-# АНАЛИЗ (прочитать конфигурацию один раз и передать дальше), а не читатель: читатель не знает, где
-# границы анализа, и молча замороженная конфигурация была бы дефектом хуже лишнего разбора.
+
+
+
+
+
+
+
+
+
 _CFG_CACHE = {}
 
 
@@ -204,10 +204,10 @@ def sot_for(model: dict, cid: str, child_root=None) -> list:
     base = [dict(s) for s in ((contour(model, cid) or {}).get("source_of_truth") or [])]
     declared = (repo_sot(child_root) if child_root is not None else {}).get(cid) or []
     if declared:
-        # ОБЪЯВЛЕНИЕ ВЛАДЕЛЬЦА СИЛЬНЕЕ ДОГАДКИ КИТА. Пути кита остаются в списке (они могли
-        # существовать тоже), но перестают быть ОБЯЗАТЕЛЬНЫМИ: иначе `ok` у контура недостижим
-        # никогда, и doctor вечно требует файл, которого в этом продукте не будет. Ровно этот
-        # случай дала обкатка: ADR лежат не там, где кит по умолчанию их ищет.
+        
+        
+        
+        
         for s in base:
             s["required"] = False
             s["superseded_by"] = "repository"
@@ -258,8 +258,8 @@ def sot_state(child_root: Path, model: dict | None = None) -> dict:
     out = {}
     for c in model.get("contours") or []:
         req_missing, opt_missing, present = [], [], []
-        # sot_for, а не поле контура: репозиторий вправе объявить свой источник истины, и тогда
-        # догадка кита перестаёт быть обязательной (иначе `ok` недостижим никогда).
+        
+        
         for s in sot_for(model, c["id"], root):
             rel = s.get("path") or ""
             if _resolve(root, rel):
@@ -292,11 +292,11 @@ def derive_affects(child_root: Path, changed_files: list, model: dict | None = N
     rules = repo_signal_rules(root) if rules is None else rules
     files = [unquote_git_path(f).replace("\\", "/") for f in (changed_files or [])]
 
-    # ПРАВИЛО СПЕЦИФИЧНОСТИ: точный путь сильнее чужого glob. `context/system/DataMap.md` — явный
-    # сигнал и источник истины контура данных, но он же попадает под `context/system/**` контура
-    # архитектуры; без этого правила КОРРЕКТНОЕ обновление модели данных давало ложную находку
-    # `undeclared_change` по архитектуре. Гейт, выдающий шум, перестают читать — и он становится
-    # хуже отсутствующего, поэтому шум здесь не косметика, а дефект. Найдено живой проверкой 3.35.
+    
+    
+    
+    
+    
     pats_by = {cid: signals_for(model, cid, overrides, rules) for cid in contour_ids(model)}
     exact_owner = {}
     for _cid, _pats in pats_by.items():
@@ -313,7 +313,7 @@ def derive_affects(child_root: Path, changed_files: list, model: dict | None = N
             if hit_exact:
                 matched.append(f)
                 continue
-            # Точный владелец этого пути есть, и это не мы -> путь принадлежит ему, не нам.
+            
             owners = exact_owner.get(f.lstrip("./") if f.startswith("./") else f, set())
             if owners and cid not in owners:
                 continue
@@ -321,8 +321,8 @@ def derive_affects(child_root: Path, changed_files: list, model: dict | None = N
                 matched.append(f)
         matched_by[cid] = matched
 
-    # Присутствие сигналов нужно ТОЛЬКО там, где ничего не совпало, и считается одним обходом на
-    # весь вызов: прежде обход шёл по контуру, до восьми раз за гейт.
+    
+    
     present = signals_present(root, {cid: pats for cid, pats in pats_by.items()
                                      if pats and not matched_by[cid]})
 
@@ -395,10 +395,10 @@ def reconcile(child_root: Path, declared: dict, changed_files: list,
             decl[k] = UNKNOWN
     findings = []
 
-    # ЗАЯВЛЕНИЕ ОБ ОПЕЧАТКЕ НЕ ПРОВЕРЯЕТ НИЧЕГО, И МОЛЧАТЬ ОБ ЭТОМ НЕЛЬЗЯ. `affects: {data_contract:
-    # true}` (id — `data_contracts`) выглядел как заполненное поле: сверка шла по известным контурам,
-    # лишний ключ игнорировался, автор считал, что связь объявлена. Тир 3: опечатка — `major`,
-    # потому что она создаёт ЛОЖНУЮ уверенность, а не просто пропуск.
+    
+    
+    
+    
     for k in sorted(set(decl) - known):
         findings.append({"id": "unknown_contour_declared", "contour": k, "severity": "major",
                          "detail": f"в affects заявлен контур '{k}', которого в модели нет "
@@ -413,12 +413,12 @@ def reconcile(child_root: Path, declared: dict, changed_files: list,
                              "detail": d["reason"]})
             continue
 
-        # ── ГЛАВНАЯ НАХОДКА: ОПИСАНИЕ ОТСТАЛО ОТ КОДА ──────────────────────────────────────────
-        # Это ФАКТ, и он не зависит от того, заполнил ли человек `affects`: сигналы контура тронуты,
-        # источник истины — нет. Прежде находка требовала заявления, и на документированном пути
-        # (`run` создаёт id из хеша задачи, элемента плана с таким id нет) поле было пустым ВСЕГДА —
-        # гейт структурно не мог дать не-`pass`. Мутационное ревью поймало это как выжившего мутанта:
-        # «файлов 5, включая миграции и CI -> verdict ok».
+        
+        
+        
+        
+        
+        
         if d["state"] == CHANGED:
             touched = _sot_touched(child_root, cid, changed_files, model)
             if not touched:
@@ -428,9 +428,9 @@ def reconcile(child_root: Path, declared: dict, changed_files: list,
                     "detail": f"изменение трогает {', '.join(d['matched'][:4])}, а описание контура "
                               f"не обновлено (ожидался один из: {', '.join(sot)})"})
 
-        # ── УЧЁТ ЗАЯВЛЕНИЯ: полезно, но это не тот дефект, ради которого гейт существует ─────────
-        # `info` осознанно. Незаполненное поле не делает работу несогласованной, а шум на каждой
-        # задаче гарантирует, что гейт перестанут читать — модель запрещает это прямо.
+        
+        
+        
         if d["state"] == CHANGED and want != CHANGED:
             findings.append({"id": "undeclared_change", "contour": cid, "severity": "info",
                              "detail": f"контур затронут, но не заявлен в affects "
@@ -490,8 +490,8 @@ def main(argv=None):
     files = [x.strip() for x in (ns.files or "").split(",") if x.strip()]
 
     if ns.cmd == "reconcile":
-        # Объявленный `affects` берём из WorkItem'а; его отсутствие — НЕ «ничего не меняем», а
-        # «ещё не определяли», и находка `undeclared_change` про это и скажет.
+        
+        
         declared = {}
         if ns.workitem:
             wp = Path(ns.workitem)
@@ -506,7 +506,7 @@ def main(argv=None):
         print(f"СВЯЗНОСТЬ КОНТУРОВ: {rep['verdict']} · сверяемо {rep['comparable']}")
         for f in rep["findings"]:
             print(f"  {f['severity']:6} {f['id']} / {f['contour']}: {f['detail']}")
-        # Гейт advisory: несогласованность НЕ роняет код возврата, но и не молчит.
+        
         return 0
 
     der = derive_affects(root, files, model)
@@ -517,8 +517,8 @@ def main(argv=None):
     return 0
 
 
-# ЯВНЫЙ ре-экспорт перенесённого фундамента: внешний код и тесты зовут эти имена как `contours.X`,
-# а `derive_affects`/`reconcile`/`_sot_touched` — по голому имени. Не `import *`: перечень явный.
+
+
 from ai_ops_kit.planning.contours_signals import (  # noqa: E402
     _under_excluded,
     unquote_git_path,

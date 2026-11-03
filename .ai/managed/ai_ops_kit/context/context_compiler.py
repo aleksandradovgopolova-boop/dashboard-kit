@@ -36,7 +36,7 @@ from ai_ops_kit.shared.gitio import git           # noqa: E402
 
 CONTEXT_BUDGET_DEFAULT = 120_000   # токенов; override через signals["context_budget"] или config
 
-# workflow -> категории правил (rules/<category>). core — всегда.
+
 WORKFLOW_RULES = {
     "QUICK": ["core", "engineering"],
     "ENGINEERING": ["core", "engineering", "quality", "thinking"],
@@ -50,7 +50,7 @@ WORKFLOW_RULES = {
     "DECISION": ["core", "thinking"],
     "ADOPTION": ["core", "product"],
 }
-# трек -> дополнительные категории правил
+
 TRACK_RULES = {
     "VISUAL": ["design"], "ANALYTICS": ["product"], "SECURITY": ["quality"],
     "DOCUMENTATION": ["documentation"], "EVENTS": ["engineering"], "AI": ["ai"], "RELEASE": ["engineering"],
@@ -96,7 +96,7 @@ def _gate_roles(gate_ids):
 
 
 def _est_tokens(text):
-    # грубая, детерминированная оценка: ~4 символа на токен
+    
     return (len(text) + 3) // 4
 
 
@@ -137,7 +137,7 @@ def compile_bundle(signals, child_root, plan=None, context_budget=None, build_pl
     agent_idx = _agent_index()
     wf = _workflow_def(base_wf)
 
-    # --- agents: владельцы/ревьюеры стадий + responsible_role гейтов, только реальные из registry ---
+    
     role_ids, why_agent = set(), {}
     for st in wf.get("stages", []) or []:
         for key in ("owner", "writer"):
@@ -147,45 +147,45 @@ def compile_bundle(signals, child_root, plan=None, context_budget=None, build_pl
     for r in _gate_roles(gate_ids):
         role_ids.add(r); why_agent.setdefault(r, "responsible_role гейта RunPlan")
     included_agents = sorted(r for r in role_ids if r in agent_idx)
-    # роли, которых нет в registry как агентов (напр. final-verifier) — честно отметим в допущениях
+    
     unknown_roles = sorted(r for r in role_ids if r not in agent_idx)
 
-    # --- skills: uses_skills по стадиям ---
+    
     skills = set()
     for st in wf.get("stages", []) or []:
         for sk in st.get("uses_skills", []) or []:
             skills.add(sk)
     included_skills = sorted(skills)
 
-    # --- rules: категории по workflow + трекам, core всегда ---
+    
     rule_cats = set(WORKFLOW_RULES.get(base_wf, ["core"]))
     for tr in tracks:
         rule_cats |= set(TRACK_RULES.get(tr, []))
     rule_cats.add("core")
     included_rules = sorted(c for c in rule_cats if (PKG / "rules" / c).is_dir())
 
-    # --- repository_context: RepositoryProfile (единая точка: кеш .ai/repository-profile.yaml,
-    #     перечитывается сам, если манифесты изменились) ---
-    # write=False принципиально: компиляция контекста — ЧТЕНИЕ, она не автор профиля. Через
-    # compile_bundle проходит `preview` (build_preview), а preview обязан не трогать репозиторий;
-    # с write=True `preview onboard` пере-создавал .ai/repository-profile.yaml — то есть выполнял
-    # действие, которое только показывал. Автор профиля — `onboard`, он и пишет файл.
-    # Свежесть данных не страдает: протухший кеш load_or_detect не отдаёт в любом случае.
+    
+    
+    
+    
+    
+    
+    
     profile = project_detector.load_or_detect(child_root, write=False)
     repo_ctx = [f"{s['language']} ({', '.join(s.get('frameworks') or []) or 'no-fw'})"
                 for s in profile.get("stacks", [])]
     files = sorted({src for s in profile.get("stacks", []) for src in (s.get("evidence_source") or [])})
 
-    # --- specifications: артефакты в features/<wid> И в .ai/runplan/<wid> (v2.108 finding аудита:
-    #     authoring пишет часть артефактов в .ai/runplan/<wid> — раньше их не находили) ---
+    
+    
     specs = []
     for base in (child_root / "features" / wid, child_root / ".ai" / "runplan" / wid):
         if base.is_dir():
             for name in ("requirements.md", "requirements.yaml", "plan.md", "plan.yaml", "spec.md"):
                 if (base / name).is_file():
                     specs.append(str((base / name).relative_to(child_root)))
-    # --- decisions: relevance-фильтр (v2.108 finding аудита: раньше включались ВСЕ разом). Берём те,
-    #     чей текст пересекается с affected_areas/ключевыми словами задачи; иначе — 3 самых свежих ---
+    
+    
     decisions = []
     dec_dir = child_root / ".ai" / "project" / "decisions"
     if dec_dir.is_dir():
@@ -200,7 +200,7 @@ def compile_bundle(signals, child_root, plan=None, context_budget=None, build_pl
         chosen = relevant or all_dec[-3:]     # релевантные; иначе 3 самых свежих (не все разом)
         decisions = [str(p.relative_to(child_root)) for p in chosen]
 
-    # --- excluded (с причиной): агенты не из RunPlan, правила и skills не по задаче ---
+    
     all_rule_cats = sorted(p.name for p in (PKG / "rules").iterdir() if p.is_dir()) if (PKG / "rules").is_dir() else []
     excluded = []
     for aid in sorted(agent_idx):
@@ -210,7 +210,7 @@ def compile_bundle(signals, child_root, plan=None, context_budget=None, build_pl
         if c not in included_rules:
             excluded.append({"source": f"rules/{c}", "reason": "категория правил не применима к workflow/трекам задачи"})
 
-    # --- токены: агенты + правила (то, что реально попадёт в контекст) ---
+    
     tok = 0
     tok += _est_tokens(signals.get("task_text", ""))
     for aid in included_agents:
@@ -291,13 +291,13 @@ def _warn_if_bundle_malformed(bundle):
 
 
 def _git_head(root):
-    # Единый вход к git с таймаутом (см. shared/gitio): зависший git не вешает компиляцию контекста.
+    
     rc, out, _ = git(root, "rev-parse", "HEAD")
     return out if rc == 0 else None
 
 
-# Контекстные окна моделей (токены). Читаются из registry/models.yaml (SoT), не хардкод.
-# Бюджет payload режем по МЕНЬШЕМУ из заданного и окна модели.
+
+
 def _load_model_context() -> dict:
     """Загрузить окна контекста из registry/models.yaml. Только модели с context_window.value."""
     models_path = PKG / "registry" / "models.yaml"
@@ -341,7 +341,7 @@ def build_payload(signals, child_root, plan=None, bundle=None, context_budget=No
     payload_budget = int(budget * (1 - _OUTPUT_RESERVE_FRAC - _TOOLLOOP_RESERVE_FRAC))
     rev = bundle.get("revision")
 
-    # источники в порядке приоритета: (kind, source_id, loader) -> текст
+    
     inc = bundle.get("included", {})
     candidates = []
     task_text = signals.get("task_text", "")
@@ -368,10 +368,10 @@ def build_payload(signals, child_root, plan=None, bundle=None, context_budget=No
     if inc.get("skills"):
         candidates.append(("skills", "skills", "Нужные skills: " + ", ".join(inc["skills"]),
                            "релевантные skills (по стадиям)"))
-    # #613 Storybook-навигация: при UI-изменении даём агенту каталог дизайн-системы дочки (и stories,
-    # связанные с затронутыми файлами), чтобы он ПЕРЕИСПОЛЬЗОВАЛ существующие компоненты/варианты/a11y,
-    # а не изобретал заново. Живой потребитель storybook_query (был built-not-wired). Guarded и дёшев:
-    # None, если у дочки нет Storybook — на не-UI дочке не шумим.
+    
+    
+    
+    
     if signals.get("ui_changed"):
         try:
             from ai_ops_kit.ui import storybook_query as _sbq

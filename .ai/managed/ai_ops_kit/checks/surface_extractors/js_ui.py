@@ -15,23 +15,23 @@ import re
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface
 
-# JSX-объявление экрана: <Route ... path="/x" ...> / <Route path='/x'/>. `\b` после Route отсекает
-# контейнер <Routes>. Путь — строковый литерал в одинарных/двойных кавычках; `{...}`/backtick мимо.
+
+
 _JSX_ROUTE_PATH_RE = re.compile(r"<Route\b[^>]*?\bpath\s*=\s*(['\"])(.*?)\1")
-# Объектная форма роута: { path: "/x", element/component: ... } — общий вид у React object routes
-# (createBrowserRouter/useRoutes) и у Vue Router (routes: [...]). `\b` перед path не даёт зацепить
-# basePath/filepath/redirect_path (ключ должен начинаться словом `path`).
+
+
+
 _OBJ_PATH_RE = re.compile(r"\bpath\s*:\s*(['\"])(.*?)\1")
 
-# Индикаторы ОБЪЕКТНОГО роутинга в файле — чтобы `path:` брался лишь в файле-роутере, а не в любом
-# объекте с ключом path. React: фабрики/хук роутера. Vue: createRouter/VueRouter/импорт vue-router.
+
+
 _REACT_OBJ_ROUTER_HINTS = ("createBrowserRouter", "createHashRouter", "createMemoryRouter", "useRoutes")
 _VUE_ROUTER_HINTS = ("createRouter", "VueRouter", "vue-router")
 
-# Индикатор Angular-роутинга в файле — чтобы объектный `path:` брался лишь в файле-роутере Angular, а
-# не в любом TS-объекте с ключом path. Ловит импорт `@angular/router`, вызовы `RouterModule.forRoot/
-# forChild` и аннотацию типа `const routes: Routes = [...]`. `\b`/`:` сужают, чтобы слово Routes в
-# другом смысле не считалось индикатором.
+
+
+
+
 _ANGULAR_ROUTER_INDICATOR_RE = re.compile(r"@angular/router|\bRouterModule\b|:\s*Routes\b")
 
 

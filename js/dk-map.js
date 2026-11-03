@@ -76,7 +76,9 @@
   }
 
   function nfmt(n) {
-    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    // Ratios may have long fractional tails. Use the kit formatter so
+    // decimal digits are neither grouped as thousands nor exposed verbatim.
+    return window.dkFmt.num(n);
   }
 
   /* --- TopoJSON → GeoJSON --------------------------------------------------
@@ -152,12 +154,21 @@
   window.dkMap = function (host, opts) {
     window.dkDestroy(host);
     var stopped = false;
+    // The host survives an embedded-screen remount. Anonymous listeners on
+    // that host and the window otherwise retain old data and create two tips.
+    var releases = [];
+    function listen(target, event, callback, options) {
+      target.addEventListener(event, callback, options);
+      releases.push(function () { target.removeEventListener(event, callback, options); });
+    }
     opts = opts || {};
 
     var name = opts.name || 'dk-regions';
     var tiles = opts.tiles;
     var values = opts.values || {};
     var unit = opts.unit || '';
+    var legendUnit = opts.legendUnit == null ? unit : String(opts.legendUnit);
+    var legendBucket = null;
     var onSelect = opts.onSelect || function () {};
     // По умолчанию — плиточная карта (картограмма: каждый регион равной
     // величины, мелкие не теряются, видно «где хуже» по всей стране разом).
@@ -173,7 +184,9 @@
        остаётся общей по стране: цвет региона значит одно и то же с фильтром и
        без. Нет scope — в срезе все. */
     var scope = opts.scope ? new Set(opts.scope) : null;
-    function inScope(id) { return !scope || scope.has(id); }
+    function inScope(id) {
+      return (!scope || scope.has(id)) && (legendBucket === null || bucket(values[id]) === legendBucket);
+    }
     var zoom = 1;
     var geo = opts.geo || (opts.topo ? fromTopo(opts.topo, opts.object) : null);
 
@@ -211,12 +224,20 @@
     rescale();
 
     function bucket(v) {
-      if (typeof v !== 'number') return -1;
+      if (typeof v !== 'number' || !Number.isFinite(v)) return -1;
+      if (typeof opts.classify === 'function') {
+        var category = opts.classify(v);
+        return Number.isInteger(category) && category >= 0 && category <= cuts.length ? category : -1;
+      }
       for (var i = 0; i < cuts.length; i++) if (v < cuts[i]) return i;
       return cuts.length;
     }
 
     function bucketColor(b) {
+      // Glass mixes the status onto its own surface: do not attenuate low twice.
+      if (opts.palette === 'risk' && cuts.length === 2 && opts.appearance === 'glass' && b === 0) {
+        return window.dkMeaning.color('calm', 'fill', host);
+      }
       return opts.palette === 'risk' && cuts.length === 2
         ? css('--risk-area-' + ['low', 'medium', 'high'][b])
         : css('--seq-' + (b + 1));
@@ -227,26 +248,26 @@
       return b < 0 ? window.dkMeaning.color('nodata', 'fill', host) : bucketColor(b);
     }
 
-    /* ЛЕГЕНДА ВНИЗУ, ПЕРЕКЛЮЧАТЕЛЬ ВВЕРХУ. Раньше они стояли вместе в шапке,
-       и это было ошибкой порядка чтения: легенда — это ключ к тому, что уже
-       нарисовано, а не настройка того, что будет нарисовано. Наверху её
-       читают до карты, то есть до того, как она может что-то объяснить, и
-       перечитывают заново, когда доходят до самой карты.
+    function tileTextColor(v) {
+      if (opts.appearance === 'glass') return 'var(--ink)';
+      var b = bucket(v);
+      if (opts.palette === 'risk' && cuts.length === 2 && b >= 0) {
+        return ['var(--risk-label-low)', 'var(--risk-label-medium)', 'var(--risk-label-high)'][b];
+      }
+      return 'var(--ink)';
+    }
 
-       Внизу она оказывается там же, где заканчивается взгляд, прошедший по
-       карте, — и отвечает ровно в тот момент, когда возник вопрос «а что
-       значит этот оттенок». Так же стоит легенда у круговой диаграммы в этом
-       ките: снизу, под тем, что объясняет.
-
-       Переключатель вида остаётся сверху: он не объясняет, а управляет, и
-       место управления — до содержимого. */
+    /* Положение легенды выбирает композиция экрана. По умолчанию снизу;
+       legendPosition: 'top' ставит её перед содержимым и в DOM, и визуально. */
     host.className = 'dk-map';
+    host.dataset.legendPosition = opts.legendPosition === 'top' ? 'top' : 'bottom';
+    host.dataset.appearance = opts.appearance === 'glass' ? 'glass' : 'default';
     host.innerHTML =
       '<div class="dk-map__head">' +
         // Сегмент — это группа переключателей, а не вкладки: он меняет ВИД
         // одних и тех же данных, не адрес и не страницу. Скринридер, услышав
         // «вкладка», ждёт новой загрузки, а получает перерисовку виджета.
-        '<div class="dk-seg dk-seg--sm dk-seg--icons" role="group" aria-label="Вид данных">' +
+        '<div class="dk-seg dk-seg--icons" role="group" aria-label="Вид данных">' +
           '<button type="button" data-view="tiles" aria-pressed="true" title="Плитки" aria-label="Плитки">' +
             '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-layout-grid"/></svg></button>' +
           '<button type="button" data-view="map" aria-pressed="false" title="Карта" aria-label="Карта">' +
@@ -263,6 +284,7 @@
 
     var legendEl = host.querySelector('.dk-map__legend');
     var bodyEl = host.querySelector('.dk-map__body');
+    if (host.dataset.legendPosition === 'top') host.insertBefore(legendEl, bodyEl);
 
     /* Переключатель вида можно перенести в шапку виджета — туда, где у всех
        остальных виджетов живут действия. Своя шапка у карты появилась раньше,
@@ -294,24 +316,50 @@
 
     function renderLegend() {
       var parts = [];
+      var counts = {all:0};
+      Object.keys(names).forEach(function (id) {
+        if (scope && !scope.has(id)) return;
+        var category = bucket(values[id]); counts.all++; counts[category] = (counts[category] || 0) + 1;
+      });
+      function key(category, content, swatch) {
+        if (opts.legendCounts) content += ' <b>' + (counts[category] || 0) + '</b>';
+        if (!opts.legendFilter) return '<span class="dk-map__key">' + content + '</span>';
+        return '<button type="button" class="dk-map__key dk-lg" data-map-bucket="' + category + '"' +
+          (swatch ? ' style="--swatch:' + swatch + '"' : '') +
+          ' aria-pressed="' + String(legendBucket === (category === 'all' ? null : Number(category))) + '">' + content + '</button>';
+      }
+      if (opts.legendFilter) {
+        legendEl.setAttribute('role', 'group'); legendEl.setAttribute('aria-label', 'Категории карты');
+        parts.push(key('all', 'Все'));
+      }
       for (var i = 0; i <= cuts.length; i++) {
         var from = i === 0 ? min : cuts[i - 1];
         var to = i === cuts.length ? max : cuts[i];
-        parts.push('<span class="dk-map__key"><i style="background:' + bucketColor(i) + '"></i>' +
-          nfmt(Math.round(from)) + '–' + nfmt(Math.round(to)) + '</span>');
+        parts.push(key(i, '<i style="background:' + bucketColor(i) + '"></i>' +
+          (opts.legendLabels && opts.legendLabels[i] != null ? esc(opts.legendLabels[i]) : nfmt(Math.round(from)) + '–' + nfmt(Math.round(to))), bucketColor(i)));
       }
-      // Правило 3: отсутствие данных названо, а не спрятано среди нулей.
-      parts.push('<span class="dk-map__key"><i class="dk-nodata"></i>нет данных</span>');
-      // Приглушение названо в легенде, как и «нет данных»: иначе бледный
-      // регион читается как «низкое значение».
-      if (scope) parts.push('<span class="dk-map__key dk-map__key--out"><i style="background:var(--seq-5)"></i>вне среза</span>');
-      legendEl.innerHTML = parts.join('') + (unit ? '<span class="dk-map__unit">' + esc(unit) + '</span>' : '');
+      // Отсутствие данных — отдельная категория, а не числовой ноль.
+      parts.push(key(-1, '<i class="dk-nodata"></i>нет данных'));
+      if ((scope || legendBucket !== null) && Object.keys(names).some(function (id) { return !inScope(id); })) parts.push('<span class="dk-map__key dk-map__key--out"><i style="background:var(--ink-3)"></i>вне фильтра</span>');
+      legendEl.innerHTML = parts.join('') + (legendUnit ? '<span class="dk-map__unit">' + esc(legendUnit) + '</span>' : '');
     }
+
+    listen(legendEl, 'click', function (event) {
+      var button = event.target.closest('button[data-map-bucket]');
+      if (!opts.legendFilter || !button || !legendEl.contains(button)) return;
+      var key = button.dataset.mapBucket;
+      var next = key === 'all' ? null : Number(key);
+      legendBucket = legendBucket === next ? null : next;
+      tipHide(); render();
+      // Перерисовка сохраняет фокус на нажатой категории.
+      var replacement = legendEl.querySelector('[data-map-bucket="' + key + '"]');
+      if (replacement) replacement.focus();
+    });
 
     function label(id) {
       var v = values[id];
-      return names[id] + ' · ' + (typeof v === 'number' ? nfmt(v) + (unit ? ' ' + unit : '') : 'нет данных') +
-        (inScope(id) ? '' : ' · вне среза');
+      return names[id] + ' · ' + (opts.legendLabels && bucket(v) >= 0 ? opts.legendLabels[bucket(v)] + ' · ' : '') + (typeof v === 'number' ? nfmt(v) + (unit ? ' ' + unit : '') : 'нет данных') +
+        (inScope(id) ? '' : ' · вне фильтра');
     }
 
     function renderMap() {
@@ -443,10 +491,10 @@
         // поэтому всё, что не число, становится нулём.
         var row = num(t.row), col = num(t.col);
         html += '<button type="button" class="dk-map__tile' + (bucket(v) < 0 ? ' dk-nodata' : '') + (inScope(t.id) ? '' : ' dk-map__tile--out') + '"' +
-          ' data-id="' + esc(t.id) + '" data-row="' + row + '" data-col="' + col + '"' +
+          ' data-id="' + esc(t.id) + '" data-row="' + row + '" data-col="' + col + '" data-map-status="' + bucket(v) + '"' +
           ' tabindex="' + (t.id === focusId ? '0' : '-1') + '"' +
           ' style="grid-row:' + (row + 1) + ';grid-column:' + (col + 1) +
-          ';--fill:' + color(v) + '"' +
+          ';--fill:' + color(v) + ';color:' + tileTextColor(v) + '"' +
           ' aria-label="' + esc(label(t.id)) + '">' +
           // Значение стоит В плитке, а не только в подсказке: плитки объявлены
           // ответом на вопрос «у кого хуже», а подсказку не получить ни
@@ -488,7 +536,7 @@
       var again = bodyEl.querySelector('[data-zoom-step="' + step + '"]');
       if (again && !again.disabled) again.focus();
     }
-    bodyEl.addEventListener('click', function (e) {
+    listen(bodyEl, 'click', function (e) {
       var b = e.target.closest && e.target.closest('[data-zoom-step]');
       if (b && bodyEl.contains(b)) setZoom(Number(b.dataset.zoomStep));
     });
@@ -543,12 +591,12 @@
        поддерева, на которое подписан обработчик. Ошибка моя и ровно того рода,
        которую не видно в коде: разметка переехала, а подписка осталась там,
        где была. */
-    segEl.addEventListener('click', function (e) {
+    listen(segEl, 'click', function (e) {
       var v = e.target.closest('button[data-view]');
       if (v) { view = v.dataset.view; render(); }
     });
 
-    host.addEventListener('click', function (e) {
+    listen(host, 'click', function (e) {
       var tile = e.target.closest('.dk-map__tile, .dk-map__li');
       if (tile) onSelect(tile.dataset.id, values[tile.dataset.id]);
     });
@@ -562,6 +610,7 @@
       var v = values[id];
       tip.innerHTML = '<span class="dk-map__tip-name">' + esc(names[id]) + '</span>' +
         '<span class="dk-map__tip-v"><i class="dk-map__tip-dot" style="background:' + color(v) + '"></i>' +
+        (opts.legendLabels && bucket(v) >= 0 ? esc(opts.legendLabels[bucket(v)]) + ' · ' : '') +
         (typeof v === 'number' ? esc(nfmt(v) + (unit ? ' ' + unit : '')) : 'нет данных') + '</span>';
       tip.hidden = false;
       var r = el.getBoundingClientRect(), t = tip.getBoundingClientRect();
@@ -570,14 +619,14 @@
       tip.style.left = Math.round(left) + 'px'; tip.style.top = Math.round(top) + 'px';
     }
     function tipHide() { if (tip) tip.hidden = true; }
-    host.addEventListener('pointerover', function (e) { var el = e.target.closest && e.target.closest('.dk-map__tile, .dk-map__li'); if (el) tipShow(el); });
-    host.addEventListener('pointerout', function (e) { var el = e.target.closest && e.target.closest('.dk-map__tile, .dk-map__li'); if (el && !el.contains(e.relatedTarget)) tipHide(); });
-    host.addEventListener('focusin', function (e) { var el = e.target.closest && e.target.closest('.dk-map__tile, .dk-map__li'); if (el) tipShow(el); });
-    host.addEventListener('focusout', tipHide);
-    window.addEventListener('scroll', tipHide, true);
+    listen(host, 'pointerover', function (e) { var el = e.target.closest && e.target.closest('.dk-map__tile, .dk-map__li'); if (el) tipShow(el); });
+    listen(host, 'pointerout', function (e) { var el = e.target.closest && e.target.closest('.dk-map__tile, .dk-map__li'); if (el && !el.contains(e.relatedTarget)) tipHide(); });
+    listen(host, 'focusin', function (e) { var el = e.target.closest && e.target.closest('.dk-map__tile, .dk-map__li'); if (el) tipShow(el); });
+    listen(host, 'focusout', tipHide);
+    listen(window, 'scroll', tipHide, true);
 
     // Плитки — сетка, и ходить по ней надо стрелками, а не двадцатью табами.
-    host.addEventListener('keydown', function (e) {
+    listen(host, 'keydown', function (e) {
       var tile = e.target.closest && e.target.closest('.dk-map__tile');
       if (!tile) return;
       var d = { ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0] }[e.key];
@@ -620,13 +669,16 @@
     sizeWatch.observe(host);
 
     render();
+    var stableView = window.dkStableView(host, bodyEl);
 
     // Погребение отдано сторожу из dk-util.js: подписка на тему висит на корне
     // документа и переживает узел, а звать destroy() руками никто не обязан.
     var destroy = own(host, function () {
       stopped = true;
+      releases.forEach(function (release) { release(); }); releases = [];
+      if (tip) { tip.remove(); tip = null; }
       if (!host.contains(segEl)) segEl.remove();
-      themeWatch.disconnect(); sizeWatch.disconnect();
+      stableView.destroy(); themeWatch.disconnect(); sizeWatch.disconnect();
       if (inst) { inst.dispose(); inst = null; }
       host.innerHTML = '';
     });

@@ -33,14 +33,14 @@ from pathlib import Path
 
 BUNDLE_SCHEMA_VERSION = 1
 
-# Состояния UI, покрытие которых история обязана показывать (агрегат по затронутым компонентам).
+
 REQUIRED_STATES = ("default", "loading", "empty", "error")
-# Дополнительно отслеживаем (не обязательно): app-специфичные состояния.
+
 EXTRA_STATES = ("restricted",)
 ALL_STATES = REQUIRED_STATES + EXTRA_STATES
 
-# Experience Contract подключённого репозитория: сторона СОЗДАНИЯ опыта. Первый существующий
-# побеждает — те же конвенции, что у остальных артефактов.
+
+
 _EXPERIENCE_CONTRACT = (".ai/project/experience-contract.yaml",
                         "docs/experience-contract.yaml",
                         ".ai/ui-evidence/experience-contract.yaml")
@@ -60,15 +60,15 @@ def _load_experience_contract(root):
         import yaml as _y
         try:
             doc = _y.safe_load(p.read_text(encoding="utf-8"))
-        # Узкий тип: файл может не читаться или не разбираться. Любое ДРУГОЕ исключение здесь —
-        # дефект, и он обязан всплыть, а не превратиться в «контракта нет».
+        
+        
         except (OSError, _y.YAMLError):
             return None
         return doc if isinstance(doc, dict) else None
     return None
 
 
-# Конвенциональные места артефактов в child-репо (первый существующий побеждает).
+
 _STORY_INDEX = ("storybook-static/index.json", "storybook-static/stories.json",
                 ".storybook-out/index.json")
 _EVIDENCE_DIRS = (".ai/ui-evidence", "test-results", ".ui-evidence")
@@ -107,7 +107,7 @@ def _find_artifact(root: Path, key) -> Path | None:
     return None
 
 
-# --- story index ----------------------------------------------------------------------------------
+
 
 def _parse_story_index(data) -> list[dict]:
     """Нормализация Storybook index: v7 {entries:{id:{title,name,importPath}}} и v6 {stories:{...}}."""
@@ -157,13 +157,13 @@ def _matches_changed(import_path: str, changed: list[str]) -> bool:
             continue
         cc_parts = cc.split("/")
         n = min(len(ip_parts), len(cc_parts))
-        # совпадение по суффиксу пути (полные компоненты пути с конца), НЕ по голому basename
+        
         if n >= 1 and ip_parts[-n:] == cc_parts[-n:]:
             return True
     return False
 
 
-# --- нормализация секций evidence -----------------------------------------------------------------
+
 
 def _norm_interaction(data) -> dict:
     if not isinstance(data, dict):
@@ -233,7 +233,7 @@ def _norm_design_system(data) -> dict:
             "new_components_justified": justified}
 
 
-# --- сборка bundle --------------------------------------------------------------------------------
+
 
 def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
     """Собрать UIEvidenceBundle из локальных артефактов.
@@ -248,7 +248,7 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
     changed = [c.strip() for c in (changed_files or []) if c.strip()]
     provenance = []
 
-    # 0) провенанс: SHA сборки evidence из меты артефактов (авторитетнее переданного commit_sha)
+    
     meta_path = _find(root, _META)
     meta_sha = None
     if meta_path:
@@ -258,7 +258,7 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
             provenance.append(str(meta_path.relative_to(root)))
     evidence_sha = meta_sha or commit_sha
 
-    # 1) Storybook detection + story index
+    
     idx_path = _find(root, _STORY_INDEX)
     has_config = (root / ".storybook").is_dir()
     stories = []
@@ -274,7 +274,7 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
     storybook = {"detected": detected, "build_status": build_status, "version": None,
                  "story_count": len(stories)}
 
-    # 2) affected components/stories (по changed files через importPath; нет changed -> все)
+    
     if changed and stories:
         aff = [s for s in stories if _matches_changed(s.get("importPath", ""), changed)]
     else:
@@ -284,26 +284,26 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
     # v3.2.3: каталог дизайн-системы — нормализованные имена ВСЕХ компонентов индекса (для reuse-чека)
     component_catalog = sorted({_component_base(_component_of(s)) for s in stories if _component_of(s)})
 
-    # 3) state coverage (агрегат по затронутым историям: состояние покрыто, если его показывает
-    #    хотя бы одна затронутая история — по ключевому слову в name/id)
+    
+    
     covered = {}
     hay = " ".join((s.get("name", "") + " " + s.get("id", "")).lower() for s in aff)
     for st in ALL_STATES:
         covered[st] = st in hay
-    # ТРЕБОВАНИЕ БЕРЁТСЯ ИЗ КОНТРАКТА, ЕСЛИ ОН ЕСТЬ (20.08.2026, `experience-contract-drives-stories`).
-    #
-    # ЗАМЕР. Здесь стоял только общий список `REQUIRED_STATES`, а сторона СОЗДАНИЯ выводила
-    # состояния из Experience Contract. Половины механизма не встречались: состояние, которое
-    # владелец описал сверх обязательных (скажем, `restricted` со своим condition), в требование
-    # не попадало — то есть контракт объявлял опыт, а гейт его не спрашивал.
-    #
-    # Теперь требование — ОБЪЕДИНЕНИЕ: обязательные (их гарантирует генератор stories) плюс то,
-    # что владелец описал сам. Контракта нет — работает прежнее поведение, ничего не ужесточая:
-    # требовать по контракту, которого не существует, значило бы придумать требование.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     required = list(REQUIRED_STATES) if affected_stories else []
-    # #452 wired: покрытие обязательных stories (экран×состояние) из контракта против СОБРАННОГО
-    # Storybook-индекса. Контракта нет -> complete=True (не ужесточаем: требовать по несуществующему
-    # контракту значило бы придумать требование — та же логика, что у state_coverage выше).
+    
+    
+    
     required_stories = {"required": [], "present": [], "missing": [], "complete": True}
     if affected_stories:
         _contract = _load_experience_contract(root)
@@ -317,7 +317,7 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
     state_coverage = {"required": required, "states": covered, "missing": missing,
                       "complete": not missing}
 
-    # 4) секции из артефактов
+    
     def _load_section(key, norm):
         p = _find_artifact(root, key)
         if p:
@@ -349,7 +349,7 @@ def reuse_violations(bundle: dict) -> list:
     return [n for n in new if _component_base(n) in catalog]
 
 
-# --- мост к gate_policy: какое ДЕТЕРМИНИРОВАННОЕ evidence bundle даёт по каждому UI-гейту ----------
+
 
 def evidence_for_gate(bundle: dict, expected_sha=None) -> dict:
     """Маппинг UIEvidenceBundle -> детерминированный статус по каждому UI-гейту.
@@ -374,8 +374,8 @@ def evidence_for_gate(bundle: dict, expected_sha=None) -> dict:
     # v3.1.9: покрытие состояний доказано ТОЛЬКО если есть затронутые истории. Пустой affected при
     # UI-правке = у изменённого компонента нет историй -> complete «вакуумно True» НЕ считается pass.
     has_affected = bool(bundle.get("affected_stories"))
-    # #452 wired: контракт объявил обязательные stories, а в собранном Storybook их НЕТ -> опыт не
-    # доказан, ux_review не может быть pass и краснеет детерминированно (не молчит).
+    
+    
     rs = bundle.get("required_stories") or {}
     rs_missing = bool(rs.get("missing"))
     ux_pass = has_affected and sc.get("complete") and inter.get("status") == "pass" and not rs_missing
@@ -403,7 +403,7 @@ def evidence_for_gate(bundle: dict, expected_sha=None) -> dict:
     }
 
 
-# --- selftest -------------------------------------------------------------------------------------
+
 
 def _write(root: Path, rel: str, obj):
     p = root / rel

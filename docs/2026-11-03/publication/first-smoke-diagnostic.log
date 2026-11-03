@@ -1,0 +1,14 @@
+Verified published view index dark 1366
+Verified published view index dark 390
+Verified published view regions dark 1470
+Verified published view accidents dark 713
+Verified published view family-mortgage dark 1280
+Verified published view family-mortgage dark 390
+file:///private/tmp/kit-nov3-public-smoke.mjs:58
+   if(!state.comparison.tipVisible||state.comparison.delta||(width===1280&&state.comparison.width>=state.comparison.container/2))throw Error('Public comparison reason');
+                                                                                                                                       ^
+
+Error: Public comparison reason
+    at file:///private/tmp/kit-nov3-public-smoke.mjs:58:136
+
+Node.js v26.7.0

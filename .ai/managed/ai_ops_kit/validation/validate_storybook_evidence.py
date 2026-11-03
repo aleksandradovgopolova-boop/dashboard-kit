@@ -32,7 +32,7 @@ SCHEMA = PKG / "schemas" / "ui-evidence-bundle.schema.json"
 STATUS3 = {"pass", "fail", "not_run"}
 BUILD = {"pass", "fail", "absent"}
 
-# Разрешённые ключи секций (closed — эквивалент additionalProperties:false).
+
 _KEYS = {
     "storybook": {"detected", "build_status", "version", "story_count"},
     "state_coverage": {"required", "states", "missing", "complete"},
@@ -108,9 +108,9 @@ def check(data: dict):
             elif sc.get("complete") != (len(recomputed) == 0):
                 e.append("state_coverage.complete не соответствует missing")
 
-    # required_stories — АДДИТИВНОЕ поле (#452 wired): проверяем самосогласованность ТОЛЬКО если оно
-    # есть (старое evidence без него остаётся валидным). complete ⟺ missing пуст; present и missing
-    # разбивают required без пересечения — иначе «покрытие» скрывало бы дыру.
+    
+    
+    
     if "required_stories" in data:
         rsd = _section("required_stories")
         if rsd is not None:
@@ -196,8 +196,8 @@ def check(data: dict):
         if isinstance(just, bool):
             if new and not just and st == "pass":
                 e.append("design_system: есть новые компоненты без обоснования, но status=pass")
-        # v3.2.3 component-reuse enforcement: «новый» компонент, уже присутствующий в каталоге
-        # дизайн-системы, — дублирование (надо переиспользовать, а не создавать заново).
+        
+        
         catalog = data.get("component_catalog")
         if isinstance(catalog, list) and new:
             cat = {_comp_base(c) for c in catalog}

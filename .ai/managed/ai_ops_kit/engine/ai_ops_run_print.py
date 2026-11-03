@@ -14,6 +14,11 @@ from __future__ import annotations
 from ai_ops_kit.engine.pipeline_helpers import work_produced, _stacks_human   # noqa: E402
 
 
+def _style_finding_text(r):
+    """Находка «стиль кода никто не проверяет» из отчёта прогона (checks.lint.finding) -> str|None."""
+    return (((r.get("checks") or {}).get("lint") or {}).get("finding") or {}).get("text")
+
+
 def _print_pipeline_product(r):
     """СВОДКА прогона для человека (аудитория product): что произошло → честные оговорки → шаг.
 
@@ -33,7 +38,7 @@ def _print_pipeline_product(r):
         tail = (f" Не закрыто: {', '.join(unmet)}." if unmet else "")
         print("Пока не готово к PR." + files + tail)
 
-    # Честные оговорки — «готово» не должно читаться как «сверено с ожиданием».
+    
     _ac = r.get("acceptance_criteria") or {}
     if not _ac.get("declared") and ready:
         print("  ⚠ критериев приёмки не было — «готово» значит «внесено и проверки закрыты», "
@@ -42,14 +47,18 @@ def _print_pipeline_product(r):
         print("  ⚠ критерии приёмки не сверялись с результатом.")
     elif _ac.get("declared") and not _ac.get("met_all"):
         print(f"  ⚠ критерии приёмки: не выполнено {len(_ac.get('unmet') or [])} из {_ac.get('count')}.")
-    if r.get("tests_warn"):
-        print("  ⚠ тестов в стеке нет — проверка тестами пропущена.")
-    if (r.get("isolation") or {}).get("sandboxed") is False and work_produced(r):
-        print("  ⚠ прогон шёл без песочницы — изоляция условна (управляемость, не защита).")
-    if (r.get("work_package") or {}).get("should_decompose"):
-        print("  ⚠ задача крупновата — стоит разбить на части.")
+    # #1183: стиль кода без линтера — находка владельцу; текст написан слоем речи (ui), здесь
+    # только показывается. Без этой строки находка жила бы лишь в предупреждениях гейта.
+    _caveats = [r.get("tests_warn") and "тестов в стеке нет — проверка тестами пропущена.",
+                (r.get("isolation") or {}).get("sandboxed") is False and work_produced(r)
+                and "прогон шёл без песочницы — изоляция условна (управляемость, не защита).",
+                (r.get("work_package") or {}).get("should_decompose")
+                and "задача крупновата — стоит разбить на части.",
+                _style_finding_text(r)]
+    for _c in (c for c in _caveats if c):
+        print(f"  ⚠ {_c}")
 
-    # Следующий шаг.
+    
     pr = r.get("draft_pr") or {}
     if pr.get("url"):
         print(f"\nДальше: черновик PR открыт — {pr['url']}.")
@@ -58,6 +67,15 @@ def _print_pipeline_product(r):
               "main не тронут.")
     else:
         print("\nДальше: закрыть оставшееся (см. оговорки выше) и повторить.")
+    # Исход #958: обещание НЕ кончается на PR. Раньше нарратив завершения обрывался на «открыть
+    # черновик PR» — и человек не знал, что после слияния кит вернётся и покажет ЭФФЕКТ на продукт.
+    # Обещание честное: это будущий шаг ПОСЛЕ merge, а не уже известный результат, и о самом слиянии
+    # кит не узнаёт автоматически. Точную команду (`ai-ops readout …`) человеку в лицо не даём —
+    # она в технических деталях; здесь только продуктовый смысл.
+    if ready or pr.get("url"):
+        print("\nНа PR история не кончается: когда сольёшь это в основную ветку, приходи за итогом — "
+              "я покажу, что от этой работы изменилось для продукта (эффект, а не просто «влито»). "
+              "Это отдельный шаг уже после слияния: сам момент merge я не отслеживаю.")
     print("\nТехнические детали прогона — по запросу («покажи технические детали»).")
     _print_contour_consistency(r)
 
@@ -94,9 +112,9 @@ def _print_pipeline(r, audience="technical"):
     print(f"  tool-loop: {loop.get('stopped')} · шагов {loop.get('steps')} · "
           f"правок через брокера {loop.get('applied_writes')} · "
           f"отклонено {loop.get('denied')}{_files_note}")
-    # F-017 + находка ии-среды: правок через брокера 0, а файлы в коммите есть — работа сделана
-    # другим каналом. Прежде строка «правок 0» стояла первой и читалась как «ничего не произошло»,
-    # хотя коммит был. Теперь канал НАЗВАН, а не выведен читателем.
+    
+    
+    
     _by = {"broker": "через брокера", "shell": "напрямую в дереве (writer или shell)",
            "model-commit": "модель закоммитила сама"}.get(commit.get("produced_by"))
     if _changed and not (loop.get("applied_writes") or 0):
@@ -118,11 +136,11 @@ def _print_pipeline(r, audience="technical"):
     _iso = r.get("isolation") or {}
     iso = _iso.get("worktree")
     print(f"  изоляция: {iso or 'основное дерево (без worktree)'}")
-    # P1 (аудит «непесочный дефолт + сеть ON»): пониженную изоляцию НАЗЫВАЕМ, а не молчим. Дефолт
-    # sandbox=False не флипаем — иначе регресс на прогонах без Docker; находка закрывается ЧЕСТНОСТЬЮ.
-    # Ноту даём ТОЛЬКО когда прогон реально работал (были правки/коммит) без песочницы: work_produced
-    # отсекает dry-run/preview/reevaluate — нет записей, нет и ноты. Читаем поле отчёта, не пересчитываем:
-    # уберут isolation.sandboxed -> нота молчит (fail-closed, поза снова невидима).
+    
+    
+    
+    
+    
     if _iso.get("sandboxed") is False and work_produced(r):
         _net = ("сеть доступна модельному shell" if _iso.get("network") == "on"
                 else "сеть ограничена")
@@ -142,8 +160,8 @@ def _print_pipeline(r, audience="technical"):
               f"дерево чистое: {commit.get('tree_clean_before_checks')}")
     if r.get("exemptions"):
         print(f"  освобождены (не применимо): {', '.join(r['exemptions'])}")
-    if r.get("tests_warn"):
-        print(f"  ⚠ {r['tests_warn']}")
+    for _w in (w for w in (r.get("tests_warn"), _style_finding_text(r)) if w):
+        print(f"  ⚠ {_w}")
     # B2-14: «доставлено» не должно читаться как «критерии выполнены». Прогон на живом продукте отдал
     # PR со `sha_verified: True`, а критерий приёмки остался невыполненным — и в отчёте об этом не
     # было ни строки. Непроверенное называется непроверенным ЗДЕСЬ, в том же выводе, где стоит
@@ -153,10 +171,10 @@ def _print_pipeline(r, audience="technical"):
     # выполненного было бы тем же смешением, что и «доставлено» = «выполнено»: сверка, нашедшая
     # невыполненный критерий, обязана назвать ЕГО, а не сообщить, что она состоялась.
     _ac = r.get("acceptance_criteria") or {}
-    # B2-18 (живой прогон 14.08.2026): когда критериев НЕ БЫЛО вовсе, вывод молчал о них совсем — и
-    # `delivered` читалось как «проверено». Урок B2-14 («доставлено ≠ выполнено») был закрыт только
-    # для случая, когда критерии есть. Отсутствие критериев — тоже факт о работе, и владелец узнаёт
-    # о нём в том же выводе, где стоит «готово».
+    
+    
+    
+    
     if not _ac.get("declared") and r.get("ready_for_pr"):
         print("  ⚠ критериев приёмки не было объявлено — проверять было нечего; «готово» здесь "
               "означает «изменение внесено и гейты закрыты», а не «результат сверен с ожиданием»")
@@ -171,8 +189,8 @@ def _print_pipeline(r, audience="technical"):
             if c.get("reason"):
                 print(f"        основание ревьюера: {str(c['reason'])[:140]}")
     elif _ac.get("declared"):
-        # Сила основания названа и здесь: «выполнены все» с подтверждённой цитатой и то же самое на
-        # слове судьи — разные факты. Смешать их значило бы вернуть ложный green с другого конца.
+        
+        
         _weak = _ac.get("judge_only") or []
         print(f"  критерии приёмки сверены с результатом: выполнены все {_ac.get('count')} "
               f"· подтверждено цитатой {_ac.get('quote_verified')} "
@@ -182,6 +200,14 @@ def _print_pipeline(r, audience="technical"):
                   f" — эти критерии проверь сам")
     print(f"  гейты: оценено {len(gates.get('evaluated') or [])} · "
           f"не закрыто {gates.get('unmet') or []} · блокирует: {gates.get('blocked')}")
+    
+    
+    _cl = gates.get("closure") or {}
+    if _cl:
+        _op = _cl.get("judged_or_human") or []
+        print(f"  разбивка закрытия: машиной {(_cl.get('counts') or {}).get('validator', 0)} "
+              f"из {len(gates.get('evaluated') or [])}"
+              + (f"; мнением/человеком: {', '.join(_op)}" if _op else "; мнением не закрыт ни один"))
     lc = r.get("lifecycle")
     if lc:
         pf = (lc.get("concurrency_preflight") or {})
@@ -208,6 +234,13 @@ def _print_pipeline(r, audience="technical"):
     pr = r.get("draft_pr")
     if pr:
         print(f"  draft PR: {pr.get('status')}" + (f" — {pr.get('url')}" if pr.get('url') else ""))
+    # Исход #958: пост-релизный readout ПОСЛЕ merge — точная команда живёт в технических деталях
+    # (аудитория product видит только продуктовое обещание в _print_pipeline_product). Кит не
+    # узнаёт о слиянии сам — это шаг человека после merge, поэтому команда, а не «автомагия».
+    if r.get("ready_for_pr") or (pr and pr.get("url")):
+        _fid = r.get("workitem_id") or "<id>"
+        print(f"  после слияния — эффект на продукт (outcome): ai-ops readout --feature {_fid} "
+              "(нужна PRR-ссылка; о самом merge кит не узнаёт автоматически)")
     for n in r.get("not_yet") or []:
         print(f"  · not_yet: {n}")
     _print_contour_consistency(r)
@@ -227,8 +260,8 @@ def _print_contour_consistency(r):
     cc = r.get("contour_consistency") or {}
     rep = cc.get("report")
     if not rep:
-        # Гейт не исполнялся (не коммитили) либо проверка не удалась — evidence уже сказал об этом
-        # своим `warn`, и выдумывать здесь ещё одно сообщение незачем.
+        
+        
         return
     try:
         from ai_ops_kit.ui import presenter
@@ -239,12 +272,12 @@ def _print_contour_consistency(r):
         print(presenter.render(msg, audience=presenter.audience_from_config(
             r.get("child_root") or ".")))
     except Exception as _e:  # noqa: BLE001 — вывод отчёта не роняет прогон...
-        # ...но и молчать нельзя: молчание здесь неотличимо от «расхождений нет».
+        
         print(f"  ⚠ находки связности контуров есть, показать не смог: {type(_e).__name__}: {_e}")
 
 
 def print_human(r):
-    # pipeline-отчёт имеет свою форму — не смешиваем с controller-отчётом (P0.1)
+    
     if r.get("kind") == "execution-pipeline":
         # #702-work: на аудитории product человек видит СУТЬ результата (готово/нет + что изменилось
         # + честные оговорки + следующий шаг), тех-разбор — «по запросу» (communication-policy:
@@ -258,9 +291,9 @@ def print_human(r):
             except Exception:  # noqa: BLE001 — печать результата не роняет прогон
                 _aud = "technical"
         return _print_pipeline(r, audience=_aud)
-    # Минимальный отчёт (например, отказ active-work/preflight ДО классификации) не несёт
-    # base_workflow/треков. Раньше вывод для человека падал на нём KeyError('base_workflow') —
-    # прогон завершался, а печать результата роняла процесс (замер поля 01.09.2026). Печатаем коротко.
+    
+    
+    
     if "base_workflow" not in r:
         print(f"ai-ops run → WorkItem {r.get('workitem_id', '?')} [{r.get('status', '?')}]")
         if r.get("blocked_by"):

@@ -51,10 +51,10 @@ except ImportError:  # pragma: no cover — PyYAML в поставке кита 
 
 from ai_ops_kit.checks.surface_extractors._common import ParsedFile, Surface
 
-# operation-ключи AsyncAPI 2.x внутри channel-item: канал + одна из них = операция.
+
 _V2_OPERATIONS = ("publish", "subscribe")
 
-# Расширения JSON — грузятся json.loads; всё прочее (.yaml/.yml) — yaml.safe_load.
+
 _JSON_SUFFIXES = (".json",)
 
 
@@ -119,7 +119,7 @@ def extract_asyncapi_operations(parsed: ParsedFile) -> list:
     lines = parsed.source.splitlines()
     out: list = []
 
-    # AsyncAPI 2.x — операции как пары канал+operation в `channels`.
+    
     channels = data.get("channels")  # type: ignore[union-attr] — _top_level_is_asyncapi гарантирует dict
     if isinstance(channels, dict):
         ch_section = _key_line(lines, "channels", 0)
@@ -141,7 +141,7 @@ def extract_asyncapi_operations(parsed: ParsedFile) -> list:
                     lineno = 1
                 out.append(_surface(parsed, lineno, f"{ch_name} {action}"))
 
-    # AsyncAPI 3.x — операции вынесены в top-level `operations`.
+    
     operations = data.get("operations")  # type: ignore[union-attr]
     if isinstance(operations, dict):
         ops_section = _key_line(lines, "operations", 0)

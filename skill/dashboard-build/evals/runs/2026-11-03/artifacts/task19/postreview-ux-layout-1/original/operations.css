@@ -1,0 +1,28 @@
+/* Consumer layout only. Components, typography and material come from pinned Kit. */
+.ops-page{max-width:1280px}
+.ops-page [hidden]{display:none!important}
+.ops-page :is(h1,h2,p,td){overflow-wrap:anywhere}
+.ops-page #ref-source{margin-block:var(--space-4)}
+.ops-page #ref-context{margin-block:var(--space-6)}
+.ops-page .dk-toolbar{flex-wrap:wrap;gap:var(--space-4)}
+.ops-page .dk-toolbar__group{min-width:0;flex-wrap:wrap}
+.ops-status{display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-4);margin-block:var(--space-6)}
+.ops-status p{margin:0}
+.ops-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-6)}
+.ops-metrics .dk-tile__row{margin-block:var(--space-4)}
+.ops-metrics p{margin:0}
+.ops-pagination{display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-4);margin-top:var(--space-6)}
+.ops-page .dk-tablewrap{--table-min:860px;--table-max:520px;max-height:520px;overflow:auto}
+.ops-page .ops-row-link{height:auto;min-height:44px;white-space:normal;text-align:left}
+.ops-page :is(th,td){white-space:normal}
+.ops-page .dk-modal__foot{flex-wrap:wrap}
+.ops-page .dk-modal__foot p{width:100%;margin:0}
+.ops-page .ops-method{margin-top:var(--space-6)}
+.ops-page .ops-method summary{cursor:pointer;min-height:44px}
+.ops-page .ops-method p{margin-block:var(--space-4)}
+@media(max-width:767px){
+.ops-page .dk-toolbar__group{flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;padding:var(--space-2)}
+.ops-page .dk-toolbar__group>*{flex-shrink:0}
+.ops-page .dk-tablewrap{max-height:none}
+.ops-metrics{grid-template-columns:minmax(0,1fr)}
+}

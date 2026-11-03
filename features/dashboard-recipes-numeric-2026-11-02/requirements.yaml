@@ -1,0 +1,33 @@
+schema_version: 1
+kind: requirements-artifact
+workitem_id: dashboard-recipes-numeric-2026-11-02
+requirements:
+- id: R1
+  statement: Четыре сценарных рецепта с входными полями, решениями, компонентами,
+    негативным примером и проверяемым ответом.
+  acceptance:
+  - Read SKILL recipes and eval tasks16–19; existing mortgage/reference examples.
+- id: R2
+  statement: Независимые literal ответы сумм, долей, взвешенной ставки и фильтров.
+  acceptance:
+  - node tools/check-numeric-data.mjs; MODEL constants.
+- id: R3
+  statement: Явная атомарная политика сравнения блокирует неполноту, длительность
+    и недостаточную базу.
+  acceptance:
+  - comparison fixture, invalid metadata, previous=0, better=decrease.
+- id: R4
+  statement: UI показывает оба периода/базы/единицы, причины в Tooltip; update/destroy
+    очищают.
+  acceptance:
+  - node tools/check-numeric-browser.mjs; hover/focus/tap/Escape and cleanup.
+- id: R5
+  statement: UI KPI и детали сверяются независимо от модели; фильтр и возврат сохраняются.
+  acceptance:
+  - UI binding literal expected; 390/1280 Dark/Light partial/no-data/recovery.
+- id: R6
+  statement: Статический стек, обратная совместимость и воспроизводимые генераторы
+    сохранены.
+  acceptance:
+  - check.py --fast, check-release.py, kit-release.py --check, full test.py when environment
+    permits.
