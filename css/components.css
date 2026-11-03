@@ -4603,6 +4603,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 
 /* DOM charts retain their numbers when CSS, color or canvas is unavailable. */
 .dk-comparison { display: grid; gap: var(--space-2); font: var(--type-body); }
+.dk-comparison > .dk-btn { justify-self: start; }
 .dk-comparison__delta { font-weight: var(--weight-ui); }
 .dk-bullet { display: grid; gap: var(--space-3); }
 .dk-bullet__track { position: relative; height: var(--space-7); background: var(--surface-2); }

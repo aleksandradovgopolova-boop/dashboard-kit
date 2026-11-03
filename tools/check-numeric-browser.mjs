@@ -33,7 +33,13 @@ try {
   const errors=[];
   browser.on(message=>{if(message.sessionId===sessionId&&message.method==='Runtime.exceptionThrown')errors.push(message.params.exceptionDetails.text);});
   await send('Runtime.enable');await send('Page.enable');await mkdir(evidence,{recursive:true});
-  const shot=async name=>{await evaluate('document.fonts.ready');const r=await send('Page.captureScreenshot',{format:'png'});await writeFile(resolve(evidence,name+'.png'),Buffer.from(r.data,'base64'));};
+  const shot=async name=>{
+    await evaluate('document.fonts.ready');
+    await evaluate('Promise.allSettled(document.getAnimations().filter(a=>a.effect?.getTiming().iterations!==Infinity).map(a=>a.finished))');
+    await frames();
+    assert(await evaluate("Array.from(document.querySelectorAll('dialog[open]')).every(d=>getComputedStyle(d).opacity==='1')"),'Screenshot waits for completed dialog entry');
+    const r=await send('Page.captureScreenshot',{format:'png'});await writeFile(resolve(evidence,name+'.png'),Buffer.from(r.data,'base64'));
+  };
   const api=`document.querySelector('#fm-dashboard').familyMortgageDashboard`;
   for(const theme of ['dark','light']) for(const width of [390,1280]) {
     await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:width===390});
@@ -99,6 +105,10 @@ try {
       assert(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),'UI comparison overflow');
       if(item.expected.comparable===false) assert(await evaluate(`!__host.querySelector('.dk-comparison__delta')`),'UI binding blocked delta has no success/failure colour');
       if(item.expected.code) {
+        if(width===1280){
+          const geometry=await evaluate(`(()=>{const b=__host.querySelector('button'),s=getComputedStyle(b),range=document.createRange();range.selectNodeContents(b);return {width:b.getBoundingClientRect().width,content:range.getBoundingClientRect().width+parseFloat(s.paddingLeft)+parseFloat(s.paddingRight)+parseFloat(s.borderLeftWidth)+parseFloat(s.borderRightWidth),container:b.parentElement.getBoundingClientRect().width};})()`);
+          assert(Math.abs(geometry.width-geometry.content)<2&&geometry.width<geometry.container/2,'Comparison status button uses content width: '+JSON.stringify(geometry));
+        }
         await evaluate(`window.__events=[];window.__button=__host.querySelector('button');window.__tip=document.getElementById(__button.getAttribute('aria-describedby'));for(const type of ['mouseenter','mouseleave','focus','blur','click','keydown','keyup'])__button.addEventListener(type,e=>__events.push({type:e.type,key:e.key,time:performance.now(),hidden:__tip.hidden}));`);
         assert.equal(await evaluate(`document.querySelectorAll('.dk-tooltip').length`),1,'UI explanation has one owner');
         await evaluate(`__host.querySelector('button').focus()`);
