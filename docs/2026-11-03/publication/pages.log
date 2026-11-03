@@ -1,0 +1,1184 @@
+publish	Set up job	﻿2026-11-03T08:15:23.6493802Z Current runner version: '2.338.2'
+publish	Set up job	2026-11-03T08:15:23.6515098Z ##[group]Runner Image Provisioner
+publish	Set up job	2026-11-03T08:15:23.6515786Z Hosted Compute Agent
+publish	Set up job	2026-11-03T08:15:23.6516323Z Version: 20261021.618
+publish	Set up job	2026-11-03T08:15:23.6516873Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+publish	Set up job	2026-11-03T08:15:23.6517480Z Build Date: 2026-10-21T00:45:21Z
+publish	Set up job	2026-11-03T08:15:23.6518081Z Worker ID: {330914c3-9aa5-464d-8731-3bf65750689f}
+publish	Set up job	2026-11-03T08:15:23.6518654Z Region: northcentralus
+publish	Set up job	2026-11-03T08:15:23.6519152Z Cloud: Azure
+publish	Set up job	2026-11-03T08:15:23.6519642Z ##[endgroup]
+publish	Set up job	2026-11-03T08:15:23.6520971Z ##[group]Operating System
+publish	Set up job	2026-11-03T08:15:23.6521556Z Ubuntu
+publish	Set up job	2026-11-03T08:15:23.6521992Z 26.04.1
+publish	Set up job	2026-11-03T08:15:23.6522400Z LTS
+publish	Set up job	2026-11-03T08:15:23.6522903Z ##[endgroup]
+publish	Set up job	2026-11-03T08:15:23.6523398Z ##[group]Runner Image
+publish	Set up job	2026-11-03T08:15:23.6523921Z Image: ubuntu-26.04
+publish	Set up job	2026-11-03T08:15:23.6524391Z Version: 20261025.179.1
+publish	Set up job	2026-11-03T08:15:23.6525244Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261025.179/images/ubuntu/Ubuntu2604-Readme.md
+publish	Set up job	2026-11-03T08:15:23.6526727Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261025.179
+publish	Set up job	2026-11-03T08:15:23.6527529Z ##[endgroup]
+publish	Set up job	2026-11-03T08:15:23.6528463Z ##[group]GITHUB_TOKEN Permissions
+publish	Set up job	2026-11-03T08:15:23.6530090Z Contents: read
+publish	Set up job	2026-11-03T08:15:23.6530744Z Metadata: read
+publish	Set up job	2026-11-03T08:15:23.6531192Z Pages: write
+publish	Set up job	2026-11-03T08:15:23.6531693Z ##[endgroup]
+publish	Set up job	2026-11-03T08:15:23.6533329Z Secret source: Actions
+publish	Set up job	2026-11-03T08:15:23.6534503Z Cache mode: write
+publish	Set up job	2026-11-03T08:15:23.6535190Z Prepare workflow directory
+publish	Set up job	2026-11-03T08:15:23.6859926Z Prepare all required actions
+publish	Set up job	2026-11-03T08:15:23.6915844Z Getting action download info
+publish	Set up job	2026-11-03T08:15:23.8933640Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+publish	Set up job	2026-11-03T08:15:24.0161852Z Download action repository 'actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa' (SHA:56afc609e74202658d3ffba0e8f6dda462b719fa)
+publish	Set up job	2026-11-03T08:15:24.1445294Z Download action repository 'actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e' (SHA:d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e)
+publish	Set up job	2026-11-03T08:15:24.5737347Z Getting action download info
+publish	Set up job	2026-11-03T08:15:24.6706340Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+publish	Set up job	2026-11-03T08:15:24.8192065Z Complete job name: publish
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	﻿2026-11-03T08:15:24.8906460Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8907387Z with:
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8907778Z   persist-credentials: false
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8908316Z   repository: aleksandradovgopolova-boop/dashboard-kit
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8912033Z   token: ***
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8912429Z   ssh-strict: true
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8912814Z   ssh-user: git
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8913182Z   clean: true
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8913564Z   sparse-checkout-cone-mode: true
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8914023Z   fetch-depth: 1
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8914430Z   fetch-tags: false
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8914831Z   show-progress: true
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8915230Z   lfs: false
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8915587Z   submodules: false
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8915977Z   set-safe-directory: true
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8916414Z   allow-unsafe-pr-checkout: false
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:24.8917056Z ##[endgroup]
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0792135Z Syncing repository: aleksandradovgopolova-boop/dashboard-kit
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0793871Z ##[group]Getting Git version info
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0794689Z Working directory is '/home/runner/work/dashboard-kit/dashboard-kit'
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0795660Z [command]/usr/bin/git version
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0878026Z git version 2.56.0
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0894588Z ##[endgroup]
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0903337Z Temporarily overriding HOME='/home/runner/work/_temp/e02d60b2-c895-483d-a8e4-bc59d3728d08' before making global git config changes
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0905778Z Adding repository directory to the temporary git global config as a safe directory
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0908153Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/dashboard-kit/dashboard-kit
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0980960Z Deleting the contents of '/home/runner/work/dashboard-kit/dashboard-kit'
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0983478Z ##[group]Determining repository object format
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0984849Z ##[endgroup]
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0985967Z ##[group]Initializing the repository
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.0988034Z [command]/usr/bin/git init /home/runner/work/dashboard-kit/dashboard-kit
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1066153Z hint: Using 'master' as the name for the initial branch. This default branch name
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1067875Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1069683Z hint: to use in all of your new repositories, which will suppress this warning,
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1071143Z hint: call:
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1071980Z hint:
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1073160Z hint: 	git config --global init.defaultBranch <name>
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1073944Z hint:
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1074578Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1075569Z hint: 'development'. The just-created branch can be renamed via this command:
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1076541Z hint:
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1077147Z hint: 	git branch -m <name>
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1077832Z hint:
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1078709Z hint: Disable this message with "git config set advice.defaultBranchName false"
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1080028Z Initialized empty Git repository in /home/runner/work/dashboard-kit/dashboard-kit/.git/
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1088242Z [command]/usr/bin/git remote add origin https://github.com/aleksandradovgopolova-boop/dashboard-kit
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1131859Z ##[endgroup]
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1132930Z ##[group]Disabling automatic garbage collection
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1134367Z [command]/usr/bin/git config --local gc.auto 0
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1165492Z ##[endgroup]
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1166660Z ##[group]Setting up auth
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1167472Z Removing SSH command configuration
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1169438Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1199422Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1553591Z Removing HTTP extra header
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1558766Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1589763Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1825690Z Removing includeIf entries pointing to credentials config files
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1830970Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.1859183Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.2089206Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.2119724Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git.path /home/runner/work/_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.2146895Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.2176640Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.2204425Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.2234239Z ##[endgroup]
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.2235353Z ##[group]Fetching the repository
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:25.2240681Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e869cfd9293c33305aa9e8e2cb20b7830d3ea535:refs/remotes/origin/main
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3243795Z From https://github.com/aleksandradovgopolova-boop/dashboard-kit
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3245359Z  * [new ref]         e869cfd9293c33305aa9e8e2cb20b7830d3ea535 -> origin/main
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3253494Z [command]/usr/bin/git branch --list --remote origin/main
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3277947Z   origin/main
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3285102Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3311315Z e869cfd9293c33305aa9e8e2cb20b7830d3ea535
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3315354Z ##[endgroup]
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3315973Z ##[group]Determining the checkout info
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3316966Z ##[endgroup]
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3320120Z [command]/usr/bin/git sparse-checkout disable
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3364648Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3391368Z ##[group]Checking out the ref
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.3394308Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8519659Z Switched to a new branch 'main'
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8522911Z branch 'main' set up to track 'origin/main'.
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8558059Z ##[endgroup]
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8598069Z [command]/usr/bin/git log -1 --format=%H
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8621929Z e869cfd9293c33305aa9e8e2cb20b7830d3ea535
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8631272Z ##[group]Removing auth
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8631653Z Removing SSH command configuration
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8634303Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8663761Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8913214Z Removing HTTP extra header
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8918326Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.8950388Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9186420Z Removing includeIf entries pointing to credentials config files
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9190927Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9213205Z includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git.path
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9213969Z includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git/worktrees/*.path
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9214672Z includeif.gitdir:/github/workspace/.git.path
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9215177Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9221646Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git.path
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9241661Z /home/runner/work/_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9249983Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-aa21c950\-f704\-432c\-a41e\-36b9d2a4b478\.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9279719Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git/worktrees/*.path
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9299586Z /home/runner/work/_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9306478Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/dashboard-kit/dashboard-kit/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-aa21c950\-f704\-432c\-a41e\-36b9d2a4b478\.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9409965Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9411311Z /github/runner_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9413429Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-aa21c950\-f704\-432c\-a41e\-36b9d2a4b478\.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9414466Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9421090Z /github/runner_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9425276Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-aa21c950\-f704\-432c\-a41e\-36b9d2a4b478\.config
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9455316Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9684861Z Removing credentials config '/home/runner/work/_temp/git-credentials-aa21c950-f704-432c-a41e-36b9d2a4b478.config'
+publish	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:31.9692839Z ##[endgroup]
+publish	Prepare static files	﻿2026-11-03T08:15:31.9868588Z ##[group]Run mkdir -p _site
+publish	Prepare static files	2026-11-03T08:15:31.9868898Z ^[[36;1mmkdir -p _site^[[0m
+publish	Prepare static files	2026-11-03T08:15:31.9869236Z ^[[36;1mcp -- *.html *.md kit-manifest.json LICENSE THIRD_PARTY_NOTICES.txt _site/^[[0m
+publish	Prepare static files	2026-11-03T08:15:31.9869651Z ^[[36;1mcp -R -- css js icons data vendor docs skill assets _site/^[[0m
+publish	Prepare static files	2026-11-03T08:15:31.9900445Z shell: /usr/bin/bash -e {0}
+publish	Prepare static files	2026-11-03T08:15:31.9900692Z ##[endgroup]
+publish	Upload static site	﻿2026-11-03T08:15:32.0685173Z ##[group]Run actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
+publish	Upload static site	2026-11-03T08:15:32.0685557Z with:
+publish	Upload static site	2026-11-03T08:15:32.0685725Z   path: _site
+publish	Upload static site	2026-11-03T08:15:32.0685916Z   name: github-pages
+publish	Upload static site	2026-11-03T08:15:32.0686105Z   retention-days: 1
+publish	Upload static site	2026-11-03T08:15:32.0686277Z ##[endgroup]
+publish	Upload static site	2026-11-03T08:15:32.0737071Z ##[start-action display=Archive artifact;id=__actions_upload-pages-artifact.__run]
+publish	Upload static site	2026-11-03T08:15:32.0771389Z ##[group]Run echo ::group::Archive artifact
+publish	Upload static site	2026-11-03T08:15:32.0771695Z ^[[36;1mecho ::group::Archive artifact^[[0m
+publish	Upload static site	2026-11-03T08:15:32.0771916Z ^[[36;1mtar \^[[0m
+publish	Upload static site	2026-11-03T08:15:32.0772128Z ^[[36;1m  --dereference --hard-dereference \^[[0m
+publish	Upload static site	2026-11-03T08:15:32.0772384Z ^[[36;1m  --directory "$INPUT_PATH" \^[[0m
+publish	Upload static site	2026-11-03T08:15:32.0772622Z ^[[36;1m  -cvf "$RUNNER_TEMP/artifact.tar" \^[[0m
+publish	Upload static site	2026-11-03T08:15:32.0772851Z ^[[36;1m  --exclude=.git \^[[0m
+publish	Upload static site	2026-11-03T08:15:32.0773053Z ^[[36;1m  --exclude=.github \^[[0m
+publish	Upload static site	2026-11-03T08:15:32.0773244Z ^[[36;1m  .^[[0m
+publish	Upload static site	2026-11-03T08:15:32.0773415Z ^[[36;1mecho ::endgroup::^[[0m
+publish	Upload static site	2026-11-03T08:15:32.0817687Z shell: /usr/bin/sh -e {0}
+publish	Upload static site	2026-11-03T08:15:32.0817909Z env:
+publish	Upload static site	2026-11-03T08:15:32.0818088Z   INPUT_PATH: _site
+publish	Upload static site	2026-11-03T08:15:32.0818287Z ##[endgroup]
+publish	Upload static site	2026-11-03T08:15:32.0859902Z ##[group]Archive artifact
+publish	Upload static site	2026-11-03T08:15:32.0874745Z ./
+publish	Upload static site	2026-11-03T08:15:32.0875032Z ./component-counter.md
+publish	Upload static site	2026-11-03T08:15:32.0875340Z ./component-tile.md
+publish	Upload static site	2026-11-03T08:15:32.0875612Z ./component-tabs.html
+publish	Upload static site	2026-11-03T08:15:32.0875883Z ./calendar.html
+publish	Upload static site	2026-11-03T08:15:32.0876142Z ./component-export.md
+publish	Upload static site	2026-11-03T08:15:32.0876441Z ./component-layout-editor.md
+publish	Upload static site	2026-11-03T08:15:32.0876749Z ./component-legend.html
+publish	Upload static site	2026-11-03T08:15:32.0877034Z ./component-select.md
+publish	Upload static site	2026-11-03T08:15:32.0877288Z ./skill/
+publish	Upload static site	2026-11-03T08:15:32.0877530Z ./skill/dashboard-build/
+publish	Upload static site	2026-11-03T08:15:32.0877830Z ./skill/dashboard-build/references/
+publish	Upload static site	2026-11-03T08:15:32.0878214Z ./skill/dashboard-build/references/numeric-checks.md
+publish	Upload static site	2026-11-03T08:15:32.0878673Z ./skill/dashboard-build/references/product-review.md
+publish	Upload static site	2026-11-03T08:15:32.0879201Z ./skill/dashboard-build/references/composition.md
+publish	Upload static site	2026-11-03T08:15:32.0879615Z ./skill/dashboard-build/references/layout.md
+publish	Upload static site	2026-11-03T08:15:32.0880009Z ./skill/dashboard-build/references/extensions.md
+publish	Upload static site	2026-11-03T08:15:32.0880742Z ./skill/dashboard-build/references/checks.md
+publish	Upload static site	2026-11-03T08:15:32.0881118Z ./skill/dashboard-build/references/chrome.md
+publish	Upload static site	2026-11-03T08:15:32.0881490Z ./skill/dashboard-build/references/uiux.md
+publish	Upload static site	2026-11-03T08:15:32.0881865Z ./skill/dashboard-build/references/recipes.md
+publish	Upload static site	2026-11-03T08:15:32.0882289Z ./skill/dashboard-build/references/accessibility.md
+publish	Upload static site	2026-11-03T08:15:32.0882698Z ./skill/dashboard-build/references/data.md
+publish	Upload static site	2026-11-03T08:15:32.0883069Z ./skill/dashboard-build/references/charts.md
+publish	Upload static site	2026-11-03T08:15:32.0883441Z ./skill/dashboard-build/references/phone.md
+publish	Upload static site	2026-11-03T08:15:32.0883800Z ./skill/dashboard-build/evals/
+publish	Upload static site	2026-11-03T08:15:32.0884124Z ./skill/dashboard-build/evals/evals.json
+publish	Upload static site	2026-11-03T08:15:32.0884467Z ./skill/dashboard-build/evals/runs/
+publish	Upload static site	2026-11-03T08:15:32.0884845Z ./skill/dashboard-build/evals/runs/2026-10-06/
+publish	Upload static site	2026-11-03T08:15:32.0885268Z ./skill/dashboard-build/evals/runs/2026-10-06/task-8/
+publish	Upload static site	2026-11-03T08:15:32.0885783Z ./skill/dashboard-build/evals/runs/2026-10-06/task-8/runtime-initial.json
+publish	Upload static site	2026-11-03T08:15:32.0886377Z ./skill/dashboard-build/evals/runs/2026-10-06/task-8/runtime-results.json
+publish	Upload static site	2026-11-03T08:15:32.0886941Z ./skill/dashboard-build/evals/runs/2026-10-06/task-8/report.md
+publish	Upload static site	2026-11-03T08:15:32.0887441Z ./skill/dashboard-build/evals/runs/2026-10-06/task-8/check.log
+publish	Upload static site	2026-11-03T08:15:32.0887925Z ./skill/dashboard-build/evals/runs/2026-10-06/task-8/index.html
+publish	Upload static site	2026-11-03T08:15:32.0888391Z ./skill/dashboard-build/evals/runs/2026-10-06/task-12/
+publish	Upload static site	2026-11-03T08:15:32.0888852Z ./skill/dashboard-build/evals/runs/2026-10-06/task-12/app.js
+publish	Upload static site	2026-11-03T08:15:32.0889339Z ./skill/dashboard-build/evals/runs/2026-10-06/task-12/check.txt
+publish	Upload static site	2026-11-03T08:15:32.0889832Z ./skill/dashboard-build/evals/runs/2026-10-06/task-12/report.md
+publish	Upload static site	2026-11-03T08:15:32.0890716Z ./skill/dashboard-build/evals/runs/2026-10-06/task-12/browser-results.json
+publish	Upload static site	2026-11-03T08:15:32.0891306Z ./skill/dashboard-build/evals/runs/2026-10-06/task-12/index.html
+publish	Upload static site	2026-11-03T08:15:32.0891788Z ./skill/dashboard-build/evals/runs/2026-10-06/task-9/
+publish	Upload static site	2026-11-03T08:15:32.0892268Z ./skill/dashboard-build/evals/runs/2026-10-06/task-9/runtime.json
+publish	Upload static site	2026-11-03T08:15:32.0892784Z ./skill/dashboard-build/evals/runs/2026-10-06/task-9/report.md
+publish	Upload static site	2026-11-03T08:15:32.0893272Z ./skill/dashboard-build/evals/runs/2026-10-06/task-9/check.log
+publish	Upload static site	2026-11-03T08:15:32.0893759Z ./skill/dashboard-build/evals/runs/2026-10-06/task-9/index.html
+publish	Upload static site	2026-11-03T08:15:32.0894274Z ./skill/dashboard-build/evals/runs/2026-10-06/archive-browser.json
+publish	Upload static site	2026-11-03T08:15:32.0894764Z ./skill/dashboard-build/evals/runs/2026-10-06/README.md
+publish	Upload static site	2026-11-03T08:15:32.0895205Z ./skill/dashboard-build/evals/runs/2026-10-06/task-11/
+publish	Upload static site	2026-11-03T08:15:32.0895709Z ./skill/dashboard-build/evals/runs/2026-10-06/task-11/runtime-results.json
+publish	Upload static site	2026-11-03T08:15:32.0896294Z ./skill/dashboard-build/evals/runs/2026-10-06/task-11/report.md
+publish	Upload static site	2026-11-03T08:15:32.0896788Z ./skill/dashboard-build/evals/runs/2026-10-06/task-11/check.log
+publish	Upload static site	2026-11-03T08:15:32.0897295Z ./skill/dashboard-build/evals/runs/2026-10-06/task-11/index.html
+publish	Upload static site	2026-11-03T08:15:32.0897788Z ./skill/dashboard-build/evals/runs/2026-10-06/task-10/
+publish	Upload static site	2026-11-03T08:15:32.0898272Z ./skill/dashboard-build/evals/runs/2026-10-06/task-10/check-output.txt
+publish	Upload static site	2026-11-03T08:15:32.0898803Z ./skill/dashboard-build/evals/runs/2026-10-06/task-10/report.md
+publish	Upload static site	2026-11-03T08:15:32.0899357Z ./skill/dashboard-build/evals/runs/2026-10-06/task-10/verification.json
+publish	Upload static site	2026-11-03T08:15:32.0899897Z ./skill/dashboard-build/evals/runs/2026-10-06/task-10/index.html
+publish	Upload static site	2026-11-03T08:15:32.0900501Z ./skill/dashboard-build/evals/runs/2026-10-06/task-7/
+publish	Upload static site	2026-11-03T08:15:32.0901010Z ./skill/dashboard-build/evals/runs/2026-10-06/task-7/initial-actions.json
+publish	Upload static site	2026-11-03T08:15:32.0901566Z ./skill/dashboard-build/evals/runs/2026-10-06/task-7/actions.json
+publish	Upload static site	2026-11-03T08:15:32.0902078Z ./skill/dashboard-build/evals/runs/2026-10-06/task-7/report.md
+publish	Upload static site	2026-11-03T08:15:32.0902572Z ./skill/dashboard-build/evals/runs/2026-10-06/task-7/check.log
+publish	Upload static site	2026-11-03T08:15:32.0903175Z ./skill/dashboard-build/evals/runs/2026-10-06/task-7/index.html
+publish	Upload static site	2026-11-03T08:15:32.0903604Z ./skill/dashboard-build/SKILL.md
+publish	Upload static site	2026-11-03T08:15:32.0903919Z ./component-period.md
+publish	Upload static site	2026-11-03T08:15:32.0904221Z ./component-timeline-annotations.md
+publish	Upload static site	2026-11-03T08:15:32.0904555Z ./component-rank.html
+publish	Upload static site	2026-11-03T08:15:32.0904822Z ./component-flex.html
+publish	Upload static site	2026-11-03T08:15:32.0905091Z ./component-scrollview.md
+publish	Upload static site	2026-11-03T08:15:32.0905382Z ./component-period.html
+publish	Upload static site	2026-11-03T08:15:32.0905668Z ./component-modal.md
+publish	Upload static site	2026-11-03T08:15:32.0905951Z ./component-card-scroll.html
+publish	Upload static site	2026-11-03T08:15:32.0906260Z ./icons/
+publish	Upload static site	2026-11-03T08:15:32.0906492Z ./icons/favicon.svg
+publish	Upload static site	2026-11-03T08:15:32.0906772Z ./icons/icon-maskable-512.png
+publish	Upload static site	2026-11-03T08:15:32.0907074Z ./icons/icon-192.png
+publish	Upload static site	2026-11-03T08:15:32.0907353Z ./icons/apple-touch-icon.png
+publish	Upload static site	2026-11-03T08:15:32.0907653Z ./icons/icon-512.png
+publish	Upload static site	2026-11-03T08:15:32.0907911Z ./icons/icon-32.png
+publish	Upload static site	2026-11-03T08:15:32.0908171Z ./component-empty.md
+publish	Upload static site	2026-11-03T08:15:32.0908439Z ./THIRD_PARTY_NOTICES.txt
+publish	Upload static site	2026-11-03T08:15:32.0908744Z ./component-widget-header.md
+publish	Upload static site	2026-11-03T08:15:32.0909040Z ./component-flex.md
+publish	Upload static site	2026-11-03T08:15:32.0909298Z ./component-avatar.html
+publish	Upload static site	2026-11-03T08:15:32.0909573Z ./HANDOFF.md
+publish	Upload static site	2026-11-03T08:15:32.0909830Z ./accidents.html
+publish	Upload static site	2026-11-03T08:15:32.0910087Z ./component-search.md
+publish	Upload static site	2026-11-03T08:15:32.0910492Z ./component-card-grid.md
+publish	Upload static site	2026-11-03T08:15:32.0910766Z ./showcase.html
+publish	Upload static site	2026-11-03T08:15:32.0911017Z ./data/
+publish	Upload static site	2026-11-03T08:15:32.0911273Z ./data/reference-dashboard.json
+publish	Upload static site	2026-11-03T08:15:32.0911590Z ./data/regions-tiles.json
+publish	Upload static site	2026-11-03T08:15:32.0911872Z ./data/monitor-demo.json
+publish	Upload static site	2026-11-03T08:15:32.0912178Z ./data/family-mortgage-demo.json
+publish	Upload static site	2026-11-03T08:15:32.0912485Z ./data/regions.topojson
+publish	Upload static site	2026-11-03T08:15:32.0912797Z ./data/family-mortgage-observations.json
+publish	Upload static site	2026-11-03T08:15:32.0913146Z ./component-chart.html
+publish	Upload static site	2026-11-03T08:15:32.0913562Z ./component-map.html
+publish	Upload static site	2026-11-03T08:15:32.0913819Z ./UIUX.md
+publish	Upload static site	2026-11-03T08:15:32.0914065Z ./component-focus-trap.html
+publish	Upload static site	2026-11-03T08:15:32.0914371Z ./component-scrollview.html
+publish	Upload static site	2026-11-03T08:15:32.0914683Z ./reference-dashboard.html
+publish	Upload static site	2026-11-03T08:15:32.0914976Z ./component-search.html
+publish	Upload static site	2026-11-03T08:15:32.0915255Z ./component-card-grid.html
+publish	Upload static site	2026-11-03T08:15:32.0915555Z ./component-tooltip.html
+publish	Upload static site	2026-11-03T08:15:32.0915846Z ./component-chips-input.html
+publish	Upload static site	2026-11-03T08:15:32.0916145Z ./family-mortgage.html
+publish	Upload static site	2026-11-03T08:15:32.0916418Z ./component-accordion.md
+publish	Upload static site	2026-11-03T08:15:32.0916717Z ./component-chips-select.html
+publish	Upload static site	2026-11-03T08:15:32.0917014Z ./grid.html
+publish	Upload static site	2026-11-03T08:15:32.0917255Z ./component-tooltip.md
+publish	Upload static site	2026-11-03T08:15:32.0917511Z ./js/
+publish	Upload static site	2026-11-03T08:15:32.0917744Z ./js/dk-notify.js
+publish	Upload static site	2026-11-03T08:15:32.0917993Z ./js/dk-period.js
+publish	Upload static site	2026-11-03T08:15:32.0918240Z ./js/dk-map.js
+publish	Upload static site	2026-11-03T08:15:32.0918486Z ./js/dk-icons.js
+publish	Upload static site	2026-11-03T08:15:32.0918759Z ./js/dk-card-scroll.js
+publish	Upload static site	2026-11-03T08:15:32.0919029Z ./js/dk-charts.js
+publish	Upload static site	2026-11-03T08:15:32.0919282Z ./js/kit2-preview.js
+publish	Upload static site	2026-11-03T08:15:32.0919541Z ./js/dk-select.js
+publish	Upload static site	2026-11-03T08:15:32.0919803Z ./js/docs-index.js
+publish	Upload static site	2026-11-03T08:15:32.0920055Z ./js/docs.js
+publish	Upload static site	2026-11-03T08:15:32.0920425Z ./js/family-mortgage-data.js
+publish	Upload static site	2026-11-03T08:15:32.0920716Z ./js/dk-focus-trap.js
+publish	Upload static site	2026-11-03T08:15:32.0920976Z ./js/dk-uptime.js
+publish	Upload static site	2026-11-03T08:15:32.0921219Z ./js/dk-tree.js
+publish	Upload static site	2026-11-03T08:15:32.0921474Z ./js/dk-layout-editor.js
+publish	Upload static site	2026-11-03T08:15:32.0921749Z ./js/dk-car.js
+publish	Upload static site	2026-11-03T08:15:32.0921985Z ./js/dk-form.js
+publish	Upload static site	2026-11-03T08:15:32.0922232Z ./js/docs-overview.js
+publish	Upload static site	2026-11-03T08:15:32.0922496Z ./js/dk-table.js
+publish	Upload static site	2026-11-03T08:15:32.0922745Z ./js/dk-touch.js
+publish	Upload static site	2026-11-03T08:15:32.0922995Z ./js/dk-workspace.js
+publish	Upload static site	2026-11-03T08:15:32.0923252Z ./js/dk-calendar.js
+publish	Upload static site	2026-11-03T08:15:32.0923498Z ./js/dk-util.js
+publish	Upload static site	2026-11-03T08:15:32.0923731Z ./js/dk-chrome.js
+publish	Upload static site	2026-11-03T08:15:32.0923981Z ./js/dk-theme.js
+publish	Upload static site	2026-11-03T08:15:32.0924226Z ./js/family-mortgage.js
+publish	Upload static site	2026-11-03T08:15:32.0924508Z ./js/dk-chart-theme.js
+publish	Upload static site	2026-11-03T08:15:32.0924780Z ./js/dk-onboarding.js
+publish	Upload static site	2026-11-03T08:15:32.0925046Z ./js/dk-modal.js
+publish	Upload static site	2026-11-03T08:15:32.0925287Z ./js/dk-chips.js
+publish	Upload static site	2026-11-03T08:15:32.0925661Z ./js/dk-context.js
+publish	Upload static site	2026-11-03T08:15:32.0925911Z ./js/dk-dashboard.js
+publish	Upload static site	2026-11-03T08:15:32.0926200Z ./js/dk-pager.js
+publish	Upload static site	2026-11-03T08:15:32.0926471Z ./js/reference-dashboard.js
+publish	Upload static site	2026-11-03T08:15:32.0926765Z ./js/dk-analysis.js
+publish	Upload static site	2026-11-03T08:15:32.0927024Z ./CONTRIBUTING.md
+publish	Upload static site	2026-11-03T08:15:32.0927285Z ./component-field.html
+publish	Upload static site	2026-11-03T08:15:32.0927567Z ./component-button.md
+publish	Upload static site	2026-11-03T08:15:32.0927860Z ./component-fullscreen.html
+publish	Upload static site	2026-11-03T08:15:32.0928160Z ./component-scroll-arrow.md
+publish	Upload static site	2026-11-03T08:15:32.0928464Z ./component-focus-trap.md
+publish	Upload static site	2026-11-03T08:15:32.0928754Z ./component-avatar.md
+publish	Upload static site	2026-11-03T08:15:32.0929024Z ./component-uptime.md
+publish	Upload static site	2026-11-03T08:15:32.0929291Z ./component-map.md
+publish	Upload static site	2026-11-03T08:15:32.0929555Z ./regions.html
+publish	Upload static site	2026-11-03T08:15:32.0929812Z ./component-export.html
+publish	Upload static site	2026-11-03T08:15:32.0930093Z ./component-list.md
+publish	Upload static site	2026-11-03T08:15:32.0930460Z ./ROADMAP.md
+publish	Upload static site	2026-11-03T08:15:32.0930698Z ./kit2-preview.html
+publish	Upload static site	2026-11-03T08:15:32.0930974Z ./component-bullet-chart.html
+publish	Upload static site	2026-11-03T08:15:32.0931296Z ./component-widget.html
+publish	Upload static site	2026-11-03T08:15:32.0931573Z ./component-list.html
+publish	Upload static site	2026-11-03T08:15:32.0931837Z ./component-legend.md
+publish	Upload static site	2026-11-03T08:15:32.0932095Z ./design-qa.md
+publish	Upload static site	2026-11-03T08:15:32.0932342Z ./component-touch.md
+publish	Upload static site	2026-11-03T08:15:32.0932617Z ./component-modal.html
+publish	Upload static site	2026-11-03T08:15:32.0932909Z ./component-scroll-arrow.html
+publish	Upload static site	2026-11-03T08:15:32.0933248Z ./component-timeline-annotations.html
+publish	Upload static site	2026-11-03T08:15:32.0933611Z ./component-period-comparison.md
+publish	Upload static site	2026-11-03T08:15:32.0933948Z ./component-density-controls.md
+publish	Upload static site	2026-11-03T08:15:32.0934272Z ./component-saved-views.html
+publish	Upload static site	2026-11-03T08:15:32.0934571Z ./component-check.md
+publish	Upload static site	2026-11-03T08:15:32.0934838Z ./component-button.html
+publish	Upload static site	2026-11-03T08:15:32.0935115Z ./AGENTS.md
+publish	Upload static site	2026-11-03T08:15:32.0935358Z ./component-tile.html
+publish	Upload static site	2026-11-03T08:15:32.0935621Z ./embed.html
+publish	Upload static site	2026-11-03T08:15:32.0935977Z ./LICENSE
+publish	Upload static site	2026-11-03T08:15:32.0936229Z ./component-layout-editor.html
+publish	Upload static site	2026-11-03T08:15:32.0936536Z ./component-widget.md
+publish	Upload static site	2026-11-03T08:15:32.0936820Z ./component-details-sidebar.html
+publish	Upload static site	2026-11-03T08:15:32.0937143Z ./component-empty.html
+publish	Upload static site	2026-11-03T08:15:32.0937401Z ./assets/
+publish	Upload static site	2026-11-03T08:15:32.0937640Z ./assets/graphite-dark.png
+publish	Upload static site	2026-11-03T08:15:32.0942824Z ./assets/dashboard-kit-hero.png
+publish	Upload static site	2026-11-03T08:15:32.0953474Z ./assets/dashboard-kit-hero-charts.png
+publish	Upload static site	2026-11-03T08:15:32.0962526Z ./assets/graphite-light.png
+publish	Upload static site	2026-11-03T08:15:32.0974456Z ./assets/examples/
+publish	Upload static site	2026-11-03T08:15:32.0974767Z ./assets/examples/calendar-dark.png
+publish	Upload static site	2026-11-03T08:15:32.0975664Z ./assets/examples/regions-dark.png
+publish	Upload static site	2026-11-03T08:15:32.0977727Z ./assets/examples/accidents-dark.png
+publish	Upload static site	2026-11-03T08:15:32.0979275Z ./assets/examples/regions-light.png
+publish	Upload static site	2026-11-03T08:15:32.0980930Z ./assets/examples/calendar-light.png
+publish	Upload static site	2026-11-03T08:15:32.0981987Z ./assets/examples/family-mortgage-dark.png
+publish	Upload static site	2026-11-03T08:15:32.0984187Z ./assets/examples/accidents-light.png
+publish	Upload static site	2026-11-03T08:15:32.0985363Z ./assets/examples/family-mortgage-light.png
+publish	Upload static site	2026-11-03T08:15:32.0987099Z ./TESTING.md
+publish	Upload static site	2026-11-03T08:15:32.0987379Z ./component-widget-header.html
+publish	Upload static site	2026-11-03T08:15:32.0987716Z ./component-popout.md
+publish	Upload static site	2026-11-03T08:15:32.0987985Z ./README.md
+publish	Upload static site	2026-11-03T08:15:32.0989699Z ./component-chart.md
+publish	Upload static site	2026-11-03T08:15:32.0989991Z ./component-onboarding.md
+publish	Upload static site	2026-11-03T08:15:32.0990407Z ./ARCHITECTURE.md
+publish	Upload static site	2026-11-03T08:15:32.0990679Z ./component-uptime.html
+publish	Upload static site	2026-11-03T08:15:32.0990977Z ./component-hero.html
+publish	Upload static site	2026-11-03T08:15:32.0991265Z ./component-onboarding.html
+publish	Upload static site	2026-11-03T08:15:32.0991577Z ./component-adaptive-icons.md
+publish	Upload static site	2026-11-03T08:15:32.0991910Z ./AI-OPS-ONBOARDING.md
+publish	Upload static site	2026-11-03T08:15:32.0992180Z ./dashboard.html
+publish	Upload static site	2026-11-03T08:15:32.0992456Z ./component-banner.md
+publish	Upload static site	2026-11-03T08:15:32.0992717Z ./CLAUDE.md
+publish	Upload static site	2026-11-03T08:15:32.0992947Z ./vendor/
+publish	Upload static site	2026-11-03T08:15:32.0993192Z ./vendor/echarts.modules.json
+publish	Upload static site	2026-11-03T08:15:32.0993498Z ./vendor/fonts/
+publish	Upload static site	2026-11-03T08:15:32.0993781Z ./vendor/fonts/golos-700-latin.woff2
+publish	Upload static site	2026-11-03T08:15:32.0994129Z ./vendor/fonts/golos-500-latin.woff2
+publish	Upload static site	2026-11-03T08:15:32.0994460Z ./vendor/fonts/golos-400-latin.woff2
+publish	Upload static site	2026-11-03T08:15:32.0994941Z ./vendor/fonts/golos-700-cyrillic.woff2
+publish	Upload static site	2026-11-03T08:15:32.0995291Z ./vendor/fonts/golos-400-cyrillic.woff2
+publish	Upload static site	2026-11-03T08:15:32.0995632Z ./vendor/fonts/golos-600-latin.woff2
+publish	Upload static site	2026-11-03T08:15:32.0995963Z ./vendor/fonts/golos-500-cyrillic.woff2
+publish	Upload static site	2026-11-03T08:15:32.0996315Z ./vendor/fonts/golos-600-cyrillic.woff2
+publish	Upload static site	2026-11-03T08:15:32.0996666Z ./vendor/air-datepicker.css
+publish	Upload static site	2026-11-03T08:15:32.0996966Z ./vendor/echarts.min.js
+publish	Upload static site	2026-11-03T08:15:32.1002537Z ./vendor/licenses/
+publish	Upload static site	2026-11-03T08:15:32.1002854Z ./vendor/licenses/Tabler-Icons-MIT.txt
+publish	Upload static site	2026-11-03T08:15:32.1003217Z ./vendor/licenses/ECharts-NOTICE.txt
+publish	Upload static site	2026-11-03T08:15:32.1003554Z ./vendor/licenses/ECharts-LICENSE.txt
+publish	Upload static site	2026-11-03T08:15:32.1003913Z ./vendor/licenses/Air-Datepicker-MIT.txt
+publish	Upload static site	2026-11-03T08:15:32.1004279Z ./vendor/licenses/Golos-Text-OFL.txt
+publish	Upload static site	2026-11-03T08:15:32.1004631Z ./vendor/air-datepicker.js
+publish	Upload static site	2026-11-03T08:15:32.1004933Z ./component-table.md
+publish	Upload static site	2026-11-03T08:15:32.1005201Z ./component-car.md
+publish	Upload static site	2026-11-03T08:15:32.1005448Z ./css/
+publish	Upload static site	2026-11-03T08:15:32.1005704Z ./css/tokens.primitives.css
+publish	Upload static site	2026-11-03T08:15:32.1006018Z ./css/page.dashboard.css
+publish	Upload static site	2026-11-03T08:15:32.1006317Z ./css/reference-dashboard.css
+publish	Upload static site	2026-11-03T08:15:32.1006633Z ./css/page.family-mortgage.css
+publish	Upload static site	2026-11-03T08:15:32.1006940Z ./css/kit2-preview.css
+publish	Upload static site	2026-11-03T08:15:32.1007216Z ./css/components.css
+publish	Upload static site	2026-11-03T08:15:32.1008634Z ./css/docs.css
+publish	Upload static site	2026-11-03T08:15:32.1009297Z ./css/page.grid.css
+publish	Upload static site	2026-11-03T08:15:32.1009610Z ./css/kit2-preview-frame.css
+publish	Upload static site	2026-11-03T08:15:32.1009833Z ./css/tokens.semantic.css
+publish	Upload static site	2026-11-03T08:15:32.1010099Z ./css/page.regions.css
+publish	Upload static site	2026-11-03T08:15:32.1010514Z ./css/page.overview.css
+publish	Upload static site	2026-11-03T08:15:32.1010731Z ./css/glass.css
+publish	Upload static site	2026-11-03T08:15:32.1010971Z ./css/chrome.css
+publish	Upload static site	2026-11-03T08:15:32.1011484Z ./component-badge.md
+publish	Upload static site	2026-11-03T08:15:32.1011784Z ./component-tree-select.html
+publish	Upload static site	2026-11-03T08:15:32.1012222Z ./ai-value.html
+publish	Upload static site	2026-11-03T08:15:32.1012489Z ./component-chips-select.md
+publish	Upload static site	2026-11-03T08:15:32.1012781Z ./mobile.html
+publish	Upload static site	2026-11-03T08:15:32.1013042Z ./component-heatmap.md
+publish	Upload static site	2026-11-03T08:15:32.1013339Z ./component-page-header.html
+publish	Upload static site	2026-11-03T08:15:32.1013649Z ./component-select.html
+publish	Upload static site	2026-11-03T08:15:32.1013942Z ./component-bullet-chart.md
+publish	Upload static site	2026-11-03T08:15:32.1014255Z ./component-touch.html
+publish	Upload static site	2026-11-03T08:15:32.1014563Z ./component-page-header.md
+publish	Upload static site	2026-11-03T08:15:32.1014862Z ./component-check.html
+publish	Upload static site	2026-11-03T08:15:32.1015136Z ./component-rank.md
+publish	Upload static site	2026-11-03T08:15:32.1015407Z ./component-counter.html
+publish	Upload static site	2026-11-03T08:15:32.1015702Z ./component-chip.md
+publish	Upload static site	2026-11-03T08:15:32.1015973Z ./component-heatmap.html
+publish	Upload static site	2026-11-03T08:15:32.1016252Z ./GLASS-STATUS.md
+publish	Upload static site	2026-11-03T08:15:32.1016513Z ./component-popout.html
+publish	Upload static site	2026-11-03T08:15:32.1016796Z ./component-banner.html
+publish	Upload static site	2026-11-03T08:15:32.1017073Z ./DECISIONS.md
+publish	Upload static site	2026-11-03T08:15:32.1018010Z ./component-period-comparison.html
+publish	Upload static site	2026-11-03T08:15:32.1018354Z ./component-calendar.md
+publish	Upload static site	2026-11-03T08:15:32.1018639Z ./component-tabs.md
+publish	Upload static site	2026-11-03T08:15:32.1018914Z ./component-accordion.html
+publish	Upload static site	2026-11-03T08:15:32.1019203Z ./docs/
+publish	Upload static site	2026-11-03T08:15:32.1019461Z ./docs/editorial-review-2026-10-26.md
+publish	Upload static site	2026-11-03T08:15:32.1019805Z ./docs/2026-10-06/
+publish	Upload static site	2026-11-03T08:15:32.1020078Z ./docs/2026-10-06/component-gap-audit.md
+publish	Upload static site	2026-11-03T08:15:32.1020555Z ./docs/2026-10-06/04-visual-guide-light.png
+publish	Upload static site	2026-11-03T08:15:32.1021017Z ./docs/2026-10-06/05-component-light.png
+publish	Upload static site	2026-11-03T08:15:32.1021873Z ./docs/2026-10-06/12-responsive-menu-s.png
+publish	Upload static site	2026-11-03T08:15:32.1022591Z ./docs/2026-10-06/11-navigation-fixed.png
+publish	Upload static site	2026-11-03T08:15:32.1023404Z ./docs/2026-10-06/09-component-compact.png
+publish	Upload static site	2026-11-03T08:15:32.1024332Z ./docs/2026-10-06/02-usability-before.png
+publish	Upload static site	2026-11-03T08:15:32.1025076Z ./docs/2026-10-06/01-overview-before.png
+publish	Upload static site	2026-11-03T08:15:32.1025916Z ./docs/2026-10-06/07-guide-phone.png
+publish	Upload static site	2026-11-03T08:15:32.1026313Z ./docs/2026-10-06/14-accordion.png
+publish	Upload static site	2026-11-03T08:15:32.1027065Z ./docs/2026-10-06/review.html
+publish	Upload static site	2026-11-03T08:15:32.1027333Z ./docs/2026-10-06/03-task-guide-after.png
+publish	Upload static site	2026-11-03T08:15:32.1028814Z ./docs/2026-10-06/graphite-review.md
+publish	Upload static site	2026-11-03T08:15:32.1029071Z ./docs/2026-10-06/10-search-dialog.png
+publish	Upload static site	2026-11-03T08:15:32.1029561Z ./docs/2026-10-06/16-toc-hidden.png
+publish	Upload static site	2026-11-03T08:15:32.1030290Z ./docs/2026-10-06/06-component-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1031045Z ./docs/2026-10-06/08-filter-open.png
+publish	Upload static site	2026-11-03T08:15:32.1032216Z ./docs/2026-10-06/support-eval/
+publish	Upload static site	2026-11-03T08:15:32.1032485Z ./docs/2026-10-06/support-eval/support-1280-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1033696Z ./docs/2026-10-06/support-eval/support-390-light.png
+publish	Upload static site	2026-11-03T08:15:32.1034668Z ./docs/2026-10-06/support-eval/support.js
+publish	Upload static site	2026-11-03T08:15:32.1034944Z ./docs/2026-10-06/support-eval/support-390-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1035823Z ./docs/2026-10-06/support-eval/first-completed.html
+publish	Upload static site	2026-11-03T08:15:32.1036217Z ./docs/2026-10-06/support-eval/support.html
+publish	Upload static site	2026-11-03T08:15:32.1036475Z ./docs/2026-10-06/support-eval/support-1280-light.png
+publish	Upload static site	2026-11-03T08:15:32.1037741Z ./docs/2026-10-06/support-eval/first-build-report.json
+publish	Upload static site	2026-11-03T08:15:32.1038000Z ./docs/2026-10-06/15-counter.png
+publish	Upload static site	2026-11-03T08:15:32.1038636Z ./docs/2026-10-06/18-card-scroll.png
+publish	Upload static site	2026-11-03T08:15:32.1039447Z ./docs/2026-10-06/13-article-share.png
+publish	Upload static site	2026-11-03T08:15:32.1040377Z ./docs/2026-10-06/17-onboarding.png
+publish	Upload static site	2026-11-03T08:15:32.1041104Z ./docs/ai-ops-integration.txt
+publish	Upload static site	2026-11-03T08:15:32.1041401Z ./docs/DEPLOYMENT.md
+publish	Upload static site	2026-11-03T08:15:32.1041640Z ./docs/ci-access.txt
+publish	Upload static site	2026-11-03T08:15:32.1041929Z ./docs/2026-09-30/
+publish	Upload static site	2026-11-03T08:15:32.1042108Z ./docs/2026-09-30/evidence/
+publish	Upload static site	2026-11-03T08:15:32.1042316Z ./docs/2026-09-30/evidence/region-details.jpg
+publish	Upload static site	2026-11-03T08:15:32.1042696Z ./docs/2026-09-30/evidence/before-after.html
+publish	Upload static site	2026-11-03T08:15:32.1042946Z ./docs/2026-09-30/evidence/accidents-light-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1043483Z ./docs/2026-09-30/evidence/dashboard-dark-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1044263Z ./docs/2026-09-30/evidence/dashboard-mobile-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1044858Z ./docs/2026-09-30/evidence/dashboard-light-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1045574Z ./docs/2026-09-30/evidence/dashboard-dark-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1046419Z ./docs/2026-09-30/evidence/regions-light-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1047296Z ./docs/2026-09-30/evidence/regions-light-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1048130Z ./docs/2026-09-30/evidence/ux-results.json
+publish	Upload static site	2026-11-03T08:15:32.1048529Z ./docs/2026-09-30/evidence/dashboard-light-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1049150Z ./docs/2026-09-30/evidence/accidents-light-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1049879Z ./docs/2026-09-30/evidence/dashboard-mobile-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1050408Z ./docs/2026-09-30/evidence/final-check.log
+publish	Upload static site	2026-11-03T08:15:32.1050754Z ./docs/current-state.md
+publish	Upload static site	2026-11-03T08:15:32.1051021Z ./docs/RUNBOOK.md
+publish	Upload static site	2026-11-03T08:15:32.1051258Z ./docs/dashboard-data.md
+publish	Upload static site	2026-11-03T08:15:32.1051489Z ./docs/react-integration.md
+publish	Upload static site	2026-11-03T08:15:32.1051777Z ./docs/2026-10-29/
+publish	Upload static site	2026-11-03T08:15:32.1051997Z ./docs/2026-10-29/kit-ui-refine/
+publish	Upload static site	2026-11-03T08:15:32.1052264Z ./docs/2026-10-29/kit-ui-refine/component-table-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1053902Z ./docs/2026-10-29/kit-ui-refine/check-final-views.log
+publish	Upload static site	2026-11-03T08:15:32.1054188Z ./docs/2026-10-29/kit-ui-refine/index-dark-886.png
+publish	Upload static site	2026-11-03T08:15:32.1059448Z ./docs/2026-10-29/kit-ui-refine/component-table-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1061921Z ./docs/2026-10-29/kit-ui-refine/index-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1064245Z ./docs/2026-10-29/kit-ui-refine/menu-five.png
+publish	Upload static site	2026-11-03T08:15:32.1064953Z ./docs/2026-10-29/kit-ui-refine/index-light-886.png
+publish	Upload static site	2026-11-03T08:15:32.1069734Z ./docs/2026-10-29/kit-ui-refine/index-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1072735Z ./docs/2026-10-29/kit-ui-refine/index-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1078646Z ./docs/2026-10-29/kit-ui-refine/README.md
+publish	Upload static site	2026-11-03T08:15:32.1079027Z ./docs/2026-10-29/kit-ui-refine/check-views.log
+publish	Upload static site	2026-11-03T08:15:32.1079432Z ./docs/2026-10-29/kit-ui-refine/menu-single-line.png
+publish	Upload static site	2026-11-03T08:15:32.1080631Z ./docs/2026-10-29/kit-ui-refine/index-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1088299Z ./docs/2026-10-29/kit-ui-refine/check-fast.log
+publish	Upload static site	2026-11-03T08:15:32.1088678Z ./docs/2026-10-29/kit-single-row/
+publish	Upload static site	2026-11-03T08:15:32.1089220Z ./docs/2026-10-29/kit-single-row/header-design-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1094193Z ./docs/2026-10-29/kit-single-row/header-design-light-886.png
+publish	Upload static site	2026-11-03T08:15:32.1096751Z ./docs/2026-10-29/kit-single-row/home-light-886x848.png
+publish	Upload static site	2026-11-03T08:15:32.1101935Z ./docs/2026-10-29/kit-single-row/home-dark-1440x900.png
+publish	Upload static site	2026-11-03T08:15:32.1110642Z ./docs/2026-10-29/kit-single-row/home-dark-886x720.png
+publish	Upload static site	2026-11-03T08:15:32.1114572Z ./docs/2026-10-29/kit-single-row/header-design-dark-886.png
+publish	Upload static site	2026-11-03T08:15:32.1117697Z ./docs/2026-10-29/kit-single-row/preview-main-886.png
+publish	Upload static site	2026-11-03T08:15:32.1123687Z ./docs/2026-10-29/kit-single-row/home-light-1280x720.png
+publish	Upload static site	2026-11-03T08:15:32.1129577Z ./docs/2026-10-29/kit-single-row/home-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1132454Z ./docs/2026-10-29/kit-single-row/home-dark-1280x720.png
+publish	Upload static site	2026-11-03T08:15:32.1139418Z ./docs/2026-10-29/kit-single-row/full-check.log
+publish	Upload static site	2026-11-03T08:15:32.1139856Z ./docs/2026-10-29/kit-single-row/home-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1147481Z ./docs/2026-10-29/kit-single-row/docs-check.log
+publish	Upload static site	2026-11-03T08:15:32.1147933Z ./docs/2026-10-29/kit-single-row/home-light-886.png
+publish	Upload static site	2026-11-03T08:15:32.1153075Z ./docs/2026-10-29/kit-single-row/home-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1155421Z ./docs/2026-10-29/kit-single-row/preview-family-header-886.png
+publish	Upload static site	2026-11-03T08:15:32.1156059Z ./docs/2026-10-29/kit-single-row/home-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1163426Z ./docs/2026-10-29/kit-single-row/README.md
+publish	Upload static site	2026-11-03T08:15:32.1163898Z ./docs/2026-10-29/kit-single-row/home-light-1440x900.png
+publish	Upload static site	2026-11-03T08:15:32.1171774Z ./docs/2026-10-29/kit-single-row/home-dark-886.png
+publish	Upload static site	2026-11-03T08:15:32.1177776Z ./docs/2026-10-29/kit-single-row/home-light-886x720.png
+publish	Upload static site	2026-11-03T08:15:32.1181772Z ./docs/2026-10-29/kit-single-row/header-design-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1182810Z ./docs/2026-10-29/kit-single-row/header-design-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1183828Z ./docs/2026-10-29/kit-single-row/family-check.log
+publish	Upload static site	2026-11-03T08:15:32.1184267Z ./docs/2026-10-29/kit-single-row/navigation-check.log
+publish	Upload static site	2026-11-03T08:15:32.1184710Z ./docs/2026-10-29/kit-single-row/home-dark-886x848.png
+publish	Upload static site	2026-11-03T08:15:32.1189482Z ./docs/2026-10-29/kit-single-row/header-design-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1193593Z ./docs/2026-10-29/kit-equal-insets/
+publish	Upload static site	2026-11-03T08:15:32.1193965Z ./docs/2026-10-29/kit-equal-insets/fast-check.log
+publish	Upload static site	2026-11-03T08:15:32.1194395Z ./docs/2026-10-29/kit-equal-insets/index-dark-886.png
+publish	Upload static site	2026-11-03T08:15:32.1198724Z ./docs/2026-10-29/kit-equal-insets/insets-check.log
+publish	Upload static site	2026-11-03T08:15:32.1199226Z ./docs/2026-10-29/kit-equal-insets/family-mortgage-light-886.png
+publish	Upload static site	2026-11-03T08:15:32.1199758Z ./docs/2026-10-29/kit-equal-insets/family-mortgage-dark-886.png
+publish	Upload static site	2026-11-03T08:15:32.1200338Z ./docs/2026-10-29/kit-equal-insets/full-check.log
+publish	Upload static site	2026-11-03T08:15:32.1200751Z ./docs/2026-10-29/kit-equal-insets/index-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1203473Z ./docs/2026-10-29/kit-equal-insets/family-mortgage-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1203955Z ./docs/2026-10-29/kit-equal-insets/index-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1209746Z ./docs/2026-10-29/kit-equal-insets/README.md
+publish	Upload static site	2026-11-03T08:15:32.1210338Z ./docs/2026-10-29/kit-equal-insets/measurements.json
+publish	Upload static site	2026-11-03T08:15:32.1210810Z ./docs/2026-10-29/kit-equal-insets/family-mortgage-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1211292Z ./docs/2026-10-29/kit-equal-insets/family-check.log
+publish	Upload static site	2026-11-03T08:15:32.1211718Z ./docs/2026-10-29/kit-equal-insets/navigation-check.log
+publish	Upload static site	2026-11-03T08:15:32.1212108Z ./docs/2026-10-29/kit-header-mega/
+publish	Upload static site	2026-11-03T08:15:32.1212491Z ./docs/2026-10-29/kit-header-mega/mega-design-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1212997Z ./docs/2026-10-29/kit-header-mega/header-design-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1217937Z ./docs/2026-10-29/kit-header-mega/home-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1220607Z ./docs/2026-10-29/kit-header-mega/full-check.log
+publish	Upload static site	2026-11-03T08:15:32.1221023Z ./docs/2026-10-29/kit-header-mega/home-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1228416Z ./docs/2026-10-29/kit-header-mega/docs-check.log
+publish	Upload static site	2026-11-03T08:15:32.1228854Z ./docs/2026-10-29/kit-header-mega/mega-design-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1229541Z ./docs/2026-10-29/kit-header-mega/home-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1232133Z ./docs/2026-10-29/kit-header-mega/mega-design-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1233959Z ./docs/2026-10-29/kit-header-mega/home-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1240483Z ./docs/2026-10-29/kit-header-mega/README.md
+publish	Upload static site	2026-11-03T08:15:32.1240913Z ./docs/2026-10-29/kit-header-mega/mega-design-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1243386Z ./docs/2026-10-29/kit-header-mega/header-design-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1244337Z ./docs/2026-10-29/kit-header-mega/header-design-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1245200Z ./docs/2026-10-29/kit-header-mega/navigation-check.log
+publish	Upload static site	2026-11-03T08:15:32.1245693Z ./docs/2026-10-29/kit-header-mega/header-design-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1249789Z ./docs/2026-10-29/kit-clean-home/
+publish	Upload static site	2026-11-03T08:15:32.1250311Z ./docs/2026-10-29/kit-clean-home/header-design-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1255222Z ./docs/2026-10-29/kit-clean-home/home-dark-1440x900.png
+publish	Upload static site	2026-11-03T08:15:32.1263012Z ./docs/2026-10-29/kit-clean-home/home-light-1280x720.png
+publish	Upload static site	2026-11-03T08:15:32.1267928Z ./docs/2026-10-29/kit-clean-home/home-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1270776Z ./docs/2026-10-29/kit-clean-home/home-dark-1280x720.png
+publish	Upload static site	2026-11-03T08:15:32.1288766Z ./docs/2026-10-29/kit-clean-home/full-check.log
+publish	Upload static site	2026-11-03T08:15:32.1289216Z ./docs/2026-10-29/kit-clean-home/home-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1289590Z ./docs/2026-10-29/kit-clean-home/docs-check.log
+publish	Upload static site	2026-11-03T08:15:32.1289853Z ./docs/2026-10-29/kit-clean-home/home-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1290125Z ./docs/2026-10-29/kit-clean-home/home-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1291837Z ./docs/2026-10-29/kit-clean-home/README.md
+publish	Upload static site	2026-11-03T08:15:32.1292257Z ./docs/2026-10-29/kit-clean-home/home-light-1440x900.png
+publish	Upload static site	2026-11-03T08:15:32.1298759Z ./docs/2026-10-29/kit-clean-home/header-design-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1299727Z ./docs/2026-10-29/kit-clean-home/header-design-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1300815Z ./docs/2026-10-29/kit-clean-home/navigation-check.log
+publish	Upload static site	2026-11-03T08:15:32.1301288Z ./docs/2026-10-29/kit-clean-home/header-design-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1305291Z ./docs/2026-10-29/kit-review/
+publish	Upload static site	2026-11-03T08:15:32.1305695Z ./docs/2026-10-29/kit-review/docs-component-table-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1307762Z ./docs/2026-10-29/kit-review/docs-component-scroll-arrow-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1309869Z ./docs/2026-10-29/kit-review/docs-component-modal-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1312309Z ./docs/2026-10-29/kit-review/docs-component-calendar-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1314566Z ./docs/2026-10-29/kit-review/docs-index-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1319756Z ./docs/2026-10-29/kit-review/docs-component-chart-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1322057Z ./docs/2026-10-29/kit-review/root-showcase-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1323089Z ./docs/2026-10-29/kit-review/docs-component-onboarding-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1325068Z ./docs/2026-10-29/kit-review/docs-component-field-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1327389Z ./docs/2026-10-29/kit-review/docs-component-widget-header-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1329240Z ./docs/2026-10-29/kit-review/docs-component-hero-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1331659Z ./docs/2026-10-29/kit-review/docs-component-details-sidebar-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1333378Z ./docs/2026-10-29/kit-review/contact-6.html
+publish	Upload static site	2026-11-03T08:15:32.1333754Z ./docs/2026-10-29/kit-review/check-full.log
+publish	Upload static site	2026-11-03T08:15:32.1334201Z ./docs/2026-10-29/kit-review/docs-component-card-grid-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1336008Z ./docs/2026-10-29/kit-review/docs-component-saved-views-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1337792Z ./docs/2026-10-29/kit-review/docs-component-table-light-320.png
+publish	Upload static site	2026-11-03T08:15:32.1338261Z ./docs/2026-10-29/kit-review/root-mobile-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1340615Z ./docs/2026-10-29/kit-review/docs-component-car-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1343171Z ./docs/2026-10-29/kit-review/docs-component-select-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1345408Z ./docs/2026-10-29/kit-review/docs-component-heatmap-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1346813Z ./docs/2026-10-29/kit-review/docs-component-button-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1348872Z ./docs/2026-10-29/kit-review/docs-component-map-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1351799Z ./docs/2026-10-29/kit-review/docs-component-period-comparison-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1353439Z ./docs/2026-10-29/kit-review/docs-component-breadcrumbs-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1355743Z ./docs/2026-10-29/kit-review/docs-component-segment-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1357774Z ./docs/2026-10-29/kit-review/contact-5.html
+publish	Upload static site	2026-11-03T08:15:32.1358451Z ./docs/2026-10-29/kit-review/docs-component-card-scroll-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1360553Z ./docs/2026-10-29/kit-review/docs-index-dark-320.png
+publish	Upload static site	2026-11-03T08:15:32.1362476Z ./docs/2026-10-29/kit-review/contact-4.html
+publish	Upload static site	2026-11-03T08:15:32.1362933Z ./docs/2026-10-29/kit-review/docs-component-chip-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1364562Z ./docs/2026-10-29/kit-review/docs-component-bullet-chart-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1366382Z ./docs/2026-10-29/kit-review/docs-component-table-dark-320.png
+publish	Upload static site	2026-11-03T08:15:32.1367036Z ./docs/2026-10-29/kit-review/docs-component-widget-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1369298Z ./docs/2026-10-29/kit-review/docs-component-fullscreen-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1371546Z ./docs/2026-10-29/kit-review/docs-component-uptime-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1373431Z ./docs/2026-10-29/kit-review/contact-1.html
+publish	Upload static site	2026-11-03T08:15:32.1373897Z ./docs/2026-10-29/kit-review/docs-component-focus-trap-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1375550Z ./docs/2026-10-29/kit-review/docs-component-legend-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1377327Z ./docs/2026-10-29/kit-review/contact-8.html
+publish	Upload static site	2026-11-03T08:15:32.1377774Z ./docs/2026-10-29/kit-review/docs-component-counter-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1379350Z ./docs/2026-10-29/kit-review/root-grid-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1381069Z ./docs/2026-10-29/kit-review/docs-component-adaptive-icons-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1382864Z ./docs/2026-10-29/kit-review/contact-3.html
+publish	Upload static site	2026-11-03T08:15:32.1383318Z ./docs/2026-10-29/kit-review/docs-component-table-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1384477Z ./docs/2026-10-29/kit-review/check-family-mortgage.log
+publish	Upload static site	2026-11-03T08:15:32.1384896Z ./docs/2026-10-29/kit-review/contact-root.html
+publish	Upload static site	2026-11-03T08:15:32.1385367Z ./docs/2026-10-29/kit-review/docs-component-accordion-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1386816Z ./docs/2026-10-29/kit-review/root-kit2-preview-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1388624Z ./docs/2026-10-29/kit-review/docs-component-rank-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1390883Z ./docs/2026-10-29/kit-review/README.md
+publish	Upload static site	2026-11-03T08:15:32.1391238Z ./docs/2026-10-29/kit-review/contact-2.html
+publish	Upload static site	2026-11-03T08:15:32.1391673Z ./docs/2026-10-29/kit-review/docs-component-export-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1393300Z ./docs/2026-10-29/kit-review/docs-component-badge-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1395385Z ./docs/2026-10-29/kit-review/docs-component-layout-editor-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1397239Z ./docs/2026-10-29/kit-review/root-embed-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1397725Z ./docs/2026-10-29/kit-review/docs-component-scrollview-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1399752Z ./docs/2026-10-29/kit-review/root-dashboard-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1402182Z ./docs/2026-10-29/kit-review/docs-component-pager-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1404108Z ./docs/2026-10-29/kit-review/docs-component-search-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1406016Z ./docs/2026-10-29/kit-review/docs-component-tile-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1408136Z ./docs/2026-10-29/kit-review/docs-component-tooltip-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1410018Z ./docs/2026-10-29/kit-review/docs-component-tree-select-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1411850Z ./docs/2026-10-29/kit-review/docs-component-density-controls-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1413466Z ./docs/2026-10-29/kit-review/docs-index-light-320.png
+publish	Upload static site	2026-11-03T08:15:32.1415251Z ./docs/2026-10-29/kit-review/docs-component-chips-select-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1417397Z ./docs/2026-10-29/kit-review/docs-component-timeline-annotations-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1419167Z ./docs/2026-10-29/kit-review/docs-component-page-header-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1421251Z ./docs/2026-10-29/kit-review/docs-index-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1427624Z ./docs/2026-10-29/kit-review/root-reference-dashboard-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1429349Z ./docs/2026-10-29/kit-review/docs-component-popout-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1431388Z ./docs/2026-10-29/kit-review/contact-7.html
+publish	Upload static site	2026-11-03T08:15:32.1431841Z ./docs/2026-10-29/kit-review/docs-component-period-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1433484Z ./docs/2026-10-29/kit-review/docs-component-empty-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1435777Z ./docs/2026-10-29/kit-review/check-docs.log
+publish	Upload static site	2026-11-03T08:15:32.1436210Z ./docs/2026-10-29/kit-review/docs-component-flex-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1437870Z ./docs/2026-10-29/kit-review/docs-component-chips-input-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1439987Z ./docs/2026-10-29/kit-review/docs-component-list-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1442416Z ./docs/2026-10-29/kit-review/docs-component-check-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1444433Z ./docs/2026-10-29/kit-review/index.html
+publish	Upload static site	2026-11-03T08:15:32.1444860Z ./docs/2026-10-29/kit-review/docs-component-banner-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1447195Z ./docs/2026-10-29/kit-review/docs-component-touch-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1449382Z ./docs/2026-10-29/kit-review/contact-examples.html
+publish	Upload static site	2026-11-03T08:15:32.1449843Z ./docs/2026-10-29/kit-review/docs-component-tabs-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1451682Z ./docs/2026-10-29/kit-review/docs-component-avatar-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1453441Z ./docs/2026-10-29/kit-review/check-fast.log
+publish	Upload static site	2026-11-03T08:15:32.1453824Z ./docs/2026-10-29/kit-review/root-ai-value-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1455751Z ./docs/2026-10-28/
+publish	Upload static site	2026-11-03T08:15:32.1456020Z ./docs/2026-10-28/compact-filters/
+publish	Upload static site	2026-11-03T08:15:32.1456382Z ./docs/2026-10-28/compact-filters/header-dark.jpg
+publish	Upload static site	2026-11-03T08:15:32.1456795Z ./docs/2026-10-28/compact-filters/light-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1457345Z ./docs/2026-10-28/compact-filters/header-right.jpg
+publish	Upload static site	2026-11-03T08:15:32.1457805Z ./docs/2026-10-28/stable-views/
+publish	Upload static site	2026-11-03T08:15:32.1458188Z ./docs/2026-10-28/stable-views/dashboard-before-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1458633Z ./docs/2026-10-28/stable-views/table-after-dark-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1459098Z ./docs/2026-10-28/stable-views/dashboard-after-light-768.jpg
+publish	Upload static site	2026-11-03T08:15:32.1459588Z ./docs/2026-10-28/stable-views/charts-after-light-768.jpg
+publish	Upload static site	2026-11-03T08:15:32.1460135Z ./docs/2026-10-28/stable-views/dashboard-after-light-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1461281Z ./docs/2026-10-28/stable-views/dashboard-after-dark-768.jpg
+publish	Upload static site	2026-11-03T08:15:32.1461941Z ./docs/2026-10-28/stable-views/dashboard-after-light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1462407Z ./docs/2026-10-28/stable-views/modal-dark-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1463205Z ./docs/2026-10-28/stable-views/dashboard-after-dark-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1463664Z ./docs/2026-10-28/stable-views/previous-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1464062Z ./docs/2026-10-28/stable-views/modal-light-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1464730Z ./docs/2026-10-28/stable-views/modal-light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1465221Z ./docs/2026-10-28/stable-views/responsive-geometry-final.json
+publish	Upload static site	2026-11-03T08:15:32.1465857Z ./docs/2026-10-28/stable-views/dashboard-after-dark-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1466787Z ./docs/2026-10-28/stable-views/dashboard-before-768.jpg
+publish	Upload static site	2026-11-03T08:15:32.1467494Z ./docs/2026-10-28/github-save/
+publish	Upload static site	2026-11-03T08:15:32.1467825Z ./docs/2026-10-28/github-save/rules-dark-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1468934Z ./docs/2026-10-28/DASHBOARD-DETAIL-MODAL-001.md
+publish	Upload static site	2026-11-03T08:15:32.1469298Z ./docs/2026-10-28/release-gates/
+publish	Upload static site	2026-11-03T08:15:32.1469692Z ./docs/2026-10-28/release-gates/family-mortgage-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1473909Z ./docs/2026-10-28/release-gates/family-mortgage-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1475199Z ./docs/2026-10-28/pr61-conflicts.md
+publish	Upload static site	2026-11-03T08:15:32.1475521Z ./docs/2026-10-28/github-save.md
+publish	Upload static site	2026-11-03T08:15:32.1475828Z ./docs/2026-10-28/stable-filters/
+publish	Upload static site	2026-11-03T08:15:32.1476197Z ./docs/2026-10-28/stable-filters/selected-header-dark.jpg
+publish	Upload static site	2026-11-03T08:15:32.1476640Z ./docs/2026-10-28/stable-filters/full-name-mobile.jpg
+publish	Upload static site	2026-11-03T08:15:32.1477040Z ./docs/2026-10-28/stable-filters/geometry.json
+publish	Upload static site	2026-11-03T08:15:32.1477452Z ./docs/2026-10-28/release-validation.md
+publish	Upload static site	2026-11-03T08:15:32.1477783Z ./docs/2026-10-28/pr61-conflicts/
+publish	Upload static site	2026-11-03T08:15:32.1478152Z ./docs/2026-10-28/pr61-conflicts/mortgage-dark-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1478701Z ./docs/2026-10-28/pr61-conflicts/docs-route-results-final.json
+publish	Upload static site	2026-11-03T08:15:32.1479189Z ./docs/2026-10-28/pr61-conflicts/generation-proof.json
+publish	Upload static site	2026-11-03T08:15:32.1479632Z ./docs/2026-10-28/pr61-conflicts/mortgage-regression.json
+publish	Upload static site	2026-11-03T08:15:32.1480120Z ./docs/2026-10-28/pr61-conflicts/docs-browser-results.json
+publish	Upload static site	2026-11-03T08:15:32.1480826Z ./docs/2026-10-28/pr61-conflicts/mortgage-light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1481281Z ./docs/2026-10-28/pr61-conflicts/calendar-regression.json
+publish	Upload static site	2026-11-03T08:15:32.1481672Z ./docs/assembly-rules.md
+publish	Upload static site	2026-11-03T08:15:32.1481940Z ./docs/mcp.md
+publish	Upload static site	2026-11-03T08:15:32.1482176Z ./docs/2026-10-27/
+publish	Upload static site	2026-11-03T08:15:32.1482431Z ./docs/2026-10-27/graphite-qa/
+publish	Upload static site	2026-11-03T08:15:32.1482770Z ./docs/2026-10-27/graphite-qa/light-1280-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1483527Z ./docs/2026-10-27/graphite-qa/comparison-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1484574Z ./docs/2026-10-27/graphite-qa/light-390-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1484988Z ./docs/2026-10-27/graphite-qa/dark-390-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1485428Z ./docs/2026-10-27/graphite-qa/comparison.html
+publish	Upload static site	2026-11-03T08:15:32.1485800Z ./docs/2026-10-27/graphite-qa/light-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1486537Z ./docs/2026-10-27/graphite-qa/dark-1487.jpg
+publish	Upload static site	2026-11-03T08:15:32.1487703Z ./docs/2026-10-27/graphite-qa/dark-1487-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1489021Z ./docs/2026-10-27/graphite-qa/dark-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1489402Z ./docs/2026-10-27/graphite-qa/comparison-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1490699Z ./docs/2026-10-27/graphite-qa/light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1491086Z ./docs/2026-10-27/graphite-qa/dark-320.jpg
+publish	Upload static site	2026-11-03T08:15:32.1491690Z ./docs/2026-10-27/table-chip-kpi-polish/
+publish	Upload static site	2026-11-03T08:15:32.1492140Z ./docs/2026-10-27/table-chip-kpi-polish/table-mortgage-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1492653Z ./docs/2026-10-27/table-chip-kpi-polish/mobile-after-dark.jpg
+publish	Upload static site	2026-11-03T08:15:32.1493148Z ./docs/2026-10-27/table-chip-kpi-polish/mobile-after-light.jpg
+publish	Upload static site	2026-11-03T08:15:32.1493756Z ./docs/2026-10-27/table-chip-kpi-polish/table-components-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1494293Z ./docs/2026-10-27/table-chip-kpi-polish/overview-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1495347Z ./docs/2026-10-27/table-chip-kpi-polish/comparison.html
+publish	Upload static site	2026-11-03T08:15:32.1495801Z ./docs/2026-10-27/table-chip-kpi-polish/chips-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1496305Z ./docs/2026-10-27/table-chip-kpi-polish/overview-after-dark.jpg
+publish	Upload static site	2026-11-03T08:15:32.1497361Z ./docs/2026-10-27/table-chip-kpi-polish/previous-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1497824Z ./docs/2026-10-27/table-chip-kpi-polish/final-dashboard.jpg
+publish	Upload static site	2026-11-03T08:15:32.1498340Z ./docs/2026-10-27/table-chip-kpi-polish/table-components-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1499225Z ./docs/2026-10-27/table-chip-kpi-polish/table-components-light.jpg
+publish	Upload static site	2026-11-03T08:15:32.1499894Z ./docs/2026-10-27/table-chip-kpi-polish/comparison-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1501108Z ./docs/2026-10-27/equal-kpi/
+publish	Upload static site	2026-11-03T08:15:32.1501424Z ./docs/2026-10-27/equal-kpi/previous-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1501782Z ./docs/2026-10-27/equal-kpi/light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1502131Z ./docs/2026-10-27/equal-kpi/dark-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1503008Z ./docs/2026-10-27/chart-table-polish/
+publish	Upload static site	2026-11-03T08:15:32.1503382Z ./docs/2026-10-27/chart-table-polish/table-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1503867Z ./docs/2026-10-27/chart-table-polish/table-dark-320.jpg
+publish	Upload static site	2026-11-03T08:15:32.1504325Z ./docs/2026-10-27/chart-table-polish/charts-dark-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1505268Z ./docs/2026-10-27/chart-table-polish/table-dark-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1505998Z ./docs/2026-10-27/chart-table-polish/charts-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1507070Z ./docs/2026-10-27/chart-table-polish/charts-light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1507514Z ./docs/2026-10-27/chart-table-polish/tooltip-light.jpg
+publish	Upload static site	2026-11-03T08:15:32.1509330Z ./docs/2026-10-27/chart-table-polish/comparison.html
+publish	Upload static site	2026-11-03T08:15:32.1509762Z ./docs/2026-10-27/chart-table-polish/table-dark-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1510311Z ./docs/2026-10-27/chart-table-polish/previous-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1510761Z ./docs/2026-10-27/chart-table-polish/charts-light-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1511452Z ./docs/2026-10-27/chart-table-polish/charts-first.jpg
+publish	Upload static site	2026-11-03T08:15:32.1512189Z ./docs/2026-10-27/chart-table-polish/table-light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1512839Z ./docs/2026-10-27/chart-table-polish/charts-dark-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1513305Z ./docs/2026-10-27/chart-table-polish/comparison-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1514883Z ./docs/2026-10-27/chart-table-polish/table-light-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1516283Z ./docs/2026-10-27/color-review/
+publish	Upload static site	2026-11-03T08:15:32.1516601Z ./docs/2026-10-27/color-review/02-pearl.png
+publish	Upload static site	2026-11-03T08:15:32.1528259Z ./docs/2026-10-27/color-review/03-plum.png
+publish	Upload static site	2026-11-03T08:15:32.1540863Z ./docs/2026-10-27/color-review/README.md
+publish	Upload static site	2026-11-03T08:15:32.1541237Z ./docs/2026-10-27/color-review/01-graphite.png
+publish	Upload static site	2026-11-03T08:15:32.1553833Z ./docs/2026-10-27/color-review/index.html
+publish	Upload static site	2026-11-03T08:15:32.1554195Z ./docs/2026-10-27/kpi-map-refine/
+publish	Upload static site	2026-11-03T08:15:32.1554548Z ./docs/2026-10-27/kpi-map-refine/dark-390-volume.jpg
+publish	Upload static site	2026-11-03T08:15:32.1554995Z ./docs/2026-10-27/kpi-map-refine/light-geo.jpg
+publish	Upload static site	2026-11-03T08:15:32.1555587Z ./docs/2026-10-27/kpi-map-refine/dark-886.jpg
+publish	Upload static site	2026-11-03T08:15:32.1556360Z ./docs/2026-10-27/kpi-map-refine/light-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1557394Z ./docs/2026-10-27/kpi-map-refine/previous-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1557769Z ./docs/2026-10-27/kpi-map-refine/dark-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1558156Z ./docs/2026-10-27/kpi-map-refine/light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1558534Z ./docs/2026-10-27/kpi-map-refine/dark-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1559452Z ./docs/2026-10-27/kpi-map-refine/before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1560835Z ./docs/2026-10-27/widget-polish/
+publish	Upload static site	2026-11-03T08:15:32.1561205Z ./docs/2026-10-27/widget-polish/widgets-dark-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1561902Z ./docs/2026-10-27/widget-polish/light-1280-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1562912Z ./docs/2026-10-27/widget-polish/satin-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1564004Z ./docs/2026-10-27/widget-polish/light-390-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1564398Z ./docs/2026-10-27/widget-polish/clear-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1565455Z ./docs/2026-10-27/widget-polish/soft-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1566539Z ./docs/2026-10-27/widget-polish/dark-390-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1566956Z ./docs/2026-10-27/widget-polish/comparison.html
+publish	Upload static site	2026-11-03T08:15:32.1567336Z ./docs/2026-10-27/widget-polish/previous-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1567726Z ./docs/2026-10-27/widget-polish/dark-1487-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1568589Z ./docs/2026-10-27/widget-polish/dark-1280-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1569617Z ./docs/2026-10-27/widget-polish/charts-active.jpg
+publish	Upload static site	2026-11-03T08:15:32.1570683Z ./docs/2026-10-27/widget-polish/charts-idle.jpg
+publish	Upload static site	2026-11-03T08:15:32.1571763Z ./docs/2026-10-27/widget-polish/comparison-final.jpg
+publish	Upload static site	2026-11-03T08:15:32.1573486Z ./docs/2026-10-27/widget-polish/before-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1574553Z ./docs/2026-10-27/kpi-strip/
+publish	Upload static site	2026-11-03T08:15:32.1574857Z ./docs/2026-10-27/kpi-strip/dark-886.jpg
+publish	Upload static site	2026-11-03T08:15:32.1575384Z ./docs/2026-10-27/kpi-strip/light-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1576313Z ./docs/2026-10-27/kpi-strip/previous-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1576662Z ./docs/2026-10-27/kpi-strip/dark-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1577034Z ./docs/2026-10-27/kpi-strip/light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1577372Z ./docs/2026-10-27/kpi-strip/dark-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1578382Z ./docs/2026-10-27/compact-spacing/
+publish	Upload static site	2026-11-03T08:15:32.1578929Z ./docs/2026-10-27/compact-spacing/after-light-1280.jpg
+publish	Upload static site	2026-11-03T08:15:32.1579430Z ./docs/2026-10-27/compact-spacing/previous-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1579838Z ./docs/2026-10-27/compact-spacing/after-dark-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1580378Z ./docs/2026-10-27/compact-spacing/after-light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1580789Z ./docs/2026-10-27/compact-spacing/before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1581593Z ./docs/2026-10-27/compact-spacing/after-desktop.jpg
+publish	Upload static site	2026-11-03T08:15:32.1582671Z ./docs/2026-10-26/
+publish	Upload static site	2026-11-03T08:15:32.1582963Z ./docs/2026-10-26/kit2-review-session-01a17818/
+publish	Upload static site	2026-11-03T08:15:32.1583504Z ./docs/2026-10-26/kit2-review-session-01a17818/13-mobile-overview-preview-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1584185Z ./docs/2026-10-26/kit2-review-session-01a17818/09-region-details-light-900.jpg
+publish	Upload static site	2026-11-03T08:15:32.1584789Z ./docs/2026-10-26/kit2-review-session-01a17818/10-empty-light-390.jpg
+publish	Upload static site	2026-11-03T08:15:32.1585379Z ./docs/2026-10-26/kit2-review-session-01a17818/02-overview-dark-900-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1586283Z ./docs/2026-10-26/kit2-review-session-01a17818/01-overview-dark-1280-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1587211Z ./docs/2026-10-26/kit2-review-session-01a17818/04-table-dark-900-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1587785Z ./docs/2026-10-26/kit2-review-session-01a17818/08-legend-light-900.jpg
+publish	Upload static site	2026-11-03T08:15:32.1588331Z ./docs/2026-10-26/kit2-review-session-01a17818/preview-checks.json
+publish	Upload static site	2026-11-03T08:15:32.1588909Z ./docs/2026-10-26/kit2-review-session-01a17818/14-light-glass-preview-900.png
+publish	Upload static site	2026-11-03T08:15:32.1589643Z ./docs/2026-10-26/kit2-review-session-01a17818/03-overview-light-390-before.jpg
+publish	Upload static site	2026-11-03T08:15:32.1590313Z ./docs/2026-10-26/kit2-review-session-01a17818/checks.json
+publish	Upload static site	2026-11-03T08:15:32.1590847Z ./docs/2026-10-26/kit2-review-session-01a17818/07-map-light-900-contrast.jpg
+publish	Upload static site	2026-11-03T08:15:32.1591709Z ./docs/2026-10-26/kit2-review-session-01a17818/12-mobile-panorama-preview-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1592370Z ./docs/2026-10-26/kit2-review-session-01a17818/06-table-dark-900-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1592964Z ./docs/2026-10-26/kit2-review-session-01a17818/05-map-dark-900-after.jpg
+publish	Upload static site	2026-11-03T08:15:32.1593575Z ./docs/2026-10-26/kit2-review-session-01a17818/11-mobile-pages-preview-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1594460Z ./docs/releases.md
+publish	Upload static site	2026-11-03T08:15:32.1594759Z ./docs/2026-10-09/
+publish	Upload static site	2026-11-03T08:15:32.1595017Z ./docs/2026-10-09/regions-focus-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1595356Z ./docs/2026-10-09/regions-focus-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1598557Z ./docs/2026-10-09/regions-focus-phone.png
+publish	Upload static site	2026-11-03T08:15:32.1599671Z ./docs/2026-10-09/overview-light.png
+publish	Upload static site	2026-11-03T08:15:32.1603596Z ./docs/2026-10-09/design-qa.md
+publish	Upload static site	2026-11-03T08:15:32.1603905Z ./docs/2026-10-09/phone-light.png
+publish	Upload static site	2026-11-03T08:15:32.1604562Z ./docs/2026-10-09/phone-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1605479Z ./docs/2026-10-09/README.md
+publish	Upload static site	2026-11-03T08:15:32.1605820Z ./docs/2026-10-09/regions-risk-chips-phone.png
+publish	Upload static site	2026-11-03T08:15:32.1606962Z ./docs/2026-10-09/regions-focus-light.png
+publish	Upload static site	2026-11-03T08:15:32.1610373Z ./docs/2026-10-09/regions-risk-chips-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1613706Z ./docs/2026-10-09/overview-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1617480Z ./docs/2026-10-09/regions-risk-chips-light.png
+publish	Upload static site	2026-11-03T08:15:32.1620907Z ./docs/2026-10-09/widget-spec.png
+publish	Upload static site	2026-11-03T08:15:32.1623347Z ./docs/github-pages.md
+publish	Upload static site	2026-11-03T08:15:32.1623616Z ./docs/2026-11-03/
+publish	Upload static site	2026-11-03T08:15:32.1623879Z ./docs/2026-11-03/pr73-acceptance/
+publish	Upload static site	2026-11-03T08:15:32.1624206Z ./docs/2026-11-03/pr73-acceptance/fast.log
+publish	Upload static site	2026-11-03T08:15:32.1624641Z ./docs/2026-11-03/pr73-acceptance/numeric-partial-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1625420Z ./docs/2026-11-03/pr73-acceptance/numeric-partial-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1626619Z ./docs/2026-11-03/pr73-acceptance/numeric-partial-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1630075Z ./docs/2026-11-03/pr73-acceptance/numeric-unequal-approval-bases-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1631385Z ./docs/2026-11-03/pr73-acceptance/numeric-browser.log
+publish	Upload static site	2026-11-03T08:15:32.1631872Z ./docs/2026-11-03/pr73-acceptance/numeric-overview-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1632655Z ./docs/2026-11-03/pr73-acceptance/numeric-detail-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1634057Z ./docs/2026-11-03/pr73-acceptance/comparison-unequal-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1635281Z ./docs/2026-11-03/pr73-acceptance/numeric-model.log
+publish	Upload static site	2026-11-03T08:15:32.1635773Z ./docs/2026-11-03/pr73-acceptance/comparison-partial-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1638142Z ./docs/2026-11-03/pr73-acceptance/numeric-overview-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1641597Z ./docs/2026-11-03/pr73-acceptance/comparison-unequal-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1644177Z ./docs/2026-11-03/pr73-acceptance/comparison-partial-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1645205Z ./docs/2026-11-03/pr73-acceptance/comparison-small-base-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1646340Z ./docs/2026-11-03/pr73-acceptance/numeric-overview-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1649054Z ./docs/2026-11-03/pr73-acceptance/comparison-partial-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1650377Z ./docs/2026-11-03/pr73-acceptance/comparison-small-base-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1653599Z ./docs/2026-11-03/pr73-acceptance/numeric-no-data-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1654896Z ./docs/2026-11-03/pr73-acceptance/numeric-unequal-approval-bases-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1655866Z ./docs/2026-11-03/pr73-acceptance/README.md
+publish	Upload static site	2026-11-03T08:15:32.1656337Z ./docs/2026-11-03/pr73-acceptance/comparison-small-base-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1658812Z ./docs/2026-11-03/pr73-acceptance/comparison-unequal-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1662060Z ./docs/2026-11-03/pr73-acceptance/numeric-detail-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1662683Z ./docs/2026-11-03/pr73-acceptance/numeric-unequal-approval-bases-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1665914Z ./docs/2026-11-03/pr73-acceptance/comparison-unequal-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1666906Z ./docs/2026-11-03/pr73-acceptance/numeric-no-data-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1669587Z ./docs/2026-11-03/pr73-acceptance/numeric-no-data-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1673372Z ./docs/2026-11-03/pr73-acceptance/numeric-detail-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1673909Z ./docs/2026-11-03/pr73-acceptance/numeric-partial-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1676788Z ./docs/2026-11-03/pr73-acceptance/numeric-unequal-approval-bases-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1679514Z ./docs/2026-11-03/pr73-acceptance/comparison-partial-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1682753Z ./docs/2026-11-03/pr73-acceptance/numeric-overview-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1683962Z ./docs/2026-11-03/pr73-acceptance/numeric-no-data-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1685033Z ./docs/2026-11-03/pr73-acceptance/numeric-detail-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1686723Z ./docs/2026-11-03/pr73-acceptance/comparison-small-base-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1688128Z ./docs/2026-11-03/pr71-acceptance/
+publish	Upload static site	2026-11-03T08:15:32.1688459Z ./docs/2026-11-03/pr71-acceptance/fast.log
+publish	Upload static site	2026-11-03T08:15:32.1688896Z ./docs/2026-11-03/pr71-acceptance/detail-method-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1689434Z ./docs/2026-11-03/pr71-acceptance/family-mortgage-partial-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1690367Z ./docs/2026-11-03/pr71-acceptance/detail-method-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1691166Z ./docs/2026-11-03/pr71-acceptance/detail-method-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1693120Z ./docs/2026-11-03/pr71-acceptance/family-mortgage-partial-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1694307Z ./docs/2026-11-03/pr71-acceptance/family-mortgage-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1695994Z ./docs/2026-11-03/pr71-acceptance/detail-visual.json
+publish	Upload static site	2026-11-03T08:15:32.1696395Z ./docs/2026-11-03/pr71-acceptance/README.md
+publish	Upload static site	2026-11-03T08:15:32.1696763Z ./docs/2026-11-03/pr71-acceptance/mortgage.log
+publish	Upload static site	2026-11-03T08:15:32.1697170Z ./docs/2026-11-03/pr71-acceptance/family-mortgage-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1699265Z ./docs/2026-11-03/pr71-acceptance/family-mortgage-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1702962Z ./docs/2026-11-03/pr71-acceptance/family-mortgage-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1703980Z ./docs/2026-11-03/pr71-acceptance/detail-method-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1706134Z ./docs/2026-11-03/pr71-acceptance/visual.log
+publish	Upload static site	2026-11-03T08:15:32.1706474Z ./docs/2026-11-02/
+publish	Upload static site	2026-11-03T08:15:32.1706743Z ./docs/2026-11-02/publication/
+publish	Upload static site	2026-11-03T08:15:32.1707051Z ./docs/2026-11-02/publication/smoke.log
+publish	Upload static site	2026-11-03T08:15:32.1707386Z ./docs/2026-11-02/publication/pages.log
+publish	Upload static site	2026-11-03T08:15:32.1707832Z ./docs/2026-11-02/publication/ci.log
+publish	Upload static site	2026-11-03T08:15:32.1708901Z ./docs/2026-11-02/publication/published-index-light-1366.png
+publish	Upload static site	2026-11-03T08:15:32.1713080Z ./docs/2026-11-02/publication/published-regions-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1715947Z ./docs/2026-11-02/publication/published-accidents-dark-713.png
+publish	Upload static site	2026-11-03T08:15:32.1717134Z ./docs/2026-11-02/publication/published-index-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1719062Z ./docs/2026-11-02/publication/pages.json
+publish	Upload static site	2026-11-03T08:15:32.1719474Z ./docs/2026-11-02/publication/published-index-dark-1366.png
+publish	Upload static site	2026-11-03T08:15:32.1723908Z ./docs/2026-11-02/publication/published-index-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1725404Z ./docs/2026-11-02/publication/smoke.json
+publish	Upload static site	2026-11-03T08:15:32.1725759Z ./docs/2026-11-02/publication/README.md
+publish	Upload static site	2026-11-03T08:15:32.1726168Z ./docs/2026-11-02/publication/published-regions-light-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1727817Z ./docs/2026-11-02/publication/published-accidents-light-713.png
+publish	Upload static site	2026-11-03T08:15:32.1728564Z ./docs/2026-11-02/publication/ci.json
+publish	Upload static site	2026-11-03T08:15:32.1728930Z ./docs/2026-11-02/publication/published-hashes.json
+publish	Upload static site	2026-11-03T08:15:32.1729309Z ./docs/2026-11-02/table-header/
+publish	Upload static site	2026-11-03T08:15:32.1729695Z ./docs/2026-11-02/table-header/accidents-table-light-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1731300Z ./docs/2026-11-02/table-header/accidents-table-light-713.png
+publish	Upload static site	2026-11-03T08:15:32.1732245Z ./docs/2026-11-02/table-header/accidents-table-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1733038Z ./docs/2026-11-02/table-header/accidents-table-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1735361Z ./docs/2026-11-02/table-header/example-shell.json
+publish	Upload static site	2026-11-03T08:15:32.1737169Z ./docs/2026-11-02/table-header/accidents-table-dark-713.png
+publish	Upload static site	2026-11-03T08:15:32.1738335Z ./docs/2026-11-02/table-header/README.md
+publish	Upload static site	2026-11-03T08:15:32.1738687Z ./docs/2026-11-02/table-header/checks.log
+publish	Upload static site	2026-11-03T08:15:32.1739089Z ./docs/2026-11-02/table-header/accidents-table-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1740041Z ./docs/2026-11-02/example-shell/
+publish	Upload static site	2026-11-03T08:15:32.1740567Z ./docs/2026-11-02/example-shell/family-mortgage-light-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1743304Z ./docs/2026-11-02/example-shell/reference-dashboard-light-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1745722Z ./docs/2026-11-02/example-shell/dashboard-light-713.png
+publish	Upload static site	2026-11-03T08:15:32.1746959Z ./docs/2026-11-02/example-shell/accidents-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1749884Z ./docs/2026-11-02/example-shell/mobile-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1754058Z ./docs/2026-11-02/example-shell/fast-check.log
+publish	Upload static site	2026-11-03T08:15:32.1754463Z ./docs/2026-11-02/example-shell/regions-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1755215Z ./docs/2026-11-02/example-shell/mobile-light-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1758444Z ./docs/2026-11-02/example-shell/accidents-light-713.png
+publish	Upload static site	2026-11-03T08:15:32.1759892Z ./docs/2026-11-02/example-shell/mobile-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1761507Z ./docs/2026-11-02/example-shell/before-regions-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1764641Z ./docs/2026-11-02/example-shell/example-shell.json
+publish	Upload static site	2026-11-03T08:15:32.1766239Z ./docs/2026-11-02/example-shell/calendar-light-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1767976Z ./docs/2026-11-02/example-shell/dashboard-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1772116Z ./docs/2026-11-02/example-shell/dashboard-dark-713.png
+publish	Upload static site	2026-11-03T08:15:32.1773793Z ./docs/2026-11-02/example-shell/mobile-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1775536Z ./docs/2026-11-02/example-shell/reference-dashboard-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1776928Z ./docs/2026-11-02/example-shell/regions-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1777825Z ./docs/2026-11-02/example-shell/before-dashboard-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1782482Z ./docs/2026-11-02/example-shell/accidents-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1783662Z ./docs/2026-11-02/example-shell/full-suite-first.log
+publish	Upload static site	2026-11-03T08:15:32.1784304Z ./docs/2026-11-02/example-shell/family-mortgage-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1787469Z ./docs/2026-11-02/example-shell/family-mortgage-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1788471Z ./docs/2026-11-02/example-shell/README.md
+publish	Upload static site	2026-11-03T08:15:32.1788862Z ./docs/2026-11-02/example-shell/calendar-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1791520Z ./docs/2026-11-02/example-shell/reference-dashboard-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1792496Z ./docs/2026-11-02/example-shell/calendar-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1793632Z ./docs/2026-11-02/example-shell/accidents-light-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1795773Z ./docs/2026-11-02/example-shell/before.json
+publish	Upload static site	2026-11-03T08:15:32.1796173Z ./docs/2026-11-02/example-shell/calendar-light-713.png
+publish	Upload static site	2026-11-03T08:15:32.1796941Z ./docs/2026-11-02/example-shell/before-calendar-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1799951Z ./docs/2026-11-02/example-shell/before-accidents-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1803369Z ./docs/2026-11-02/example-shell/calendar-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1804569Z ./docs/2026-11-02/example-shell/accidents-dark-713.png
+publish	Upload static site	2026-11-03T08:15:32.1806507Z ./docs/2026-11-02/example-shell/full-suite-resume.log
+publish	Upload static site	2026-11-03T08:15:32.1806931Z ./docs/2026-11-02/example-shell/mortgage-retry.log
+publish	Upload static site	2026-11-03T08:15:32.1807336Z ./docs/2026-11-02/example-shell/calendar-dark-713.png
+publish	Upload static site	2026-11-03T08:15:32.1808036Z ./docs/2026-11-02/example-shell/family-mortgage-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1809087Z ./docs/2026-11-02/example-shell/dashboard-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1810446Z ./docs/2026-11-02/example-shell/reference-dashboard-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1813567Z ./docs/2026-11-02/example-shell/regions-dark-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1816560Z ./docs/2026-11-02/example-shell/regions-light-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1818948Z ./docs/2026-11-02/example-shell/dashboard-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1819897Z ./docs/2026-11-02/example-shell/dashboard-light-1470.png
+publish	Upload static site	2026-11-03T08:15:32.1823357Z ./docs/2026-11-02/example-shell/accidents-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1824361Z ./docs/OBSERVABILITY.md
+publish	Upload static site	2026-11-03T08:15:32.1824628Z ./docs/2026-10-30/
+publish	Upload static site	2026-11-03T08:15:32.1824887Z ./docs/2026-10-30/publication/
+publish	Upload static site	2026-11-03T08:15:32.1825206Z ./docs/2026-10-30/publication/smoke.log
+publish	Upload static site	2026-11-03T08:15:32.1825540Z ./docs/2026-10-30/publication/pages.log
+publish	Upload static site	2026-11-03T08:15:32.1825867Z ./docs/2026-10-30/publication/ci.log
+publish	Upload static site	2026-11-03T08:15:32.1826237Z ./docs/2026-10-30/publication/published-light-1366.png
+publish	Upload static site	2026-11-03T08:15:32.1829609Z ./docs/2026-10-30/publication/published-dark-1366.png
+publish	Upload static site	2026-11-03T08:15:32.1834407Z ./docs/2026-10-30/publication/published-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1836077Z ./docs/2026-10-30/publication/pages.json
+publish	Upload static site	2026-11-03T08:15:32.1836420Z ./docs/2026-10-30/publication/hashes.log
+publish	Upload static site	2026-11-03T08:15:32.1836766Z ./docs/2026-10-30/publication/smoke.json
+publish	Upload static site	2026-11-03T08:15:32.1837109Z ./docs/2026-10-30/publication/README.md
+publish	Upload static site	2026-11-03T08:15:32.1837446Z ./docs/2026-10-30/publication/published-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1838145Z ./docs/2026-10-30/publication/ci.json
+publish	Upload static site	2026-11-03T08:15:32.1838528Z ./docs/2026-10-30/publication/published-hashes.json
+publish	Upload static site	2026-11-03T08:15:32.1838921Z ./docs/2026-10-30/compact-system/
+publish	Upload static site	2026-11-03T08:15:32.1839308Z ./docs/2026-10-30/compact-system/example-regions-light.png
+publish	Upload static site	2026-11-03T08:15:32.1841872Z ./docs/2026-10-30/compact-system/example-accidents-light.png
+publish	Upload static site	2026-11-03T08:15:32.1844279Z ./docs/2026-10-30/compact-system/example-dashboard-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1848447Z ./docs/2026-10-30/compact-system/full-suite/
+publish	Upload static site	2026-11-03T08:15:32.1848963Z ./docs/2026-10-30/compact-system/full-suite/docs-component-field-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1850554Z ./docs/2026-10-30/compact-system/full-suite/dashboard-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1855267Z ./docs/2026-10-30/compact-system/full-suite/docs-component-table-light-320.png
+publish	Upload static site	2026-11-03T08:15:32.1855956Z ./docs/2026-10-30/compact-system/full-suite/docs-component-select-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1857336Z ./docs/2026-10-30/compact-system/full-suite/docs-component-button-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1858986Z ./docs/2026-10-30/compact-system/full-suite/sdk-snippets.json
+publish	Upload static site	2026-11-03T08:15:32.1859474Z ./docs/2026-10-30/compact-system/full-suite/runtime.json
+publish	Upload static site	2026-11-03T08:15:32.1860027Z ./docs/2026-10-30/compact-system/full-suite/docs-component-search-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1861117Z ./docs/2026-10-30/compact-system/full-suite/docs-index-light-320.png
+publish	Upload static site	2026-11-03T08:15:32.1862656Z ./docs/2026-10-30/compact-system/asymmetric.json
+publish	Upload static site	2026-11-03T08:15:32.1863074Z ./docs/2026-10-30/compact-system/home-light-1366.png
+publish	Upload static site	2026-11-03T08:15:32.1865963Z ./docs/2026-10-30/compact-system/stress-390.png
+publish	Upload static site	2026-11-03T08:15:32.1867328Z ./docs/2026-10-30/compact-system/home-dark-768.png
+publish	Upload static site	2026-11-03T08:15:32.1871103Z ./docs/2026-10-30/compact-system/example-family-mortgage-light.png
+publish	Upload static site	2026-11-03T08:15:32.1873820Z ./docs/2026-10-30/compact-system/home-light-768.png
+publish	Upload static site	2026-11-03T08:15:32.1876803Z ./docs/2026-10-30/compact-system/example-calendar-light.png
+publish	Upload static site	2026-11-03T08:15:32.1878876Z ./docs/2026-10-30/compact-system/home-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1880990Z ./docs/2026-10-30/compact-system/example-calendar-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1883900Z ./docs/2026-10-30/compact-system/modal-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1884368Z ./docs/2026-10-30/compact-system/home-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1887794Z ./docs/2026-10-30/compact-system/home-light-320.png
+publish	Upload static site	2026-11-03T08:15:32.1888805Z ./docs/2026-10-30/compact-system/example-mobile-light.png
+publish	Upload static site	2026-11-03T08:15:32.1892204Z ./docs/2026-10-30/compact-system/home-dark-1920.png
+publish	Upload static site	2026-11-03T08:15:32.1899292Z ./docs/2026-10-30/compact-system/home-light-886.png
+publish	Upload static site	2026-11-03T08:15:32.1902422Z ./docs/2026-10-30/compact-system/home-light-375.png
+publish	Upload static site	2026-11-03T08:15:32.1903875Z ./docs/2026-10-30/compact-system/modal-dark-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1905260Z ./docs/2026-10-30/compact-system/home-light-390.png
+publish	Upload static site	2026-11-03T08:15:32.1906847Z ./docs/2026-10-30/compact-system/home-dark-1366.png
+publish	Upload static site	2026-11-03T08:15:32.1911952Z ./docs/2026-10-30/compact-system/navigation.log
+publish	Upload static site	2026-11-03T08:15:32.1912381Z ./docs/2026-10-30/compact-system/modal-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1913147Z ./docs/2026-10-30/compact-system/example-accidents-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1916521Z ./docs/2026-10-30/compact-system/home-light-1280.png
+publish	Upload static site	2026-11-03T08:15:32.1919229Z ./docs/2026-10-30/compact-system/README.md
+publish	Upload static site	2026-11-03T08:15:32.1919616Z ./docs/2026-10-30/compact-system/measurements.json
+publish	Upload static site	2026-11-03T08:15:32.1924586Z ./docs/2026-10-30/compact-system/checks.log
+publish	Upload static site	2026-11-03T08:15:32.1924987Z ./docs/2026-10-30/compact-system/home-light-1440.png
+publish	Upload static site	2026-11-03T08:15:32.1929412Z ./docs/2026-10-30/compact-system/stress-683.png
+publish	Upload static site	2026-11-03T08:15:32.1932266Z ./docs/2026-10-30/compact-system/example-regions-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1935482Z ./docs/2026-10-30/compact-system/example-dashboard-light.png
+publish	Upload static site	2026-11-03T08:15:32.1938572Z ./docs/2026-10-30/compact-system/home-dark-1440.png
+publish	Upload static site	2026-11-03T08:15:32.1944132Z ./docs/2026-10-30/compact-system/home-dark-320.png
+publish	Upload static site	2026-11-03T08:15:32.1945163Z ./docs/2026-10-30/compact-system/home-light-1920.png
+publish	Upload static site	2026-11-03T08:15:32.1951367Z ./docs/2026-10-30/compact-system/modal-dark-390.png
+publish	Upload static site	2026-11-03T08:15:32.1951823Z ./docs/2026-10-30/compact-system/menu-3-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1955477Z ./docs/2026-10-30/compact-system/example-mobile-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1959264Z ./docs/2026-10-30/compact-system/home-dark-886.png
+publish	Upload static site	2026-11-03T08:15:32.1962984Z ./docs/2026-10-30/compact-system/home-dark-375.png
+publish	Upload static site	2026-11-03T08:15:32.1964688Z ./docs/2026-10-30/compact-system/menu-2-light.png
+publish	Upload static site	2026-11-03T08:15:32.1968262Z ./docs/2026-10-30/compact-system/menu-2-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1972812Z ./docs/2026-10-30/compact-system/menu-3-light.png
+publish	Upload static site	2026-11-03T08:15:32.1975795Z ./docs/2026-10-30/compact-system/example-family-mortgage-dark.png
+publish	Upload static site	2026-11-03T08:15:32.1979111Z ./docs/2026-10-30/compact-system/geometry.log
+publish	Upload static site	2026-11-03T08:15:32.1979489Z ./docs/family-mortgage.md
+publish	Upload static site	2026-11-03T08:15:32.1979785Z ./docs/reference-server.md
+publish	Upload static site	2026-11-03T08:15:32.1980064Z ./docs/DR.md
+publish	Upload static site	2026-11-03T08:15:32.1980565Z ./docs/OPERATIONS.md
+publish	Upload static site	2026-11-03T08:15:32.1980833Z ./component-car.html
+publish	Upload static site	2026-11-03T08:15:32.1981102Z ./component-breadcrumbs.md
+publish	Upload static site	2026-11-03T08:15:32.1981387Z ./component-table.html
+publish	Upload static site	2026-11-03T08:15:32.1981667Z ./component-calendar.html
+publish	Upload static site	2026-11-03T08:15:32.1981969Z ./component-density-controls.html
+publish	Upload static site	2026-11-03T08:15:32.1982290Z ./component-chip.html
+publish	Upload static site	2026-11-03T08:15:32.1982567Z ./component-card-scroll.md
+publish	Upload static site	2026-11-03T08:15:32.1982859Z ./kit-manifest.json
+publish	Upload static site	2026-11-03T08:15:32.1984288Z ./component-segment.html
+publish	Upload static site	2026-11-03T08:15:32.1984576Z ./component-pager.md
+publish	Upload static site	2026-11-03T08:15:32.1984850Z ./component-tree-select.md
+publish	Upload static site	2026-11-03T08:15:32.1985142Z ./component-fullscreen.md
+publish	Upload static site	2026-11-03T08:15:32.1985427Z ./component-saved-views.md
+publish	Upload static site	2026-11-03T08:15:32.1985724Z ./component-details-sidebar.md
+publish	Upload static site	2026-11-03T08:15:32.1986019Z ./index.html
+publish	Upload static site	2026-11-03T08:15:32.1986510Z ./component-segment.md
+publish	Upload static site	2026-11-03T08:15:32.1986799Z ./component-breadcrumbs.html
+publish	Upload static site	2026-11-03T08:15:32.1987111Z ./component-badge.html
+publish	Upload static site	2026-11-03T08:15:32.1987376Z ./SECURITY.md
+publish	Upload static site	2026-11-03T08:15:32.1987625Z ./component-chips-input.md
+publish	Upload static site	2026-11-03T08:15:32.1987909Z ./REVIEW.md
+publish	Upload static site	2026-11-03T08:15:32.1988580Z ./component-adaptive-icons.html
+publish	Upload static site	2026-11-03T08:15:32.1988887Z ./component-hero.md
+publish	Upload static site	2026-11-03T08:15:32.1989146Z ./component-pager.html
+publish	Upload static site	2026-11-03T08:15:32.1989430Z ./DESIGN-UX-ACCESSIBILITY.md
+publish	Upload static site	2026-11-03T08:15:32.1989964Z ./component-field.md
+publish	Upload static site	2026-11-03T08:15:32.1993906Z ##[endgroup]
+publish	Upload static site	2026-11-03T08:15:32.2007113Z ##[end-action id=__actions_upload-pages-artifact.__run;outcome=success;conclusion=success;duration_ms=126]
+publish	Upload static site	2026-11-03T08:15:32.2011644Z ##[start-action display=Archive artifact;id=__actions_upload-pages-artifact.__run_2]
+publish	Upload static site	2026-11-03T08:15:32.2016835Z ##[end-action id=__actions_upload-pages-artifact.__run_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+publish	Upload static site	2026-11-03T08:15:32.2019587Z ##[start-action display=Archive artifact;id=__actions_upload-pages-artifact.__run_3]
+publish	Upload static site	2026-11-03T08:15:32.2023003Z ##[end-action id=__actions_upload-pages-artifact.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+publish	Upload static site	2026-11-03T08:15:32.2024626Z ##[start-action display=Upload artifact;id=__actions_upload-pages-artifact.upload-artifact]
+publish	Upload static site	2026-11-03T08:15:32.2079973Z ##[group]Run actions/upload-artifact@v4
+publish	Upload static site	2026-11-03T08:15:32.2080395Z with:
+publish	Upload static site	2026-11-03T08:15:32.2080577Z   name: github-pages
+publish	Upload static site	2026-11-03T08:15:32.2080811Z   path: /home/runner/work/_temp/artifact.tar
+publish	Upload static site	2026-11-03T08:15:32.2081056Z   retention-days: 1
+publish	Upload static site	2026-11-03T08:15:32.2081238Z   if-no-files-found: error
+publish	Upload static site	2026-11-03T08:15:32.2081436Z   compression-level: 6
+publish	Upload static site	2026-11-03T08:15:32.2081618Z   overwrite: false
+publish	Upload static site	2026-11-03T08:15:32.2081799Z   include-hidden-files: false
+publish	Upload static site	2026-11-03T08:15:32.2081995Z ##[endgroup]
+publish	Upload static site	2026-11-03T08:15:32.3427247Z (node:2263) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+publish	Upload static site	2026-11-03T08:15:32.3428048Z (Use `node --trace-deprecation ...` to show where the warning was created)
+publish	Upload static site	2026-11-03T08:15:32.3463466Z With the provided path, there will be 1 file uploaded
+publish	Upload static site	2026-11-03T08:15:32.3468098Z Artifact name is valid!
+publish	Upload static site	2026-11-03T08:15:32.3468579Z Root directory input is valid!
+publish	Upload static site	2026-11-03T08:15:32.5993655Z Beginning upload of artifact content to blob storage
+publish	Upload static site	2026-11-03T08:15:32.9834579Z (node:2263) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+publish	Upload static site	2026-11-03T08:15:33.3201336Z Uploaded bytes 8388608
+publish	Upload static site	2026-11-03T08:15:33.5749494Z Uploaded bytes 16777216
+publish	Upload static site	2026-11-03T08:15:33.5952138Z Uploaded bytes 25165824
+publish	Upload static site	2026-11-03T08:15:33.8107006Z Uploaded bytes 33554432
+publish	Upload static site	2026-11-03T08:15:33.9587269Z Uploaded bytes 41943040
+publish	Upload static site	2026-11-03T08:15:34.2383836Z Uploaded bytes 50331648
+publish	Upload static site	2026-11-03T08:15:34.4864531Z Uploaded bytes 58720256
+publish	Upload static site	2026-11-03T08:15:34.6380350Z Uploaded bytes 67108864
+publish	Upload static site	2026-11-03T08:15:34.8992661Z Uploaded bytes 75497472
+publish	Upload static site	2026-11-03T08:15:35.0832212Z Uploaded bytes 83886080
+publish	Upload static site	2026-11-03T08:15:35.2941178Z Uploaded bytes 92274688
+publish	Upload static site	2026-11-03T08:15:35.5276661Z Uploaded bytes 100663296
+publish	Upload static site	2026-11-03T08:15:35.7461334Z Uploaded bytes 109051904
+publish	Upload static site	2026-11-03T08:15:35.9604136Z Uploaded bytes 117440512
+publish	Upload static site	2026-11-03T08:15:36.0892507Z Uploaded bytes 122529571
+publish	Upload static site	2026-11-03T08:15:36.1244696Z Finished uploading artifact content to blob storage!
+publish	Upload static site	2026-11-03T08:15:36.1249480Z SHA256 digest of uploaded artifact zip is cc6046d2e2a35e9d59ea1d54b00cb0ecef1c66de02da7bc94dcc26fa2af1dd4b
+publish	Upload static site	2026-11-03T08:15:36.1251207Z Finalizing artifact upload
+publish	Upload static site	2026-11-03T08:15:36.5645407Z Artifact github-pages.zip successfully finalized. Artifact ID 13215380513
+publish	Upload static site	2026-11-03T08:15:36.5646283Z Artifact github-pages has been successfully uploaded! Final size is 122529571 bytes. Artifact ID is 13215380513
+publish	Upload static site	2026-11-03T08:15:36.5652724Z Artifact download URL: https://github.com/aleksandradovgopolova-boop/dashboard-kit/actions/runs/41601910731/artifacts/13215380513
+publish	Upload static site	2026-11-03T08:15:36.5798896Z ##[end-action id=__actions_upload-pages-artifact.upload-artifact;outcome=success;conclusion=success;duration_ms=4377]
+publish	Deploy to GitHub Pages	﻿2026-11-03T08:15:36.5869011Z ##[group]Run actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.5869344Z with:
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.5871405Z   token: ***
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.5871587Z   timeout: 600000
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.5871756Z   error_count: 10
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.5871928Z   reporting_interval: 5000
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.5872130Z   artifact_name: github-pages
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.5872339Z   preview: false
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.5872523Z ##[endgroup]
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.7285549Z (node:2276) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.7286152Z (Use `node --trace-deprecation ...` to show where the warning was created)
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.8408288Z Fetching artifact metadata for "github-pages" in this workflow run
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.9980515Z Found 1 artifact(s)
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.9994536Z Creating Pages deployment with payload:
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.9994959Z {
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.9995301Z 	"artifact_id": 13215380513,
+publish	Deploy to GitHub Pages	2026-11-03T08:15:36.9995788Z 	"pages_build_version": "e869cfd9293c33305aa9e8e2cb20b7830d3ea535",
+publish	Deploy to GitHub Pages	2026-11-03T08:15:37.0031272Z 	"oidc_token": "***"
+publish	Deploy to GitHub Pages	2026-11-03T08:15:37.0031487Z }
+publish	Deploy to GitHub Pages	2026-11-03T08:15:37.9233204Z Created deployment for e869cfd9293c33305aa9e8e2cb20b7830d3ea535, ID: e869cfd9293c33305aa9e8e2cb20b7830d3ea535
+publish	Deploy to GitHub Pages	2026-11-03T08:15:42.9254851Z Getting Pages deployment status...
+publish	Deploy to GitHub Pages	2026-11-03T08:15:43.1953628Z Current status: deployment_in_progress
+publish	Deploy to GitHub Pages	2026-11-03T08:15:48.1964170Z Getting Pages deployment status...
+publish	Deploy to GitHub Pages	2026-11-03T08:15:48.3477291Z Reported success!
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	﻿2026-11-03T08:15:48.3710513Z Post job cleanup.
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4399925Z [command]/usr/bin/git version
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4470764Z git version 2.56.0
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4501295Z Temporarily overriding HOME='/home/runner/work/_temp/aaf4beb6-65c3-459c-b919-b5153c6730e2' before making global git config changes
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4502329Z Adding repository directory to the temporary git global config as a safe directory
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4505670Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/dashboard-kit/dashboard-kit
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4537149Z Removing SSH command configuration
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4542506Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4575886Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4839891Z Removing HTTP extra header
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4845488Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.4880675Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.5131967Z Removing includeIf entries pointing to credentials config files
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.5137557Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+publish	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-11-03T08:15:48.5167555Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+publish	Complete job	﻿2026-11-03T08:15:48.5540912Z Evaluate and set environment url
+publish	Complete job	2026-11-03T08:15:48.5544311Z Evaluated environment url: https://aleksandradovgopolova-boop.github.io/dashboard-kit/
+publish	Complete job	2026-11-03T08:15:48.5545129Z Cleaning up orphan processes
+publish	Complete job	2026-11-03T08:15:48.5852789Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

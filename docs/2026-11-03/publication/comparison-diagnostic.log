@@ -1,0 +1,8 @@
+file:///private/tmp/kit-nov3-public-diagnostic.mjs:58
+   if(!state.comparison.tipVisible||state.comparison.delta||(width===1280&&state.comparison.width>=state.comparison.container/2)){const shot=await send('Page.captureScreenshot',{format:'png'});await writeFile(resolve(out,'diagnostic-comparison.png'),Buffer.from(shot.data,'base64'));throw Error('Public comparison reason '+JSON.stringify(state.comparison));}
+                                                                                                                                                                                                                                                                                                 ^
+
+Error: Public comparison reason {"text":"Неполный период","tipVisible":false,"reason":"Один из периодов не завершён или данные за него неполны. Сравнение отключено.","width":136.8125,"container":1202,"delta":false}
+    at file:///private/tmp/kit-nov3-public-diagnostic.mjs:58:290
+
+Node.js v26.7.0
