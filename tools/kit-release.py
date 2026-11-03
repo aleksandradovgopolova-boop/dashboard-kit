@@ -20,7 +20,7 @@ FIXED_FILES = {
     "css/chrome.css", "css/glass.css", "js/dk-dashboard.js",
     "reference-dashboard.html", "css/reference-dashboard.css",
     "js/reference-dashboard.js", "data/reference-dashboard.json",
-    "docs/dashboard-data.md", "docs/named-metrics.md", "docs/releases.md", "docs/reference-server.md",
+    "docs/dashboard-data.md", "docs/releases.md", "docs/reference-server.md",
     "tools/reference-server.py",
     "family-mortgage.html", "js/family-mortgage-data.js", "js/family-mortgage.js",
     "data/family-mortgage-observations.json", "data/regions.topojson", "data/regions-tiles.json",
@@ -84,6 +84,9 @@ def digest(document):
 def runtime_files(root):
     """Explicit runtime roots, plus every asset declared by the generated catalog."""
     names = set(FIXED_FILES)
+    # Older pinned packages predate the optional named-metric module.
+    if (root / "js/dk-metrics.js").exists():
+        names.add("docs/named-metrics.md")
     names.update(p.relative_to(root).as_posix() for p in (root / "js").glob("dk-*.js"))
     for folder in ("vendor", "icons", "assets"):
         for path in (root / folder).rglob("*"):
