@@ -6,6 +6,7 @@
 #d-dashboard .dk-top__path { font: var(--type-caption); color: var(--ink-2); }
 #d-dashboard #d-views { margin: 0; flex: none; }
 #d-dashboard #d-views [aria-selected="true"] { background: var(--surface); color: var(--ink); }
+#d-dashboard #d-views button:focus-visible { background:var(--control-focus); color:var(--control-focus-ink); }
 #d-dashboard #t-period { max-width: 13em; font: var(--type-caption); }
 #d-dashboard .dk-wrap--monitor { padding-top: var(--space-4); }
 #d-dashboard .d-status-row { display: grid; grid-template-columns: 2fr 1fr; gap: var(--grid-gap); margin-bottom: var(--grid-gap); }
@@ -29,7 +30,6 @@
 #d-dashboard #d-risk-keys b { color: var(--ink); }
 #d-dashboard .d-map-summary .dk-caption { font: var(--type-caption); }
 #d-dashboard #d-map-controls .dk-seg { font: var(--type-caption); }
-#d-dashboard #d-map-controls button { padding-inline: var(--space-4); }
 #d-dashboard #d-map .dk-map__pan { max-height: 220px; }
 #d-dashboard .dk-map__zoom { border: 0; }
 #d-dashboard .dk-map__zoom button + button { border-top: 0; }
@@ -67,8 +67,8 @@
   #d-dashboard .dk-top__title { font: var(--type-h2); }
   #d-dashboard .dk-top__path { display: none; }
   #d-dashboard .dk-top__tools { display: flex; flex-wrap: wrap; }
-  #d-dashboard #d-views { display: flex; flex: 1 1 100%; order: 3; }
-  #d-dashboard #d-views button { flex: 1; min-width: 0; }
+  #d-dashboard #d-views { display: flex; flex: 0 0 auto; order: 3; }
+  #d-dashboard #d-views button { flex: none; min-width: 0; }
   #d-dashboard #t-period { max-width: none; }
   #d-dashboard #d-alert { display: flex; flex-wrap: nowrap; }
   #d-dashboard #d-alert > .dk-widget-icon { display: none; }
@@ -133,8 +133,8 @@
  #d-dashboard .dk-top__titles { grid-area:title; order:0; }
  #d-dashboard .dk-top__tools { display:contents; }
  #d-dashboard .dk-top__tools > .dk-seg:not(#d-views) { grid-area:tools; }
- #d-dashboard #d-views { grid-area:views; width:100%; min-width:0; overflow-x:auto; }
- #d-dashboard #d-views button { flex:1 0 auto; min-width:max-content; height:auto; min-height:var(--control-md); }
+ #d-dashboard #d-views { grid-area:views; width:max-content; justify-self:start; min-width:0; overflow-x:auto; }
+ #d-dashboard #d-views button { flex:none; min-width:0; height:auto; }
 }
 @media(max-width:1023px) {
  #d-dashboard .dk-top { grid-template-columns:auto minmax(0,1fr) auto; grid-template-areas:"burger title tools" "views views views"; }

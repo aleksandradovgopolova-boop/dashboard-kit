@@ -229,9 +229,10 @@ try {
       assert(await evaluate(`(()=>{
         const tabs=[...document.querySelectorAll('#d-views [role="tab"]')];
         const boxes=tabs.map(el=>el.getBoundingClientRect());
-        return tabs.map(el=>el.textContent.trim()).join('|')==='Обзор|Работа|Аналитика' &&
+        return tabs.map(el=>el.getAttribute('aria-label')).join('|')==='Обзор|Работа|Аналитика' &&
+          tabs.every(el=>!el.textContent.trim()&&el.querySelector('svg[aria-hidden="true"]')&&el.getAttribute('title')===el.getAttribute('aria-label')) &&
           boxes.every(box=>Math.abs(box.top-boxes[0].top)<1 && box.left>=0 && box.right<=innerWidth);
-      })()`), `${theme}/${width}: approved short view names stay in one visible row`);
+      })()`), `${theme}/${width}: named icon-only view controls stay in one visible row`);
       assert(await evaluate(`(()=>{
         const text=document.querySelector('.dk-banner__text').getBoundingClientRect();
         const action=document.querySelector('.dk-banner > .dk-btn').getBoundingClientRect();

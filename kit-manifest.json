@@ -392,9 +392,9 @@
      "what": "Тихая кнопка без заливки."
     },
     {
-     "name": "dk-btn--sm, dk-btn--lg",
+     "name": "dk-btn--sm, dk-btn--md, dk-btn--lg",
      "type": "класс",
-     "what": "Высота 32 или 44; по умолчанию 36."
+     "what": "Высота 32 / 36 / 44; по умолчанию S (32)."
     },
     {
      "name": "dk-iconbtn",
@@ -426,7 +426,7 @@
     "Кнопка, которая ведёт на другую страницу, — это ссылка, и выглядеть должна ссылкой."
    ],
    "a11y": [
-    "Клавиатура. Настоящий `<button>`: Tab, Enter и пробел работают сами. Кольцо фокуса — только при навигации с клавиатуры.",
+    "Клавиатура. Настоящий `<button>`: Tab, Enter и пробел работают сами. Контрастная заливка фокуса без обводки — только при навигации с клавиатуры.",
     "Подписи. Кнопка-значок обязана иметь `aria-label`; проверка на витрине это не ловит — на совести автора.",
     "Контраст. Подпись на основной кнопке и силуэт кнопки на поверхности проверяются проверкой КНОПКА на всех акцентах в обеих темах.",
     "Недоступная нативная кнопка с `disabled` пропускается при Tab; причина видна рядом и доступна при чтении страницы."
@@ -440,10 +440,12 @@
     "dk-btn",
     "dk-btn--ghost",
     "dk-btn--lg",
+    "dk-btn--md",
     "dk-btn--primary",
     "dk-btn--sm",
     "dk-iconbtn",
     "dk-iconbtn--lg",
+    "dk-iconbtn--md",
     "dk-iconbtn--sm"
    ],
    "include": []
@@ -493,7 +495,7 @@
      "what": "«true» у выбранной кнопки; страница переключает сама."
     },
     {
-     "name": "dk-seg--sm, dk-seg--lg",
+     "name": "dk-seg--sm, dk-seg--md, dk-seg--lg",
      "type": "класс",
      "what": "Размер группы."
     },
@@ -508,11 +510,11 @@
      "what": "Вариант недоступен — например, нет данных для плиток."
     }
    ],
-   "example": "<div class=\"dk-seg\" role=\"group\" aria-label=\"Вид данных\">\n  <button type=\"button\" data-view=\"map\" aria-pressed=\"true\">Карта</button>\n  <button type=\"button\" data-view=\"tiles\" aria-pressed=\"false\">Плитки</button>\n</div>\n\n<script>\nseg.addEventListener('click', function (e) {\n  var b = e.target.closest('button[data-view]');\n  if (!b) return;\n  seg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });\n  map.view = b.dataset.view;   // например, dkMap\n});\n</script>",
+   "example": "<div class=\"dk-seg dk-seg--icons\" role=\"group\" aria-label=\"Вид данных\">\n  <button type=\"button\" data-view=\"map\" aria-pressed=\"true\" aria-label=\"Карта\" title=\"Карта\"><svg class=\"dk-i\" aria-hidden=\"true\"><use href=\"#ti-map\"/></svg></button>\n  <button type=\"button\" data-view=\"tiles\" aria-pressed=\"false\" aria-label=\"Плитки\" title=\"Плитки\"><svg class=\"dk-i\" aria-hidden=\"true\"><use href=\"#ti-layout-grid\"/></svg></button>\n</div>\n\n<script>\nseg.addEventListener('click', function (e) {\n  var b = e.target.closest('button[data-view]');\n  if (!b) return;\n  seg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });\n  map.view = b.dataset.view;   // например, dkMap\n});\n</script>",
    "rules": [
     "Короткие подписи одной формы: «Карта / Плитки», «7 дней / 30 дней».",
     "Первым стоит вид по умолчанию, и он же выбран при открытии.",
-    "Значок и слово вместе; только значки — когда у группы есть aria-label."
+    "Для вида по умолчанию значки без текста: у каждой кнопки aria-label и подсказка. Для периода и неоднозначных вариантов сохраняйте текст."
    ],
    "avoid": [
     "«Показать карту / Показать плитки» — глаголы у сегмента лишние.",
@@ -534,6 +536,7 @@
     "dk-seg",
     "dk-seg--icons",
     "dk-seg--lg",
+    "dk-seg--md",
     "dk-seg--sm"
    ],
    "include": []
@@ -6663,7 +6666,7 @@
  "hooks": {},
  "counts": {
   "parts": 67,
-  "classes": 518,
+  "classes": 521,
   "functions": 50,
   "chart_types": 12
  }

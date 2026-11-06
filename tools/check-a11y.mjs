@@ -102,6 +102,13 @@ function tagReachable() {
   };
   let n = 0;
   const expected = [];
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=1;
+  const ctx=canvas.getContext('2d',{willReadFrequently:true});
+  const rgba=color=>{ctx.clearRect(0,0,1,1);ctx.fillStyle=color;ctx.fillRect(0,0,1,1);return [...ctx.getImageData(0,0,1,1).data];};
+  const backdrop=e=>{
+    const layers=[];for(let a=e;a;a=a.parentElement)layers.push(rgba(getComputedStyle(a).backgroundColor));
+    let out=[255,255,255];for(const c of layers.reverse()){const alpha=c[3]/255;out=out.map((v,i)=>c[i]*alpha+v*(1-alpha));}return out;
+  };
   for (const e of document.querySelectorAll(sel)) {
     if (!own(e) || e.disabled) continue;
     if (e.matches('input[type=hidden]') || e.closest('[inert], [hidden], .dk-vh, .dk-skip')) continue;
@@ -112,6 +119,7 @@ function tagReachable() {
     if (r.width < 2 || r.height < 2) continue;
     if (getComputedStyle(e).pointerEvents === 'none') continue;
     e.setAttribute('data-a11y', String(n));
+    e.setAttribute('data-a11y-background',JSON.stringify(backdrop(e)));
     expected.push({ idx: n, label: label(e) });
     n++;
   }
@@ -131,13 +139,25 @@ function activeState() {
   const hasRing = n => { const s = getComputedStyle(n);
     return (s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0) || s.boxShadow !== 'none'; };
   let ring = hasRing(e);
+  // A fill is an approved focus indicator for buttons/segments. It must
+  // change visibly (3:1) and retain readable text (4.5:1), not just exist.
+  let fill=false;
+  if(e.matches('.dk-btn,.dk-iconbtn,.dk-seg button')&&e.matches(':focus-visible')){
+    const canvas=document.createElement('canvas');canvas.width=canvas.height=1;
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    const rgba=color=>{ctx.clearRect(0,0,1,1);ctx.fillStyle=color;ctx.fillRect(0,0,1,1);return [...ctx.getImageData(0,0,1,1).data];};
+    const luminance=c=>c.slice(0,3).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((v,x,i)=>v+x*[.2126,.7152,.0722][i],0);
+    const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+    const s=getComputedStyle(e),bg=rgba(s.backgroundColor),ink=rgba(s.color),before=JSON.parse(e.getAttribute('data-a11y-background')||'null');
+    fill=!!before&&bg[3]===255&&contrast(bg,before)>=3&&contrast(bg,ink)>=4.5;
+  }
   for (let a = e.parentElement; !ring && a && a !== document.body; a = a.parentElement) {
     if (a.matches(':focus-within') && hasRing(a)) ring = true;
   }
   let visible = false; try { visible = e.matches(':focus-visible'); } catch { visible = true; }
   const own = (typeof e.className === 'string' && e.className.trim()) ? '.' + e.className.trim().split(/\s+/).slice(0, 2).join('.') : '';
   const txt = (e.getAttribute('aria-label') || e.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 24);
-  return { idx: e.getAttribute('data-a11y'), ring, keyboard: visible,
+  return { idx: e.getAttribute('data-a11y'), ring:ring||fill, keyboard: visible,
     label: e.tagName.toLowerCase() + own + (txt ? ` «${txt}»` : '') };
 }
 
@@ -212,7 +232,7 @@ async function checkPage(b, base, page) {
       problems.push('обход Tab не состоялся: фокус не попал ни на один контрол — проверка клавиатуры недействительна');
     } else {
       for (const m of missed.slice(0, 12)) problems.push(`контрол недостижим с клавиатуры (Tab до него не доходит): ${m.label}`);
-      for (const [, label] of [...noRing].slice(0, 12)) problems.push(`фокус не виден на контроле (нет кольца при клавиатурном фокусе): ${label}`);
+      for (const [, label] of [...noRing].slice(0, 12)) problems.push(`фокус не виден на контроле (нет контура или контрастной заливки при клавиатурном фокусе): ${label}`);
     }
 
     /* 2. ИМЯ. Дерево доступности — то же, что читает скринридер. Нужен не наш

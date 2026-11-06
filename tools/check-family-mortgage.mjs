@@ -67,10 +67,14 @@ try {
   await mkdir(evidence, {recursive:true});
 
   const equalHeaderInsets = async () => {
-    const controls = await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__trigger,.fm-topbar .dk-iconbtn,.fm-topbar__tools .dk-seg button,.fm-filters')).filter(x=>x.getClientRects().length).map(x=>{const s=getComputedStyle(x),r=x.getBoundingClientRect(),b=Array.from(x.children).filter(n=>n.getClientRects().length).map(n=>n.getBoundingClientRect());return {name:x.className,padding:[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat),insets:x.matches('.dk-select__trigger')?[Math.min(...b.map(n=>n.top))-r.top,r.right-Math.max(...b.map(n=>n.right)),r.bottom-Math.max(...b.map(n=>n.bottom)),Math.min(...b.map(n=>n.left))-r.left]:[]};})`);
+    const controls = await evaluate(`Array.from(document.querySelectorAll('.fm-topbar .dk-select__trigger,.fm-topbar .dk-iconbtn,.fm-topbar__tools .dk-seg button,.fm-filters')).filter(x=>x.getClientRects().length).map(x=>{const s=getComputedStyle(x),r=x.getBoundingClientRect(),b=Array.from(x.children).filter(n=>n.getClientRects().length).map(n=>n.getBoundingClientRect());return {name:x.className,leftInset:parseFloat(s.getPropertyValue('--field-inset')),padding:[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat),insets:x.matches('.dk-select__trigger')?[Math.min(...b.map(n=>n.top))-r.top,r.right-Math.max(...b.map(n=>n.right)),r.bottom-Math.max(...b.map(n=>n.bottom)),Math.min(...b.map(n=>n.left))-r.left]:[]};})`);
     for (const c of controls) {
-      assert(Math.max(...c.padding)-Math.min(...c.padding)<.1,'Equal padding on all four sides: '+JSON.stringify(c));
-      if(c.insets.length) assert(Math.max(...c.insets)-Math.min(...c.insets)<=1.1,'Filter text/arrow have equal actual edge insets: '+JSON.stringify(c));
+      if(c.insets.length){
+        // Owner's 06.11 input/select exception: larger left inset, other edges equal.
+        assert.equal(c.padding[3],c.leftInset,'Filter left padding uses field-inset');
+        assert(Math.max(...c.padding.slice(0,3))-Math.min(...c.padding.slice(0,3))<.1,'Other filter paddings remain equal: '+JSON.stringify(c));
+        assert(c.insets.every((v,i)=>Math.abs(v-(i===3?c.leftInset:c.padding[i]))<=1.1),'Actual filter edges match their tokens: '+JSON.stringify(c));
+      }else assert(Math.max(...c.padding)-Math.min(...c.padding)<.1,'Equal button/container padding on all four sides: '+JSON.stringify(c));
     }
   };
 

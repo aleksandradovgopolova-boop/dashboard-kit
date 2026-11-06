@@ -522,8 +522,8 @@
      переход на страницу компонента, и он рисовался подчёркнутым текстом. */
   text-decoration: none;
   gap: var(--space-3);
-  height: var(--control-md);
-  padding: var(--control-pad-md);
+  min-height: var(--control-sm);
+  padding: var(--control-pad-sm);
   font: var(--type-body);
   font-weight: var(--weight-ui);
   color: var(--ink-2);
@@ -555,18 +555,18 @@
    Кнопка без подписи обязана иметь aria-label — иначе для скринридера она
    просто «кнопка». */
 
-.dk-btn .dk-i { width: 16px; height: 16px; vertical-align: 0; }
-.dk-btn--sm .dk-i { width: 14px; height: 14px; }
+.dk-btn .dk-i { width: var(--icon-size-control); height: var(--icon-size-control); vertical-align: 0; }
+.dk-btn--sm .dk-i { width: var(--icon-size-compact); height: var(--icon-size-compact); }
 .dk-btn--lg .dk-i { width: 20px; height: 20px; }
 
 /* Ведомый значок — всегда последним и чуть отодвинут: он не часть подписи. */
 .dk-i--after { margin-left: var(--space-1); }
 
-/* Размеры. По умолчанию M — он стоит в девяти случаях из десяти.
-   S для плотных мест: панель фильтров, действие внутри строки таблицы.
+/* По умолчанию S; M выбирается явно для соседних контролов той же высоты.
    L для одиночного главного действия на странице. */
-.dk-btn--sm { height: var(--control-sm); padding: var(--control-pad-sm); font:var(--type-body); }
-.dk-btn--lg { height: var(--control-lg); padding: var(--control-pad-lg); font: var(--type-h3); }
+.dk-btn--sm { min-height: var(--control-sm); padding: var(--control-pad-sm); font:var(--type-body); }
+.dk-btn--md { min-height: var(--control-md); padding: var(--control-pad-md); }
+.dk-btn--lg { min-height: var(--control-lg); padding: var(--control-pad-lg); font: var(--type-h3); }
 
 .dk-btn--primary {
   color: var(--brand-ink);
@@ -596,9 +596,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--control-md);
-  height: var(--control-md);
-  padding: 0;
+  width: var(--control-sm);
+  height: var(--control-sm);
+  padding: var(--control-pad-sm);
   color: var(--ink-2);
   background: var(--surface-2);
   border: 0;
@@ -611,20 +611,18 @@
   .dk-iconbtn:hover { color: var(--ink); background: var(--surface-3); }
 }
 
-.dk-iconbtn .dk-i { width: 18px; height: 18px; vertical-align: 0; }
+.dk-iconbtn .dk-i { width: var(--icon-size-control); height: var(--icon-size-control); vertical-align: 0; }
 
 .dk-iconbtn--sm { width: var(--control-sm); height: var(--control-sm); }
-.dk-iconbtn--sm .dk-i { width: 16px; height: 16px; }
-.dk-iconbtn--lg { width: var(--control-lg); height: var(--control-lg); }
+.dk-iconbtn--md { width: var(--control-md); height: var(--control-md); padding: var(--control-pad-md); }
+.dk-iconbtn--sm .dk-i { width: var(--icon-size-compact); height: var(--icon-size-compact); }
+.dk-iconbtn--lg { width: var(--control-lg); height: var(--control-lg); padding:var(--control-pad-lg); }
 .dk-iconbtn--lg .dk-i { width: 20px; height: 20px; }
 
 /* ИСКЛЮЧЕНИЕ 1. Кольцо фокуса с клавиатуры.
    Единственная обводка, которая рисуется всегда. Она появляется только при
    навигации с клавиатуры и исчезает при работе мышью, так что визуального
    шума не создаёт — но без неё интерфейс недоступен. Не удалять. */
-.dk-btn:focus-visible,
-.dk-iconbtn:focus-visible,
-.dk-seg button:focus-visible,
 .dk-lg:focus-visible,
 .dk-field:focus-within,
 .dk-rank__row:focus-visible,
@@ -633,10 +631,23 @@
   outline-offset: var(--focus-offset);
 }
 
+/* Клавиатурный фокус управления — контрастная заливка без контура. */
+.dk-btn:focus-visible,
+.dk-iconbtn:focus-visible,
+.dk-seg button:focus-visible {
+  outline: none;
+  background: var(--control-focus);
+  color: var(--control-focus-ink);
+  text-decoration: underline;
+  text-underline-offset: var(--space-1);
+}
+
 /* --- сегментированный переключатель --------------------------------------
    Дорожка — вложенная поверхность, активный сегмент — акцентная заливка.    */
 
 .dk-seg {
+  --segment-size: var(--control-sm);
+  --segment-pad: var(--space-2);
   display: inline-flex;
   gap: var(--space-1);
   background: var(--surface-2);
@@ -654,9 +665,9 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  height: calc(var(--control-md) - 2 * var(--track-pad));
-  padding: var(--control-pad-md);
-  font: var(--type-caption);
+  min-height: calc(var(--segment-size) - 2 * var(--track-pad));
+  padding: var(--segment-pad);
+  font: var(--type-body);
   color: var(--ink-2);
   background: transparent;
   border: 0;
@@ -679,7 +690,7 @@
   font-weight: var(--weight-ui-strong);
 }
 
-.dk-seg button .dk-i { width: 16px; height: 16px; vertical-align: 0; }
+.dk-seg button .dk-i { width: var(--icon-size-control); height: var(--icon-size-control); vertical-align: 0; }
 
 /* Сегмент, который не помещается на телефоне, листается вбок — так же, как
    вкладки: одно поведение на весь интерфейс. Замер на 360: сегмент из четырёх
@@ -698,8 +709,8 @@
   .dk-seg button:focus-visible { outline-offset: calc(-1 * var(--focus-width)); }
 }
 
-.dk-seg--sm button { height: calc(var(--control-sm) - 2 * var(--track-pad)); padding: var(--control-pad-sm); }
-.dk-seg--lg button { height: calc(var(--control-lg) - 2 * var(--track-pad)); padding: var(--control-pad-lg); font-size: var(--text-body); }
+.dk-seg--md { --segment-size: var(--control-md); --segment-pad: var(--space-3); }
+.dk-seg--lg { --segment-size: var(--control-lg); --segment-pad: var(--space-5); }
 
 /* Сегмент значками. Стоит ПОСЛЕ модификаторов размера намеренно: у них та же
    специфичность, и правило, написанное выше, проигрывало им поля — кнопка
@@ -725,6 +736,20 @@
   aspect-ratio: 1;
   width: auto;
   padding: 0;
+}
+.dk-root .dk-seg button:focus-visible {
+  outline:none;
+  background:var(--control-focus);
+  color:var(--control-focus-ink);
+}
+@media (pointer:coarse) {
+  .dk-seg { --track-pad:0px; --segment-pad:var(--control-pad-lg); }
+}
+@media (forced-colors:active) {
+  .dk-root :is(.dk-btn,.dk-iconbtn,.dk-seg button):focus-visible {
+    outline:var(--focus-width) solid Highlight;
+    outline-offset:var(--focus-offset-tight);
+  }
 }
 
 
@@ -3091,8 +3116,9 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-cal__head { display: flex; align-items: center; gap: var(--gap-tight); flex-wrap: wrap; }
 
 .dk-cal__month {
-  flex: 1;
+  flex: 1 0 auto;
   min-width: 0;
+  max-width: 100%;
   font: var(--type-h3);
   letter-spacing: var(--type-h3-track);
   color: var(--ink);
@@ -3384,7 +3410,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   transition: color var(--duration-fast), background var(--duration-fast);
 }
 @media (hover: hover) and (pointer: fine) {
-  .dk-tab:hover { color: var(--ink); background: var(--surface-2); }
+  .dk-tab:hover { color: var(--ink); background: var(--glass-hover, var(--surface-3)); }
 }
 
 .dk-tab:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
@@ -5240,15 +5266,15 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-modal--detail .dk-modal__metrics > .dk-tile { background:var(--surface); }
 
 /* Editable controls own the inset once; the native input is the whole hit box. */
-.dk-field input,.dk-field select,.dk-search__input{ box-sizing:border-box; padding:var(--control-pad-md); height:auto; min-height:var(--control-md); align-self:center; }
+.dk-field input,.dk-field select,.dk-search__input{ box-sizing:border-box; padding:var(--control-pad-md); padding-inline-start:var(--field-inset); height:auto; min-height:var(--control-md); align-self:center; }
 .dk-field,.dk-search{ height:auto; min-height:var(--control-md); gap:0; }
 .dk-search__clear .dk-i{ width:var(--icon-size-control); height:var(--icon-size-control); }
 .dk-search__at{ height:auto; min-height:var(--control-sm); }
-.dk-field > .dk-i,.dk-search > .dk-i,.dk-search__icon{ margin-inline-start:var(--control-pad-md); }
+.dk-field > .dk-i,.dk-search > .dk-i,.dk-search__icon{ margin-inline-start:var(--field-inset); }
 /* Search owns one inset; the input remains a full-size native touch target. */
 .dk-menu__search{ padding:0; gap:0; }
 .dk-menu__search input{ height:auto; min-height:var(--control-md); align-self:center; padding:var(--control-pad-md); }
-.dk-menu__search > .dk-i{ margin-inline-start:var(--space-4); }
+.dk-menu__search > .dk-i{ margin-inline-start:var(--field-inset); }
 /* Keep the 48px selection column and its sticky offset in agreement. */
 .dk-table :is(.dk-td-pick,.dk-th-pick) .dk-check{ width:44px; min-width:44px; justify-content:center; }
 

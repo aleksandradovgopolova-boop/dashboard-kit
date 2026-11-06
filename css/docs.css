@@ -675,8 +675,9 @@
 /* Header uses the kit compact variant, with separate non-overlapping touch boxes. */
 .sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg{ border:0; background:none; box-shadow:none; padding:0; }
 .sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg button,
-.sc-docs.dk-glass .sc-bar .sc-search-trigger{ --glass-control-size:var(--control-sm); --glass-control-icon:var(--icon-size-control); width:var(--control-sm); min-width:var(--control-sm); height:var(--control-sm); min-height:var(--control-sm); padding:var(--control-pad-sm); border:var(--hairline) solid var(--glass-edge-soft); border-radius:var(--radius-md); background:var(--glass-control-sheen),var(--glass-control); }
+.sc-docs.dk-glass .sc-bar .sc-search-trigger{ --glass-control-size:var(--control-sm); --glass-control-icon:var(--icon-size-control); width:var(--control-sm); min-width:var(--control-sm); height:var(--control-sm); min-height:var(--control-sm); padding:var(--control-pad-sm); border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); border-radius:var(--radius-md); background:var(--glass-control-sheen),var(--glass-control); }
 .sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg button[aria-pressed="true"]{ background:var(--control-on); color:var(--control-on-ink); }
+.sc-docs.dk-glass .sc-bar .sc-ctl .dk-seg button:focus-visible{ background:var(--control-focus); color:var(--control-focus-ink); }
 .sc-docs .sc-bar__tools .dk-i{ width:var(--icon-size-control); height:var(--icon-size-control); }
 .sc-docs .sc-search-trigger__text{ display:none; }
 .sc-docs .sc-nav.sc-mega{ border:var(--hairline) solid var(--glass-edge); border-radius:var(--radius-lg); }
