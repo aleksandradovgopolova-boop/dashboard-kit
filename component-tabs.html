@@ -36,7 +36,7 @@
 <div class="sc-shell sc-shell--closed">
 <nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
-<div class="dk-wrap" id="top">
+<main class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
     <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Управление</p>
@@ -66,7 +66,6 @@
       <a class="dk-tab" href="#">Аварии <span class="dk-tab__n">23</span></a>
       <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
       <a class="dk-tab" href="#">Отчёты</a>
-      <a class="dk-tab" href="#">Отчёты</a>
     </nav></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
@@ -79,7 +78,7 @@
       <a class="dk-tab" href="#" aria-current="page"><b class="sc-callout">1</b>Текущий</a>
       <a class="dk-tab" href="#"><b class="sc-callout">2</b>Аварии <span class="dk-tab__n"><b class="sc-callout">3</b>23</span></a>
       <a class="dk-tab" href="#">Отчёты</a>
-    </nav></div><ol class="sc-anatomy__list"><li><b>Текущая вкладка</b> — <code>aria-current="page"</code>: цвет текста ink, жирность и черта снизу цветом <code>--control-on</code> — двумя признаками, не одним.</li><li><b>Обычная вкладка</b> — ссылка <code>&lt;a&gt;</code> с адресом; при наведении подпись темнеет.</li><li><b>Счётчик</b> — <code>dk-tab__n</code>: сколько объектов в разделе ждут внимания. Ноль не показывается.</li></ol>
+    </nav></div><ol class="sc-anatomy__list"><li><b>Текущая вкладка</b> — <code>aria-current="page"</code>: цвет текста ink, жирность и черта снизу цветом <code>--control-on</code> — двумя признаками, не одним.</li><li><b>Обычная вкладка</b> — ссылка <code>&lt;a&gt;</code> с адресом; при наведении текст и значок становятся контрастнее, фон остаётся прозрачным.</li><li><b>Счётчик</b> — <code>dk-tab__n</code>: сколько объектов в разделе ждут внимания. Ноль не показывается.</li></ol>
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
@@ -90,7 +89,8 @@
     <div class="dk-panel"><nav class="dk-tabs" aria-label="Состояния">
       <a class="dk-tab" href="#" aria-current="page">Текущая</a>
       <a class="dk-tab" href="#">Обычная</a>
-      <a class="dk-tab" href="#" style="outline:var(--focus-width) solid var(--brand);outline-offset:var(--focus-offset)">Фокус</a>
+      <a class="dk-tab is-hover" href="#">Наведение</a>
+      <a class="dk-tab is-focus-visible" href="#" tabindex="-1">Фокус</a>
       <a class="dk-tab" href="#">С счётчиком <span class="dk-tab__n">7</span></a>
     </nav></div>
     <div class="sc-note"><b>Недоступных вкладок не бывает.</b> Раздел, в который нельзя попасть, не показывают; если доступа нет — показывают страницу «Нет доступа» (<a href="component-empty.html">Состояния</a>), а не серую вкладку.</div>
@@ -101,7 +101,7 @@
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
-    <ul class="sc-list sc-list--wide"><li><b>Роль.</b> <code>&lt;nav aria-label&gt;</code> со ссылками, а не <code>tablist</code>: это переходы между страницами, и скринридер должен ждать загрузку.</li><li><b>Текущая</b> — <code>aria-current="page"</code>, скринридер объявляет «текущая страница».</li><li><b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Кольцо фокуса — только при навигации табом.</li><li><b>Контраст.</b> Черта текущей вкладки — <code>--control-on</code>, тот же серый, что у выбранного управления: не ниже 3:1 к поверхности.</li></ul>
+    <ul class="sc-list sc-list--wide"><li><b>Роль.</b> <code>&lt;nav aria-label&gt;</code> со ссылками, а не <code>tablist</code>: это переходы между страницами, и скринридер должен ждать загрузку.</li><li><b>Текущая</b> — <code>aria-current="page"</code>, скринридер объявляет «текущая страница».</li><li><b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Фокус подчёркивает текст; нижняя черта всей вкладки по-прежнему обозначает текущий раздел.</li><li><b>Контраст.</b> Черта текущей вкладки — <code>--control-on</code>, тот же серый, что у выбранного управления: не ниже 3:1 к поверхности.</li></ul>
   </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>С чем сочетать</h2>
@@ -120,7 +120,7 @@
 &lt;/nav&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>aria-current=&quot;page&quot;</code></td><td>атрибут</td><td>Текущий раздел.</td></tr><tr><td><code>dk-tab__n</code></td><td>элемент</td><td>Счётчик; не показывать при нуле.</td></tr><tr><td><code>aria-label</code></td><td>атрибут nav</td><td>Название группы разделов для скринридера.</td></tr></tbody></table></div>
   </section>
 
-</div>
+</main>
 </div>
 
 <script>

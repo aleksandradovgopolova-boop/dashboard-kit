@@ -37,7 +37,7 @@
 <div class="sc-shell sc-shell--closed">
 <nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
-<div class="dk-wrap" id="top">
+<main class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
     <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Визуализация</p>
@@ -118,7 +118,7 @@ cal.view = &#x27;week&#x27;; cal.goTo(&#x27;2026-09-14&#x27;); cal.setEvents(lis
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>events[]</code></td><td>массив</td><td>date, name, kind; from/to для недели.</td></tr><tr><td><code>view, month, week, value, today</code></td><td>строки / даты</td><td>Что показать и что выбрано.</td></tr><tr><td><code>Размер при смене вида</code></td><td>автоматически</td><td>Месяц/неделя сохраняют рамку исходного вида. Содержимое прокручивается внутри; ширина окна остаётся адаптивной.</td></tr><tr><td><code>max, hourHeight</code></td><td>числа</td><td>Событий в дне до «ещё N»; высота часа.</td></tr><tr><td><code>onSelect(day) / onEvent(e)</code></td><td>функции</td><td>Клик по дню и по событию.</td></tr><tr><td><code>view / value / goTo(d) / setEvents(list)</code></td><td>API</td><td>Управление снаружи.</td></tr><tr><td><code>update({events,view}) / destroy()</code></td><td>API</td><td>Совместим со старым setEvents/view/goTo. На narrow/coarse неделя — agenda со временем словами и кнопками 44px, на desktop/fine — часовая сетка.</td></tr></tbody></table></div>
   </section>
 
-</div>
+</main>
 </div>
 
 <script>

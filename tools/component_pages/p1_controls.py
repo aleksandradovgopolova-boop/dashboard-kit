@@ -9,23 +9,23 @@ PAGES = [
     "slug": "button", "title": "Кнопка", "group": "Управление", "status": "стабильный",
     "purpose": 'Запускает действие: сохранить изменения, добавить запись или открыть отчёт.',
     "files": ["css/components.css"], "scripts": [],
-    "live_intro": 'Основная кнопка выделяет главное действие, остальные поддерживают его. Здесь показан внешний вид: сохранение и удаление не выполняются.',
+    "live_intro": 'На дашборде по умолчанию используется S. Основная кнопка выделяет главное действие, остальные поддерживают его. Здесь показан внешний вид: сохранение и удаление не выполняются.',
     "live": """<div class="dk-panel">
-      <div class="sc-row"><span class="dk-caption" style="width:96px">S · 28</span>
-        <button class="dk-btn dk-btn--primary dk-btn--sm">Действие</button>
-        <button class="dk-btn dk-btn--sm">Обычная</button>
-        <button class="dk-btn dk-btn--ghost dk-btn--sm">Тихая</button>
-        <button class="dk-iconbtn dk-iconbtn--sm" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button></div>
-      <div class="sc-row"><span class="dk-caption" style="width:96px">M · 32</span>
+      <div class="sc-row"><span class="dk-caption" style="width:96px">S · 32</span>
         <button class="dk-btn dk-btn--primary">Действие</button>
         <button class="dk-btn">Обычная</button>
         <button class="dk-btn dk-btn--ghost">Тихая</button>
-        <button class="dk-iconbtn" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button></div>
-      <div class="sc-row" style="margin-bottom:0"><span class="dk-caption" style="width:96px">L · 40</span>
+        <button class="dk-iconbtn" title="Настройки" aria-label="Настройки"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg></button></div>
+      <div class="sc-row"><span class="dk-caption" style="width:96px">M · 36</span>
+        <button class="dk-btn dk-btn--primary dk-btn--md">Действие</button>
+        <button class="dk-btn dk-btn--md">Обычная</button>
+        <button class="dk-btn dk-btn--ghost dk-btn--md">Тихая</button>
+        <button class="dk-iconbtn dk-iconbtn--md" title="Настройки" aria-label="Настройки"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg></button></div>
+      <div class="sc-row" style="margin-bottom:0"><span class="dk-caption" style="width:96px">L · 44</span>
         <button class="dk-btn dk-btn--primary dk-btn--lg">Действие</button>
         <button class="dk-btn dk-btn--lg">Обычная</button>
         <button class="dk-btn dk-btn--ghost dk-btn--lg">Тихая</button>
-        <button class="dk-iconbtn dk-iconbtn--lg" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button></div>
+        <button class="dk-iconbtn dk-iconbtn--lg" title="Настройки" aria-label="Настройки"><svg class="dk-i" aria-hidden="true"><use href="#ti-settings"/></svg></button></div>
     </div>""",
     "when_yes": ["Действие меняет данные или открывает новый экран: «Добавить работу», «Удалить запись».",
                  "На экране нужно показать, какое действие главное — оно одно и оно основное.",
@@ -38,8 +38,8 @@ PAGES = [
       <button class="dk-btn"><b class="sc-callout">2</b>Обычная</button>
       <button class="dk-btn dk-btn--ghost"><b class="sc-callout">3</b>Тихая</button>
       <button class="dk-btn" disabled><b class="sc-callout">4</b>Недоступна</button>
-      <button class="dk-iconbtn" title="Отчёт" aria-label="Отчёт"><b class="sc-callout">5</b><svg class="dk-i"><use href="#ti-file-text"/></svg></button>
-      <button class="dk-btn"><b class="sc-callout">6</b><svg class="dk-i"><use href="#ti-refresh"/></svg>Со значком</button>
+      <button class="dk-iconbtn" title="Отчёт" aria-label="Отчёт"><b class="sc-callout">5</b><svg class="dk-i" aria-hidden="true"><use href="#ti-file-text"/></svg></button>
+      <button class="dk-btn"><b class="sc-callout">6</b><svg class="dk-i" aria-hidden="true"><use href="#ti-refresh"/></svg>Со значком</button>
     </div>""",
     "anatomy": [("Основная", "залита акцентом — единственное место на экране, где акцент разрешён управлению (третий принцип)."),
                 ("Обычная", "залита поверхностью второго уровня; рамки нет — форму держит заливка."),
@@ -47,19 +47,19 @@ PAGES = [
                 ("Недоступная", "приглушена, курсор «нельзя». Причину недоступности говорит подсказка или текст рядом, а не сама кнопка."),
                 ("Кнопка-значок", "квадрат под один значок; подпись обязательна в <code>aria-label</code> и в <code>title</code>."),
                 ("Значок в кнопке", "стоит слева от слова и берёт цвет текста; сам по себе значок кнопкой не бывает.")],
-    "sizes": 'Высота и отступы задаются токенами контролов. Обычная кнопка M — 36 px (--control-md), компактная S — 32 px (--control-sm), CTA L — 44 px (--control-lg). Поля симметричны и берутся из --control-pad-sm/md/lg; текст 14 px, CTA 16 px. На таче цель не меньше 44 px, значок 18–20 px. Соседние кнопки и фильтры выбирайте одной высоты; приоритет задаётся оформлением, а не размером.',
-    "variants": [("dk-btn", "Обычная кнопка, размер M.", "По умолчанию."),
+    "sizes": 'Высота и отступы задаются токенами контролов. По умолчанию S — 32 px (--control-sm); явные --md и --lg дают M — 36 px и L — 44 px. Отступы одинаковы со всех четырёх сторон: S — 8 px, M — 10 px, L — 12 px (--button-pad-sm/md/lg). Текст S/M — 14 px, L — 16 px; значки — 16/16/20 px. На таче цель не меньше 44 px, значок 20 px. Соседние кнопки и фильтры выбирайте одной высоты; приоритет задаётся оформлением, а не размером.',
+    "variants": [("dk-btn", "Обычная кнопка, размер S · 32 px.", "По умолчанию на дашборде."),
                  ("dk-btn--primary", "Основное действие, заливка акцентом.", "Одна на экран или на форму."),
                  ("dk-btn--ghost", "Тихая: без заливки до наведения.", "Второстепенное рядом с основным: «Отмена», «Снять выбор»."),
-                 ("dk-btn--sm / dk-btn--lg", "Высота 32 или 44 вместо 36.", "Строка действий в таблице (sm), шапка страницы (lg)."),
+                 ("dk-btn--sm / dk-btn--md / dk-btn--lg", "Высота 32, 36 или 44 px.", "S — по умолчанию; M и L выбираются явно."),
                  ("dk-iconbtn", "Квадратная кнопка под значок, те же три размера.", "Действия виджета: обновить, скачать, настройки."),
                  ("disabled", "Атрибут: приглушена, не нажимается.", "Только когда причина видна рядом.")],
     "states": """<div class="dk-panel"><div class="sc-row" style="margin:0">
       <button class="dk-btn dk-btn--primary">Обычное</button>
-      <button class="dk-btn dk-btn--primary" style="background:var(--brand-hover)">Наведение</button>
-      <button class="dk-btn dk-btn--primary" style="outline:var(--focus-width) solid var(--brand);outline-offset:var(--focus-offset)">Фокус</button>
+      <button class="dk-btn dk-btn--primary" style="background:var(--brand-hover)" tabindex="-1">Наведение</button>
+      <button class="dk-btn dk-btn--primary is-focus-visible" tabindex="-1">Фокус</button>
       <button class="dk-btn dk-btn--primary" disabled>Недоступно</button>
-      <button class="dk-btn dk-btn--primary" aria-busy="true"><svg class="dk-i"><use href="#ti-refresh"/></svg>Сохраняем…</button>
+      <button class="dk-btn dk-btn--primary" aria-busy="true"><svg class="dk-i" aria-hidden="true"><use href="#ti-refresh"/></svg>Сохраняем…</button>
     </div></div>
     <div class="sc-note"><b>Загрузка — это надпись, а не крутилка.</b> «Сохраняем…» говорит, что происходит; кнопка при этом
       остаётся на месте и не меняет ширину, иначе соседние кнопки прыгают. Отдельного класса для загрузки нет:
@@ -72,21 +72,21 @@ PAGES = [
                     "Две основные кнопки рядом — человек не знает, какую ждут.",
                     "Значок без подписи: «шестерёнка» для одних настройки, для других фильтр.",
                     "Кнопка, которая ведёт на другую страницу, — это ссылка, и выглядеть должна ссылкой."],
-    "a11y": ["<b>Клавиатура.</b> Настоящий <code>&lt;button&gt;</code>: Tab, Enter и пробел работают сами. Кольцо фокуса — только при навигации с клавиатуры.",
+    "a11y": ["<b>Клавиатура.</b> Настоящий <code>&lt;button&gt;</code>: Tab, Enter и пробел работают сами. При навигации с клавиатуры фокус заметен по смене заливки и цвета текста, без обводки.",
              "<b>Подписи.</b> Кнопка-значок обязана иметь <code>aria-label</code>; проверка на витрине это не ловит — на совести автора.",
              "<b>Контраст.</b> Подпись на основной кнопке и силуэт кнопки на поверхности проверяются проверкой КНОПКА на всех акцентах в обеих темах.",
              "<b>Недоступная</b> нативная кнопка с <code>disabled</code> пропускается при Tab; причина видна рядом и доступна при чтении страницы."],
     "tokens": ["dk-btn", "dk-iconbtn"],
-    "code_intro": "Обычные кнопки без скрипта. Ссылка с классом кнопки допустима, когда действие — переход.",
+    "code_intro": "Обычные кнопки S без скрипта; для M или L добавьте явный модификатор размера. Ссылка с классом кнопки допустима, когда действие — переход.",
     "code": """<button class="dk-btn dk-btn--primary">Добавить работу</button>
 <button class="dk-btn dk-btn--ghost">Отмена</button>
 <button class="dk-iconbtn" title="Обновить" aria-label="Обновить">
-  <svg class="dk-i"><use href="#ti-refresh"/></svg>
+  <svg class="dk-i" aria-hidden="true"><use href="#ti-refresh"/></svg>
 </button>
 <a class="dk-btn dk-btn--sm" href="component-table.html">Страница компонента →</a>""",
     "api": [("dk-btn--primary", "класс", "Основное действие, одно на экран."),
             ("dk-btn--ghost", "класс", "Тихая кнопка без заливки."),
-            ("dk-btn--sm, dk-btn--lg", "класс", "Высота 32 или 44; по умолчанию 36."),
+            ("dk-btn--sm, dk-btn--md, dk-btn--lg", "класс", "Высота S 32, M 36 или L 44 px; по умолчанию S."),
             ("dk-iconbtn", "класс", "Кнопка под значок; те же модификаторы размера."),
             ("aria-busy", "атрибут", "Пока идёт действие; подпись меняется на «…аем»."),
             ("disabled", "атрибут", "Недоступна; причина должна быть видна рядом.")],
@@ -99,17 +99,16 @@ PAGES = [
     "slug": "segment", "title": "Сегмент", "group": "Управление", "status": "стабильный",
     "purpose": 'Переключает представление одних данных: карту и список, месяц и неделю.',
     "files": ["css/components.css"], "scripts": [],
-    "live_intro": 'Один вариант выбран всегда. Переключите его: это меняет вид тех же данных, а не открывает другой раздел.',
+    "live_intro": 'По умолчанию — S со значками, названия доступны в подсказках. Один вариант выбран всегда. Периоды сохраняют текст: значок не передаёт точный интервал.',
     "live": """<div class="dk-panel">
-      <div class="sc-row"><span class="dk-caption" style="width:96px">S · 28</span>
-        <div class="dk-seg dk-seg--sm" role="group" aria-label="Период"><button type="button" aria-pressed="true">7д</button><button type="button" aria-pressed="false">30д</button><button type="button" aria-pressed="false">Год</button></div></div>
-      <div class="sc-row"><span class="dk-caption" style="width:96px">M · 32</span>
+      <div class="sc-row"><span class="dk-caption" style="width:96px">S · 32</span>
+        <div class="dk-seg dk-seg--icons" role="group" aria-label="Вид данных, размер S"><button type="button" aria-pressed="true" aria-label="Карта" title="Карта"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg></button><button type="button" aria-pressed="false" aria-label="Плитки" title="Плитки"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg></button><button type="button" aria-pressed="false" aria-label="Таблица" title="Таблица"><svg class="dk-i" aria-hidden="true"><use href="#ti-table"/></svg></button></div></div>
+      <div class="sc-row"><span class="dk-caption" style="width:96px">M · 36</span>
+        <div class="dk-seg dk-seg--icons dk-seg--md" role="group" aria-label="Вид данных, размер M"><button type="button" aria-pressed="true" aria-label="Карта" title="Карта"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg></button><button type="button" aria-pressed="false" aria-label="Плитки" title="Плитки"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg></button><button type="button" aria-pressed="false" aria-label="Таблица" title="Таблица"><svg class="dk-i" aria-hidden="true"><use href="#ti-table"/></svg></button></div></div>
+      <div class="sc-row"><span class="dk-caption" style="width:96px">L · 44</span>
+        <div class="dk-seg dk-seg--icons dk-seg--lg" role="group" aria-label="Вид данных, размер L"><button type="button" aria-pressed="true" aria-label="Карта" title="Карта"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg></button><button type="button" aria-pressed="false" aria-label="Плитки" title="Плитки"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg></button><button type="button" aria-pressed="false" aria-label="Таблица" title="Таблица"><svg class="dk-i" aria-hidden="true"><use href="#ti-table"/></svg></button></div></div>
+      <div class="sc-row" style="margin-bottom:0"><span class="dk-caption" style="width:96px">Период</span>
         <div class="dk-seg" role="group" aria-label="Период"><button type="button" aria-pressed="true">7 дней</button><button type="button" aria-pressed="false">30 дней</button><button type="button" aria-pressed="false">Год</button></div></div>
-      <div class="sc-row"><span class="dk-caption" style="width:96px">L · 40</span>
-        <div class="dk-seg dk-seg--lg" role="group" aria-label="Период"><button type="button" aria-pressed="true">7 дней</button><button type="button" aria-pressed="false">30 дней</button></div></div>
-      <div class="sc-row" style="margin-bottom:0"><span class="dk-caption" style="width:96px">со значками</span>
-        <div class="dk-seg" role="group" aria-label="Вид"><button type="button" aria-pressed="true"><svg class="dk-i"><use href="#ti-map"/></svg>Карта</button><button type="button" aria-pressed="false"><svg class="dk-i"><use href="#ti-layout-grid"/></svg>Плитки</button><button type="button" aria-pressed="false"><svg class="dk-i"><use href="#ti-table"/></svg>Таблица</button></div>
-        <div class="dk-seg dk-seg--icons" role="group" aria-label="Вид"><button type="button" aria-pressed="true" title="Карта" aria-label="Карта"><svg class="dk-i dk-i--sm"><use href="#ti-map"/></svg></button><button type="button" aria-pressed="false" title="Плитки" aria-label="Плитки"><svg class="dk-i dk-i--sm"><use href="#ti-layout-grid"/></svg></button></div></div>
     </div>""",
     "live_script": """  document.querySelectorAll('.dk-seg:not([aria-label="Тема"]) button').forEach(function (b) {
     b.addEventListener('click', function () {
@@ -122,53 +121,61 @@ PAGES = [
     "when_no": ["Переход в другой раздел со своим адресом — <a href=\"component-tabs.html\">Вкладки</a>.",
                 "Больше пяти вариантов — <a href=\"component-select.html\">Фильтр</a> с выпадающим списком.",
                 "Независимое «да / нет» — <a href=\"component-check.html\">Флажок или тумблер</a>."],
-    "anatomy_html": """<div class="sc-row" style="margin:0"><div class="dk-seg" role="group" aria-label="Вид"><b class="sc-callout">1</b>
-      <button type="button" aria-pressed="true"><b class="sc-callout">2</b><svg class="dk-i"><use href="#ti-map"/></svg>Карта</button>
-      <button type="button" aria-pressed="false"><b class="sc-callout">3</b>Плитки</button></div></div>""",
+    "anatomy_html": """<div class="sc-row" style="margin:0"><div class="dk-seg dk-seg--icons" role="group" aria-label="Вид"><b class="sc-callout">1</b>
+      <button type="button" aria-pressed="true" aria-label="Карта" title="Карта"><b class="sc-callout" aria-hidden="true">2</b><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg></button>
+      <button type="button" aria-pressed="false" aria-label="Плитки" title="Плитки"><b class="sc-callout" aria-hidden="true">3</b><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg></button></div></div>""",
     "anatomy": [("Контейнер", "<code>role=\"group\"</code> с <code>aria-label</code>: скринридер слышит «группа Вид», а не «вкладки», и не ждёт новой загрузки."),
-                ("Выбранная кнопка", "<code>aria-pressed=\"true\"</code>: серая заливка <code>--control-on</code>, подпись жирнее. Контраст к контейнеру 3,44:1 (проверка ТИШИНА)."),
+                ("Выбранная кнопка", "<code>aria-pressed=\"true\"</code>: заливка <code>--control-on</code> отделяет выбранный значок от общей подложки; текстовый вариант дополнительно выделяется жирностью."),
                 ("Обычная кнопка", "прозрачная, при наведении темнеет подпись.")],
-    "sizes": 'Размер согласуется с соседними контролами. Обычный сегмент использует --control-md (36 px), компактный — --control-sm (32 px), крупный — --control-lg (44 px). На таче цели от 44 px. Внутренняя кнопка учитывает поля общей подложки.',
-    "variants": [("dk-seg", "Сегмент размера M.", "По умолчанию."),
-                 ("dk-seg--sm / dk-seg--lg", "Высота 32 или 44.", "Шапка виджета (sm), панель страницы (lg)."),
-                 ("dk-seg--icons", "Кнопки только со значками, квадратные.", "Когда слов не хватает по ширине; подпись — в aria-label и title."),
+    "sizes": 'Размер согласуется с соседними контролами. По умолчанию S использует --control-sm (32 px); явные --md и --lg дают M 36 px и L 44 px. Это полная внешняя высота сегмента: она совпадает с кнопкой того же размера. На таче цели от 44 px. Внутренняя кнопка учитывает поля общей подложки.',
+    "variants": [("dk-seg", "Сегмент размера S · 32 px.", "По умолчанию на дашборде."),
+                 ("dk-seg--sm / dk-seg--md / dk-seg--lg", "Внешняя высота 32, 36 или 44 px.", "S — по умолчанию; M и L выбираются явно."),
+                 ("dk-seg--icons", "Кнопки только со значками, квадратные.", "Основной вариант: у каждой кнопки есть aria-label и title. Текст оставляем для периодов и других значений, которым нужен точный смысл."),
                  ("aria-pressed=\"true\"", "Атрибут выбранной кнопки.", "Ровно у одной кнопки группы.")],
     "states": """<div class="dk-panel"><div class="sc-row" style="margin:0">
-      <div class="dk-seg" role="group" aria-label="Пример"><button type="button" aria-pressed="true">Выбрано</button><button type="button" aria-pressed="false">Обычное</button><button type="button" aria-pressed="false" style="outline:var(--focus-width) solid var(--brand);outline-offset:var(--focus-offset)">Фокус</button><button type="button" aria-pressed="false" disabled>Недоступно</button></div>
+      <div class="dk-seg" role="group" aria-label="Пример"><button type="button" aria-pressed="true">Выбрано</button><button type="button" aria-pressed="false">Обычное</button><button type="button" aria-pressed="false" class="is-focus-visible" tabindex="-1">Фокус</button><button type="button" aria-pressed="false" disabled>Недоступно</button></div>
     </div></div>
     <div class="sc-note"><b>Состояния «загрузка» у сегмента нет.</b> Переключение обязано быть мгновенным; если данные для другого вида грузятся, грузится виджет (скелетон), а не кнопка.</div>""",
-    "content_ok": ["Короткие подписи одной формы: «Карта / Плитки», «7 дней / 30 дней».",
+    "content_ok": ["По умолчанию — узнаваемые значки; у каждой кнопки одинаковые aria-label и подсказка.",
                    "Первым стоит вид по умолчанию, и он же выбран при открытии.",
-                   "Значок и слово вместе; только значки — когда у группы есть aria-label."],
+                   "Текст — осознанное исключение: «7 дней / 30 дней / Год» точнее значков."],
     "content_bad": ["«Показать карту / Показать плитки» — глаголы у сегмента лишние.",
                     "Пустая группа без выбранного: человек не знает, что он смотрит сейчас.",
                     "Сегмент, который ведёт на другую страницу, — это вкладки под чужим видом."],
     "a11y": ["<b>Роль.</b> <code>role=\"group\"</code> + <code>aria-label</code>, кнопки с <code>aria-pressed</code>. Не <code>tablist</code>: вкладки обещают отдельные панели с адресом.",
              "<b>Клавиатура.</b> Tab ходит по кнопкам, Enter и пробел переключают. Стрелки внутри группы кит не перехватывает — это обычные кнопки.",
              "<b>Контраст.</b> Выбранная кнопка к контейнеру не ниже 3:1 в обеих темах и не ярче самой контрастной серии — проверка ТИШИНА.",
-             "<b>Не только цветом.</b> Выбранное отличается ещё и жирностью подписи."],
+             "<b>Имена и состояния.</b> Каждый значок имеет <code>aria-label</code> и подсказку; выбор передаётся через <code>aria-pressed</code>. Фокус меняет заливку и цвет значка, без обводки."],
     "tokens": ["dk-seg"],
     "code_intro": "Логику переключения задаёт страница: сегмент не знает, что значит «Карта». Ниже — минимальный обработчик.",
-    "code": """<div class="dk-seg" role="group" aria-label="Вид данных">
-  <button type="button" data-view="map" aria-pressed="true">Карта</button>
-  <button type="button" data-view="tiles" aria-pressed="false">Плитки</button>
+    "code": """<div class="dk-seg dk-seg--icons" id="data-view" role="group" aria-label="Вид данных">
+  <button type="button" data-view="map" aria-pressed="true" aria-label="Карта" title="Карта">
+    <svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg>
+  </button>
+  <button type="button" data-view="tiles" aria-pressed="false" aria-label="Плитки" title="Плитки">
+    <svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg>
+  </button>
+  <button type="button" data-view="table" aria-pressed="false" aria-label="Таблица" title="Таблица">
+    <svg class="dk-i" aria-hidden="true"><use href="#ti-table"/></svg>
+  </button>
 </div>
 
 <script>
+var seg = document.getElementById('data-view');
 seg.addEventListener('click', function (e) {
   var b = e.target.closest('button[data-view]');
   if (!b) return;
   seg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-  map.view = b.dataset.view;   // например, dkMap
+  // Здесь обновите представление страницы по b.dataset.view.
 });
 </script>""",
     "api": [("aria-pressed", "атрибут", "«true» у выбранной кнопки; страница переключает сама."),
-            ("dk-seg--sm, dk-seg--lg", "класс", "Размер группы."),
+            ("dk-seg--sm, dk-seg--md, dk-seg--lg", "класс", "Внешняя высота S 32, M 36 или L 44 px; по умолчанию S."),
             ("dk-seg--icons", "класс", "Квадратные кнопки под значки."),
             ("disabled", "атрибут кнопки", "Вариант недоступен — например, нет данных для плиток.")],
     "related": [("component-tabs.html", "Вкладки", "когда варианты — это разделы с адресом"),
                 ("component-map.html", "Регионы", "сегмент «карта / плитки» внутри виджета"),
-                ("component-button.html", "Кнопка", "те же размеры и кольцо фокуса")],
+                ("component-button.html", "Кнопка", "те же размеры и состояние фокуса")],
 },
 {
     "slug": "tabs", "title": "Вкладки", "group": "Управление", "status": "стабильный",
@@ -179,7 +186,6 @@ seg.addEventListener('click', function (e) {
       <a class="dk-tab" href="#" aria-current="page">Инфраструктура</a>
       <a class="dk-tab" href="#">Аварии <span class="dk-tab__n">23</span></a>
       <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
-      <a class="dk-tab" href="#">Отчёты</a>
       <a class="dk-tab" href="#">Отчёты</a>
     </nav></div>""",
     "when_yes": ["Разделы одного уровня, у каждого свой адрес: «Обзор», «Записи», «Отчёты».",
@@ -194,7 +200,7 @@ seg.addEventListener('click', function (e) {
       <a class="dk-tab" href="#">Отчёты</a>
     </nav>""",
     "anatomy": [("Текущая вкладка", "<code>aria-current=\"page\"</code>: цвет текста ink, жирность и черта снизу цветом <code>--control-on</code> — двумя признаками, не одним."),
-                ("Обычная вкладка", "ссылка <code>&lt;a&gt;</code> с адресом; при наведении подпись темнеет."),
+                ("Обычная вкладка", "ссылка <code>&lt;a&gt;</code> с адресом; при наведении текст и значок становятся контрастнее, фон остаётся прозрачным."),
                 ("Счётчик", "<code>dk-tab__n</code>: сколько объектов в разделе ждут внимания. Ноль не показывается.")],
     "sizes": "Размер один: строка вкладок стоит под заголовком страницы и не бывает мельче текста. На узком экране "
              "строка листается вбок, вкладки не переносятся и не прячутся — спрятанная вкладка выглядит как "
@@ -206,7 +212,8 @@ seg.addEventListener('click', function (e) {
     "states": """<div class="dk-panel"><nav class="dk-tabs" aria-label="Состояния">
       <a class="dk-tab" href="#" aria-current="page">Текущая</a>
       <a class="dk-tab" href="#">Обычная</a>
-      <a class="dk-tab" href="#" style="outline:var(--focus-width) solid var(--brand);outline-offset:var(--focus-offset)">Фокус</a>
+      <a class="dk-tab is-hover" href="#">Наведение</a>
+      <a class="dk-tab is-focus-visible" href="#" tabindex="-1">Фокус</a>
       <a class="dk-tab" href="#">С счётчиком <span class="dk-tab__n">7</span></a>
     </nav></div>
     <div class="sc-note"><b>Недоступных вкладок не бывает.</b> Раздел, в который нельзя попасть, не показывают; если доступа нет — показывают страницу «Нет доступа» (<a href="component-empty.html">Состояния</a>), а не серую вкладку.</div>""",
@@ -218,7 +225,7 @@ seg.addEventListener('click', function (e) {
                     "Вкладка «Ещё…» с выпадающим списком — значит, разделов слишком много для вкладок."],
     "a11y": ["<b>Роль.</b> <code>&lt;nav aria-label&gt;</code> со ссылками, а не <code>tablist</code>: это переходы между страницами, и скринридер должен ждать загрузку.",
              "<b>Текущая</b> — <code>aria-current=\"page\"</code>, скринридер объявляет «текущая страница».",
-             "<b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Кольцо фокуса — только при навигации табом.",
+             "<b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Фокус подчёркивает текст; нижняя черта всей вкладки по-прежнему обозначает текущий раздел.",
              "<b>Контраст.</b> Черта текущей вкладки — <code>--control-on</code>, тот же серый, что у выбранного управления: не ниже 3:1 к поверхности."],
     "tokens": ["dk-tabs", "dk-tab"],
     "code_intro": "Вкладки — ссылки. Текущую отмечает сервер или страница, скрипта у компонента нет.",
@@ -322,21 +329,21 @@ seg.addEventListener('click', function (e) {
     "live": """<div class="dk-panel"><form class="dk-form" id="ex-form">
       <div class="dk-form__alarm" hidden></div>
       <div class="dk-ff dk-ff--wide">
-        <label class="dk-label" for="x-name">Название работы <span class="dk-label__req">обязательно</span></label>
+        <label class="dk-label" for="x-name">Название работы <span class="dk-label__req" aria-hidden="true">*</span></label>
         <div class="dk-field"><input id="x-name" name="name" placeholder="Замена задвижки на вводе" required minlength="5"></div>
         <div class="dk-hint">Так её увидят диспетчеры смены в календаре</div>
       </div>
       <div class="dk-ff">
-        <label class="dk-label" for="x-kind">Вид работы <span class="dk-label__req">обязательно</span></label>
+        <label class="dk-label" for="x-kind">Вид работы <span class="dk-label__req" aria-hidden="true">*</span></label>
         <div class="dk-field"><select id="x-kind" name="kind" required><option value="">Выберите вид</option><option value="plan">Плановое отключение</option><option value="high">Работа с ограничением</option><option value="crit">Авария</option></select></div>
       </div>
       <div class="dk-ff">
-        <label class="dk-label" for="x-people">Затронуто жителей <span class="dk-label__opt">если известно</span></label>
+        <label class="dk-label" for="x-people">Затронуто жителей</label>
         <div class="dk-field"><input id="x-people" name="people" type="number" min="0" max="500000" placeholder="1240"></div>
         <div class="dk-hint">Человек, а не квартир</div>
       </div>
       <div class="dk-ff dk-ff--wide">
-        <label class="dk-label" for="x-note">Что сказать жителям <span class="dk-label__opt">необязательно</span></label>
+        <label class="dk-label" for="x-note">Что сказать жителям</label>
         <textarea class="dk-area" id="x-note" name="note" maxlength="300" placeholder="Горячей воды не будет с 8:00 до 13:00"></textarea>
         <div class="dk-hint">До 300 знаков — текст уйдёт в рассылку как есть</div>
       </div>
@@ -361,20 +368,20 @@ seg.addEventListener('click', function (e) {
                 "Выбор дат — <a href=\"component-period.html\">Период</a>.",
                 "Подтверждение действия без ввода — <a href=\"component-modal.html\">Модальное окно</a>."],
     "anatomy_html": """<form class="dk-form" onsubmit="return false"><div class="dk-form__alarm"><b class="sc-callout">1</b>Заполните обязательные поля — 2 из 3</div>
-      <div class="dk-ff"><label class="dk-label"><b class="sc-callout">2</b>Подпись <span class="dk-label__req">обязательно</span></label>
-        <div class="dk-field"><b class="sc-callout">3</b><input placeholder="Пример значения" aria-label="Пример"></div>
+      <div class="dk-ff"><label class="dk-label" for="anatomy-field"><b class="sc-callout">2</b>Подпись <span class="dk-label__req" aria-hidden="true">*</span></label>
+        <div class="dk-field"><b class="sc-callout">3</b><input id="anatomy-field" placeholder="Пример значения" required></div>
         <div class="dk-hint"><b class="sc-callout">4</b>Подсказка под полем</div></div>
       <div class="dk-ff"><label class="dk-label">С ошибкой</label>
         <div class="dk-field"><input value="Зам" aria-label="С ошибкой" aria-invalid="true"></div>
         <div class="dk-err"><b class="sc-callout">5</b>Не короче 5 знаков — сейчас 3</div></div>
       <div class="dk-form__foot"><b class="sc-callout">6</b><button type="button" class="dk-btn">Очистить</button><button type="button" class="dk-btn dk-btn--primary">Добавить</button></div></form>""",
     "anatomy": [("Сводка ошибок", "<code>dk-form__alarm</code> над формой после неудачной отправки: сколько полей не заполнено."),
-                ("Подпись над полем", "<code>dk-label</code>; пометка «обязательно» или «если известно» — у того, чего меньше."),
+                ("Подпись над полем", "<code>dk-label</code>; у обязательного поля — компактная <code>*</code>, скрытая от скринридера. Обязательность задаётся атрибутом <code>required</code> на поле."),
                 ("Поле", "<code>dk-field</code> вокруг input или select: заливка вместо рамки; внутри пример значения, а не название."),
                 ("Подсказка", "<code>dk-hint</code>: единица, формат, куда попадёт значение."),
                 ("Ошибка", "<code>dk-err</code> под полем и <code>aria-invalid</code> на input: говорит, что сделать, а не что не так."),
                 ("Подвал", "<code>dk-form__foot</code>: основная кнопка справа, обычная левее.")],
-    "sizes": 'Высота задаётся токеном контрола; не фиксируйте её поверх темы. Ширину задаёт сетка формы: dk-ff занимает половину строки, dk-ff--wide — всю строку. На телефоне сохраняйте удобную область ввода.',
+    "sizes": 'Обычное поле — 44 px с отступами 12 px со всех сторон; явный dk-field--md — 36 px с отступами 8 px. Высота задаётся токеном контрола; не фиксируйте её поверх темы. Ширину задаёт сетка формы: dk-ff занимает половину строки, dk-ff--wide — всю строку. На телефоне сохраняйте удобную область ввода.',
     "variants": [("dk-form", "Форма с сеткой полей.", "Всегда; внутри — dk-ff."),
                  ("dk-ff / dk-ff--wide", "Поле в полстроки или во всю.", "Названия и комментарии — wide, числа и даты — половина."),
                  ("dk-field", "Обёртка input или select.", "Все однострочные поля."),
@@ -383,7 +390,7 @@ seg.addEventListener('click', function (e) {
                  ("dk-err + aria-invalid", "Текст ошибки под полем и пометка на input.", "Ставит dk-form.js; руками — только в статичном примере.")],
     "states": """<div class="dk-panel"><div class="dk-form">
       <div class="dk-ff"><label class="dk-label">Обычное</label><div class="dk-field"><input placeholder="Пример" aria-label="Обычное"></div></div>
-      <div class="dk-ff"><label class="dk-label">Фокус</label><div class="dk-field" style="outline:var(--focus-width) solid var(--brand);outline-offset:var(--focus-offset)"><input value="Замена задвижки" aria-label="Фокус"></div></div>
+      <div class="dk-ff"><label class="dk-label">Фокус</label><div class="dk-field" style="outline:var(--focus-width) solid var(--brand);outline-offset:var(--focus-offset)"><input value="Замена задвижки" aria-label="Фокус" tabindex="-1"></div></div>
       <div class="dk-ff"><label class="dk-label">С ошибкой</label><div class="dk-field"><input value="Зам" aria-invalid="true" aria-label="С ошибкой"></div><div class="dk-err">Не короче 5 знаков — сейчас 3</div></div>
       <div class="dk-ff"><label class="dk-label">Недоступно</label><div class="dk-field"><input value="Заполнено системой" disabled aria-label="Недоступно"></div></div>
     </div></div>
@@ -391,12 +398,12 @@ seg.addEventListener('click', function (e) {
     "content_ok": ["Подпись — название данных: «Затронуто жителей». Внутри поля — пример: «1240».",
                    "Ошибка говорит, что сделать: «Не короче 5 знаков — сейчас 3».",
                    "Подсказка отвечает на вопрос, который возникнет: «Человек, а не квартир».",
-                   "Отмечено то, чего меньше: обязательные или необязательные, но не оба сразу."],
+                   "Обязательное поле отмечено компактной звёздочкой и имеет required; необязательные поля не требуют дополнительных слов."],
     "content_bad": ["Название данных плейсхолдером внутри поля — исчезает при вводе.",
                     "«Неверное значение», «Ошибка» — человек и так знает, что ошибся.",
-                    "Звёздочка без расшифровки.",
+                    "Звёздочка без required: визуальная пометка должна совпадать с правилами формы.",
                     "Кнопка «Отправить» — что именно произойдёт?"],
-    "a11y": ["<b>Подписи.</b> <code>&lt;label for&gt;</code> у каждого поля; подсказка и ошибка связаны через текст под полем и <code>aria-invalid</code>.",
+    "a11y": ["<b>Подписи.</b> <code>&lt;label for&gt;</code> у каждого поля; <code>required</code> сообщает обязательность, а декоративная звёздочка скрыта через <code>aria-hidden</code>; подсказка и ошибка связаны через текст под полем и <code>aria-invalid</code>.",
              "<b>Фокус после ошибки</b> уходит на первое неверное поле — форма, которая молча не отправилась, заставляет перечитывать её сверху.",
              "<b>Сводка</b> над формой объявляется скринридеру как живой регион.",
              "<b>Клавиатура.</b> Enter в поле отправляет форму; Escape ничего не сбрасывает — потерять набранное дороже, чем нажать «Очистить»."],
@@ -405,7 +412,7 @@ seg.addEventListener('click', function (e) {
     "code": """<form class="dk-form" id="work">
   <div class="dk-form__alarm" hidden></div>
   <div class="dk-ff dk-ff--wide">
-    <label class="dk-label" for="name">Название работы <span class="dk-label__req">обязательно</span></label>
+    <label class="dk-label" for="name">Название работы <span class="dk-label__req" aria-hidden="true">*</span></label>
     <div class="dk-field"><input id="name" name="name" placeholder="Замена задвижки на вводе" required minlength="5"></div>
     <div class="dk-hint">Так её увидят диспетчеры смены</div>
   </div>

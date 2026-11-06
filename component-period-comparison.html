@@ -38,7 +38,7 @@
 <div class="sc-shell sc-shell--closed">
 <nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
-<div class="dk-wrap" id="top">
+<main class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
     <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Данные</p>
@@ -107,7 +107,7 @@ dkPeriodComparison(document.getElementById(&#x27;advanced-comparison&#x27;), {la
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkComparison(current, previous, better, comparison?)</code></td><td>чистая функция</td><td>delta, percent, direction, meaning; с метаданными также comparable, code, status, reason, context. better: increase/decrease/neutral. comparison: currentPeriod/previousPeriod {from,to,complete,sampleSize?}, duration: equal (по умолчанию) или calendar-month, minBase?, baseLabel при переданной базе. Неверные/частичные метаданные вызывают TypeError. Полный контракт — skill/dashboard-build/references/numeric-checks.md.</td></tr><tr><td><code>dkPeriodComparison(el, opts)</code></td><td>API</td><td>current, previous, better, label, unit, comparison?; update(opts) заменяет все параметры, destroy() удаляет причину и обработчики. С метаданными нужны dk-analysis.js и dk-context.js; kit.py head period-comparison включает оба.</td></tr></tbody></table></div>
   </section>
 
-</div>
+</main>
 </div>
 
 <script>

@@ -574,6 +574,23 @@
   --control-pad-md: var(--step-4);
   --control-pad-lg: var(--size-12);
 
+  /* Кнопки: равные поля и согласованная строка дают ровно S/M/L 32/36/44.
+     Отдельная шкала не меняет отступы фильтров и полей ввода. */
+  --button-pad-sm: var(--step-4);
+  --button-pad-md: var(--step-5);
+  --button-pad-lg: var(--size-12);
+  --button-line-sm: 1.1428571429;
+  --button-line-lg: 1.25;
+  --button-size: var(--control-sm);
+  --button-pad: var(--button-pad-sm);
+  --button-icon: var(--icon-sm);
+  --field-size: var(--control-lg);
+  --field-pad: var(--control-pad-lg);
+  --segment-size: var(--control-sm);
+  --segment-icon: var(--icon-sm);
+  --button-focus-bg: var(--ink);
+  --button-focus-ink: var(--surface);
+
   /* -------------------------------------------------------------------------
      СЕТКА И УСТРОЙСТВА
 

@@ -16,7 +16,7 @@
 После изменения исходников и пересборки `kit-manifest.json`:
 
 ```sh
-python3 tools/kit-release.py --write --version 0.1.0-rc.8 --channel candidate
+python3 tools/kit-release.py --write --version 0.1.0-rc.9 --channel candidate
 python3 tools/kit-release.py --check
 python3 tools/check-release.py
 python3 tools/test.py
@@ -24,7 +24,7 @@ python3 tools/test.py
 
 `--write` пересчитывает дескриптор. Изменение хешей рассматривается вместе с
 исходниками в PR. Для уже выданного потребителю кандидата используйте следующий
-номер, например `0.1.0-rc.9`; не заменяйте пакет под прежним именем.
+номер, например `0.1.0-rc.10`; не заменяйте пакет под прежним именем.
 `--check` обнаруживает изменение содержимого и добавление/удаление runtime-файлов.
 `check-release.py` проверяет целостность и изоляцию пакетов; он не заменяет
 браузерные проверки и приёмку подключённого источника данных.
@@ -32,7 +32,7 @@ python3 tools/test.py
 ## Создание пакета
 
 ```sh
-python3 tools/kit-release.py --pack /tmp/dashboard-kit-0.1.0-rc.8
+python3 tools/kit-release.py --pack /tmp/dashboard-kit-0.1.0-rc.9
 ```
 
 Родительский каталог должен существовать, конечный каталог — отсутствовать.

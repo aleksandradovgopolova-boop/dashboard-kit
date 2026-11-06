@@ -30,7 +30,8 @@
 
    2. Границ нет. Блок отделяется от соседа поверхностью и воздухом.
       Исключений ровно два, и оба функциональные:
-        · кольцо фокуса с клавиатуры — без него человек без мыши теряется;
+        · видимый фокус с клавиатуры; кнопки и сегменты используют заливку,
+          вкладки — подчёркивание, остальные компоненты сохраняют свой индикатор;
         · модификаторы --ruled / --zebra для плотных таблиц, где взгляду
           нужна опора на длинной строке. Включаются вручную.
 
@@ -515,6 +516,11 @@
    Кнопка узнаётся заливкой, а не рамкой: своя поверхность на фоне виджета.  */
 
 .dk-btn {
+  --button-size: var(--control-sm);
+  --button-pad: var(--button-pad-sm);
+  --button-line: var(--button-line-sm);
+  --button-icon: var(--icon-sm);
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -522,9 +528,11 @@
      переход на страницу компонента, и он рисовался подчёркнутым текстом. */
   text-decoration: none;
   gap: var(--space-3);
-  height: var(--control-md);
-  padding: var(--control-pad-md);
+  height: auto;
+  min-height: var(--button-size);
+  padding: var(--button-pad);
   font: var(--type-body);
+  line-height: var(--button-line);
   font-weight: var(--weight-ui);
   color: var(--ink-2);
   background: var(--surface-2);
@@ -555,18 +563,16 @@
    Кнопка без подписи обязана иметь aria-label — иначе для скринридера она
    просто «кнопка». */
 
-.dk-btn .dk-i { width: 16px; height: 16px; vertical-align: 0; }
-.dk-btn--sm .dk-i { width: 14px; height: 14px; }
-.dk-btn--lg .dk-i { width: 20px; height: 20px; }
+.dk-btn .dk-i { width: var(--button-icon); height: var(--button-icon); vertical-align: 0; flex: none; }
 
 /* Ведомый значок — всегда последним и чуть отодвинут: он не часть подписи. */
 .dk-i--after { margin-left: var(--space-1); }
 
-/* Размеры. По умолчанию M — он стоит в девяти случаях из десяти.
-   S для плотных мест: панель фильтров, действие внутри строки таблицы.
-   L для одиночного главного действия на странице. */
-.dk-btn--sm { height: var(--control-sm); padding: var(--control-pad-sm); font:var(--type-body); }
-.dk-btn--lg { height: var(--control-lg); padding: var(--control-pad-lg); font: var(--type-h3); }
+/* На дашборде по умолчанию S. M и L выбираются явно.
+   Высота складывается из строки и одного поля со всех четырёх сторон. */
+.dk-btn--sm { --button-size: var(--control-sm); --button-pad: var(--button-pad-sm); }
+.dk-btn--md { --button-size: var(--control-md); --button-pad: var(--button-pad-md); }
+.dk-btn--lg { --button-size: var(--control-lg); --button-pad: var(--button-pad-lg); --button-line: var(--button-line-lg); --button-icon: var(--icon-md); font-size: var(--text-title); }
 
 .dk-btn--primary {
   color: var(--brand-ink);
@@ -593,12 +599,16 @@
 }
 
 .dk-iconbtn {
+  --button-size: var(--control-sm);
+  --button-pad: var(--button-pad-sm);
+  --button-icon: var(--icon-sm);
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--control-md);
-  height: var(--control-md);
-  padding: 0;
+  width: var(--button-size);
+  height: var(--button-size);
+  padding: var(--button-pad);
   color: var(--ink-2);
   background: var(--surface-2);
   border: 0;
@@ -611,20 +621,18 @@
   .dk-iconbtn:hover { color: var(--ink); background: var(--surface-3); }
 }
 
-.dk-iconbtn .dk-i { width: 18px; height: 18px; vertical-align: 0; }
+.dk-iconbtn .dk-i { width: var(--button-icon); height: var(--button-icon); vertical-align: 0; flex: none; }
 
-.dk-iconbtn--sm { width: var(--control-sm); height: var(--control-sm); }
-.dk-iconbtn--sm .dk-i { width: 16px; height: 16px; }
-.dk-iconbtn--lg { width: var(--control-lg); height: var(--control-lg); }
-.dk-iconbtn--lg .dk-i { width: 20px; height: 20px; }
+.dk-iconbtn--sm { --button-size: var(--control-sm); --button-pad: var(--button-pad-sm); }
+.dk-iconbtn--md { --button-size: var(--control-md); --button-pad: var(--button-pad-md); }
+.dk-iconbtn--lg { --button-size: var(--control-lg); --button-pad: var(--button-pad-lg); --button-icon: var(--icon-md); }
 
-/* ИСКЛЮЧЕНИЕ 1. Кольцо фокуса с клавиатуры.
-   Единственная обводка, которая рисуется всегда. Она появляется только при
-   навигации с клавиатуры и исчезает при работе мышью, так что визуального
-   шума не создаёт — но без неё интерфейс недоступен. Не удалять. */
-.dk-btn:focus-visible,
-.dk-iconbtn:focus-visible,
-.dk-seg button:focus-visible,
+@media (pointer: coarse) {
+  .dk-btn, .dk-iconbtn { --button-pad: var(--button-pad-lg); --button-line: var(--button-line-lg); --button-icon: var(--icon-md); }
+}
+
+/* Кнопки и сегменты показывают клавиатурный фокус заливкой, без кольца.
+   Остальные компоненты сохраняют собственный индикатор фокуса. */
 .dk-lg:focus-visible,
 .dk-field:focus-within,
 .dk-rank__row:focus-visible,
@@ -637,6 +645,12 @@
    Дорожка — вложенная поверхность, активный сегмент — акцентная заливка.    */
 
 .dk-seg {
+  --segment-size: var(--control-sm);
+  --segment-pad: var(--space-2);
+  --segment-line: var(--button-line-sm);
+  --segment-icon: var(--icon-sm);
+  box-sizing: border-box;
+  min-height: var(--segment-size);
   display: inline-flex;
   gap: var(--space-1);
   background: var(--surface-2);
@@ -650,13 +664,16 @@
 }
 
 .dk-seg button {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  height: calc(var(--control-md) - 2 * var(--track-pad));
-  padding: var(--control-pad-md);
-  font: var(--type-caption);
+  height: auto;
+  min-height: calc(var(--segment-size) - 2 * var(--track-pad));
+  padding: var(--segment-pad);
+  font: var(--type-body);
+  line-height: var(--segment-line);
   color: var(--ink-2);
   background: transparent;
   border: 0;
@@ -679,15 +696,14 @@
   font-weight: var(--weight-ui-strong);
 }
 
-.dk-seg button .dk-i { width: 16px; height: 16px; vertical-align: 0; }
+.dk-seg button .dk-i { width: var(--segment-icon); height: var(--segment-icon); vertical-align: 0; flex: none; }
 
 /* Сегмент, который не помещается на телефоне, листается вбок — так же, как
    вкладки: одно поведение на весь интерфейс. Замер на 360: сегмент из четырёх
    вариантов выходил на 304 px при месте в 296 и делал страницу шире экрана.
    Переносить варианты на вторую строку нельзя — сегмент перестаёт читаться
    одним выбором; обрезать подписи многоточием тоже — «Недосту…» не вариант.
-   Кольцо фокуса при этом рисуется внутрь кнопки: прокрутка обрезала бы
-   внешнее, а фокус без кольца — это потерянное место на странице.
+   Фокус меняет заливку внутри кнопки, поэтому прокрутка его не обрезает.
    Цена: крайний вариант может оказаться за краем, и о нём говорит только
    обрезанная кнопка. Больше трёх вариантов на телефоне — повод взять
    выпадающий список, а не надеяться на прокрутку. */
@@ -695,36 +711,35 @@
   .dk-seg { overflow-x: auto; scrollbar-width: none; }
   .dk-seg::-webkit-scrollbar { display: none; }
   .dk-seg button { flex: none; }
-  .dk-seg button:focus-visible { outline-offset: calc(-1 * var(--focus-width)); }
 }
 
-.dk-seg--sm button { height: calc(var(--control-sm) - 2 * var(--track-pad)); padding: var(--control-pad-sm); }
-.dk-seg--lg button { height: calc(var(--control-lg) - 2 * var(--track-pad)); padding: var(--control-pad-lg); font-size: var(--text-body); }
+.dk-seg--sm { --segment-size: var(--control-sm); --segment-pad: var(--space-2); }
+.dk-seg--md { --segment-size: var(--control-md); --segment-pad: var(--space-3); }
+.dk-seg--lg { --segment-size: var(--control-lg); --segment-pad: var(--space-4); --segment-line: var(--button-line-lg); --segment-icon: var(--icon-md); }
+.dk-seg--lg button { font-size:var(--text-title); }
 
-/* Сегмент значками. Стоит ПОСЛЕ модификаторов размера намеренно: у них та же
-   специфичность, и правило, написанное выше, проигрывало им поля — кнопка
-   выходила 28 на 24 вместо квадрата. Заметно это только линейкой, а не
-   глазом, поэтому и держалось.
-
-   Квадрат делает aspect-ratio, а не вторая цифра ширины. Написать
-   width: var(--control-sm) рядом с height: calc(var(--control-sm) - 2 * var(--track-pad))
-   значит завести два числа, которые обязаны совпадать, — и однажды они
-   разойдутся при смене размера. Здесь ширина следует за высотой сама, каким
-   бы модификатором размера ни пользовались.
-
-   Вариант один. Был второй, --icon, с шириной 34 px цифрой — под высотой 28
-   он выходил 34 × 28, и владелец кита увидел это глазом на переключателе
-   темы (29.09). Убран: два имени одного варианта — и одно из них врёт.
-
-   Подпись в таком сегменте не исчезает, а переезжает в title и aria-label:
-   кнопка без доступного имени для скринридера — просто «кнопка», и человек
-   не узнает, между чем переключается. Значками сегмент делают там, где выбор
-   очевиден из самого содержимого: карта против плиток видна сразу, как только
-   переключишь. Там, где выбор не очевиден, подписи остаются. */
+/* Основной вариант сегмента — значки. Внешняя высота следует S/M/L,
+   квадрат кнопки — внутренней высоте за вычетом дорожки.
+   Подпись задаётся через title и aria-label; точные периоды можно оставить текстом. */
 .dk-seg--icons button {
   aspect-ratio: 1;
-  width: auto;
+  width: calc(var(--segment-size) - 2 * var(--track-pad));
   padding: 0;
+}
+
+:is(.dk-btn, .dk-iconbtn, .dk-seg button):is(:focus-visible, .is-focus-visible):not(:disabled):not([aria-disabled="true"]) {
+  outline: none;
+  box-shadow: none;
+  background: var(--button-focus-bg);
+  color: var(--button-focus-ink);
+}
+
+@media (forced-colors: active) {
+  :is(.dk-btn, .dk-iconbtn, .dk-seg button):is(:focus-visible, .is-focus-visible):not(:disabled):not([aria-disabled="true"]) {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
 }
 
 
@@ -732,6 +747,8 @@
    Залитое поле читается как «сюда можно писать» без всякой рамки.           */
 
 .dk-field {
+  --field-size: var(--control-lg);
+  --field-pad: var(--control-pad-lg);
   position: relative;
   display: flex;
   align-items: center;
@@ -751,7 +768,7 @@
 
 /* Поле по умолчанию L: в него пишут и в него целятся, мелкое неудобно.
    M — для плотной панели фильтров, где полей несколько в ряд. */
-.dk-field--md { height: var(--control-md); padding: 0; }
+.dk-field--md { --field-size: var(--control-md); --field-pad: var(--control-pad-md); height: auto; padding: 0; }
 
 .dk-field .dk-i { width: 16px; height: 16px; color: var(--ink-3); vertical-align: 0; }
 
@@ -3379,15 +3396,25 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   text-decoration: none;
   background: none;
   border: 0;
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  border-radius: 0;
   cursor: pointer;
-  transition: color var(--duration-fast), background var(--duration-fast);
+  transition: color var(--duration-fast);
 }
 @media (hover: hover) and (pointer: fine) {
-  .dk-tab:hover { color: var(--ink); background: var(--surface-2); }
+  .dk-tab:hover { color: var(--ink); }
+  .dk-tab:hover .dk-tab__n { color: var(--ink-2); }
 }
+.dk-tab.is-hover { color: var(--ink); }
+.dk-tab.is-hover .dk-tab__n { color: var(--ink-2); }
 
-.dk-tab:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+.dk-tab:focus-visible,
+.dk-tab.is-focus-visible {
+  color: var(--ink);
+  outline: none;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: var(--space-2);
+}
 
 /* Текущая вкладка отмечена подчёркиванием и цветом: одного цвета мало. */
 .dk-tab[aria-selected="true"],
@@ -3412,6 +3439,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   font-size: var(--text-caption);
   font-variant-numeric: tabular-nums;
   color: var(--ink-3);
+  transition: color var(--duration-fast);
 }
 
 /* --- баннер состояния страницы --------------------------------------------
@@ -3939,7 +3967,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 /* Отмечаем то, чего меньше. Если обязательны почти все поля, звёздочка у
    каждого превращается в шум; тогда помечают необязательные. Поэтому здесь
    два класса, а не один обязательный порядок. */
-.dk-label__req { color: var(--crit-ink); }
+.dk-label__req { color: var(--crit-ink); font-weight: var(--weight-ui-strong); }
 .dk-label__opt { color: var(--ink-3); }
 
 /* Подсказка объясняет требование ЗАРАНЕЕ. Требование, о котором человек узнаёт
@@ -3965,9 +3993,10 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 /* Многострочное поле. Высота по содержимому, но не меньше трёх строк: поле в
    одну строку обещает короткий ответ, и человек его и напишет. */
 .dk-area {
+  box-sizing: border-box;
   width: 100%;
   min-height: 84px;
-  padding: var(--control-pad-sm);
+  padding: var(--control-pad-lg);
   font: inherit;
   font-size: var(--text-body);
   color: var(--ink);
@@ -4526,7 +4555,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 
 /* Adaptive Tabler SVGs: compact mouse UI / regular touch UI. */
 .dk-i.dk-i--adaptive{ width:24px; height:24px; }
-.dk-btn--sm .dk-i.dk-i--adaptive,.dk-iconbtn--sm .dk-i.dk-i--adaptive{ width:20px; height:20px; }
+.dk-btn--sm .dk-i.dk-i--adaptive,.dk-iconbtn--sm .dk-i.dk-i--adaptive{ width:var(--button-icon); height:var(--button-icon); }
 @media(hover:hover) and (pointer:fine){
   .dk-i.dk-i--adaptive{ width:20px; height:20px; }
   .dk-btn--sm .dk-i.dk-i--adaptive,.dk-iconbtn--sm .dk-i.dk-i--adaptive{ width:16px; height:16px; }
@@ -4543,11 +4572,9 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 @media(prefers-reduced-motion:reduce){ .dk-scrollview--smooth{ scroll-behavior:auto; } }
 @media(forced-colors:active){ .dk-scrollview{ scrollbar-color:auto; } .dk-scrollview--hidden-bar{ scrollbar-width:auto; } .dk-scrollview--hidden-bar::-webkit-scrollbar{ display:block; } }
 /* Auto-size ordinary action icons; explicit sm/lg stay fixed. */
-.dk-btn > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:24px; height:24px; }
-.dk-btn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:20px; height:20px; }
+.dk-btn > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:var(--button-icon); height:var(--button-icon); }
 @media(hover:hover) and (pointer:fine){
- .dk-btn > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:20px; height:20px; }
- .dk-btn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:16px; height:16px; }
+  .dk-btn > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:var(--button-icon); height:var(--button-icon); }
 }
 .dk-scrollview{ --scrollview-height:320px; }
 
@@ -4708,7 +4735,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-tree__item { overflow-wrap: anywhere; }
 .dk-saved-views input { min-width: 0; max-width: 100%; }
 .dk-saved-views { min-width: 0; grid-template-columns: minmax(0, 1fr); }
-.dk-saved-views .dk-btn, .dk-layout-editor .dk-btn, .dk-export .dk-btn { white-space: normal; height: auto; min-height: var(--control-md); max-width: 100%; overflow-wrap: anywhere; }
+.dk-saved-views .dk-btn, .dk-layout-editor .dk-btn, .dk-export .dk-btn { white-space: normal; height: auto; min-height: var(--button-size); max-width: 100%; overflow-wrap: anywhere; }
 .dk-cal__agenda { display: grid; gap: var(--space-4); }
 .dk-cal__agenda ul { list-style: none; padding: 0; margin: var(--space-2) 0; }
 .dk-cal__agenda li { margin-bottom: var(--space-2); }
@@ -5151,13 +5178,13 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 }
 
 /* One control scale for dashboard filter toolbars. */
-.dk-toolbar :is(.dk-field, .dk-select__trigger, .dk-iconbtn) {
+.dk-toolbar :is(.dk-field, .dk-select__trigger) {
   height: var(--control-lg);
   border-radius: var(--radius-md);
   border: 0;
   box-shadow: none;
 }
-.dk-toolbar .dk-iconbtn { width: var(--control-lg); flex: none; background: var(--surface-2); }
+.dk-toolbar .dk-iconbtn { width: var(--button-size); height:var(--button-size); flex: none; }
 .dk-toolbar .dk-select__trigger { justify-content: space-between; }
 
 /* Shared overview composition: one material plane, one primary number and
@@ -5242,6 +5269,14 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 /* Editable controls own the inset once; the native input is the whole hit box. */
 .dk-field input,.dk-field select,.dk-search__input{ box-sizing:border-box; padding:var(--control-pad-md); height:auto; min-height:var(--control-md); align-self:center; }
 .dk-field,.dk-search{ height:auto; min-height:var(--control-md); gap:0; }
+.dk-field { min-height:var(--field-size); }
+.dk-field input,.dk-field select { min-height:var(--field-size); padding:var(--field-pad); font:var(--type-body); }
+.dk-field > .dk-i:first-child { margin-inline-start:var(--field-pad); }
+.dk-field > .dk-i:last-child { margin-inline:0 var(--field-pad); }
+@media (pointer:coarse) {
+  .dk-field { --field-pad:var(--control-pad-lg); }
+  .dk-field input,.dk-field select,.dk-area { font-size:var(--text-title); }
+}
 .dk-search__clear .dk-i{ width:var(--icon-size-control); height:var(--icon-size-control); }
 .dk-search__at{ height:auto; min-height:var(--control-sm); }
 .dk-field > .dk-i,.dk-search > .dk-i,.dk-search__icon{ margin-inline-start:var(--control-pad-md); }

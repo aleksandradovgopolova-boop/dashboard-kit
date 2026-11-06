@@ -153,7 +153,7 @@ def render(p: dict) -> str:
 <div class="sc-shell sc-shell--closed">
 <nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
-<div class="dk-wrap" id="top">
+<main class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
     <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · {esc(p["group"])}</p>
@@ -177,7 +177,7 @@ def render(p: dict) -> str:
   </header>
 
 {"".join(sec)}
-</div>
+</main>
 </div>
 
 <script>

@@ -37,7 +37,7 @@
 <div class="sc-shell sc-shell--closed">
 <nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
-<div class="dk-wrap" id="top">
+<main class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
     <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Управление</p>
@@ -106,7 +106,7 @@ document.getElementById(&#x27;advanced-export&#x27;).addEventListener(&#x27;clic
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>dkExport.csv(rows, columns, name?)</code></td><td>Blob</td><td>UTF-8 BOM, CRLF, quotes; formula-like strings prefixed with apostrophe. Передавайте текущий срез, не исходные строки.</td></tr><tr><td><code>dkExport.chart(chart, name?)</code></td><td>Promise<Blob></td><td>PNG через dkChart.exportImage(). SVG только из переданного самодостаточного DOM SVG: dkExport.svg(svg,name?).</td></tr></tbody></table></div>
   </section>
 
-</div>
+</main>
 </div>
 
 <script>

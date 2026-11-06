@@ -118,26 +118,104 @@ function tagReachable() {
   return expected;
 }
 
+/* Запоминаем спокойное состояние до обхода. Постоянная декоративная тень
+   не доказывает видимый фокус: индикатор должен появиться или измениться
+   именно при переходе фокуса. Прозрачные заливки считаем поверх заливок предков. */
+async function prepareFocusAudit() {
+  const baseline = new WeakMap();
+  const colors = new Map();
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 1;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const rgba = value => {
+    if (!colors.has(value)) {
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = value;
+      ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+      colors.set(value, [r, g, b, a / 255]);
+    }
+    return colors.get(value);
+  };
+  const over = (fg, bg) => fg.slice(0, 3).map((v, i) => v * fg[3] + bg[i] * (1 - fg[3]));
+  const background = n => {
+    const chain = [];
+    for (let a = n; a; a = a.parentElement) chain.push(a);
+    let rgb = [255, 255, 255];
+    for (const a of chain.reverse()) rgb = over(rgba(getComputedStyle(a).backgroundColor), rgb);
+    return rgb;
+  };
+  const luminance = rgb => rgb.map(v => {
+    v /= 255;
+    return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4;
+  }).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+  const contrast = (a, b) => {
+    const x = luminance(a), y = luminance(b);
+    return (Math.max(x, y) + .05) / (Math.min(x, y) + .05);
+  };
+  const read = n => {
+    const s = getComputedStyle(n);
+    return {
+      outline: [s.outlineStyle, s.outlineWidth, s.outlineColor, s.outlineOffset].join('|'),
+      outlineVisible: s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0 && rgba(s.outlineColor)[3] > 0,
+      shadow: s.boxShadow,
+      shadowVisible: (s.boxShadow.match(/(?:rgba?|color)\([^)]*\)/g) || []).some(color => rgba(color)[3] > 0),
+      decoration: [s.textDecorationLine, s.textDecorationStyle, s.textDecorationThickness, s.textDecorationColor].join('|'),
+      underline: s.textDecorationLine.includes('underline') && !!n.textContent.trim(),
+      decorationColor: rgba(s.textDecorationColor),
+      background: background(n),
+    };
+  };
+  const settle = async n => {
+    const transitions = [];
+    for (let a = n; a && a !== document.body; a = a.parentElement) {
+      for (const animation of a.getAnimations()) {
+        if (animation instanceof CSSTransition) transitions.push(animation.finished);
+      }
+    }
+    if (transitions.length) await Promise.race([
+      Promise.allSettled(transitions), new Promise(r => setTimeout(r, 400)),
+    ]);
+  };
+  const active = document.activeElement;
+  if (active && active !== document.body) { active.blur(); await settle(active); }
+  for (const n of document.querySelectorAll('[data-a11y]')) {
+    for (let a = n; a && a !== document.body; a = a.parentElement) {
+      if (!baseline.has(a)) baseline.set(a, read(a));
+    }
+  }
+  window.__dkA11yFocus = { settle, changed(n) {
+    const before = baseline.get(n);
+    if (!before) return false;
+    const after = read(n);
+    const outline = after.outlineVisible && after.outline !== before.outline;
+    const shadow = after.shadowVisible && after.shadow !== before.shadow;
+    const fill = contrast(before.background, after.background) >= 3;
+    const underline = after.underline && after.decoration !== before.decoration &&
+      contrast(over(after.decorationColor, after.background), after.background) >= 3;
+    return outline || shadow || fill || underline;
+  } };
+}
+
 /* Описание активного элемента после нажатия Tab: его номер (если это помеченный
-   контрол), видно ли фокус-кольцо и считает ли браузер фокус «клавиатурным»
+   контрол), появился ли видимый индикатор и считает ли браузер фокус «клавиатурным»
    (:focus-visible). Невидимый фокус на клавиатурном элементе — настоящий
    дефект: человек не знает, где он на странице. */
-function activeState() {
+async function activeState() {
   const e = document.activeElement;
   if (!e || e === document.body || e === document.documentElement) return { body: true };
-  // Кольцо может рисовать не сам элемент, а обёртка через :focus-within —
-  // так кит метит фокус у составного поля и у пилюли поиска. Поэтому кольцо
-  // ищем на элементе и его предках, пока фокус внутри них.
-  const hasRing = n => { const s = getComputedStyle(n);
-    return (s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0) || s.boxShadow !== 'none'; };
-  let ring = hasRing(e);
-  for (let a = e.parentElement; !ring && a && a !== document.body; a = a.parentElement) {
-    if (a.matches(':focus-within') && hasRing(a)) ring = true;
+  const audit = window.__dkA11yFocus;
+  await audit.settle(e);
+  // Фокус может рисовать обёртка через :focus-within — так устроены поля
+  // и поиск. Принимаем изменение индикатора, а не её постоянное оформление.
+  let indicator = audit.changed(e);
+  for (let a = e.parentElement; !indicator && a && a !== document.body; a = a.parentElement) {
+    if (a.matches(':focus-within') && audit.changed(a)) indicator = true;
   }
   let visible = false; try { visible = e.matches(':focus-visible'); } catch { visible = true; }
   const own = (typeof e.className === 'string' && e.className.trim()) ? '.' + e.className.trim().split(/\s+/).slice(0, 2).join('.') : '';
   const txt = (e.getAttribute('aria-label') || e.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 24);
-  return { idx: e.getAttribute('data-a11y'), ring, keyboard: visible,
+  return { idx: e.getAttribute('data-a11y'), indicator, keyboard: visible,
     label: e.tagName.toLowerCase() + own + (txt ? ` «${txt}»` : '') };
 }
 
@@ -182,8 +260,9 @@ async function checkPage(b, base, page) {
        смотрим, куда уехал фокус. Обход ограничен: если за 4× ожидаемых шагов он
        не замкнулся и не ушёл со страницы — это ловушка фокуса. */
     const expected = await ev(tagReachable);
+    await ev(prepareFocusAudit);
     const reached = new Set();
-    const noRing = new Map();
+    const noIndicator = new Map();
     const tab = async () => {
       for (const type of ['rawKeyDown', 'keyUp']) {
         await s('Input.dispatchKeyEvent', { type, windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9, key: 'Tab', code: 'Tab' });
@@ -198,7 +277,7 @@ async function checkPage(b, base, page) {
       if (a.idx !== null && a.idx !== undefined) {
         if (reached.has(a.idx)) { if (reached.size >= expected.length) break; } // замкнулся круг
         reached.add(a.idx);
-        if (!a.ring && a.keyboard) noRing.set(a.idx, a.label);
+        if (!a.indicator && a.keyboard) noIndicator.set(a.idx, a.label);
       }
       // Застревание: фокус не двигается с одного и того же места много шагов.
       if (a.label === lastLabel) { if (++stuck >= 6) { trap = a.label; break; } } else stuck = 0;
@@ -212,7 +291,7 @@ async function checkPage(b, base, page) {
       problems.push('обход Tab не состоялся: фокус не попал ни на один контрол — проверка клавиатуры недействительна');
     } else {
       for (const m of missed.slice(0, 12)) problems.push(`контрол недостижим с клавиатуры (Tab до него не доходит): ${m.label}`);
-      for (const [, label] of [...noRing].slice(0, 12)) problems.push(`фокус не виден на контроле (нет кольца при клавиатурном фокусе): ${label}`);
+      for (const [, label] of [...noIndicator].slice(0, 12)) problems.push(`фокус не виден на контроле (нет различимого изменения при клавиатурном фокусе): ${label}`);
     }
 
     /* 2. ИМЯ. Дерево доступности — то же, что читает скринридер. Нужен не наш

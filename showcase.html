@@ -601,12 +601,11 @@
   <!-- ---------------------------------------------------------------- -->
   <section class="sc-sec" data-group="Управление">
     <h2>Управление</h2>
-    <p>Кнопки узнаются заливкой, а не рамкой. Пройди табом — кольцо фокуса появляется
-       только при работе с клавиатуры.</p>
+    <p>Кнопки и сегменты по умолчанию используют S. Пройди табом — фокус меняет заливку и цвет текста без обводки.</p>
 
     <div class="dk-panel">
       <div class="sc-row">
-        <span class="dk-caption" style="width:96px">S · 28</span>
+        <span class="dk-caption" style="width:96px">S · 32</span>
         <button class="dk-btn dk-btn--primary dk-btn--sm">Действие</button>
         <button class="dk-btn dk-btn--sm">Обычная</button>
         <button class="dk-iconbtn dk-iconbtn--sm" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button>
@@ -614,15 +613,15 @@
       </div>
 
       <div class="sc-row">
-        <span class="dk-caption" style="width:96px">M · 32</span>
-        <button class="dk-btn dk-btn--primary">Действие</button>
-        <button class="dk-btn">Обычная</button>
-        <button class="dk-iconbtn" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button>
-        <div class="dk-seg" role="group" aria-label="Период"><button type="button" aria-pressed="true">7 дней</button><button type="button" aria-pressed="false">30 дней</button></div>
+        <span class="dk-caption" style="width:96px">M · 36</span>
+        <button class="dk-btn dk-btn--primary dk-btn--md">Действие</button>
+        <button class="dk-btn dk-btn--md">Обычная</button>
+        <button class="dk-iconbtn dk-iconbtn--md" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button>
+        <div class="dk-seg dk-seg--md" role="group" aria-label="Период"><button type="button" aria-pressed="true">7 дней</button><button type="button" aria-pressed="false">30 дней</button></div>
       </div>
 
       <div class="sc-row">
-        <span class="dk-caption" style="width:96px">L · 40</span>
+        <span class="dk-caption" style="width:96px">L · 44</span>
         <button class="dk-btn dk-btn--primary dk-btn--lg">Действие</button>
         <button class="dk-btn dk-btn--lg">Обычная</button>
         <button class="dk-iconbtn dk-iconbtn--lg" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button>
@@ -639,10 +638,10 @@
       </div>
 
       <div class="sc-row" style="margin-bottom:0">
-        <div class="dk-seg" role="group" aria-label="Вид">
-          <button type="button" aria-pressed="true"><svg class="dk-i"><use href="#ti-map"/></svg>Карта</button>
-          <button type="button" aria-pressed="false"><svg class="dk-i"><use href="#ti-layout-grid"/></svg>Плитки</button>
-          <button type="button" aria-pressed="false"><svg class="dk-i"><use href="#ti-table"/></svg>Таблица</button>
+        <div class="dk-seg dk-seg--icons" role="group" aria-label="Вид">
+          <button type="button" aria-pressed="true" aria-label="Карта" title="Карта"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg></button>
+          <button type="button" aria-pressed="false" aria-label="Плитки" title="Плитки"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg></button>
+          <button type="button" aria-pressed="false" aria-label="Таблица" title="Таблица"><svg class="dk-i" aria-hidden="true"><use href="#ti-table"/></svg></button>
         </div>
 
         <div class="dk-field dk-field--search">
@@ -1289,13 +1288,13 @@
         <div class="dk-form__alarm" hidden></div>
 
         <div class="dk-ff dk-ff--wide">
-          <label class="dk-label" for="f-name">Название работы <span class="dk-label__req">обязательно</span></label>
+          <label class="dk-label" for="f-name">Название работы <span class="dk-label__req" aria-hidden="true">*</span></label>
           <div class="dk-field"><input id="f-name" name="name" placeholder="Замена задвижки на вводе" required minlength="5"></div>
           <div class="dk-hint">Так её увидят диспетчеры смены в календаре</div>
         </div>
 
         <div class="dk-ff">
-          <label class="dk-label" for="f-kind">Вид работы <span class="dk-label__req">обязательно</span></label>
+          <label class="dk-label" for="f-kind">Вид работы <span class="dk-label__req" aria-hidden="true">*</span></label>
           <div class="dk-field">
             <select id="f-kind" name="kind" required>
               <option value="">Выберите вид</option>
@@ -1308,24 +1307,24 @@
         </div>
 
         <div class="dk-ff">
-          <label class="dk-label" for="f-people">Затронуто жителей <span class="dk-label__opt">если известно</span></label>
+          <label class="dk-label" for="f-people">Затронуто жителей</label>
           <div class="dk-field"><input id="f-people" name="people" type="number" min="0" max="500000" placeholder="1240"></div>
           <div class="dk-hint">Человек, а не квартир</div>
         </div>
 
         <div class="dk-ff">
-          <label class="dk-label" for="f-from">Начало <span class="dk-label__req">обязательно</span></label>
+          <label class="dk-label" for="f-from">Начало <span class="dk-label__req" aria-hidden="true">*</span></label>
           <div class="dk-field"><input id="f-from" name="from" type="datetime-local" required></div>
         </div>
 
         <div class="dk-ff">
-          <label class="dk-label" for="f-till">Окончание <span class="dk-label__opt">если известно</span></label>
+          <label class="dk-label" for="f-till">Окончание</label>
           <div class="dk-field"><input id="f-till" name="till" type="datetime-local"></div>
           <div class="dk-hint">Оставьте пустым, если срок ещё не ясен</div>
         </div>
 
         <div class="dk-ff dk-ff--wide">
-          <label class="dk-label" for="f-note">Что сказать жителям <span class="dk-label__opt">необязательно</span></label>
+          <label class="dk-label" for="f-note">Что сказать жителям</label>
           <textarea class="dk-area" id="f-note" name="note" maxlength="300" placeholder="Горячей воды не будет с 8:00 до 13:00, подвоз воды у дома 14"></textarea>
           <div class="dk-hint">До 300 знаков — текст уйдёт в рассылку как есть</div>
         </div>

@@ -37,7 +37,7 @@
 <div class="sc-shell sc-shell--closed">
 <nav hidden class="sc-nav" aria-label="Разделы страницы"></nav>
 
-<div class="dk-wrap" id="top">
+<main class="dk-wrap" id="top">
 
   <header class="sc-hero sc-hero--component">
     <div class="sc-article-tools"><p class="sc-hero__o">Компоненты · Данные</p>
@@ -163,7 +163,7 @@ t.selected; t.clear();
 &lt;/script&gt;</code></pre><h3>Параметры и методы</h3><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:26%">Параметр</th><th style="width:22%">Тип</th><th>Что делает</th></tr></thead><tbody><tr><td><code>onSelect(ids)</code></td><td>функция</td><td>При каждой смене выбора с массивом <code>data-id</code>.</td></tr><tr><td><code>onSort(e)</code></td><td>функция</td><td>Передан — таблица не сортирует сама, а сообщает <code>e.column</code> и <code>e.dir</code>.</td></tr><tr><td><code>data-sortable</code></td><td>атрибут th</td><td>Имя колонки для сортировки.</td></tr><tr><td><code>data-sort</code></td><td>атрибут td</td><td>Значение для сортировки, когда текст ячейки — не оно.</td></tr><tr><td><code>--table-min, --table-max</code></td><td>переменные на обёртке</td><td>Минимальная ширина и высота прокрутки; по умолчанию 720 и 480.</td></tr><tr><td><code>update({selected}) / destroy()</code></td><td>API</td><td>Восстановление выбора по data-id; cleanup обработчиков/observer без удаления таблицы. Sort host связывает через onSort.</td></tr></tbody></table></div>
   </section>
 
-</div>
+</main>
 </div>
 
 <script>

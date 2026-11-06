@@ -87,31 +87,35 @@
   .dk-glass :is(.dk-btn, .dk-iconbtn, .dk-select__trigger, .dk-seg button, .dk-field, .dk-search) { transition: none; }
 }
 
-/* Одинаковый размер по умолчанию. S/M/L остаются только явными вариантами. */
-.dk-glass :is(.dk-btn, .dk-iconbtn, .dk-select, .dk-field, .dk-search, .dk-seg) {
+/* Материал использует размеры компонентов: кнопка и сегмент по умолчанию S. */
+.dk-glass :is(.dk-select, .dk-search) {
   --glass-control-size: var(--control-md);
   --glass-control-icon: var(--icon-size-control);
   --glass-control-pad: var(--control-pad-md);
 }
-.dk-glass :is(.dk-btn--sm, .dk-iconbtn--sm, .dk-select--sm, .dk-seg--sm) {
+.dk-glass .dk-select--sm {
   --glass-control-size: var(--control-sm);
   --glass-control-pad: var(--control-pad-sm);
   --glass-control-icon: var(--icon-size-compact);
 }
-.dk-glass :is(.dk-btn--lg,.dk-seg--lg) { --glass-control-size:var(--control-lg); --glass-control-pad:var(--control-pad-lg); --glass-control-icon:var(--icon-size-control); }
-.dk-glass :is(.dk-field--md, .dk-select--md) { --glass-control-size: var(--control-md); }
-.dk-glass :is(.dk-field, .dk-search, .dk-select__trigger, .dk-iconbtn) {
+.dk-glass .dk-select--md { --glass-control-size: var(--control-md); }
+.dk-glass .dk-field { --glass-control-size: var(--field-size); --glass-control-pad: var(--field-pad); --glass-control-icon: var(--icon-size-control); }
+.dk-glass :is(.dk-btn, .dk-iconbtn) { --glass-control-size: var(--button-size); --glass-control-pad: var(--button-pad); --glass-control-icon: var(--button-icon); }
+.dk-glass .dk-seg { --glass-control-size: var(--segment-size); --glass-control-icon: var(--segment-icon); }
+.dk-glass :is(.dk-field, .dk-search, .dk-select__trigger) {
   height: var(--glass-control-size);
 }
 .dk-glass .dk-btn { height:auto; min-height:var(--glass-control-size); }
-.dk-glass .dk-iconbtn { width: var(--glass-control-size); }
+.dk-glass .dk-iconbtn { width: var(--glass-control-size); height: var(--glass-control-size); border: 0; }
 /* Дорожка и выбранная стеклянная линза читаются как два уровня глубины. */
 .dk-glass .dk-seg {
   padding: var(--track-pad);
+  border: 0;
   background: var(--glass-control-sheen), var(--glass-segment-track);
 }
 .dk-glass .dk-seg button {
-  height: calc(var(--glass-control-size) - 2 * var(--track-pad) - 2px);
+  height: auto;
+  min-height: calc(var(--glass-control-size) - 2 * var(--track-pad));
   border-radius: calc(var(--radius-md) - var(--track-pad));
 }
 /* Одна шкала SVG для обычных контролов; явно адаптивные значки имеют свой API. */
@@ -146,7 +150,7 @@
   .dk-glass .dk-seg button { min-width: var(--control-md); min-height: var(--control-md); }
 }
 
-/* У сегмента — свет и глубина; синий контур остаётся только фокусу с клавиатуры. */
+/* У выбранного сегмента — свет и глубина; фокус меняет заливку. */
 .dk-glass .dk-seg button[aria-pressed="true"],
 .dk-glass .dk-seg button.is-on {
   background: var(--glass-segment-sheen), var(--glass-segment-lens);
@@ -183,10 +187,6 @@
 
 /* Фокус виден отдельным контуром. Мягкий ореол дополняет, не заменяет его. */
 .dk-glass .dk-select__trigger:focus-visible,
-.dk-glass .dk-btn:focus-visible,
-.dk-glass .dk-iconbtn:focus-visible,
-.dk-glass .dk-seg button:focus-visible,
-.dk-glass .dk-tab:focus-visible,
 .dk-glass .dk-field:focus-within,
 .dk-glass .dk-search:focus-within {
   outline: var(--focus-width) solid var(--brand);
@@ -413,12 +413,29 @@
 
 .dk-glass :is(.dk-field,.dk-search,.dk-select__trigger){ height:auto; min-height:var(--glass-control-size); }
 .dk-glass .dk-field input,.dk-glass .dk-field select,.dk-glass .dk-search__input{ height:auto; min-height:var(--glass-control-size); }
-.dk-root .dk-glass :is(.dk-field,.dk-search) > svg.dk-i{ margin-inline-start:var(--control-pad-md); }
+.dk-root .dk-glass .dk-search > svg.dk-i{ margin-inline-start:var(--control-pad-md); }
+.dk-root .dk-glass .dk-field > svg.dk-i:first-child{ margin-inline-start:var(--field-pad); }
+.dk-root .dk-glass .dk-field > svg.dk-i:last-child{ margin-inline:0 var(--field-pad); }
 .dk-root .dk-glass .dk-table :is(.dk-td-pick,.dk-th-pick){ padding:var(--space-1); }
 
 /* An inset edge preserves the size variant and even content gutters. */
 .dk-root .dk-glass .dk-btn{ border:0; }
-.dk-root .dk-glass .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost){ border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
+.dk-root .dk-glass .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost):not(:focus-visible):not(.is-focus-visible){ border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
+
+/* The same real focus state is used by the component demonstration. */
+.dk-root .dk-glass :is(.dk-btn, .dk-iconbtn, .dk-seg button):is(:focus-visible, .is-focus-visible):not(:disabled):not([aria-disabled="true"]) {
+  outline: none;
+  box-shadow: none;
+  background: var(--button-focus-bg);
+  color: var(--button-focus-ink);
+}
+@media (forced-colors: active) {
+  .dk-root .dk-glass :is(.dk-btn, .dk-iconbtn, .dk-seg button):is(:focus-visible, .is-focus-visible):not(:disabled):not([aria-disabled="true"]) {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+}
 
 
 /* The edge is drawn inside the surface, without adding odd layout insets. */
