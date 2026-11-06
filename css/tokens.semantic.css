@@ -573,6 +573,9 @@
   --control-pad-sm: var(--step-3);
   --control-pad-md: var(--step-4);
   --control-pad-lg: var(--size-12);
+  --control-focus: var(--ink);
+  --control-focus-ink: var(--bg);
+  --field-inset: var(--size-12);
 
   /* -------------------------------------------------------------------------
      СЕТКА И УСТРОЙСТВА

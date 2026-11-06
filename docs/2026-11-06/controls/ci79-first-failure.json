@@ -1,0 +1,19 @@
+{
+  "head": "ac2fa9b3f747e69a57b594052409bb705214801d",
+  "run": 42217137594,
+  "job": 127889854309,
+  "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/actions/runs/42217137594",
+  "result": "failure",
+  "excerpt": "\n2026-11-06T12:23:44.4664273Z RUN: browser/controls\n2026-11-06T12:23:46.8013155Z node:internal/modules/run_main:123\n2026-11-06T12:23:46.8013767Z     triggerUncaughtException(\n2026-11-06T12:23:46.8014155Z     ^\n2026-11-06T12:23:46.8014327Z \n2026-11-06T12:23:46.8014830Z AssertionError [ERR_ASSERTION]: Tab hover is visible\n2026-11-06T12:23:46.8015774Z     at file:///home/runner/work/dashboard-kit/dashboard-kit/tools/check-controls.mjs:49:11 {\n2026-11-06T12:23:46.8016554Z   generatedMessage: false,\n2026-11-06T12:23:46.8016960Z   code: 'ERR_ASSERTION',\n2026-11-06T12:23:46.8017318Z   actual: 'rgba(0, 0, 0, 0)',\n2026-11-06T12:23:46.8017712Z   expected: 'rgba(0, 0, 0, 0)',\n2026-11-06T12:23:46.8018234Z   operator: 'notStrictEqual',\n2026-11-06T12:23:46.8019606Z   diff: 'simple'\n2026-11-06T12:23:46.8019974Z }\n2026-11-06T12:23:46.8020139Z \n2026-11-06T12:23:46.8020299Z Node.js v22.23.4\n2026-11-06T12:23:46.8368733Z Traceback (most recent call last):\n2026-11-06T12:23:46.8369638Z   File \"/home/runner/work/dashboard-kit/dashboard-kit/tools/test.py\", line 66, in <module>\n2026-11-06T12:23:46.8370331Z     main()\n2026-11-06T12:23:46.8441296Z   File \"/home/runner/work/dashboard-kit/dashboard-kit/tools/test.py\", line 55, in main\n2026-11-06T12:23:46.8443158Z     run([node, f'tools/check-{name}.mjs'], timeout=600 if name == 'docs' else 240)\n2026-11-06T12:23:46.8445634Z   File \"/home/runner/work/dashboard-kit/dashboard-kit/tools/test.py\", line 31, in run\n2026-11-06T12:23:46.8447077Z     raise subprocess.CalledProcessError(code, args)\n2026-11-06T12:23:46.8448780Z subprocess.CalledProcessError: Command '['/opt/hostedtoolcache/node/22.23.4/x64/bin/node', 'tools/check-controls.mjs']' returned non-zero exit status 1.\n2026-11-06T12:23:46.8524099Z ##[error]Process completed with exit code 1.\n2026-11-06T12:23:46.8641890Z ##[gro",
+  "codeql": [
+    {
+      "rule": "Insecure temporary file",
+      "path": "tools/check-controls.mjs",
+      "lines": [
+        61,
+        75
+      ],
+      "fix": "Use mkdtemp under the OS temp directory; explicit DK_EVIDENCE_DIR remains a caller-owned output directory."
+    }
+  ]
+}

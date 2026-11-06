@@ -18,7 +18,7 @@
 
 - Короткие подписи одной формы: «Карта / Плитки», «7 дней / 30 дней».
 - Первым стоит вид по умолчанию, и он же выбран при открытии.
-- Значок и слово вместе; только значки — когда у группы есть aria-label.
+- Для вида по умолчанию значки без текста: у каждой кнопки aria-label и подсказка. Для периода и неоднозначных вариантов сохраняйте текст.
 
 ## Контент: не так
 
@@ -49,21 +49,21 @@
 
 ## Варианты
 
-- `dk-seg` — Сегмент размера M. По умолчанию.
-- `dk-seg--sm / dk-seg--lg` — Высота 32 или 44. Шапка виджета (sm), панель страницы (lg).
-- `dk-seg--icons` — Кнопки только со значками, квадратные. Когда слов не хватает по ширине; подпись — в aria-label и title.
+- `dk-seg` — Сегмент размера S. По умолчанию.
+- `dk-seg--sm / dk-seg--md / dk-seg--lg` — Высота 32 / 36 / 44 px. Шапка виджета (sm), панель страницы (lg).
+- `dk-seg--icons` — Кнопки только со значками, квадратные. По умолчанию для переключения вида. Названия — в aria-label и title; декоративные SVG скрыты от скринридера.
 - `aria-pressed="true"` — Атрибут выбранной кнопки. Ровно у одной кнопки группы.
 
 ## Размеры
 
-Размер согласуется с соседними контролами. Обычный сегмент использует --control-md (36 px), компактный — --control-sm (32 px), крупный — --control-lg (44 px). На таче цели от 44 px. Внутренняя кнопка учитывает поля общей подложки.
+Размер согласуется с соседними контролами. По умолчанию S — --control-sm (32 px), явный M — --control-md (36 px), L — --control-lg (44 px). Внешняя высота совпадает с кнопкой того же размера. На таче цели от 44 px. Внутренняя кнопка учитывает поля общей подложки.
 
 ## Код
 
 ```html
-<div class="dk-seg" role="group" aria-label="Вид данных">
-  <button type="button" data-view="map" aria-pressed="true">Карта</button>
-  <button type="button" data-view="tiles" aria-pressed="false">Плитки</button>
+<div class="dk-seg dk-seg--icons" role="group" aria-label="Вид данных">
+  <button type="button" data-view="map" aria-pressed="true" aria-label="Карта" title="Карта"><svg class="dk-i" aria-hidden="true"><use href="#ti-map"/></svg></button>
+  <button type="button" data-view="tiles" aria-pressed="false" aria-label="Плитки" title="Плитки"><svg class="dk-i" aria-hidden="true"><use href="#ti-layout-grid"/></svg></button>
 </div>
 
 <script>
@@ -79,7 +79,7 @@ seg.addEventListener('click', function (e) {
 ## Параметры
 
 - `aria-pressed` (атрибут): «true» у выбранной кнопки; страница переключает сама.
-- `dk-seg--sm, dk-seg--lg` (класс): Размер группы.
+- `dk-seg--sm, dk-seg--md, dk-seg--lg` (класс): Размер группы.
 - `dk-seg--icons` (класс): Квадратные кнопки под значки.
 - `disabled` (атрибут кнопки): Вариант недоступен — например, нет данных для плиток.
 
@@ -87,4 +87,4 @@ seg.addEventListener('click', function (e) {
 
 - [Вкладки](component-tabs.html) — когда варианты — это разделы с адресом
 - [Регионы](component-map.html) — сегмент «карта / плитки» внутри виджета
-- [Кнопка](component-button.html) — те же размеры и кольцо фокуса
+- [Кнопка](component-button.html) — те же размеры и заливка фокуса

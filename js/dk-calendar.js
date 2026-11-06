@@ -196,9 +196,9 @@
         '<button type="button" class="dk-iconbtn dk-iconbtn--sm" data-go="1" title="Вперёд" aria-label="Вперёд">' +
           '<svg class="dk-i dk-i--sm" aria-hidden="true"><use href="#ti-chevron-right"/></svg></button>' +
         '<button type="button" class="dk-btn dk-btn--sm" data-go="today">Сегодня</button>' +
-        '<div class="dk-seg dk-seg--sm" role="group" aria-label="Вид календаря">' +
-          '<button type="button" data-view="month" aria-pressed="true">Месяц</button>' +
-          '<button type="button" data-view="week" aria-pressed="false">Неделя</button>' +
+        '<div class="dk-seg dk-seg--icons" role="group" aria-label="Вид календаря">' +
+          '<button type="button" data-view="month" aria-pressed="true" aria-label="Месяц" title="Месяц"><svg class="dk-i" aria-hidden="true"><use href="#ti-calendar"/></svg></button>' +
+          '<button type="button" data-view="week" aria-pressed="false" aria-label="Неделя" title="Неделя"><svg class="dk-i" aria-hidden="true"><use href="#ti-table"/></svg></button>' +
         '</div>' +
       '</div>' +
       '<div class="dk-cal__body"></div>';

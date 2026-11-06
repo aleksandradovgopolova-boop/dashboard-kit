@@ -98,7 +98,15 @@
   --glass-control-pad: var(--control-pad-sm);
   --glass-control-icon: var(--icon-size-compact);
 }
-.dk-glass :is(.dk-btn--lg,.dk-seg--lg) { --glass-control-size:var(--control-lg); --glass-control-pad:var(--control-pad-lg); --glass-control-icon:var(--icon-size-control); }
+.dk-glass :is(.dk-btn, .dk-iconbtn, .dk-seg) {
+  --glass-control-size: var(--control-sm);
+  --glass-control-pad: var(--control-pad-sm);
+}
+.dk-glass :is(.dk-btn--md, .dk-iconbtn--md, .dk-seg--md) {
+  --glass-control-size: var(--control-md);
+  --glass-control-pad: var(--control-pad-md);
+}
+.dk-glass :is(.dk-btn--lg,.dk-iconbtn--lg,.dk-seg--lg) { --glass-control-size:var(--control-lg); --glass-control-pad:var(--control-pad-lg); --glass-control-icon:var(--icon-size-control); }
 .dk-glass :is(.dk-field--md, .dk-select--md) { --glass-control-size: var(--control-md); }
 .dk-glass :is(.dk-field, .dk-search, .dk-select__trigger, .dk-iconbtn) {
   height: var(--glass-control-size);
@@ -108,10 +116,13 @@
 /* Дорожка и выбранная стеклянная линза читаются как два уровня глубины. */
 .dk-glass .dk-seg {
   padding: var(--track-pad);
+  border: 0;
+  box-shadow: inset 0 0 0 var(--hairline) var(--glass-edge-soft);
   background: var(--glass-control-sheen), var(--glass-segment-track);
 }
 .dk-glass .dk-seg button {
-  height: calc(var(--glass-control-size) - 2 * var(--track-pad) - 2px);
+  height: auto;
+  min-height: calc(var(--glass-control-size) - 2 * var(--track-pad));
   border-radius: calc(var(--radius-md) - var(--track-pad));
 }
 /* Одна шкала SVG для обычных контролов; явно адаптивные значки имеют свой API. */
@@ -142,7 +153,7 @@
   box-shadow: none;
 }
 @media (pointer: coarse) {
-  .dk-glass .dk-seg { --track-pad: 0px; }
+  .dk-glass .dk-seg { --track-pad: 0px; --segment-pad:var(--control-pad-lg); }
   .dk-glass .dk-seg button { min-width: var(--control-md); min-height: var(--control-md); }
 }
 
@@ -183,9 +194,6 @@
 
 /* Фокус виден отдельным контуром. Мягкий ореол дополняет, не заменяет его. */
 .dk-glass .dk-select__trigger:focus-visible,
-.dk-glass .dk-btn:focus-visible,
-.dk-glass .dk-iconbtn:focus-visible,
-.dk-glass .dk-seg button:focus-visible,
 .dk-glass .dk-tab:focus-visible,
 .dk-glass .dk-field:focus-within,
 .dk-glass .dk-search:focus-within {
@@ -413,7 +421,7 @@
 
 .dk-glass :is(.dk-field,.dk-search,.dk-select__trigger){ height:auto; min-height:var(--glass-control-size); }
 .dk-glass .dk-field input,.dk-glass .dk-field select,.dk-glass .dk-search__input{ height:auto; min-height:var(--glass-control-size); }
-.dk-root .dk-glass :is(.dk-field,.dk-search) > svg.dk-i{ margin-inline-start:var(--control-pad-md); }
+.dk-root .dk-glass :is(.dk-field,.dk-search) > svg.dk-i{ margin-inline-start:var(--field-inset); }
 .dk-root .dk-glass .dk-table :is(.dk-td-pick,.dk-th-pick){ padding:var(--space-1); }
 
 /* An inset edge preserves the size variant and even content gutters. */
@@ -423,7 +431,7 @@
 
 /* The edge is drawn inside the surface, without adding odd layout insets. */
 .dk-root .dk-glass :is(.dk-field,.dk-search){ border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
-.dk-glass .dk-menu__search > .dk-i{ width:var(--icon-size-control); height:var(--icon-size-control); margin-inline-start:var(--control-pad-md); }
+.dk-glass .dk-menu__search > .dk-i{ width:var(--icon-size-control); height:var(--icon-size-control); margin-inline-start:var(--field-inset); }
 .dk-glass .dk-map__zoom{ width:var(--control-lg); border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
 .dk-glass .dk-map__zoom button .dk-i{ width:var(--icon-size-control); height:var(--icon-size-control); }
 .dk-glass .dk-map__zoom button + button{ border-top:0; box-shadow:inset 0 var(--hairline) 0 var(--glass-edge-soft); }
@@ -432,6 +440,16 @@
 .dk-glass .dk-select--sm{ --glass-control-pad:var(--control-pad-sm); }
 .dk-root .dk-glass .dk-select > .dk-select__trigger,
 .dk-root .dk-glass .dk-pager__size select{ border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
+.dk-root .dk-glass .dk-select > .dk-select__trigger { padding-inline-start:var(--field-inset); }
+.dk-root .dk-glass :is(.dk-btn,.dk-iconbtn,.dk-seg button):focus-visible {
+ outline:none; box-shadow:none; background:var(--control-focus); color:var(--control-focus-ink);
+ text-decoration:underline; text-underline-offset:var(--space-1);
+}
+@media (forced-colors: active) {
+ .dk-root .dk-glass :is(.dk-btn,.dk-iconbtn,.dk-seg button):focus-visible {
+  outline:var(--focus-width) solid Highlight;
+ }
+}
 @media(pointer:coarse){ .dk-glass .dk-select{ --glass-control-pad:var(--control-pad-lg); } }
 
 @media(pointer:coarse){

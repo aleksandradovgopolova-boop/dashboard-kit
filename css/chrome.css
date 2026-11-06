@@ -611,6 +611,9 @@
   .dk-tabbar__item > span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .dk-tabbar__item .dk-i { width: 20px; height: 20px; }
   .dk-tabbar__item:active { background: var(--surface-2); }
+  @media (hover: hover) and (pointer: fine) {
+    .dk-tabbar__item:hover { color:var(--ink); background:var(--glass-hover, var(--surface-3)); }
+  }
   .dk-tabbar__item:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
   .dk-tabbar__item[aria-current="page"] { color: var(--ink); font-weight: var(--weight-ui-strong); }
   .dk-tabbar__item[aria-current="page"] .dk-i { width: 22px; height: 22px; }

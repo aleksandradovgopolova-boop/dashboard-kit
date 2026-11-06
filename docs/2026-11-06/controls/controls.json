@@ -1,0 +1,1258 @@
+[
+  {
+    "glass": false,
+    "theme": "dark",
+    "touch": false,
+    "geometry": [
+      {
+        "size": "s",
+        "items": [
+          {
+            "width": 78.1875,
+            "height": 32,
+            "padding": [
+              "6px",
+              "6px",
+              "6px",
+              "6px"
+            ]
+          },
+          {
+            "width": 32,
+            "height": 32,
+            "padding": [
+              "6px",
+              "6px",
+              "6px",
+              "6px"
+            ]
+          },
+          {
+            "width": 58,
+            "height": 32,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "md",
+        "items": [
+          {
+            "width": 82.1875,
+            "height": 36,
+            "padding": [
+              "8px",
+              "8px",
+              "8px",
+              "8px"
+            ]
+          },
+          {
+            "width": 36,
+            "height": 36,
+            "padding": [
+              "8px",
+              "8px",
+              "8px",
+              "8px"
+            ]
+          },
+          {
+            "width": 66,
+            "height": 36,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "lg",
+        "items": [
+          {
+            "width": 100.140625,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 82,
+            "height": 44,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      }
+    ],
+    "focus": {
+      "button": true,
+      "visible": true,
+      "outline": "none",
+      "bg": "rgb(245, 246, 250)",
+      "color": "rgb(18, 20, 25)"
+    }
+  },
+  {
+    "glass": false,
+    "theme": "dark",
+    "touch": true,
+    "geometry": [
+      {
+        "size": "s",
+        "items": [
+          {
+            "width": 90.1875,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "md",
+        "items": [
+          {
+            "width": 90.1875,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "lg",
+        "items": [
+          {
+            "width": 100.140625,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      }
+    ],
+    "focus": {
+      "button": true,
+      "visible": true,
+      "outline": "none",
+      "bg": "rgb(245, 246, 250)",
+      "color": "rgb(18, 20, 25)"
+    }
+  },
+  {
+    "glass": false,
+    "theme": "light",
+    "touch": false,
+    "geometry": [
+      {
+        "size": "s",
+        "items": [
+          {
+            "width": 78.1875,
+            "height": 32,
+            "padding": [
+              "6px",
+              "6px",
+              "6px",
+              "6px"
+            ]
+          },
+          {
+            "width": 32,
+            "height": 32,
+            "padding": [
+              "6px",
+              "6px",
+              "6px",
+              "6px"
+            ]
+          },
+          {
+            "width": 58,
+            "height": 32,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "md",
+        "items": [
+          {
+            "width": 82.1875,
+            "height": 36,
+            "padding": [
+              "8px",
+              "8px",
+              "8px",
+              "8px"
+            ]
+          },
+          {
+            "width": 36,
+            "height": 36,
+            "padding": [
+              "8px",
+              "8px",
+              "8px",
+              "8px"
+            ]
+          },
+          {
+            "width": 66,
+            "height": 36,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "lg",
+        "items": [
+          {
+            "width": 100.140625,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 82,
+            "height": 44,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      }
+    ],
+    "focus": {
+      "button": true,
+      "visible": true,
+      "outline": "none",
+      "bg": "rgb(32, 38, 51)",
+      "color": "rgb(232, 235, 242)"
+    }
+  },
+  {
+    "glass": false,
+    "theme": "light",
+    "touch": true,
+    "geometry": [
+      {
+        "size": "s",
+        "items": [
+          {
+            "width": 90.1875,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "md",
+        "items": [
+          {
+            "width": 90.1875,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "lg",
+        "items": [
+          {
+            "width": 100.140625,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      }
+    ],
+    "focus": {
+      "button": true,
+      "visible": true,
+      "outline": "none",
+      "bg": "rgb(32, 38, 51)",
+      "color": "rgb(232, 235, 242)"
+    }
+  },
+  {
+    "glass": true,
+    "theme": "dark",
+    "touch": false,
+    "geometry": [
+      {
+        "size": "s",
+        "items": [
+          {
+            "width": 78.1875,
+            "height": 32,
+            "padding": [
+              "6px",
+              "6px",
+              "6px",
+              "6px"
+            ]
+          },
+          {
+            "width": 32,
+            "height": 32,
+            "padding": [
+              "6px",
+              "6px",
+              "6px",
+              "6px"
+            ]
+          },
+          {
+            "width": 58,
+            "height": 32,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "md",
+        "items": [
+          {
+            "width": 82.1875,
+            "height": 36,
+            "padding": [
+              "8px",
+              "8px",
+              "8px",
+              "8px"
+            ]
+          },
+          {
+            "width": 36,
+            "height": 36,
+            "padding": [
+              "8px",
+              "8px",
+              "8px",
+              "8px"
+            ]
+          },
+          {
+            "width": 66,
+            "height": 36,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "lg",
+        "items": [
+          {
+            "width": 100.140625,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 82,
+            "height": 44,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      }
+    ],
+    "focus": {
+      "button": true,
+      "visible": true,
+      "outline": "none",
+      "bg": "rgb(245, 246, 250)",
+      "color": "rgb(18, 20, 25)"
+    }
+  },
+  {
+    "glass": true,
+    "theme": "dark",
+    "touch": true,
+    "geometry": [
+      {
+        "size": "s",
+        "items": [
+          {
+            "width": 90.1875,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "md",
+        "items": [
+          {
+            "width": 90.1875,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "lg",
+        "items": [
+          {
+            "width": 100.140625,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      }
+    ],
+    "focus": {
+      "button": true,
+      "visible": true,
+      "outline": "none",
+      "bg": "rgb(245, 246, 250)",
+      "color": "rgb(18, 20, 25)"
+    }
+  },
+  {
+    "glass": true,
+    "theme": "light",
+    "touch": false,
+    "geometry": [
+      {
+        "size": "s",
+        "items": [
+          {
+            "width": 78.1875,
+            "height": 32,
+            "padding": [
+              "6px",
+              "6px",
+              "6px",
+              "6px"
+            ]
+          },
+          {
+            "width": 32,
+            "height": 32,
+            "padding": [
+              "6px",
+              "6px",
+              "6px",
+              "6px"
+            ]
+          },
+          {
+            "width": 58,
+            "height": 32,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "md",
+        "items": [
+          {
+            "width": 82.1875,
+            "height": 36,
+            "padding": [
+              "8px",
+              "8px",
+              "8px",
+              "8px"
+            ]
+          },
+          {
+            "width": 36,
+            "height": 36,
+            "padding": [
+              "8px",
+              "8px",
+              "8px",
+              "8px"
+            ]
+          },
+          {
+            "width": 66,
+            "height": 36,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "lg",
+        "items": [
+          {
+            "width": 100.140625,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 82,
+            "height": 44,
+            "padding": [
+              "4px",
+              "4px",
+              "4px",
+              "4px"
+            ]
+          }
+        ]
+      }
+    ],
+    "focus": {
+      "button": true,
+      "visible": true,
+      "outline": "none",
+      "bg": "rgb(32, 38, 51)",
+      "color": "rgb(232, 235, 242)"
+    }
+  },
+  {
+    "glass": true,
+    "theme": "light",
+    "touch": true,
+    "geometry": [
+      {
+        "size": "s",
+        "items": [
+          {
+            "width": 90.1875,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "md",
+        "items": [
+          {
+            "width": 90.1875,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      },
+      {
+        "size": "lg",
+        "items": [
+          {
+            "width": 100.140625,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 44,
+            "height": 44,
+            "padding": [
+              "12px",
+              "12px",
+              "12px",
+              "12px"
+            ]
+          },
+          {
+            "width": 90,
+            "height": 44,
+            "padding": [
+              "0px",
+              "0px",
+              "0px",
+              "0px"
+            ]
+          }
+        ]
+      }
+    ],
+    "focus": {
+      "button": true,
+      "visible": true,
+      "outline": "none",
+      "bg": "rgb(32, 38, 51)",
+      "color": "rgb(232, 235, 242)"
+    }
+  },
+  {
+    "page": "dashboard",
+    "theme": "dark",
+    "width": 390,
+    "segments": [
+      {
+        "id": "d-views",
+        "label": "Представления сводки",
+        "height": 44,
+        "expected": 44
+      },
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 44,
+        "expected": 44
+      },
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 44,
+        "expected": 44
+      }
+    ]
+  },
+  {
+    "page": "dashboard",
+    "theme": "dark",
+    "width": 1280,
+    "segments": [
+      {
+        "id": "d-views",
+        "label": "Представления сводки",
+        "height": 32,
+        "expected": 32
+      },
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 32,
+        "expected": 32
+      },
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 32,
+        "expected": 32
+      }
+    ]
+  },
+  {
+    "page": "dashboard",
+    "theme": "light",
+    "width": 390,
+    "segments": [
+      {
+        "id": "d-views",
+        "label": "Представления сводки",
+        "height": 44,
+        "expected": 44
+      },
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 44,
+        "expected": 44
+      },
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 44,
+        "expected": 44
+      }
+    ]
+  },
+  {
+    "page": "dashboard",
+    "theme": "light",
+    "width": 1280,
+    "segments": [
+      {
+        "id": "d-views",
+        "label": "Представления сводки",
+        "height": 32,
+        "expected": 32
+      },
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 32,
+        "expected": 32
+      },
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 32,
+        "expected": 32
+      }
+    ]
+  },
+  {
+    "page": "family-mortgage",
+    "theme": "dark",
+    "width": 390,
+    "segments": [
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 44,
+        "expected": 44
+      },
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 44,
+        "expected": 44
+      }
+    ]
+  },
+  {
+    "page": "family-mortgage",
+    "theme": "dark",
+    "width": 1280,
+    "segments": [
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 32,
+        "expected": 32
+      },
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 32,
+        "expected": 32
+      }
+    ]
+  },
+  {
+    "page": "family-mortgage",
+    "theme": "light",
+    "width": 390,
+    "segments": [
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 44,
+        "expected": 44
+      },
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 44,
+        "expected": 44
+      }
+    ]
+  },
+  {
+    "page": "family-mortgage",
+    "theme": "light",
+    "width": 1280,
+    "segments": [
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 32,
+        "expected": 32
+      },
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 32,
+        "expected": 32
+      }
+    ]
+  },
+  {
+    "page": "regions",
+    "theme": "dark",
+    "width": 390,
+    "segments": [
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 44,
+        "expected": 44
+      }
+    ]
+  },
+  {
+    "page": "regions",
+    "theme": "dark",
+    "width": 1280,
+    "segments": [
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 32,
+        "expected": 32
+      }
+    ]
+  },
+  {
+    "page": "regions",
+    "theme": "light",
+    "width": 390,
+    "segments": [
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 44,
+        "expected": 44
+      }
+    ]
+  },
+  {
+    "page": "regions",
+    "theme": "light",
+    "width": 1280,
+    "segments": [
+      {
+        "id": "",
+        "label": "Вид данных",
+        "height": 32,
+        "expected": 32
+      }
+    ]
+  },
+  {
+    "page": "calendar",
+    "theme": "dark",
+    "width": 390,
+    "segments": [
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 44,
+        "expected": 44
+      },
+      {
+        "id": "",
+        "label": "Вид календаря",
+        "height": 44,
+        "expected": 44
+      }
+    ]
+  },
+  {
+    "page": "calendar",
+    "theme": "dark",
+    "width": 1280,
+    "segments": [
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 32,
+        "expected": 32
+      },
+      {
+        "id": "",
+        "label": "Вид календаря",
+        "height": 32,
+        "expected": 32
+      }
+    ]
+  },
+  {
+    "page": "calendar",
+    "theme": "light",
+    "width": 390,
+    "segments": [
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 44,
+        "expected": 44
+      },
+      {
+        "id": "",
+        "label": "Вид календаря",
+        "height": 44,
+        "expected": 44
+      }
+    ]
+  },
+  {
+    "page": "calendar",
+    "theme": "light",
+    "width": 1280,
+    "segments": [
+      {
+        "id": "",
+        "label": "Тема",
+        "height": 32,
+        "expected": 32
+      },
+      {
+        "id": "",
+        "label": "Вид календаря",
+        "height": 32,
+        "expected": 32
+      }
+    ]
+  }
+]
