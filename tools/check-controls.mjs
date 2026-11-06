@@ -24,13 +24,20 @@ try {
  // override does not change hover/pointer (verified by a separate probe).
  // Emulate only that device capability in this isolated fixture's CSSOM;
  // retain all width conditions and the real :hover selector/mouse events.
- const enableFineHover=force=>{
-  const native=matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if(force||!native){
-   const walk=rules=>{for(const rule of rules){if(rule instanceof CSSMediaRule&&/\(hover:\s*hover\)/.test(rule.media.mediaText))rule.media.mediaText=rule.media.mediaText.replace(/\((?:hover:\s*hover|pointer:\s*fine)\)/g,'(min-width: 0px)');if(rule.cssRules)walk(rule.cssRules);}};
-   for(const sheet of document.styleSheets)walk(sheet.cssRules);
+ const enableFineHover = force => {
+  const native = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (force || !native) {
+   const walk = rules => {
+    for (const rule of rules) {
+     if ((rule instanceof CSSMediaRule) && /\(hover:\s*hover\)/.test(rule.media.mediaText)) {
+      rule.media.mediaText = rule.media.mediaText.replace(/\((?:hover:\s*hover|pointer:\s*fine)\)/g, '(min-width: 0px)');
+     }
+     if (rule.cssRules) walk(rule.cssRules);
+    }
+   };
+   for (const sheet of document.styleSheets) walk(sheet.cssRules);
   }
-  return native&&!force?'native':'fixture-cssom';
+  return (native && !force) ? 'native' : 'fixture-cssom';
  };
  for(const glass of [false,true])for(const theme of ['dark','light'])for(const touch of [false,true]) {
   await send('Emulation.setTouchEmulationEnabled',{enabled:touch,maxTouchPoints:5});

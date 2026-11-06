@@ -1,0 +1,2 @@
+PASS: controls S/M/L, equal padding, touch targets, keyboard focus, input inset, hover and icon names (8 fixtures + 16 live views)
+Evidence: /var/folders/h1/3_z8zfj15yggh5pnq51gdk8w0000gn/T/dashboard-kit-controls-GXYBDT
