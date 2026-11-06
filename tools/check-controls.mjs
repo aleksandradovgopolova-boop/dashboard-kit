@@ -1,13 +1,13 @@
 // Control geometry and real keyboard/pointer states in Chrome; no dependencies.
 import assert from 'node:assert/strict';
-import {readFile,mkdir,writeFile} from 'node:fs/promises';
-import {resolve} from 'node:path';
+import {readFile,mkdir,mkdtemp,writeFile} from 'node:fs/promises';
+import {resolve,join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {createServer} from 'node:http';
 import {extname} from 'node:path';
 import {findChrome,launch} from './browser-harness.mjs';
 const styles=await Promise.all(['tokens.primitives.css','tokens.semantic.css','components.css','chrome.css','glass.css'].map(n=>readFile(new URL('../css/'+n,import.meta.url),'utf8')));
-const evidence=resolve(process.env.DK_EVIDENCE_DIR||resolve(tmpdir(),'dashboard-kit-controls-evidence'));
+const evidence=process.env.DK_EVIDENCE_DIR?resolve(process.env.DK_EVIDENCE_DIR):await mkdtemp(join(tmpdir(),'dashboard-kit-controls-'));
 assert(findChrome(),'Chrome required');
 const browser=await launch(findChrome()),report=[];
 const root=new URL('../',import.meta.url);
@@ -19,7 +19,19 @@ try {
  const {sessionId}=await browser.send('Target.attachToTarget',{targetId,flatten:true});
  const send=(method,params={})=>browser.send(method,params,sessionId);
  const ev=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;};
- await send('Page.enable');await mkdir(evidence,{recursive:true});
+ await send('Page.enable');await send('Page.bringToFront');await mkdir(evidence,{recursive:true});
+ // Headless Linux can have no physical hover-capable pointer. CDP's media
+ // override does not change hover/pointer (verified by a separate probe).
+ // Emulate only that device capability in this isolated fixture's CSSOM;
+ // retain all width conditions and the real :hover selector/mouse events.
+ const enableFineHover=force=>{
+  const native=matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if(force||!native){
+   const walk=rules=>{for(const rule of rules){if(rule instanceof CSSMediaRule&&/\(hover:\s*hover\)/.test(rule.media.mediaText))rule.media.mediaText=rule.media.mediaText.replace(/\((?:hover:\s*hover|pointer:\s*fine)\)/g,'(min-width: 0px)');if(rule.cssRules)walk(rule.cssRules);}};
+   for(const sheet of document.styleSheets)walk(sheet.cssRules);
+  }
+  return native&&!force?'native':'fixture-cssom';
+ };
  for(const glass of [false,true])for(const theme of ['dark','light'])for(const touch of [false,true]) {
   await send('Emulation.setTouchEmulationEnabled',{enabled:touch,maxTouchPoints:5});
   await send('Emulation.setDeviceMetricsOverride',{width:touch?390:1280,height:844,deviceScaleFactor:1,mobile:touch});
@@ -27,6 +39,7 @@ try {
   const row=size=>{const mod=size==='s'?'':'--'+size;return '<div class="row" data-size="'+size+'"><button class="dk-btn '+(mod?'dk-btn'+mod:'')+'">Действие</button><button class="dk-iconbtn '+(mod?'dk-iconbtn'+mod:'')+'" aria-label="Настройки">'+svg+'</button><div class="dk-seg dk-seg--icons '+(mod?'dk-seg'+mod:'')+'" role="group" aria-label="Вид"><button aria-pressed="true" aria-label="Карта">'+svg+'</button><button aria-pressed="false" aria-label="Список">'+svg+'</button></div></div>';};
   const html='<!doctype html><html class="dk-root" data-theme="'+theme+'"><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>'+styles.slice(0,glass?5:4).join('\n')+'\n.row{display:flex;align-items:center;gap:12px;margin:12px}body{padding:12px}</style></head><body class="'+(glass?'dk-glass':'')+'">'+['s','md','lg'].map(row).join('')+'<div class="dk-field"><input aria-label="Название" placeholder="Название"></div><nav class="dk-tabs"><a class="dk-tab" href="#a">Обзор</a><a class="dk-tab" href="#b">Работа</a></nav><nav class="dk-tabbar"><a class="dk-tabbar__item" href="#a"><span>Обзор</span></a><a class="dk-tabbar__item" href="#b"><span>Работа</span></a></nav></body></html>';
   await send('Page.navigate',{url:'data:text/html;charset=utf-8,'+encodeURIComponent(html)});
+  const hoverCapability=touch?'touch':await ev('('+enableFineHover.toString()+')('+glass+')');
   const geometry=await ev(`Array.from(document.querySelectorAll('.row')).map(row=>({size:row.dataset.size,items:[...row.children].map(n=>{const r=n.getBoundingClientRect(),s=getComputedStyle(n);return {width:r.width,height:r.height,padding:[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft]}})}))`);
   for(const row of geometry){const expected=touch?44:({s:32,md:36,lg:44}[row.size]);for(const item of row.items)assert.equal(item.height,expected,JSON.stringify({glass,theme,touch,row}));assert.equal(row.items[1].width,expected);assert(new Set(row.items[0].padding).size===1,'Button padding is equal');}
   assert.equal(await ev("getComputedStyle(document.querySelector('.dk-field input')).paddingLeft"),'12px','Input left inset');
@@ -46,20 +59,27 @@ try {
    const before=await ev("getComputedStyle(document.querySelector('.dk-tab')).backgroundColor");
    await send('Input.dispatchMouseEvent',{type:'mouseMoved',...point});
    await ev('new Promise(r=>setTimeout(r,200))');
-   assert.notEqual(await ev("getComputedStyle(document.querySelector('.dk-tab')).backgroundColor"),before,'Tab hover is visible');
+   const hovered=await ev("(()=>{const e=document.querySelector('.dk-tab');return {bg:getComputedStyle(e).backgroundColor,hover:e.matches(':hover'),native:matchMedia('(hover: hover) and (pointer: fine)').matches}})()");
+   assert(hovered.hover&&hovered.bg!==before,'Tab hover is visible '+JSON.stringify({hoverCapability,hovered,before}));
    await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:false});
    const nav=await ev("(()=>{const e=document.querySelector('.dk-tabbar__item'),r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,bg:getComputedStyle(e).backgroundColor}})()");
    await send('Input.dispatchMouseEvent',{type:'mouseMoved',x:nav.x,y:nav.y});
    await ev('new Promise(r=>setTimeout(r,200))');
    assert.notEqual(await ev("getComputedStyle(document.querySelector('.dk-tabbar__item')).backgroundColor"),nav.bg,'Narrow-screen tabbar hover is visible');
    await send('Emulation.setDeviceMetricsOverride',{width:1280,height:844,deviceScaleFactor:1,mobile:false});
+  }else{
+   assert(await ev("!matchMedia('(hover: hover)').matches"),'Touch has no hover capability');
+   const point=await ev("(()=>{const e=document.querySelector('.dk-tab'),r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,bg:getComputedStyle(e).backgroundColor}})()");
+   await send('Input.dispatchMouseEvent',{type:'mouseMoved',x:point.x,y:point.y});
+   await ev('new Promise(r=>setTimeout(r,200))');
+   assert.equal(await ev("getComputedStyle(document.querySelector('.dk-tab')).backgroundColor"),point.bg,'Touch excludes mouse-only hover styles');
   }
   // Zoom text without clipping: a size variant is a minimum, not a fixed line box.
   await ev("document.querySelectorAll('.dk-btn').forEach(n=>{n.style.fontSize='28px';n.style.lineHeight='40px'})");
   assert(await ev("[...document.querySelectorAll('.dk-btn')].every(n=>n.scrollHeight<=n.clientHeight+1)"),'200% text fits');
   await ev("document.querySelectorAll('.dk-btn').forEach(n=>{n.style.fontSize='';n.style.lineHeight=''})");
   await writeFile(resolve(evidence,`controls-${glass?'glass':'base'}-${theme}-${touch?'touch':'mouse'}.png`),Buffer.from((await send('Page.captureScreenshot',{format:'png'})).data,'base64'));
-  report.push({glass,theme,touch,geometry,focus});
+  report.push({glass,theme,touch,hoverCapability,geometry,focus});
  }
  for(const page of ['dashboard','family-mortgage','regions','calendar'])for(const theme of ['dark','light'])for(const width of [390,1280]){
   await send('Emulation.setTouchEmulationEnabled',{enabled:width===390,maxTouchPoints:5});
@@ -74,4 +94,5 @@ try {
  }
  await writeFile(resolve(evidence,'controls.json'),JSON.stringify(report,null,2));
  console.log('PASS: controls S/M/L, equal padding, touch targets, keyboard focus, input inset, hover and icon names (8 fixtures + 16 live views)');
+ console.log('Evidence:',evidence);
 }finally{await browser.close();server.close();}
