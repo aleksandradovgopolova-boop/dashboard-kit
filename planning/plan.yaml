@@ -11,38 +11,6 @@ goals:
   outcome:
     dynamic_semantic_colors_checked: true
 work:
-- id: aiops-415-update
-  title: Обновить AI Ops Kit с 4.11.4 до 4.15.0
-  type: quality
-  goal: reliable-dashboard-work
-  status: in_progress
-  owner_role: development
-  depends_on: []
-  write_scope:
-  - .ai/managed/
-  - .ai/generated/
-  - .ai-ops.yaml
-  - ai-ops
-  value: medium
-  affects:
-    delivery_operations: true
-    engineering_quality_security: true
-- id: product-console
-  title: Создать пульт состояния dashboard-kit по существующим источникам
-  type: quality
-  goal: reliable-dashboard-work
-  status: in_progress
-  owner_role: development
-  depends_on: []
-  write_scope:
-  - product-console.html
-  - product-console/
-  - tools/product-console.py
-  - .ai/project/product-console/
-  value: medium
-  affects:
-    delivery_operations: true
-    engineering_quality_security: false
 - id: live-accessibility
   title: Проверить фильтры скринридером и на живом телефоне/WebView
   type: quality
