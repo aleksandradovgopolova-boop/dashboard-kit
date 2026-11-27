@@ -37,6 +37,11 @@ stacks:
   - tools/check-controls.mjs
   - tools/check-screen-policy.py
   - tools/check-kit-update.py
+  - tools/product-console.py
+  - tools/check-product-console.py
+  - tools/check-product-console.mjs
+  - tools/check-product-console-pages.py
+  - product-console.html
   - tools/check-component-contracts.py
   - tools/check-screen-spec.py
   - tools/check-screen-builder.mjs
