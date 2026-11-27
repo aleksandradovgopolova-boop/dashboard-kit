@@ -60,7 +60,7 @@ def confirmation(record):
     if not isinstance(checks, list) or not checks:
         return "BLOCKED", "нет результатов обязательных проверок"
     observations = [record.get("runtime"), record.get("public")]
-    
+
     if any(isinstance(c, dict) and c.get("status") == "FAIL" for c in checks + observations):
         return "FAIL", "обязательная проверка/сценарий не прошли"
     for observed in observations:
@@ -273,8 +273,8 @@ def assess(child_root):
         maturity = "absent"
 
     platform_hints = [m for m in markers if m in _PLATFORM_HINT_MARKERS]
-    
-    
+
+
     deploy_path_unknown = not runnable_paths and bool(markers)
 
     reason = {

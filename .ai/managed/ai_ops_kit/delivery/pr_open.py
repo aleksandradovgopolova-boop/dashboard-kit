@@ -50,8 +50,8 @@ def _status_docs_note(status_docs):
     outcome = status_docs or {}
     if outcome.get("managed"):
         doc, reviewed = outcome.get("doc"), outcome.get("reviewed_at")
-        
-        
+
+
         if outcome.get("fresh_today"):
             return f"Статус-док свеж на дату доставки: {doc} (reviewed_at {reviewed})."
         return (f"Статус-док {doc} НЕ свеж на дату доставки (reviewed_at {reviewed}) — "
@@ -92,8 +92,8 @@ _CHANNEL_SUBS = (
      r"\1" + _secret_formats.REDACTION_MARKER + "@"),
     (re.compile(r"github_pat_[A-Za-z0-9_]{20,}"),                 # fine-grained PAT
      _secret_formats.REDACTION_MARKER),
-    
-    
+
+
     (re.compile(r"\bgh[posru]_[A-Za-z0-9]{20,}"),
      _secret_formats.REDACTION_MARKER),
     (re.compile(r"(?i)(authorization:\s*(?:bearer|token)\s+)\S+"),  # заголовок авторизации
@@ -175,7 +175,7 @@ def _canonical_owner_repo(owner, name, token):
     if not full or "/" not in full:
         return None
     new_owner, _, new_name = full.partition("/")
-    
+
     if not (_cp._valid_owner_repo_seg(new_owner) and _cp._valid_owner_repo_seg(new_name)):
         return None
     return new_owner, new_name
@@ -208,8 +208,8 @@ def open_draft_pr(root, branch, title, body="", base=None, push=True, delivery_i
     if not owner_repo:
         return {"status": "unavailable", "note": "не удалось определить owner/repo из origin"}
     owner, name = owner_repo
-    
-    
+
+
     canonical = _canonical_owner_repo(owner, name, token)
     if canonical:
         owner, name = canonical
@@ -235,10 +235,10 @@ def open_draft_pr(root, branch, title, body="", base=None, push=True, delivery_i
                          "дописали извне)" if _is_non_fast_forward(perr) else "")
                 return {"status": "error",
                         "note": f"git push не удался (rc={prc}): {_scrub_git_output(perr)[:200]}{_hint}"}
-        
-        
-        
-        
+
+
+
+
         _rc, _out, _ = _git(root, "rev-parse", branch)
         if _rc == 0 and _out.strip():
             pushed_sha = _out.strip()
@@ -253,8 +253,8 @@ def open_draft_pr(root, branch, title, body="", base=None, push=True, delivery_i
     data, err = _gh_request(f"{_api_base()}/repos/{owner}/{name}/pulls", token,
                             data=_pr_payload(branch, title, body, base), method="POST")
     if err:
-        
-        
+
+
         return {"status": "outcome_unknown", "repository": repository, "base": base,
                 "note": f"GitHub API POST дал неоднозначный результат ({err}) — исход доставки неизвестен, "
                         "нужна сверка с remote (reconciliation)"}
@@ -269,7 +269,7 @@ def _find_pr_for_branch(owner, name, branch, token, state="all"):
     data, _err = _gh_request(
         f"{_api_base()}/repos/{owner}/{name}/pulls?head={owner}:{branch}&state={state}", token)
     if isinstance(data, list) and data:
-        
+
         return data[0]
     return None
 
@@ -340,8 +340,8 @@ def reconcile_delivery(root, branch):
     if not owner_repo:
         return {"status": "unavailable", "note": "не удалось определить owner/repo из origin"}
     owner, name = owner_repo
-    
-    
+
+
     canonical = _canonical_owner_repo(owner, name, token)
     if canonical:
         owner, name = canonical

@@ -53,11 +53,11 @@ def _read_runtime_session(child_root, session_id):
     try:
         from ai_ops_kit.engops import session_telemetry_provider as _p
         data = _p.read_session_metadata(session_id=session_id, project_dir=str(child_root))
-        
+
         return data or {"unavailable_reason": _p.lookup_reason(session_id, str(child_root))}
-    
-    
-    
+
+
+
     except Exception as exc:  # noqa: BLE001 — opt-in провайдер отсутствует; статус остаётся честным
         return {"unavailable_reason": f"{type(exc).__name__}: {exc}"}
 
@@ -100,10 +100,10 @@ def snapshot(child_root, workitem_id=None, session_id=None, context_current=None
         "workitem_id": workitem_id or (wids[0] if len(wids) == 1 else None),
         "started_at": started_at,
         "started_at_status": "measured" if started_at else "unavailable",
-        
+
         "turns": rt["turns"] if rt_measured else agg["calls"],
         "turns_source": "session-transcript" if rt_measured else "usage-ledger",
-        
+
         "input_tokens": agg["input_tokens"],
         "output_tokens": agg["output_tokens"],
         "cache_read_tokens": rt.get("cache_read_tokens") if cache_measured else None,
@@ -113,7 +113,7 @@ def snapshot(child_root, workitem_id=None, session_id=None, context_current=None
         "context_peak": ctx_peak,
         "context_status": ctx_status,
         "context_source": ctx_source,
-        
+
         "session_total_tokens": rt.get("total_tokens"),
         "session_tokens_status": rt.get("total_tokens_status") or "unavailable",
         "session_source": rt.get("source"),

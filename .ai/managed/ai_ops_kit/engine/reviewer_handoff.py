@@ -99,8 +99,8 @@ def open_request(root, gate_id, *, checklist, reviewed_revision, changed_files, 
             f"(заполняет независимый оркестратор), после чего resume закроет гейт")
     ev = {"status": "fail" if blocking else "warn", "checks": [],
           "evidence": [f"awaiting_reviewer @ {gate_id}: handoff-запрос записан ({rpath.name})"],
-          
-          
+
+
           "human_handoff": True}
     if blocking:
         ev["blockers"] = [text]

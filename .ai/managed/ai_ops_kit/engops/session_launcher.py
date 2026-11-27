@@ -100,8 +100,8 @@ def load_ceiling(child_root):
         try:
             se = (yaml.safe_load(src.read_text(encoding="utf-8")) or {}).get(key) or {}
         except (yaml.YAMLError, OSError):
-            
-            
+
+
             return out
         for k in AUTONOMY_DEFAULTS:
             if k in se:
@@ -239,7 +239,7 @@ def decide(child_root, snapshot, *, ceiling=None, next_relation="new_independent
                        f"исчерпан объявленный лимит подсессий ({spent['calls']} из {int(max_count)}).",
                        numbers)
 
-    
+
     if state == "unknown":
         return {"kind": "SubsessionDecision", "schema_version": 1, "action": "continue_here",
                 "refusal": None,
@@ -291,7 +291,7 @@ def build_brief(*, workitem_id=None, title=None, repo_path=None, safe_step=None,
               "через свои проверки — сам не пиши файлы, не коммить, не создавай PR."]
     brief = "\n".join(L)
     if len(brief) > max_chars:
-        
+
         brief = brief[:max_chars] + f"\n\n[бриф усечён до {max_chars} символов — часть фактов не вошла]"
     return brief
 
@@ -323,7 +323,7 @@ def spawn(child_root, brief, snapshot, *, ceiling=None, provider=None, usage_hoo
                     "нельзя записать, сделала бы следующий потолок недействительным.",
                     d.get("numbers") or {})
     if d["action"] != "spawn_subsession":
-        
+
         return {"kind": "SubsessionResult", "schema_version": 1, "spawned": False,
                 "decision": d, "spend_before": None, "spend_after": None, "result": None,
                 "ceiling_crossed_by": None}
@@ -347,8 +347,8 @@ def spawn(child_root, brief, snapshot, *, ceiling=None, provider=None, usage_hoo
     return {"kind": "SubsessionResult", "schema_version": 1, "spawned": True, "decision": d,
             "run_id": run_id, "result": text,
             "spend_before": before, "spend_after": after, "records_written": written,
-            
-            
+
+
             "ceiling_crossed_by": crossed}
 
 

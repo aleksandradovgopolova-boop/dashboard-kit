@@ -51,8 +51,8 @@ def parse_date(s):
 
 def assess(fm: dict, today: date):
     """Вернуть (status, detail) для документа с frontmatter."""
-    
-    
+
+
     if fm.get("template") is True:
         return None
     stab = fm.get("stability")

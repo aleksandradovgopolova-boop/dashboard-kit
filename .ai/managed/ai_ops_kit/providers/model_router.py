@@ -69,9 +69,9 @@ def resolve(role, roles_cfg=None, quals=None, models=None, exclude_models=None):
              and q.get("model_id") not in exclude_models
              and (not allowed_classes or (m_classes(q.get("model_id")) & allowed_classes))]
 
-    
-    
-    
+
+
+
     def _money(q):
         v = (q.get("economics") or {}).get("total_cost_per_verified_change")
         return v if isinstance(v, (int, float)) else None
@@ -116,10 +116,10 @@ def resolve(role, roles_cfg=None, quals=None, models=None, exclude_models=None):
     if not money_mode:
         res["cost_warning"] = ("ранжирование в ТОКЕНАХ, не деньгах: не у всех кандидатов роли задан "
                                "total_cost_per_verified_change (нет тарифа) — порядок может не совпасть с деньгами")
-    
-    
-    
-    
+
+
+
+
     def _succ(q):
         v = (q.get("metrics") or {}).get("success_rate")
         return v if isinstance(v, (int, float)) else 0.0
@@ -166,17 +166,17 @@ def plan_run(roles_cfg=None, quals=None, models=None, signals=None, available_pr
     available_providers — optional allowset вызывающего; не online health/новый допуск роли."""
     if roles_cfg is None:
         roles_cfg, quals, models = _load()
-    
-    
+
+
     if available_providers is not None:
         available_providers = set(available_providers)
         quals = [q for q in quals if q.get("provider") in available_providers]
     plan = {role: resolve(role, roles_cfg, quals, models) for role in ALL_ROLES}
     plan["preferred_writer_tier"] = writer_tier(signals)
-    
-    
-    
-    
+
+
+
+
     _constraints = (roles_cfg.get("role_constraints") or {})
     plan["role_constraints_applied"] = []
     for _judge_role, _c in _constraints.items():
@@ -195,11 +195,11 @@ def plan_run(roles_cfg=None, quals=None, models=None, signals=None, available_pr
     rev = plan["code_review"]
     plan["writer_ne_judge_by_model"] = bool(impl.get("resolved") and rev.get("resolved")
                                             and impl.get("model_id") != rev.get("model_id"))
-    
-    
-    
-    
-    
+
+
+
+
+
     plan["independence"] = check_independence(plan)
     return plan
 

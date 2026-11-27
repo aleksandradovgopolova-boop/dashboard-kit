@@ -111,7 +111,7 @@ def decide(root: Path, decision_id: str, status: str, decided_by: str = "owner",
     if status not in ("approved", "rejected", "deferred"):
         return {"error": f"Invalid status: {status}. Must be approved|rejected|deferred"}
 
-    
+
     decisions_dir = _decisions_dir(root)
     decision_files = list(decisions_dir.glob(f"*-{decision_id}.yaml"))
 
@@ -223,7 +223,7 @@ def format_decisions(decisions: list[dict]) -> str:
 
     lines = ["# Product Decisions\n"]
 
-    
+
     by_status = {}
     for d in decisions:
         s = d.get("status", "unknown")
@@ -255,7 +255,7 @@ def main():
 
     sub = ap.add_subparsers(dest="command")
 
-    
+
     propose_p = sub.add_parser("propose", help="Propose a new decision")
     propose_p.add_argument("--id", required=True, help="Decision ID")
     propose_p.add_argument("--proposal", required=True, help="What is proposed")
@@ -265,14 +265,14 @@ def main():
     propose_p.add_argument("--feature-target", default="",
                            help="JSON: {baseline, target, guardrails} — измеримое обязательство фичи")
 
-    
+
     decide_p = sub.add_parser("decide", help="Record a decision")
     decide_p.add_argument("--id", required=True, help="Decision ID")
     decide_p.add_argument("--status", required=True, choices=["approved", "rejected", "deferred"])
     decide_p.add_argument("--by", default="owner", help="Who decided")
     decide_p.add_argument("--outcome", default="", help="What happened after")
 
-    
+
     list_p = sub.add_parser("list", help="List decisions")
     list_p.add_argument("--status", choices=["pending", "approved", "rejected", "deferred"])
     list_p.add_argument("--json", action="store_true")
@@ -282,13 +282,13 @@ def main():
     args = ap.parse_args()
 
     if args.selftest:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         print(__doc__)
         print("Проверки модуля — в tests/unit/ (AGENTS.md: selftest не живёт в продакшн-модуле).")
         return 0

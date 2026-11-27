@@ -21,7 +21,7 @@ from __future__ import annotations
 
 
 GATE_PRODUCT_DIMENSION = {
-    
+
     "intake_completeness": "полноту заявки",
     "requirements": "требования",
     "specification": "спецификацию",
@@ -41,7 +41,7 @@ GATE_PRODUCT_DIMENSION = {
     "feature_decision_quality": "качество решений по функциям",
     "knowledge_integrity": "целостность знаний",
     "knowledge_freshness": "свежесть знаний",
-    
+
     "code_review": "код",
     "security": "безопасность",
     "architecture_review": "архитектуру",
@@ -210,8 +210,8 @@ def knowledge_readout(evidence_verdict: dict, *, outcome_verdict: str | None = N
     if unknown:
         lines.append("Что пока неизвестно: " + "; ".join(unknown) + ".")
 
-    
-    
+
+
     det = dimensions([g for g in (ev.get("deterministic") or []) if g not in _SPINE_GATES])
     aij = dimensions([g for g in (ev.get("ai_judgment") or []) if g not in _SPINE_GATES])
     hum = dimensions([g for g in (ev.get("human") or []) if g not in _SPINE_GATES])

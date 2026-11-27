@@ -169,7 +169,7 @@ def _apply_overrides(rows: list, overrides: list, today: _dt.date) -> tuple[list
                                  "address": f"{CONFIG_REL} standard.overrides", "detail": detail})
         echo.append(entry)
 
-    
+
     suppress = {req for req, _ in active_targets}
 
     def _covered(requirement: str) -> bool:
@@ -177,7 +177,7 @@ def _apply_overrides(rows: list, overrides: list, today: _dt.date) -> tuple[list
 
     kept = [r for r in rows if not _covered(r["requirement"])]
 
-    
+
     na_rows = [{"requirement": req, "status": NOT_APPLICABLE, "closed_by": "human",
                 "reason": reason} for req, reason in active_targets]
 
@@ -224,11 +224,11 @@ def build(child_root, today: _dt.date | None = None, pkg_root: Path | None = Non
         "counts": counts,
         "overrides": overrides_echo,
         "rows": rows,
-        
-        
+
+
         "architecture": architecture_invariants.report(root, deps=deps),
-        
-        
+
+
         "drift": drift.report(root, changed_files=changed_files),
     }
 
@@ -261,6 +261,9 @@ def render(rep: dict) -> str:
         ac = arch["counts"]
         lines.append(f"  Архитектурные инварианты (advisory, SR-9..13): "
                      f"pass {ac['pass']} · violated {ac['violated']} · not_checked {ac['not_checked']}")
+        parsed = architecture_invariants.parse_summary(arch.get("parse"))
+        if parsed:
+            lines.append(f"    разбор: {parsed}")
         for r in arch["rows"]:
             if r["status"] == PASS:
                 continue

@@ -28,8 +28,8 @@ def _intent_onboard(task, child_root, signals, a):
     out = child_root / ".ai" / "repository-profile.yaml"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(yaml.safe_dump(prof, allow_unicode=True, sort_keys=False), encoding="utf-8")
-    
-    
+
+
     conf_rel = None
     try:
         from ai_ops_kit.checks import constitution_conformance as _cc
@@ -64,16 +64,16 @@ def _intent_onboard(task, child_root, signals, a):
             print(f"\n  Соответствие конституции: {_conf_summary}")
             print(f"  Отчёт с рекомендациями: {conf_rel}")
         if reach == "register":
-            
+
             print("\n  Отметились: анонимно и без телеметрии — кит ничего никуда не отправляет.")
             print("  Охват обновится, когда владелец кита периодически соберёт отметившиеся проекты "
                   "(reach collect).")
         elif reach == "decline":
-            
+
             print("\n  Отметку отклонили: ничего не создано, онбординг это не затрагивает.")
         elif not _reg.has_decided(child_root):
-            
-            
+
+
             print("\n  Отмечаемся? Это добровольно и без телеметрии — кит ничего никуда не отправляет "
                   "(запишем имя проекта + версию кита + дату + анонимный id, без путей и почты).")
             print("  Да:  ./ai-ops onboard . --reach register   (или ./ai-ops reach register .)")
@@ -97,6 +97,10 @@ def _intent_reach(task, child_root, signals, a):
     js = a.json
     sub = (task or "").strip().lower()
     root = child_root
+
+    if sub == "adoption":
+        from ai_ops_kit.cli import adoption as adoption_cli
+        return adoption_cli.main(["status", str(root)])
 
     if sub in ("", "status"):
         rep = cr.registration_state(root)
@@ -152,7 +156,7 @@ def _intent_reach(task, child_root, signals, a):
         return 1 if rep["errors"] else 0
 
     if sub == "collect":
-        
+
         print(json.dumps({"ok": False, "reason": "collect зовётся модулем: "
                           "python3 -m ai_ops_kit.engops.child_registry collect <kit> <child>..."},
                          ensure_ascii=False, indent=2) if js
@@ -161,14 +165,14 @@ def _intent_reach(task, child_root, signals, a):
         return 2
 
     print(f"неизвестная подкоманда '{sub}'. Есть: register | decline | forget | status | "
-          "summary (в дочке) · coverage (в ките)")
+          "summary | adoption (в дочке) · coverage (в ките)")
     return 1
 
 
 def _intent_team(task, child_root, signals, a):
     js = a.json
-    
-    
+
+
     from ai_ops_kit.intelligence import team_sync
     try:
         status = team_sync.team_status(Path(child_root))
@@ -184,10 +188,10 @@ def _intent_team(task, child_root, signals, a):
 
 def _intent_replan(task, child_root, signals, a):
     js = a.json
-    
-    
-    
-    
+
+
+
+
     from ai_ops_kit.intelligence import replan_loop
     root = Path(child_root)
     if getattr(a, "apply", False):
@@ -217,9 +221,9 @@ def _intent_replan(task, child_root, signals, a):
 
 def _intent_governance(task, child_root, signals, a):
     js = a.json
-    
-    
-    
+
+
+
     from ai_ops_kit.governance import decision_boundary, decision_log, human_override, policy_engine
     root = Path(child_root)
     try:
@@ -229,20 +233,22 @@ def _intent_governance(task, child_root, signals, a):
         return 1
     decisions = decision_log.ai_decisions(root)
     ovr = human_override.overrides(root)
-    
-    
+
+
     boundary = decision_boundary.evaluate(signals)
+    autonomy = decision_boundary.ladder(signals, root=root, task_type=signals.get("task_type"),
+                                        runtime_rights=signals.get("runtime_rights"))   # #1413
     if js:
         print(json.dumps({"policy": policy, "ai_decisions_count": len(decisions),
                           "overrides_count": len(ovr), "recent_decisions": decisions[-5:],
-                          "overrides": ovr, "decision_boundary": boundary},
+                          "overrides": ovr, "decision_boundary": boundary, "autonomy": autonomy},
                          ensure_ascii=False, indent=2, default=str))
         return 0
     print(f"GOVERNANCE ПРОДУКТА ({root})")
     print(f"  политика автономии: default={policy['default']} (источник: {policy['source']})")
     for act, lvl in (policy.get("actions") or {}).items():
         print(f"    {act}: {lvl}")
-    for _ln in decision_boundary.describe(boundary):   # граница решений (#631): 3 оси -> класс
+    for _ln in decision_boundary.describe(boundary) + decision_boundary.describe_ladder(autonomy):
         print(_ln)
     print(f"  решений AI в журнале: {len(decisions)}; переопределений человека: {len(ovr)}")
     for e in decisions[-5:]:
@@ -261,8 +267,8 @@ def _intent_bootstrap(task, child_root, signals, a):
     from ai_ops_kit.planning import repo_audit as _ra
     from ai_ops_kit.cli.ai_ops_cli import _say   # единый путь наружу, живёт в ai_ops_cli
     try:
-        
-        
+
+
         _und = _ra.run(child_root)
         boot = _boot.plan(child_root, _und)
     except (_contours.ModelCorrupt, _dp.PlanCorrupt) as e:
@@ -307,9 +313,9 @@ def _intent_roadmap(task, child_root, signals, a):
     if (task or "").strip().lower() == "sync-issues":   # реализация в roadmap_sync_cli (ратчет размера)
         from ai_ops_kit.cli.roadmap_sync_cli import run_roadmap_sync
         return run_roadmap_sync(child_root, a)
-    
-    
-    
+
+
+
     from ai_ops_kit.planning import roadmap_manager
     from ai_ops_kit.planning import delivery_plan as _plan
     try:
@@ -331,7 +337,7 @@ def _intent_roadmap(task, child_root, signals, a):
         if not block:
             print("  (пусто)")
         for d in block:
-            
+
             name = d.get("title") or d["goal"]
             anchor = f" ({d['goal']})" if name != d["goal"] else ""
             print(f"  • {name}{anchor}: "
@@ -352,7 +358,7 @@ def _intent_doctor(task, child_root, signals, a):
         print(json.dumps(rep, ensure_ascii=False, indent=2))
     else:
         print(child_doctor.render(rep))
-    
+
     return 1 if rep.get("blocking") else 0
 
 
@@ -402,14 +408,14 @@ def _intent_new(task, child_root, signals, a):
     wid = _wid_for(task, signals, a.feature)
     workitem.start(str(child_root / "features"), wid, task or wid,
                    task_type=signals.get("task_type"), risk=signals.get("risk"))
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
     _copy_affects_from_plan(child_root, wid)
     sp, created, spec_rep = spec_levels.create_spec(child_root, wid, signals)
     if js:
@@ -457,7 +463,7 @@ def _intent_specify(task, child_root, signals, a):
                           "answers_applied": ans_rep["applied"],
                           "answers_unmatched": ans_rep["unmatched"],
                           "answers_error": ans_rep["error"],
-                          
+
                           "spec_provisional": spec_provisional,
                           "level_if_escalated": _disc.get("level_if_escalated"),
                           "sections_if_escalated": _disc.get("sections_if_escalated"),
@@ -467,8 +473,8 @@ def _intent_specify(task, child_root, signals, a):
         shown = sp.relative_to(child_root)
     except ValueError:
         shown = sp
-    
-    
+
+
     _answer_words = spec_answers.answer_words_for(cov["blocking_missing"][:3])
     _answer_command = None
     if _answer_words:
@@ -476,8 +482,8 @@ def _intent_specify(task, child_root, signals, a):
         # #958: feature id (wi-…) детерминирован от текста задачи — кит резолвит ту же фичу по
         # тексту без `--feature`, поэтому в человеко-обращённую команду id не подставляем.
         _answer_command = f'./ai-ops specify "{task or "<задача>"}" --answers "{_pairs}"'
-    
-    
+
+
     _say(child_root, "from_specification", shown, created, cov["level_name"],
          cov["sections"], cov["blocking_missing"],
          f"./ai-ops plan \"{task or '<задача>'}\"",
@@ -492,9 +498,9 @@ def _intent_discuss(task, child_root, signals, a):
     js = a.json
     from ai_ops_kit.cli.ai_ops_cli import _say, _wid_for   # инфраструктура, живёт в ai_ops_cli
     wid = _wid_for(task, signals, a.feature)
-    fdir = child_root / "features" / wid
-    fdir.mkdir(parents=True, exist_ok=True)
-    draft = fdir / "discovery-draft.md"
+    from ai_ops_kit.shared.work_areas import artifact_path
+    draft = artifact_path(child_root / "features", wid, "discovery-draft.md")
+    draft.parent.mkdir(parents=True, exist_ok=True)
     if not draft.is_file():
         draft.write_text(
             f"# Discovery: {task or wid}\n\n"

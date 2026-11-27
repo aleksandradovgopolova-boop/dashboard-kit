@@ -118,18 +118,18 @@ def _analyze(path: Path, *, tree=None):
                 parts = n.module.split(".")
                 mods.update(parts)
                 mods.update(a.name for a in n.names)
-                
-                
-                
-                
+
+
+
+
                 if parts[0] == "ai_ops_kit" and len(parts) == 2:
                     mods.update(a.name for a in n.names)
                 else:
                     mods.add(_stem(parts))
             else:
                 mods.update(a.name for a in n.names)
-    
-    
+
+
     for target in _known_file_spec_targets(path, tree)[0]:
         mods.add(target.stem)
     return symbols, mods
@@ -156,8 +156,8 @@ def _analyze_js(path: Path, *, content=None):
 
     # Imports: import ... from 'module', import 'module', require('module')
     mods = set()
-    
-    
+
+
     specifiers = set(re.findall(r"\bimport\s*['\"]([^'\"]+)['\"]", content))
     specifiers.update(re.findall(r"\bfrom\s*['\"]([^'\"]+)['\"]", content))
     for m in specifiers:
@@ -252,8 +252,8 @@ def _known_file_spec_targets(path: Path, tree, *, known_paths=None) -> tuple[set
     if tree is None:
         return targets, True
     nodes = list(ast.walk(tree))
-    
-    
+
+
     if not any(
         isinstance(n, ast.Attribute) and n.attr == _FILE_SPEC_NAME
         or isinstance(n, ast.Name) and n.id == _FILE_SPEC_NAME
@@ -288,7 +288,7 @@ def _known_file_spec_targets(path: Path, tree, *, known_paths=None) -> tuple[set
                     targets.add(target)
                 else:
                     resolvable = False
-    
+
     for n in nodes:
         if isinstance(n, ast.Attribute) and n.attr == _FILE_SPEC_NAME and id(n) not in call_func_ids:
             resolvable = False
@@ -311,18 +311,18 @@ def _dependency_uncertainty(path: Path, *, text=None, tree=None, known_paths=Non
         if path.suffix == ".py":
             if tree is None:
                 tree = ast.parse(text, filename=str(path))
-            
+
             if any(isinstance(n, ast.Name) and isinstance(n.ctx, ast.Store)
                    and n.id == "pytest_plugins" for n in ast.walk(tree)):
                 return "test-hook"
             dynamic_names = {"__import__", "eval", "exec", "import_module",
                              "run_path", "run_module"}
-            
+
             if any(isinstance(n, ast.Name) and isinstance(n.ctx, ast.Load)
                    and n.id in ("__import__", "eval", "exec") for n in ast.walk(tree)):
                 return "dynamic"
-            
-            
+
+
             if any(isinstance(n, ast.Attribute) and n.attr in dynamic_names
                    for n in ast.walk(tree)):
                 return "dynamic"
@@ -335,17 +335,17 @@ def _dependency_uncertainty(path: Path, *, text=None, tree=None, known_paths=Non
                 ("import_module", "run_path", "run_module")) for n in ast.walk(tree))
             if dynamic:
                 return "dynamic"
-            
-            
-            
-            
+
+
+
+
             if not _known_file_spec_targets(path, tree, known_paths=known_paths)[1]:
                 return "dynamic"
             return None
         dynamic = re.search(r"\bimport\s*\(|\brequire\s*\((?!\s*['\"])|"
                             r"\brequire\s*\(\s*['\"](?:@|/)|"
                             r"(?:from\s*|import\s*)['\"](?:@|/)|\bexport\s+.*?\bfrom\s", text)
-        
+
         return "unbounded" if dynamic else None
     except (SyntaxError, OSError, UnicodeError):
         return "unreadable"
@@ -373,13 +373,13 @@ def build_graph(root=PKG, subdirs=DEFAULT_SUBDIRS, path_filter=None, include_js=
             stem_to_rels.setdefault(f.parent.name, set()).add(rel)
 
     known_rels = {rel for _, rel in rels}
-    
-    
+
+
     known_paths = {f.resolve() for f, _ in rels if not f.is_symlink()}
     file_info, symbol_index, import_edges, tests, kinds = {}, {}, {}, {}, {}
     for f, rel in rels:
-        
-        
+
+
         try:
             content = f.read_text(encoding="utf-8")
             tree = ast.parse(content, filename=str(f)) if f.suffix == ".py" else None
@@ -397,8 +397,8 @@ def build_graph(root=PKG, subdirs=DEFAULT_SUBDIRS, path_filter=None, include_js=
             symbol_index.setdefault(s, []).append(rel)
         internal = {target for m in mods for target in stem_to_rels.get(m, ()) if target != rel}
         if f.suffix == ".py":
-            
-            
+
+
             for parent in Path(rel).parents:
                 initializer = str(parent / "__init__.py")
                 if initializer in known_rels:
@@ -423,16 +423,16 @@ def affected_tests(graph: dict, changed_files: list) -> list:
     Возвращает список тест-файлов, которые импортируют изменённые файлы (транзитивно)."""
     if not changed_files:
         return []
-    
+
     all_affected = set(changed_files) | _impact_many(graph, changed_files)
-    
+
     tests = graph.get("tests", {})
     result = []
     for test_file, test_imports in tests.items():
-        
+
         if any(imp in all_affected for imp in test_imports):
             result.append(test_file)
-        
+
         elif test_file in changed_files:
             result.append(test_file)
     return sorted(set(result))
@@ -461,7 +461,7 @@ def _impact_many(graph: dict, changed_files) -> set:
 
 
 def main(argv):
-    
+
     skip = set()
     for flag in ("--impact", "--affected-tests"):
         if flag in argv:
@@ -479,7 +479,7 @@ def main(argv):
         return 0
     if "--affected-tests" in argv:
         idx = argv.index("--affected-tests")
-        
+
         changed_files = []
         for i in range(idx + 1, len(argv)):
             if argv[i].startswith("--"):

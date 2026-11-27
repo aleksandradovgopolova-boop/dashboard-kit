@@ -147,9 +147,9 @@ REVIEWER_RESULT = ResponseContract(
     name="reviewer-result",
     wire_schema=_reviewer_result_wire_schema(),
     required=("schema_version", "kind", "gate", "status", "checks"),
-    
-    
-    
+
+
+
 )
 
 
@@ -169,6 +169,9 @@ UNSUPPORTED = "unsupported"  # механизма нет; проза плюс р
 
 
 SHAPE_SUPPORT = {
+    "codex-app-server": {"mode": UNSUPPORTED, "mechanism": None,
+                         "note": "native текстовая роль; форма проверяется китом после ответа. "
+                                 "Живая квалификация общего pipeline ещё не получена"},
     "anthropic": {"mode": ENFORCED, "mechanism": "output_config.format (json_schema)",
                   "note": "ответ приходит одним текстовым блоком с валидным по схеме JSON"},
     "openai": {"mode": ENFORCED, "mechanism": "response_format: json_schema (strict)",

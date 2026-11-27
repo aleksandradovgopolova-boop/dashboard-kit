@@ -65,7 +65,7 @@ def main(argv):
     gate_ids = _gate_ids()
     errors = []
     if gate_ids is None:
-        
+
         errors.append("quality/gates.yaml не прочитан — принадлежность гейта реестру НЕ проверена; "
                       "это не «гейт отсутствует»")
     errors += check(data, gate_ids)

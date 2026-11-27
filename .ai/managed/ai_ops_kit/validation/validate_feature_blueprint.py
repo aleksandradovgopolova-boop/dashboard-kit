@@ -46,7 +46,7 @@ def main(argv):
         all_errors += _e
         all_debt += _a
     if all_debt:
-        
+
         print(f"ДОЛГ ДОКАЗАТЕЛЬСТВА ПОСТАВКИ ({len(all_debt)}) — не блокирует, но остаётся:")
         for a in all_debt:
             print(f"  · {a}")

@@ -78,15 +78,15 @@ STATES = ("normal", "attention", "over_ceiling", "code_started", "unknown")
 _KIT_PREFIXES = (".ai/", ".ai-ops/", ".claude/", ".codex/", ".github/", "features/", "planning/", "history/",
                  "security/")
 _KIT_FILES = (".ai-ops.yaml", "ai-ops", "AI-OPS-ONBOARDING.md", "CLAUDE.md", "ROADMAP.md",
-              
-              
+
+
               "ARCHITECTURE.md",
-              
-              
+
+
               "SECURITY.md",
-              
-              
-              
+
+
+
               ".gitignore", ".gitattributes")
 
 
@@ -148,8 +148,8 @@ def code_changed(child_root):
     Смотрим и индекс, и рабочее дерево, и неотслеживаемые файлы: правка, которую ещё не закоммитили,
     — всё равно правка. Пути самого кита исключены (см. `_is_kit_path`).
     """
-    
-    
+
+
     try:
         r = subprocess.run(["git", "-C", str(child_root), "status", "--porcelain"],
                            capture_output=True, text=True, timeout=20, check=False)
@@ -190,8 +190,8 @@ def record_step(child_root, wid, intent, session_total, session_id=None):
     session_changed = (not new) and session_id is not None and session_id != base_sid
     first_measurable = entry.get("first_step_session_tokens") is None and session_total is not None
     if session_changed or first_measurable:
-        
-        
+
+
         entry["first_step_session_tokens"] = session_total
         entry["first_step_session_id"] = session_id
         entry["baseline_from"] = intent
@@ -233,8 +233,8 @@ def assess(child_root, wid, intent, session_total=_UNSET, session_id=None, polic
     limit = ceiling(child_root, policy)
     if session_total is _UNSET:
         session_total = _session_total(child_root, wid)
-        
-        
+
+
         session_id = _session_id(child_root, wid)
     touched = code_changed(child_root)
     entry = record_step(child_root, wid, intent, session_total, session_id) if record \
@@ -292,9 +292,9 @@ def _work_scoped_spend(entry, session_total, session_id):
     base_sid = entry.get("first_step_session_id")
     if base is None or session_total is None:
         return None
-    
-    
-    
+
+
+
     if base_sid is not None and session_id is None:
         return None
     if session_id is not None and base_sid is not None and session_id != base_sid:

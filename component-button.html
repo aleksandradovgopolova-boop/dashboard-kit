@@ -63,17 +63,17 @@
     <h2>В работе</h2>
     <p>Основная кнопка выделяет главное действие, остальные поддерживают его. Здесь показан внешний вид: сохранение и удаление не выполняются.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel">
       <div class="sc-row"><span class="dk-caption" style="width:96px">S · 32</span>
-        <button class="dk-btn dk-btn--primary dk-btn--sm">Действие</button>
+        <button class="dk-btn dk-btn--primary dk-btn--sm"><svg class="dk-i" aria-hidden="true"><use href="#ti-plus"/></svg>Добавить</button>
         <button class="dk-btn dk-btn--sm">Обычная</button>
         <button class="dk-btn dk-btn--ghost dk-btn--sm">Тихая</button>
         <button class="dk-iconbtn dk-iconbtn--sm" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button></div>
       <div class="sc-row"><span class="dk-caption" style="width:96px">M · 36</span>
-        <button class="dk-btn dk-btn--primary dk-btn--md">Действие</button>
+        <button class="dk-btn dk-btn--primary dk-btn--md"><svg class="dk-i" aria-hidden="true"><use href="#ti-plus"/></svg>Добавить</button>
         <button class="dk-btn dk-btn--md">Обычная</button>
         <button class="dk-btn dk-btn--ghost dk-btn--md">Тихая</button>
         <button class="dk-iconbtn dk-iconbtn--md" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button></div>
       <div class="sc-row" style="margin-bottom:0"><span class="dk-caption" style="width:96px">L · 44</span>
-        <button class="dk-btn dk-btn--primary dk-btn--lg">Действие</button>
+        <button class="dk-btn dk-btn--primary dk-btn--lg"><svg class="dk-i" aria-hidden="true"><use href="#ti-plus"/></svg>Добавить</button>
         <button class="dk-btn dk-btn--lg">Обычная</button>
         <button class="dk-btn dk-btn--ghost dk-btn--lg">Тихая</button>
         <button class="dk-iconbtn dk-iconbtn--lg" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button></div>
@@ -96,7 +96,7 @@
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Высота и отступы задаются токенами контролов. По умолчанию S — 32 px (--control-sm), явный M — 36 px (--control-md), CTA L — 44 px (--control-lg). Поля симметричны и берутся из --control-pad-sm/md/lg; текст 14 px, CTA 16 px. На таче цель не меньше 44 px, значок 18–20 px. Соседние кнопки и фильтры выбирайте одной высоты; приоритет задаётся оформлением, а не размером.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-btn</code></td><td>Обычная кнопка, размер S.</td><td>По умолчанию.</td></tr><tr><td><code>dk-btn--primary</code></td><td>Основное действие, заливка акцентом.</td><td>Одна на экран или на форму.</td></tr><tr><td><code>dk-btn--ghost</code></td><td>Тихая: без заливки до наведения.</td><td>Второстепенное рядом с основным: «Отмена», «Снять выбор».</td></tr><tr><td><code>dk-btn--sm / dk-btn--md / dk-btn--lg</code></td><td>Высота 32 / 36 / 44 px.</td><td>Строка действий в таблице (sm), шапка страницы (lg).</td></tr><tr><td><code>dk-iconbtn</code></td><td>Квадратная кнопка под значок, те же три размера.</td><td>Действия виджета: обновить, скачать, настройки.</td></tr><tr><td><code>disabled</code></td><td>Атрибут: приглушена, не нажимается.</td><td>Только когда причина видна рядом.</td></tr></tbody></table></div>
+    <p>Высота и отступы задаются токенами контролов. По умолчанию S — 32 px (--control-sm), явный M — 36 px (--control-md), CTA L — 44 px (--control-lg). Парные поля S/M/L: 6/16, 8/16, 12/24 px (вертикаль/горизонталь), из --control-pad-sm/md/lg и --button-pad-inline-sm/md/lg. Кнопки-значки квадратные. Текст 14 px, CTA 16 px. На таче цель не меньше 44 px, значок 20 px. Соседние кнопки и фильтры выбирайте одной высоты; приоритет задаётся оформлением, а не размером.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-btn</code></td><td>Обычная кнопка, размер S.</td><td>По умолчанию.</td></tr><tr><td><code>dk-btn--primary</code></td><td>Основное действие, заливка акцентом.</td><td>Одна на экран или на форму.</td></tr><tr><td><code>dk-btn--ghost</code></td><td>Тихая: без заливки до наведения.</td><td>Второстепенное рядом с основным: «Отмена», «Снять выбор».</td></tr><tr><td><code>dk-btn--sm / dk-btn--md / dk-btn--lg</code></td><td>Высота 32 / 36 / 44 px.</td><td>Строка действий в таблице (sm), шапка страницы (lg).</td></tr><tr><td><code>dk-iconbtn</code></td><td>Квадратная кнопка под значок, те же три размера.</td><td>Действия виджета: обновить, скачать, настройки.</td></tr><tr><td><code>disabled</code></td><td>Атрибут: приглушена, не нажимается.</td><td>Только когда причина видна рядом.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>

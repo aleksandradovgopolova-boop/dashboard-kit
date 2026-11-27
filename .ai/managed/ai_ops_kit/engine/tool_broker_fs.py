@@ -43,7 +43,7 @@ _RISKY_ASSIGNMENT_NAMES = frozenset({
     "PYTHONEXECUTABLE", "PYTHONPLATLIBDIR",
     "NODE_OPTIONS", "NODE_PATH", "PERL5LIB", "PERL5OPT", "PERLLIB", "RUBYOPT", "RUBYLIB",
     "JAVA_TOOL_OPTIONS", "_JAVA_OPTIONS", "JDK_JAVA_OPTIONS",
-    
+
     "RUSTC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTDOC",
     "GOFLAGS", "GOENV", "GOTOOLCHAIN", "CC", "CXX", "LD",   # LD — точное имя, LD_* — префикс ниже
     "PYTEST_ADDOPTS", "PYTEST_PLUGINS", "MAKEFLAGS", "MFLAGS", "MAKEFILES",
@@ -76,8 +76,8 @@ def _normalize(cmd):
     без push-credentials, изоляция сети и ФС — в контейнере, сужение входных бинарников —
     в allowlist-режиме (он оба вектора выше ловил и до этой правки)."""
     s = (cmd or "").replace('"', "").replace("'", "")
-    
-    
+
+
     s = re.sub(r"\\\r?\n", "", s)
     return re.sub(r"\\(.)", r"\1", s)  # escape перед обычным символом: shell его съест
 
@@ -142,18 +142,18 @@ def _allowlist_denial(cmd, allowlist):
 
 
 _ENV_ALLOW_EXACT = {
-    
+
     "PATH", "HOME", "LANG", "LANGUAGE", "TZ", "TERM", "SHELL", "USER", "LOGNAME",
     "HOSTNAME", "PWD", "OLDPWD", "TMPDIR", "TEMP", "TMP", "SHLVL",
-    
+
     "NODE_ENV", "CI", "PYTHONPATH", "PYTHONUNBUFFERED", "PYTHONDONTWRITEBYTECODE",
     "VIRTUAL_ENV", "LD_LIBRARY_PATH", "GOPATH", "GOCACHE", "GOROOT", "JAVA_HOME",
     "CARGO_HOME", "RUSTUP_HOME", "PIP_CACHE_DIR", "npm_config_cache", "COLUMNS", "LINES",
-    
+
     "GITHUB_SHA", "GITHUB_REF", "GITHUB_REF_NAME", "GITHUB_REPOSITORY", "GITHUB_RUN_ID",
     "GITHUB_RUN_NUMBER", "GITHUB_WORKSPACE", "GITHUB_ACTIONS", "GITHUB_HEAD_REF",
     "GITHUB_BASE_REF", "GITHUB_EVENT_NAME",
-    
+
     "OPENAI_COMPATIBLE_BASE_URL", "GITHUB_API_URL",
 }
 _ENV_ALLOW_PREFIX = ("LC_", "XDG_")
@@ -255,7 +255,7 @@ def _fs_snapshot(root, policy):
     """Состояние до shell-операции: HEAD + грязные пути + игнорируемые под protected. None -> неприм."""
     if not getattr(policy, "shell_path_guard", False):
         return None
-    
+
     if not policy.protected and not (getattr(policy, "shell_scope_guard", False) and policy.write_scope):
         return None
     st = _porcelain(root)
@@ -292,8 +292,8 @@ def _shell_violations(root, policy, pre):
         if pre_ignored.get(rel) != tup:              # новый или изменённый на месте
             touched.add(rel)
             ignored_pre[rel] = rel in pre_ignored
-    
-    
+
+
     carried = {new: old for old, new in renames
                if policy.path_violation(old, check_scope=check_scope) and new in touched}
     violations = []
@@ -338,10 +338,10 @@ def _revert_violations(root, pre, head_now, violations):
                     fp.unlink()
                     undone["removed"].append(rel)
                 elif fp.is_dir():
-                    
-                    
+
+
                     undone["failed"].append(f"{rel}: каталог, автоматический откат не выполнен")
-                
+
             except OSError as e:
                 undone["failed"].append(f"{rel}: {e}")
     return undone

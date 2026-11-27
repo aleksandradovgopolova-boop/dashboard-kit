@@ -202,21 +202,21 @@ def classify(active, entry):
     contracts = set(entry.get("shared_contracts") or [])
     my_branch = entry.get("branch")
     my_holder = (entry.get("machine"), entry.get("owner_session"))
-    
-    
-    
+
+
+
     probe_has_identity = bool(entry.get("machine") or entry.get("owner_session"))
     out = []
     if probe_has_identity:
-        
+
         for w in active:
             if w.get("status") in _CLOSED_STATUSES:
                 continue
             if w.get("id") == wid and (w.get("machine"), w.get("owner_session")) != my_holder:
                 out.append({"kind": "same-work", "id": w.get("id"), "branch": w.get("branch"),
                             "owner_session": w.get("owner_session"), "machine": w.get("machine"),
-                            
-                            
+
+
                             "since": w.get("started_at"), "worktree": w.get("worktree"),
                             "detail": wid})
     others = _active_others(active, wid)
@@ -249,9 +249,9 @@ def find_cycle(active, entry):
     graph = {w.get("id"): list(w.get("depends_on") or []) for w in active}
     graph[entry.get("id")] = list(entry.get("depends_on") or [])
     start = entry.get("id")
-    
-    
-    
+
+
+
     def dfs(node, path):
         for nxt in graph.get(node, []):
             if nxt == start and len(path) >= 1:
@@ -318,7 +318,7 @@ def _automatic_claim_refusal(path, root, admission, session, takeover, wid, bran
 def _refuse_busy(blocking, published, child_root):
     for c in blocking:
         what = ("ту же работу" if c["kind"] == "same-work" else f"ту же область/ветку {c.get('detail')}")
-        
+
         since = c.get("since") or "время начала не записано"
         where = f", рабочая копия {c['worktree']}" if c.get("worktree") else ""
         print(f"ОТКАЗ: не начинаю — {what} уже держит другой: сессия "
@@ -377,8 +377,8 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
                  "owner_pid": os.getpid()}
         if admission is not None:
             entry.update(auto_admission=admission, budget_origin=_budget_origin(data["active"], wid), budget_binding=_budget_binding(data["active"], wid))
-        
-        
+
+
         if child_root is not None:
             entry["worktree"] = str(Path(child_root).resolve())
         # #639: роль-владелец на записи Work (закрывает дрейф модель↔код — domain_model заявляет,
@@ -391,14 +391,14 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
             entry["depends_on"] = list(depends)
         if contracts:
             entry["shared_contracts"] = list(contracts)
-        
+
         cycle = find_cycle(data["active"], entry)
         if cycle:
             print(f"ОШИБКА: циклическая зависимость задач: {' -> '.join(cycle)}. "
                   f"Разорвите цикл (одна задача не может транзитивно зависеть от себя).")
             return 1
-        
-        
+
+
         against = team_view(child_root, data["active"] + old, published)
         # #137: сверяем карту с базой ДО прогноза — иначе влитая работа предупреждает о себе, и
         # человек либо переделывает готовое, либо перестаёт верить реестру (и тогда он не нужен).
@@ -406,18 +406,18 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
             protected = [w for w in against if w.get("auto_admission")]
             against = reconcile_with_base([w for w in against if not w.get("auto_admission")], child_root) + protected
         confs = classify(against, entry) + classify([w for w in against if w.get("auto_admission")], dict(entry, owner_session=None))
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         blocking = [c for c in confs if c.get("kind") in ("same-work", "branch")]
         automatic_ids = {w.get("id") for w in protected} if child_root else set()
         blocking += [c for c in confs if c.get("id") in automatic_ids and c not in blocking]
-        
-        
+
+
         _by_id = {w.get("id"): w for w in data["active"]}
         released = []
         for c in list(blocking):
@@ -440,11 +440,11 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
         data["active"] = [w for w in data["active"] if w.get("id") != wid] + [entry]
         save(path, data)
         _project_claim(legacy, entry)
-        
+
         if published:
             publish_claim(child_root, entry)
-        
-        
+
+
         claim_to_copies(child_root, entry)
     # #708: на product-аудитории человеку не нужны wi-…/сессия/машина/ветка — это внутренние
     # идентификаторы координации. Суть одна: работа началась в отдельной копии, main не тронут.
@@ -460,15 +460,15 @@ def register(path, wid, branch, areas, session, workitem=None, status="in-progre
     for line in _forecast_lines(confs):
         print(line)
     if audience != "product":
-        
-        
+
+
         print("  " + reach_note(published))
         _cl = _copies_line(child_root)
         if _cl:
             print("  " + _cl)
     if published:
-        
-        
+
+
         print("  опубликовано в .ai/claims/: " + ", ".join(PUBLISHED_FIELDS)
               + " — содержимое файлов не уходит.")
     return 0
@@ -638,8 +638,8 @@ def main(argv):
     r.add_argument("--contracts", help="пути общих контрактов через запятую")
     r.add_argument("--at")
     r.add_argument("--repo", help="корень репозитория для чтения team_coordination (по умолчанию cwd)")
-    
-    
+
+
     r.add_argument("--owner-role", help="начальная роль-владелец из словаря модели (#639)")
     r.add_argument("--takeover", action="store_true",
                    help="перенять заявку, которую держит другая сессия (осознанно)")

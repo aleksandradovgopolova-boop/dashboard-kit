@@ -24,16 +24,16 @@ from pathlib import Path
 
 import yaml
 
+from ai_ops_kit.checks import code_duplication
+
 
 LONG_FUNCTION_LINES = 60
 DEEP_NESTING = 5
 LONG_MODULE_LINES = 500
-DUP_MIN_STMTS = 10
 
 
 _SKIP_DIRS = {".git", ".ai", ".ai-ops", "node_modules", "venv", ".venv", "__pycache__",
               "build", "dist", ".mypy_cache", ".pytest_cache", "tests", "test"}
-_SKIP_FUNC_NAMES = {"main", "__init__", "__repr__", "__eq__", "__hash__", "__str__"}
 
 
 def load_rules(rules_path: Path) -> dict:
@@ -166,10 +166,6 @@ def _max_depth(node: ast.AST, _depth: int = 0) -> int:
     return best
 
 
-def _dup_signature(fn: ast.AST) -> tuple:
-    return tuple(type(n).__name__ for n in ast.walk(fn))
-
-
 def _files(root: Path, files=None):
     """Файлы для проверки: явный список (ревью) или весь исходник дочки (онбординг)."""
     return list(files) if files is not None else list(iter_source_files(root))
@@ -220,19 +216,10 @@ def _long_modules(root, files=None):
 
 
 def _duplicates(root, files=None):
-    by_sig: dict[tuple, list[str]] = {}
-    for p, fn in _functions(root, files):
-        if fn.name in _SKIP_FUNC_NAMES:
-            continue
-        if sum(1 for n in ast.walk(fn) if isinstance(n, ast.stmt)) < DUP_MIN_STMTS:
-            continue
-        by_sig.setdefault(_dup_signature(fn), []).append(f"{_rel(p, root)}:{fn.lineno}:{fn.name}")
-    hits = []
-    for members in by_sig.values():
-        uniq = sorted(set(members))
-        if len(uniq) > 1:
-            hits.append({"where": uniq[0], "detail": "дубль: " + ", ".join(uniq[1:])})
-    return hits
+    """CODE-003 — то же ядро, что у ратчета кита и проверки проекта (`checks.code_duplication`)."""
+    root = Path(root)
+    return [{"where": g["locations"][0], "detail": "дубль: " + ", ".join(g["locations"][1:])}
+            for g in code_duplication.duplicate_groups(_files(root, files), root)]
 
 
 
@@ -432,7 +419,7 @@ def conform(root: Path, rules_path: Path | None = None) -> list[dict]:
             "details": hits,
             "recommendation": advice,
         })
-    
+
     order = {"critical": 0, "high": 1, "medium": 2, "low": 3}
     findings.sort(key=lambda f: (order.get(f["severity"], 9), f["article_id"]))
     return findings
@@ -454,7 +441,7 @@ def conform_paths(root: Path, rel_paths, rules_path: Path | None = None) -> list
     if not wanted:
         return []
     rules = load_rules(rules_path) if rules_path else load_all_rules(root)
-    
+
     targets = [root / rp for rp in wanted if (root / rp).is_file()]
     findings = []
     for article_id in _PER_FILE_ARTICLES:

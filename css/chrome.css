@@ -593,6 +593,7 @@
   }
 
   .dk-tabbar__item {
+    position: relative;
     flex: 1 1 0;
     min-width: 0;
     height: 56px;
@@ -603,20 +604,27 @@
     gap: var(--space-2);
     font-size: var(--text-caption);
     font-weight: var(--weight-ui);
-    color: var(--ink-3);
+    color: var(--ink-2);
     text-decoration: none;
     border-radius: var(--radius-lg);
     -webkit-tap-highlight-color: transparent;
+    transition: color var(--duration-fast), background-color var(--duration-fast);
   }
   .dk-tabbar__item > span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .dk-tabbar__item .dk-i { width: 20px; height: 20px; }
-  .dk-tabbar__item:active { background: var(--surface-2); }
+  .dk-tabbar__item:active { background: var(--control-soft); color: var(--ink); }
   @media (hover: hover) and (pointer: fine) {
-    .dk-tabbar__item:hover { color:var(--ink); background:var(--glass-hover, var(--surface-3)); }
+    .dk-tabbar__item:hover { color:var(--ink); background:var(--control-soft); }
   }
-  .dk-tabbar__item:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
-  .dk-tabbar__item[aria-current="page"] { color: var(--ink); font-weight: var(--weight-ui-strong); }
-  .dk-tabbar__item[aria-current="page"] .dk-i { width: 22px; height: 22px; }
+  .dk-tabbar__item[aria-current="page"] { color: var(--ink); background: var(--control-soft); }
+  .dk-tabbar__item[aria-current="page"]::after {
+    content: ""; position: absolute; width: var(--space-7); height: 2px;
+    bottom: var(--space-2); border-radius: var(--radius-full); background: currentColor;
+  }
+  .dk-tabbar__item:focus-visible { outline: none; background: var(--control-focus); color: var(--control-focus-ink); text-decoration: underline; text-underline-offset: var(--space-1); }
+  @media (forced-colors: active) {
+    .dk-tabbar__item:focus-visible { outline: var(--focus-width) solid Highlight; outline-offset: calc(-1 * var(--focus-width)); }
+  }
 
   /* Запас под панелью: её высота, её отступ от низа и воздух до последнего
      блока. Без него последний блок страницы уходил под панель целиком. */

@@ -45,6 +45,7 @@ CLOSED_DECLARABLE = ("done", "dropped")
 
 
 MILESTONE_KEY = "current_milestone"
+RELEASE_INTENT_KEY = "release_intent"
 MILESTONE_STATUSES = DECLARABLE
 # Поля-связки: чем работа привязана к реальности. Не обязательны, но их СМЫСЛ проверяется ниже.
 LINK_KEYS = ("pr", "branch", "commit", "evidence", "decision", "finding")
@@ -103,6 +104,11 @@ def is_template(plan) -> bool:
 
 def items(plan) -> list:
     return [w for w in (plan or {}).get("work") or [] if isinstance(w, dict)]
+
+
+def release_intent(plan):
+    """Необязательные параметры собственного релиза; malformed-present судит validate."""
+    return (plan or {}).get(RELEASE_INTENT_KEY)
 
 
 def goals(plan) -> list:
@@ -194,21 +200,21 @@ def freeze_state(plan) -> dict:
     удалить строку, чтобы правило исчезло).
     """
     g = next((x for x in goals(plan) if x.get("id") == FREEZE_GOAL), None)
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     if not g:
         return {"frozen": False, "applies": False, "readable": True, "decision": FREEZE_DECISION,
                 "reason": f"в этом плане нет цели '{FREEZE_GOAL}' — заморозка умений относится к "
                           f"репозиторию кита, а не к плану продукта"}
     lifted = str(g.get(FREEZE_LIFT_FIELD) or "").strip()
     if lifted:
-        
-        
-        
+
+
+
         reached = bool((g.get("outcome") or {}).get(FREEZE_OUTCOME))
         return {"frozen": False, "applies": True, "readable": True, "decision": FREEZE_DECISION,
                 "lifted_by": lifted, "outcome_reached": reached,
@@ -217,8 +223,8 @@ def freeze_state(plan) -> dict:
                               f"; исход {FREEZE_OUTCOME} при этом ещё НЕ достигнут — "
                               f"снято решением, а не результатом"))}
     if not isinstance(g.get("outcome"), dict) or FREEZE_OUTCOME not in g["outcome"]:
-        
-        
+
+
         return {"frozen": True, "applies": True, "readable": False, "decision": FREEZE_DECISION,
                 "reason": f"исход {FREEZE_GOAL}.{FREEZE_OUTCOME} не найден в плане — "
                           f"состояние заморозки не прочитано, поэтому считается держащейся"}
@@ -293,8 +299,8 @@ def _freeze_lift_errors(fz, root) -> list:
                     errors.append(
                         f"заморозка снята решением '{lift}', которого нет в decisions/registry.yaml — "
                         f"снятие без записанного решения это тихий обход правила, а не решение")
-    
-    
+
+
     if fz.get("applies") and fz.get("outcome_reached") and not _field_evidence_present(root):
         errors.append(
             f"заморозка {FREEZE_DECISION} снята исходом {FREEZE_OUTCOME}=true, но доказательства "

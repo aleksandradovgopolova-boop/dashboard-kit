@@ -54,8 +54,8 @@ class _Builder:
     def node(self, nid: str, ntype: str, **attrs) -> str:
         nid = _slug(nid)
         if nid in self.nodes:
-            
-            
+
+
             for k, v in attrs.items():
                 if v is not None and self.nodes[nid].get(k) in (None, ""):
                     self.nodes[nid][k] = v
@@ -266,13 +266,13 @@ def _outcome_verdict(outcome: dict) -> str:
 
 class _PlanContext(NamedTuple):
     """Что проход плана отдаёт паспортам функций."""
-    
+
     goal_outcome: dict[str, str]
-    
-    
+
+
     name_taken_in_plan: dict[str, set[str]]
-    
-    
+
+
     name_conflict_dropped: dict[str, int]
 
 
@@ -288,11 +288,11 @@ def _plan_pass(b: _Builder, plan: dict, feature_ids: set[str]) -> _PlanContext:
         if not isinstance(g, dict) or not _text(g.get("id")):
             continue
         if _slug(g["id"]) in feature_ids:
-            
-            
-            
-            
-            
+
+
+
+
+
             gid_conflict = _slug(g["id"])
             name_taken_in_plan.setdefault(gid_conflict, set()).add("цель")
             name_conflict_dropped[gid_conflict] = _plan_records_lost_with(gid_conflict, plan)
@@ -309,21 +309,21 @@ def _plan_pass(b: _Builder, plan: dict, feature_ids: set[str]) -> _PlanContext:
         if not isinstance(w, dict) or not _text(w.get("id")):
             continue
         goal_ref = _slug(w.get("goal")) if _text(w.get("goal")) else None
-        
-        
-        
+
+
+
         goal_exists = bool(goal_ref) and (b.type_of(goal_ref) == "goal"
                                           or "цель" in name_taken_in_plan.get(goal_ref, set()))
         if not goal_exists:
             continue                      # работа без резолвимой цели узлом не была и раньше
         if _slug(w["id"]) in feature_ids:
-            
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
+
             kind = ("работа" if b.type_of(goal_ref) == "goal"
                     else "работа, но первым разведи имена у её цели")
             name_taken_in_plan.setdefault(_slug(w["id"]), set()).add(kind)
@@ -365,9 +365,9 @@ def _feature_ladder(b: _Builder, feat: dict, links: dict, feature_ids: set[str])
     chain = [("goal", links.get("goal")), ("initiative", links.get("initiative")),
              ("epic", links.get("epic")), ("feature", feat["id"])]
     declared_levels = [(t, _slug(v)) for t, v in chain if _text(v)]
-    
-    
-    
+
+
+
     broken_links = [pid for ptype, pid in declared_levels
                     if ptype != "feature" and pid in feature_ids]
     present = [(t, pid) for t, pid in declared_levels
@@ -376,17 +376,17 @@ def _feature_ladder(b: _Builder, feat: dict, links: dict, feature_ids: set[str])
         if CONTAINS_LADDER.index(ctype) <= CONTAINS_LADDER.index(ptype):
             continue   # не сверху вниз по лестнице — валидного ребра contains нет
         if not b.has(pid):
-            
-            
-            
-            
-            
+
+
+
+
+
             extra = {"unresolved": True} if ptype == "goal" else {}
             b.node(pid, ptype, title=pid, **extra)
         elif b.type_of(pid) != ptype:
-            
-            
-            
+
+
+
             broken_links.append(pid)
             continue
         b.edge(pid, "contains", cid)
@@ -521,13 +521,13 @@ def _learning_pass(b: _Builder, learnings: list[tuple[Path, dict]], graph_dir: P
             if oid:
                 b.edge(iid, "derived-from", oid)
 
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         oref = fl.get("derived_from_outcome")
         if _text(oref):
             b.edge(iid, "derived-from", _slug(oref))
@@ -591,10 +591,10 @@ def build_graph(child_root: str | os.PathLike) -> dict:
 
     src = _load_sources(root)   # единственное чтение диска (#1134)
 
-    
-    
-    
-    
+
+
+
+
     plan_ctx = _plan_pass(b, src.plan, src.feature_ids)
     feature_outcome = _feature_pass(b, src, plan_ctx, graph_dir)
     _learning_pass(b, src.learnings, graph_dir, feature_outcome)
@@ -636,12 +636,12 @@ def feature_life_source(graph: dict, feature: str, child_root: str | os.PathLike
         data = _load_yaml((graph_dir / ref).resolve())
         return data if isinstance(data, dict) else {}
 
-    
+
     bp_feat = (_read(_text(fnode.get("blueprint"))).get("feature") or {})
     if isinstance(bp_feat, dict) and _text(bp_feat.get("audience")):
         out["audience"] = _text(bp_feat["audience"])
 
-    
+
     fl_ref = None
     for e in graph.get("edges") or []:
         if isinstance(e, dict) and e.get("type") == "feeds" and _slug(e.get("to")) == fid:
@@ -664,8 +664,8 @@ def feature_life_source(graph: dict, feature: str, child_root: str | os.PathLike
         if _text(chosen.get("option")):
             out["solution_chosen"] = _text(chosen["option"])
     elif (why := _decision_reason(graph, fid, root)):
-        
-        
+
+
         out["solution_rationale"], out["solution_rationale_decision"] = why
     return out
 

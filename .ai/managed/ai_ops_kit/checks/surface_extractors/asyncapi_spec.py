@@ -119,7 +119,7 @@ def extract_asyncapi_operations(parsed: ParsedFile) -> list:
     lines = parsed.source.splitlines()
     out: list = []
 
-    
+
     channels = data.get("channels")  # type: ignore[union-attr] — _top_level_is_asyncapi гарантирует dict
     if isinstance(channels, dict):
         ch_section = _key_line(lines, "channels", 0)
@@ -141,7 +141,7 @@ def extract_asyncapi_operations(parsed: ParsedFile) -> list:
                     lineno = 1
                 out.append(_surface(parsed, lineno, f"{ch_name} {action}"))
 
-    
+
     operations = data.get("operations")  # type: ignore[union-attr]
     if isinstance(operations, dict):
         ops_section = _key_line(lines, "operations", 0)

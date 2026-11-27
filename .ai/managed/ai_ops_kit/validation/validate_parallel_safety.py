@@ -201,20 +201,20 @@ def diff_mixes_code_with_coordination(changed: list, coord: list, markers=None) 
             doc_hits.append(f)          # документация — не код территории, DIRTY-дорожку N² не растит
         else:
             code_hits.append(f)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
     kit_update = is_kit_update_diff(changed, markers=markers)
-    
+
     kit_release = is_kit_release_diff(changed)
     return {"mixed": bool(coord_hits) and bool(code_hits) and not kit_update and not kit_release,
             "coordination": sorted(coord_hits), "code": sorted(code_hits),
@@ -256,8 +256,8 @@ def assess(root, base=None, defaults=None, include_worktree=False) -> dict:
                     f"{', '.join(mix['coordination'])} — миграция апдейта, а не параллельная работа; "
                     "смешение DIRTY не взводит (#384)."]
             elif mix["kit_release"] and mix["coordination"] and mix["code"]:
-                
-                
+
+
                 rep["notes"] = rep.get("notes", []) + [
                     "релиз-PR кита (release_bump бампит все поверхности VERSION/manifest/release-claims/"
                     f"release-notes): правки {', '.join(mix['coordination'])} — машинный выпуск, а не "
@@ -290,8 +290,8 @@ def main(argv):
     import json
     rep = assess(root, base=base, defaults=defaults)
     print(json.dumps(rep, ensure_ascii=False, indent=2) if js else render(rep))
-    
-    
+
+
     if strict and rep.get("checked") and (rep.get("diff") or {}).get("mixed"):
         return 1
     return 0

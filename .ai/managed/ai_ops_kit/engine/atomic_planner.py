@@ -247,7 +247,7 @@ def assess(signals, child_root=None, bundle=None, budget=None):
         axes.append("by-size")
 
     should = bool(reasons)
-    
+
     seen, uniq_axes = set(), []
     for a in axes:
         if a not in seen:
@@ -317,16 +317,16 @@ def decompose(signals, wid=None, child_root=None, bundle=None, budget=None):
                     "axis": "by-result", "scope": subsystems or ["unspecified"],
                     "depends_on": [], "acceptance": base_acc, "order": i + 1})
         else:
-            
+
             for i in range(2):
                 packages.append({
                     "id": f"{wid}-pkg-{i+1}", "title": f"часть {i+1} (ось {primary}; уточнить дробление)",
                     "axis": primary, "scope": subsystems or ["unspecified"],
                     "depends_on": ([f"{wid}-pkg-1"] if i == 1 else []),
                     "acceptance": base_acc, "order": i + 1})
-        
-        
-        
+
+
+
         for p in packages:
             p["write_scope"] = _scope_paths(p.get("scope")) or None
         wp["primary_axis"] = primary

@@ -51,8 +51,8 @@ def _blocked_signal(root: Path) -> hc.Signal:
     if not open_work:
         return hc.Signal("blocked_work", hc.GREEN,
                          "открытых работ нет — заблокированных тоже")
-    
-    
+
+
     blocked = [w for w in open_work
                if any(dep in open_ids for dep in (w.get("depends_on") or []))]
     if not blocked:

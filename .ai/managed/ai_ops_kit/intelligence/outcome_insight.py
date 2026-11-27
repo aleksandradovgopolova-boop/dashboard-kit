@@ -153,7 +153,7 @@ def _epistemics(contract: dict, readout: dict, evaluation: dict) -> dict:
     measured, measured_at = evaluation.get("measured"), evaluation.get("measured_at")
     breaches = list(evaluation.get("guardrail_breaches") or [])
 
-    
+
     observed = [f"метрика «{metric}» на замере {measured} (baseline {baseline}, цель {target})"
                 + (f", измерено {measured_at}" if measured_at else "")]
     reported = _reported_guardrails(readout)
@@ -161,7 +161,7 @@ def _epistemics(contract: dict, readout: dict, evaluation: dict) -> dict:
         state = "просела" if name in breaches else "в пределах"
         observed.append(f"защитная метрика «{name}»: {state}")
 
-    
+
     inferred = []
     if evaluation.get("verdict") == "met":
         inferred.append("основная метрика взяла цель, защитные метрики удержаны — правило решения «continue»")
@@ -178,7 +178,7 @@ def _epistemics(contract: dict, readout: dict, evaluation: dict) -> dict:
     if b2d:
         inferred.append(f"знание в discovery: {b2d}")
 
-    
+
     unknown = []
     not_reported = sorted(set(_declared_guardrails(contract)) - reported)
     for name in not_reported:
@@ -301,7 +301,7 @@ def _metric_name(insight: dict, contract: dict | None) -> str:
         name = _text((contract.get("primary_metric") or {}).get("name"))
         if name:
             return name
-    
+
     return _text((insight.get("headline") or "").strip("«").split("»")[0]) or _text(insight.get("outcome_id"))
 
 
@@ -318,7 +318,7 @@ def _because(insight: dict, evaluation: dict, readout: dict | None, contract: di
     if verdict == "met":
         parts.append(f"метрика «{metric}» дошла до {m} при цели {t} (старт {b})")
     elif breaches:
-        
+
         parts.append(f"защитная метрика просела ({', '.join(breaches)}), "
                      f"а «{metric}» была на {m} при цели {t}")
     elif m is not None and m == b:

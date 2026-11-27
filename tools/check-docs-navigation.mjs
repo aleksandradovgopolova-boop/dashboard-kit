@@ -6,6 +6,8 @@ import {resolve,extname,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url)).replace(/\/$/,'');
 const out=resolve(process.env.DK_EVIDENCE_DIR || root+'/docs/2026-10-29/kit-single-row/')+'/';
+const componentIndex=JSON.parse((await readFile(root+'/js/docs-index.js','utf8')).split('window.dkDocsIndex = ')[1].trim().replace(/;$/, ''));
+const componentRoutes=componentIndex.map(x=>'component-'+x.slug+'.html').sort();
 const server=createServer(async(req,res)=>{try{const f=resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://local').pathname));if(!f.startsWith(root+sep)){res.writeHead(403);res.end();return;}const b=await readFile(f);res.setHeader('Content-Type',({'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.topojson':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2','.png':'image/png'})[extname(f)]||'application/octet-stream');res.end(b);}catch{res.writeHead(404);res.end();}});
 await mkdir(out,{recursive:true});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
@@ -32,8 +34,8 @@ try {
   assert(await ev(`document.querySelector('.sc-nav').hidden&&!document.querySelector('.sc-shell>.dk-wrap').inert`),'Megamenu is closed by default');
   assert(await ev(`document.documentElement.scrollWidth<=innerWidth+1`),'No page overflow: '+file+' '+width);
   assert(await ev(`Array.from(document.querySelectorAll('.sc-bar button')).filter(x=>x.getClientRects().length).every(x=>Math.abs(x.getBoundingClientRect().height-parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--control-sm')))<1)`),'Header controls use equal 44px targets');
-  assert(await ev(`Array.from(document.querySelectorAll('.sc-bar__tools .dk-iconbtn,.sc-bar__tools .dk-seg button,.sc-overview-actions .dk-btn,.sc-overview-steps,.sc-example-card')).filter(x=>x.getClientRects().length).every(x=>{const s=getComputedStyle(x),p=[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat);return Math.max(...p)-Math.min(...p)<.1;})`),'Bounded buttons and overview containers have equal padding on all four sides');
-  if(file==='index.html')assert(await ev(`(()=>{const a=[...document.querySelectorAll('.sc-overview-actions a')];return a.length===2&&a.every(x=>Math.abs(x.getBoundingClientRect().height-44)<1&&parseFloat(getComputedStyle(x).fontSize)>=15)&&(innerWidth<=859||Math.abs(a[0].getBoundingClientRect().top-a[1].getBoundingClientRect().top)<1);})()`),'Hero actions use readable, aligned 44px controls');
+  assert(await ev(`Array.from(document.querySelectorAll('.sc-bar__tools .dk-iconbtn,.sc-bar__tools .dk-seg button,.sc-overview-steps,.sc-example-card')).filter(x=>x.getClientRects().length).every(x=>{const s=getComputedStyle(x),p=[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat);return Math.max(...p)-Math.min(...p)<.1;})`),'Square controls and overview containers keep equal padding');
+  if(file==='index.html')assert(await ev(`(()=>{const a=[...document.querySelectorAll('.sc-overview-actions a')];return a.length===2&&a.every(x=>Math.abs(x.getBoundingClientRect().height-44)<1&&parseFloat(getComputedStyle(x).fontSize)>=15)&&(innerWidth<=859||Math.abs(a[0].getBoundingClientRect().top-a[1].getBoundingClientRect().top)<1);})()`),'Hero actions use readable, aligned 44px controls '+width+' '+theme+' '+JSON.stringify(await ev("[...document.querySelectorAll('.sc-overview-actions a')].map(n=>({text:n.textContent,height:n.getBoundingClientRect().height,top:n.getBoundingClientRect().top,width:n.getBoundingClientRect().width,font:getComputedStyle(n).fontSize}))")));
 
   assert(await ev(`(()=>{const h=document.querySelector('.sc-bar').getBoundingClientRect(),b=document.querySelector('.sc-brand').getBoundingClientRect(),t=document.querySelector('.sc-bar__tools').getBoundingClientRect(),c=document.querySelector('.sc-bar__menu'),n=document.querySelector('.sc-topnav').getBoundingClientRect();const s=getComputedStyle(document.querySelector('.sc-bar'));return Math.max(...[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat))-Math.min(...[s.paddingTop,s.paddingRight,s.paddingBottom,s.paddingLeft].map(parseFloat))<.1&&b.top>=h.top&&t.bottom<=h.bottom+1&&t.right<=innerWidth&&(!c.hidden?(c.getBoundingClientRect().left>=b.right&&c.getBoundingClientRect().right<=t.left):n.left>=b.right+3&&n.right<=t.left-3&&n.width>=document.querySelector('.sc-topnav').scrollWidth-1);})()`),'One header row without overlaps or clipped labels: '+file+' '+width);
 
@@ -50,7 +52,7 @@ try {
   await choose('Дизайн-система');assert(await ev(`${panel}.querySelectorAll('.sc-mega__group').length===3&&${panel}.querySelectorAll('a').length===15`),'Design contains all three groups and 15 links');
   assert(await ev(`(()=>{const a=document.querySelector('button.sc-mega__category[aria-expanded="true"]').getBoundingClientRect(),r=document.querySelector('.sc-mega__rail').getBoundingClientRect();return a.left>=r.left-1&&a.right<=r.right+1;})()`),'Selected category is visible on header buttons');
   if(file==='index.html'&&[390,886,1280].includes(width)){const shot=await send('Page.captureScreenshot',{format:'png'});await writeFile(out+'header-design-'+theme+'-'+width+'.png',Buffer.from(shot.data,'base64'));}
-  await choose('Компоненты');assert(await ev(`${panel}.querySelectorAll('a[href^="component-"]').length===56&&${panel}.querySelectorAll('.sc-mega__group').length===7`),'All components retained');
+  await choose('Компоненты');assert(await ev(`JSON.stringify([...${panel}.querySelectorAll('a[href^="component-"]')].map(a=>a.getAttribute('href')).sort())===${JSON.stringify(JSON.stringify(componentRoutes))}&&${panel}.querySelectorAll('.sc-mega__group').length===7`),'All components retained');
   await ev(`(()=>{const links=${panel}.querySelectorAll('a');links[links.length-1].focus();})()`);await key('Tab','Tab',9);
   assert(await ev(`document.activeElement===document.querySelector('.sc-brand')`),'Tab wraps to header');
   await key('Escape','Escape',27);assert(await ev(`document.querySelector('.sc-nav').hidden&&!document.querySelector('.sc-shell>.dk-wrap').inert&&document.activeElement.matches('.sc-topnav button,.sc-bar__menu')`),'Escape closes and restores focus');
@@ -94,7 +96,7 @@ try {
  assert(await ev(`document.querySelector('.sc-nav').hidden`),'Outside click closes menu');
  await open();await ev(`document.querySelector('.sc-search-trigger').click();const i=document.querySelector('.sc-search input');i.value='Семейная ипотека';i.dispatchEvent(new Event('input'));`);await settled();
  assert(await ev(`document.querySelector('.sc-nav').hidden&&document.querySelector('.sc-search').open&&!!document.querySelector('.sc-search__results a[href="family-mortgage.html"]')`),'Search closes mega and retains example results');
- console.log('PASS: '+count+' responsive portrait/landscape views plus 22 desktop viewport checks and real hover; five categories, 15 design routes, 56 components, mouse/keyboard, header buttons, current component, search, outside click and focus restoration');
+ console.log('PASS: '+count+' responsive portrait/landscape views plus 22 desktop viewport checks and real hover; five categories, 15 design routes, '+componentRoutes.length+' components, mouse/keyboard, header buttons, current component, search, outside click and focus restoration');
  assert(errors.length===0,'Runtime errors: '+errors.join(', '));
 
 } finally {if(browser)await browser.close();server.close();}

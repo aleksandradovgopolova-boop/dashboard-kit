@@ -46,11 +46,11 @@ def _collect_base_checks_at(child_root, base_sha, sandbox):
     except Exception:  # noqa: BLE001
         return None
     finally:
-        
-        
-        
-        
-        
+
+
+
+
+
         try:
             _git(child_root, "worktree", "remove", "--force", str(tmp))
         except Exception:  # noqa: BLE001,S110 — уборка после уже вынесенного вердикта: отказ не меняет baseline
@@ -58,10 +58,10 @@ def _collect_base_checks_at(child_root, base_sha, sandbox):
 
 
 def _collect_baseline(child_root, sequence_base_sha, sandbox):
-    
-    
-    
-    
+
+
+
+
     _base_res = _collect_base_checks_at(child_root, sequence_base_sha, sandbox)
     base_checks = (_base_res or {}).get("checks") if _base_res else None
     baseline_proven = bool(_base_res and _base_res.get("proven"))
@@ -82,7 +82,7 @@ def _aggregate_close_security(agg_sec, vroot, base_sha, final_sha, signals, revi
     if agg_sec.get("overall") != "needs_review":
         return agg_sec, None
 
-    
+
     if strict_judge_qualified and security_reviewer_proposer is not None:
         try:
             from ai_ops_kit.engine import execution_pipeline as _ep
@@ -101,9 +101,9 @@ def _aggregate_close_security(agg_sec, vroot, base_sha, final_sha, signals, revi
             agg_sec["review_error"] = str(e)
             return agg_sec, None
 
-    
-    
-    
+
+
+
     _root = child_root or vroot
     _nr = list(agg_sec.get("needs_review") or [])
     if wid and _root and _nr:
@@ -126,7 +126,7 @@ def _aggregate_close_security(agg_sec, vroot, base_sha, final_sha, signals, revi
             agg_sec["review_error"] = str(e)
             return agg_sec, None
 
-    
+
     agg_sec.setdefault("closed_by", None)
     return agg_sec, None
 
@@ -144,11 +144,11 @@ def _aggregate_code_review(vroot, base_sha, final_sha, signals, reviewer_propose
         gev, revs = _ep._run_reviews(reviewer_proposer, vroot, ["code_review"], {},
                                      dict(signals or {}), final_sha, {"max_model_calls": 16},
                                      change_context=ctx)
-        
-        
-        
-        
-        
+
+
+
+
+
         ok = (gev.get("code_review") or {}).get("status") == "pass"
         return ok, revs
     except Exception:  # noqa: BLE001 — сбой aggregate-ревью = fail-closed
@@ -170,7 +170,7 @@ def _aggregate_verify(child_root, wid, sandbox, final_sha, base_checks, sequence
     try:
         wt = Path(child_root) / ".ai" / "worktrees" / wid
         vroot = wt if wt.is_dir() else Path(child_root)
-        
+
         head_sha = _git(vroot, "rev-parse", "HEAD")[1]
         revision_ok = (head_sha == final_sha)
         _vpol = (_tb2.sandbox_policy(child_root=str(vroot)) if sandbox
@@ -181,7 +181,7 @@ def _aggregate_verify(child_root, wid, sandbox, final_sha, base_checks, sequence
         _is_git = _git(vroot, "rev-parse", "--is-inside-work-tree")[0] == 0
         tree_clean = _ep._tree_clean_after_checks(vroot) if _is_git else True
         agg_reg, _agg_fix = _ep._diff_checks(base_checks, final_checks) if base_checks else ([], [])
-        
+
         _base_sha = sequence_base_sha
         if not _base_sha and final_sha:
             _fp = _git(vroot, "rev-list", "--max-parents=0", final_sha)[1].split("\n")[0]
@@ -191,13 +191,13 @@ def _aggregate_verify(child_root, wid, sandbox, final_sha, base_checks, sequence
             agg_sec = _sp2.run_pack(vroot, base=(_base_sha or None), signals=(signals or {}))
         except Exception:  # noqa: BLE001
             agg_sec = {"overall": "error"}
-        
+
         agg_sec, agg_sec_review = _aggregate_close_security(
             agg_sec, vroot, _base_sha, final_sha, signals, reviewer_proposer, review,
             security_reviewer_proposer=security_reviewer_proposer,
             strict_judge_qualified=strict_judge_qualified, wid=wid, child_root=child_root)
-        
-        
+
+
         agg_sec_ok = (agg_sec or {}).get("overall") in ("clear", "advisory")
         agg_code_ok, agg_code_reviews = _aggregate_code_review(
             vroot, _base_sha, final_sha, signals, reviewer_proposer, review)
@@ -209,10 +209,10 @@ def _aggregate_verify(child_root, wid, sandbox, final_sha, base_checks, sequence
                 "evidence_revision_ok": (coll.get("revision") == final_sha),
                 "security_overall": (agg_sec or {}).get("overall"), "security_ok": agg_sec_ok,
                 "security_reviewer_status": (agg_sec or {}).get("reviewer_status"),
-                
-                
-                
-                
+
+
+
+
                 "security_scan": _sp2.for_report(agg_sec),
                 "code_review_ok": agg_code_ok, "code_reviews": agg_code_reviews,
                 "checks": {k: (v or {}).get("status") for k, v in (final_checks or {}).items()}}
@@ -238,11 +238,11 @@ def _compute_aggregate_verdict(completed, ordered, stopped_at, results, final_sh
                                       sequence_base_sha, signals, reviewer_proposer, review, baseline_proven,
                                       security_reviewer_proposer=security_reviewer_proposer,
                                       strict_judge_qualified=strict_judge_qualified)
-    
-    
-    
-    
-    
+
+
+
+
+
     agg_ok = bool(aggregate.get("verified") and aggregate.get("no_regressions")
                   and aggregate.get("baseline_proven")
                   and aggregate.get("revision_ok") and aggregate.get("tree_clean")
@@ -255,8 +255,8 @@ def _compute_aggregate_verdict(completed, ordered, stopped_at, results, final_sh
 def _deliver_pr(open_pr, aggregate_ready, final_sha, child_root, wid, base, sequence_base_sha,
                 task, ordered):
     from ai_ops_kit.engine import execution_pipeline as _ep
-    
-    
+
+
     pr, delivery = None, {"requested": bool(open_pr), "status": "not-requested" if not open_pr else None}
     if open_pr:
         if aggregate_ready and final_sha:
@@ -309,11 +309,11 @@ def _finalize_sequence_report(wid, results, completed, stopped_at, executed_all,
            "sequence_base_sha": sequence_base_sha, "base_drift": base_drift,   # rc16 (P0/P1)
            "aggregate": aggregate, "delivery": delivery, "draft_pr": pr,
            "resumed_from": resume_from}
-    
+
     from ai_ops_kit.shared import lifecycle_store as _ls2
-    
-    
-    
+
+
+
     _ls2.merge_bookkeeping_losses(seq)
     _sr = _ls2.durable_write(features_dir / wid / "sequence-report.yaml", seq)
     if not _sr.get("ok"):

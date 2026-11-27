@@ -24,16 +24,15 @@ runtimes:
       при install. Стадии, handoff и enforcement гейтов исполняет сам Claude Code,
       следуя командам; код кита их в этом раннтайме не оркестрирует. Полное
       исполнение контракта с блокировкой гейтов — через generic-orchestrator.
-    # v3.9.0 (rc, in progress): KIT-DRIVEN executing путь — кит сам оркестрирует Claude Code как
-    # СИЛЬНОГО writer'а через локальный `claude -p --tools ""` (orchestrator.make_claude_cli_provider,
-    # provider=claude-cli). Claude только ПРЕДЛАГАЕТ действия текстом; кит владеет worktree/diff/evidence/
-    # gates/delivery (Claude не пушит/не создаёт PR/не меняет основной checkout/не закрывает свой review|
-    # security/не владеет lifecycle). Доказано live (full-stack -> draft PR). Codex-адаптер — позже.
+    # #1476: прежний live end-to-end не квалифицировал effective read-only tool/config boundary.
+    # KIT-DRIVEN Claude subprocess закрыт до отдельной квалификации. Native generated-commands
+    # выше и возможности самого внешнего Claude Code ниже — отдельные поверхности.
     kit_driven_executing:
-      status: verified          # v3.9.0: доказан live end-to-end через shipped-путь (не monkeypatch)
-      via: "provider=claude-cli (orchestrator.make_claude_cli_provider), read-only Read/Grep/Glob"
+      status: unsupported
+      via: "provider=claude-cli (orchestrator.make_claude_cli_provider); live BLOCKED"
+      note: "#1476: readonly_runtime_unqualified до subprocess; квалифицированного runtime нет. См. docs/claude-readonly-contract.md."
       contract: "AI Ops = control plane; Claude Code = сильный заменяемый исполнитель"
-      proven_live: "complexity-routing->writer=claude-cli; green build/typecheck/test; независимый deepseek-ревьюер поймал реальный дефект claude (writer≠judge, 0 false-green); security->human #5"
+      proven_live: "Историческое evidence v3.9.0, не текущая read-only квалификация: complexity-routing->writer=claude-cli; green build/typecheck/test; независимый deepseek-ревьюер поймал реальный дефект claude (writer≠judge, 0 false-green); security->human #5"
       routing: "complexity-aware: ENGINEERING/PRODUCT/AI_FEATURE/CRITICAL/RESEARCH или risk high/critical -> strong-executor сразу; QUICK -> дешёвый API writer"
     default_provider: anthropic
     execution_modes: [native, orchestrated, sequential]
@@ -74,12 +73,25 @@ runtimes:
       entrypoint: ai_ops_kit/devtools/codex_stage_cli.py
       implementation: ai_ops_kit/devtools/codex_stage.py
       note: "opt-in text-only; internal CLI не поставляется; workflow остаётся blocked; не general executing provider"
+    pipeline_text_provider:
+      status: degraded
+      provider: codex-app-server
+      implementation: ai_ops_kit/providers/codex_native.py
+      note: "Подготовлен native text-only provider; offline regression не заменяет живую приёмку. В CLI0.147.0 SessionStart выполняется внутри run_turn, поэтому даже trusted hooks не дают требуемой no-model readiness. Без настоящего pre-turn ack provider остаётся NOT_READY; права не расширяются автоматически."
     default_provider: openai
     execution_modes: [native, orchestrated, sequential]
     preferred_mode: orchestrated
     capabilities:
-      native_subagents: {status: degraded, value: "baseline TOML agents, not full parity"}
-      parallel_execution: {status: degraded, value: limited}
+      native_subagents: {status: degraded, value: "baseline TOML agents, not full parity",
+        note: "current-session finalize выдаёт scoped native-agent jobs и команду продолжения;
+          dispatch выполняет открытый host своими subagent tools. Пакет заданий не доказывает
+          запуск; обязательные review/gates и ограничения headless provider сохраняются.
+          Код: ai_ops_kit/cli/project_session_completion.py."}
+      parallel_execution: {status: degraded, value: "governed concurrent orchestration (не live-verified)",
+        note: "v4.12 (#1434): parallel_live_dispatch передаёт runtime+provider каждому пакету;
+          offline доказана конкурентность package callbacks с изоляцией клонов. Native Codex turns
+          текущего adapter сериализованы общим workspace lock. Гейты readiness/trust/model сохранены;
+          live concurrency и ускорение не подтверждены. Тест: test_parallel_codex_concurrent."}
       tools: {status: documented, value: true}
       mcp: {status: documented, value: true}
       function_calling: {status: documented, value: true}

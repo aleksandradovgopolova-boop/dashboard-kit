@@ -132,9 +132,9 @@ def _rank(w, res, model, plan):
     if goal_rank == 0 and len(prio) > 1:
         why.append("работает на цель первого приоритета")
     if not _plan.goal_is_live(plan, gid):
-        
-        
-        
+
+
+
         why.append(f"цель «{_plan.goal_display_name(gid)}» уже не ведёт вперёд (достигнута или "
                    f"на паузе) — приоритет ниже живых целей; работу стоит перевесить в плане")
     if w.get("value") == "high":
@@ -187,8 +187,8 @@ def _parallel_set(candidates, by_id, anchor=None):
     chosen, skipped = [], []
     if anchor is not None:
         if not (by_id.get(anchor["id"]) or {}).get("write_scope"):
-            
-            
+
+
             return [], [{"id": c["id"], "reason": f"у {anchor['id']} нет write_scope — "
                                                   f"параллельность с ней недоказуема"}
                         for c in candidates if c["id"] != anchor["id"]]
@@ -255,8 +255,8 @@ def _holders(child_root, me=None):
         wid = _plan._workitem_key(e)
         row = {"id": wid, "title": None, "branch": e.get("branch"),
                "owner_session": e.get("owner_session"), "machine": e.get("machine"),
-               
-               
+
+
                "worktree": e.get("worktree"),
                "since": e.get("started_at")}
         (mine if (me and e.get("owner_session") == me) else others).append(row)
@@ -318,8 +318,8 @@ def compute(child_root, budget_left=None, me=None):
     model = _contours.load_model()
     plan = _plan.load(child_root)
     rm = _roadmap.check(child_root, plan)
-    
-    
+
+
     plan_rel = _plan.plan_rel(child_root)
 
     if plan is None:
@@ -330,8 +330,8 @@ def compute(child_root, budget_left=None, me=None):
                 "gap": f"нет {plan_rel} — контур Planning & Execution не заполнен; "
                        f"шаблон: templates/planning/plan.yaml"}
 
-    
-    
+
+
     if _plan.is_template(plan):
         return {"schema_version": 1, "plan_present": True, "plan_is_template": True,
                 "plan_errors": [], "plan_warnings": [],
@@ -342,9 +342,9 @@ def compute(child_root, budget_left=None, me=None):
                        f"Впишите свою работу и снимите строку `template: true`; советовать из "
                        f"примера кит не станет."}
 
-    
-    
-    
+
+
+
     try:
         closed = _plan.load_history(child_root)
     except _plan.PlanCorrupt:
@@ -355,7 +355,7 @@ def compute(child_root, budget_left=None, me=None):
     by_id = {w["id"]: w for w in ws if w.get("id")}
     caps_known = _known_capabilities()
 
-    
+
     where = []
     single = _plan.goals(plan)[0]["id"] if len(_plan.goals(plan)) == 1 else None
     for g in _plan.goals(plan):
@@ -372,14 +372,14 @@ def compute(child_root, budget_left=None, me=None):
     in_progress, blocked, ready, not_ready, held = _categorize(
         by_id, res, caps_known, budget_left, model, plan)
 
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
     frozen = _plan.frozen_work(plan)
     frozen_rows = []
     if frozen:
@@ -417,11 +417,11 @@ def compute(child_root, budget_left=None, me=None):
     if len(ready) > 1:
         parallel, par_skipped = _parallel_set(ready[1:], by_id, anchor=next_best)
 
-    
-    
-    
-    
-    
+
+
+
+
+
     try:
         from ai_ops_kit.planning import staleness as _stale
         stale = _stale.assess(child_root, plan_rel)
@@ -473,7 +473,7 @@ def render(rep) -> str:
     for g in rep["where_are_we"]:
         mark = "✓" if g["outcome_reached"] else "·"
         rm = "" if g["in_roadmap"] else "  ⚠ цели нет в roadmap (работа без направления)"
-        
+
         name = _plan.goal_display_name(g["goal"])
         L.append(f"  {mark} цель {name} [{g['status']}] — работа {g['work_done']}/{g['work_total']}{rm}")
         for k, v in (g["outcome"] or {}).items():
@@ -500,9 +500,9 @@ def render(rep) -> str:
         for c in r["admission"]:
             if not c["ok"]:
                 L.append(f"      {c['id']}: {c['detail']}")
-    
-    
-    
+
+
+
     for r in rep.get("held") or []:
         L.append(f"  · {r['id']} ждёт твоего решения (waiting_on: {r.get('waiting_on') or '?'}) "
                  f"— {r['title']}")
@@ -527,8 +527,8 @@ def render(rep) -> str:
     for w in rep["plan_warnings"] + rep["roadmap"]["warnings"]:
         L.append(f"  ⚠ {w}")
 
-    
-    
+
+
     st = rep.get("staleness") or {}
     dead, behind = st.get("dead_references") or [], st.get("plan_behind")
     stale_dec = rep.get("stale_decisions") or []

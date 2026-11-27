@@ -123,17 +123,17 @@ def build_role_prompt(stage, agent_id, agents_index, task_text, published, skill
 def _write_reviewer_json(run_dir, sid, text):
     """Из ответа judge-роли достать JSON reviewer-result и, если валиден по схеме, записать
     stage-<sid>.reviewer.json (структурный источник истины). Иначе — ничего (фолбэк на markdown)."""
-    
-    
-    
+
+
+
     from ai_ops_kit.gates.gate_executor import extract_reviewer_json
     obj = extract_reviewer_json(text)
     if obj is None:
         return False
     try:
-        
-        
-        
+
+
+
         from ai_ops_kit.checks import reviewer_result as _vrr
         if _vrr.check(obj):           # непустой список ошибок -> невалидно
             return False
@@ -168,13 +168,71 @@ def _save_stage_origin(stage, owner, result, out):
     return origin
 
 
-def _finish_run_state(state, gates, skill_failure, budget_exceeded):
-    if skill_failure:
+def _is_readonly_refusal(rec) -> bool:
+    return (rec.get("reason") == "readonly_runtime_unqualified"
+            and rec.get("provider") == "claude-cli")
+
+
+def _writer_stage(provider, prompt, sid, state, run_dir, bud):
+    """Вызвать writer-провайдера стадии. -> (result, None) либо (None, отказ #1476).
+
+    Узкая граница #1476: перехватывается только отказ неквалифицированного read-only Claude CLI;
+    отказ или политика API и mock идут дальше исключением.
+    """
+    try:
+        result = provider(prompt)
+    except ProviderRefusal as refusal:
+        rec = refusal.as_dict()
+        if not _is_readonly_refusal({"reason": refusal.reason, "provider": refusal.provider}):
+            raise
+        writer_refusal = {"stage": sid, **rec}
+        state.update(status="blocked", current_phase=None,
+                     provider_refusal=writer_refusal, budget=bud.to_dict())
+
+
+        save_state(run_dir, state)
+        (run_dir / f"stage-{sid}.refusal.json").write_text(
+            json.dumps(rec, ensure_ascii=False, indent=2), encoding="utf-8")
+        return None, writer_refusal
+    previous = state.get("provider_refusal") or {}
+    if previous.get("stage") == sid and _is_readonly_refusal(previous):
+
+
+        refusal_path = run_dir / f"stage-{sid}.refusal.json"
+        if refusal_path.exists():
+            refusal_path.replace(run_dir / f"stage-{sid}.refusal.previous.json")
+        state.pop("provider_refusal", None)
+    return result, None
+
+
+def _final_line(workflow_id, state, gates, run_dir, skill_failure, writer_refusal) -> str:
+    """Итоговая строка прогона человеку: отказ writer, незакрытые гейты либо успех."""
+    if writer_refusal:
+        return (f"BLOCKED: workflow {workflow_id}, стадия {writer_refusal['stage']}: "
+                f"{writer_refusal['reason']}. {writer_refusal['detail']} "
+                f"Состояние для продолжения: {run_dir / 'TaskState.yaml'}")
+    if state["status"] == "blocked":
+        return (f"BLOCKED: workflow {workflow_id} прошёл {len(state['completed_checks'])} стадий, "
+                f"но блокирующие гейты не выполнены: {', '.join(gates['unmet_gates'])}. "
+                f"Отчёт гейтов: {run_dir / 'GateReport.json'}"
+                f"{'; skill недоступен: ' + skill_failure['reason'] if skill_failure else ''}")
+    return (f"OK: workflow {workflow_id} завершён sequential-режимом; "
+            f"{len(state['completed_checks'])} стадий, все блокирующие гейты выполнены; "
+            f"состояние: {run_dir / 'TaskState.yaml'}")
+
+
+def _finish_run_state(state, gates, skill_failure, budget_exceeded, writer_refusal=None):
+    if writer_refusal:
+
+        state['status'] = 'blocked'
+        state['provider_refusal'] = writer_refusal
+        state['unmet_gates'] = gates.get('unmet_gates', [])
+    elif skill_failure:
         state['status'] = 'blocked'
         state['skill_failure'] = skill_failure
         state['unmet_gates'] = gates.get('unmet_gates', [])
     elif budget_exceeded:
-        
+
         state["status"] = "blocked"
         state["budget_exceeded"] = budget_exceeded
         state["unmet_gates"] = gates.get("unmet_gates", [])
@@ -212,8 +270,8 @@ def run_workflow(workflow_id: str, task_text: str, child_root: Path,
         raise SystemExit(f"неизвестный workflow '{workflow_id}' (есть: {', '.join(wf_all)})")
     w = wf_all[workflow_id]
 
-    
-    
+
+
     task_hash, wid, run_dir, gate_ids = _run_identity(
         child_root, workitem_id, task_text, workflow_id, gate_ids)
     if fresh and run_dir.exists():        # --fresh: начать с чистого состояния (иначе — resume)
@@ -232,21 +290,22 @@ def run_workflow(workflow_id: str, task_text: str, child_root: Path,
         "execution_mode": "sequential", "current_phase": None,
         "completed_checks": [], "artifacts": [], "next_action": w["stages"][0]["id"],
     }
-    
+
     if existing and existing.get("workflow") != workflow_id:
         raise SystemExit(f"resume-конфликт: под '{wid}' сохранён workflow "
                          f"{existing.get('workflow')} != {workflow_id}. Используйте --fresh.")
 
-    
+
     from ai_ops_kit.shared import budget as _budget_mod
     bud = budget if isinstance(budget, _budget_mod.Budget) else _budget_mod.Budget.from_dict(budget)
     budget_exceeded = None
     skill_failure = None
+    writer_refusal = None
 
     stages = w["stages"]
     done_ids = {s for s in state.get("completed_checks", [])}
     published = {}  # name -> content (опубликованные артефакты)
-    
+
     for f in sorted(run_dir.glob("stage-*.md")):
         published[f.stem] = f.read_text(encoding="utf-8")
 
@@ -275,18 +334,18 @@ def run_workflow(workflow_id: str, task_text: str, child_root: Path,
             break
         is_judge_stage = stage.get("review_mode") == "read-only"
         if is_judge_stage:
-            
-            
-            
+
+
+
             judge_fn, shape = for_contract(provider, REVIEWER_RESULT)
             state.setdefault("verdict_shape", {})[sid] = {
                 "mode": shape.get("mode"), "mechanism": shape.get("mechanism")}
             try:
                 result = judge_fn(prompt)
             except ProviderRefusal as refusal:
-                
-                
-                
+
+
+
                 rec = refusal.as_dict()
                 (run_dir / f"stage-{sid}.refusal.json").write_text(
                     json.dumps(rec, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -298,9 +357,11 @@ def run_workflow(workflow_id: str, task_text: str, child_root: Path,
                 if verbose:
                     print(f"  stage {sid} [{owner}/judge] -> ОТКАЗ: {rec['reason_text']}")
         else:
-            result = provider(prompt)
+            result, writer_refusal = _writer_stage(provider, prompt, sid, state, run_dir, bud)
+            if writer_refusal:
+                break
 
-        
+
         out = run_dir / f"stage-{sid}.md"
         out.write_text(result, encoding="utf-8")
         published[out.stem] = result
@@ -331,8 +392,8 @@ def run_workflow(workflow_id: str, task_text: str, child_root: Path,
             role = "judge" if is_judge_stage else "writer"
             print(f"  stage {sid} [{owner}/{role}] -> stage-{sid}.md")
 
-    
-    
+
+
     from ai_ops_kit.gates import gate_executor
     gate_ev = dict(gate_evidence or {})
     if collect:      # вывести evidence из вердиктов reviewer-стадий; явный --evidence имеет приоритет
@@ -346,7 +407,7 @@ def run_workflow(workflow_id: str, task_text: str, child_root: Path,
     state["current_phase"] = None
     state["gate_report"] = "GateReport.json"
     state["budget"] = bud.to_dict()
-    _finish_run_state(state, gates, skill_failure, budget_exceeded)
+    _finish_run_state(state, gates, skill_failure, budget_exceeded, writer_refusal)
     save_state(run_dir, state)
     # append-only аудит-лог действия ИИ (security-posture: audit-log)
     # Ф0: НЕ писать сырой task_text (может содержать ПДн/секреты) — только id и хэш.
@@ -358,15 +419,7 @@ def run_workflow(workflow_id: str, task_text: str, child_root: Path,
         "model_calls": bud.model_calls,
         "budget_exceeded": bool(budget_exceeded)})
     if verbose:
-        if state["status"] == "blocked":
-            print(f"BLOCKED: workflow {workflow_id} прошёл {len(state['completed_checks'])} стадий, "
-                  f"но блокирующие гейты не выполнены: {', '.join(gates['unmet_gates'])}. "
-                  f"Отчёт гейтов: {run_dir / 'GateReport.json'}"
-                  f"{'; skill недоступен: ' + skill_failure['reason'] if skill_failure else ''}")
-        else:
-            print(f"OK: workflow {workflow_id} завершён sequential-режимом; "
-                  f"{len(state['completed_checks'])} стадий, все блокирующие гейты выполнены; "
-                  f"состояние: {run_dir / 'TaskState.yaml'}")
+        print(_final_line(workflow_id, state, gates, run_dir, skill_failure, writer_refusal))
     return state, run_dir
 
 
@@ -375,7 +428,7 @@ def main(argv):
         rest = list(argv[2:])
         collect = "--collect-evidence" in rest
         fresh = "--fresh" in rest
-        
+
         for fl in ("--collect-evidence", "--fresh", "--resume"):
             while fl in rest:
                 rest.remove(fl)

@@ -51,7 +51,10 @@ from ai_ops_kit.shared.gitio import git  # noqa: E402
 OBSERVATION_CLASSES = ("defect", "friction", "question", "idea")
 SEVERITIES = ("p0", "p1", "p2")
 
-STATES = ("new", "delivered", "accepted", "became_work", "rejected")
+
+
+
+STATES = ("new", "delivered", "accepted", "became_work", "rejected", "resolved")
 EVIDENCE_KINDS = ("file", "command", "note")
 
 
@@ -60,7 +63,7 @@ EVIDENCE_KINDS = ("file", "command", "note")
 
 STATE_NAMES = {"new": "записано", "delivered": "дошло до кита",
                "accepted": "принято", "became_work": "стало работой",
-               "rejected": "отклонено"}
+               "rejected": "отклонено", "resolved": "снято (неактуально)"}
 
 
 
@@ -102,7 +105,7 @@ def _kit_version(root):
 
 
 def _git_head(root):
-    
+
     try:
         rc, out, _ = git(root, "rev-parse", "HEAD", timeout=20)
     except (OSError, subprocess.SubprocessError):
@@ -153,11 +156,11 @@ def check(obs):
     if not st:
         e.append("statement пуст: наблюдение без утверждения — это не наблюдение")
     elif _looks_like_path(st):
-        
-        
-        
-        
-        
+
+
+
+
+
         e.append(f"statement похож на путь, а не на наблюдение ({st!r}): "
                  "скажите, ЧТО кит сделал не так — путь репозитория он подставляет сам")
     cls = obs.get("observation_class")
@@ -170,6 +173,9 @@ def check(obs):
         e.append(f"state ∉ {STATES} (got {obs.get('state')!r})")
     if obs.get("state") == "rejected" and not str(obs.get("state_reason") or "").strip():
         e.append("rejected без причины: отклонение без объяснения останавливает канал")
+    if obs.get("state") == "resolved" and not str(obs.get("state_reason") or "").strip():
+        e.append("resolved без причины: снятие наблюдения без объяснения стирает запись решения — "
+                 "скажи, почему оно больше не актуально (например «исправлено в <версии>»)")
     ev = obs.get("evidence")
     if ev is None or not isinstance(ev, list):
         e.append("evidence должен быть списком (пустым — тоже, но списком)")
@@ -296,7 +302,7 @@ def collect(kit_root, child_roots, *, dry_run=False):
                                           "child": obs.get("child", {}).get("name")})
                 continue
             if not evidenced(obs):
-                
+
                 report["unevidenced"].append({"id": obs["id"],
                                               "statement": obs["statement"][:120]})
             if dry_run:
@@ -323,8 +329,8 @@ def set_state(kit_root, child_root, obs_id, state, reason=None, work_item=None):
     kp, cp = kit_path(kit_root, obs_id), child_path(child_root, obs_id)
     src = kp if kp.is_file() else cp
     if not src.is_file():
-        
-        
+
+
         return None, [f"наблюдения {obs_id} нет ни в ките, ни в дочке — проверь id "
                       f"(`kit_feedback.py status <дочка>` покажет настоящие)"]
     doc, err = _load(src)
@@ -360,7 +366,8 @@ def status(child_root):
                          "state_name": STATE_NAMES.get(o["state"], o["state"]),
                          "statement": o["statement"][:120],
                          "reason": o.get("state_reason")}
-                        for o in obs if o.get("state") in ("accepted", "became_work", "rejected")],
+                        for o in obs
+                        if o.get("state") in ("accepted", "became_work", "rejected", "resolved")],
             "errors": errors}
 
 

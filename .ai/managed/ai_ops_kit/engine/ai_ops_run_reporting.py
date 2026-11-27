@@ -9,6 +9,8 @@ engine), а не из ai_ops_run — иначе получился бы цикл
 """
 from __future__ import annotations
 
+import time
+
 import yaml
 
 
@@ -20,7 +22,7 @@ def _review_fix_context(rep):
     if not isinstance(rep, dict) or rep.get("ready_for_pr"):
         return None
     ov, err = rep.get("overall_status"), (rep.get("error") or "").lower()
-    
+
     if ov == "blocked-preflight" or any(w in err for w in
             ("human", "approval", "переписан", "fast-forward", "lifecycle", "повреждён", "replan", "base-")):
         return None
@@ -44,17 +46,17 @@ def _review_fix_context(rep):
                 if tail:
                     break
             parts.append(f"[проверка {name}] упала:\n{tail}".rstrip())
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
     for rv in (rep.get("reviews") or []):
         if rv.get("closed_as") == "refused":
             continue   # ревьюер не вынес вердикт — писатель это не чинит, не зацикливаем
@@ -71,14 +73,27 @@ def _review_fix_context(rep):
             "ломая уже пройденное), затем заверши:\n\n" + "\n\n".join(parts))
 
 
+def _payload_contains_child_file(root, source, items):
+    for item in items:
+        if item.get("kind") not in {"required", "optional", "specification", "decision"}:
+            continue
+        try:
+            if (root / source).samefile(root / item["source"]):
+                return True
+        except OSError:
+            continue  # идентичность не доказана; следующий этап всё равно проверит путь до чтения
+    return False
+
+
 def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, model,
                                context_hybrid, base_binding, task_text):
     """Артефакты контекста (bundle/payload/hybrid/spec/work-package); ошибки не гаснут —
     копятся в lifecycle_errors. K6: вынесено из run() без изменения поведения."""
-    
-    
+
+
     lifecycle_errors = []
-    
+    context_started = time.perf_counter()
+
     from ai_ops_kit.context import context_compiler
     try:
         bundle = context_compiler.compile_bundle(signals, child_root, plan=plan)
@@ -86,23 +101,26 @@ def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, mod
             yaml.safe_dump(bundle, allow_unicode=True, sort_keys=False), encoding="utf-8")
     except Exception as e:  # noqa: BLE001 — не роняем прогон, но и не молчим
         bundle = None; lifecycle_errors.append(f"context_compiler: {type(e).__name__}: {e}")
-    
+
     payload = None
     try:
         payload = context_compiler.build_payload(signals, child_root, plan=plan, bundle=bundle, model=model)
-        (features_dir / fid / "context-payload.yaml").write_text(
-            yaml.safe_dump({k: v for k, v in payload.items() if k != "text"},
-                           allow_unicode=True, sort_keys=False), encoding="utf-8")
+        payload["metrics"]["time_to_context_ms"] = round((time.perf_counter() - context_started) * 1000, 3)
+        payload["metrics"]["timing_scope"] = "compile_bundle + build_payload"
     except Exception as e:  # noqa: BLE001
         payload = None; lifecycle_errors.append(f"context_payload: {type(e).__name__}: {e}")
-    
-    
-    
-    
+
+
+
+
     _hybrid_prelude = (payload or {}).get("text")
     _hybrid_fed = None
+
+
     if context_hybrid and payload:
         try:
+            from ai_ops_kit.context import context_cost
+            _source_policy = context_cost.load_policy(child_root)
             from ai_ops_kit.context import context_hybrid as _chyb
             from ai_ops_kit.context import context_engine as _ce
             _mand = None
@@ -114,50 +132,82 @@ def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, mod
             _pol_refs = [p.get("id") for p in (_afp, _dcp) if isinstance(p, dict) and p.get("id")]
             _budget = _ce.budget_tokens_from(_bud)
             _base_sha = base_binding.get("base_sha")
-            
-            
-            
+
+
+
             _hyb = _chyb.build_hybrid_from_child(
                 child_root, task_text, "executor", sha=_base_sha, afp=_afp, dcp=_dcp,
                 v1_mandatory=_mand, rule_refs=_rule_refs, policy_refs=_pol_refs,
                 budget=_budget, require_snapshot=True)
             _adds = _hyb.get("v2_additions") or []
-            
+
             _adds = [f for f in _adds if not (f.startswith("features/") or f.startswith(".ai/"))]
-            _fed, _dropped = [], []
+            _fed, _dropped, _denied = [], [], []
             if _hyb.get("mode") == "hybrid" and _adds:
-                
-                
+
+
                 _base_txt = (payload or {}).get("text") or ""
                 _used = len(_base_txt) // 4
                 _hard = _budget if isinstance(_budget, int) and _budget > 0 else 20000
-                _extra = []
+                _extra, _hybrid_items = [], []
                 for _f in _adds:
+                    if _payload_contains_child_file(child_root, _f, payload["included_items"]):
+                        continue
+                    if context_cost.forbidden(_source_policy, _f, child_root):
+                        _denied.append(_f); continue
                     _p = child_root / _f
                     if not _p.is_file():
                         continue
-                    _c = _p.read_text(encoding="utf-8", errors="replace")[:8000]
+                    _raw = _p.read_text(encoding="utf-8", errors="replace")
+                    _c = _raw[:8000]
                     _t = len(_c) // 4
                     if _used + _t > _hard:
                         _dropped.append(_f); continue
                     _used += _t; _fed.append(_f); _extra.append(f"### {_f}\n{_c}")
+                    _hybrid_items.append({"source": _f, "kind": "hybrid", "tokens": context_cost.estimate_tokens(_c),
+                                          "hash": context_compiler._sha(_raw), "revision": _base_sha,
+                                          "truncated": _c != _raw, "reason": "hybrid v2-addition"})
                 if _extra:
                     _hybrid_prelude = _base_txt + "\n\n## Hybrid v2-additions (fed_to_model)\n" + "\n\n".join(_extra)
+                    _total = context_cost.estimate_tokens(_hybrid_prelude)
+                    if _total > payload["payload_budget"]:
+                        _dropped.extend(_fed); _fed = []
+                        _hybrid_prelude = _base_txt
+                    if _fed:
+                        payload["included_items"].extend(_hybrid_items)
+                        payload["text"] = _hybrid_prelude
+                        payload["payload_tokens"] = sum(i["tokens"] for i in payload["included_items"])
+                        payload["compiled_text_tokens_estimate"] = _total
+                        payload["metrics"] = {**context_cost.relevance_metrics(
+                            payload["included_items"], signals.get("context_relevance")),
+                                              "time_to_context_ms": round((time.perf_counter() - context_started) * 1000, 3),
+                                              "timing_scope": "compile_bundle + build_payload + hybrid"}
             _hybrid_fed = {"kind": "ContextHybrid", "mode": _hyb.get("mode"),
+                           "reason": _hyb.get("reason"), "snapshot_verified": _hyb.get("snapshot_verified"),
+                           "cache_key": _hyb.get("cache_key"),
                            "v2_additions": _adds, "fed_additions": _fed, "dropped_over_budget": _dropped,
+                           "dropped_for_policy": _denied,
                            "fed_to_model": bool(_hyb.get("mode") == "hybrid" and _fed),
                            "prompt_tokens_est": (len(_hybrid_prelude or "") // 4), "hard_window": (_budget or 20000),
                            "exact_snapshot": True,
                            "mandatory_references": _hyb.get("mandatory_references"),
                            "promotion_ready": _hyb.get("promotion_ready"), "base_sha": _base_sha}
         except Exception as _e:  # noqa: BLE001 — hybrid feed не должен ронять прогон
+            _hybrid_prelude = payload.get("text")
             _hybrid_fed = {"kind": "ContextHybrid", "error": f"hybrid feed failed: {type(_e).__name__}: {_e}"[:300],
                            "fed_to_model": False}
-    
+    if payload:
+        try:
+            (features_dir / fid / "context-payload.yaml").write_text(
+                yaml.safe_dump({k: v for k, v in payload.items() if k != "text"},
+                               allow_unicode=True, sort_keys=False), encoding="utf-8")
+        except OSError as e:
+            lifecycle_errors.append(f"context_payload.write: {type(e).__name__}: {e}")
+
     from ai_ops_kit.gates import spec_levels
     try:
-        
-        
+
+
         _wt_pre = child_root / ".ai" / "worktrees" / fid
         spec_cov = spec_levels.assess_from_artifacts(
             signals, child_root, fid, work_root=(_wt_pre if _wt_pre.is_dir() else None))
@@ -165,7 +215,7 @@ def _compile_context_artifacts(signals, child_root, features_dir, fid, plan, mod
             yaml.safe_dump(spec_cov, allow_unicode=True, sort_keys=False), encoding="utf-8")
     except Exception as e:  # noqa: BLE001
         spec_cov = None; lifecycle_errors.append(f"spec_levels: {type(e).__name__}: {e}")
-    
+
     from ai_ops_kit.engine import atomic_planner
     try:
         # v2.111: decompose — при необходимости строит КОНКРЕТНЫЕ WorkPackages (не только оси).
@@ -189,9 +239,9 @@ def _add_context_reports(rep, *, bundle, payload, spec_cov, work_pkg, context_sh
                                  "agents": bundle["included"]["agents"],
                                  "rules": bundle["included"]["rules"],
                                  "excluded_count": len(bundle["excluded"])}
-    
-    
-    
+
+
+
     if context_shadow:
         try:
             from ai_ops_kit.context import context_shadow as _cshadow
@@ -211,7 +261,7 @@ def _add_context_reports(rep, *, bundle, payload, spec_cov, work_pkg, context_sh
                 _content_root, task_text, role="executor", sha=_csha,
                 policy_root=child_root, v1_mandatory=_mandatory, require_snapshot=True)
         except Exception as _e:  # noqa: BLE001 — shadow не должен ронять прогон
-            
+
             rep["context_shadow"] = {"error": f"shadow build failed: {type(_e).__name__}: {_e}"[:300]}
     # v3.7.16: hybrid собран ДО прогона и РЕАЛЬНО подан модели (см. hybrid_fed выше). Записываем что
     # именно было fed_to_model (mode/additions/references), а не пересобираем post-hoc. v1 не теряется.
@@ -223,7 +273,10 @@ def _add_context_reports(rep, *, bundle, payload, spec_cov, work_pkg, context_sh
                                   "context_budget": payload["context_budget"],
                                   "included_items": len(payload["included_items"]),
                                   "excluded_for_budget": len(payload["excluded_for_budget"]),
-                                  "fed_to_model": bool(payload.get("text"))}
+                                  "fed_to_model": bool(payload.get("text")),
+                                  "compiled_text_tokens_estimate": payload.get("compiled_text_tokens_estimate"),
+                                  "resource_check": payload.get("resource_check"),
+                                  "metrics": payload.get("metrics")}
     if spec_cov:
         rep["spec_coverage"] = {"level": spec_cov["level"], "level_name": spec_cov["level_name"],
                                 "escalated_from": spec_cov["escalated_from"],
@@ -249,8 +302,8 @@ def _enrich_run_report(rep, *, runtime, provider_name, provider_resolution, chil
                        preflight):
     """Provenance-поля отчёта (runtime/provider/model/base/preflight/resume/lifecycle-dict).
     K6: вынесено из run() без изменения поведения; мутирует rep на месте."""
-    
-    
+
+
     from ai_ops_kit.engine.ai_ops_run import _profile_for_report
     rep["runtime"] = runtime
     rep["engine"] = "pipeline"
@@ -259,8 +312,8 @@ def _enrich_run_report(rep, *, runtime, provider_name, provider_resolution, chil
     # (синтетические отчёты тестов и минимальные отчёты честно видят полную стену).
     rep["child_root"] = str(child_root)
     rep["provider"] = provider_name
-    
-    
+
+
     if provider_resolution:
         rep["provider_resolution"] = dict(provider_resolution)
     # P1-3: обогащаем профиль движка (там stacks — только языки) человекочитаемым display
@@ -277,7 +330,7 @@ def _enrich_run_report(rep, *, runtime, provider_name, provider_resolution, chil
             _last["outcome"] = ("verified" if rep.get("ready_for_pr")
                                 else "not_ready:" + ",".join((rep.get("gates") or {}).get("unmet") or []))
     _eff = model_resolution.get("effective_model") if isinstance(model_resolution, dict) else None
-    
+
     rep["model"] = _eff or (writer_model if (isinstance(model_resolution, dict) and model_resolution.get("applied")) else model)
     if isinstance(model_resolution, dict) and model_resolution.get("applied"):
         rep["initial_model"] = model_resolution.get("initial_model")
@@ -297,8 +350,8 @@ def _enrich_run_report(rep, *, runtime, provider_name, provider_resolution, chil
     # на живом провайдере она вводит в заблуждение (предложитель УЖЕ живой). Честный отчёт.
     if provider_name and provider_name != "mock" and isinstance(rep.get("not_yet"), list):
         rep["not_yet"] = [n for n in rep["not_yet"] if "живой предложитель" not in n]
-    
-    
+
+
     if resume and isinstance(rep.get("resume"), dict):
         rep["resume"]["preflight_reasons"] = pf["reasons"]
         rep["resume"]["revalidation_needed"] = pf["revalidation_needed"]

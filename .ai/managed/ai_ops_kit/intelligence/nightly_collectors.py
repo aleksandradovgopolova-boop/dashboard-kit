@@ -33,11 +33,11 @@ def _git(root: Path, *args) -> tuple[int, str, str]:
             timeout=30,
         )
         return result.returncode, result.stdout, result.stderr
-    
-    
-    
-    
-    
+
+
+
+
+
     except (OSError, subprocess.SubprocessError) as e:
         return 1, "", f"{type(e).__name__}: {e}"
 
@@ -47,7 +47,7 @@ def _get_recent_commits(root: Path, since: str | None = None) -> list[dict]:
     if since:
         range_spec = f"{since}..HEAD"
     else:
-        
+
         since_time = (datetime.now() - timedelta(hours=24)).isoformat()
         range_spec = f"--since={since_time}"
 
@@ -74,7 +74,7 @@ def _get_changed_files(root: Path, since: str | None = None) -> list[str]:
         range_spec = f"{since}..HEAD"
     else:
         since_time = (datetime.now() - timedelta(hours=24)).isoformat()
-        
+
         rc, out, _ = _git(root, "log", f"--since={since_time}", "--name-only", "--pretty=format:")
         if rc != 0:
             return []
@@ -106,9 +106,9 @@ def _check_plan_status(root: Path) -> dict:
             s = w.get("status", "unknown")
             by_status[s] = by_status.get(s, 0) + 1
         return {"exists": True, "total": len(work), "by_status": by_status}
-    
-    
-    
+
+
+
     except (OSError, yaml.YAMLError, AttributeError) as e:
         return {"exists": True, "error": f"план не разобран ({type(e).__name__}: {e})"}
 
@@ -136,10 +136,10 @@ def _check_open_prs(root: Path) -> dict:
             prs = json.loads(result.stdout)
             return {"open_prs": len(prs), "prs": prs[:5]}  # First 5
         return {"open_prs": None, "unavailable": f"gh вернул код {result.returncode}"}
-    
-    
-    
-    
+
+
+
+
     except (OSError, subprocess.SubprocessError, ValueError) as e:
         return {"open_prs": None, "unavailable": f"{type(e).__name__}: {e}"}
 
@@ -177,12 +177,12 @@ CHECKS = (
      "subject": "связность артефактов между собой"},
     {"title": "заявления", "name": "validate_claims", "how": "none",
      "subject": "публичные числа против кода"},
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     {"title": "план работы", "name": "validate_plan_artifact", "how": "artifact",
      "artifact": "features/*/plan.yaml", "kind": "plan-artifact",
      "subject": "RunPlan фичи и его связность"},
@@ -277,18 +277,18 @@ def run_checks(root: Path, timeout: int = 120) -> list[dict]:
         # не поймёт даже, о чём речь. На трёх дочках из трёх это была ПОЛОВИНА всех находок.
         wrong_call = "Traceback" in full or re.search(r"(?i)использование:|usage:", full)
         if wrong_call:
-            
-            
+
+
             detail = lines[0][:220] if lines else f"код {r.returncode}, вывод пуст"
             out.append({**rec, "ok": None, "detail": f"позвали неверно — {detail}"})
             continue
         detail = lines[-1][:220] if lines else f"код {r.returncode}, вывод пуст"
         out.append({**rec, "ok": r.returncode == 0, "detail": detail})
 
-    
-    
-    
-    
+
+
+
+
     from ai_ops_kit.intelligence import event_arrival
     rep = event_arrival.assess(root)
     out.append({

@@ -180,9 +180,9 @@ def extract_rails_routes(parsed: ParsedFile) -> list:
         return []
 
     out: list = []
-    
-    
-    
+
+
+
     stack: list = []
     for idx, raw in enumerate(src.split("\n")):
         line = _strip_comment(raw)
@@ -192,8 +192,8 @@ def extract_rails_routes(parsed: ParsedFile) -> list:
         in_resource = any(kind == "resource" for kind, _ in stack)
         prefix_segs = [seg for kind, seg in stack if kind in ("namespace", "scope") and seg]
 
-        
-        
+
+
         if not in_resource:
             mv = _VERB_RE.match(line)
             if mv is not None and _is_literal_path(mv.group(3)) \
@@ -214,7 +214,7 @@ def extract_rails_routes(parsed: ParsedFile) -> list:
                             kind="route", ref=f"{parsed.rel_path}:{lineno}|{method} {path}",
                             confidence="inferred", extractor="rails-routes"))
 
-        
+
         if _BLOCK_OPEN_RE.search(line) is not None:
             stack.append(_block_prefix_segment(line))
         elif stripped == "end" and stack:

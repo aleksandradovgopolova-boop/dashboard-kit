@@ -85,8 +85,8 @@ def _docs_only_result(revision, impact_status, verification_info):
         "schema_evidence": {},
         "gate_evidence": {"implementation_verification": {
             "status": "pass",
-            
-            
+
+
             "source": "deterministic",
             "provided": ["skip_verification", "tested_revision"],
             "evidence": [f"skip_reason:{impact_status}", f"revision:{revision}"],
@@ -152,8 +152,8 @@ def _broker_run(broker, policy):
     def run(argv, cwd):
         exe = Path(argv[0])
         if exe.parent.name == ".bin" and exe.parent.parent.name == "node_modules":
-            
-            
+
+
             argv = ["npx", "--offline", exe.name, *argv[1:]]
         elif shutil.which(exe.name) == str(exe):
             argv = [exe.name, *argv[1:]]         # найден в PATH — зовём по имени, как команды профиля
@@ -226,7 +226,7 @@ def _add_warnings(iv: dict, extra: list) -> None:
 
 def _execute_with_receipt(root, policy, broker, check, cmd, profile, context):
     action = {"op": "shell", "command": cmd}
-    
+
     decision = policy.decide(action) if hasattr(policy, "decide") else {"allow": False}
     if not decision.get("allow"):
         return broker.execute(action, root, policy), {"status": "BLOCKED", "reused": False,
@@ -345,7 +345,7 @@ def collect(profile, root, policy, changed_files=None, broker=None, lifecycle_in
 
         status = "pass" if all_ok else "fail"
         checks_report[check] = {"status": status, "runs": runs}
-        
+
         first = runs[0]
         schema_evidence[schema_key] = {"command": first.get("command"),
                                        "exit_code": first.get("exit_code"),
@@ -356,27 +356,27 @@ def collect(profile, root, policy, changed_files=None, broker=None, lifecycle_in
             reason = "отклонено policy" if any_denied else "команда завершилась с ненулевым кодом"
             blockers.append(f"{check}: {reason}")
 
-    
-    
+
+
     style, style_warnings = _code_style(profile, root, broker, policy, checks_report, provided,
                                         blockers, not_applicable)
     if revision:
         provided.append("tested_revision")
 
-    
-    
-    
+
+
+
     gate_status = "fail" if blockers else "pass"
-    
-    
+
+
     ev_strings = [f"{k}:exit={v.get('exit_code')}" for k, v in schema_evidence.items()]
     if revision:
         ev_strings.append(f"tested_revision:{revision}")
     gate_evidence = {
         "implementation_verification": {
             "status": gate_status,
-            
-            
+
+
             "source": "deterministic",
             "provided": provided,
             "evidence": ev_strings,
@@ -385,8 +385,8 @@ def collect(profile, root, policy, changed_files=None, broker=None, lifecycle_in
     if blockers:
         gate_evidence["implementation_verification"]["blockers"] = blockers
     if style and not style["blocking"]:
-        
-        
+
+
         gate_evidence["implementation_verification"].update(
             warnings=[style["text"]], explained_exemptions=["lint_passed"])
     _add_warnings(gate_evidence["implementation_verification"], style_warnings)

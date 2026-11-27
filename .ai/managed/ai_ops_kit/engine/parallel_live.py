@@ -39,10 +39,10 @@ from ai_ops_kit.engine import parallel_executor as pe   # noqa: E402
 
 
 def _git(root, *args, check=True):
-    
-    
-    
-    
+
+
+
+
     try:
         r = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True,
                            timeout=gitio.GIT_TIMEOUT_DEFAULT)
@@ -64,7 +64,7 @@ def _ensure_identity(root):
     настроек. Fallback ставится ТОЛЬКО когда идентичность не разрешается — реальные окружения
     (у пользователя/агента она есть) сохраняют свою и авторство коммитов не подменяется.
     """
-    
+
     if gitio.git(root, "var", "GIT_COMMITTER_IDENT")[0] == 0:
         return False
     _git(root, "config", "user.email", "ai-ops@local", check=False)
@@ -85,10 +85,10 @@ def _glob_match(path, pat):
         return path.startswith(pat[:-2])
     if fnmatch.fnmatch(path, pat) or path == pat:
         return True
-    
-    
-    
-    
+
+
+
+
     if not any(ch in pat for ch in "*?["):
         base = pat.rstrip("/")
         return bool(base) and (path == base or path.startswith(base + "/"))
@@ -176,7 +176,7 @@ def make_package_runner(child_root, base_sha, task_map, signals, run_fn, feature
     def runner(pkg):
         pid = pkg["id"]
         task = task_map[pid]
-        
+
         _git(child_root, "checkout", "-q", "main", check=False)
         _git(child_root, "reset", "--hard", "-q", base_sha)
         _git(child_root, "clean", "-fdq", "-e", ".ai", check=False)
@@ -202,9 +202,9 @@ def make_integration_runner(child_root, base_sha, integration_branch="ai-ops/int
                 conflicts += 1
                 _git(child_root, "merge", "--abort", check=False)
         integration_sha = _git(child_root, "rev-parse", "HEAD").stdout.strip()
-        
-        
-        
+
+
+
         tested_revision, postcheck_revision, revision_ok, tree_clean = None, None, False, False
         try:
             from ai_ops_kit.shared import project_detector as _pd
@@ -271,16 +271,16 @@ def run_live(wg, child_root, base_sha, task_map, signals, run_fn, open_pr=False,
     pr = make_package_runner(child_root, base_sha, task_map, signals, run_fn, features_dir)
     ir = make_integration_runner(child_root, base_sha, integration_branch)
     rec = pe.execute_parallel(wg, pr, ir, contract_shas=None, max_parallel=1)
-    
+
     rec["execution_concurrency"] = "serial"
     rec["parallel_safe"] = True
     rec["fan_in"] = "live"
     rec["concurrency_note"] = "серийно (max_parallel=1); настоящая конкурентность требует отдельных клонов на пакет"
     rec["pr"] = None
     if open_pr and rec.get("delivery", {}).get("open_pr") and repo_slug:
-        
-        
-        
+
+
+
         push = _git(child_root, "push", "--force-with-lease", "-q", "origin", integration_branch, check=False)
         if push.returncode != 0:
             rec["pr"] = None
@@ -308,7 +308,7 @@ def make_isolated_package_runner(child_root, base_sha, task_map, signals, run_fn
     def runner(pkg):
         pid = pkg["id"]
         cpath = Path(clones_dir) / pid
-        
+
         cl_rc, _, cl_err = gitio.run(["clone", "-q", str(child_root), str(cpath)])
         if cl_rc != 0:  # #7 fail-closed
             clones[pid] = {"path": str(cpath), "branch": f"ai-ops/{pid}", "error": "clone-failed"}
@@ -343,8 +343,8 @@ def make_isolated_package_runner(child_root, base_sha, task_map, signals, run_fn
         rep = run_fn(task_map[pid], pkg_signals, Path(cpath), **options)
         res = package_result_from_rep(rep)
         res["clone"] = str(cpath)
-        
-        
+
+
         if res.get("sha") and pkg.get("write_scope"):
             changed = _changed_files(cpath, base_sha, res["sha"])   # #2-fix: диффим РЕАЛЬНЫЙ package-SHA,
             sok, outside = _scope_ok(changed, pkg["write_scope"])   # не HEAD клона (ai_ops_run — вложенный worktree)
@@ -448,7 +448,7 @@ def _retain_package_commit(child_root, source, sha, run_id, pid):
         _checkpoint_git(child_root, "fetch", *harden, "fetch", "--no-tags", "--no-write-fetch-head",
              "--no-recurse-submodules", "--no-auto-maintenance", "--no-write-commit-graph",
                         "--no-prune", "--no-prune-tags", str(source.resolve()), sha)
-    
+
     _checkpoint_git(child_root, "ref-write", *harden, "update-ref", "--no-deref", ref, sha, sha if old.returncode == 0 else "0" * 40)
     _require_direct_checkpoint_ref(child_root, ref)
     if _checkpoint_git(child_root, "ref-readback", "rev-parse", "--verify", ref).stdout.strip() != sha:
@@ -563,7 +563,7 @@ def run_live_concurrent(wg, child_root, base_sha, task_map, signals, run_fn, clo
     try:
         clones = {}
         iroot = Path(clones_dir) / "_integration"
-        
+
         cl_rc, _, cl_err = gitio.run(["clone", "-q", str(child_root), str(iroot)])
         if cl_rc != 0:  # #7 fail-closed
             cleanup_safe = True  # пакетные вызовы ещё не запускались
@@ -585,8 +585,8 @@ def run_live_concurrent(wg, child_root, base_sha, task_map, signals, run_fn, clo
         rec["parallel_safe"] = True
         rec["fan_in"] = "live"
         rec["pr"] = None
-        
-        
+
+
         try:
             rec["package_artifacts"] = _preserve_package_artifacts(
                 child_root, base_sha, clones, clones_dir, rec.get("package_results") or {})

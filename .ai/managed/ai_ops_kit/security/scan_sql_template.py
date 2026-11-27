@@ -73,7 +73,7 @@ def sql_template_literal_lines(text: str) -> list:
         if not _TEMPLATE_INTERPOLATION.search(body):
             continue                                   # подстановок нет — запрос статичен
         spots = _INTERPOLATION_BODY.findall(body)
-        
+
         if len(spots) == body.count("${") and all(e.strip() in consts for e in spots):
             continue
         out.append(text.count("\n", 0, m.start()) + 1)

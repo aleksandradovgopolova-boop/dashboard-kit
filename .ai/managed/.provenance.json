@@ -3,17 +3,17 @@
   "package": "ai-first-system",
   "source": "https://github.com/aleksandradovgopolova-boop/ai-ops-kit.git",
   "source_identity": {
-    "path": "/private/tmp/slice2b-dashboard/kit",
-    "sha": "78a65b6d14f4",
+    "path": "/private/tmp/dashboard-aiops-20261126-c3yw4a_a/release",
+    "sha": "dbbe2bdb5fda",
     "branch": "HEAD",
-    "tag": "v4.11.4",
+    "tag": "v4.15.0",
     "is_release": true,
     "origin": "https://github.com/aleksandradovgopolova-boop/ai-ops-kit.git"
   },
-  "installed_version": "4.11.4",
+  "installed_version": "4.15.0",
   "installed_at": null,
   "managed_root": ".ai/managed",
   "presets": [],
   "checksums_file": ".checksums.json",
-  "note": "Updated 4.3.2 -> 4.11.4 by ai-ops CLI."
+  "note": "Updated 4.11.4 -> 4.15.0 by ai-ops CLI."
 }

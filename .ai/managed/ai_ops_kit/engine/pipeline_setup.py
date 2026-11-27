@@ -42,7 +42,7 @@ from ai_ops_kit.engine.pipeline_readiness import _evaluate_security  # noqa: E40
 
 
 def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
-                     discard_previous, open_pr):
+                     discard_previous, open_pr, base_revision=None):
     """BASE BINDING + worktree-изоляция/resume: рабочая ветка ai-ops/<wid> форкается от РАЗРЕШЁННОГО
     base (не от HEAD), весь прогон идёт в отдельном worktree, основное дерево не трогается.
 
@@ -54,9 +54,20 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
     resume_info = ({"requested": bool(resume), "resumed": False,
                     "reused_worktree": False, "reused_branch": False}
                    if (resume or reevaluate_only) else None)
-    
-    
-    _br = _resolve_base(child_root, base)   # base может быть None (auto) или явной веткой
+
+
+    if base_revision is not None:
+        import re
+        if not reevaluate_only or isolate or open_pr:
+            raise ValueError("pinned base_revision разрешена только для локальной переоценки без доставки")
+        if (not isinstance(base_revision, str) or re.fullmatch(r"[0-9a-f]{40}", base_revision) is None
+                or _git(child_root, "rev-parse", "--verify", base_revision + "^{commit}")[:2] != (0, base_revision)
+                or _git(child_root, "merge-base", "--is-ancestor", base_revision, "HEAD")[0] != 0):
+            raise ValueError("исходная база текущей задачи недоступна или не предок результата")
+        _br = {"base_ref": None, "base_sha": base_revision, "source": "session-pinned",
+               "mode": "explicit", "resolved": True}
+    else:
+        _br = _resolve_base(child_root, base)
     base_sha = _br.get("base_sha")
     base_ref = _br.get("base_ref") or base or "HEAD"
     base_binding = {"base_ref": base_ref, "base_sha": base_sha, "mode": _br.get("mode"),
@@ -94,11 +105,11 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
         branch = f"ai-ops/{wid}"
         wp = child_root / ".ai" / "worktrees" / wid
         branch_exists = _wt._branch_exists(child_root, branch)
-        
+
         reused = False
         if (resume or reevaluate_only) and (branch_exists or wp.is_dir()):
             if not wp.is_dir() and branch_exists:
-                
+
                 rc = _wt.add(child_root, wid, branch, quiet=_wt_quiet)
                 if rc != 0:
                     return {"error": {"schema_version": 1, "kind": "execution-pipeline", "workitem_id": wid,
@@ -117,27 +128,27 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
             reused = True
         if not reused:
             if resume:
-                
+
                 resume_info["reason"] = (f"ни ветки {branch}, ни worktree нет — продолжать нечего; "
                                          f"выполняется свежий старт")
-            
-            
-            
-            
+
+
+
+
             if wp.is_dir() or branch_exists:
                 ahead = 0
                 if branch_exists:
-                    
+
                     rc_a, out_a, _ = _git(child_root, "rev-list", "--count", branch, "^HEAD")
                     ahead = int(out_a) if rc_a == 0 and out_a.isdigit() else 0
                 if ahead > 0 and not discard_previous:
                     return {"error": {"schema_version": 1, "kind": "execution-pipeline", "workitem_id": wid,
                             "status": "error",
-                            
-                            
-                            
-                            
-                            
+
+
+
+
+
                             "error": f"предыдущий прогон feature='{wid}' имеет {ahead} несохранённых "
                                      f"коммит(ов) на ветке {branch}. Чтобы не потерять работу, прогон "
                                      f"остановлен. Продолжить поверх них: "
@@ -155,7 +166,7 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
             if rc == 0:
                 work_root = wp
                 worktree_rel = wp.relative_to(child_root).as_posix()
-                
+
                 if base_sha:
                     _rc_h, _wh, _ = _git(wp, "rev-parse", "HEAD")
                     if _rc_h != 0 or (_wh or "").strip() != base_sha:
@@ -167,8 +178,8 @@ def _setup_isolation(child_root, wid, base, *, isolate, resume, reevaluate_only,
                                 "loop": None, "isolation": {"worktree": None}, "gates": None,
                                 "ready_for_pr": False, "overall_status": "error"}}
         if work_root is child_root:
-            
-            
+
+
             return {"error": {"schema_version": 1, "kind": "execution-pipeline", "workitem_id": wid,
                     "status": "error",
                     "error": f"isolate=True, но worktree .ai/worktrees/{wid} не создан "
@@ -249,7 +260,7 @@ def _provision_kit_gate_tools(work_root):
                       f"— прогон судит НАСТОЯЩИМ набором (self-host), как CI"}
 
 
-def _prepare_environment(profile, work_root, pol, is_git, *, install_deps, isolate, baseline_diff):
+def _prepare_environment(profile, work_root, pol, is_git, *, install_deps, isolate, baseline_diff, read_only=False):
     """Фаза install-deps: зависимости стека + baseline-evidence + откат мутаций подготовки до правок
     модели. v3.38 (K6): вынесено из run_pipeline. -> (prepare, prepare_ok, baseline_checks, mutated).
 
@@ -257,34 +268,39 @@ def _prepare_environment(profile, work_root, pol, is_git, *, install_deps, isola
     ДОПОЛНИТЕЛЬНО получает ворота-инструменты кита (ruff/pytest/…) из координаторского venv, чтобы
     гейты исполнялись НАСТОЯЩИМ набором (как CI), а не ослабленным. Провал провижининга уходит в
     `prepare` -> prepare_ok=False -> честная деградация вердикта. Путь ДОЧЕК (не self-host) не тронут."""
-    
-    
+    if read_only:
+
+        if install_deps or isolate or baseline_diff or not _tree_clean(work_root):
+            raise ValueError("локальная переоценка требует чистое дерево без install/baseline мутаций")
+        return None, True, None, False
+
+
     untracked_before_prep = _untracked(work_root) if is_git else set()
-    
-    
+
+
     prepare = None
     if install_deps and isolate:
         prepare = _install_dependencies(profile, work_root, pol)
-        
-        
+
+
         if tool_broker._is_kit_self_host(work_root):
             _prov = _provision_kit_gate_tools(work_root)
-            
-            
+
+
             prepare = (prepare or []) + [{
                 "language": "kit-self-host", "command": "provision gate-tools",
                 "allowed": True, "ok": _prov["ok"], "exit_code": None,
                 "output_tail": _prov["reason"][-200:]}]
     # P0.6: install обязан ПРОЙТИ — иначе baseline/проверки недостоверны, прогон не может быть ready.
     prepare_ok = (prepare is None) or all(p.get("ok") for p in prepare)
-    
-    
+
+
     baseline_checks = None
     if baseline_diff:
         baseline_checks = evidence_collector.collect(profile, work_root, pol, broker=tool_broker)["checks"]
-    
-    
-    
+
+
+
     prepare_mutated_tree = False
     if is_git and not _tree_clean(work_root):
         prepare_mutated_tree = True
@@ -306,7 +322,7 @@ def _commit_work(work_root, wid, task, is_git, applied, authored, shell_changed,
     SHA); reevaluate переиспользует HEAD. work_produced_by (broker/shell/model-commit) — факт для
     человека. v3.38 (K6): вынесено из run_pipeline. -> (committed_sha, work_branch, produced_by, clean)."""
     committed_sha, work_branch = None, None
-    
+
     work_produced_by = ("broker" if applied else ("shell" if shell_changed else None))
     tree_clean_before_checks = None
     # v2.93: коммитим при правках В ДЕРЕВЕ (git-diff/untracked, вкл. shell и артефакты), не только
@@ -330,7 +346,7 @@ def _commit_work(work_root, wid, task, is_git, applied, authored, shell_changed,
             pass
         committed_sha = _commit_on_branch(work_root, work_branch,
                                           f"ai-ops: {task[:60]}")
-        
+
         if committed_sha is None and self_committed:
             _rc_b, _out_b, _ = _git(work_root, "rev-parse", "--abbrev-ref", "HEAD")
             work_branch = _out_b.strip() if _rc_b == 0 and _out_b.strip() != "HEAD" else work_branch
@@ -354,7 +370,8 @@ def _verification_changed_files(root, base_sha, revision):
 def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, loop, *,
                        commit, is_git, committed_sha, base_sha, authored_ev, allow_missing_tests,
                        calibrated_enforcement, ui_evidence, review, reviewer_proposer, budget,
-                       strict_judge_qualified, security_reviewer_proposer, reevaluate_only, verification_intent="merge_candidate"):
+                       strict_judge_qualified, security_reviewer_proposer, reevaluate_only, verification_intent="merge_candidate",
+                       review_handoff_root=None):
     """Сбор evidence на зафиксированном SHA и наполнение gate_ev: реальный прогон проверок профиля
     через Broker, intake/regression/authored/reevaluate-seed, освобождения по неприменимым проверкам,
     UI-evidence на точном SHA, seam-scan advisory, независимые ревью и доменный security-вердикт.
@@ -364,11 +381,11 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
     not_applicable/exempt_reason/tests_warn/ui_evidence_bundle/seam_advisory/reviews/security_pack_result/
     effective_approval_signals).
     """
-    
+
     _changed_for_verification = (_verification_changed_files(work_root, base_sha, committed_sha)
                                  if commit and is_git else None)
-    
-    
+
+
     coll = evidence_collector.collect(profile, work_root, pol, changed_files=_changed_for_verification,
         broker=tool_broker, lifecycle_intent=verification_intent)
 
@@ -378,16 +395,16 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
     # tracked-правки от проверок по-прежнему делают дерево грязным (evidence-целостность сохранена).
     tree_clean_after_checks = _tree_clean_after_checks(work_root) if (commit and is_git) else None
 
-    
-    
+
+
     gate_ev = dict(coll["gate_evidence"])
     intake = _intake_evidence(signals)
     if intake:
         gate_ev.setdefault("intake_completeness", intake)
-    
-    
-    
-    
+
+
+
+
     regression_proof = None
     if commit and is_git and committed_sha:
         try:
@@ -405,15 +422,15 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
     for _gid, _ev in (authored_ev or {}).items():
         gate_ev.setdefault(_gid, _ev)
 
-    
-    
-    
-    
-    
+
+
+
+
+
     if reevaluate_only:
-        
-        
-        
+
+
+
         try:
             import json as _json
             _rep = Path(child_root) / ".ai" / f"reevaluate-evidence-{wid}.json"
@@ -423,18 +440,18 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
                     for _gid, _ev in (_rj.get("gate_ev") or {}).items():
                         if _gid != "security":
                             gate_ev.setdefault(_gid, _ev)
-        
-        
-        
-        
+
+
+
+
         except Exception:  # noqa: BLE001,S110 — потеря кеша не меняет вердикт, пересчитаем
             pass
         for _gid, _ev in _reevaluate_artifact_evidence(work_root, wid, plan["gates"]).items():
             gate_ev.setdefault(_gid, _ev)
 
-    
-    
-    
+
+
+
     exempt = set(coll.get("not_applicable") or [])
     tests_warn = None
     if coll.get("tests_absent"):
@@ -445,8 +462,8 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
             exempt.discard("tests_passed")   # тесты обязательны -> гейт заблокирует
             tests_warn = "нет тестов, а require_tests -> implementation_verification блокирует"
     not_applicable = {"implementation_verification": exempt}
-    
-    
+
+
     exempt_reason = {"implementation_verification": coll.get("not_applicable_reason")}
 
     # 6d. v2.83 Full RunPlan: постадийный НЕЗАВИСИМЫЙ ревью для ai-review гейтов плана
@@ -462,23 +479,27 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
     ui_evidence_bundle = None
     if calibrated_enforcement and ui_evidence is None and committed_sha:
         try:
-            _changed = _committed_changed_files(work_root, committed_sha)
-            
-            
+            _changed = (_changed_for_verification if review_handoff_root else
+                        _committed_changed_files(work_root, committed_sha))
+
+
             from ai_ops_kit.ui import ui_readiness as _uir
             _ui_run, _ui_reason = _uir.should_run_ui_evidence(_changed, signals)
             if not _ui_run:
                 ui_evidence, ui_evidence_bundle = None, None
             else:
-                
-                
+
+
                 try:
                     from ai_ops_kit.ui import ui_evidence_collect
-                    ui_evidence_collect.collect(work_root, committed_sha)
-                
-                
-                
-                
+                    if review_handoff_root:
+                        ui_evidence_collect.collect(work_root, committed_sha, install_deps=False)
+                    else:
+                        ui_evidence_collect.collect(work_root, committed_sha)
+
+
+
+
                 except Exception:   # noqa: BLE001,S110 — не собрали -> гейт не освобождён (fail-closed ниже)
                     pass
                 ui_evidence_bundle = storybook_adapter.build_bundle(work_root, changed_files=_changed)
@@ -487,10 +508,10 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
         except Exception:   # noqa: BLE001 — сбой сбора evidence не освобождает гейт (ui_evidence=None)
             ui_evidence, ui_evidence_bundle = None, None
 
-    
-    
-    
-    
+
+
+
+
     seam_advisory = _seam_scan_advisory(work_root, base_sha, committed_sha)
 
     reviews = None
@@ -500,26 +521,28 @@ def _assemble_evidence(profile, work_root, pol, child_root, wid, plan, signals, 
                                         calibrated_enforcement=calibrated_enforcement,
                                         ui_evidence=ui_evidence, child_root=child_root)
     elif committed_sha:
-        
-        
-        
-        
-        
+
+
+
+
+
         gate_ev, reviews = _consume_handoff_verdicts(
-            work_root, plan["gates"], gate_ev, signals, committed_sha, child_root=child_root,
+            work_root, plan["gates"], gate_ev, signals, committed_sha, child_root=review_handoff_root or child_root,
+            review_base=base_sha if review_handoff_root else None,
             calibrated_enforcement=calibrated_enforcement, ui_evidence=ui_evidence)
-        
-        
-        
+
+
+
         reviews = reviews or None
 
-    
-    
+
+
     gate_ev, security_pack_result, effective_approval_signals = _evaluate_security(
         work_root, child_root, wid, committed_sha, is_git, gate_ev, signals,
         review=review, strict_judge_qualified=strict_judge_qualified,
         security_reviewer_proposer=security_reviewer_proposer,
-        reviewer_proposer=reviewer_proposer, budget=budget)
+        reviewer_proposer=reviewer_proposer, budget=budget,
+        base_revision=base_sha if review_handoff_root else None)
     return {"changed_for_verification": _changed_for_verification, "coll": coll, "gate_ev": gate_ev,
             "tree_clean_after_checks": tree_clean_after_checks, "regression_proof": regression_proof,
             "exempt": exempt, "not_applicable": not_applicable, "exempt_reason": exempt_reason,

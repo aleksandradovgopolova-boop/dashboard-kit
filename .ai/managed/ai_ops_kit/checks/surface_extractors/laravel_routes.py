@@ -104,7 +104,7 @@ def _strip_php_comments(line: str, in_block: bool) -> tuple:
                 quote = None
             i += 1
             continue
-        
+
         if c == "/" and i + 1 < n and line[i + 1] == "/":   # строчный // → до конца строки
             break
         if c == "#":                                        # строчный # → до конца строки
@@ -204,7 +204,7 @@ def extract_laravel_routes(parsed: ParsedFile) -> list:
         return []
 
     out: list = []
-    
+
     stack: list = []
     in_block = False
     for idx, raw in enumerate(src.split("\n")):
@@ -213,7 +213,7 @@ def extract_laravel_routes(parsed: ParsedFile) -> list:
         lineno = idx + 1
         prefix_segs = [seg for seg in stack if seg]
 
-        
+
         for mv in _VERB_RE.finditer(line):
             if not _is_literal_path(mv.group(2), mv.group(3)):
                 continue
@@ -224,7 +224,7 @@ def extract_laravel_routes(parsed: ParsedFile) -> list:
                 kind="route", ref=f"{parsed.rel_path}:{lineno}|{mv.group(1).upper()} {path}",
                 confidence="inferred", extractor="laravel-routes"))
 
-        
+
         for mr in _RESOURCE_RE.finditer(line):
             if not _is_literal_path(mr.group(2), mr.group(3)):
                 continue
@@ -234,7 +234,7 @@ def extract_laravel_routes(parsed: ParsedFile) -> list:
                     kind="route", ref=f"{parsed.rel_path}:{lineno}|{method} {path}",
                     confidence="inferred", extractor="laravel-routes"))
 
-        
+
         if _GROUP_OPEN_RE.search(line) is not None and "{" in line:
             stack.append(_group_prefix_segment(line))
         elif stripped.startswith("})") and stack:

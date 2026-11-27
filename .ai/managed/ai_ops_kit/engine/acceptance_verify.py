@@ -130,10 +130,10 @@ def parse_criteria(text) -> list:
     raw = (text or "")
     if not isinstance(raw, str):
         raw = str(raw)
-    
-    
-    
-    
+
+
+
+
     raw = textwrap.dedent(raw)
     items, in_list_item = [], False
     for ln in raw.splitlines():
@@ -148,11 +148,11 @@ def parse_criteria(text) -> list:
                 in_list_item = True
             continue
         if in_list_item and ln[:1].isspace():
-            
-            
-            
-            
-            
+
+
+
+
+
             items[-1] = f"{items[-1]} {s}"
             continue
         if len(s) >= 3 and not s.endswith(":"):
@@ -183,19 +183,19 @@ def _section_text(node) -> tuple:
             t, problem = _section_text(x)
             if problem:
                 return "", problem
-            
-            
+
+
             for i, ln in enumerate([l for l in str(t).splitlines() if l.strip()]):
                 parts.append(("- " if i == 0 else "  ") + ln.strip())
         return "\n".join(parts), None
     if isinstance(node, dict):
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         head = []
         for key in ("content", "text", "value"):
             text, problem = _section_text(node.get(key))
@@ -203,14 +203,14 @@ def _section_text(node) -> tuple:
                 return "", problem
             if text:
                 head.append(text)   # ВСЕ три, а не первый непустой: иначе `text` рядом с `content`
-                                    
+
         if head:
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
             return "\n".join(head), None
         parts, skipped = [], []
         for k, v in node.items():
@@ -221,22 +221,22 @@ def _section_text(node) -> tuple:
             if problem:
                 return "", problem
             if t:
-                
-                
+
+
                 lines = [l.strip() for l in str(t).splitlines() if l.strip()]
                 parts.append(f"- {k}: {lines[0]}")
                 parts += [f"  {l}" for l in lines[1:]]
             else:
                 skipped.append(str(k))
         status = str(node.get("status") or "").strip().lower()
-        
-        
-        
+
+
+
         if not parts and status in _NOT_PROVIDED:
             return "", None
         if skipped:
-            
-            
+
+
             return "", (f"в разделе есть ключи без читаемого текста: {', '.join(sorted(skipped))} — "
                         f"часть критериев была бы потеряна")
         if parts:
@@ -329,12 +329,12 @@ def _diff_by_file(change_context) -> dict:
             in_hunk = path is not None
             continue
         if not in_hunk:
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
             if ln.startswith("+++ "):
                 cand = ln[4:].strip()
                 if cand.startswith("b/"):
@@ -352,8 +352,8 @@ def _diff_by_file(change_context) -> dict:
         elif ln.startswith(" ") or not ln:
             out[path][0].append(ln[1:] if ln else ln)
         else:
-            
-            
+
+
             in_hunk = False
     return {p: ("\n".join(k), "\n".join(r)) for p, (k, r) in out.items()}
 
@@ -380,9 +380,9 @@ def _read_source(work_root, source) -> tuple:
     if not src:
         return None, "source не назван"
     root = Path(work_root).resolve()
-    
-    
-    
+
+
+
     candidates = [src] + ([_rel_path(src)] if _rel_path(src) != src else [])
     last = f"source не найден: {src}"
     for cand in candidates:
@@ -434,43 +434,43 @@ def _ground_quote(quote, change_context, work_root, source, evidence="present") 
     any_removed = "\n".join(v[1] for v in by_file.values())
 
     if evidence == "absent":
-        
-        
+
+
         if body is not None and q not in _norm(body) and q in _norm(own_removed):
             return "absence-proof", None
         if body is not None and q in _norm(body):
-            
-            
-            
-            
-            
+
+
+
+
+
             return "absence-refuted", (f"объявлено отсутствие, но цитата В ФАЙЛЕ ЕСТЬ ({src}) — "
                                        f"основание опровергнуто чтением")
-        
-        
-        
-        
+
+
+
+
         return "judge-only", (f"отсутствие не подтверждено машинно: {read_problem}" if body is None
                               else "отсутствие в файле подтверждено, но эта строка не удалялась "
                                    "в этом изменении — связь с правкой не доказана")
 
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     if body is not None and q in _norm(body):
         return "file", None
     if q in _norm(own_post) or (not src and q in _norm(any_post)):
         return "post-state", None
     if q in _norm(own_removed) or q in _norm(any_removed):
-        
+
         return "removed-line", ("основание — УДАЛЁННАЯ строка диффа: она описывает состояние ДО "
                                 "правки, а не результат")
     if q in _norm(any_post):
         return "post-state-other-file", (f"цитата найдена в изменении, но не в {src or 'названном файле'}")
-    
+
     return None, (f"цитата не найдена ни в изменении, ни в {src}" if src else
                   f"цитата не найдена в изменении, а source не назван ({read_problem})")
 
@@ -484,10 +484,10 @@ def make_acceptance_proposer(provider, criteria, revision=None):
     listing = "\n".join(f'  {c["id"]}: {c["text"]}' for c in criteria)
 
     def propose(context):
-        
-        
-        
-        
+
+
+
+
         task = (
             "Ты НЕЗАВИСИМЫЙ ревьюер приёмки (не автор изменения). Только чтение.\n"
             f"Проверяемая ревизия: {revision or 'HEAD'}.\n"
@@ -534,10 +534,10 @@ def _unverified(criteria, reason, declared=None, **extra):
     """
     out = {"declared": bool(criteria) if declared is None else bool(declared),
            "count": len(criteria or []), "verified": False, "verifier": None,
-           
-           
-           
-           
+
+
+
+
            "attempted": False,
            "met_all": None, "quote_verified": 0, "judge_only": [],
            "owner_check_required": False, "unmet": [], "undetermined": [],
@@ -574,9 +574,9 @@ def verify(work_root, criteria, provider, revision=None, change_context=None, bu
                               terminal_kind="acceptance-result", terminal_field="criteria")
     res, reads, denied = rv.get("result"), rv.get("reads") or [], rv.get("denied") or []
 
-    
-    
-    
+
+
+
     if not isinstance(res, dict):
         return _unverified(criteria, f"ревьюер не вынес вердикт ({rv.get('stopped')}) — сверки нет",
                            reads=reads, denied=denied, attempted=True)
@@ -603,15 +603,15 @@ def verify(work_root, criteria, provider, revision=None, change_context=None, bu
             # `met`, и `unmet`. Слабое, но НАСТОЯЩЕЕ основание вердикт не обнуляет — оно называется.
             status, reason = "undetermined", f"основание не подтверждено: {why}"
         elif status == "met" and basis == "absence-refuted":
-            
-            
+
+
             status = "undetermined"
             reason = why
         elif status == "met" and basis == "removed-line" and evidence != "absent":
-            
-            
-            
-            
+
+
+
+
             status = "undetermined"
             reason = ("вердикт «выполнено» опирается на УДАЛЁННУЮ строку — её в результате нет. "
                       "Для критерия об отсутствии нужен evidence=\"absent\" с фрагментом, "
@@ -627,16 +627,16 @@ def verify(work_root, criteria, provider, revision=None, change_context=None, bu
         elif status == "undetermined":
             undet.append(c["id"])
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
     if not reads and not any(c["basis"] in FILE_CONFIRMED_BASES for c in out):
         return _unverified(criteria, "вердикт вынесен без единого чтения (0 reads) и ни одна цитата "
                                      "не сверена с доставленным файлом — рубер-штамп сверкой не "
@@ -653,8 +653,8 @@ def verify(work_root, criteria, provider, revision=None, change_context=None, bu
     elif not met_all:
         reason = f"сверка состоялась: НЕ ВЫПОЛНЕНО {len(unmet)} из {len(criteria)}"
     elif weak:
-        
-        
+
+
         reason = (f"все критерии выполнены; подтверждено цитатой {len(strong)} из {len(criteria)}, "
                   f"только суждением судьи — {len(weak)} ({', '.join(weak)})")
     else:
@@ -664,10 +664,10 @@ def verify(work_root, criteria, provider, revision=None, change_context=None, bu
             "verifier": (f"independent-reviewer @ {(revision or 'HEAD')[:12]}" if verified else None),
             "met_all": met_all if verified else None,
             "quote_verified": len(strong), "judge_only": weak,
-            
-            
-            
-            
+
+
+
+
             "owner_check_required": bool(met_all and not strong),
             "unmet": unmet, "undetermined": undet, "criteria": out,
             "reads": reads, "denied": denied, "reason": reason}

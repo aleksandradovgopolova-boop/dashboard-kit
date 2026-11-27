@@ -80,10 +80,10 @@ def _matches(rel_path: str, pattern: str) -> bool:
     паттернов-каталогов, чтобы `schemas/` не требовал писать `schemas/**`.
     """
     rel = rel_path.replace("\\", "/")
-    
-    
-    
-    
+
+
+
+
     while rel.startswith("./"):
         rel = rel[2:]
     pat = (pattern or "").replace("\\", "/")
@@ -93,10 +93,10 @@ def _matches(rel_path: str, pattern: str) -> bool:
         return rel.startswith(pat)
     if fnmatch.fnmatch(rel, pat):
         return True
-    
+
     if pat.endswith("/**") and rel.startswith(pat[:-3] + "/"):
         return True
-    
+
     if pat.startswith("**/") and fnmatch.fnmatch(rel, pat[3:]):
         return True
     return False
@@ -116,7 +116,7 @@ def _product_dirs(child_root: Path):
     root = Path(child_root)
     for cur, dirnames, filenames in os.walk(root, topdown=True):
         rel = Path(cur).relative_to(root)
-        
+
         dirnames[:] = [d for d in dirnames
                        if not _under_excluded(str(rel / d) if str(rel) != "." else d)]
         yield Path(cur), filenames
@@ -143,14 +143,14 @@ def _repo_has_signal(child_root: Path, patterns: list) -> bool:
                 continue                               # сигнал, указывающий внутрь кита/вендора
             if (root / head).exists():
                 return True
-            
+
             if _resolve(root, head):
                 return True
             continue
-        
-        
-        
-        
+
+
+
+
         segs = [s for s in pat.split("/") if s and s != "**"]
         if not segs:
             continue                               # паттерн из одних `**` не является сигналом
@@ -158,8 +158,8 @@ def _repo_has_signal(child_root: Path, patterns: list) -> bool:
 
     if not unanchored:
         return False
-    
-    
+
+
     import fnmatch as _fn
     try:
         for cur, filenames in _product_dirs(root):
@@ -195,8 +195,8 @@ def signals_present(child_root: Path, patterns_by_contour: dict) -> set:
                     anchored = True
                     break
                 continue
-            
-            
+
+
             segs = [s for s in pat.split("/") if s and s != "**"]
             if segs:
                 tails.append(segs[-1])

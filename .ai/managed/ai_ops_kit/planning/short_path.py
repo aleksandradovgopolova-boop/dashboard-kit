@@ -164,7 +164,7 @@ def minimum(child_root, wid, signals=None, task=None):
     def _res(present, source, detail):
         return {"present": present, "source": source, "detail": detail}
 
-    
+
     if str(signals.get("goal") or "").strip():
         out["goal"] = _res(True, "signals", "goal передан сигналом")
     else:
@@ -180,7 +180,7 @@ def minimum(child_root, wid, signals=None, task=None):
         else:
             out["goal"] = _res(False, None, "цель не названа ни сигналом, ни спекой, ни планом")
 
-    
+
     from ai_ops_kit.engine import acceptance_verify
     sig_crit = signals.get("acceptance_criteria")
     parsed_sig = acceptance_verify.parse_criteria(sig_crit) if sig_crit else []
@@ -198,7 +198,7 @@ def minimum(child_root, wid, signals=None, task=None):
             out["acceptance_criteria"] = _res(
                 False, None, "критериев готовности нет: раздел пуст или не разбирается в пункты")
 
-    
+
     sig_paths = signals.get("write_scope") or signals.get("affected_files")
     if isinstance(sig_paths, str):
         sig_paths = [p for p in re.split(r"[,\s]+", sig_paths) if p]
@@ -268,7 +268,8 @@ def assess(task, signals, child_root, wid):
 
 
 def record_path(child_root, wid):
-    return Path(child_root) / "features" / str(wid) / "short-path.yaml"
+    from ai_ops_kit.shared.work_areas import artifact_path
+    return artifact_path(Path(child_root) / "features", wid, "short-path.yaml")
 
 
 def trace(child_root, wid, signals, decision):
@@ -282,6 +283,7 @@ def trace(child_root, wid, signals, decision):
     import yaml
     from ai_ops_kit.gates import spec_levels
     child_root, wid = Path(child_root), str(wid)
+    rp = record_path(child_root, wid)  # Both destinations checked before creating/updating spec.
     sp, created, add_rep = spec_levels.create_spec(child_root, wid, signals)
     try:
         doc = yaml.safe_load(sp.read_text(encoding="utf-8")) or {}
@@ -333,7 +335,6 @@ def trace(child_root, wid, signals, decision):
         "spec_created": created,
         "spec_sections_added": add_rep.get("added") or [],
     }
-    rp = record_path(child_root, wid)
     rp.parent.mkdir(parents=True, exist_ok=True)
     rp.write_text(yaml.safe_dump(rec, allow_unicode=True, sort_keys=False), encoding="utf-8")
     return {"spec": sp, "record": rp, "filled": filled, "declined": declined, "error": None}
@@ -358,7 +359,7 @@ def _content_for(key, info, signals, child_root, wid):
         if key == "goal":
             return str(item.get("title") or "").strip()
         return "\n".join(f"- {p}" for p in (item.get("write_scope") or []))
-    
+
     return ""
 
 

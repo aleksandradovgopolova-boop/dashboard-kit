@@ -48,25 +48,25 @@ def _reevaluate_artifact_evidence(work_root, wid, gate_ids):
             if isinstance(data, dict) and not mod.check(data):
                 ev[gid] = {"status": "pass", "provided": mod.provided_evidence(data),
                            "evidence": [f".ai/runplan/{wid}/{fname} — форма подтверждена (reevaluate, SHA стабилен)"]}
-        
-        
-        
-        
-        
+
+
+
+
+
         except Exception:  # noqa: BLE001,S110 — сбой разбора артефакта не закрывает гейт (fail-closed)
             pass
     if "specification" in gate_ids:
         try:
             _avail, _ok, _ = _openspec_validate(work_root, wid)
             if _avail and _ok:
-                
-                
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
+
+
                 ev["specification"] = {"status": "pass",
                                        "provided": ["openspec_valid", "requirements_covered"],
                                        "evidence": ["openspec validate --strict (reevaluate, SHA стабилен)"]}
@@ -75,7 +75,7 @@ def _reevaluate_artifact_evidence(work_root, wid, gate_ids):
     return ev
 
 
-def _delivered_files(work_root, revision) -> set:
+def _delivered_files(work_root, revision, base=None) -> set:
     """Файлы, затронутые ДОСТАВЛЕННОЙ правкой на revision. Авторитет — git, не судья.
 
     Тот же источник, что уже использует `_review_security` (git show --name-only). Нужен для
@@ -83,7 +83,8 @@ def _delivered_files(work_root, revision) -> set:
     if not revision:
         return set()
     from ai_ops_kit.engine.pipeline_git import _git
-    rc, names, _ = _git(work_root, "show", "--name-only", "--format=", revision)
+    args = ("diff", "--name-only", base, revision) if base else ("show", "--name-only", "--format=", revision)
+    rc, names, _ = _git(work_root, *args)
     if rc != 0:
         return set()
     return {ln.strip().lstrip("./") for ln in names.splitlines() if ln.strip()}
@@ -126,7 +127,10 @@ def _review_cites_delivered_file(res, delivered, work_root) -> bool:
     for c in res.get("checks") or []:
         if not isinstance(c, dict):
             continue
-        for ev in c.get("evidence") or []:
+        evidence = c.get("evidence") or []
+        if isinstance(evidence, dict):
+            evidence = [evidence]  # опубликованная одиночная форма reviewer-result
+        for ev in evidence:
             f = ev.get("file") if isinstance(ev, dict) else None
             if not f or f.strip().lstrip("./") not in delivered:
                 continue
@@ -177,8 +181,8 @@ def _gate_ev_from_verdict(gid, g, rv, *, revision, delivered, work_root, valid_i
              "blockers": (res or {}).get("blockers") if isinstance(res, dict) else None,
              "errors": errs or None}
     if errs:
-        
-        
+
+
         ref = gate_executor.evidence_from_no_verdict(
             g, gate_id=gid, stopped=rv.get("stopped"), reads=rv.get("reads"),
             errors=errs, refusal=rv.get("refusal"))
@@ -193,12 +197,12 @@ def _gate_ev_from_verdict(gid, g, rv, *, revision, delivered, work_root, valid_i
     calib_ui = calibrated_enforcement and gid in gate_policy.UI_GATES
     if calib_ui and isinstance(ui_evidence, dict):
         ev_status = (ui_evidence.get(gid) or {}).get("deterministic_status", "not_run")
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     if (status == "pass" and blocking and not rv.get("reads")
             and not _review_cites_delivered_file(res, delivered, work_root)):
         entry["closed_as"] = "blocked"
@@ -239,7 +243,7 @@ def _gate_ev_from_verdict(gid, g, rv, *, revision, delivered, work_root, valid_i
 
 
 def _consume_handoff_verdicts(work_root, gate_ids, gate_ev, signals, revision, *, child_root=None,
-                              calibrated_enforcement=False, ui_evidence=None):
+                              calibrated_enforcement=False, ui_evidence=None, review_base=None):
     """Потребить ЗАПИСАННЫЕ оркестратором вердикты для ai-review гейтов БЕЗ вызова провайдера.
 
     #570 follow-up (живой прогон 07.09): artifact-first жил ТОЛЬКО внутри `_run_reviews`, а тот
@@ -254,12 +258,12 @@ def _consume_handoff_verdicts(work_root, gate_ids, gate_ev, signals, revision, *
     handoff_root = child_root or work_root
     gates = gate_executor.load_gates()
     valid_ids = set(gates)
-    delivered = _delivered_files(work_root, revision)
+    delivered = _delivered_files(work_root, revision, review_base)
     gate_ev = dict(gate_ev)
     reviews = []
     for gid in _reviewable_gates(gate_ids, signals):
-        
-        
+
+
         if (gate_ev.get(gid) or {}).get("status") == "pass":
             continue
         handoff_rr, _ = reviewer_handoff.load_verdict(handoff_root, gid, revision=revision)
@@ -308,30 +312,30 @@ def _run_reviews(reviewer_proposer, work_root, gate_ids, gate_ev, signals, revis
     ro_policy = tool_broker.Policy(level="read-only", child_root=str(work_root))
     reviews = []
     gate_ev = dict(gate_ev)
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     valid_ids = set(gates)
     change_ctx = change_context if change_context is not None else _change_context(work_root, revision)
-    
-    
+
+
     delivered = _delivered_files(work_root, revision)
     for gid in _reviewable_gates(gate_ids, signals):
         if gid in gate_ev:
             continue
         g = gates.get(gid) or {}
         req = g.get("required_evidence", []) or []
-        
-        
-        
+
+
+
         checklist = _gate_checklist(g, root=work_root, changed_files=delivered or None)
-        
-        
-        
-        
+
+
+
+
         handoff_rr, _ = reviewer_handoff.load_verdict(handoff_root, gid, revision=revision)
         if handoff_rr is not None:
             rv = {"result": handoff_rr, "stopped": "handoff-artifact", "reads": [], "denied": [],
@@ -351,8 +355,8 @@ def _run_reviews(reviewer_proposer, work_root, gate_ids, gate_ev, signals, revis
             # Только БЛОКИРУЮЩИЙ гейт: advisory-гейт всё равно не блокирует, ему handoff не нужен (и
             # это сохраняет named refusal у ux_review — «дал разбор без вердикта» не станет awaiting).
             if _provider_structurally_mute(rv) and bool(g.get("blocking")):
-                
-                
+
+
                 cause = ("исполнитель ревьюера недоступен в этой среде (сессия Клода, #160)"
                          if rv.get("stopped") == "env-unavailable"
                          else (rv.get("refusal") or {}).get("reason_text")
@@ -361,9 +365,9 @@ def _run_reviews(reviewer_proposer, work_root, gate_ids, gate_ev, signals, revis
                     handoff_root, gid, checklist=checklist, reviewed_revision=revision,
                     changed_files=delivered, blocking=True, required_evidence=req, cause=cause)
                 gate_ev[gid] = aw
-                
-                
-                
+
+
+
                 reviews.append({"gate": gid, "stopped": rv.get("stopped"), "reads": rv.get("reads") or [],
                                 "denied": rv.get("denied"), "valid": False, "source": "handoff-request",
                                 "status": "awaiting_reviewer", "closed_as": "awaiting_reviewer",
@@ -434,7 +438,8 @@ def _human_approval_domains_uncovered(approval_root, wid, changed_files, diff_ro
                     if p.strip() not in _CATCH_ALL]
             if not pats:
                 continue
-            matched = [f for f in (changed_files or []) if any(_re.search(p, f) for p in pats)]
+            matched = [f for f in (changed_files or [])
+                       if any(_re.search(p, security_pack.domain_path(f)) for p in pats)]
             if matched:
                 triggered[d["id"]] = matched
     except Exception:  # noqa: BLE001

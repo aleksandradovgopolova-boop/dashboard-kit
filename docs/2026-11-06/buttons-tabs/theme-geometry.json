@@ -1,0 +1,124 @@
+{
+  "sameGeometry": true,
+  "width": 680,
+  "buttons": {
+    "dark": [
+      {
+        "text": "Добавить",
+        "pad": "6px 12px",
+        "font": "600 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 118.421875,
+        "icon": 20
+      },
+      {
+        "text": "Обычная",
+        "pad": "6px 12px",
+        "font": "500 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 85.609375
+      },
+      {
+        "text": "Тихая",
+        "pad": "6px 12px",
+        "font": "500 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 63.84375
+      },
+      {
+        "text": "Добавить",
+        "pad": "8px 16px",
+        "font": "600 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 126.421875,
+        "icon": 20
+      },
+      {
+        "text": "Обычная",
+        "pad": "8px 16px",
+        "font": "500 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 93.609375
+      },
+      {
+        "text": "Тихая",
+        "pad": "8px 16px",
+        "font": "500 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 71.84375
+      },
+      {
+        "text": "Добавить",
+        "pad": "12px 24px",
+        "font": "600 16px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 151.90625,
+        "icon": 20
+      },
+      {
+        "text": "Обычная",
+        "pad": "12px 24px",
+        "font": "500 16px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 118.40625
+      },
+      {
+        "text": "Тихая",
+        "pad": "12px 24px",
+        "font": "500 16px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 93.53125
+      }
+    ],
+    "light": [
+      {
+        "text": "Добавить",
+        "pad": "6px 12px",
+        "font": "600 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 118.421875,
+        "icon": 20
+      },
+      {
+        "text": "Обычная",
+        "pad": "6px 12px",
+        "font": "500 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 85.609375
+      },
+      {
+        "text": "Тихая",
+        "pad": "6px 12px",
+        "font": "500 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 63.84375
+      },
+      {
+        "text": "Добавить",
+        "pad": "8px 16px",
+        "font": "600 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 126.421875,
+        "icon": 20
+      },
+      {
+        "text": "Обычная",
+        "pad": "8px 16px",
+        "font": "500 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 93.609375
+      },
+      {
+        "text": "Тихая",
+        "pad": "8px 16px",
+        "font": "500 14px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 71.84375
+      },
+      {
+        "text": "Добавить",
+        "pad": "12px 24px",
+        "font": "600 16px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 151.90625,
+        "icon": 20
+      },
+      {
+        "text": "Обычная",
+        "pad": "12px 24px",
+        "font": "500 16px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 118.40625
+      },
+      {
+        "text": "Тихая",
+        "pad": "12px 24px",
+        "font": "500 16px / 20px \"Golos Text\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "width": 93.53125
+      }
+    ]
+  }
+}

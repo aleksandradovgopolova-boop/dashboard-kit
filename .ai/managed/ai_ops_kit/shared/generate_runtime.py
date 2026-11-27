@@ -289,17 +289,17 @@ def generate(child_root: Path, verbose: bool = True, runtimes: list | None = Non
             p = base / f"{name}.md"
             p.write_text(render_command(wid, w, agents, runtime), encoding="utf-8")
             out_files.append(p)
-        
+
         if _keep_command("ai-run", command_filter):
             rn = base / "ai-run.md"
             rn.write_text(render_ai_run(runtime, workflows), encoding="utf-8")
             out_files.append(rn)
-        
+
         if _keep_command("ai-start-task", command_filter):
             st = base / "ai-start-task.md"
             st.write_text(render_start_task(runtime, workflows), encoding="utf-8")
             out_files.append(st)
-        
+
         if _keep_command("ai-ops-init", command_filter):
             it = base / "ai-ops-init.md"
             it.write_text(render_ai_ops_init(runtime), encoding="utf-8")

@@ -46,7 +46,7 @@ AUDIT_FIELD_MARKERS = {"actor", "actorid", "action", "result", "objecttype", "ob
 
 
 def _stem(name):
-    
+
     return name.rsplit(".", 1)[0] if "." in name else name
 
 
@@ -75,14 +75,14 @@ def check(data: dict):
         if k not in KINDS:
             errors.append(f"событие {n}: kind '{k}' не в {sorted(KINDS)}")
 
-        
+
         if k == "domain":
             flds = {str(f).lower() for f in (e.get("fields") or [])}
             if flds & AUDIT_FIELD_MARKERS:
                 errors.append(f"domain-событие {n} описано audit-полями "
                               f"{sorted(flds & AUDIT_FIELD_MARKERS)} — domain event подменён на AuditEvent")
 
-        
+
         if k in ("audit", "analytics"):
             if e.get("standalone"):
                 if not e.get("reason"):
@@ -95,14 +95,14 @@ def check(data: dict):
                 elif mt not in domain_names:
                     errors.append(f"событие {n}: maps_to '{mt}' — нет такого domain-события")
 
-    
+
     by_stem = {}
     for e in events:
         by_stem.setdefault(_stem(e.get("name", "")), []).append(e)
     for stem, group in by_stem.items():
         gnames = {g.get("name") for g in group}
         if len(gnames) > 1:
-            
+
             linked = any(g.get("maps_to") in gnames for g in group)
             if not linked:
                 warns.append(f"разные имена с общим концептом '{stem}': {sorted(gnames)} — "
@@ -113,7 +113,7 @@ def check(data: dict):
 def scan_code(catalog_names, mapped_names, files):
     """Best-effort: строковые литералы событий в коде, не совпадающие с каноном."""
     known = set(catalog_names) | set(mapped_names)
-    
+
     lit_re = re.compile(r"""['"]([a-z][a-z0-9]*(?:[._][a-z0-9]+)+)['"]""")
     drift = []
     for f in files:
@@ -122,7 +122,7 @@ def scan_code(catalog_names, mapped_names, files):
             continue
         for m in lit_re.finditer(p.read_text(encoding="utf-8", errors="ignore")):
             lit = m.group(1)
-            
+
             if "." in lit and lit not in known:
                 drift.append({"file": f, "literal": lit})
     return drift

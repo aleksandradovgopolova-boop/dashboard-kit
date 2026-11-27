@@ -48,7 +48,7 @@ dev_tools:
     # F-05 ЗАКРЫТ (2026-09-09): замер решил спор «включить vs убрать» — обычный проход нашёл 8
     # реальных проблем на фундаменте, типы окупаются. Включён на kernel+shared ([tool.mypy]), шаг в
     # джобе lint. Полная аннотация (disallow_untyped_defs) — отдельный ратчет-вверх.
-    enforced_at: {file: .github/workflows/package-quality.yml, pattern: "mypy==2.3.1"}
+    enforced_at: {file: .github/workflows/package-quality.yml, pattern: "mypy==2.4.1"}
 
 # Каждый хук из .pre-commit-config.yaml обязан быть здесь: либо `enforced` с зеркалом в CI и
 # доказательством `enforced_at`, либо честно `local_only` с причиной. Новый хук без записи — красный.
@@ -116,3 +116,6 @@ ratchet_baselines:
     consumed_by: ai_ops_kit/devtools/code_duplication.py
   - name: packages/swallowed-exceptions-baseline.yaml        # B3: стоячий ратчет молчаливых глушителей
     consumed_by: ai_ops_kit/validation/validate_swallowed_exceptions.py
+  # #1387: необязательный CLI-пилот; bootstrap пуст, глобальная измеренная заморозка ещё не снята.
+  - name: packages/crap-score-baseline.yaml
+    consumed_by: ai_ops_kit/devtools/crap_score.py

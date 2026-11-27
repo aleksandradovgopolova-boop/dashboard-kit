@@ -26,10 +26,10 @@ def build_preview(intent, task, child_root, signals):
     if task:
         signals.setdefault("task_text", task)
     plan = run_plan.build_plan(signals, workitem_id=signals.get("feature"))
-    
-    
-    
-    
+
+
+
+
     if not signals.get("task_type"):
         signals["task_type"] = plan["base_workflow"]
     flags = resolve_flags(signals)
@@ -37,9 +37,9 @@ def build_preview(intent, task, child_root, signals):
     try:
         bundle = context_compiler.compile_bundle(signals, child_root, plan=plan)
     except Exception as _e:  # noqa: BLE001 — сборка контекста не должна ронять превью...
-        
-        
-        
+
+
+
         bundle, bundle_error = None, f"{type(_e).__name__}: {_e}"[:200]
     cov = spec_levels.assess(signals)
     wp = atomic_planner.assess(signals, child_root=child_root, bundle=bundle)
@@ -53,13 +53,13 @@ def build_preview(intent, task, child_root, signals):
     if signals.get("secret_boundary") or signals.get("destructive"):
         approvals.append("человек: затронута граница секретов/деструктивное действие")
 
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     if intent == "run":
         expected = ("запущу исследование: превращу вопрос в доказательства и пакет для решения "
                     "(материалы соберу в .research/)" if plan["base_workflow"] == "RESEARCH"
@@ -98,13 +98,26 @@ def build_preview(intent, task, child_root, signals):
                       "rules": (bundle or {}).get("included", {}).get("rules", []),
                       "estimated_tokens": (bundle or {}).get("estimated_tokens"),
                       "context_budget": (bundle or {}).get("context_budget"),
-                      
-                      
+
+
                       "context_error": bundle_error},
         "approvals_needed": approvals,
         "decomposition_advised": wp["should_decompose"],
         "expected_result": expected,
     }
+
+
+def _show_preview(pv, child_root, a, blocked_on_intake=False):
+    """Одинаковый вывод для dry preview и обычного пути запуска; без dispatch."""
+    from ai_ops_kit.cli.ai_ops_cli import _say, _audience, _print_preview
+    if a.json:
+        print(json.dumps(pv, ensure_ascii=False, indent=2))
+    elif not blocked_on_intake:
+
+        _say(Path(child_root), "from_execution_preview", pv)
+        if _audience(Path(child_root)) != "product":
+            print()
+            _print_preview(pv)
 
 
 def _print_preview(pv):
@@ -145,7 +158,7 @@ def _run_backlog(sub, child_root, signals, js, a=None):
     state = (signals or {}).get("state", "open")
     root = str(child_root)
     if sub not in _BACKLOG_SUBS:
-        
+
         msg = ("backlog: операционный разбор GitHub Issues. Подкоманды:\n"
                "  classify    — тип/область/приоритет/атрибуты, каждый вывод с объяснением\n"
                "  dedup       — дубликаты (предлагает объединение) и устаревшие\n"
@@ -209,9 +222,9 @@ def _run_backlog(sub, child_root, signals, js, a=None):
         return 0 if rep.ok else 2
 
     if sub == "merge":
-        
-        
-        
+
+
+
         import yaml as _yaml
         from ai_ops_kit.planning import backlog_dedup as _dd
         approved_path = getattr(a, "approved", None) if a is not None else None
@@ -252,7 +265,7 @@ def _run_backlog(sub, child_root, signals, js, a=None):
                 print(f"  {res.reason}")
         return 0 if res.ok or res.dry_run else 2
 
-    
+
     from ai_ops_kit.planning import backlog_depgraph as _dg
     g = _dg.graph_from_backlog(root, state=state)
     if js:
@@ -273,14 +286,14 @@ def _run_backlog(sub, child_root, signals, js, a=None):
 
 def _intent_model(task, child_root, signals, a):
     js = a.json
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
     from ai_ops_kit.planning import repo_audit
     from ai_ops_kit.planning import contours as _contours
     try:
@@ -288,30 +301,30 @@ def _intent_model(task, child_root, signals, a):
     except _contours.ModelCorrupt as e:
         print(f"ОШИБКА: {e}")
         return 1
-    
-    
-    
+
+
+
     if getattr(a, "answer", None):
         whys = list(getattr(a, "why", None) or [])
         for i, pair in enumerate(a.answer):
             why = whys[i] if i < len(whys) else None
             ok, msg = repo_audit.record_answer(child_root, pair[0], pair[1], rep["ask"], why=why)
             print(msg)
-            
-            
+
+
             if not ok:
                 return 2
-        
+
         if not getattr(a, "flow", False):
             return 0
-        
-        
-        
+
+
+
         rep = repo_audit.run(child_root)
-    
-    
-    
-    
+
+
+
+
     answers_file = None
     if rep["ask"]["questions"]:
         answers_file = repo_audit.write_question_file(child_root, rep["ask"])
@@ -328,10 +341,10 @@ def _intent_model(task, child_root, signals, a):
         if res.get("stage") != first_hour.BLOCKED_UNDERSTANDING:
             from ai_ops_kit.cli import ai_ops_cli_first_health as _health
             res["health"] = _health.assess(child_root)
-        
-        
-        
-        
+
+
+
+
         result_file = first_hour.write_result(child_root, res) \
             if bool(getattr(a, "apply", False)) else None
         if js:
@@ -370,9 +383,9 @@ def _intent_model(task, child_root, signals, a):
             print(f"  {mark} [{q['id']}] {q['ask']}")
             if q["proposal"]:
                 print(f"      предполагаю: {q['proposal']['value']} — подтвердить?")
-        
-        
-        
+
+
+
         if answers_file:
             try:
                 shown = answers_file.relative_to(Path(child_root))
@@ -419,13 +432,13 @@ def _product_risks(root):
 
 def _intent_contract(task, child_root, signals, a):
     js = a.json
-    
-    
+
+
     from ai_ops_kit.planning import artifact_registry as _AR
     from ai_ops_kit.planning import product_contract
-    
-    
-    
+
+
+
     health = _product_health_report(child_root)
     risks = _product_risks(child_root)
     try:
@@ -462,19 +475,19 @@ def _intent_contract(task, child_root, signals, a):
 
 def _intent_products(task, child_root, signals, a):
     js = a.json
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     from ai_ops_kit.planning import product_registry
     sub = (task or "").strip()
 
     if sub == "register":
-        
-        
-        
+
+
+
         reg_path = product_registry._default_registry(Path(child_root)) or (Path(child_root) / "products.yaml")
         res = product_registry.register(reg_path, Path(child_root).resolve())
         if js:
@@ -503,8 +516,8 @@ def _intent_products(task, child_root, signals, a):
         print("или создайте вручную: kind: product-registry, products: [{id, name, path}].")
         return 1
 
-    
-    
+
+
     health_map = {}
     _data = product_registry.load(reg_path)
     for _p in (_data.get("products", []) if isinstance(_data, dict) else []):
@@ -531,13 +544,15 @@ def _intent_products(task, child_root, signals, a):
             print(f"  {mark} {r['id']} ({r['name']}): {r['verdict']} "
                   f"[артефакты={r['worst_artifact_state']}, "
                   f"контуры={'ok' if r['contours_ok'] else 'неполны'}, health={r['health_band']}]")
+        if "kit" in r:
+            print(f"    {product_registry.render_kit_state(r['kit'])}")
     return 0
 
 
 def _intent_inspect(task, child_root, signals, a):
     js = a.json
-    
-    
+
+
     from ai_ops_kit.planning import product_registry
     pid = (task or "").strip()
     if not pid:
@@ -596,8 +611,8 @@ def _intent_plan(task, child_root, signals, a):
         (fdir / "context-bundle.yaml").write_text(
             yaml.safe_dump(bundle, allow_unicode=True, sort_keys=False), encoding="utf-8")
     except Exception as _ce:  # noqa: BLE001 — план не должен рушиться из-за контекста...
-        
-        
+
+
         bundle = None
         ctx_error = f"{type(_ce).__name__}: {_ce}"[:200]
     cov = spec_levels.assess_from_artifacts(signals, child_root, wid)
@@ -642,7 +657,7 @@ def _intent_session(task, child_root, signals, a):
     if js:
         print(json.dumps({"snapshot": snap, "recommendation": rec}, ensure_ascii=False, indent=2))
     else:
-        
+
         print("Session Snapshot:")
         for k, v in snap.items():
             print(f"  {k}: {v}")

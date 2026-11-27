@@ -21,6 +21,8 @@ from pathlib import Path
 
 import yaml
 
+from ai_ops_kit.shared.contracts import GuardedLoadResult
+
 
 def _durable(path: str | Path, data: dict, serialize: Callable, parse: Callable, require_keys: tuple, keep_backup: bool) -> dict:
     """v3.0.15 (LifecycleStore v1.1, finding аудита P1): АТОМАРНАЯ + FAIL-CLOSED запись с валидацией
@@ -31,7 +33,7 @@ def _durable(path: str | Path, data: dict, serialize: Callable, parse: Callable,
     -> {ok} | {ok: False, error}."""
     import tempfile
     path = Path(path)
-    
+
     if not isinstance(data, dict):
         return {"ok": False, "error": "данные для записи не dict"}
     missing = [k for k in require_keys if k not in data]
@@ -41,7 +43,7 @@ def _durable(path: str | Path, data: dict, serialize: Callable, parse: Callable,
         text = serialize(data)
     except Exception as e:  # noqa: BLE001
         return {"ok": False, "error": f"сериализация не удалась: {type(e).__name__}: {e}"}
-    
+
     try:
         prospective = parse(text)
     except Exception as e:  # noqa: BLE001
@@ -51,25 +53,25 @@ def _durable(path: str | Path, data: dict, serialize: Callable, parse: Callable,
     tmp = None
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         fd, tmp_name = tempfile.mkstemp(dir=str(path.parent), prefix=path.name + ".", suffix=".tmp")
         tmp = Path(tmp_name)
         with os.fdopen(fd, "w", encoding="utf-8") as f:
             f.write(text)
             f.flush()
             os.fsync(f.fileno())
-        
+
         if keep_backup and path.exists():
             try:
                 path.with_suffix(path.suffix + ".bak").write_text(
                     path.read_text(encoding="utf-8"), encoding="utf-8")
             except OSError:
                 pass
-        
+
         os.replace(str(tmp), str(path))
         tmp = None
         _fsync_dir(path.parent)
-        
+
         back = parse(path.read_text(encoding="utf-8"))
         if not isinstance(back, dict) or [k for k in require_keys if k not in back]:
             return {"ok": False, "error": "перечитанный после замены документ невалиден"}
@@ -287,10 +289,10 @@ def _note_journal_loss(journal_path: Path, event: dict, error: str) -> dict:
     """
     ev = event if isinstance(event, dict) else {}
     ref = {k: ev.get(k) for k in ("run_id", "workitem_id", "package_id") if ev.get(k) is not None}
-    
-    
-    
-    
+
+
+
+
     if len(_BOOKKEEPING_LOSSES) >= _BOOKKEEPING_LIMIT:
         tail = _BOOKKEEPING_LOSSES[-1]
         if tail.get("what") == "lifecycle_journal.__overflow__":
@@ -381,7 +383,7 @@ def journal_append(journal_path: Path, event: dict) -> dict:
                 f.write(_json.dumps(rec, ensure_ascii=False) + "\n")
                 f.flush()
                 os.fsync(f.fileno())
-            
+
             durable_write_json(Path(str(journal_path) + ".head"),
                                {"kind": "journal-head", "seq": seq, "checksum": rec["checksum"]},
                                require_keys=("seq", "checksum"))
@@ -468,7 +470,7 @@ def _fsync_dir(directory: Path) -> None:
         os.close(dfd)
 
 
-def load_guarded(path: str | Path, required_keys: tuple = (), kind: str | None = None) -> dict:
+def load_guarded(path: str | Path, required_keys: tuple[str, ...] = (), kind: str | None = None) -> GuardedLoadResult:
     """FAIL-CLOSED чтение. Различает три состояния (а не «пусто -> дефолт»):
       * absent  — файла нет (легитимно fresh);
       * corrupt — есть, но НЕЧИТАЕМ/пуст/не dict/не тот kind/нет обязательных ключей (оборванная запись,

@@ -94,8 +94,8 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
     from ai_ops_kit.engine import execution_pipeline
     from ai_ops_kit.engine import tool_loop
     from ai_ops_kit.providers import orchestrator
-    
-    
+
+
     from ai_ops_kit.engine import ai_ops_run as _ar
     from ai_ops_kit.shared.budget import resolve_budget
     budget = resolve_budget(budget, plan.get("execution_budget"))
@@ -118,7 +118,7 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
     try:
         rep = _pipe(resume, resume_ctx)
         _fix_left = int(review_fix_attempts or 0)
-        
+
         _esc_ladder = (((ctx.model_resolution or {}).get("plan") or {}).get("implementation") or {}).get("escalation_ladder") or []
         _esc_idx = 0
         _QUALITY_GATES = {"implementation_verification", "code_review"}
@@ -127,7 +127,7 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
             _fx = _review_fix_context(rep)
             if not _fx:
                 break   # блок не модель-фиксируем (human/base/lifecycle) -> не зацикливаем
-            
+
             _unmet = set((rep.get("gates") or {}).get("unmet") or [])
             if ctx.model is None and (_unmet & _QUALITY_GATES) and _esc_idx < len(_esc_ladder):
                 if ctx.model_resolution.get("model_attempts"):
@@ -140,7 +140,7 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                     _ct = _ar._provider_trust(c["provider"], _pe2.endpoint_for(c["provider"])["key_env"],
                                               ctx.klp_by_env, ctx.trust_env, ctx.trust_now, ctx.trust_cache)
                     return _ct["ready"], _ct.get("reason")
-                
+
                 _esc = None
                 while _esc_idx < len(_esc_ladder):
                     _cand = _esc_ladder[_esc_idx]; _esc_idx += 1
@@ -156,7 +156,7 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                     try:
                         _eep = _pe2.endpoint_for(_esc["provider"])
                         _eprov = orchestrator.make_openai_provider(_esc["model_id"], _eep["base_url"], _eep["key_env"])
-                        
+
                         _nxt = next((n for n in _esc_ladder[_esc_idx:] if _cand_trusted(n)[0]), None)
                         if _nxt:
                             _nep = _pe2.endpoint_for(_nxt["provider"])
@@ -188,8 +188,8 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                                     "attempt_id": attempt_id, "remaining": _fix_left,
                                     "unmet": (rep.get("gates") or {}).get("unmet")})
             except Exception as _je:  # noqa: BLE001 — журнал не роняет fix-loop...
-                
-                
+
+
                 _note_bookkeeping_error(rep, "lifecycle_journal.fix_attempt", _je)
             rep = _pipe(True, _fx + (("\n\n" + resume_ctx) if resume_ctx else ""))
             _fix_left -= 1
@@ -201,9 +201,9 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                                    audience=_run_start_audience(ctx.child_root))
         raise
     except Exception as _e:  # noqa: BLE001
-        
-        
-        
+
+
+
         from ai_ops_kit.engine.ai_ops_run_lifecycle import _run_start_audience
         with contextlib.redirect_stdout(sys.stderr):
             active_work.finish_cmd(aw_path, fid, status="blocked", child_root=ctx.child_root,  # #695
@@ -230,9 +230,9 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                    "initial_model": (ctx.model_resolution.get("initial_model") if isinstance(ctx.model_resolution, dict) else None),
                    "effective_model": _eff_e,
                    "model_resolution": ctx.model_resolution if isinstance(ctx.model_resolution, dict) else None}
-        
-        
-        
+
+
+
         try:
             _safe = ("retry прогон (сбой транзиентный: провайдер/сеть)"
                      if _fail.get("retryable") else
@@ -247,12 +247,12 @@ def _execute_with_fix_loop(ctx, uctx, *, execute, plan, discard_previous, instal
                               require_keys=("kind", "workitem_id"))
             err_rep["run_report"] = f"features/{fid}/run-report.json"
             err_rep["handoff"] = {"next_action": _safe}
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         except Exception as _we:  # noqa: BLE001 — исходный сбой важнее сбоя записи, но утрата видна
             _note_bookkeeping_error(err_rep, "failure_evidence.write", _we)
         _ls.merge_bookkeeping_losses(err_rep)
@@ -303,15 +303,15 @@ def _build_run_proposers(ctx, proposer, reviewer_proposer, author_proposer):
     _rname = ((_model_resolution or {}).get("reviewer") or {}).get("provider") or provider_name
     prop = proposer or tool_loop.make_model_proposer(
         _uctx(_writer_prov or orchestrator.make_provider(provider_name, _writer_model), "implementation", "initial", _wname))
-    
+
     rev_prop = reviewer_proposer
     if rev_prop is None and provider_name != "mock":
         if ctx.review:
-            
+
             rev_prop = _uctx(_rev_prov or orchestrator.make_provider(provider_name, _rev_model),
                              "code_review", "review", _rname)
         else:
-            
+
             try:
                 rev_prop = _uctx(_rev_prov or orchestrator.make_provider(provider_name, _rev_model),
                                  "code_review", "review", _rname)
@@ -381,9 +381,9 @@ def exit_code(r):
             return 2
         if r.get("status") == "blocked":   # v2.115: preflight не пройден — не ready, но не ошибка исполнения
             return 1
-        
-        
-        
+
+
+
         _ov = r.get("overall_status")
         if _ov == "error":
             return 2
@@ -402,9 +402,9 @@ def _build_run_arg_parser():
     rp.add_argument("--signals", default="{}")
     rp.add_argument("--features-dir")
     rp.add_argument("--runtime", default="claude-code")
-    
-    
-    
+
+
+
     rp.add_argument("--provider", default=None,
                     help="провайдер (mock|anthropic|openai|openai-compatible|claude-cli|qwen|"
                          "deepseek|kimi). Без флага при --execute — авторезолв: .ai-ops.yaml + ключ "
@@ -483,8 +483,8 @@ def _build_run_arg_parser():
     rs.add_argument("--force", action="store_true",
                     help="продолжить, даже если нужна ревалидация (база/состояние изменились) — "
                          "осознанное решение человека")
-    
-    
+
+
     rs.add_argument("--provider", default=None)
     rs.add_argument("--model", help="ID модели для провайдера (напр. deepseek-chat)")
     # #695: resume доводит готовую-на-ветке работу до ОТКРЫТОГО PR и снимает брошенную заявку.
@@ -496,10 +496,10 @@ def _build_run_arg_parser():
     rs.add_argument("--replan", action="store_true",
                     help="осознанно сменить классификацию/policy при продолжении (не resume, а replan "
                          "с ревалидацией) — иначе смена task_type/risk/write_scope блокируется")
-    
-    
-    
-    
+
+
+
+
     rs.add_argument("--reevaluate-only", action="store_true", dest="reevaluate_only",
                     help="доставить готовый READY-коммит фичи БЕЗ переавторинга (0 model-вызовов, "
                          "HEAD как committed_sha): переоценить гейты и открыть/обновить PR. "

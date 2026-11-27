@@ -95,12 +95,12 @@ def generate_stories(contract: dict) -> list[dict]:
     states = contract.get("states", [])
     roles = contract.get("roles", [])
 
-    
+
     for screen in screens:
         screen_id = screen.get("id", "unknown")
         screen_name = screen.get("name", screen_id)
 
-        
+
         stories.append({
             "id": f"{screen_id}-default",
             "title": f"{screen_name} — Default",
@@ -113,13 +113,13 @@ def generate_stories(contract: dict) -> list[dict]:
             },
         })
 
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         declared = {str(st.get("name")): st for st in states if st.get("name")}
         for req in REQUIRED_STATES:
             declared.setdefault(req, {"name": req, "derived_from": "REQUIRED_STATES",
@@ -138,7 +138,7 @@ def generate_stories(contract: dict) -> list[dict]:
                 },
             })
 
-        
+
         for role in roles:
             role_name = role.get("name", "unknown")
             stories.append({
@@ -154,7 +154,7 @@ def generate_stories(contract: dict) -> list[dict]:
                 },
             })
 
-    
+
     responsive = contract.get("responsive", [])
     if responsive and screens:
         first_screen = screens[0]
@@ -173,12 +173,12 @@ def generate_stories(contract: dict) -> list[dict]:
                 },
             })
 
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     choice = chosen_experience_option(contract)
     if choice:
         for st in stories:
@@ -255,16 +255,16 @@ def generate_design_options(contract: dict) -> list[dict]:
 
     UI-UX designer предлагает варианты, а не один «правильный» макет.
     """
-    
-    
-    
-    
-    
+
+
+
+
+
     user_goal = str(contract.get("user_goal") or "").strip()
     flow = contract.get("flow") or []
     goal = user_goal or "цель пользователя в контракте не названа"
     steps = len(flow)
-    
+
     step_names = [str(s.get("name") or s.get("step") or s) if isinstance(s, dict) else str(s)
                   for s in flow]
 
@@ -413,12 +413,12 @@ def process_contract(contract_path: Path) -> dict:
     """Process Experience Contract and generate stories + options."""
     contract = yaml.safe_load(contract_path.read_text(encoding="utf-8"))
 
-    
+
     errors = validate_contract(contract)
     if errors:
         return {"error": "Validation failed", "errors": errors}
 
-    
+
     stories = generate_stories(contract)
     options = generate_design_options(contract)
 
@@ -431,8 +431,8 @@ def process_contract(contract_path: Path) -> dict:
         "stories": stories,
         "required_stories": [s["id"] for s in required_story_specs(contract)],
         "design_options": options,
-        
-        
+
+
         "experience_choice": chosen_experience_option(contract),
         "open_questions": contract.get("open_questions", []),
         "tradeoffs": contract.get("tradeoffs", []),
@@ -504,13 +504,13 @@ def main():
     args = ap.parse_args()
 
     if args.selftest:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         print(__doc__)
         print("Проверки модуля — в tests/unit/ (AGENTS.md: selftest не живёт в продакшн-модуле).")
         return 0

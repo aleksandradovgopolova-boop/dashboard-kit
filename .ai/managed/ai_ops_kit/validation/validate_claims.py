@@ -115,10 +115,10 @@ def run(claims_file: Path, as_json=False):
 def main(argv):
     args = [a for a in argv if not a.startswith("--")]
     claims_file = Path(args[0]).resolve() if args else (PKG / "knowledge" / "claims.yaml")
-    
-    
-    
-    
+
+
+
+
     if not claims_file.is_file():
         what = "это каталог" if claims_file.is_dir() else "файла нет"
         print(f"ОШИБКА: ожидался путь к файлу заявлений, получено '{claims_file}' — {what}.")

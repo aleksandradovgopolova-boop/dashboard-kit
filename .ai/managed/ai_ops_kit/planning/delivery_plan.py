@@ -78,8 +78,8 @@ def plan_rel(child_root) -> str:
     try:
         return _contours.declared_path(child_root, "plan", PLAN_REL)
     except _contours.ConfigInvalid as e:
-        
-        
+
+
         raise PlanCorrupt(str(e)) from e
 
 
@@ -165,7 +165,7 @@ def _trunk_ref(root):
     и в рабочей копии работы возвращает саму эту ветку. Замер 20.08.2026: из копии прогона сверка
     получалась `ai-ops/w` против `ai-ops/w` и объявляла любую заявку влитой. Здесь нужен ствол, и он
     берётся списком явных кандидатов — без догадок."""
-    
+
     for cand in ("origin/main", "main", "origin/master", "master"):
         if git(root, "rev-parse", "--verify", "--quiet", cand)[0] == 0:
             return cand
@@ -178,7 +178,7 @@ def _branch_state(root, branch, trunk):
     Состояния: `in-base` — коммиты ветки уже в стволе; `ahead` — ветка впереди; `absent` — ссылки нет
     ни локально, ни на origin (удалена после слияния либо не выкачана — РАЗЛИЧИТЬ НЕЛЬЗЯ, и мы не
     угадываем)."""
-    
+
     ref = None
     for cand in (branch, f"origin/{branch}"):
         if git(root, "rev-parse", "--verify", "--quiet", cand)[0] == 0:
@@ -352,16 +352,16 @@ def _active_map(child_root):
     data = active_work.load(p)
     out = {}
     for a in data.get("active") or []:
-        
-        
+
+
         if active_work.holder_is_gone(a):
             continue
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         out[_workitem_key(a)] = a
     out.pop("", None)
     return out
@@ -382,8 +382,8 @@ def _scope_conflict(scope, active, exclude_id=None):
             continue
         if (a.get("status") or "") == "done":
             continue
-        
-        
+
+
         theirs = [scope_prefix(x) for x in (a.get("affected_areas") or a.get("areas") or [])]
         if any(scopes_overlap(m, o) for m in mine for o in theirs):
             hits.append(wid)
@@ -406,7 +406,7 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
     ws = items(plan)
     by_id = {w["id"]: w for w in ws if w.get("id")}
 
-    
+
     children = {k: [] for k in by_id}
     for wid, w in by_id.items():
         for d in w.get("depends_on") or []:
@@ -423,17 +423,17 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
             stack.extend(children.get(n) or [])
         return seen
 
-    
-    
-    
-    
-    
+
+
+
+
+
     if closed is None:
         try:
             closed = load_history(child_root)
         except PlanCorrupt:
-            
-            
+
+
             closed = []
     out = {}
     for w in closed or []:
@@ -450,7 +450,7 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
         source, status = "declared", declared if declared in DECLARABLE else "todo"
 
         if wi:
-            
+
             if wi == "done":
                 status, source = "done", "workitem"
                 reasons.append("WorkItem закрыт: блокирующих гейтов нет")
@@ -465,10 +465,10 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
             reasons.append(f"работа идёт сейчас: ветка {a.get('branch') or '?'}, "
                            f"сессия {a.get('session') or '?'}")
 
-        
-        
-        
-        
+
+
+
+
         if status == OWNER_WAIT_STATUS and source == "declared":
             reasons.append(f"механизм готов, ждёт названного действия владельца: "
                            f"{str(w.get(OWNER_WAIT_KEY) or '').strip() or '?'}")
@@ -481,13 +481,13 @@ def resolve(plan, child_root, model=None, active=None, closed=None):
                                   if declared in DECLARABLE and declared != status else None)}
             continue
 
-        
+
         blocked_by, waiting_for = [], []
         for d in w.get("depends_on") or []:
             dep = out.get(d)
             if dep is None:
-                
-                
+
+
                 blocked_by.append(d)
             elif dep["status"] == "done":
                 continue
@@ -570,17 +570,17 @@ def main(argv=None):
         return 1
 
     if ns.cmd == "validate":
-        
-        
+
+
         try:
             closed = load_history(root)
             hrep = validate_history(closed, plan)
         except PlanCorrupt as e:
             closed, hrep = [], {"errors": [str(e)], "warnings": []}
         rep = validate(plan, closed=closed, root=root)
-        
-        
-        
+
+
+
         grep_ = git_disagreements(plan, root)
         rep = {"errors": rep["errors"] + hrep["errors"] + grep_["errors"],
                "warnings": rep["warnings"] + hrep["warnings"] + grep_["warnings"]}

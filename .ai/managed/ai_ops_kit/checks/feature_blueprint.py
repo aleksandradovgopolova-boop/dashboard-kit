@@ -143,11 +143,11 @@ def validate_dir_full(feature_dir: Path):
             fail(f"стадия '{st}' достигнута (current_stage={stage}, profile={profile}), "
                  "но артефактов для неё нет")
 
-    
-    
-    
-    
-    
+
+
+
+
+
     if feature.get("status") == "released":
         any_done = any(e.get("status") == "done"
                        for entries in artifacts.values() if isinstance(entries, list)
@@ -156,28 +156,28 @@ def validate_dir_full(feature_dir: Path):
             fail("feature.status=released, но ни один артефакт не 'done' — нет доказательства "
                  "поставки (reality/blueprint дрейф; пометьте реальные артефакты done или снимите released)")
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if "delivery" in set(PROFILES[profile]):
-            
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
+
             outbox_dir = feature_dir / "delivery-outbox"
             outbox_receipts = (sorted(outbox_dir.glob("*.receipt.yaml"))
                                if outbox_dir.is_dir() else [])
@@ -187,21 +187,21 @@ def validate_dir_full(feature_dir: Path):
                 feature_dir.parent.parent / ".ai" / "runtime" / "delivery" / feature.get("id", "") / "receipt.yaml",
             ]
             receipt_found = False
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
             unreadable = []
             for rp in receipt_paths:
                 if rp.exists():
                     try:
                         receipt = yaml.safe_load(rp.read_text(encoding="utf-8"))
                     except (OSError, yaml.YAMLError) as exc:
-                        
-                        
-                        
+
+
+
                         unreadable.append(f"{rp.name}: {type(exc).__name__}")
                         continue
                     if receipt and receipt.get("kind") == "DeliveryReceipt" and receipt.get("sha_verified") is True:
@@ -216,8 +216,8 @@ def validate_dir_full(feature_dir: Path):
                         "Требуется DeliveryReceipt с sha_verified=true (PR смержён, SHA совпадает с "
                         "remote)." + _why)
                 if str(feature.get("id")) in _debt_ids(feature_dir):
-                    
-                    
+
+
                     debt(_msg + " Признано долгом: функция выпущена до появления требования "
                                 "(закрывается следующей настоящей доставкой или записью SHA владельцем).")
                 else:

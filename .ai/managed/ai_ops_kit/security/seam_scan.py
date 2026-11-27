@@ -130,8 +130,8 @@ def gate_decision(scan):
                 blockers.append(f"{sig}: шов без доказательства перехода ({fnd['file']})")
         else:
             advisories.append(f"{sig}: {fnd['file']}")
-    
-    
+
+
     if any(f["signal"] == "surface_wiring_drift" for f in scan["findings"]) and not ev.get("routes_registry_changed"):
         advisories.append("surface_wiring_drift: маршрут/вызов добавлен, но реестр маршрутов не менялся "
                           "-> проверь core⊆обёртки⊆client (validate_surface_wiring)")
@@ -145,7 +145,7 @@ def main(argv):
     if not args:
         print(__doc__)
         return 1
-    
+
     diff_text = sys.stdin.read() if args[0] == "-" else Path(args[0]).read_text(encoding="utf-8")
     scan = scan_diff(diff_text)
     dec = gate_decision(scan)

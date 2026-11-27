@@ -163,8 +163,8 @@ def extract_aspnet_routes(parsed: ParsedFile) -> list:
     if _INDICATOR_RE.search(src) is None:
         return []
 
-    
-    
+
+
     class_starts = sorted((m.start(1), m.group(1)) for m in _CLASS_DECL_RE.finditer(src))
     class_prefix: dict = {}
     class_route_positions: set = set()
@@ -174,8 +174,8 @@ def extract_aspnet_routes(parsed: ParsedFile) -> list:
 
     out: list = []
 
-    
-    
+
+
     for m in _METHOD_ATTR_RE.finditer(src):
         if m.start() in class_route_positions:
             continue
@@ -189,7 +189,7 @@ def extract_aspnet_routes(parsed: ParsedFile) -> list:
             kind="route", ref=f"{parsed.rel_path}:{_lineno(src, m.start())}|{path_value}",
             confidence="inferred", extractor="aspnet-routes"))
 
-    
+
     for m in _MINIMAL_MAP_RE.finditer(src):
         path_value = _join("", m.group(2))
         out.append(Surface(

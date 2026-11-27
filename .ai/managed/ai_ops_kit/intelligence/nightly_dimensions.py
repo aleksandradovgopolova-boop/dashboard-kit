@@ -166,8 +166,8 @@ def format_dimensions(groups, *, focus: str | None = None) -> list[str]:
         elif g["status"] == "чисто":
             L.append("- проверено, расхождений не найдено.")
         elif g["has_signal_source"]:
-            
-            
+
+
             why = "; ".join(u.get("detail", "") for u in g["unknown"]) or "проверить нечем"
             L.append(f"- не наблюдается здесь: {why}. Это не «ок» — это «не смотрели».")
         else:

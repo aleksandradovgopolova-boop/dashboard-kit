@@ -52,8 +52,8 @@ from ai_ops_kit.engine.ai_ops_run_reporting import (   # noqa: F401,E402
     _review_fix_context, _compile_context_artifacts, _add_context_reports, _enrich_run_report)
 from ai_ops_kit.engine.ai_ops_run_lifecycle import (   # noqa: F401,E402
     _commit_barrier, _start_lifecycle, _resume_gate, _finalize_run_cost, _finalize_run, _deliver,
-    
-    
+
+
     live_provider_refusal, _reconcile_pending_delivery, _register_active_work,
     _restore_resume_policy, _resolve_models)
 from ai_ops_kit.lifecycle import workitem          # noqa: E402
@@ -87,24 +87,24 @@ def _run_controller_path(task_text, signals, child_root, features_dir, feature,
     except (ValueError, budget_mod.BudgetExceeded) as exc:
         return {"schema_version": 1, "kind": "execution-pipeline", "status": "blocked", "ready_for_pr": False,
                 "blocked_by": "execution-budget", "error": str(exc)}
-    
-    
+
+
     plan = run_plan.build_plan(signals, workitem_id=feature)
     plan["execution_budget"] = budget.limits()
     fid = plan["workitem_id"]
     base_wf = plan["base_workflow"]
 
-    
+
     workitem.start(str(features_dir), fid, task_text,
                    task_type=signals.get("task_type"), risk=signals.get("risk"), signals=signals)
 
-    
+
     _pw2 = _ls.durable_write(features_dir / fid / "run-plan.yaml", plan)
     if not _pw2.get("ok"):
         return {"schema_version": 1, "kind": "run-report", "workitem_id": fid, "status": "error",
                 "error": f"lifecycle fail-closed: не удалось надёжно сохранить RunPlan ({_pw2.get('error')})"}
 
-    
+
     aw_path = child_root / ".ai" / "runtime" / "active-work.yaml"
     areas = _work_areas.areas_for(signals, write_scope)   # #138: вывод, а не заглушка (см. work_areas)
     _reg_rc2 = active_work.register(aw_path, fid, f"feature/{fid}", areas, session,
@@ -112,14 +112,16 @@ def _run_controller_path(task_text, signals, child_root, features_dir, feature,
                                     child_root=child_root,
                                     published=active_work.publication_enabled(child_root))
     if _reg_rc2:
-        
+
         return {"schema_version": 1, "kind": "run-report", "workitem_id": fid, "status": "blocked",
                 "blocked_by": "active-work",
                 "error": ("работа не начата: заявку на эту работу или ветку держит другая сессия "
                           "(причина и держатель названы выше).")}
 
-    
+
     status, run_state = "planned", f".ai/runtime/workitems/{fid}/TaskState.yaml"
+    provider_refusal = None
+    next_action = None
     run_state_materialized = False   # честно: в planned run_state — обещание пути, не файл
     if execute or runtime == "generic-orchestrator":
         from ai_ops_kit.providers import orchestrator
@@ -131,10 +133,12 @@ def _run_controller_path(task_text, signals, child_root, features_dir, feature,
             gate_ids=plan.get("gates"),            # v2.54: прогон оценивает ГЕЙТЫ RUNPLAN (base+треки)
             signals=signals)                       # v2.55: условный human_approval по сигналам задачи
         status = st["status"]
+        provider_refusal = st.get("provider_refusal")
+        next_action = st.get("next_action")
         run_state = str(Path(run_dir) / "TaskState.yaml")
         run_state_materialized = True
 
-    
+
     report = {
         "schema_version": 1, "kind": "run-report",
         "workitem_id": fid, "base_workflow": base_wf,
@@ -149,13 +153,19 @@ def _run_controller_path(task_text, signals, child_root, features_dir, feature,
         "run_state_materialized": run_state_materialized,
         "artifacts": {"workitem": f"features/{fid}/workitem.yaml",
                       "run_plan": f"features/{fid}/run-plan.yaml"},
-        
-        
+
+
         "delivery": {"requested": False, "status": "not-applicable",
                      "reason": "controller/planning путь: внешняя доставка не выполняется; "
                                "execution+delivery-гарантии — только engine=pipeline"},
     }
-    
+    if (isinstance(provider_refusal, dict)
+            and provider_refusal.get("reason") == "readonly_runtime_unqualified"
+            and provider_refusal.get("provider") == "claude-cli"):
+        # #1476: та же сохранённая причина, без новой provider policy в controller.
+        report["provider_refusal"] = provider_refusal
+        report["next_action"] = next_action
+
     _rw2 = _ls.durable_write_json(features_dir / fid / "run-report.json", report)
     if not _rw2.get("ok"):
         report["lifecycle_errors"] = [f"run-report durable-write: {_rw2.get('error')}"]
@@ -185,13 +195,13 @@ def run(task_text, signals, child_root: Path, features_dir=None,
     child_root = Path(child_root)
     features_dir = Path(features_dir) if features_dir else child_root / "features"
 
-    
-    
+
+
     if engine == "pipeline":
         from ai_ops_kit.providers import orchestrator   # нужен ниже для _finalize_run_cost
-        
-        
-        
+
+
+
         ctx = RunContext.from_run_args(
             task_text=task_text, signals=signals, child_root=child_root, features_dir=features_dir,
             feature=feature, provider_name=provider_name, model=model, runtime=runtime,
@@ -201,7 +211,7 @@ def run(task_text, signals, child_root: Path, features_dir=None,
         _rrerr = _restore_resume_policy(ctx, resume)
         if _rrerr:
             return _rrerr
-        
+
         base, base_binding, _brerr = _resolve_run_base(ctx, ctx.base)
         if _brerr is not None:
             return _brerr
@@ -227,36 +237,36 @@ def run(task_text, signals, child_root: Path, features_dir=None,
         sandbox, baseline_diff, require_fix = ctx.sandbox, ctx.baseline_diff, ctx.require_fix
         author, review, open_pr = ctx.author, ctx.review, ctx.open_pr
         write_scope, max_steps = ctx.write_scope, ctx.max_steps
-        
-        
+
+
         _mrerr = _resolve_models(ctx)
         if _mrerr:
             return _mrerr
-        
+
         _writer_model, _model_resolution = ctx.writer_model, ctx.model_resolution
 
         _uctx = _build_run_proposers(ctx, proposer, reviewer_proposer, author_proposer)   # writer ≠ judge
 
-        
-        
+
+
         plan = run_plan.build_plan(signals, workitem_id=feature)
         plan["execution_budget"] = budget.limits()
         fid = plan["workitem_id"]
 
-        
-        
+
+
         try:
             _rec = _reconcile_pending_delivery(features_dir, fid, child_root)
         except Exception:  # noqa: BLE001
             _rec = None
 
-        
-        
+
+
         pf, resume_ctx, _rerr = _resume_gate(child_root, fid, base, force_resume, resume)
         if _rerr:
             return _rerr
 
-        
+
         _attempt_id, _lcerr = _start_lifecycle(
             features_dir, fid, task_text, signals, plan, engine, base, resume, execute,
             _saved_task, sandbox, baseline_diff, require_fix, author, review, open_pr,
@@ -267,8 +277,8 @@ def run(task_text, signals, child_root: Path, features_dir=None,
          spec_cov, work_pkg) = _compile_context_artifacts(
             signals, child_root, features_dir, fid, plan, model,
             context_hybrid, base_binding, task_text)
-        
-        
+
+
         pretruth, _blocked = _run_preflight(ctx, fid, plan, bundle, payload, spec_cov, work_pkg,
                                             lifecycle_errors, reevaluate_only, provider_resolution)
         if _blocked is not None:
@@ -280,8 +290,8 @@ def run(task_text, signals, child_root: Path, features_dir=None,
         if _awerr:
             return _awerr
 
-        
-        
+
+
         _calib = bool(calibrated_enforcement)
         rep, _exerr = _execute_with_fix_loop(
             ctx, _uctx, execute=execute, plan=plan, discard_previous=discard_previous,
@@ -312,22 +322,22 @@ def run(task_text, signals, child_root: Path, features_dir=None,
                              work_pkg=work_pkg, context_shadow=context_shadow,
                              context_hybrid=context_hybrid, hybrid_fed=_hybrid_fed,
                              child_root=child_root, task_text=task_text, fid=fid)
-        
-        
-        
-        
+
+
+
+
         _jname, _handoff_ok, _report_ok, _plan = _commit_barrier(
             rep, child_root, features_dir, fid, lifecycle_errors)
-        
-        
+
+
         _deliver(ctx, rep, plan=_plan, handoff_ok=_handoff_ok, report_ok=_report_ok,
                  jname=_jname, fid=fid)
-        
+
         _finalize_run_cost(rep, orchestrator, model, _jname, fid, _attempt_id, signals,
                            _plan, _model_resolution, child_root)
         return _finalize_run(rep, fid, child_root, _jname, _attempt_id, aw_path)
 
-    
+
     return _run_controller_path(task_text, signals, child_root, features_dir, feature,
                                 runtime, provider_name, execute, session, write_scope, budget)
 
@@ -390,9 +400,9 @@ def main(argv):
                     print(f"  следующий шаг: {pf['next_action']}")
                 if pf["can_resume"]:
                     reval = pf.get("revalidation_needed")
-                    
-                    
-                    
+
+
+
                     print(f"  продолжить: ai-ops resume {a.child_root} --feature {a.feature} --execute"
                           f"{' --force' if reval else ''}   (worktree/ветка переиспользуются; "
                           f"{'нужна ревалидация -> --force' if reval else 'база актуальна'})")
@@ -436,9 +446,9 @@ def main(argv):
                      session=getattr(a, "session", "cli"),
                      execute=True, feature=a.feature, resume=True, force_resume=a.force, base=a.base,
                      replan=a.replan, open_pr=getattr(a, "open_pr", False),
-                     
-                     
-                     
+
+
+
                      reevaluate_only=getattr(a, "reevaluate_only", False),
                      takeover=getattr(a, "takeover", False),
                      takeover_reason=getattr(a, "takeover_reason", None),
@@ -451,7 +461,7 @@ def main(argv):
             print(f"ai-ops resume {a.feature}: status={report.get('status') or report.get('overall_status')} · "
                   f"resumed={rinfo.get('resumed')} · reused_branch={rinfo.get('reused_branch')} · "
                   f"провайдер={_pres['provider']}")
-            
+
             print(f"  задача: {task}  (источник: {'--task' if a.task else _pt['source']})")
             if pf.get("next_action"):
                 print(f"  что осталось по мнению кита: {pf['next_action']} — это контекст, не задача")
@@ -468,9 +478,9 @@ def main(argv):
         # провайдер не вызывается вовсе, поэтому остаётся офлайн-дефолт mock.
         prov = resolve_provider_for_run(a.provider, Path(a.child_root), execute=a.execute,
                                         quiet=a.json)
-        
-        
-        
+
+
+
         _refusal = live_provider_refusal(prov, a.provider) if a.execute else None
         if _refusal:
             if a.json:
@@ -493,8 +503,8 @@ def main(argv):
             print(json.dumps(report, ensure_ascii=False, indent=2))
         else:
             print_human(report)
-        
-        
+
+
         return exit_code(report)
     return 1
 

@@ -82,8 +82,8 @@ def record(child_root, fid, decision, *, wait_seconds=None, areas=None, work_id=
         "writer_busy": True,
         "parallel_viable": viable,
         "reason": decision.get("reason", ""),
-        
-        
+
+
         "recommended_path": "parallel-subagent" if viable else "queue-wait",
         "wait_estimate_seconds": wait_seconds,
         "areas": list(areas or []),
@@ -91,9 +91,9 @@ def record(child_root, fid, decision, *, wait_seconds=None, areas=None, work_id=
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if viable:
-        
-        
-        
+
+
+
         from ai_ops_kit.lifecycle import attention_bus as _ab
         _ab.record(child_root, key=f"writer-contention:{fid}",
                    source="прогон: писатель занят",

@@ -157,7 +157,7 @@ def check_commit(files, message="", workitem=None, task_type="ENGINEERING",
     msg = (message or "").strip()
     hard, soft = [], []
 
-    
+
     if not files:
         hard.append({"rule": "empty_commit", "detail": "нет файлов — коммит не создаётся"})
 
@@ -201,14 +201,14 @@ def check_commit(files, message="", workitem=None, task_type="ENGINEERING",
         hard.append({"rule": "placeholder_message",
                      "detail": f"сообщение '{msg or '—'}' не объясняет ни что, ни зачем"})
 
-    
+
     if len(files) > pol["max_files"]:
         soft.append({"rule": "large_commit",
                      "detail": f"{len(files)} файлов > порога {pol['max_files']} — ревью такого "
                                f"коммита вырождается в формальность"})
 
-    
-    
+
+
     top = {seg[0] for f in files if len(seg := _norm(f).split("/")) > 1}
     root_files = any(len(_norm(f).split("/")) == 1 for f in files)
     if len(top) > pol["max_top_level_dirs"]:

@@ -65,11 +65,11 @@ def _write_scope_for(model: dict, cid: str, child_root) -> list:
         rel = (s.get("path") or "").strip()
         if not rel:
             continue
-        
-        
+
+
         if rel.startswith(".ai/"):
             continue
-        
+
         scope.append(rel if rel.endswith("/") else str(Path(rel).parent) + "/")
     return sorted({s for s in scope if s not in ("./", "/")}) or ["context/"]
 
@@ -100,25 +100,25 @@ def work_items(understanding: dict, model: dict | None = None, child_root=".") -
             "write_scope": _write_scope_for(model, cid, child_root),
             "value": "high" if r["gap_tier"] == "required_now" else "medium",
             "affects": {cid: True},
-            
-            
+
+
             "why": (f"{r['question']} — сейчас ответа в репозитории нет "
                     f"({r['state']}); отсутствует: "
                     + (", ".join(r["missing_required"][:3]) or "описание контура")),
         }
         if r["needs_human"]:
-            
-            
-            
-            
+
+
+
+
             item["depends_on"] = []
             item["human_decision"] = ("нужен ответ владельца: из кода это не выводится "
                                       "(см. .ai/project/onboarding-answers.yaml). Ответив, "
                                       "удалите это поле — тогда работа станет готовой")
         else:
-            
-            
-            
+
+
+
             item["depends_on"] = [prev] if prev else []
             prev = wid
         out.append(item)
@@ -283,8 +283,8 @@ def plan(child_root, understanding: dict | None = None, model: dict | None = Non
                      "не на чём считать"),
         "provenance": "факты репозитория + пометки «нужно ваше слово» там, где фактов нет"})
 
-    
-    
+
+
     plan_is_template = bool(existing_plan) and existing_plan != "corrupt" \
         and _plan.is_template(existing_plan)
     pl_exists = (root / pl_rel).is_file()
@@ -300,8 +300,8 @@ def plan(child_root, understanding: dict | None = None, model: dict | None = Non
         "provenance": "аудит контуров: каждая работа — незакрытый источник истины"})
 
     open_questions = [q for q in understanding["ask"]["questions"] if q.get("blocks_work")]
-    
-    
+
+
     awaiting = [w["id"] for w in items if w.get("human_decision")]
     return {"schema_version": 1, "kind": "bootstrap-plan",
             "actions": actions, "work_items": items,
@@ -327,8 +327,8 @@ def apply(child_root, boot: dict | None = None, understanding: dict | None = Non
     которую кит не смог прочитать.
     """
     root = Path(child_root)
-    
-    
+
+
     understanding = understanding or _audit.run(root)
     boot = boot or plan(root, understanding)
     if boot["plan_corrupt"]:

@@ -51,24 +51,24 @@ def run(child_root, *, apply=False, budget_left=None, understanding=None) -> dic
            "conflicts": conflicts, "bootstrap": None, "bootstrap_applied": False, "next": None,
            "dashboard_offer": None}
 
-    
+
     if cls == "UNKNOWN":
         out["stage"] = BLOCKED_UNDERSTANDING
         return out
 
-    
-    
+
+
     if blocking or conflicts:
         out["stage"] = NEEDS_ANSWERS
         return out
 
-    
+
     boot_plan = _boot.plan(child_root, und)
     out["bootstrap"] = _boot.apply(child_root, boot_plan, und) if apply else boot_plan
     out["bootstrap_applied"] = bool(apply)
 
-    
-    
+
+
     if apply and not (out["bootstrap"] or {}).get("error"):
         out["next"] = _nw.compute(child_root, budget_left=budget_left)
 

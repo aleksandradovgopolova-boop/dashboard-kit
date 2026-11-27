@@ -20,7 +20,7 @@ from pathlib import Path
 
 
 from ai_ops_kit.cli.ai_ops_cli_product import (  # noqa: F401 — ре-экспорт для вызывающих/тестов
-    build_preview, _print_preview, _BACKLOG_SUBS, _run_backlog, _intent_model, _product_health_report, _product_risks, _intent_contract, _intent_products, _intent_inspect, _intent_plan, _intent_session,
+    build_preview, _print_preview, _show_preview, _BACKLOG_SUBS, _run_backlog, _intent_model, _product_health_report, _product_risks, _intent_contract, _intent_products, _intent_inspect, _intent_plan, _intent_session,
 )
 from ai_ops_kit.cli.foundation_proposal import run_intent as _intent_propose  # noqa: F401 — оркестратор `propose`
 from ai_ops_kit.cli.ai_ops_cli_lifecycle import (  # noqa: F401 — ре-экспорт для вызывающих/тестов
@@ -44,7 +44,7 @@ def _work_positionals(child_root, a):
     каталогом (подкоманда и id работы каталогами не бывают), и получаем [sub, id] в любом порядке
     вызова. -> (sub, work_id)."""
     def _is_dir(p):
-        
+
         try:
             return Path(p).is_dir()
         except OSError:
@@ -64,7 +64,7 @@ def _intent_work(task, child_root, signals, a):
     root = Path(child_root)
     sub, work_id = _work_positionals(root, a)
     if sub not in _WORK_SUBS or not work_id:
-        
+
         msg = ("work: единая проекция работы по id (только чтение). Подкоманда:\n"
                "  show <id>   — карточка: стадия, ветка, кто ведёт, области, зависимости, "
                "артефакты, решения — сведено из заявки/реестра/графа/плана\n"
@@ -82,7 +82,7 @@ def _intent_work(task, child_root, signals, a):
     else:
         print(presenter.render(presenter.from_work_view(view),
                                audience=presenter.audience_from_config(root)))
-    
+
     return 0 if view.get("sources") else 2
 
 
@@ -123,9 +123,9 @@ def _intent_readout(task, child_root, signals, a):
         if aud != "product":
             print()
             print(post_release_loop.render(result))
-    
-    
-    
+
+
+
     return 0 if result.get("verdict") == "partially_verified" else 1
 
 
@@ -151,7 +151,7 @@ def _graph_positionals(a, child_root):
     root = Path(child_root).resolve()
     for index in reversed(range(len(args))):
         value = args[index]
-        
+
         if (len(args) > 1 or value not in _GRAPH_SUBS) and Path(value).resolve() == root:
             args.pop(index)
             break
@@ -252,12 +252,12 @@ def _intent_graph(task, child_root, signals, a):
     graph = kg.build_graph(root)
     integrity = _validate_graph_integrity(graph, root)
     if integrity:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         from ai_ops_kit.validation import validate_knowledge_graph as vkg
         skew = vkg.classify_errors(integrity).get("has_type_vocab_error", False)
         remediation = (
@@ -303,23 +303,23 @@ def _intent_graph(task, child_root, signals, a):
             _graph_help(js)
             return 2
         result = kg.trace(graph, feature)
-        
-        
+
+
         measured_outcome, next_action = _feature_measured_outcome(root, feature)
         if measured_outcome is not None:
             result["measured_outcome"] = measured_outcome
             if next_action:
                 result["next_action"] = next_action
             if measured_outcome.get("measured"):
-                
+
                 result["gaps"] = [g for g in (result.get("gaps") or [])
                                   if "targets" not in g and "measured-by" not in g]
         if js:
             print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
         else:
             print(presenter.render(presenter.from_graph_trace(result), audience=aud))
-        
-        
+
+
         if result.get("verdict") == "unknown":
             return 2
         return 0 if not result.get("gaps") else 1
@@ -328,9 +328,9 @@ def _intent_graph(task, child_root, signals, a):
         if not feature:
             _graph_help(js)
             return 2
-        
-        
-        
+
+
+
         source = kg.feature_life_source(graph, feature, root)
         measured_outcome, next_action = _feature_measured_outcome(root, feature)
         result = kg.answer_ten_questions(graph, feature, source=source,
@@ -340,12 +340,12 @@ def _intent_graph(task, child_root, signals, a):
             print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
         else:
             print(presenter.render(presenter.from_graph_questions(result), audience=aud))
-        
+
         if result.get("verdict") == "unknown":
             return 2
         return 0 if result.get("complete") else 1
 
-    
+
     result = kg.gaps(graph)
     if js:
         print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
@@ -386,5 +386,5 @@ def _intent_scorecard(task, child_root, signals, a):
     else:
         print(presenter.render(presenter.from_scorecard(scorecard),
                                audience=presenter.audience_from_config(root)))
-    
+
     return 0 if not scorecard.get("unmeasured_count") else 1

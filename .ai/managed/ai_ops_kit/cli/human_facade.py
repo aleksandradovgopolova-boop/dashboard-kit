@@ -67,6 +67,14 @@ HUMAN_ACTIONS = {
 }
 
 
+def _add_execution_arguments(parser):
+    """Параметры штатного запуска, общие для фасадных действий."""
+    parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--runtime", default="claude-code",
+                        help="фактический runtime проектной сессии (передаётся штатному движку)")
+    parser.add_argument("--session", help="идентификатор проектной сессии runtime")
+
+
 
 def _first_nondir(rest):
     """Первый позиционный токен, который НЕ флаг и НЕ каталог репозитория, нижним регистром.
@@ -165,9 +173,9 @@ def _dispatch_human_action(argv, run_main):
     if verb not in HUMAN_ACTIONS:
         return None
     rest = argv[1:]
-    
+
     if verb == "review" and _first_nondir(rest) == "all":
-        
+
         return _review_all([t for t in rest if t.strip().lower() != "all"])
     plan = facade_plan(argv)
     if plan is None:

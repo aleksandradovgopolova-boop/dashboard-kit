@@ -424,7 +424,7 @@ def trace_feature_rationale(graph: dict, feature_id: str) -> dict:
         return {"feature": feature_id, "chain": [], "outcome": None,
                 "gaps": [f"узел '{feature_id}' отсутствует в графе — цепочку строить не от чего"]}
 
-    
+
     chain_ids = [feature_id]
     current, seen = feature_id, {feature_id}
     while nodes.get(current, {}).get("type") != "goal":
@@ -438,7 +438,7 @@ def trace_feature_rationale(graph: dict, feature_id: str) -> dict:
         chain_ids.insert(0, parent)
         current = parent
 
-    
+
     outcome_ids = [e["to"] for e in edges if e.get("type") == "targets"
                    and e.get("from") == feature_id and e.get("to") in nodes]
     outcome = None

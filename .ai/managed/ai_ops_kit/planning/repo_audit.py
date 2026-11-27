@@ -71,8 +71,8 @@ _SRC_EXT = {".py", ".ts", ".tsx", ".js", ".jsx", ".go", ".rs", ".java", ".kt", "
             ".vue", ".svelte", ".sql"}
 _SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "__pycache__", "dist", "build", ".next",
               "target", "vendor", ".ai", ".mypy_cache", ".pytest_cache", ".ruff_cache",
-              
-              
+
+
               ".claude"}
 
 
@@ -131,7 +131,7 @@ def _measure_storybook(root: Path) -> dict:
             break
     result["stories"] = story_count
 
-    
+
     pkg_json = root / "package.json"
     if pkg_json.is_file():
         try:
@@ -140,7 +140,7 @@ def _measure_storybook(root: Path) -> dict:
             scripts = pkg.get("scripts", {})
             result["build_script"] = any("storybook" in v for v in scripts.values()
                                          if isinstance(v, str))
-            
+
             for dep_key in ("dependencies", "devDependencies"):
                 deps = pkg.get(dep_key, {})
                 for name in ("@storybook/react", "@storybook/vue", "@storybook/svelte",
@@ -153,7 +153,7 @@ def _measure_storybook(root: Path) -> dict:
         except (OSError, ValueError, KeyError):
             pass
 
-    
+
     result["present"] = has_config and story_count > 0
     return result
 
@@ -173,12 +173,12 @@ def discover(child_root) -> dict:
         for p in root.rglob("*"):
             if not p.is_file():
                 continue
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
             if any(part in _SKIP_DIRS for part in p.relative_to(root).parts):
                 continue
             if p.suffix.lower() in _SRC_EXT:
@@ -203,12 +203,12 @@ def discover(child_root) -> dict:
     ev["test_files"] = tests if readable else None
     ev["commits"] = commits
     ev["release_history"] = [t for t in (tags or "").splitlines() if t][:5] if tags is not None else None
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     ev["ci"] = _product_ci(root)
     ev["containers"] = _exists("Dockerfile", "docker-compose.yml", "docker-compose.yaml")
     ev["dependency_manifests"] = _exists("package.json", "requirements.txt", "pyproject.toml",
@@ -290,11 +290,11 @@ def audit(child_root, evidence: dict | None = None, model: dict | None = None) -
     ai_only = [r["contour"] for r in rows
                if r["state"] != VERIFIED and r["ai_can_reconstruct"] == "full" and not r["questions"]]
     human = [r["contour"] for r in rows if r["state"] != VERIFIED and r["needs_human"]]
-    
-    
-    
-    
-    
+
+
+
+
+
     blocking_tiers = {t.get("id") for t in (model.get("gap_tiers") or []) if t.get("blocks_work")}
     # SR-1: версия стандарта репозитория (отдельная от версии пакета) + сходится ли отпечаток
     # состава требований с объявленным. Расхождение = требования правили, а версию не подняли.
@@ -373,8 +373,8 @@ def run(child_root) -> dict:
     cls = classify(ev, model)
     rec = reconstruct(child_root, ev, model)
     aud = audit(child_root, ev, model)
-    
-    
+
+
     conflicts = (rec.get("persistence") or {}).get("conflicts") or []
     return {"schema_version": 1, "kind": "repository-understanding",
             "classification": cls, "evidence": ev, "reconstructed": rec, "audit": aud,

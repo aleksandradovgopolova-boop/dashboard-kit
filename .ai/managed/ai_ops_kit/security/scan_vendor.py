@@ -41,9 +41,9 @@ def mark_arrivals(flags, text_after: str, before_flags, text_before: str) -> lis
     сторону лишнего внимания, а не пропуска, — и это единственная безопасная сторона для раздела,
     который ничего не блокирует.
     """
-    
-    
-    
+
+
+
     было = Counter(_fingerprint(f, text_before.splitlines()) for f in before_flags)
     строки = text_after.splitlines()
     out = []
@@ -63,9 +63,9 @@ def arrivals_note(version_before, version_after, arrived: int, total: int, compa
     различает их везде (тот же инвариант, что у `dependencies_compared`), и здесь обязан различать
     тоже: иначе прогон по всему дереву выдавал бы «всё это было и раньше» бесплатно."""
     чей = "адресат — сопровождающий кита, не эта команда; в вердикт гейта продукта не входит"
-    
-    
-    
+
+
+
     if not version_after:
         чем = "версия кита не прочиталась"
     elif not compared:

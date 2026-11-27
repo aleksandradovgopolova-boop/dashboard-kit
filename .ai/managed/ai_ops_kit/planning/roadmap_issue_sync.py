@@ -174,8 +174,8 @@ def epic_body(goal: str, horizon: str, reached: int, total: int,
               "`roadmap sync-issues`, правки руками она перезапишет.")
     extra: list[str] = []
     if waiting:
-        
-        
+
+
         extra.append("### Ждёт owner-прогон")
         for w in waiting:
             reason = _one_line(w.get("waiting_on") or "")
@@ -194,9 +194,9 @@ def epic_body(goal: str, horizon: str, reached: int, total: int,
 
 
 def work_body(goal: str, work: dict) -> str:
-    
-    
-    
+
+
+
     wid = work["id"]
     title = _one_line(work.get("title") or wid, limit=300)
     what = (f"Работа `{wid}` под направлением-эпиком `{goal}`: {title}. "
@@ -256,14 +256,14 @@ def sync(report: dict, plan_items: list[dict], client: Client, apply: bool = Fal
     for iss in existing:
         k = parse_key(iss)
         if k is not None:
-            
+
             if k not in by_key or iss.state == "open":
                 by_key[k] = iss
 
     plan = SyncPlan()
     desired_keys: set[str] = set()
 
-    
+
     work_number: dict[str, int | None] = {}
     for goal, _hz, _r, _t, _m in directions:
         for w in works_by.get(goal, []):
@@ -287,7 +287,7 @@ def sync(report: dict, plan_items: list[dict], client: Client, apply: bool = Fal
                         client.edit(cur.number, body)
                     plan.actions.append(Action("update", key, title, cur.number))
 
-    
+
     for goal, hz, reached, total, missing in directions:
         key = _epic_key(goal)
         desired_keys.add(key)
@@ -304,7 +304,7 @@ def sync(report: dict, plan_items: list[dict], client: Client, apply: bool = Fal
                 client.edit(cur.number, body)
             plan.actions.append(Action("update", key, title, cur.number))
 
-    
+
     for key, iss in by_key.items():
         if iss.state == "open" and key not in desired_keys:
             if apply:

@@ -42,7 +42,7 @@ from ai_ops_kit.shared import lifecycle_store
 
 FIELDS = ("run_id", "workitem_id", "package_id", "role", "provider", "model", "runtime",
           "input_tokens", "output_tokens", "usage_status", "cost", "cost_status", "latency", "trigger",
-          
+
           "task_type", "workflow", "risk", "size", "writer_tier", "execution_mode", "stack", "architecture_impact")
 USAGE_STATUS = ("measured", "estimated", "unavailable")
 TRIGGERS = ("initial", "retry", "review", "escalation", "fallback", "reevaluate")
@@ -100,14 +100,14 @@ def normalize(rec: dict, run_id: str | None = None, workitem_id: str | None = No
         out["run_id"] = run_id
     if out.get("workitem_id") is None:
         out["workitem_id"] = workitem_id
-    
+
     if out.get("cost") is None and rec.get("cost_usd_est") is not None:
         out["cost"] = rec.get("cost_usd_est")
     out["cost"] = cost_value(out.get("cost"))
     if out["cost"] is None:
         out["cost_status"] = "unavailable"
-    
-    
+
+
     return cast(UsageRecord, out)
 
 
@@ -202,7 +202,7 @@ def aggregate(records: list[dict] | None) -> dict:
                     agg["cost_precision_lost"] = True
                 agg["cost"] = total
             else:
-                
+
                 agg["cost_overflow"] = True
         for dim, key in (("by_role", "role"), ("by_trigger", "trigger"), ("by_provider", "provider"),
                          ("by_task_type", "task_type"), ("by_workflow", "workflow"),
@@ -364,7 +364,7 @@ def _merge_ledgers(child_root: str | Path, source_roots: list, source_ids: dict 
         return 0
     added, writes = 0, {}
     with lifecycle_store._journal_lock(_product_path(child_root), required=True):
-        
+
         for path, rows in batches.items():
             merged, count = _merge_rows(_strict_rows(path), rows)
             if count:

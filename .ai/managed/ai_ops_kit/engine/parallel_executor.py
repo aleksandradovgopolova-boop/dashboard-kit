@@ -103,7 +103,7 @@ def _run_packages(plan, by_id, package_runner, max_parallel=pp.MAX_PARALLEL):
                 done, _ = _cf.wait(running, return_when=_cf.FIRST_COMPLETED)
                 for future in done:
                     row = running.pop(future)
-                    
+
                     results[row["pkg"]] = _safe_run(lambda _, f=future: f.result(), by_id[row["pkg"]])
                     trace.append(row)
     return {pid: results[pid] for pid in plan["integration_order"]}, trace
@@ -124,7 +124,7 @@ def execute_parallel(wg, package_runner, integration_runner, contract_shas=None,
     contract_shas = dict(contract_shas or {})
     shared = plan["contract_first"]
 
-    
+
     unfixed = [c for c in shared if not pp._sha_like(contract_shas.get(c))]
     if unfixed:
         return {"proceed": False, "stage": "contract-first",
@@ -149,7 +149,7 @@ def execute_parallel(wg, package_runner, integration_runner, contract_shas=None,
     return {"proceed": bool(final.get("proceed")), "stage": "fan-in", "decision": final,
             "package_results": results, "trace": trace, "plan": plan,
             "integration_sha": integration_sha, "aggregate": aggregate,
-            
+
             "delivery": {"intents": 1 if open_pr else 0, "open_pr": open_pr,
                          "integration_sha": integration_sha if open_pr else None}}
 

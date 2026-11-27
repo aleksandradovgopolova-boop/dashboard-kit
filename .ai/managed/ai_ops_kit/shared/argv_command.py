@@ -198,8 +198,8 @@ class _Commands:
         if not self.raw:
             return
         if self.redirect_target:
-            
-            
+
+
             if self.dup_target and not _DUP_TARGET.fullmatch("".join(self.raw)):
                 raise NeedsShell("цель `<&`/`>&` — не номер потока и не `-`")
             self.redirect_target = self.dup_target = False
@@ -303,11 +303,11 @@ def simple_commands(command: str) -> list[list[Word]]:
                 acc.end_word()
             if acc.redirect_target:
                 raise NeedsShell("перенаправление без цели")
-            
-            
-            
-            
-            
+
+
+
+
+
             nxt = s[i + 1:i + 2]
             if c == "<" and nxt == "<":
                 raise NeedsShell("here-document")

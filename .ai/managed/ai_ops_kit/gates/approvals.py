@@ -219,9 +219,9 @@ def load_approvals(child_root, wid):
                 r = yaml.safe_load(p.read_text(encoding="utf-8"))
                 if isinstance(r, dict) and r.get("kind") == "ApprovalRecord":
                     recs.append(r)
-            
-            
-            
+
+
+
             except Exception:  # noqa: BLE001,S110 — битая запись не считается одобрением
                 pass
     return recs
@@ -355,9 +355,9 @@ def write_record(child_root, wid, approval, approved_by, scope, reason, revision
     if binds_to is None:
         binds_to = plan_binding_hash(child_root, wid)
     if not binds_to:
-        
-        
-        
+
+
+
         raise ValueError(
             f"ApprovalRecord '{approval}' нечем связать: в features/{wid}/ нет ни run-plan.yaml, "
             f"ни spec.yaml. Одобрение обязано ссылаться на содержимое (v3.37) — сначала план/спека, "
@@ -376,8 +376,8 @@ def write_record(child_root, wid, approval, approved_by, scope, reason, revision
     if covers_packages:              # v3.0-rc5 (P1.2): какие пакеты покрывает (supply-chain fingerprint)
         rec["covers_packages"] = list(covers_packages)
     p = d / f"{approval}.yaml"
-    
-    
+
+
     from ai_ops_kit.shared import lifecycle_store as _ls
     _r = _ls.durable_write(p, rec, require_keys=("approval", "approved_by", "scope"))
     if not _r.get("ok"):

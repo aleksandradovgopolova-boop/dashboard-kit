@@ -37,20 +37,20 @@ def classify(current_workitem=None, new_task="", new_workitem=None, repo_changed
     if repo_changed:
         return "new_product", "изменился репозиторий/продукт — физически иная работа"
 
-    
+
     if new_workitem and current_workitem and new_workitem == current_workitem:
         return "same_task", f"тот же WorkItem {current_workitem}"
 
-    
+
     marker = continues is True or (continues is None and any(m in txt for m in _CONT_MARKERS))
     if marker and current_workitem and not new_workitem:
         return "continuation", "логическое продолжение текущего WorkItem (явная ссылка/маркер)"
 
-    
+
     if (scope_overlap or related_requirements) and current_workitem:
         return "adjacent_subtask", "тот же репозиторий, пересекающийся scope/требования, иной фокус"
 
-    
+
     return "new_independent_task", "нет признаков продолжения/пересечения — самостоятельная задача"
 
 

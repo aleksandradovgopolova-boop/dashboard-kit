@@ -112,12 +112,12 @@ def _intent_feedback(task, child_root, signals, a):
     # Наблюдение о ките — данные, а не пересказ. Без текста команда показывает судьбу уже
     # сказанного: канал в одну сторону перестают наполнять, поэтому ответ обязан быть виден.
     from ai_ops_kit.engops import kit_feedback
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     _txt = (task or "").strip()
     if _txt and Path(_txt).is_dir():
         _txt = ""
@@ -160,7 +160,7 @@ def _intent_status(task, child_root, signals, a):
         try:
             data = active_work.load(awp)
         except active_work.ActiveWorkCorrupt as e:
-            
+
             print(presenter.render(presenter.message(
                 status="blocked",
                 summary="Не могу сказать, что идёт прямо сейчас: запись об идущих работах "
@@ -173,27 +173,27 @@ def _intent_status(task, child_root, signals, a):
             return 1
     pub = active_work.publication_enabled(child_root)
     if js:
-        
+
         return (active_work.list_cmd(awp, as_json=True, published=pub, child_root=child_root)
                 if awp.is_file() else 0)
     aud = presenter.audience_from_config(child_root)
-    
-    
+
+
     team = active_work.team_view(child_root, data.get("active") or [], pub)
     # #137: СВЕРКА С БАЗОЙ на чтении. Поле 17.08.2026: три записи из четырёх относились к работе,
     # давно влитой в main, а `status` отвечал «Работа идёт» и советовал не трогать те же файлы.
     team = active_work.reconcile_with_base(team, child_root)
     reconciled = active_work.persist_reconciliation(awp, team) if awp.is_file() else 0
-    
-    
-    
-    
+
+
+
+
     from ai_ops_kit.planning import delivery_plan as _dp
     try:
         cross = _dp.crosscheck_running(child_root, team, registry_exists=awp.is_file())
     except _dp.PlanCorrupt as e:
-        
-        
+
+
         print(presenter.render(presenter.message(
             status="degraded",
             summary="Про заявки на работу отвечу, а про план — нет: файл плана не разбирается.",
@@ -217,8 +217,8 @@ def _intent_status(task, child_root, signals, a):
 def _enrich_running_with_work_view(child_root, team):
     """READ-ONLY: прикрепить единую Work-проекцию к каждой идущей записи и синхронизировать ветку
     из неё (issue #565). Ничего не пишет на диск и не меняет статус (за «идёт ли» отвечает реестр)."""
-    
-    
+
+
     from ai_ops_kit.lifecycle import work_view
     from ai_ops_kit.planning.delivery_plan import _workitem_key
     for a in team or []:
@@ -237,7 +237,7 @@ def _enrich_running_with_work_view(child_root, team):
 
 def _intent_next(task, child_root, signals, a):
     js = a.json
-    
+
     from ai_ops_kit.planning import next_work
     from ai_ops_kit.planning import delivery_plan as _plan
     from ai_ops_kit.planning import contours as _contours
@@ -261,15 +261,15 @@ def _intent_next(task, child_root, signals, a):
         rep = dict(rep, outcome_candidate=candidate, child_findings=findings)
         print(json.dumps(rep, ensure_ascii=False, indent=2))
     else:
-        
-        
+
+
         from ai_ops_kit.ui import presenter
         aud = presenter.audience_from_config(child_root)
         print(presenter.render(presenter.from_next_work(rep), audience=aud))
         if candidate:
-            
-            
-            
+
+
+
             print(f"\n  Что делать дальше по итогу релиза (черновик, требует решения): "
                   f"{candidate.get('action') or candidate['what']}")
             if candidate.get("because"):
@@ -283,8 +283,8 @@ def _intent_next(task, child_root, signals, a):
                   f"{_cand.get('title')}"
                   f"\n      контекст: {_cand.get('source_context') or '—'}; "
                   "активной не станет без твоего решения")
-        
-        
+
+
         for _e in (rep.get("plan_errors") or []):
             print(f"  ✗ план: {_e}")
         for _e in (rep.get("roadmap") or {}).get("errors") or []:
@@ -292,8 +292,8 @@ def _intent_next(task, child_root, signals, a):
         if aud != "product":
             print()
             print(next_work.render(rep))
-    
-    
+
+
     return 0 if (rep.get("plan_present") and not rep.get("plan_errors")
                  and not rep["roadmap"]["errors"]) else 1
 
@@ -303,7 +303,7 @@ def _intent_review(task, child_root, signals, a):
     from ai_ops_kit.engine import review_branch
     from ai_ops_kit.engine import run_plan
     wid = a.feature or _wid_for(task, signals, a.feature)
-    
+
     rev_prop = None
     prov = getattr(a, "provider", "mock") or "mock"
     if prov != "mock":
@@ -314,14 +314,14 @@ def _intent_review(task, child_root, signals, a):
         print(json.dumps(rep, ensure_ascii=False, indent=2))
     else:
         _say(child_root, "from_review", rep)
-        
+
         _cf = rep.get("constitution_findings") or []
         if _cf:
             print(f"\n  Соответствие конституции (по изменённым файлам): {len(_cf)} статей "
                   "с рекомендациями — это советы, не блок на мерже:")
             for _f in _cf:
                 print(f"    · {_f['article_id']} {_f['title']} ({_f['count']}) — {_f['recommendation']}")
-    
+
     return 0 if (rep.get("readiness") or {}).get("ready_for_merge") else 1
 
 
@@ -390,28 +390,28 @@ def _session_guard_before_start(child_root, task, signals, feature=None):
         from ai_ops_kit.engops import session_guardrails
         from ai_ops_kit.engops import session_boundary
         from ai_ops_kit.engops import delegation_advisor
-        
+
         snap = session_telemetry.snapshot(str(child_root), workitem_id=feature)
-        
+
         current_wid = snap.get("workitem_id")
         relation_cls, reason = session_boundary.classify(
             current_workitem=current_wid, new_task=task or "", new_workitem=feature)
         relation = session_boundary.to_relation(relation_cls)
-        
+
         pol = session_guardrails.load_policy(child_root)
         rec = session_guardrails.recommend(snap, pol, next_relation=relation, next_task=task,
                                            task_done=False, repo_path=str(child_root))
         _say(child_root, "from_session_economy", snap, rec)
-        
-        
-        
-        
+
+
+
+
         if rec.get("outcome") in ("new_session", "clear"):
-            
-            
-            
-            
-            
+
+
+
+
+
             from ai_ops_kit.engops import session_handoff
             try:
                 _h = session_handoff.write(
@@ -423,7 +423,7 @@ def _session_guard_before_start(child_root, task, signals, feature=None):
             dec = session_launcher.decide(str(child_root), snap, next_relation=relation,
                                           next_task=task, task_done=False)
             _say(child_root, "from_subsession_decision", dec)
-        
+
         del_signals = {"task_text": task or "", "files_count": 0}
         del_recs = delegation_advisor.advise(del_signals)
         if del_recs:
@@ -431,7 +431,7 @@ def _session_guard_before_start(child_root, task, signals, feature=None):
             for r in del_recs[:2]:
                 print(f"  · {r.get('trigger')}: {r.get('reason', '')[:80]}")
     except Exception as e:  # noqa: BLE001
-        
+
         print(f"⚠ session guard: {e}")
 
 
@@ -472,18 +472,18 @@ def _process_gate(intent, task, child_root, signals, a, preview_mode):
                 if _audience(child_root) != "product":
                     print()
                     print(short_path.render(d))
-            
-            
+
+
             return 1 if tr.get("error") else 0
         if d["declared"] and not a.json:
-            
+
             _say(child_root, "from_short_path", d, None, None)
 
-    
-    
-    
-    
-    
+
+
+
+
+
     top_up = {"missing": []}
     if intent == "specify":
         from ai_ops_kit.gates import spec_levels
@@ -497,8 +497,8 @@ def _process_gate(intent, task, child_root, signals, a, preview_mode):
                               "level": _lvl, "sections_to_add": top_up["missing"]},
                              ensure_ascii=False, indent=2))
         else:
-            
-            
+
+
             print(f"· уровень описания поднялся ({_lvl}): дописываю разделы "
                   f"{', '.join(top_up['missing'])}. Это конечный шаг без обращения к модели — "
                   f"потолок траты на разбор к нему не применяю.")
@@ -515,7 +515,7 @@ def _process_gate(intent, task, child_root, signals, a, preview_mode):
             _say(child_root, "from_process_spend", check, cont_cmd, run_cmd)
         return 2
     if check["state"] == "unknown" and not a.json and _audience(child_root) != "product":
-        
+
         _say(child_root, "from_process_spend", check, None, None)
     return None
 
@@ -549,7 +549,7 @@ def _dispatch_parallel(task, signals, child_root, a, flags, intent, provider):
     rec = parallel_live_dispatch.run_parallel_live(
         task, sig, Path(child_root), feature=wid, provider=provider, model=a.model, base=a.base,
         open_pr=a.open_pr, max_steps=a.max_steps, repo_slug=getattr(a, "repo", None),
-        **_parallel_policy(flags, intent, a), **options)
+        runtime=getattr(a, "runtime", "claude-code") or "claude-code", **_parallel_policy(flags, intent, a), **options)
     if rec is not None:
         parallel_live_dispatch.print_parallel(rec)
         return parallel_live_dispatch.exit_code(rec)
@@ -562,16 +562,16 @@ def _main_run_execute(intent, task, child_root, signals, a, pv):
     if (intent == "run" and a.execute) or intent == "do":
         from ai_ops_kit.engine import ai_ops_run
         from ai_ops_kit.engine import pipeline_helpers
-        
-        
+
+
         from ai_ops_kit.engops import session_events as _session_events  # noqa: F401
-        
-        
-        
+
+
+
         _missing = pipeline_helpers.missing_intake_signals(signals)
         if _missing:
-            
-            
+
+
             _cmd = _intake_command_carrying_task_type(_missing, signals.get("task_type"))
             _hint = pipeline_helpers.intake_signals_hint(_missing, task)
             if _hint and signals.get("task_type"):
@@ -580,7 +580,7 @@ def _main_run_execute(intent, task, child_root, signals, a, pv):
                 print(json.dumps({"kind": "intake-incomplete", "exit": 2,
                                   "missing": _missing, "hint": _hint}, ensure_ascii=False, indent=2))
             else:
-                
+
                 _say(Path(child_root), "from_intake_gap", _missing, _cmd)
             return 2
         # #564: Decision Loop проведён в маршрут. Для триггерного профиля (заявлено фича-решение)
@@ -596,8 +596,8 @@ def _main_run_execute(intent, task, child_root, signals, a, pv):
                 print(f"  завести контракт: {_dc['propose_command']}")
             return _dc["exit"]
         flags = pv["will_do"]["auto_flags"]
-        
-        
+
+
         _pres = ai_ops_run.resolve_provider_for_run(a.provider, Path(child_root), execute=True,
                                                     quiet=a.json)
         # F-026: прогон без вызова модели не доводится до вердикта — отказ (офлайн только `--provider mock`).
@@ -619,8 +619,8 @@ def _main_run_execute(intent, task, child_root, signals, a, pv):
         parallel_exit = _dispatch_parallel(task, signals, Path(child_root), a, flags, intent, provider)
         if parallel_exit is not None:
             return parallel_exit
-        
-        
+
+
         if a.sequential:
             from ai_ops_kit.engine import atomic_planner
             from ai_ops_kit.engine import workpackage_executor
@@ -628,8 +628,8 @@ def _main_run_execute(intent, task, child_root, signals, a, pv):
             from ai_ops_kit.providers import orchestrator
             wid = a.feature or _wid_for(task, signals, a.feature)
             wp = atomic_planner.decompose(signals, wid=wid, child_root=Path(child_root))
-            
-            
+
+
             resume_from = a.resume_from
             if a.retry_package:
                 rt = workpackage_executor.retry_package(Path(child_root), wid, a.retry_package)
@@ -651,7 +651,7 @@ def _main_run_execute(intent, task, child_root, signals, a, pv):
                     author=flags["author"], author_proposer=auth,
                     review=flags["review"], reviewer_proposer=rev, baseline_diff=flags["baseline_diff"],
                     sandbox=flags["sandbox"], install_deps=True, open_pr=a.open_pr, max_steps=a.max_steps,
-                    
+
                     write_scope_for=lambda pkg: pkg.get("write_scope"),
                     resume_from=resume_from)   # v2.124: resume; v3.0-rc13: retry -> resume_from=retry-package
                 _dlv = seq.get("delivery") or {}
@@ -660,8 +660,8 @@ def _main_run_execute(intent, task, child_root, signals, a, pv):
                       + (f" · доставка={_dlv.get('status')}" if _dlv.get('requested') else ""))
                 for p in seq["packages"]:
                     print(f"  [{p['id']}] {p['status']} · sha={(p.get('sha') or '')[:12] or '—'} · ready={p.get('ready')}")
-                
-                
+
+
                 if seq["ready_all"]:
                     if _dlv.get("requested") and _dlv.get("status") not in ("opened", "updated"):
                         return 1   # готово, но draft PR не открыт -> не полный успех
@@ -675,7 +675,8 @@ def _main_run_execute(intent, task, child_root, signals, a, pv):
         # (аудит P0.1: раньше уходило в mock). v3.22: `do` добавляет review_fix_attempts=2.
         review_fix = 2 if intent == "do" else getattr(a, "review_fix_attempts", 0)
         rep = ai_ops_run.run(task, signals, Path(child_root), engine=flags["engine"],
-                             session=_session_identity(child_root),
+                             runtime=getattr(a, "runtime", "claude-code"),
+                             session=getattr(a, "session", None) or _session_identity(child_root),
                              feature=a.feature, execute=True, sandbox=flags["sandbox"],
                              baseline_diff=flags["baseline_diff"], review=flags["review"],
                              author=flags["author"], provider_name=provider, model=a.model,

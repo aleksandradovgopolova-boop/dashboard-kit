@@ -165,8 +165,8 @@ def _direction(goal: dict, works: list, closed: set) -> Direction:
         horizon = NEXT
         note = "работа под направление есть, но вся ждёт закрытия зависимостей"
     elif works:
-        
-        
+
+
         horizon = NOW
         note = "работы закрыты, но не все исходы достигнуты — результат ещё не подтверждён"
     elif reached:
@@ -219,14 +219,14 @@ def deviations(roadmap: Roadmap, authored) -> list:
     """
     if authored is None:
         return []
-    
+
     authored_rank: dict = {}
     for key, block in authored.items():
         rank = _AUTHORED_TO_RANK.get(key)
         if rank is None:
             continue
         for gid in block.get("goals") or []:
-            
+
             authored_rank.setdefault(gid, rank)
 
     out = []
@@ -242,8 +242,8 @@ def deviations(roadmap: Roadmap, authored) -> list:
                 )
             continue
         if a_rank is None:
-            
-            
+
+
             continue
         if d_rank < a_rank:
             out.append(
@@ -366,7 +366,7 @@ def main(argv=None):
             _print_build(rm)
         return 0
 
-    
+
     rep = check(root, plan)
     if ns.json:
         print(json.dumps(rep, ensure_ascii=False, indent=2))

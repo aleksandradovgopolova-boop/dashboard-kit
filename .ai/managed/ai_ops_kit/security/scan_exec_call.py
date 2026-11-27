@@ -186,16 +186,16 @@ def launch_is_a_surface(функция: str, окно: str, окно_скеле�
     """
     if функция in _ЧЕРЕЗ_ОБОЛОЧКУ:
         return True                              # оболочка участвует всегда
-    
-    
-    
+
+
+
     скелет = окно if окно_скелет is None else окно_скелет
     if _россыпь_в_опциях(скелет):
         return True                              # `{ ...opts }` — внутри может оказаться `shell`
-    
-    
-    
-    
+
+
+
+
     if _SHELL_КЛЮЧ.search(окно) and not _SHELL_ЛОЖЬ.search(окно):
         return True                              # `shell` в любой форме, кроме доказанно ложной
     вид, значение = _первый_аргумент(окно)
@@ -237,10 +237,10 @@ def bound_names(код: str) -> frozenset:
             if not кусок:
                 continue
             for часть in кусок.split(","):
-                
-                
-                
-                
+
+
+
+
                 часть = часть.strip()
                 if часть.startswith("type ") or часть == "type":
                     continue
@@ -263,9 +263,9 @@ def _все_обращения_разобраны(код: str, скелет: str
         for m in re.finditer(r"\b" + re.escape(имя) + r"\b", скелет):
             if m.start() in разобранные or код.count("\n", 0, m.start()) in строки_импорта:
                 continue
-            
-            
-            
+
+
+
             if скелет[:m.start()].rstrip().endswith("."):
                 continue
             хвост = скелет[m.end():m.end() + 40].lstrip()
@@ -278,13 +278,13 @@ def _все_обращения_разобраны(код: str, скелет: str
 def _разобрать(код: str, скелет: str, имена_регулярок: frozenset) -> tuple:
     """-> (строки всех найденных вызовов, строки вызовов-поверхностей) для ОДНОГО прочтения."""
     строки, строки_скелета = код.splitlines(), скелет.splitlines()
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     смещения, позиция = [], 0
     for строка_с_концом in код.splitlines(keepends=True):
         смещения.append(позиция)

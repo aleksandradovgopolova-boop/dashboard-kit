@@ -68,7 +68,7 @@ def _is_managed(md: str) -> bool:
     fm = _frontmatter(md)
     if fm.get("template") is True:
         return False
-    
+
     return ("reviewed_at" in fm) or ("stability" in fm)
 
 
@@ -105,7 +105,7 @@ def _bump_reviewed_at(md: str, today: str) -> str:
     if _REVIEWED_RE.search(fm_block):
         new_fm = _REVIEWED_RE.sub(lambda mm: f"{mm.group(1)}reviewed_at: {today}", fm_block, count=1)
     else:
-        
+
         new_fm = fm_block.rstrip("\n") + f"\nreviewed_at: {today}\n"
     return md[:m.start(2)] + new_fm + md[m.end(2):]
 
@@ -115,7 +115,7 @@ def _append_entry(md: str, entry: str) -> str:
     line = f"- {entry}"
     idx = md.find(_DELIVERY_HEADING)
     if idx != -1:
-        
+
         eol = md.find("\n", idx)
         if eol == -1:
             return md + f"\n{line}\n"

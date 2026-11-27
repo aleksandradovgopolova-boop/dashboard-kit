@@ -67,7 +67,7 @@ def adjust_priority(
     count, directions = _count_overrides_for_target(signals, f"priority:{work_id}")
 
     if count == 0:
-        
+
         count, directions = _count_overrides_for_target(signals, "priority:")
 
     if count == 0:
@@ -79,7 +79,7 @@ def adjust_priority(
             "explanation": "без override'ов — оценка не изменена",
         }
 
-    
+
     ups = directions.count("up")
     downs = directions.count("down")
     net = ups - downs  # положительный = человек повышал, отрицательный = понижал
@@ -124,7 +124,7 @@ def adjust_risk(
             "explanation": "без override'ов — оценка не изменена",
         }
 
-    
+
     downs = directions.count("down")
     ups = directions.count("up")
     net = downs - ups  # положительный = человек снижал риск

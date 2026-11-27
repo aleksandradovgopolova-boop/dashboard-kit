@@ -60,11 +60,11 @@ def from_subsession_decision(decision: dict) -> dict:
             summary=(decision or {}).get("reason") or "Продолжаю здесь.",
             next_steps=["продолжаю"], technical=tech)
 
-    
+
     if code == "no_ceiling":
-        
-        
-        
+
+
+
         sug = n.get("suggested_usd")
         why = n.get("suggestion_reason")
         tech["предложено $"] = sug if sug is not None else "нет замера"
@@ -149,15 +149,15 @@ def from_session_economy(snapshot: dict, rec: dict) -> dict:
     outcome = (rec or {}).get("outcome")
     spend = (rec or {}).get("session_spend") or "н/д"
     turns = snapshot.get("turns")
-    
-    
+
+
     tech = {"контекст": ctx, "статус измерения": status,
             "источник": snapshot.get("context_source") or "—",
             "ходов": turns, "источник ходов": snapshot.get("turns_source") or "—",
             "расход сессии": spend, "состояние расхода": (rec or {}).get("spend_state") or "—",
             "исход": outcome, "причина": (rec or {}).get("reason") or "—",
-            
-            
+
+
             "handoff сессии": (rec or {}).get("handoff") or "—",
             "последняя компакция": snapshot.get("last_compaction_at") or "не обнаружена"}
 
@@ -193,13 +193,13 @@ def from_session_economy(snapshot: dict, rec: dict) -> dict:
                       "recommendation": advice,
                       "on_approve": "выполни команду ниже и повтори задачу",
                       "on_reject": "продолжу здесь — решение твоё, я не блокирую"},
-            
-            
+
+
             next_steps=[(rec or {}).get("handoff") or "состояние сессии не проверено",
                         (rec or {}).get("command") or "продолжаю здесь"],
             technical=tech)
-    
-    
+
+
     growing = "attention" in ((rec or {}).get("context_state"), (rec or {}).get("spend_state"))
     return message(
         status="ok",
@@ -247,7 +247,7 @@ def from_first_hour(res: dict) -> dict:
             technical={"classification": cls, "blocking_questions": n_block,
                        "conflicts": ", ".join(c.get("category", "") for c in conflicts) or "—"})
 
-    
+
     boot = res.get("bootstrap") or {}
     wi = boot.get("work_items")
     n_work = len(wi) if isinstance(wi, list) else (wi or 0)
@@ -311,9 +311,9 @@ def from_bootstrap(rep: dict, applied=False) -> dict:
                 summary="Создавать было нечего: направление и план в проекте уже есть.",
                 next_steps=["спроси «что дальше» — предложу работу по существующему плану"],
                 technical={"пропущено": ", ".join(s["path"] for s in skipped) or "—"})
-        
-        
-        
+
+
+
         doable = rep.get("ready_without_human")
         waiting = rep.get("awaiting_human") or 0
         tech = {"создано": ", ".join(w["path"] for w in wrote),
@@ -382,8 +382,8 @@ def from_intake_gap(missing, hint_command=None) -> dict:
     names = {"size": "насколько большая задача", "risk": "насколько рискованная",
              "task_type": "какого рода работа"}
     human = [names.get(m.get("signal"), m.get("signal")) for m in miss]
-    
-    
+
+
     if hint_command:
         steps = ["если задача небольшая и обычная — просто скопируй эту строку в команду:  "
                  + hint_command,
@@ -547,9 +547,9 @@ def from_doctor(lines) -> dict:
                        technical={"проверок": len(rows)})
     n = len(gaps)
     if worst >= 2:
-        
-        
-        
+
+
+
         nb = len(blocking)
         rest = n - nb
         return message(

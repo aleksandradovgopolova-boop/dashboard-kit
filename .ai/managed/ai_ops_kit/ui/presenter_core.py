@@ -94,8 +94,8 @@ def _contract(policy=None) -> dict:
             "product")
         if not labels or not auds:
             raise PolicyMissing("в политике коммуникации нет statuses/audiences")
-        
-        
+
+
         modes = {str(k): (v or {}).get("audience")
                  for k, v in (data.get("operating_modes") or {}).items()}
         modes = {k: a for k, a in modes.items() if a in auds}
@@ -170,7 +170,7 @@ def _glossary(policy=None) -> dict:
             raise PolicyMissing("в политике коммуникации нет product_glossary")
     except PolicyMissing:
         gmap, src = dict(_FALLBACK_GLOSSARY), "fallback"
-    
+
     terms = sorted((str(k) for k in gmap), key=len, reverse=True)
     rx = re.compile("|".join(r"\b" + re.escape(t) + r"\b" for t in terms),
                     re.IGNORECASE) if terms else None
@@ -215,15 +215,15 @@ def message(status, summary, why_it_matters=None, decision=None, next_steps=None
     msg = {"schema_version": 1, "kind": "user-message", "status": status,
            "summary": summary.strip()}
     if headline:
-        
-        
-        
-        
+
+
+
+
         msg["headline"] = headline.strip()
     if why_it_matters:
         msg["why_it_matters"] = why_it_matters.strip()
     if decision:
-        
+
         if not decision.get("question"):
             raise ValueError("decision без question")
         msg["decision"] = {"question": decision["question"],
@@ -241,12 +241,12 @@ def render(msg: dict, audience="product", show_technical=False) -> str:
     con = _contract()
     if audience not in con["audiences"]:
         audience = con["default"]
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     h = _humanize if audience == "product" else (lambda s, policy=None: s)
     L = []
     label = msg.get("headline") or con["labels"].get(msg.get("status"), msg.get("status", ""))
@@ -271,8 +271,8 @@ def render(msg: dict, audience="product", show_technical=False) -> str:
 
     tech = (msg.get("technical_details") or {})
     if tech.get("available"):
-        
-        
+
+
         if audience in ("technical", "debug") or show_technical:
             L.append("")
             L.append("Технические детали:")

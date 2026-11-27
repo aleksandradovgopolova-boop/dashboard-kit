@@ -71,9 +71,9 @@ def from_execution_preview(pv: dict) -> dict:
                      "проверить")
 
     if ctx_error:
-        
-        
-        
+
+
+
         return message(
             status="degraded", headline="Могу запустить, но материалы проекта не собрались",
             summary=summary,
@@ -143,7 +143,7 @@ def from_onboarding_profile(prof: dict, written: str) -> dict:
             technical=tech)
 
     what = ", ".join(langs)
-    
+
     missing_cmds = sorted({k for s in stacks for k, v in (s.get("commands") or {}).items()
                            if not v and k != "format"})
     # #1183: без линтера — не «не хватает команды», а последствие для кода и совет, что поставить
@@ -166,8 +166,8 @@ def from_onboarding_profile(prof: dict, written: str) -> dict:
                         "с тем, что уже знаю"],
             technical=tech)
     if undetermined:
-        
-        
+
+
         n = len(undetermined)
         return message(
             status="degraded", headline="Разобрался, но не до конца",
@@ -258,12 +258,12 @@ def from_specification(path, created, level_name, sections, blocking_missing, ne
         tech["не узнал слова"] = ", ".join(unmatched)
     if answer_error:
         tech["запись ответа не удалась"] = str(answer_error)
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     _disclosure = ""
     if spec_provisional:
         tech["форма предварительная"] = (
@@ -285,7 +285,7 @@ def from_specification(path, created, level_name, sections, blocking_missing, ne
     if created:
         _origin = "начата"
     elif n_added:
-        
+
         _origin = f"уже была — добавила {n_added} {_q(n_added, 'вопрос', 'вопроса', 'вопросов')}"
     else:
         _origin = "уже была"
@@ -301,10 +301,10 @@ def from_specification(path, created, level_name, sections, blocking_missing, ne
                         + " — назови их словами из вопросов ниже")
         steps.append("ответь словами, не открывая файл: " + ask)
         steps.append("потом скажи, что переходим к плану — дальше я работаю сам")
-        
-        
-        
-        
+
+
+
+
         if answer_command:
             tech["ответить командой"] = answer_command
         tech["следующий шаг"] = next_command
@@ -362,7 +362,7 @@ def _verified_why(passed_gates) -> tuple:
         return ("Независимая проверка пройдена — смотрел не тот, кто делал работу.", None)
     clause = ("Независимый ревьюер (не тот, кто делал работу) посмотрел и принял: "
               + ", ".join(dims) + ".")
-    
+
     return clause, ("Это заключение независимого ревьюера, а не автоматических тестов, — но проверял "
                     "не тот, кто делал работу, и потому «замечаний нет» здесь имеет основание.")
 
@@ -385,8 +385,8 @@ def from_review(rep: dict) -> dict:
             "основание": readiness.get("reason") or "—",
             "гейтов на ревью": len(rep.get("reviewable") or []),
             "изменено файлов": changed,
-            
-            
+
+
             "база дифа": (rep.get("base") or "не выбрана")
                          + (f" ({rep['base_source']})" if rep.get("base_source") and rep.get("base") else "")
                          + (f" — {rep['base_note']}" if rep.get("base_note") else ""),
@@ -417,8 +417,8 @@ def from_review(rep: dict) -> dict:
                            "решение вливать за тобой.",
             next_steps=["можно вливать"], technical=tech)
 
-    
-    
+
+
     no_verdict = verdict == "needs-reviewer" or (
         bool(reviews) and all((r.get("status") or "") in ("", "invalid") for r in reviews))
     if no_verdict:
@@ -431,9 +431,9 @@ def from_review(rep: dict) -> dict:
             technical=tech)
 
     if ready:
-        
-        
-        
+
+
+
         passed_gates = [r.get("gate") for r in reviews
                         if r.get("status") == "pass" and r.get("valid", True) and r.get("gate")]
         clause, why = _verified_why(passed_gates)
@@ -444,7 +444,7 @@ def from_review(rep: dict) -> dict:
             next_steps=["можно вливать"], technical=tech)
 
     if verdict != "needs-changes":
-        
+
         return message(
             status="degraded", headline="Не понимаю итог проверки",
             summary=f"Проверка вернула незнакомый мне итог: {verdict}.",
@@ -473,8 +473,8 @@ def from_advice(result: dict) -> dict:
 
     eng_recs = list(result.get("recommendations") or [])
 
-    
-    
+
+
     tech = {"продуктовых рекомендаций": len(precs)}
     tech.update({f"продукт · {p.get('kind')} {i + 1}":
                  f"{p.get('need')} — {p.get('why')} (источник: {p.get('source')})"
@@ -489,7 +489,7 @@ def from_advice(result: dict) -> dict:
                  f"{r.get('advice')} (источник: {r.get('source')})"
                  for i, r in enumerate(eng_recs)})
 
-    
+
     eng_line = (f"отдельно есть заметки про настройку самого кита — это не про продукт, "
                 f"покажу по запросу") if eng_recs else None
 
@@ -507,7 +507,7 @@ def from_advice(result: dict) -> dict:
             why_it_matters=lead.get("why"),
             next_steps=next_steps, technical=tech)
 
-    
+
     if not enough:
         next_steps = ["заполним продуктовую картину — тогда смогу советовать по продукту"]
         if eng_line:
@@ -549,8 +549,8 @@ def from_repository_understanding(rep: dict) -> dict:
     known = ", ".join(k.replace("_", " ") for k, v in rep["reconstructed"].items()
                       if v["status"] in ("verified", "inferred") and v.get("value"))
     human_needed = [c["title"] for c in aud["contours"] if c["needs_human"]]
-    
-    
+
+
     conflicts = rep.get("conflicts") or []
 
     if cls == "NEW_PRODUCT":
@@ -573,15 +573,15 @@ def from_repository_understanding(rep: dict) -> dict:
         steps.append(f"задам {n_q} "
                      + ("короткий " if n_q % 10 == 1 and n_q % 100 != 11 else "коротких ")
                      + _q(n_q))
-    
-    
-    
+
+
+
     steps.append("соберу первое направление и план из фактов репозитория: ./ai-ops bootstrap")
     if not n_q:
         steps.append("после этого покажу, какую работу имеет смысл взять первой")
 
-    
-    
+
+
     conflict_line = None
     if conflicts:
         conflict_line = ("Источники истины противоречат друг другу — сам выбрать актуальный не "
@@ -620,8 +620,8 @@ def from_contour_consistency(rep: dict) -> dict:
     unknown = [f for f in findings if f.get("id") == "unknown_contour"]
 
     if not rep.get("comparable"):
-        
-        
+
+
         return message(
             status="degraded", headline="Сверять нечего",
             summary="Изменений не предъявлено.",

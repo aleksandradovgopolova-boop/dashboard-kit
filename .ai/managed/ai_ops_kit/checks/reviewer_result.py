@@ -46,9 +46,9 @@ def check(data: dict, gate_ids=None, allow_empty_checks=False):
         if c["status"] == "fail":
             any_fail = True
 
-    
-    
-    
+
+
+
     if data.get("status") in ("fail", "warn") and not (data.get("blockers")):
         errors.append(f"status={data.get('status')} требует непустой blockers (блокирующий вердикт без причины)")
     if any_fail and data.get("status") == "pass":

@@ -80,8 +80,8 @@ def _reconcile_pending_delivery(features_dir, fid, child_root, *, delivery_guard
     from ai_ops_kit.engine.ai_ops_run_lifecycle_stages import _delivery_write
     owned = SimpleNamespace(delivery_guard=delivery_guard or nullcontext)
     from pathlib import Path as _P
-    
-    
+
+
     from ai_ops_kit.engine.ai_ops_run import (
         _outbox_dir, _unresolved_intents, _nonfinal_receipt_intents)
     # незавершённые (Intent без Receipt) + #400: не-финальные receipt (sha_verified != True) —
@@ -114,12 +114,12 @@ def _reconcile_pending_delivery(features_dir, fid, child_root, *, delivery_guard
             results.append({"delivery_id": did, "status": "reconciled-absent" if _w.get("ok")
                             else "receipt-write-failed"})
             continue
-        
+
         _idn = (rc.get("repository") == intent.get("repository")
                 and rc.get("head_sha") == intent.get("commit_sha")
                 and rc.get("base_ref") == intent.get("base_ref"))
         if not _idn:
-            
+
             _w = _delivery_write(owned, "durable_write", rp, {**_base, "status": "mismatch", "remote_sha": rc.get("head_sha"),
                                         "remote_base_ref": rc.get("base_ref"),
                                         "remote_repository": rc.get("repository"), "sha_verified": False,
@@ -173,8 +173,8 @@ def _register_active_work(child_root, signals, write_scope, fid, session, lifecy
     # сразу (неизвестность считалась совпадением). Зоны выводятся из `write_scope` тем же
     # правилом, что на пакетном пути (`work_areas` — одна формула на оба пути).
     areas = _work_areas.areas_for(signals, write_scope)
-    
-    
+
+
     try:
         _aw = active_work.load(aw_path)
         _conf = active_work.classify(
@@ -182,9 +182,9 @@ def _register_active_work(child_root, signals, write_scope, fid, session, lifecy
             {"id": fid, "affected_areas": list(areas), "depends_on": [], "shared_contracts": []})
         preflight = {"conflicts": _conf}
     except Exception as _pe:  # noqa: BLE001 — preflight не должен ронять прогон...
-        
-        
-        
+
+
+
         preflight = {"error": f"{type(_pe).__name__}: {_pe}"[:200], "conflicts": None}
     # #661: сигнал «писатель занят + работа независима → годится параллельный субагентный путь».
     # Момент выбран потому, что здесь у нас ОБА факта: неблокирующая проба замка писателя говорит,
@@ -200,15 +200,15 @@ def _register_active_work(child_root, signals, write_scope, fid, session, lifecy
         if _decision["parallel_viable"]:
             _wc.record(child_root, fid, _decision, areas=list(areas), work_id=fid)
     except Exception as _wce:  # noqa: BLE001 — сигнал advisory: его сбой не роняет прогон...
-        
+
         lifecycle_errors.append(f"writer-contention signal: {type(_wce).__name__}: {_wce}"[:200])
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     _reg_rc = 1
     with contextlib.redirect_stdout(sys.stderr):
         try:
@@ -246,16 +246,16 @@ def _restore_resume_policy(ctx, resume):
     ветки) НЕ является сменой классификации: executor сам управляет policy пакета. Помечен
     _sequence_internal -> пропускаем drift-проверку и restore run-settings.
     """
-    
-    
+
+
     from ai_ops_kit.engine.ai_ops_run import is_service_text, product_task_for_resume
     ctx.saved_task = None    # F-027: продуктовая задача исходного прогона (переживает продолжение)
     if resume and ctx.feature and not ctx.signals.get("_sequence_internal"):
         _sp = ctx.features_dir / ctx.feature / "run-settings.yaml"
-        
-        
-        
-        
+
+
+
+
         _g = _ls.load_guarded(_sp, required_keys=("kind", "policy"), kind="run-settings")
         if _g["state"] == "corrupt":
             return {"schema_version": 1, "kind": "execution-pipeline", "workitem_id": ctx.feature,
@@ -269,10 +269,10 @@ def _restore_resume_policy(ctx, resume):
             _ss, _pp = (_saved.get("signals") or {}), (_saved.get("policy") or {})
             if isinstance(_saved.get("task"), str) and _saved["task"].strip():
                 ctx.saved_task = _saved["task"]
-            
-            
-            
-            
+
+
+
+
             _POLICY_KEYS = ("task_type", "risk", "size", "affected_areas")
             _drift = [k for k in _POLICY_KEYS
                       if k in ctx.signals and k in _ss and ctx.signals[k] != _ss[k]]
@@ -286,8 +286,8 @@ def _restore_resume_policy(ctx, resume):
                                   f"(drift: {', '.join(_drift)}). Это replan — запусти с replan=True "
                                   "(ревалидация + новый план), а не resume."),
                         "resume": {"requested": True, "resumed": False, "drift": _drift}}
-            
-            
+
+
             if not ctx.replan:
                 ctx.signals = {**ctx.signals, **_ss}          # saved policy побеждает
                 ctx.sandbox = bool(_pp.get("sandbox", ctx.sandbox))
@@ -299,8 +299,8 @@ def _restore_resume_policy(ctx, resume):
                 ctx.write_scope = _pp.get("write_scope") if ctx.write_scope is None else ctx.write_scope
                 if ctx.max_steps == 40 and _pp.get("max_steps"):
                     ctx.max_steps = _pp["max_steps"]
-                
-                
+
+
                 ctx.base = ((_pp.get("base_binding") or {}).get("base_ref")) or _pp.get("base", ctx.base)
         # F-027: задача исполнителя на продолжении обязана остаться ПРОДУКТОВОЙ. Служебный
         # next_action кита («закрыть незакрытые гейты: …») сюда доезжал как task_text — и автор
@@ -335,8 +335,8 @@ def _resolve_models(ctx):
     возвращает blocked-preflight-отчёт (fail-closed, provider не строится). -> error-dict | None.
     """
     from ai_ops_kit.providers import orchestrator
-    
-    
+
+
     from ai_ops_kit.engine.ai_ops_run import (
         _load_klp_by_env, _provider_trust, _with_provider_fallback)
     ctx.writer_model, ctx.writer_prov, ctx.rev_model, ctx.rev_prov = ctx.model, None, ctx.model, None
@@ -354,9 +354,9 @@ def _resolve_models(ctx):
             ctx.model_resolution["provider_availability"] = {
                 "basis": "local-api-key-presence", "available_providers": sorted(available),
                 "unavailable_providers": sorted(set(_pe.PROVIDER_ENDPOINTS) - available), "online_health": None}
-        
-        
-        
+
+
+
         import os as _os
         import datetime as _dt
         ctx.trust_cache = {}
@@ -367,7 +367,7 @@ def _resolve_models(ctx):
             impl, rev = _plan.get("implementation") or {}, _plan.get("code_review") or {}
             if impl.get("resolved") and _pe.key_available(impl.get("provider")):
                 ep = _pe.endpoint_for(impl["provider"])
-                
+
                 _pt = _provider_trust(impl["provider"], ep["key_env"], ctx.klp_by_env, ctx.trust_env, ctx.trust_now, ctx.trust_cache)
                 ctx.model_resolution["key_preflight"] = _pt.get("preflight") or {"ready": _pt["ready"], "blocks": ([] if _pt["ready"] else [_pt.get("reason")])}
                 if not _pt["ready"]:
@@ -382,20 +382,20 @@ def _resolve_models(ctx):
                 ctx.model_resolution["model_attempts"] = [
                     {"attempt": 1, "model": impl["model_id"], "provider": impl["provider"],
                      "trigger": "initial", "outcome": "pending"}]
-                
-                
-                
-                
+
+
+
+
                 _tier = _plan.get("preferred_writer_tier") or {}
                 if _tier.get("tier") == "strong-executor":
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+
+
+
+
+
+
+
+
                     if orchestrator.claude_binary():
                         ctx.writer_model = "claude-code-local"
                         ctx.writer_prov = orchestrator.make_claude_cli_provider()
@@ -432,9 +432,9 @@ def _resolve_models(ctx):
                     ctx.model_resolution["reviewer"] = {"model_id": rev["model_id"], "provider": rev["provider"], "independent_by_model": True}
                 elif (ctx.writer_model == "claude-code-local" and impl.get("resolved")
                       and _pe.key_available(impl.get("provider"))):
-                    
-                    
-                    
+
+
+
                     _iep = _pe.endpoint_for(impl["provider"])
                     ctx.rev_model = impl["model_id"]
                     ctx.rev_prov = orchestrator.make_openai_provider(impl["model_id"], _iep["base_url"], _iep["key_env"])
@@ -483,13 +483,13 @@ def _resolve_models(ctx):
         if ctx.model is None and ctx.provider_name == "openai-compatible":
             ctx.model_resolution.update(preflight_blocked=True, key_preflight={"ready": False,
                 "blocks": [f"назначение API-модели недостоверно: {type(_e).__name__}"]})
-    
-    
-    
-    
+
+
+
+
     ctx.sec_qualified = bool(((ctx.model_resolution.get("plan") or {}).get("security_review") or {}).get("resolved"))
-    
-    
+
+
     if isinstance(ctx.model_resolution, dict) and ctx.model_resolution.get("preflight_blocked"):
         _kpf = ctx.model_resolution.get("key_preflight", {})
         # #633: provider/key preflight не пройден до вызова модели — вызов человека, живший только в

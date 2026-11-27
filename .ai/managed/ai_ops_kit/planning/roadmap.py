@@ -62,8 +62,8 @@ def roadmap_rel(child_root) -> str:
     try:
         return _c.declared_path(child_root, "roadmap", ROADMAP_REL)
     except _c.ConfigInvalid:
-        
-        
+
+
         return ROADMAP_REL
 
 

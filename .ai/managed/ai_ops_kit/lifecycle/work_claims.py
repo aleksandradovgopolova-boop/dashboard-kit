@@ -123,7 +123,7 @@ def _git_common_dir(start=None):
     """Каталог `.git`, ОБЩИЙ для всех рабочих копий репозитория. -> Path или None.
 
     None — «не измерили» (не git, git не установлен), и вызывающие говорят это, а не «заявок нет»."""
-    
+
     cwd = str(start or Path.cwd())
     try:
         rc, out, _ = gitio.run(["rev-parse", "--git-common-dir"], cwd=cwd)
@@ -134,9 +134,9 @@ def _git_common_dir(start=None):
     common = Path(out)
     if not str(common):
         return None
-    
-    
-    
+
+
+
     if not common.is_absolute():
         common = (Path(cwd) / common).resolve()
     return common
@@ -239,11 +239,11 @@ def load_copy_claims(start=None) -> list:
             continue
         if not isinstance(rec, dict) or not rec.get("id"):
             continue
-        
-        
-        
-        
-        
+
+
+
+
+
         wt = rec.get("worktree")
         if wt and not Path(wt).is_dir():
             continue
@@ -440,7 +440,7 @@ def bind_attempt_budget(root, wid, admission, budget, guard):
             if _budget_json(binding) != _budget_json(_goal_budget_binding(wid, admission)):
                 raise BudgetExceeded('budget immutable original goal/constraints binding mismatch')
         else:
-            
+
             binding = {'workitem_id': wid, 'base_sha': admission['base_sha'], 'inputs': admission['inputs']}
     budget.bind_durable(ledger, binding, create=origin == 'fresh', guard=guard)
     with aw._claim_lock(path, root) as legacy:

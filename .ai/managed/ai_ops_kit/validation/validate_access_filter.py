@@ -75,7 +75,7 @@ def check(data: dict):
                 e.append(f"rule[{role}]: класс '{c}' не объявлен в data_classes")
         if "secret" in ac:
             e.append(f"ИНВАРИАНТ секретов: rule[{role}] допускает 'secret' — секреты не входят в context")
-    
+
     for role in sorted(ROLES):
         n = seen_roles.get(role, 0)
         if n == 0:

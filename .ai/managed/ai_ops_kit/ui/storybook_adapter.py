@@ -60,8 +60,8 @@ def _load_experience_contract(root):
         import yaml as _y
         try:
             doc = _y.safe_load(p.read_text(encoding="utf-8"))
-        
-        
+
+
         except (OSError, _y.YAMLError):
             return None
         return doc if isinstance(doc, dict) else None
@@ -157,7 +157,7 @@ def _matches_changed(import_path: str, changed: list[str]) -> bool:
             continue
         cc_parts = cc.split("/")
         n = min(len(ip_parts), len(cc_parts))
-        
+
         if n >= 1 and ip_parts[-n:] == cc_parts[-n:]:
             return True
     return False
@@ -248,7 +248,7 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
     changed = [c.strip() for c in (changed_files or []) if c.strip()]
     provenance = []
 
-    
+
     meta_path = _find(root, _META)
     meta_sha = None
     if meta_path:
@@ -258,7 +258,7 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
             provenance.append(str(meta_path.relative_to(root)))
     evidence_sha = meta_sha or commit_sha
 
-    
+
     idx_path = _find(root, _STORY_INDEX)
     has_config = (root / ".storybook").is_dir()
     stories = []
@@ -274,7 +274,7 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
     storybook = {"detected": detected, "build_status": build_status, "version": None,
                  "story_count": len(stories)}
 
-    
+
     if changed and stories:
         aff = [s for s in stories if _matches_changed(s.get("importPath", ""), changed)]
     else:
@@ -284,26 +284,26 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
     # v3.2.3: каталог дизайн-системы — нормализованные имена ВСЕХ компонентов индекса (для reuse-чека)
     component_catalog = sorted({_component_base(_component_of(s)) for s in stories if _component_of(s)})
 
-    
-    
+
+
     covered = {}
     hay = " ".join((s.get("name", "") + " " + s.get("id", "")).lower() for s in aff)
     for st in ALL_STATES:
         covered[st] = st in hay
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
     required = list(REQUIRED_STATES) if affected_stories else []
-    
-    
-    
+
+
+
     required_stories = {"required": [], "present": [], "missing": [], "complete": True}
     if affected_stories:
         _contract = _load_experience_contract(root)
@@ -317,7 +317,7 @@ def build_bundle(child_root, commit_sha=None, changed_files=None) -> dict:
     state_coverage = {"required": required, "states": covered, "missing": missing,
                       "complete": not missing}
 
-    
+
     def _load_section(key, norm):
         p = _find_artifact(root, key)
         if p:
@@ -374,8 +374,8 @@ def evidence_for_gate(bundle: dict, expected_sha=None) -> dict:
     # v3.1.9: покрытие состояний доказано ТОЛЬКО если есть затронутые истории. Пустой affected при
     # UI-правке = у изменённого компонента нет историй -> complete «вакуумно True» НЕ считается pass.
     has_affected = bool(bundle.get("affected_stories"))
-    
-    
+
+
     rs = bundle.get("required_stories") or {}
     rs_missing = bool(rs.get("missing"))
     ux_pass = has_affected and sc.get("complete") and inter.get("status") == "pass" and not rs_missing

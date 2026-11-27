@@ -65,7 +65,7 @@ def check_change(change_dir):
                 fail(f"{rel}/specs/{capability}", "нет секции ADDED/MODIFIED/REMOVED/RENAMED Requirements")
             for name, body in split_requirement_blocks(text):
                 touched.append((capability, name))
-                
+
                 is_removed = re.search(r"REMOVED Requirements[\s\S]*?" + re.escape(name), text, re.I)
                 if not SCEN_RE.search(body) and not is_removed:
                     fail(f"{rel}/specs/{capability}", f"требование '{name}' без '#### Scenario:'")
@@ -88,12 +88,12 @@ def main(argv):
             if d.is_dir() and d.name != "archive":
                 active.append(d)
 
-    
+
     touched_by_change = {}
     for ch in active:
         touched_by_change[ch.name] = check_change(ch)
 
-    
+
     seen = {}
     for cname, reqs in touched_by_change.items():
         for key in reqs:

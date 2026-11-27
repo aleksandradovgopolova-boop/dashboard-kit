@@ -77,7 +77,7 @@ def _latest_tag(root: Path) -> str | None:
     `release_history` из repo_audit — это `git tag --list` в лексикографическом порядке, где `v0.8.0`
     идёт раньше `3.36.12`. Называть первый «последним релизом» — фактическая ошибка; берём по дате.
     """
-    
+
     import subprocess
     try:
         rc, out, _ = git(root, "for-each-ref", "--sort=-creatordate",
@@ -136,12 +136,12 @@ def sections(repo_root: Path, evidence: dict | None = None) -> dict:
     title, desc = _readme_summary(root)
     version = (_read(root, "VERSION") or "").strip() or None
     releases = ev.get("release_history")
-    
+
     last_release = _latest_tag(root) or (releases[0] if releases else None)
 
     out = {}
 
-    
+
     if title or desc:
         out["Название и описание"] = {
             "state": INFERRED, "source": "README.md",
@@ -150,11 +150,11 @@ def sections(repo_root: Path, evidence: dict | None = None) -> dict:
         out["Название и описание"] = _unknown("в README нет заголовка/описания; назвать продукт "
                                               "должен владелец")
 
-    
+
     out["Аудитория и проблема"] = _unknown("аудитория и Problem/JTBD из кода не выводятся — нужен "
                                            "ответ владельца (контур product_strategy)")
 
-    
+
     stack = None
     prof = ev.get("profile") or {}
     if isinstance(prof, dict):
@@ -171,18 +171,18 @@ def sections(repo_root: Path, evidence: dict | None = None) -> dict:
                  + (". " + "; ".join(envs) if envs else "")
                  + ". Какое окружение считать production — за владельцем."}
 
-    
+
     out["Owner и команда"] = _unknown("владелец и команда из кода достоверно не выводятся — назвать "
                                       "должен человек")
 
-    
+
     out["Статус и зрелость"] = {
         "state": INFERRED, "source": "repo_audit.classify",
         "value": f"Класс: **{cls.get('class')}** (уверенность {cls.get('confidence')}). "
                  f"{'; '.join(cls.get('reasons') or []) or 'признаки зрелости не собраны'}. "
                  f"Подтверждение владельца желательно."}
 
-    
+
     tech = _tech_health(ev)
     out["Здоровье (продукт / технологии / delivery)"] = {
         "state": INFERRED if tech["state"] != UNKNOWN else UNKNOWN,
@@ -191,7 +191,7 @@ def sections(repo_root: Path, evidence: dict | None = None) -> dict:
                  f"Технологии: **{tech['band']}** — {tech['reason']}. "
                  f"Delivery: {_delivery_health(ev)}."}
 
-    
+
     if version or last_release:
         out["Версия и последний релиз"] = {
             "state": VERIFIED, "source": "VERSION, git tags",
@@ -201,10 +201,10 @@ def sections(repo_root: Path, evidence: dict | None = None) -> dict:
     else:
         out["Версия и последний релиз"] = _unknown("нет ни VERSION, ни тегов — версию назвать нечем")
 
-    
+
     out["Текущий milestone и прогресс"] = _milestone(root)
 
-    
+
     deps = list(ev.get("dependency_manifests") or []) + list(ev.get("api_schemas") or [])
     out["Риски и зависимости"] = {
         "state": INFERRED, "source": "манифесты зависимостей, API-схемы",
@@ -309,9 +309,9 @@ def _milestone(root: Path) -> dict:
     цель для пользователя и связанные направления. Ключа нет — откат к прежнему прокси целиком
     сохранён (молодой репозиторий без плана видит то же, что раньше).
     """
-    
-    
-    
+
+
+
     from ai_ops_kit.planning import delivery_plan as _plan
     try:
         plan = _plan.load(root)
@@ -329,23 +329,23 @@ def _milestone(root: Path) -> dict:
             return {"state": VERIFIED, "source": "planning/plan.yaml -> current_milestone",
                     "value": value}
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
     from ai_ops_kit.planning import roadmap as _roadmap
     rp = _roadmap.resolve_roadmap_path(root)
     if rp.is_file():
         now = _roadmap.parse(rp.read_text(encoding="utf-8")).get("now") or {}
         items = now.get("items") or []
         if items:
-            
-            
+
+
             body = " · ".join(_HTML_COMMENT.sub("", i).lstrip("-*").strip() for i in items)
             body = body.strip()
             if body:
@@ -421,8 +421,8 @@ def merge_owner_sections(existing: str, generated: str, reg: dict | None = None)
     seen = set()
     for title, body in ex_secs:
         seen.add(title)
-        
-        
+
+
         keep = title in OWNER_SECTIONS or title not in gen_body
         out.append(f"## {title}{body if keep else gen_body[title]}")
     for title, body in gen_secs:

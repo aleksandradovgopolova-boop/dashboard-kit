@@ -274,7 +274,11 @@ def _render_articles(articles):
              for r in articles]
     header = (f"Статьи Архитектурной конституции для ревью кода ({_CONSTITUTION_REL}, части I–II). "
               "Замечание по статье называй её ID; SHOULD-статьи (имена, место логики) машина не "
-              "ловит — их проверяешь ты. Вердикт по-прежнему заземляй цитатой изменённого файла:")
+              "ловит — их проверяешь ты. В частности имя-транслитерация (`proverka` вместо `check`, "
+              "`polzovatel` вместо `user`): алфавит латинский, но это не английское слово — линтер "
+              "(CODE-011) такое пропускает, потому что судит алфавит, а не язык; английское слово "
+              "вместо транслита — твой критерий (CODE-004). Вердикт по-прежнему заземляй цитатой "
+              "изменённого файла:")
     return _render_capped(header, lines, _CONSTITUTION_ARTICLES_CAP,
                           lambda n: f"… не вошло статей: {n} (лимит размера) — см. {_CONSTITUTION_REL}")
 
@@ -313,7 +317,7 @@ def _constitution_criteria(gate_id, root=None, changed_files=None):
         block = f"статьи конституции недоступны: реестр {_CONSTITUTION_REL} не найден или пуст — суди без них"
     else:
         block = _render_articles(articles)
-    
+
     if articles and root is not None and changed_files is not None:
         block += "\n" + _render_findings(root, changed_files, rules_path=path)
     return block
@@ -323,7 +327,7 @@ def _parse_yaml_block(text):
     """Достать YAML-артефакт из ответа author-модели. v3.0-rc5 (finding живого прогона kimi): терпимо к
     РАЗНЫМ стилям вывода моделей — несколько ```-блоков, проза вокруг, YAML без ограды после текста."""
     import yaml
-    
+
     if isinstance(text, dict):
         return text
     s = text or ""
@@ -361,8 +365,8 @@ def _openspec_validate(work_root, change_id):
 def _authoring_specs():
     """v2.86: артефакт-гейты, которые движок умеет ЗАКРЫВАТЬ производством артефакта + детерминированной
     проверкой ФОРМЫ (не «качества»). specification обрабатывается ОТДЕЛЬНО."""
-    
-    
+
+
     from ai_ops_kit.checks import requirements_artifact as vra
     from ai_ops_kit.checks import plan_artifact as vpa
     return {

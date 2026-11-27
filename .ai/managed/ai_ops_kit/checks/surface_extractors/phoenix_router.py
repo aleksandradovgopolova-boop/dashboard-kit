@@ -176,8 +176,8 @@ def extract_phoenix_routes(parsed: ParsedFile) -> list:
         return []
 
     out: list = []
-    
-    
+
+
     stack: list = []
     for idx, raw in enumerate(src.split("\n")):
         line = _strip_comment(raw)

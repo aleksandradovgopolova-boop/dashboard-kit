@@ -234,7 +234,7 @@ def _process_router(masked: str, src: str, open_brace_idx: int, prefix: str,
             out.append(Surface(kind="api",
                                ref=f"{rel}:{_lineno(src, key_pos)}|{name}",
                                confidence="inferred", extractor="trpc-router"))
-        
+
 
 
 def extract_trpc_operations(parsed: ParsedFile) -> list:

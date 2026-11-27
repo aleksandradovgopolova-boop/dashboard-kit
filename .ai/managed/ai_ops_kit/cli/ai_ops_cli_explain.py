@@ -329,8 +329,8 @@ def _explain_message(state):
     st = f["status"]
     label = _EXPLAIN_STATUS_LABEL.get(st, "в работе")
     cost = state.get("cost") or {}
-    
-    
+
+
     where = ("Работа идёт." if f.get("branch") else "Работа начата.")
     blocker = _explain_blocker(st, f.get("human_approval"), state.get("conflicts") or [])
     if blocker:
@@ -339,8 +339,8 @@ def _explain_message(state):
     else:
         why = "Сейчас ничего не мешает — работа продолжается."
         status = "ok"
-    
-    
+
+
     cmd = _explain_next_command(st, f["wid"], f["task"])
     technical = {"работа": f["wid"], "workflow": f.get("workflow") or "—", "статус": st,
                  "гейтов в плане": state.get("gates") if state.get("gates") is not None else "—",
@@ -367,8 +367,8 @@ def _intent_explain(task, child_root, signals, a):
     else:
         print(presenter.render(_explain_message(state),
                                audience=presenter.audience_from_config(Path(child_root))))
-    
-    
+
+
     return 0 if state.get("registry_ok") else 1
 
 

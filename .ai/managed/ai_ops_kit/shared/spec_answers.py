@@ -31,14 +31,14 @@ from collections.abc import Iterable
 
 
 SECTION_QUESTIONS = {
-    
+
     "goal": ("зачем", "Зачем эта задача? Какую пользу она приносит?"),
     "scope": ("что", "Что именно нужно сделать (в двух словах — объём работы)?"),
     "expected_behavior": ("поведение", "Как всё должно вести себя после того, как задача сделана?"),
     "acceptance_criteria": ("как-поймём", "Как поймём, что задача готова?"),
     "constraints": ("ограничения", "Что нельзя трогать или ломать, делая эту задачу?"),
     "affected_files": ("файлы", "Какие места/файлы это затрагивает (если знаешь)?"),
-    
+
     "requirements": ("требования", "Какие конкретные требования должны выполняться?"),
     "acceptance_scenarios": ("сценарии", "Опиши сценарий: что делает пользователь и что видит в ответ?"),
     "contracts": ("контракты", "Какие интерфейсы/контракты (API, форматы) это задевает?"),
@@ -48,7 +48,7 @@ SECTION_QUESTIONS = {
     "implementation_plan": ("план", "Как по шагам предполагается это сделать?"),
     "write_scope": ("область-правок", "Какие файлы/области разрешено менять?"),
     "verification_strategy": ("проверка", "Чем и как это будет проверяться?"),
-    
+
     "problem": ("проблема", "Чья это боль и в чём она?"),
     "users_jtbd": ("пользователи", "Кто пользователи и какую задачу они этим решают?"),
     "value": ("ценность", "В чём ценность для пользователя или бизнеса?"),
@@ -60,7 +60,7 @@ SECTION_QUESTIONS = {
     "analytics": ("аналитика", "Что нужно замерять/логировать?"),
     "rollout": ("раскатка", "Как это раскатывать — сразу всем или постепенно?"),
     "risks": ("риски", "Какие риски у этой задачи?"),
-    
+
     "threat_model": ("угрозы", "Какие угрозы безопасности здесь стоит учесть?"),
     "rollback_plan": ("откат", "Как откатить изменение, если что-то пошло не так?"),
     "migration_plan": ("миграция", "Нужна ли миграция данных/схемы и какая?"),
@@ -143,7 +143,11 @@ def apply_answers(child_root: str | Path, wid: str, text: str) -> dict:
     import yaml
 
     matched, unmatched = parse_plain_answers(text)
-    sp = Path(child_root) / "features" / str(wid) / "spec.yaml"
+    from ai_ops_kit.shared.work_areas import artifact_path
+    try:
+        sp = artifact_path(Path(child_root) / "features", wid, "spec.yaml")
+    except ValueError as exc:
+        return {"applied": [], "unmatched": unmatched, "error": str(exc)}
     if not sp.is_file():
         return {"applied": [], "unmatched": unmatched,
                 "error": f"спецификации {sp} ещё нет — сначала запусти specify"}

@@ -116,21 +116,21 @@ def _scan(text, patterns):
     lines = text.splitlines()
     for lineno, line in enumerate(lines, 1):
         for pid, rx in patterns:
-            
-            
-            
-            
-            
+
+
+
+
+
             найдено_на_строке = False
             for m in rx.finditer(line):
-                
-                
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
+
+
                 value = m.group(1) if m.groups() else m.group(0)
                 if _looks_like_placeholder(value):
                     continue
@@ -162,9 +162,9 @@ def scan_secrets(files):
     """
     res = []
     for path, text in files.items():
-        
-        
-        
+
+
+
         for f in _scan(text, SECRET_PATTERNS):
             res.append({"path": path, **f})
     return res
@@ -331,23 +331,23 @@ def scan_injection(files):
                 найдено = _scan(без_комментариев, INJECTION_PATTERNS)
         for f in найдено:
             res.append({"path": path, **f})
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         if _child_process_imported(text):
             были_вызовы, вызовы = _launch_findings(text, path, _blank_comments, _blank_strings)
             for lineno in вызовы:
                 res.append({"path": path, "id": "node_child_process_exec", "line": lineno})
             if были_вызовы:
-                
-                
-                
-                
-                
+
+
+
+
+
                 res = [f for f in res
                        if not (f["path"] == path and f["id"] == "node_child_process")]
         for lineno in _sql_template_literal_lines(text):
@@ -356,9 +356,9 @@ def scan_injection(files):
         # не считается: исполнится ровно написанное (решение и цена — в `scan_inline_code`).
         for lineno in _inline_code_lines(text, path):
             res.append({"path": path, "id": "inline_code_interpolated", "line": lineno})
-    
-    
-    
+
+
+
     for f in res:
         f["area"] = _area_of(f["path"])
     return res
@@ -409,8 +409,8 @@ def security_evidence(secrets, injections, new_deps, deps_compared=True):
     else:
         ev["deps_approved"] = {"status": "pass" if not new_deps else "fail",
                                "new_dependencies": new_deps}
-    
-    
+
+
     ev["no_injection_surface"] = {"status": "needs_review" if not injections else "fail",
                                   "flags": injections,
                                   "note": "детерминированный сканер не закрывает injection-surface — "
@@ -439,7 +439,7 @@ def _looks_binary(data: bytes) -> bool:
 
 
 def _git_changed_files(root, base):
-    
+
     try:
         r = subprocess.run(["git", "-C", str(root), "diff", "--name-only", f"{base}..HEAD"],
                            capture_output=True, text=True, timeout=90)
@@ -468,9 +468,9 @@ def _read_files(root, rels):
 
 
 def _git_show(root, ref, rel):
-    
-    
-    
+
+
+
     try:
         r = subprocess.run(["git", "-C", str(root), "show", f"{ref}:{rel}"],
                            capture_output=True, text=True, timeout=90)
@@ -528,8 +528,8 @@ def scan_repo(root, base=None):
     root = Path(root)
     changed = _git_changed_files(root, base) if base else None
     if changed is None:
-        
-        
+
+
         try:
             r = subprocess.run(["git", "-C", str(root), "ls-files"],
                                capture_output=True, text=True, timeout=90)
@@ -538,15 +538,15 @@ def scan_repo(root, base=None):
             changed = []
     files = _read_files(root, changed)
     secrets = scan_secrets(files)
-    
-    
-    
-    
-    
+
+
+
+
+
     injections, vendor = _vendor_split(scan_injection(files))
-    
-    
-    
+
+
+
     vendor_compared = bool(base)
     if vendor_compared and vendor:
         vendor = _vendor_arrivals(root, base, vendor, files)
@@ -555,10 +555,10 @@ def scan_repo(root, base=None):
     after_mani = {p: c for p, c in files.items() if Path(p).name in DEP_MANIFESTS}
     if not after_mani:  # манифесты могли не измениться — прочитаем текущие для полноты
         after_mani = _read_files(root, [m for m in DEP_MANIFESTS if (root / m).is_file()])
-    
-    
-    
-    
+
+
+
+
     deps_compared = bool(base)
     before_mani = {p: (_git_show(root, base, p) if base else "") for p in after_mani}
     new_deps = new_dependencies(before_mani, after_mani) if deps_compared else []
@@ -589,8 +589,8 @@ def _vendor_lines(rep):
     out = [f"  ── поставленная зависимость .ai/managed/ ({len(vendor)}) ──",
            f"     {rep['vendor_note']}"]
     if not rep.get("vendor_compared"):
-        
-        
+
+
         out += [f"     {f['id']} — {f['path']}:{f['line']}" for f in vendor]
         return out
     out += [f"     ПРИЕХАЛО С ОБНОВЛЕНИЕМ {f['id']} — {f['path']}:{f['line']}"
@@ -611,15 +611,15 @@ def main(argv):
     if a.json:
         print(json.dumps(rep, ensure_ascii=False, indent=2))
     else:
-        
-        
-        
-        
+
+
+
+
         s = [f"SECURITY-SCAN: файлов {rep['scanned_files']} · секретов {len(rep['secrets'])} · "
              f"injection-флагов {len(rep['injection_flags'])} · новых зависимостей {len(rep['new_dependencies'])}"]
         s += [f"  СЕКРЕТ {x['id']} — {x['path']}:{x['line']}" for x in rep["secrets"]]
-        
-        
+
+
         боевые = [f for f in rep["injection_flags"] if f.get("area") != "harness"]
         обвязка = [f for f in rep["injection_flags"] if f.get("area") == "harness"]
         s += [f"  ПОДОЗРИТЕЛЬНОЕ МЕСТО {f['id']} — {f['path']}:{f['line']}" for f in боевые]
@@ -632,7 +632,7 @@ def main(argv):
                      "это НЕ «новых нет»")
         s += [f"  НОВАЯ ЗАВИСИМОСТЬ {d} (нужно одобрение)" for d in rep["new_dependencies"]]
         print("\n".join(s))
-    
+
     return 1 if (rep["secrets"] or rep["new_dependencies"]) else 0
 
 

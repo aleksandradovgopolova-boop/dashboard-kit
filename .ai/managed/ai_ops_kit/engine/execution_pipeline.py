@@ -169,9 +169,9 @@ def _pipeline_build_report(*, plan, child_root, profile, sandbox, pol, loop, app
                     "undetermined": profile.get("undetermined", [])},
         "containment": _build_containment(sandbox, pol, loop),
         "loop": _build_loop_section(loop, applied),
-        
-        
-        
+
+
+
         "isolation": {"worktree": worktree_rel,     # каталог изоляции (None -> прогон в основном дереве)
                       "sandboxed": bool(sandbox),
                       "network": "on" if pol.allow_network else "restricted"},
@@ -195,25 +195,25 @@ def _pipeline_build_report(*, plan, child_root, profile, sandbox, pol, loop, app
         "gates": {"evaluated": gates["evaluated_gates"], "unmet": gates["unmet_gates"],
                   "blocked": gates["blocked"],
                   "other_blocking_unmet": other_blocking_unmet,   # P0.1: блокирующие ≠ impl_verification
-                  
-                  
-                  
+
+
+
                   "closure": gates.get("closure"),
                   "claim_origins": gates.get("claim_origins"),
-                  
-                  
+
+
                   "evidence_verdict": gates.get("evidence_verdict"),
-                  
+
                   "gate_results": gates.get("gate_results"),
                   "tested_revision": committed_sha},
-        
+
         "approval_recheck": approval_recheck,
         # v3.35.2: НАХОДКИ ГЕЙТА СВЯЗНОСТИ ДОХОДЯТ ДО ЧЕЛОВЕКА. Гейт исполнялся и писал evidence, но
         # вывод прогона о нём молчал: «описание продукта отстало от кода» существовало только внутри
         # yaml-артефакта. Гейт, чьи находки не видны, — это гейт, которого нет.
         "contour_consistency": contour_consistency,
-        
-        
+
+
         "reviews": reviews,
         # v3.1.9: UIEvidenceBundle, собранный на ТОЧНОМ committed_sha (qualification evidence). None,
         # если калибровка выкл / evidence инжектировано / нет коммита. commit_sha в bundle привязан.
@@ -231,21 +231,21 @@ def _pipeline_build_report(*, plan, child_root, profile, sandbox, pol, loop, app
         # `security_pack.for_report` — белый список полей: значения секретов и содержимое файлов в
         # отчёт не уезжают (он лежит в репозитории и попадает в PR).
         "security_scan": _security_pack_for_report(security_pack_result),
-        
-        
+
+
         "authored": authored,
         # baseline-diff: None вне режима; иначе — статусы проверок на базе + регрессии/починки
         "baseline": ({"checks": {k: (v or {}).get("status") for k, v in (baseline_checks or {}).items()},
                       "regressions": regressions, "fixed": fixed, "no_regressions": no_regressions,
                       "unstable_checks": rd.get("unstable_checks") or []} if baseline_diff else None),
         "ready_criterion": ready_criterion,    # all-green | no-regressions
-        
-        
+
+
         "spec_depth": {"level": _level, "missing": spec_depth_missing, "ok": spec_depth_ok},
-        
+
         "spec_first": {"artifact_present": bool(spec_incomplete) or _sl._spec_path(child_root, wid).is_file(),
                        "incomplete_sections": spec_incomplete, "ok": spec_complete_ok,
-                       
+
                        "prestage": {"ran": bool(author and author_proposer is not None),
                                     "invalid": [e.get("gate") for e in spec_prestage_bad],
                                     "implementation_skipped": bool(spec_prestage_bad)}},
@@ -273,7 +273,8 @@ def run_pipeline(task, signals, child_root, proposer, policy=None, budget=None,
                  calibrated_enforcement=False, ui_evidence=None,   # v3.1.8 калиброванное UI-enforcement
                  strict_judge_qualified=True,   # v3.7.1: есть ли QUALIFIED security/integration судья
                  security_reviewer_proposer=None,   # v3.7.3 (#5): ОТДЕЛЬНЫЙ security-судья (не общий reviewer)
-                 reevaluate_only=False, verification_intent="merge_candidate"):   # v3.8.4: переоценить гейты существующего HEAD БЕЗ переавторинга
+                 reevaluate_only=False, verification_intent="merge_candidate", review_handoff_root=None,
+                 base_revision=None):
     """Один прогон движка: [worktree-изоляция] -> детект -> правки через tool-loop ->
     [commit на ветке] -> evidence (на зафиксированном SHA) -> гейты RunPlan.
 
@@ -313,16 +314,16 @@ def run_pipeline(task, signals, child_root, proposer, policy=None, budget=None,
     signals = dict(signals or {})
     signals.setdefault("task_text", task)
 
-    
-    
+
+
     if plan is None:
         plan = run_plan.build_plan(signals, workitem_id=feature)
     plan["execution_budget"] = budget.limits()
     wid = plan["workitem_id"]
 
-    
-    
-    _iso = _setup_isolation(child_root, wid, base, isolate=isolate, resume=resume,
+
+
+    _iso = _setup_isolation(child_root, wid, base, isolate=isolate, resume=resume, base_revision=base_revision,
                             reevaluate_only=reevaluate_only, discard_previous=discard_previous,
                             open_pr=open_pr)
     if _iso.get("error"):
@@ -331,39 +332,39 @@ def run_pipeline(task, signals, child_root, proposer, policy=None, budget=None,
     resume_info, base_binding = _iso["resume_info"], _iso["base_binding"]
     base_ref, base_sha, delivery_pf = _iso["base_ref"], _iso["base_sha"], _iso["delivery_pf"]
 
-    
+
     profile = project_detector.detect(work_root)
 
-    
+
     pol = _pipeline_resolve_policy(policy, sandbox, work_root, write_scope)
     is_git = _git(work_root, "rev-parse", "--is-inside-work-tree")[0] == 0
 
-    
+
     prepare, prepare_ok, baseline_checks, prepare_mutated_tree = _prepare_environment(
         profile, work_root, pol, is_git, install_deps=install_deps, isolate=isolate,
-        baseline_diff=baseline_diff)
+        baseline_diff=baseline_diff, read_only=base_revision is not None)
 
-    
-    
+
+
     ctx, authored, authored_ev, spec_prestage_bad = _assemble_context_and_author(
         task, profile, plan, wid, work_root, budget,
         context_prelude=context_prelude, resume_context=resume_context,
         baseline_diff=baseline_diff, baseline_checks=baseline_checks,
         author=author, author_proposer=author_proposer, reevaluate_only=reevaluate_only)
 
-    
+
     loop, applied, shell_changed, self_committed, head_sha = _run_tool_loop(
         proposer, work_root, pol, ctx, is_git, budget=budget, max_steps=max_steps,
         reevaluate_only=reevaluate_only, spec_prestage_bad=spec_prestage_bad)
 
-    
-    
+
+
     committed_sha, work_branch, work_produced_by, tree_clean_before_checks = _commit_work(
         work_root, wid, task, is_git, applied, authored, shell_changed, self_committed, head_sha,
         commit=commit, reevaluate_only=reevaluate_only)
 
-    
-    
+
+
     _ev = _assemble_evidence(
         profile, work_root, pol, child_root, wid, plan, signals, loop,
         commit=commit, is_git=is_git, committed_sha=committed_sha, base_sha=base_sha,
@@ -372,9 +373,9 @@ def run_pipeline(task, signals, child_root, proposer, policy=None, budget=None,
         review=review, reviewer_proposer=reviewer_proposer, budget=budget,
         strict_judge_qualified=strict_judge_qualified,
         security_reviewer_proposer=security_reviewer_proposer, reevaluate_only=reevaluate_only,
-        verification_intent=verification_intent)
-    
-    
+        verification_intent=verification_intent, review_handoff_root=review_handoff_root)
+
+
     coll = _ev["coll"]
     gate_ev = _ev["gate_ev"]
     tree_clean_after_checks = _ev["tree_clean_after_checks"]
@@ -383,7 +384,7 @@ def run_pipeline(task, signals, child_root, proposer, policy=None, budget=None,
     security_pack_result = _ev["security_pack_result"]
     effective_approval_signals = _ev["effective_approval_signals"]
 
-    
+
     gates = _pipeline_run_gates(plan, gate_ev, committed_sha, signals, not_applicable, exempt_reason,
                                 reevaluate_only=reevaluate_only, worktree_rel=worktree_rel,
                                 child_root=child_root, wid=wid)
@@ -398,6 +399,7 @@ def run_pipeline(task, signals, child_root, proposer, policy=None, budget=None,
         require_fix=require_fix, tree_clean_before_checks=tree_clean_before_checks,
         tree_clean_after_checks=tree_clean_after_checks, prepare_ok=prepare_ok,
         commit=commit, effective_approval_signals=effective_approval_signals,
+        approval_base=base_sha if base_revision is not None else None,
         security_pack_result=security_pack_result, gate_ev=gate_ev)
     ready = rd["ready"]
     env_qualified = rd["env_qualified"]
@@ -410,18 +412,18 @@ def run_pipeline(task, signals, child_root, proposer, policy=None, budget=None,
     spec_bad_status = rd["spec_bad_status"]
     context_overflow = rd["context_overflow"]
 
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
     delivery, delivery_plan, can_deliver = _plan_delivery(
         open_pr, ready, committed_sha, work_branch, base_binding, base_ref, base_sha,
         work_root, wid, task, delivery_pf)
-    
+
     overall_status = _compute_overall_status(ready, can_deliver, open_pr)
 
     not_yet = _build_not_yet_list(commit, env_qualified, open_pr, spec_prestage_bad,
@@ -429,7 +431,7 @@ def run_pipeline(task, signals, child_root, proposer, policy=None, budget=None,
                                   context_overflow, approvals_cover_ok, approval_recheck,
                                   acceptance_block_reason=(acceptance_block_reason if acceptance_block else None), checks=coll["checks"])
 
-    
+
     report = _pipeline_build_report(
         plan=plan, child_root=child_root, profile=profile, sandbox=sandbox, pol=pol,
         loop=loop, applied=applied, worktree_rel=worktree_rel, base_binding=base_binding,
@@ -456,7 +458,7 @@ def _assemble_context_and_author(task, profile, plan, wid, work_root, budget, *,
     # v2.108: compiled payload из ContextBundle РЕАЛЬНО в prompt (не только отчёт).
     if context_prelude:
         ctx = context_prelude + "\n\n" + ctx
-    
+
     if resume_context:
         ctx = resume_context + "\n\n" + ctx
     if baseline_diff:
@@ -464,9 +466,9 @@ def _assemble_context_and_author(task, profile, plan, wid, work_root, budget, *,
         if fails:
             ctx += ("\n\n=== ТЕКУЩИЕ ПРОВАЛЫ ПРОВЕРОК НА БАЗЕ (почини относящиеся к задаче; "
                     "не ломай остальное) ===\n" + fails)
-    
-    
-    
+
+
+
     authored, authored_ev = None, {}
     spec_prestage_bad = []
     if author and author_proposer is not None and not reevaluate_only:
@@ -485,12 +487,12 @@ def _run_tool_loop(proposer, work_root, pol, ctx, is_git, *, budget, max_steps,
     """Фаза execute: снять HEAD до правок, прогнать реализацию через модель (или пропустить при
     reevaluate/невалидной pre-spec), распознать факт правок из git (broker/shell/model-commit).
     v3.38 (K6): вынесено из run_pipeline. -> (loop, applied, shell_changed, self_committed, head_sha)."""
-    
-    
-    
+
+
+
     _rc_hb, _out_hb, _ = _git(work_root, "rev-parse", "HEAD") if is_git else (1, "", "")
     head_before = _out_hb.strip() if _rc_hb == 0 else None
-    
+
     if reevaluate_only:
         # v3.8.4: НЕ авторим и НЕ гоняем loop — переоцениваем существующий HEAD как есть (0 вызовов).
         loop = {"schema_version": 1, "kind": "tool-loop-report", "stopped": "reevaluate-only",
@@ -505,8 +507,8 @@ def _run_tool_loop(proposer, work_root, pol, ctx, is_git, *, budget, max_steps,
     # v2.93: факт правок из git (tracked-diff ИЛИ новые untracked), не только из счётчика write —
     # иначе правки через shell (sed/форматтер) не считались «применено» и коммит терялся.
     shell_changed = bool(applied) or (is_git and _has_changes(work_root))
-    
-    
+
+
     self_committed, head_sha = (_head_advanced(work_root, head_before)
                                 if is_git else (False, None))
     return loop, applied, shell_changed, self_committed, head_sha
