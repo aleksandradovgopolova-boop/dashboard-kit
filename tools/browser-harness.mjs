@@ -75,6 +75,9 @@ export async function launch(chrome) {
       wait.clear();
       ws.close();
       proc.kill();
+      // Crashpad/updater can inherit Chrome's stderr after Chrome exits.
+      // Release our pipe so those helpers cannot keep a finished test alive.
+      proc.stderr.destroy();
     }
     await rm(profile, { recursive: true, force: true }).catch(() => {});
   };
@@ -82,6 +85,7 @@ export async function launch(chrome) {
   } catch (e) {
     ws?.close();
     proc.kill();
+    proc.stderr.destroy();
     await rm(profile, { recursive: true, force: true }).catch(() => {});
     throw e;
   }

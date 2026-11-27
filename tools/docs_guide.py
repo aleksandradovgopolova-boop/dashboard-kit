@@ -18,6 +18,7 @@ def render(pages, component_render):
 <script src="js/docs-overview.js?v=20261029-single-row" defer></script>
 </head>''')
  start = start.replace('tools/component_pages/p1_controls.py', 'tools/docs_guide.py')
+ start = start.replace('<div class="sc-ctl">', '<div class="sc-ctl">\n    <a class="dk-btn dk-btn--ghost" href="product-console.html">Пульт</a>', 1)
  rules = render_assembly_rules()
  policy = json.loads((Path(__file__).resolve().parent.parent/'.ai/project/uiux-policy.json').read_text())
  heuristics = ''.join('<tr><td>'+e(h['name'])+'</td><td>'+e(h['requirement'])+'</td></tr>' for h in policy['heuristics'])

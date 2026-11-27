@@ -1,0 +1,163 @@
+{
+  "fetchedAt": "2026-11-26T16:03:27Z",
+  "repository": "aleksandradovgopolova-boop/dashboard-kit",
+  "sources": {
+    "pages": {
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/actions/runs/42221289606",
+      "ok": true,
+      "complete": true
+    },
+    "ci": {
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/actions/runs/42221198356",
+      "ok": true,
+      "complete": true
+    },
+    "main": {
+      "url": "https://api.github.com/repos/aleksandradovgopolova-boop/dashboard-kit/commits/main",
+      "ok": true,
+      "complete": true
+    },
+    "issues": {
+      "url": "https://api.github.com/repos/aleksandradovgopolova-boop/dashboard-kit/issues?state=open&per_page=100",
+      "ok": true,
+      "complete": true
+    }
+  },
+  "main": {
+    "sha": "a0c373ed7ee35f6f43ca94614e653a120492961c",
+    "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/commit/a0c373ed7ee35f6f43ca94614e653a120492961c",
+    "date": "2026-11-06T12:54:01Z"
+  },
+  "issues": [
+    {
+      "number": 70,
+      "title": "dashboard-build: реальные evals минимального текста и сборки в Codex и Claude",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/70",
+      "updatedAt": "2026-11-03T13:27:41Z",
+      "deferred": true,
+      "labels": [],
+      "kind": "issue"
+    },
+    {
+      "number": 63,
+      "title": "Развитие dashboard-kit: лаконичные экраны, проверяемая сборка и точные метрики",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/63",
+      "updatedAt": "2026-11-03T13:27:37Z",
+      "deferred": false,
+      "labels": [],
+      "kind": "epic"
+    },
+    {
+      "number": 43,
+      "title": "Мобильный каркас дашборда: липкий поиск + таб-бар + порядок блоков (по референсу)",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/43",
+      "updatedAt": "2026-11-03T13:26:30Z",
+      "deferred": false,
+      "labels": [
+        "enhancement"
+      ],
+      "kind": "issue"
+    },
+    {
+      "number": 36,
+      "title": "Дашборды: экспорт обзорного экрана целиком",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/36",
+      "updatedAt": "2026-10-09T12:55:02Z",
+      "deferred": false,
+      "labels": [
+        "enhancement"
+      ],
+      "kind": "issue"
+    },
+    {
+      "number": 34,
+      "title": "Дашборды: узкий набор иконок — нет денег/процентов/трендов",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/34",
+      "updatedAt": "2026-10-09T12:54:55Z",
+      "deferred": false,
+      "labels": [
+        "enhancement"
+      ],
+      "kind": "issue"
+    },
+    {
+      "number": 31,
+      "title": "Реальные данные: выбор и приёмка первого источника",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/31",
+      "updatedAt": "2026-11-03T13:01:33Z",
+      "deferred": false,
+      "labels": [
+        "documentation",
+        "enhancement"
+      ],
+      "kind": "issue"
+    },
+    {
+      "number": 29,
+      "title": "Автономная сборка: приёмка Claude после проверенного Codex-пути",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/29",
+      "updatedAt": "2026-11-03T13:01:15Z",
+      "deferred": true,
+      "labels": [
+        "bug",
+        "enhancement"
+      ],
+      "kind": "issue"
+    },
+    {
+      "number": 25,
+      "title": "MCP: приёмка реального клиентского пути поиска и подключения кита",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/25",
+      "updatedAt": "2026-11-03T13:00:52Z",
+      "deferred": false,
+      "labels": [],
+      "kind": "issue"
+    },
+    {
+      "number": 24,
+      "title": "Дополнить каталог рецептами строк и состояниями загрузки",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/24",
+      "updatedAt": "2026-10-06T15:41:59Z",
+      "deferred": false,
+      "labels": [],
+      "kind": "issue"
+    },
+    {
+      "number": 23,
+      "title": "Добавить загрузку файлов и числовой диапазон",
+      "state": "open",
+      "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/issues/23",
+      "updatedAt": "2026-10-06T15:41:58Z",
+      "deferred": false,
+      "labels": [],
+      "kind": "issue"
+    }
+  ],
+  "ci": {
+    "name": "dashboard-check",
+    "status": "completed",
+    "conclusion": "success",
+    "sha": "a0c373ed7ee35f6f43ca94614e653a120492961c",
+    "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/actions/runs/42221198356",
+    "updatedAt": "2026-11-06T13:06:13Z",
+    "scope": "verified-published-commit"
+  },
+  "pages": {
+    "name": "Publish Dashboard Kit",
+    "status": "completed",
+    "conclusion": "success",
+    "sha": "a0c373ed7ee35f6f43ca94614e653a120492961c",
+    "url": "https://github.com/aleksandradovgopolova-boop/dashboard-kit/actions/runs/42221289606",
+    "updatedAt": "2026-11-06T12:55:50Z",
+    "scope": "verified-published-commit"
+  }
+}

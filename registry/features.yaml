@@ -1,0 +1,16 @@
+schema_version: 1
+registry_type: feature-registry
+features:
+- id: product-console
+  name: Пульт продукта
+  description:
+    what: Читает источники состояния и показывает локальный пульт, снимок и результаты проверок.
+    who: Владелец dashboard-kit.
+    verify: python3 tools/check-product-console.py и node tools/check-product-console.mjs
+  status: active
+  owner: dashboard-kit
+  surfaces:
+  - {kind: cli, ref: "tools/product-console.py:1|snapshot", confidence: verified, extractor: python-cli-argparse}
+  - {kind: cli, ref: "tools/product-console.py:1|json", confidence: verified, extractor: python-cli-argparse}
+  - {kind: cli, ref: "tools/product-console.py:1|check", confidence: verified, extractor: python-cli-argparse}
+  - {kind: cli, ref: "tools/product-console.py:1|serve", confidence: verified, extractor: python-cli-argparse}
