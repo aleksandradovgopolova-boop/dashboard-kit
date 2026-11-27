@@ -1,12 +1,13 @@
 // Real local API, responsive UI, stale results, XSS, refresh recovery and static fallback.
 import assert from 'node:assert/strict';
 import {spawn,execFileSync} from 'node:child_process';
-import {mkdir,writeFile} from 'node:fs/promises';
-import {resolve} from 'node:path';
+import {mkdir,mkdtemp,writeFile} from 'node:fs/promises';
+import {resolve,join} from 'node:path';
+import {tmpdir} from 'node:os';
 import {findChrome,launch} from './browser-harness.mjs';
 
 const root=new URL('../',import.meta.url).pathname;
-const out=resolve(process.env.DK_EVIDENCE_DIR||'/tmp/dashboard-product-console-evidence');
+const out=process.env.DK_EVIDENCE_DIR?resolve(process.env.DK_EVIDENCE_DIR):await mkdtemp(join(tmpdir(),'dashboard-product-console-'));
 await mkdir(out,{recursive:true});
 const expected=JSON.parse(execFileSync('python3',['tools/product-console.py','json'],{cwd:root,encoding:'utf8'}));
 const server=spawn('python3',['tools/product-console.py','serve','--port','0'],{cwd:root,stdio:['ignore','pipe','pipe']});
@@ -43,7 +44,7 @@ try{
   assert.equal(await ev('document.documentElement.dataset.theme'),theme);
   assert.equal(await ev("document.querySelectorAll('[data-metric]').length"),3);
   assert(await ev("[...document.querySelectorAll('[data-metric]')].every(n=>n.textContent==='Не измерено')"),'Missing measurements remain unknown');
-  assert(await ev('document.querySelector("#console-summary").textContent.includes('+JSON.stringify(expected.aiops.installed)+')'),'Installed version comes from the local config');
+  assert(await ev('document.querySelector("#console-summary").textContent.includes('+JSON.stringify(expected.aiops.installed || 'Неизвестно')+')'),'Installed version is read from the local config, or explicitly unknown without the AI Ops YAML reader');
   await click('[data-filter="plan"]');
   assert(await ev("[...document.querySelectorAll('#console-work a')].every(a=>a.getAttribute('href')==='planning/plan.yaml')"),'Plan is not copied into a second task list');
   await click('[data-filter="deferred"]');

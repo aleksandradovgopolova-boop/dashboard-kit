@@ -117,5 +117,5 @@
   byId('console-refresh').addEventListener('click', function () { refresh(false); });
   if (data) render(data);
   else byId('console-feedback').textContent = 'Снимок отсутствует. Локальный сервер попробует прочитать источники.';
-  refresh(true);
+  if (document.documentElement.hasAttribute('data-pc-live')) refresh(true);
 }());

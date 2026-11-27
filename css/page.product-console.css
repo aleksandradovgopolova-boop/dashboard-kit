@@ -41,7 +41,7 @@
 .pc-source-grid a { color: var(--ink); }
 .pc-page a:focus-visible, .pc-page summary:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: var(--focus-offset-tight); }
 .pc-page .dk-btn:focus-visible { outline: none; }
-.pc-skip { position: fixed; left: var(--space-7); top: var(--space-7); z-index: var(--z-chrome); transform: translateY(-200%); }
+.pc-skip { position: fixed; left: max(var(--space-7), env(safe-area-inset-left)); top: max(var(--space-7), env(safe-area-inset-top)); z-index: var(--z-chrome); transform: translateY(-200%); }
 .pc-skip:focus { transform: none; }
 #console-feedback:empty { display: none; }
 #console-feedback { margin: 0 0 var(--space-6); color: var(--ink-2); }
@@ -50,6 +50,9 @@
   .pc-source-grid { grid-template-columns: minmax(0,1fr); }
   .pc-work-row { grid-template-columns: minmax(0,1fr); }
   .pc-work-row .pc-state { justify-self: start; }
+}
+@media (pointer: coarse) {
+  .pc-work-row a, .pc-fact a, .pc-source-grid a { display: inline-flex; align-items: center; min-height: var(--control-lg); }
 }
 @media (forced-colors: active) {
   .pc-state { border: var(--hairline) solid CanvasText; }

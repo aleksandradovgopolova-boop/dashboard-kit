@@ -53,8 +53,12 @@ def write_json(path, data):
 
 def yaml_document(path):
     try:
-        import yaml  # Already required by the installed AI Ops; no new dependency.
-        data = yaml.safe_load(path.read_text(encoding='utf-8'))
+        text = path.read_text(encoding='utf-8')
+        try:
+            data = json.loads(text)  # JSON is also a valid YAML document.
+        except ValueError:
+            import yaml  # Supplied by AI Ops; absent in a bare SDK/CI environment.
+            data = yaml.safe_load(text)
         if not isinstance(data, dict):
             raise ValueError('Expected a mapping')
         return data, None
@@ -192,6 +196,17 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split('?', 1)[0]
+        if path in {'/', '/product-console.html'}:
+            # Only the dedicated loopback server advertises the local API.
+            # A static host must display the saved snapshot without a failed request.
+            body = (ROOT / 'product-console.html').read_text(encoding='utf-8')
+            body = body.replace('<html ', '<html data-pc-live ', 1).encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Content-Length', str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if path == '/api/product-console':
             try:
                 data = collect()

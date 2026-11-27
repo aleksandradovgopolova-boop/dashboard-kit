@@ -21,12 +21,12 @@ class ConsoleChecks(unittest.TestCase):
         self.root = Path(self.temp.name)
         for directory in ['product-console', 'planning', 'css', '.ai-ops', '.ai/project/product-console', '.git']:
             (self.root / directory).mkdir(parents=True)
-        (self.root / '.ai-ops.yaml').write_text('parent:\n  installed_version: 4.11.4\n  update_channel: stable\n')
-        (self.root / 'planning/plan.yaml').write_text('goals: []\nwork:\n- id: existing\n  title: Existing plan\n  status: todo\n')
+        (self.root / '.ai-ops.yaml').write_text(json.dumps({'parent': {'installed_version': '4.11.4', 'update_channel': 'stable'}}))
+        (self.root / 'planning/plan.yaml').write_text(json.dumps({'goals': [], 'work': [{'id': 'existing', 'title': 'Existing plan', 'status': 'todo'}]}))
         (self.root / 'product-console/upstream.json').write_text('{"version":"4.15.0","channel":"qualification"}')
         (self.root / '.git/config').write_text('private')
         (self.root / '.ai-ops/PRODUCT_PASSPORT.md').write_text('Product passport')
-        (self.root / 'product-console.html').write_text('<h1>Console</h1>')
+        (self.root / 'product-console.html').write_text('<html lang="ru"><h1>Console</h1></html>')
 
     def tearDown(self):
         self.temp.cleanup()
@@ -60,6 +60,13 @@ class ConsoleChecks(unittest.TestCase):
         self.assertIsNone(data['plan'])
         self.assertTrue(any('plan.yaml' in error for error in data['errors']))
 
+    def test_yaml_without_aiops_dependency_is_unknown(self):
+        (self.root / '.ai-ops.yaml').write_text('parent:\n  installed_version: 4.15.0\n')
+        with patch.dict('sys.modules', {'yaml': None}):
+            data = console.collect(self.root)
+        self.assertIsNone(data['aiops']['installed'])
+        self.assertTrue(any('.ai-ops.yaml' in error for error in data['errors']))
+
     def test_changed_remote_inputs_invalidate_console_evidence(self):
         proof = {'checks': [{'suite': 'quick', 'status': 'fail', 'signature': console.signature(self.root)}]}
         console.write_json(self.root / '.ai/project/product-console/checks.json', proof)
@@ -78,6 +85,9 @@ class ConsoleChecks(unittest.TestCase):
             thread.start()
             base = f'http://127.0.0.1:{server.server_port}'
             try:
+                with urlopen(base + '/product-console.html', timeout=5) as response:
+                    self.assertIn(b'<html data-pc-live ', response.read())
+                self.assertNotIn('data-pc-live', (self.root / 'product-console.html').read_text())
                 with urlopen(base + '/api/product-console', timeout=5) as response:
                     data = json.load(response)
                     self.assertEqual(data['mode'], 'local')
