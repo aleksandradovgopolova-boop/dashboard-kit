@@ -56,7 +56,8 @@ def run_parallel_live(task, signals, child_root, *, feature=None, provider=None,
                       base=None, open_pr=False, max_steps=40, repo_slug=None,
                       contract_shas=None, run_fn=None, runner=None, author=True, review=True,
                       sandbox=False, baseline_diff=False, install_deps=True, require_fix=False,
-                      review_fix_attempts=0, budget=None, work_graph=None, task_map=None, admission=None):
+                      review_fix_attempts=0, budget=None, work_graph=None, task_map=None, admission=None,
+                      runtime="claude-code"):
     """ЯВНЫЙ opt-in `--parallel`: декомпозировать задачу и провести мультипакетный план через
     `parallel_live.run_live_concurrent` (настоящая конкурентность, disposable-клон на пакет).
 
@@ -144,10 +145,10 @@ def run_parallel_live(task, signals, child_root, *, feature=None, provider=None,
     package_run = run_fn
     if admission is not None:
         def package_run(*args, **options):
-            
+
             with active_work.claimed_attempt(child_root, wid, admission):
                 active_work.validate_admission(child_root, admission)
-            
+
             from ai_ops_kit.lifecycle import work_claims
             with ExitStack() as slots:
                 try:
@@ -170,6 +171,12 @@ def run_parallel_live(task, signals, child_root, *, feature=None, provider=None,
         rec = dispatch(wg, str(child_root), base_sha, task_map, signals, package_run,
                        repo_slug=repo_slug, contract_shas=contract_shas, integration_branch=f"ai-ops/{wid}",
                        run_options={"provider_name": provider, "model": model, "base": binding["base_ref"],
+                                    # #1434: исполнитель прокидывается в КАЖДЫЙ пакетный прогон. Без этого
+                                    # concurrent-путь всегда помечал пакет runtime=claude-code (дефолт run()),
+                                    # даже когда провайдер — codex-app-server: отчёт пакета врал об исполнителе,
+                                    # а per-работа маршрутизация/trust шли не по тому рантайму. Честная проводка
+                                    # Codex в governed-параллель — тот же путь, тот же fan-in, без ослабления гейтов.
+                                    "runtime": runtime,
                                     "max_steps": max_steps, "author": author, "review": review,
                                     "sandbox": sandbox, "baseline_diff": baseline_diff,
                                     "install_deps": install_deps, "require_fix": require_fix,
@@ -294,8 +301,8 @@ def _deliver_parallel(rec, child_root, wid, task, binding, admission=None):
             rec, work_root, ctx.features_dir, wid, [])
     stages._deliver(ctx, rec, plan=saved_plan, handoff_ok=handoff_ok, report_ok=report_ok,
                     jname=jname, fid=wid)
-    
-    
+
+
 
 
 def _blocked(rec) -> bool:
@@ -537,7 +544,7 @@ def _load_package_resume(root, wid, admission, wg, task, binding):
             or not isinstance(artifacts, dict) or artifacts.get('status') != 'preserved'
             or any(p.get('depends_on') for p in wg['packages'])):
         raise ValueError('package resume requires terminal preserved automatic results; ready work uses deliver-only')
-    
+
     if any(_retry_outbox(root, wid).glob('*')):
         raise ValueError('package resume has delivery outbox; reconcile external outcome before package retry')
     receipt = _safe_retry_path(root, Path(artifacts.get('receipt', '')))
@@ -588,7 +595,7 @@ def _load_package_resume(root, wid, admission, wg, task, binding):
     def check():
         if report.read_bytes() != raw or receipt.read_bytes() != receipt_raw:
             raise ValueError('package resume evidence changed during admission')
-        
+
         if _load_package_resume(root, wid, admission, wg, task, binding)[1] != reused:
             raise ValueError('package resume retained evidence changed')
     return saved, reused, check

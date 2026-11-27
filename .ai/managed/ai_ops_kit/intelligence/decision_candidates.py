@@ -101,14 +101,14 @@ def _decision_candidate(feature_id: str, contract: dict, readout: dict,
     name = _feature_name(contract, feature)
 
     if reason == "hypothesis_unconfirmed":
-        
-        
-        
+
+
+
         action, because = _hypothesis_action_because(readout, evaluation)
         confidence = None
     else:
-        
-        
+
+
         insight = outcome_insight.derive_insight(contract, readout, evaluation)
         if insight is not None:
             base = outcome_insight.propose_candidate_work(insight, contract, readout)
@@ -127,7 +127,7 @@ def _decision_candidate(feature_id: str, contract: dict, readout: dict,
         "schema_version": 1,
         "kind": "CandidateWork",
         "id": f"cand-decision-{feature}",
-        
+
         "title": f"Решить следующий шаг по фиче «{name}»: {action}",
         "type": "decision",               # DRAFT-метка; приёмка переводит её в словарь плана
         "owner_role": "product-manager",
@@ -178,8 +178,8 @@ def project_decision_candidates(items: Iterable) -> dict:
             continue                       # без контракта исхода нет — считать нечего
         considered += 1
         if not isinstance(readout, dict) or not readout:
-            
-            
+
+
             not_measured.append({
                 "feature": _text(feature_id) or "feature",
                 "reason": "контракт результата есть, а замер (outcome-readout) ещё не снят — "
@@ -188,11 +188,11 @@ def project_decision_candidates(items: Iterable) -> dict:
             continue
         reason = _decision_reason(readout, evaluation)
         if reason is None:
-            
-            
-            
-            
-            
+
+
+
+
+
             ev = evaluation if isinstance(evaluation, dict) else {}
             if not bool(ev.get("is_real_measurement")):
                 not_measured.append({

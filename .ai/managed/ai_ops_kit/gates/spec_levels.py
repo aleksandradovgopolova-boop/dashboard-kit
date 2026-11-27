@@ -100,7 +100,7 @@ def ceremony_budget_errors(level_sections=None, budget=None, required_fn=None):
     required_fn = required_sections if required_fn is None else required_fn
     errors = []
     levels = sorted(level_sections)
-    
+
     for lv in levels:
         n = len(level_sections[lv])
         cap = budget.get(lv)
@@ -112,14 +112,14 @@ def ceremony_budget_errors(level_sections=None, budget=None, required_fn=None):
             errors.append(f"уровень L{lv}: разделов {n} > потолок {cap} — церемония выросла без "
                           f"обоснования риском; подними потолок в LEVEL_SECTION_BUDGET и запиши в "
                           f"LEVEL_SECTION_BUDGET_RAISES, ПОЧЕМУ риск требует лишнего раздела")
-    
+
     for prev, lv in zip(levels, levels[1:]):
         lost = set(required_fn(prev)) - set(required_fn(lv))
         if lost:
             errors.append(f"уровень L{lv}: потерял разделы нижнего уровня {sorted(lost)} — "
                           f"церемония обязана ПРИРАСТАТЬ с риском, а не терять разделы (нарушена "
                           f"монотонность required_sections)")
-    
+
     seen = set()
     for lv in levels:
         secs = set(level_sections[lv])
@@ -152,12 +152,12 @@ def classify(signals):
                        f"irreversible={signals.get('irreversible', False)}, "
                        f"secret_boundary={signals.get('secret_boundary', False)}")
         level = 3
-    
+
     elif signals.get("measurable_behavior") and signals.get("user_facing_change") and level < 2:
         reasons.append("эскалация до L2 PRODUCT: измеримое пользовательское изменение")
         level = 2
 
-    
+
     requested = signals.get("requested_level")
     escalated_from = None
     if isinstance(requested, int) and requested < level:
@@ -240,10 +240,10 @@ def assess(signals, provided=None):
             status = entry.get("status", "missing")
             note = entry.get("note")
             if status not in SECTION_STATUSES:
-                
-                
-                
-                
+
+
+
+
                 form_errors.append(
                     f"{sid}: неизвестный статус '{status}' — допустимо: "
                     f"{'/'.join(sorted(SECTION_STATUSES - {'missing'}))}")
@@ -284,7 +284,8 @@ _SECTION_ARTIFACT_CREDIT = {
 
 
 def _spec_path(child_root, wid):
-    return Path(child_root) / "features" / str(wid) / "spec.yaml"
+    from ai_ops_kit.shared.work_areas import artifact_path
+    return artifact_path(Path(child_root) / "features", wid, "spec.yaml")
 
 
 
@@ -389,7 +390,7 @@ def provided_from_artifacts(child_root, wid, work_root=None):
     roots_for_credit.append(child_root)
     provided = {}
 
-    
+
     sp = _spec_path(child_root, wid)
     if sp.is_file():
         try:
@@ -400,17 +401,17 @@ def provided_from_artifacts(child_root, wid, work_root=None):
                     provided[sid] = {"status": entry.get("status", "missing"), "note": entry.get("note")}
                 elif isinstance(entry, str):
                     provided[sid] = {"status": "complete", "note": None}
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         except Exception:  # noqa: BLE001,S110 — битый spec -> missing -> блокирует; см. про import выше
             pass
 
-    
+
     for sid, (rel_tmpl, status) in _SECTION_ARTIFACT_CREDIT.items():
         if provided.get(sid, {}).get("status") in ("complete", "not_applicable"):
             continue
@@ -487,8 +488,8 @@ def create_spec(child_root, wid, signals, overwrite=False):
     doc = {"schema_version": 1, "kind": "spec", "workitem_id": str(wid),
            "level": level, "level_name": cls["level_name"],
            "level_reason": cls["reason"],
-           
-           
+
+
            "signals": _carryable_signals(signals),
            # F-013: словарь статусов — прямо в файле. Спеку заполняет человек или агент без
            # контекста исходников кита; раньше допустимые значения находились только чтением
@@ -539,7 +540,7 @@ def _add_missing_sections(sp, cls, signals=None):
         doc["signals"] = merged
     for sid in added:
         sections[sid] = {"status": "missing", "content": "", "note": None}
-    
+
     if int(doc.get("level") or 0) < level:
         doc["level"] = level
         doc["level_name"] = cls["level_name"]
@@ -599,7 +600,7 @@ def main(argv):
     c = sub.add_parser("classify")
     c.add_argument("--signals", default="{}")
     c.add_argument("--json", action="store_true")
-    
+
     cr = sub.add_parser("create", help="создать features/<wid>/spec.yaml нужной глубины")
     cr.add_argument("child_root"); cr.add_argument("wid")
     cr.add_argument("--signals", default="{}"); cr.add_argument("--overwrite", action="store_true")

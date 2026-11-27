@@ -61,14 +61,14 @@ SECRET_FORMATS: list[tuple[str, re.Pattern[str]]] = [
      re.compile(r"\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|redis(?:s)?|amqps?|mssql)"
                 r"://[^\s:/@'\"<>]+:([^\s:/@'\"<>]{3,})@")),
     ("npm_token", re.compile(r"\bnpm_[A-Za-z0-9]{36}\b")),
-    
-    
-    
+
+
+
     ("jwt_token",
      re.compile(r"\beyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}(?![A-Za-z0-9_-])")),
-    
-    
-    
+
+
+
     ("anthropic_api_key", re.compile(r"\bsk-ant-[A-Za-z0-9_-]{32,}")),
     ("openai_api_key", re.compile(r"\bsk-(?:proj-)?[A-Za-z0-9]{32,}\b")),
 ]

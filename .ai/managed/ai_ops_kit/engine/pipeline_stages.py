@@ -150,13 +150,13 @@ def _pipeline_run_gates(plan, gate_ev, committed_sha, signals, not_applicable, e
                                    gate_ids=_gate_ids, tested_revision=committed_sha,
                                    signals=signals, not_applicable=not_applicable,
                                    exempt_reason=exempt_reason)
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     _ev = gates.get("evidence_verdict") or {}
     _readout = gate_dimensions.knowledge_readout(_ev)
     if gate_dimensions.knowledge_has_known(_ev):
@@ -165,7 +165,7 @@ def _pipeline_run_gates(plan, gate_ev, committed_sha, signals, not_applicable, e
         print("  Проверено — подтверждать пока нечего; вот граница знания:")
     for _line in _readout:
         print(f"    · {_line}")
-    
+
     _ev = gates.get("evidence_verdict") or {}
     if _ev and not _ev.get("verified") and _ev.get("advisory"):
         print(f"  evidence: {_ev.get('reason')}")
@@ -179,12 +179,12 @@ def _pipeline_run_gates(plan, gate_ev, committed_sha, signals, not_applicable, e
             import json as _json
             _passed = {gid: ev for gid, ev in gate_ev.items()
                        if gid != "security" and isinstance(ev, dict) and ev.get("status") == "pass"}
-            
+
             (Path(child_root) / ".ai").mkdir(parents=True, exist_ok=True)
             (Path(child_root) / ".ai" / f"reevaluate-evidence-{wid}.json").write_text(
                 _json.dumps({"sha": committed_sha, "gate_ev": _passed}, ensure_ascii=False), encoding="utf-8")
-        
-        
+
+
         except Exception:  # noqa: BLE001,S110 — потеря кеша не меняет вердикт, пересчитаем
             pass
     return gates
@@ -194,16 +194,16 @@ def _pipeline_assess_readiness(gates, coll, signals, plan, child_root, wid, work
                                baseline_diff, baseline_checks, committed_sha, base_sha,
                                reviewer_proposer, budget, loop, require_fix,
                                tree_clean_before_checks, tree_clean_after_checks, prepare_ok,
-                               commit, effective_approval_signals, security_pack_result, gate_ev):
+                               commit, effective_approval_signals, security_pack_result, gate_ev, approval_base=None):
     """Фаза 8-вердикт: собирает готовность прогона к PR — evidence-ревизия, spec-depth, baseline-diff,
     квалификация окружения, перепроверка одобрений после диффа, связность контуров и итоговый ready.
     Возвращает dict полей, которые далее проецируются в отчёт и в список not_yet."""
-    
+
     evidence_revision = coll.get("revision")
     revision_matches = (committed_sha is not None and evidence_revision == committed_sha)
 
-    
-    
+
+
     _rd = _assess_readiness(gates, coll, signals, plan, child_root, wid, work_root,
                             baseline_diff=baseline_diff, baseline_checks=baseline_checks,
                             committed_sha=committed_sha, base_sha=base_sha,
@@ -217,45 +217,52 @@ def _pipeline_assess_readiness(gates, coll, signals, plan, child_root, wid, work
     acceptance_criteria = _rd["acceptance_criteria"]
     context_overflow = _rd["context_overflow"]
 
-    
+
     regressions, fixed = _diff_checks(baseline_checks, coll["checks"]) if baseline_diff else ([], [])
     no_regressions = (len(regressions) == 0) if baseline_diff else None
-    
-    
-    
-    
+
+
+
+
     other_blocking_unmet = [g for g in gates["unmet_gates"] if g != "implementation_verification"]
 
-    
-    
-    
+
+
+
     tree_ok = bool(tree_clean_before_checks) and (tree_clean_after_checks is not False)
-    
-    
-    
+
+
+
     env_qualified = prepare_ok or _env_proven_ok(coll["checks"])
 
-    
-    
-    
+
+
+
     approval_recheck = {"ok": True, "uncovered": []}
     contour_consistency = None
     if commit and committed_sha:
         try:
             from ai_ops_kit.gates import approvals as _appr
-            _changed = _committed_changed_files(work_root, committed_sha)
-            
-            
+            if approval_base:
+                from ai_ops_kit.engine.pipeline_git import _git
+                rc, names, _ = _git(work_root, "diff", "--name-only", "-z", approval_base, committed_sha)
+                if rc:
+                    raise ValueError("диапазон проверки approvals недоступен")
+                _changed = [p for p in names.split("\0") if p]
+            else:
+                _changed = _committed_changed_files(work_root, committed_sha)
+
+
             contour_consistency = contour_consistency_evidence(child_root, wid, _changed)
             gate_ev["contour_consistency"] = {
                 "status": contour_consistency["status"],
                 "provided": contour_consistency["provided"],
                 "evidence": contour_consistency["evidence"]}
-            
-            
+
+
             approval_recheck = _appr.recheck_after_diff(child_root, wid, _changed, signals=effective_approval_signals)
-            
-            
+
+
             _dep_findings = [f for r in ((security_pack_result or {}).get("results") or [])
                              for f in (r.get("findings") or []) if f.get("type") == "new_dependency"]
             if _dep_findings:
@@ -265,24 +272,24 @@ def _pipeline_assess_readiness(gates, coll, signals, plan, child_root, wid, work
                                         "uncovered": (approval_recheck.get("uncovered") or []) + _dep_rc["uncovered"],
                                         "dependency_uncovered": _dep_rc["uncovered"]}
         except Exception as _e:  # noqa: BLE001 — v2.123 (P0.2b): approval FAIL-CLOSED. Сбой recheck НЕ
-            
+
             approval_recheck = {"ok": False, "uncovered": [{"domain": "*", "reason": f"recheck упал: {_e}"}],
                                 "error": str(_e)}
     approvals_cover_ok = bool(approval_recheck.get("ok"))
 
-    
-    
-    
+
+
+
     base_ok = (loop["stopped"] in ("done", "reevaluate-only")) and (committed_sha is not None) \
         and revision_matches and tree_ok and env_qualified and approvals_cover_ok
-    
-    
-    
+
+
+
     acceptance_block, acceptance_block_reason = acceptance_blocks_ready(acceptance_criteria)
     if baseline_diff:
-        
-        
-        
+
+
+
         ready = base_ok and not acceptance_block and no_regressions and (not other_blocking_unmet) \
             and (not require_fix or len(fixed) > 0) and spec_depth_ok and (not context_overflow) \
             and spec_complete_ok

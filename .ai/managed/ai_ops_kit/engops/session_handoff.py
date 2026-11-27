@@ -123,15 +123,15 @@ def build(child_root, snapshot=None, rec=None, goal=None, decisions=None, open_q
     snap = snapshot or {}
     files, files_status = _changed_files(child_root)
 
-    
-    
+
+
     nxt = next_action or (rec or {}).get("command") or (
         "перечитать этот handoff и назвать следующий шаг" if not rec else
         f"исход рекомендации — {(rec or {}).get('outcome')}: {(rec or {}).get('reason') or ''}".strip())
 
     done = list(completed or [])
     if not done:
-        
+
         done = [f"изменённых файлов в дереве: {len(files)}"] if files_status == "measured" else [
             "состав работы сессии не передан, а git не ответил — перечислить нечем"]
 
@@ -143,7 +143,7 @@ def build(child_root, snapshot=None, rec=None, goal=None, decisions=None, open_q
         "revision": _head(child_root),
         "created_at": _now(),
         "started_at": snap.get("started_at"),
-        
+
         "goal": goal or GOAL_NOT_NAMED,
         "completed": done,
         "decisions": list(decisions or []),
@@ -153,8 +153,8 @@ def build(child_root, snapshot=None, rec=None, goal=None, decisions=None, open_q
         "open_questions": list(open_questions or []),
         "next_action": nxt,
         "known_risks": list(known_risks or []),
-        
-        
+
+
         "why_handed_off": {
             "context_current": snap.get("context_current"),
             "context_status": snap.get("context_status") or "unavailable",
@@ -180,8 +180,8 @@ def check(h):
         if not h.get(s):
             e.append(f"раздел {s} пуст — handoff, который не называет следующий шаг, ничего не передаёт")
     w = h.get("why_handed_off") or {}
-    
-    
+
+
     if w.get("session_tokens_status") == "unavailable" and w.get("session_total_tokens") is not None:
         e.append("расход сессии не измерен, но в handoff записано число (unknown как значение)")
     if w.get("context_status") == "unavailable" and w.get("context_current") is not None:

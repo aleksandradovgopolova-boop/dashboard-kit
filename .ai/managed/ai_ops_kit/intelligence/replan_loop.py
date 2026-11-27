@@ -78,7 +78,7 @@ def observe(child_root, *, backlog: bool = True) -> dict:
 
     from ai_ops_kit.planning import next_work, delivery_plan
 
-    
+
     nx = next_work.compute(child_root)
     if not nx.get("plan_present"):
         unverified.append(f"план не заполнен: {nx.get('gap') or 'нет planning/plan.yaml'}")
@@ -95,15 +95,15 @@ def observe(child_root, *, backlog: bool = True) -> dict:
 
     ready = list(nx.get("ready") or [])            # УЖЕ ранжировано реальностью (по score)
     in_progress = list(nx.get("in_progress") or [])
-    
+
     plan = delivery_plan.load(child_root)
     declared_order = [w.get("id") for w in delivery_plan.items(plan) if w.get("id")]
 
-    
+
     plan_drift = [{"id": r["id"], "title": r.get("title"), "drift": r["drift"]}
                   for r in (ready + in_progress) if r.get("drift")]
 
-    
+
     git = delivery_plan.git_disagreements(plan, child_root)
     if not git.get("measured"):
         unverified.append("состояние работ в git не измерено (ствол не найден) — не «согласовано»")
@@ -230,7 +230,7 @@ def _structural_proposals(observed: dict) -> list:
         proposals.append({"kind": kind, "class": PROPOSAL_CLASS.get(kind, "C"),
                           "rationale": err, "signal": "git: ветка↔ствол",
                           "requires_approval": True})
-    
+
     for d in (observed.get("plan_drift") or []):
         proposals.append({"kind": "reconcile-status", "class": "B", "target": d["id"],
                           "rationale": f"{d['id']}: {d['drift']}",
@@ -253,7 +253,7 @@ def replan_report(child_root, *, backlog: bool = True) -> dict:
         "schema_version": 1,
         "kind": KIND,
         "root": str(child_root),
-        
+
         "autonomy": "reprioritize-auto; structure-proposed",
         "plan_present": True,
         "reprioritization": plan_intent["reprioritization"],
@@ -329,7 +329,7 @@ def apply_reprioritization(child_root, *, dry_run: bool = False, backlog: bool =
         return {**result, "status": "disabled",
                 "reason": "policy: replan=suggest — только отчёт, автономную запись не делаю"}
 
-    
+
     observed = observe(child_root, backlog=backlog)
     if not observed.get("plan_present") or observed.get("plan_is_template"):
         return {**result, "status": "no_change",
@@ -342,9 +342,9 @@ def apply_reprioritization(child_root, *, dry_run: bool = False, backlog: bool =
                 "reason": "готовых работ для переприоритизации нет (пусто — не «согласовано»)",
                 "unverified": observed.get("unverified")}
 
-    
-    
-    
+
+
+
     actionable_ids = [r.get("id") for r in (observed.get("actionable") or [])]
     order_ids = [r.get("id") for r in repri]
     breach = _check_same_work_set(actionable_ids, order_ids)

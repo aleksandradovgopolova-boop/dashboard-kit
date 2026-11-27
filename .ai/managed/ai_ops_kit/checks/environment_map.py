@@ -214,7 +214,7 @@ def assess(root):
         "kind": "EnvironmentMap",
         "environments_status": "not_detected" if not environments else "detected",
         "environments": environments,
-        
+
         "secret_names": sorted(secret_names),
         "secret_sources": {k: sorted(set(v)) for k, v in sorted(secret_names.items())},
         "findings": findings,

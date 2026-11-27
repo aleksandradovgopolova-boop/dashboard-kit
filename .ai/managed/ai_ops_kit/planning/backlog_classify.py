@@ -112,7 +112,7 @@ def infer_area(issue: dict) -> "tuple[str, str]":
         m = _AREA_LABEL.match(str(lb))
         if m:
             return m.group(2).strip(), f"метка области '{lb}'"
-    
+
     body = issue.get("body") or ""
     m = re.search(r"`?([a-z_][a-z0-9_]*/[a-z0-9_./]+)`?", body)
     if m:
@@ -176,7 +176,7 @@ def classify_issue(issue: dict) -> Classification:
     impact, impact_why = _level_from_labels(labels, ("impact", "critical", "major"), "impact")
     urgency, urg_why = _level_from_labels(labels, ("urgent", "blocker", "critical"), "urgency")
     effort, eff_why = _level_from_labels(labels, ("epic", "large", "xl"), "effort")
-    
+
     if "метка" in typ_why:
         confidence = "high"
     elif "дефолт" in typ_why:

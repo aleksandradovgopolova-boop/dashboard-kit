@@ -95,28 +95,28 @@ def _hard_stop(rep):
         return "no-commit"
     if (rep.get("baseline") or {}).get("regressions"):
         return "regression"
-    
-    
-    
-    
-    
+
+
+
+
+
     if (rep.get("security_scan") or {}).get("overall") in ("blocked", "fail"):
         return "security-fail"
-    
-    
-    
-    
+
+
+
+
     for g in ((rep.get("gates") or {}).get("gate_results") or []):
         if g.get("gate") == "security" and g.get("status") == "fail":
             _blk = " ".join(g.get("blockers") or [])
             _awaiting = ("нужен независимый security-reviewer" in _blk) and "ApprovalRecord" not in _blk
             if not _awaiting:
                 return "security-gate-fail"
-    
-    
-    
-    
-    
+
+
+
+
+
     for rv in (rep.get("reviews") or []):
         if (rv or {}).get("status") == "fail" or (rv or {}).get("closed_as") == "blocked":
             return "reviewer-blocked"
@@ -128,8 +128,8 @@ def _hard_stop(rep):
             ev = " ".join(g.get("evidence") or [])
             if "reviewer verdict" in ev:      # вердикт РЕАЛЬНО вынесен (не пустой artifact-гейт)
                 return "reviewer-blocked"
-    
-    
+
+
     for reason in ((rep.get("loop") or {}).get("denied_reasons") or []):
         if "вне write_scope" in (reason or ""):
             return "scope-violation"
@@ -143,8 +143,8 @@ def _classify_failure(exc):
     import traceback
     et = type(exc).__name__
     msg = str(exc)
-    
-    
+
+
     if isinstance(exc, (ConnectionError, TimeoutError)) or "Connection reset" in msg or "timed out" in msg:
         fclass, retryable = ("network", True)
     elif et in ("URLError", "HTTPError", "IncompleteRead", "RemoteDisconnected"):
@@ -183,7 +183,7 @@ def retry_package(child_root, wid, pid, features_dir=None):
     if pid not in ids:
         return {"ok": False, "error": f"пакет '{pid}' не в плане последовательности {ids}"}
     idx = ids.index(pid)
-    
+
     if idx == 0:
         checkpoint = plan.get("sequence_base_sha")
         predecessor = None
@@ -200,12 +200,12 @@ def retry_package(child_root, wid, pid, features_dir=None):
         return {"ok": False, "error": (f"не найден checkpoint предшественника для '{pid}' "
                                        f"(предшественник={predecessor or 'база'}) — снимок отсутствует")}
 
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     wt = child_root / ".ai" / "worktrees" / wid
     branch = f"ai-ops/{wid}"
     if not wt.is_dir():
@@ -213,15 +213,15 @@ def retry_package(child_root, wid, pid, features_dir=None):
                                        f".ai/worktrees/{wid} не существует — восстановление в основном "
                                        f"checkout запрещено. Пересоберите worktree/прогон.")}
     vroot = wt
-    
+
     _rc_top, _top, _ = _git(vroot, "rev-parse", "--show-toplevel")
     _rc_mtop, _mtop, _ = _git(child_root, "rev-parse", "--show-toplevel")
     if _rc_top != 0 or Path((_top or "").strip() or ".").resolve() == Path((_mtop or "").strip() or "/x").resolve():
         return {"ok": False, "error": "retry отказан (fail-closed): worktree резолвится в основной checkout"}
-    
+
     if _git(vroot, "cat-file", "-e", f"{checkpoint}^{{commit}}")[0] != 0:
         return {"ok": False, "error": f"retry отказан (fail-closed): checkpoint {checkpoint[:8]} не найден в репозитории"}
-    
+
     rc_co, _, err_co = _git(vroot, "checkout", "-q", branch)
     if rc_co != 0:
         return {"ok": False, "error": f"retry отказан (fail-closed): checkout {branch} не удался: {err_co}"}
@@ -229,12 +229,12 @@ def retry_package(child_root, wid, pid, features_dir=None):
     if _rc_hb != 0 or (_hb or "").strip() != branch:
         return {"ok": False, "error": (f"retry отказан (fail-closed): HEAD worktree не на {branch} "
                                        f"(факт: {(_hb or '?').strip()})")}
-    
+
     if _git(vroot, "merge-base", "--is-ancestor", checkpoint, "HEAD")[0] != 0:
         return {"ok": False, "error": (f"retry отказан (fail-closed): checkpoint {checkpoint[:8]} не "
                                        f"является предком {branch} — не принадлежит этой цепочке")}
 
-    
+
     pkg_dir = fdir / "work-packages" / pid
     archived = None
     if pkg_dir.is_dir():
@@ -262,7 +262,7 @@ def _resolve_start_index(ordered, resume_from, wid):
     start_index = 0
     if resume_from:
         _ids = [p.get("id") for p in ordered]
-        
+
         if resume_from not in _ids:
             return None, _seq_err(wid, ordered,
                     f"resume_from='{resume_from}' нет в SequencePlan (пакеты: {_ids})")
@@ -275,16 +275,16 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
     Возвращает (base, sequence_base_sha, base_drift, err): err != None -> последовательность не
     запускается (lifecycle-corrupted / plan-drift / base-contract-drift / base-preflight / fail-closed
     записи плана). Поведение идентично прежнему инлайну execute_sequence."""
-    
-    
-    
-    
+
+
+
+
     cur_plan_hash = _plan_hash(ordered)
     pdir = features_dir / wid
     _sp = pdir / "sequence-plan.yaml"
     saved_plan = None
-    
-    
+
+
     import yaml as _y
     # Причина подавления ЗАПИСАНА (срез engine ратчета 2026-08-12): отказ создания каталога НЕ
     # теряется — он проявляется ниже, на записи SequencePlan через `_durable_write_yaml`, и там путь
@@ -308,10 +308,10 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
         if _corrupt_reason is not None or _schema_err is not None:
             import hashlib as _h
             _raw = b""
-            
-            
-            
-            
+
+
+
+
             try:
                 _raw = _sp.read_bytes()
             except Exception:  # noqa: BLE001,S110 — только для sha256 в сообщении; вердикт уже fail-closed
@@ -335,8 +335,8 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
                  "resume по старым отчётам небезопасен. Нужен явный replan (пересобрать план "
                  "и переисполнить с нуля), а не resume_from."),
                 plan_hash=cur_plan_hash, saved_plan_hash=saved_plan["plan_hash"])
-    
-    
+
+
     from ai_ops_kit.engine import execution_pipeline as _ep
     if saved_plan and saved_plan.get("base_ref"):
         if resume_from and base and base != saved_plan["base_ref"]:
@@ -353,9 +353,9 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
                      f"({_br.get('reason')}) — последовательность не запущена (ноль пакетов)"))
         base = _br.get("base_ref") or base
 
-    
-    
-    
+
+
+
     _cur_base = None
     try:
         _rc, _bs, _ = _git(child_root, "rev-parse", base or "HEAD")
@@ -365,7 +365,7 @@ def _resolve_sequence_plan(ordered, features_dir, wid, base, resume_from, child_
         _cur_base = None
     base_drift = None
     if saved_plan is not None:
-        
+
         sequence_base_sha = saved_plan.get("sequence_base_sha")
         if _cur_base and sequence_base_sha and _cur_base != sequence_base_sha:
             base_drift = {"saved": sequence_base_sha, "current_base": _cur_base}
@@ -530,7 +530,7 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
         if i < start_index:
             rep_ok, why = _verify_resumed_package(pid, features_dir, wid, _rev_root, _branch)
             if rep_ok is None:
-                
+
                 return _seq_err(wid, ordered,
                         f"resume: пакет '{pid}' до resume_from не подтверждён — {why}",
                         packages=results, completed=sorted(completed), stopped_at=pid)
@@ -540,9 +540,9 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
             results.append({"id": pid, "sha": psha, "ready": bool(rep_ok.get("ready_for_pr")),
                             "executed": True, "status": "resumed-skip", "resume_point": psha})
             continue
-        
-        
-        
+
+
+
         if start_index > 0 and i == start_index and prev_sha:
             _head = _git(_rev_root, "rev-parse", _branch)[1]
             if _head != prev_sha:
@@ -560,10 +560,10 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
 
         sig_pkg, pkg_task = _build_package_signals_and_task(
             pkg, pid, task, signals, signals_for, ordered)
-        
-        
-        
-        
+
+
+
+
         infra_error = None
         try:
             rep = ai_ops_run.run(pkg_task, sig_pkg, child_root, features_dir=str(features_dir),
@@ -572,9 +572,9 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
                                  model=model, author=author, author_proposer=author_proposer,
                                  review=review, reviewer_proposer=reviewer_proposer,
                                  baseline_diff=baseline_diff, install_deps=install_deps,
-                                 
-                                 
-                                 
+
+
+
                                  sandbox=sandbox, max_steps=max_steps, open_pr=False, verification_intent="draft",
                                  write_scope=(write_scope_for(pkg) if write_scope_for else None))
         except (KeyboardInterrupt, SystemExit):
@@ -590,41 +590,41 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
             infra_error = rep.get("failure")
 
         sha = (rep.get("commit") or {}).get("sha")
-        
-        
-        
+
+
+
         stop_reason = (f"{infra_error['failure_class']}-error: {infra_error['exception_type']}"
                        if infra_error else _hard_stop(rep))
-        
-        
-        
+
+
+
         pkg_scope = write_scope_for(pkg) if write_scope_for else None
         if stop_reason is None and sha and pkg_scope:
             from ai_ops_kit.gates import approvals as _appr
             wt = child_root / ".ai" / "worktrees" / wid
             changed = _changed_files(wt if wt.is_dir() else child_root, sha)
-            
-            
-            
+
+
+
             outside = [f for f in changed
                        if not f.startswith((".ai/", "openspec/", "features/"))
                        and not _appr.covers_paths({"scope": " ".join(pkg_scope)}, [f])]
             if outside:
                 stop_reason = f"scope-violation: пакет изменил пути вне write_scope: {', '.join(outside[:5])}"
-        
-        
+
+
         executed = bool(sha) and stop_reason is None
         ready = bool(rep.get("ready_for_pr"))
         blocked = stop_reason is not None
 
-        
-        
-        
+
+
+
         pkg_dir = features_dir / wid / "work-packages" / pid
         _persist_err = _persist_package_report(pkg_dir, features_dir, wid, rep)
         if _persist_err is not None:
-            
-            
+
+
             blocked = True
             if not stop_reason:
                 stop_reason = f"checkpoint-persist-failed: {_persist_err}"
@@ -645,8 +645,8 @@ def execute_sequence(task, signals, child_root, packages, proposer_for, feature,
                         "handoff": (rep.get("handoff") or {}).get("next_action"),
                         "failure": infra_error,   # v3.0-rc13 (P1): типизированный envelope (None если не исключение)
                         "status": status})
-        
-        
+
+
         _journal_package_end(features_dir, wid, pid, pkg, sha, ready, status,
                              (rep.get("gates") or {}).get("unmet"))
 

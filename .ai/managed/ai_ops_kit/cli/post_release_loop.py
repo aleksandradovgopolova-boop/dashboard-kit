@@ -183,9 +183,9 @@ def _assess_outcome(contract, readout, feature) -> dict | None:
         trace = vpo.trace_feature_rationale(graph, feature)
     node = (graph.get("nodes") or [{}])[0]
     measured = vpo.evaluate_outcome(contract, readout)   # ФЛИП: met/failed/unknown ИЗ ЧИСЕЛ
-    
-    
-    
+
+
+
     from ai_ops_kit.intelligence import outcome_insight
     human_readout = outcome_insight.build_outcome_readout(contract, readout, measured)
     return {
@@ -363,38 +363,38 @@ def run_post_release(prr_ref, child_root, *, contract=None, readout=None,
     """
     child_root = Path(child_root)
 
-    
+
     prr = _assess_prr(prr_ref, child_root)
-    
+
     analytics = _assess_analytics(child_root)
-    
+
     outcome = _assess_outcome(contract, readout, feature)
-    
+
     synth = _synthesize_verdict(prr, analytics, outcome)
 
-    
-    
-    
+
+
+
     delivery_verified = bool(prr.get("found") and prr.get("valid"))
     outcome_verdict = (outcome or {}).get("measured_verdict", "unknown")
     product_status = classify_product_status(delivery_verified, outcome_verdict)
-    
-    
+
+
     outcome_flip_ready = bool(outcome and outcome.get("flip_ready"))
 
-    
-    
-    
-    
-    
+
+
+
+
+
     from ai_ops_kit.intelligence import outcome_insight
     measured_eval = (outcome or {}).get("measured_evaluation")
     loop = outcome_insight.from_outcome(contract, readout, measured_eval) if measured_eval else None
     insight = (loop or {}).get("insight")
     candidate_work = (loop or {}).get("candidate_work")
     recommendation = (loop or {}).get("recommendation")
-    
-    
+
+
     next_action = (loop or {}).get("next_action")
     insight_gap = None if insight else outcome_insight.no_insight_reason(measured_eval)
 
@@ -448,27 +448,27 @@ def run_post_release(prr_ref, child_root, *, contract=None, readout=None,
         "prr": prr,
         "analytics_runtime": analytics,
         "outcome": outcome,
-        
+
         "verdict": synth["verdict"],
         "readout_decision": synth["readout_decision"],
-        
+
         "outcome_verdict": outcome_verdict,
-        
+
         "product_status": product_status,
-        
-        
+
+
         "outcome_readout": (outcome or {}).get("human_readout"),
-        
-        
+
+
         "outcome_flip_ready": outcome_flip_ready,
-        
-        
-        
+
+
+
         "insight": insight,
         "candidate_work": candidate_work,
         "recommendation": recommendation,
-        
-        
+
+
         "next_action": next_action,
         "insight_gap": insight_gap,
         # #584: кластер обучения проведён в контур — стоимостная аналитика и триггеры развития.
@@ -607,8 +607,8 @@ def main(argv):
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
         print(render(result))
-    
-    
+
+
     return 0 if result["verdict"] == "partially_verified" else 1
 
 

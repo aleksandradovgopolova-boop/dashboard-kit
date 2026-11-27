@@ -73,7 +73,7 @@ def check(root: Path):
 
     agent_ids, gate_ids, skill_ids, shipped = collect(root)
 
-    
+
     wf = load_yaml(root / "registry" / "workflows.yaml")
     for wid, w in (wf.get("workflows") or {}).items():
         for g in (w.get("quality_gates") or []):
@@ -88,7 +88,7 @@ def check(root: Path):
                 if sk not in skill_ids and sk not in EXTERNAL_SKILLS:
                     bad("skill", sk, f"workflow {wid}.{st.get('id')}.uses_skills")
 
-    
+
     gates = load_yaml(root / "quality" / "gates.yaml")
     for gid, g in (gates.get("gates") or {}).items():
         for key in ("checklist", "source_of_truth"):
@@ -96,7 +96,7 @@ def check(root: Path):
             if isinstance(ref, str) and not path_exists(root, ref):
                 bad("path", ref, f"gate {gid}.{key}")
 
-    
+
     for rp in sorted((root / "rules").rglob("*.yaml")):
         try:
             d = load_yaml(rp) or {}
@@ -107,20 +107,20 @@ def check(root: Path):
             if isinstance(ref, str) and not path_exists(root, ref):
                 bad("path", ref, f"{rp.relative_to(root)}.{key}")
 
-    
+
     for sp in sorted((root / "skills").glob("*/SKILL.md")):
         fm = frontmatter(sp.read_text(encoding="utf-8"))
         ref = fm.get("checklist")
         if isinstance(ref, str) and not path_exists(root, ref):
             bad("path", ref, f"{sp.relative_to(root)}.checklist")
 
-    
+
     for s in shipped:
         for key in ("path", "checklist"):
             ref = s.get(key)
             if isinstance(ref, str) and not path_exists(root, ref):
                 bad("path", ref, f"manifest.skills.shipped[{s.get('id')}].{key}")
-        
+
         sp = s.get("path")
         if isinstance(sp, str) and (root / sp).exists():
             fm = frontmatter((root / sp).read_text(encoding="utf-8"))
@@ -128,9 +128,9 @@ def check(root: Path):
                 if not fm.get(req):
                     bad("skill-frontmatter", f"{s.get('id')}: нет '{req}'", f"{sp} frontmatter")
 
-    
-    
-    
+
+
+
     for f in manifest_path_findings(root):
         bad(f["kind"], f["ref"], f["where"])
 
@@ -191,8 +191,8 @@ def manifest_path_findings(root):
     delivered = _delivered_tops(man)
     out = []
     for tok in _manifest_path_tokens(man):
-        
-        
+
+
         if not kit and delivered and not tok.startswith(tuple(delivered)):
             continue
         if not path_exists(root, tok.rstrip("/")):

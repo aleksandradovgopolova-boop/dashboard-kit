@@ -53,7 +53,7 @@ def main():
         print("нет .ai-ops.yaml — репозиторий не является child; пропуск.")
         return 0
 
-    
+
     try:
         cfg = yaml.safe_load(CHILD_CONFIG.read_text(encoding="utf-8"))
     except yaml.YAMLError as e:
@@ -71,7 +71,7 @@ def main():
             if v and not CRED_RE.match(str(v)):
                 fail(".ai-ops.yaml", f"provider '{p.get('id')}': {key} '{v}' не secret-reference (env:/secret:)")
 
-    
+
     inst = str((cfg.get("parent") or {}).get("installed_version", ""))
     prov_file = MANAGED / ".provenance.json"
     if prov_file.exists():
@@ -99,12 +99,12 @@ def main():
         if pkg_v != inst:
             fail("VERSION", f"версия пакета '{pkg_v}' != установленной '{inst}' (обнови managed-слой)")
 
-    
+
     for zone in ("managed", "project", "custom", "generated", "runtime"):
         if not (AI_DIR / zone).exists():
             fail(".ai", f"нет зоны {zone}/")
 
-    
+
     if not (MANAGED / ".checksums.json").exists():
         fail(".ai/managed", "нет .checksums.json")
     else:
@@ -116,14 +116,14 @@ def main():
                 rc = amc.verify(MANAGED)
             if rc != 0:
                 fail(".ai/managed", "drift: managed-слой изменён вручную (см. ai_managed_checksums verify .ai/managed)")
-        
-        
-        
-        
+
+
+
+
         except Exception as e:  # noqa: BLE001 — отказ становится находкой, а не тишиной
             fail(".ai/managed", f"не удалось проверить целостность: {e}")
 
-    
+
     prov_reg_file = PKG / "registry" / "providers.yaml"
     if prov_reg_file.exists():
         known = set(yaml.safe_load(prov_reg_file.read_text(encoding="utf-8")).get("providers", {}))
@@ -134,13 +134,21 @@ def main():
             if p not in known:
                 fail(".ai-ops.yaml", f"fallback provider '{p}' не найден в реестре")
 
-    
+
     gates_file = PKG / "quality" / "gates.yaml"
     if gates_file.exists():
         known_gates = set(yaml.safe_load(gates_file.read_text(encoding="utf-8")).get("gates", {}))
         for g in (cfg.get("quality_gates", {}) or {}).get("blocking", []) or []:
             if g not in known_gates:
                 fail(".ai-ops.yaml", f"blocking gate '{g}' не найден в quality/gates.yaml")
+
+    # #1434: существующий child CI видит удаление/повреждение проектного подключения.
+    # Это проверка конфигурации; она не доказывает доверие runtime или использование
+    # кита конкретной сессией (для этого нужна привязанная запись запуска).
+    if (cfg.get("standard") or {}).get("team_session") == "required":
+        from ai_ops_kit.lifecycle import project_session
+        for problem in project_session.configuration_problems(REPO_ROOT):
+            fail("проектное подключение Claude/Codex", problem)
 
     if errors:
         print(f"НАЙДЕНЫ ПРОБЛЕМЫ В CHILD-УСТАНОВКЕ ({len(errors)}):")

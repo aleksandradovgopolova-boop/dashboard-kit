@@ -144,7 +144,7 @@ def check_economics(est, limits=None, policy=None):
                 "estimate_status": est["status"], "limits": lim,
                 "violations": hard, "advisories": soft, "enforce": pol["enforce"]}
 
-    
+
     if lim["max_cost"] is not None and est["cost_max"] is not None and est["cost_max"] > lim["max_cost"]:
         hard.append({"rule": "cost_limit_exceeded",
                      "detail": f"худший сравнимый прогон стоил ${est['cost_max']} при лимите "

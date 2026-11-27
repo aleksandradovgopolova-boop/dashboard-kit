@@ -193,10 +193,10 @@ def assess(child_root, *, model: dict | None = None, feature_dates: list | None 
     fdocs = foundation_doc_paths(model, child_root)
     all_sot = _all_sot_paths(model, child_root)
     ref_paths = sorted({p for ps in all_sot.values() for p in ps} - set(fdocs))
-    
+
     doc_contour = {p: cid for cid in foundation_contours(model) for p in all_sot.get(cid, [])}
 
-    
+
     present = {p: _last_commit_ts(root, p) for p in fdocs if contours._resolve(root, p) is not None}
     tracked = {p: t for p, t in present.items() if t is not None}
     ref_dates = {p: t for p in ref_paths
@@ -250,7 +250,7 @@ def assess(child_root, *, model: dict | None = None, feature_dates: list | None 
                 "feature_stream": feat_stream, "candidate": None, "state": "fresh",
                 "note": "фундамент не отстаёт от нижнего слоя измеримо — сигнала нет"}
 
-    
+
     row, lag, lag_source, n_ref, n_feat = max(
         candidates, key=lambda c: (c[1], c[4], c[3], c[0]["path"]))
     candidate = {

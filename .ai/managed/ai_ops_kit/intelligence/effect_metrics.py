@@ -50,13 +50,13 @@ def load_history(hist_dir: Path):
     """
     features = {}
     dropped = {}
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     raw: dict[str, list[str]] = {}
     for f in sorted(hist_dir.glob("*.jsonl")):
         raw.setdefault(f.stem, []).extend(f.read_text(encoding="utf-8").splitlines())
@@ -130,8 +130,8 @@ def build(hist_dir: Path):
                          if total_runs else None),
         "median_days_to_retrospective": (round(median(flights), 1) if flights else None),
         "baseline_ready": len(sufficient) >= MIN_FEATURES,
-        
-        
+
+
         "duplicate_slices_dropped": sum(dropped.values()),
     }
     return {"schema_version": 1, "kind": "effect-metrics-report",

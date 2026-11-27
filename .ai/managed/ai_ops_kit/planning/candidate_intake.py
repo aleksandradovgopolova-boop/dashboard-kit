@@ -195,6 +195,94 @@ def accept_candidates(child_root, candidate_ids, candidates, *, goal: str | None
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _observation_id_for(cand: dict) -> str | None:
+    """id наблюдения-источника кандидата. Берём объявленный `source_observation`; если его нет —
+    снимаем префикс `cand-` с id (кандидаты находок — `cand-<obs-id>`). Не-находка → None."""
+    if str(cand.get("source") or "") != "child-finding":
+        return None
+    oid = _text(cand.get("source_observation"))
+    if oid:
+        return oid
+    cid = _text(cand.get("id"))
+    return cid[len("cand-"):] if cid.startswith("cand-") else None
+
+
+def _child_root_for(root: Path, obs_id: str) -> str:
+    """child_root для возврата решения дочке. Читаем доставленную в кит копию наблюдения
+    (findings/from-children/<id>.yaml), берём `child.path` и отдаём его КАК ЕСТЬ.
+
+    Почему как есть, а не только существующий: `set_state` сам решает, писать ли копию дочки
+    (`cp.is_file() or Path(child_root).is_dir()`). Дочка на месте → решение ложится и в неё
+    (двусторонний канал, правило 2 kit_feedback); дочки нет (исправлено в более новой версии кита /
+    продукт закрыт) → ложится только кит-копия. Важно НЕ подсунуть сюда существующий каталог КИТА:
+    тогда set_state создал бы `.ai/kit-feedback/` внутри кита. Поэтому при отсутствии `child.path`
+    возвращаем заведомо несуществующий путь-страж — так пишется только кит-копия."""
+    from ai_ops_kit.engops import kit_feedback
+    doc, err = kit_feedback._load(kit_feedback.kit_path(root, obs_id))
+    cpath = ""
+    if not err and isinstance(doc, dict):
+        child = doc.get("child") if isinstance(doc.get("child"), dict) else {}
+        cpath = _text(child.get("path"))
+    return cpath or str(root / "__no_child_present__")
+
+
+def decline_candidates(child_root, candidate_ids, candidates, *, reason: str) -> dict:
+    """Отклонить (снять как неактуальные) наблюдения-кандидаты с ОБЯЗАТЕЛЬНОЙ причиной.
+
+    -> {"declined": [obs_id…], "skipped_unknown": [id…], "skipped_unsupported": [{id, source}…],
+        "errors": [str…]}.
+
+    Решение ПЕРСИСТИТСЯ и ПОДАВЛЯЕТ РЕ-ДЕРИВАЦИЮ через перевод наблюдения-источника в состояние
+    `resolved` (kit_feedback.set_state) — см. блок-комментарий выше. Причина обязательна (как улика у
+    дефекта): без неё отклонение — стёртая запись, а не решение. Отклонять умеем ТОЛЬКО кандидатов
+    наблюдений (`source: child-finding`): у них есть устойчивый источник-ключ (файл наблюдения).
+    Кандидаты из непокрытых направлений роадмапа и недобравших исходов ре-деривируются из ЖИВОГО
+    состояния (покрытие плана / замер фичи) — у них нет наблюдения, чтобы «снять»; такой кандидат
+    уходит в `skipped_unsupported` с честной причиной, а не подавляется наполовину.
+    """
+    from ai_ops_kit.engops import kit_feedback
+    root = Path(child_root)
+    result: dict = {"declined": [], "skipped_unknown": [], "skipped_unsupported": [], "errors": []}
+    why = _text(reason)
+    if not why:
+        return {**result, "errors": ["отклонение требует причину: укажи --why \"<почему снято>\" "
+                                     "(например «уже исправлено в текущей версии кита»)"]}
+    by_id = {c.get("id"): c for c in (candidates or []) if isinstance(c, dict) and c.get("id")}
+    for cid in (candidate_ids or []):
+        cand = by_id.get(cid)
+        if cand is None:
+            result["skipped_unknown"].append(cid)
+            continue
+        obs_id = _observation_id_for(cand)
+        if obs_id is None:
+            result["skipped_unsupported"].append({"id": cid, "source": _text(cand.get("source"))})
+            continue
+        cr = _child_root_for(root, obs_id)
+        _doc, errs = kit_feedback.set_state(root, cr, obs_id, "resolved", reason=why)
+        if errs:
+            result["errors"].append(f"{cid}: {'; '.join(errs)}")
+            continue
+        result["declined"].append(obs_id)
+    return result
+
+
+
+
 def _yaml_scalar(s: str) -> str:
     """Строка → безопасный YAML-скаляр. JSON-строка — валидный YAML flow-скаляр в двойных кавычках,
     поэтому `json.dumps(..., ensure_ascii=False)` корректно экранирует кавычки/переводы строк и не
@@ -234,7 +322,7 @@ def _append_work_items_text(text: str, items_yaml: str) -> str:
     work_idx = next((i for i, ln in enumerate(lines) if re.match(r"^work\s*:", ln)), None)
     if work_idx is None:
         raise ValueError("в plan.yaml нет верхнеуровневого блока work: — дописывать некуда")
-    
+
     after = lines[work_idx].split(":", 1)[1] if ":" in lines[work_idx] else ""
     if after.split("#", 1)[0].strip():
         raise ValueError("блок work: не блок-список (значение в той же строке — flow-стиль) — "
@@ -246,8 +334,8 @@ def _append_work_items_text(text: str, items_yaml: str) -> str:
         if ln and not ln[0].isspace() and stripped and not stripped.startswith("#"):
             end = i
             break
-    
-    
+
+
     first_content = next((lines[i] for i in range(work_idx + 1, end)
                           if lines[i].strip() and not lines[i].lstrip().startswith("#")), None)
     if first_content is not None and not re.match(r"^  -\s", first_content):

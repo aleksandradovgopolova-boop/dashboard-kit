@@ -112,7 +112,7 @@ def closure_breakdown(gates: dict, signals: dict = None) -> dict:
     return {"counts": counts, "by_gate": by_gate,
             "machine_checked": sorted(g for g, v in by_gate.items() if v == "validator"),
             "judged_or_human": sorted(g for g, v in by_gate.items() if v != "validator"),
-            
+
             "by_source": by_source,
             "deterministic": sorted(g for g, s in by_source.items() if s == "deterministic"),
             "ai_judgment": sorted(g for g, s in by_source.items() if s == "ai_judgment"),
@@ -185,8 +185,8 @@ def _not_applicable_result(gate_id, gate, tested_revision, rw):
     return {
         "provenance": "FACT",
         "schema_version": 1, "gate": gate_id, "status": "pass", "blocking": False,
-        
-        
+
+
         "awaiting_human": False,
         "scope": ["not_applicable"], "checks": [], "blockers": [],
         "warnings": [f"гейт неприменим: нет ни одного сигнала {rw} — не оценивался (honest skip)"],
@@ -207,23 +207,23 @@ def evaluate_gate(gate_id: str, gate: dict, evidence: dict, tested_revision=None
     реально запускаемым валидатором проверка исполняется здесь; символические валидаторы
     и reviewer/human-гейты требуют внешнего evidence."""
     kind = classify(gate, signals)
-    
-    
-    
+
+
+
     blocking, _rc_reason = gate_policy.effective_enforcement(
         gate_id, bool(gate.get("blocking")), signals or {},
         enabled=gate_policy.risk_calibrated_enforcement_enabled(signals))
     required = gate.get("required_evidence", []) or []
     ev = dict((evidence or {}).get(gate_id) or {})
 
-    
-    
-    
+
+
+
     rw = gate.get("required_when") or []
     if rw and not any((signals or {}).get(s) for s in rw):
         return _not_applicable_result(gate_id, gate, tested_revision, rw)
 
-    
+
     if not ev.get("status") and kind == "deterministic":
         run = deterministic_run(gate.get("validator"))
         if run:
@@ -239,10 +239,10 @@ def evaluate_gate(gate_id: str, gate: dict, evidence: dict, tested_revision=None
         warnings = list(ev.get("warnings", []))
         evid = ev.get("evidence", [])
         override = ev.get("override")
-        
-        
-        
-        
+
+
+
+
         if status == "pass" and required:
             exempt = set(not_applicable or [])
             real_covered = set(ev.get("provided", [])) | {c.get("id") for c in checks
@@ -255,11 +255,11 @@ def evaluate_gate(gate_id: str, gate: dict, evidence: dict, tested_revision=None
             _explained = set(ev.get("explained_exemptions") or []) if not exempt_reason else set()
             _generic = [k for k in used_exempt if k not in _explained]
             if _generic:
-                
-                
-                
-                
-                
+
+
+
+
+
                 warnings = warnings + [f"освобождено ({exempt_reason or 'нет инструмента в стеке'}): "
                                        f"{', '.join(_generic)}"]
             missing = [k for k in required if k not in covered]
@@ -271,7 +271,7 @@ def evaluate_gate(gate_id: str, gate: dict, evidence: dict, tested_revision=None
                 else:
                     warnings = warnings + [msg]
     else:
-        
+
         reason = _unmet_reason(kind, gate)
         status = "fail" if blocking else "warn"
         checks = []
@@ -288,10 +288,10 @@ def evaluate_gate(gate_id: str, gate: dict, evidence: dict, tested_revision=None
         warnings = warnings + [msg]
         override = None
 
-    
-    
-    
-    
+
+
+
+
     adv = gate.get("advisory_evidence") or []
     if adv:
         _scope = gate.get("advisory_applicability") or gate.get("applicability") or []
@@ -304,10 +304,10 @@ def evaluate_gate(gate_id: str, gate: dict, evidence: dict, tested_revision=None
                                        f"{', '.join(_adv_missing)} — «тесты есть» != «тест проходит "
                                        f"пользовательский сценарий тем же путём, что продукт»"]
 
-    
-    
-    
-    
+
+
+
+
     if _rc_reason:
         warnings = warnings + [_rc_reason]
         if status == "fail":
@@ -374,7 +374,7 @@ def evaluate(workflow_id: str, evidence: dict = None, tested_revision=None, gate
         if floor_workflow not in workflows:
             raise ValueError('не удалось определить обязательную policy workflow')
         mandatory.extend(workflows[floor_workflow].get('quality_gates', []) or [])
-        
+
         from ai_ops_kit.gates.spec_levels import classify as ceremony_classify
         ceremony_level = ceremony_classify(signals)['level']
         risk_floor = 'CRITICAL' if ceremony_level >= 3 else 'ENGINEERING' if ceremony_level >= 2 else None
@@ -421,9 +421,9 @@ def evaluate(workflow_id: str, evidence: dict = None, tested_revision=None, gate
         # выходила: в отчёте прогона все гейты выглядели одинаково, и «зелёное» от валидатора было
         # неотличимо от «зелёного» по мнению судьи. Дочка, читающая отчёт, обязана видеть разницу.
         "closure": closure_breakdown({gid: gates[gid] for gid in gate_ids}, signals),
-        
-        
-        
+
+
+
         "evidence_verdict": evidence_verdict(results, {gid: gates[gid] for gid in gate_ids}, signals),
         "gate_results": results,
         "unmet_gates": unmet,

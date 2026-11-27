@@ -62,12 +62,12 @@ def load_policy(root: Path) -> dict:
     if not isinstance(data, dict):
         raise PolicyInvalid(f"{POLICY_REL}: ожидался mapping, получен {type(data).__name__}")
     default = data.get("default", DEFAULT_LEVEL)
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     autonomy = data.get("autonomy") or {}
     actions_legacy = data.get("actions") or {}
     if not isinstance(autonomy, dict):

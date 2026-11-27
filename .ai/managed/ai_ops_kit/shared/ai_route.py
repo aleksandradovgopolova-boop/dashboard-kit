@@ -23,6 +23,8 @@ import yaml
 
 from typing import Any
 
+from ai_ops_kit.shared.contracts import RouteResult
+
 PKG_ROOT = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
                  Path(__file__).resolve().parents[1])
 REG = PKG_ROOT / "registry"
@@ -41,15 +43,15 @@ def _match(when: Any, ctx: dict[str, Any]) -> bool:
     return True
 
 
-def route(inp: dict[str, Any]) -> dict[str, Any]:
+def route(inp: dict[str, Any]) -> RouteResult:
     policy = load("routing-policy.yaml")
     providers = load("providers.yaml")["providers"]
     runtimes = load("runtimes.yaml")["runtimes"]
     workflows = load("workflows.yaml")["workflows"]
 
-    available_providers = inp.get("available_providers", list(providers.keys()))
-    available_runtimes = inp.get("available_runtimes", list(runtimes.keys()))
-    reasons = []
+    available_providers: list[str] = inp.get("available_providers", list(providers.keys()))
+    available_runtimes: list[str] = inp.get("available_runtimes", list(runtimes.keys()))
+    reasons: list[str] = []
     low_confidence = False   # v2.123: классификация без явного сигнала тяжести -> подтвердить preview
 
     # 1. workflow: правила policy (эскалации) -> точное имя контракта ->
@@ -58,8 +60,8 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
     # Правило, целящее в ещё не зарегистрированный контракт (напр. CRITICAL, post-MVP),
     # применяется как ЭСКАЛАЦИЯ к базовому workflow (reason + ручное одобрение), а не
     # как отдельный workflow — иначе route ссылается на несуществующую стадийную схему.
-    workflow = None
-    escalations = []
+    workflow: str | None = None
+    escalations: list[str] = []
     for rule in policy.get("workflow_rules", []):
         if "when" in rule and _match(rule["when"], inp):
             target = rule.get("workflow")
@@ -68,12 +70,12 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
                 if rule.get("escalate_reason"):
                     reasons.append(rule["escalate_reason"])
                 break
-            
+
             if rule.get("escalate_reason"):
                 escalations.append(
                     f"{rule['escalate_reason']} (контракт {target} ещё не зарегистрирован — "
                     f"эскалация применена к базовому workflow, требуется ручное одобрение)")
-            
+
     if workflow is None:
         tt = inp.get("task_type")
         if tt in workflows:
@@ -86,12 +88,12 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
                     reasons.append(f"task_type '{tt}' -> {wid} (selection_criteria)")
                     break
     if workflow is None:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         size, risk = inp.get("size"), inp.get("risk")
         heavy = size in ("medium", "large", "xl") or risk in ("medium", "high", "critical")
         if heavy and "ENGINEERING" in workflows:
@@ -107,8 +109,8 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
             workflow = "ENGINEERING"
             reasons.append(f"unknown task_type '{inp.get('task_type')}' -> ENGINEERING (QUICK недоступен)")
 
-    
-    prefer_provider, forbid_provider, model_class = [], [], None
+
+    prefer_provider, forbid_provider, model_class = [], [], None  # type: tuple[list[str], list[str], str | None]
     for rule in policy.get("provider_rules", []):
         applies = ("default" in rule) or _match(rule.get("when", {}), inp)
         if not applies:
@@ -127,7 +129,7 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
             model_class = rule["prefer_model_class"]
     model_class = model_class or "balanced"
 
-    
+
     def pick_provider() -> str | None:
         for p in prefer_provider:
             if p in available_providers and p not in forbid_provider:
@@ -140,11 +142,11 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
     if selected_provider is None:
         reasons.append("no allowed provider available")
 
-    
-    prefer_runtime = []
+
+    prefer_runtime: list[str] = []
     for rule in policy.get("runtime_rules", []):
         ctx = dict(inp)
-        
+
         if "when" in rule and "available_runtime" in rule["when"]:
             ar = rule["when"]["available_runtime"]
             if ar in available_runtimes:
@@ -155,7 +157,7 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
     selected_runtime = next((r for r in prefer_runtime if r in available_runtimes),
                             (available_runtimes[0] if available_runtimes else None))
 
-    
+
     rt = runtimes.get(selected_runtime, {})
     caps = rt.get("capabilities", {})
     def cap_true(name: str) -> bool:
@@ -166,21 +168,21 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
     else:
         execution_mode = rt.get("preferred_mode", "sequential")
 
-    
-    human_approval = "conditional"
+
+    human_approval: str | bool = "conditional"
     for rule in policy.get("approval_rules", []):
         if ("default" in rule) or _match(rule.get("when", {}), inp):
             if "human_approval_required" in rule:
                 human_approval = rule["human_approval_required"]
                 break
     human_approval_required = (human_approval is True)
-    
-    
+
+
     if escalations:
         human_approval_required = True
 
-    
-    required = workflows.get(workflow, {}).get("required_capabilities", [])
+
+    required: list[str] = workflows.get(workflow, {}).get("required_capabilities", [])
     prov_caps = providers.get(selected_provider, {}).get("capabilities", {}) if selected_provider else {}
     def provider_supports(capname: str) -> bool:
         c = prov_caps.get(capname)
@@ -188,12 +190,12 @@ def route(inp: dict[str, Any]) -> dict[str, Any]:
             return True
         if isinstance(c, dict):
             return c.get("value") is True or c.get("status") in ("documented", "verified")
-        
+
         return cap_true(capname) or capname in ("file_read", "file_write")
     missing = [c for c in required if not provider_supports(c)]
 
-    
-    fallbacks = []
+
+    fallbacks: list[dict[str, str | None]] = []
     for p in prefer_provider:
         if p != selected_provider and p in available_providers and p not in forbid_provider:
             fallbacks.append({"provider": p, "runtime": selected_runtime})
@@ -284,7 +286,7 @@ SCENARIOS = [
      "inp": {"task_type": None, "confidentiality": "internal",
              "available_providers": ["anthropic"], "available_runtimes": ["claude-code"]},
      "expect": {"workflow": "QUICK", "classification_confidence": "low"}},
-    
+
     {"name": "unknown task_type + size small/low risk -> QUICK (finding 4)",
      "inp": {"task_type": None, "size": "small", "risk": "low", "ui_changed": True,
              "confidentiality": "internal",
@@ -294,7 +296,7 @@ SCENARIOS = [
      "inp": {"task_type": None, "size": "large", "risk": "low", "confidentiality": "internal",
              "available_providers": ["anthropic"], "available_runtimes": ["claude-code"]},
      "expect": {"workflow": "ENGINEERING"}},
-    
+
     {"name": "critical PRODUCT -> CRITICAL (override) + ручное одобрение",
      "inp": {"task_type": "PRODUCT", "risk": "critical", "confidentiality": "internal",
              "available_providers": ["anthropic"], "available_runtimes": ["claude-code"]},

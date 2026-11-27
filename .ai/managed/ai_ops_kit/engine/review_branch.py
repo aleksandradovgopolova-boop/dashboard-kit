@@ -65,8 +65,8 @@ def _base_for_review(child_root, base, branch):
     r = _pg._resolve_base(child_root, None)
     if r.get("resolved"):
         if r.get("base_ref") == branch:
-            
-            
+
+
             return {"base": None, "source": r.get("source"), "resolved": False,
                     "reason": f"авто-база совпала с ревьюируемой веткой {branch} — "
                               f"диф против себя пуст; задай --base <ветка>"}
@@ -108,7 +108,7 @@ def _persist_review(child_root, wid, rep):
               "review_statuses": {r["gate"]: (r.get("status") if r.get("valid") else "invalid")
                                   for r in rep.get("reviews") or []},
               "changed_files": rep.get("changed_files") or [],
-              
+
               "base": rep.get("base"), "base_source": rep.get("base_source"),
               "base_note": rep.get("base_note"),
               "readiness": rep.get("readiness"),
@@ -134,7 +134,7 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
         return {"kind": "BranchReview", "workitem_id": wid, "reviewable": False,
                 "reviews": [], "verdict": "no-branch", "readiness": _readiness_for("no-branch"),
                 "note": f"ветка {branch} не найдена — нечего ревьюить (сначала ai-ops run --execute)"}
-    
+
     reattached = False
     if not wp.is_dir():
         if _wt.add(child_root, wid, branch) != 0:
@@ -145,8 +145,8 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
 
     rc, revision, _ = _git(wp, "rev-parse", "HEAD")
     revision = revision if rc == 0 else None
-    
-    
+
+
     changed = []
     based = _base_for_review(child_root, base, branch)
     if based["resolved"]:
@@ -169,7 +169,7 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
     rc_merge, merge_base, _ = _git(wp, "merge-base", based.get("base") or "HEAD", branch)
     rc_diff, exact_diff, _ = _git(wp, "diff", "--no-ext-diff", "--no-textconv", "--binary",
                                  "--full-index", f"{based.get('base') or 'HEAD'}...{branch}")
-    
+
     context = {"complete": based["resolved"] and rc_base == rc_merge == rc_diff == 0,
                "toolchain": receipts.digest([receipts.file_digest(Path(__file__)),
                                                receipts.file_digest(Path(_ep.__file__))]),
@@ -201,7 +201,7 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
     if after != inputs:
         inputs = None
 
-    
+
     statuses = {r["gate"]: (r.get("status") if r.get("valid") else "invalid") for r in reviews}
     if not reviewable:
         verdict = "no-ai-review-gates"
@@ -212,9 +212,9 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
     else:
         verdict = "needs-changes"
 
-    
-    
-    
+
+
+
     constitution_findings = []
     try:
         from ai_ops_kit.checks import constitution_conformance as _cc   # внутрипакетно
@@ -228,7 +228,7 @@ def review(child_root, wid, reviewer_proposer, base=None, budget=None, persist=T
            "reattached_worktree": reattached, "reviewable": reviewable, "reviews": reviews,
            "verdict": verdict, "readiness": _readiness_for(verdict), "changed_files": changed,
            "constitution_findings": constitution_findings,
-           
+
            "base": based.get("base"), "base_source": based.get("source")}
     if not based["resolved"]:
         rep["base_note"] = based.get("reason")

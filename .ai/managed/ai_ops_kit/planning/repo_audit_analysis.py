@@ -84,8 +84,8 @@ def classify(evidence: dict, model: dict | None = None) -> dict:
         return {"class": "NEW_PRODUCT", "confidence": conf, "reasons": reasons,
                 "onboarding": "product_bootstrap"}
 
-    
-    
+
+
     cls_cfg = model.get("classification") or {}
     min_weight = cls_cfg.get("maturity_min_weight", 6)
     weight, live = _maturity(evidence, model)
@@ -103,9 +103,9 @@ def classify(evidence: dict, model: dict | None = None) -> dict:
     reasons.append(f"код есть (файлов {src}), продуктовой и архитектурной истории почти нет")
     if commits is not None:
         reasons.append(f"коммитов {commits}")
-        
-        
-        
+
+
+
         early_max = th.get("early_max_commits", 50)
         if commits > early_max:
             reasons.append(f"история длиннее порога ранней стадии ({early_max}), но признаков "
@@ -123,9 +123,9 @@ def owner_confirmed(child_root) -> dict:
     реестре, которого не вычисляет никто, — ровно та «capability без реализации», которую
     инварианты кита запрещают (то же правило уже применено к `stale`).
     """
-    
-    
-    
+
+
+
     data = {}
     cfg = Path(child_root) / ".ai-ops.yaml"
     if cfg.is_file():
@@ -136,8 +136,8 @@ def owner_confirmed(child_root) -> dict:
     if not isinstance(data, dict):
         data = {}
     conf = dict((data.get("product_operating_model") or {}).get("confirmed") or {})
-    
-    
+
+
     conf.update(read_answers(child_root))
     return {k: v for k, v in conf.items() if v not in (None, "")}
 
@@ -187,9 +187,9 @@ def reconstruct(child_root, evidence: dict, model: dict | None = None) -> dict:
             for k, v in (s.get("commands") or {}).items():
                 if v:
                     cmds[k] = v
-        
-        
-        
+
+
+
         _cmd_ev = list(evidence.get("dependency_manifests") or [])
         out["ci_pipeline"] = {"value": sorted(cmds) or "CI объявлен", "status": VERIFIED,
                               "evidence": list(evidence["ci"]) + _cmd_ev,
@@ -207,8 +207,8 @@ def reconstruct(child_root, evidence: dict, model: dict | None = None) -> dict:
             "value": f"{tests} тестовых файлов на {src} файлов кода",
             "status": VERIFIED if tests else MISSING, "evidence": ["обход дерева"]}
 
-    
-    
+
+
     style, why = None, []
     if (root / "src" / "modules").is_dir() or (root / "modules").is_dir():
         style, why = "modular_monolith", ["src/modules/*"]
@@ -221,25 +221,25 @@ def reconstruct(child_root, evidence: dict, model: dict | None = None) -> dict:
         out["architecture_style"] = {"value": style, "status": INFERRED, "evidence": why,
                                      "note": "вывод из структуры; подтверждение владельца желательно"}
 
-    
+
     for key, note in (("primary_user", "пользователи продукта из репозитория не выводятся"),
-                      
-                      
-                      
+
+
+
                       ("main_goal_now", "цель продукта из репозитория не выводится"),
                       ("sensitive_data", "чувствительность данных определяет владелец")):
-        
-        
-        
-        
-        
+
+
+
+
+
         out[key] = {"value": None, "status": UNKNOWN, "evidence": [], "note": note,
                     "asks_human": True}
 
-    
-    
-    
-    
+
+
+
+
     if evidence.get("containers") or evidence.get("ci"):
         out["production_env"] = {
             "value": "окружение, куда деплоит существующий конвейер", "status": INFERRED,
@@ -250,11 +250,11 @@ def reconstruct(child_root, evidence: dict, model: dict | None = None) -> dict:
         out["production_env"] = {"value": None, "status": UNKNOWN, "evidence": [],
                                  "note": "признаков деплоя не найдено", "asks_human": True}
 
-    
-    
-    
-    
-    
+
+
+
+
+
     from ai_ops_kit.planning import source_conflict as _conflict
     _conflicts = _conflict.detect(child_root)
     _db_conflict = next((c for c in _conflicts if c["category"] == "database"), None)
@@ -323,10 +323,10 @@ def _contour_state(child_root, c: dict, evidence: dict, model: dict) -> dict:
     дерево не читается: тогда неизвестно даже отсутствие.
     """
     root = Path(child_root)
-    
-    
-    
-    
+
+
+
+
     _sot = _contours.sot_for(model, c["id"], root)
     req = [s for s in _sot if s.get("required")]
     opt = [s for s in _sot if not s.get("required")]
@@ -356,30 +356,30 @@ def _contour_state(child_root, c: dict, evidence: dict, model: dict) -> dict:
         else:
             state = MISSING
 
-    
+
     if state == VERIFIED and c.get("id") == "planning_execution":
         try:
             from ai_ops_kit.planning import delivery_plan as _dp
             if _dp.is_template(_dp.load(root)):
                 state = PARTIAL
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         except Exception:  # noqa: BLE001 — любой отказ проверки -> UNKNOWN, а не VERIFIED
             state = UNKNOWN
 
     rec = c.get("reconstruction") or {}
     qs = c.get("questions") or []
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     section_findings = []
     if evidence.get("tree_readable"):
         from ai_ops_kit.planning import artifact_sections as _sections

@@ -95,7 +95,7 @@ def plan(wg: dict) -> dict:
             contract_count[c] = contract_count.get(c, 0) + 1
     contract_first = sorted([c for c, n in contract_count.items() if n >= 2])
 
-    
+
     groups, used = [], set()
     for i, pa in enumerate(independent):
         if pa["id"] in used:
@@ -121,7 +121,7 @@ def plan(wg: dict) -> dict:
     else:
         mode = "sequential"
 
-    
+
     order, placed = [], set()
     guard = 0
     remaining = list(ids)
@@ -173,7 +173,7 @@ def integration_decision(package_results: dict, conflicts=0, base_moved=False, a
     if base_moved:
         return {"proceed": False, "integration_sha_required": True, "open_pr": False,
                 "revalidation_required": True, "reason": "base сдвинулась -> integration revalidation"}
-    
+
     return {"proceed": True, "integration_sha_required": True, "open_pr": bool(aggregate_ok),
             "reason": ("aggregate green -> новый integration-SHA + один draft PR" if aggregate_ok
                        else "aggregate FAIL -> integration-SHA есть, но PR НЕ открывается")}
@@ -214,7 +214,7 @@ def integration_gate(expected_packages, package_results, shared_contracts=None, 
         errors.append(f"неполный набор результатов: нет пакетов {sorted(missing)}")
     if extra:
         errors.append(f"лишние результаты вне WorkGraph: {sorted(extra)}")
-    
+
     for pid, r in got.items():
         if not isinstance(r, dict):
             errors.append(f"{pid}: результат не доказательный (нет SHA/gate_report, голое '{r}')")
@@ -229,7 +229,7 @@ def integration_gate(expected_packages, package_results, shared_contracts=None, 
                 errors.append(f"{pid}: status=pass, но gate_report.all_pass != true")
             if r.get("sha") and gr.get("tested_revision") != r.get("sha"):
                 errors.append(f"{pid}: gate_report.tested_revision != package sha (evidence не на ревизии пакета)")
-    
+
     for c in shared_contracts or []:
         cs = (contract_shas or {}).get(c)
         if not cs:
@@ -239,7 +239,7 @@ def integration_gate(expected_packages, package_results, shared_contracts=None, 
     if errors:
         return _block(errors)
 
-    
+
     not_pass = [pid for pid, r in got.items() if r.get("status") != "pass"]
     if not_pass:
         return _block([f"пакет(ы) не pass {sorted(not_pass)} -> fan-in НЕ начинается"])
@@ -252,10 +252,10 @@ def integration_gate(expected_packages, package_results, shared_contracts=None, 
     if not isinstance(aggregate, dict):
         return {"proceed": True, "integration_sha_required": True, "open_pr": False, "errors": [],
                 "reason": "aggregate не РЕАЛЬНЫЙ GateReport (голый bool/None) -> integration-SHA есть, PR НЕ открывается"}
-    
-    
-    
-    
+
+
+
+
     rev_ok = integration_sha is not None and aggregate.get("tested_revision") == integration_sha
     agg_ok = aggregate.get("all_pass") is True and rev_ok
     if not rev_ok:

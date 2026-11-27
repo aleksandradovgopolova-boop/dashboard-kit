@@ -223,7 +223,7 @@ def gate_evidence_entry(child_root, base_entry: dict = None) -> dict:
     """
     live = events_verified_live(child_root)
     entry = dict(base_entry or {})
-    
+
     provided = [p for p in (entry.get("provided") or []) if p != EVIDENCE_NAME]
     evid = list(entry.get("evidence") or [])
     src = f"{EVIDENCE_NAME} @ intelligence/event_arrival: {live.get('detail') or live['reason']}"

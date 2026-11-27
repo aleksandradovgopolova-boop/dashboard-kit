@@ -147,8 +147,8 @@ def _collect_product_bindings(tree: ast.AST) -> tuple[set[str], set[str], bool]:
         callee = value.func
         cname = callee.attr if isinstance(callee, ast.Attribute) else \
             (callee.id if isinstance(callee, ast.Name) else "")
-        
-        
+
+
         is_loader = cname in ("module_from_spec", *DYNAMIC_LOADERS)
         if not is_loader:
             return False
@@ -160,16 +160,16 @@ def _collect_product_bindings(tree: ast.AST) -> tuple[set[str], set[str], bool]:
         return False
 
     for node in ast.walk(tree):
-        
+
         if isinstance(node, ast.ImportFrom):
             mod = node.module or ""
             top = mod.split(".")[0]
             if top in PRODUCT_IMPORT_ROOTS or top in PRODUCT_FLAT_MODULES:
                 imports_product = True
                 for a in node.names:
-                    
-                    
-                    
+
+
+
                     bound = a.asname or a.name
                     product_funcs.add(bound)
                     product_aliases.add(bound)
@@ -179,7 +179,7 @@ def _collect_product_bindings(tree: ast.AST) -> tuple[set[str], set[str], bool]:
                 if top in PRODUCT_IMPORT_ROOTS or top in PRODUCT_FLAT_MODULES:
                     imports_product = True
                     product_aliases.add(a.asname or top)
-        
+
         elif isinstance(node, ast.Call):
             callee = node.func
             cname = callee.attr if isinstance(callee, ast.Attribute) else \
@@ -188,13 +188,13 @@ def _collect_product_bindings(tree: ast.AST) -> tuple[set[str], set[str], bool]:
                 imports_product = True
             if cname == "import_module" and _refs_product_path(node):
                 imports_product = True
-        
+
         elif isinstance(node, ast.Assign):
             note_dynamic_assign(node.targets, node.value)
         elif isinstance(node, ast.AnnAssign) and node.value is not None:
             note_dynamic_assign([node.target], node.value)
 
-    
+
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and _is_fixture(node):
             if _fixture_loads_product(node):
@@ -232,17 +232,17 @@ def _calls_product(tree: ast.AST, product_funcs: set[str], product_aliases: set[
         if not isinstance(node, ast.Call):
             continue
         func = node.func
-        
+
         if isinstance(func, ast.Name) and func.id in product_funcs:
             return True
-        
+
         if isinstance(func, ast.Attribute):
             root = func.value
             while isinstance(root, ast.Attribute):
                 root = root.value
             if isinstance(root, ast.Name) and root.id in product_aliases:
                 return True
-            
+
             if func.attr in SUBPROCESS_RUNNERS and _refs_product_path(node):
                 return True
     return False
@@ -355,7 +355,7 @@ def check(current: dict, baseline: dict) -> list[str]:
                 "порога не существует"]
     c_beh = current["behavioral_count"]
     c_tot = current["total_count"]
-    
+
     if c_beh * b_tot < b_beh * c_tot:
         c_share = current["behavioral_share_pct"]
         b_share = round(100.0 * b_beh / b_tot, 2)

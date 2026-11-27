@@ -105,8 +105,8 @@ def _inbox_outcome_candidate(child_root):
     if not cand:
         return None
     rec, ins = result.get("recommendation") or {}, result.get("insight") or {}
-    
-    
+
+
     na = result.get("next_action") or {}
     return {"wid": cand.get("id"), "what": cand.get("title"), "confidence": ins.get("confidence"),
             "action": na.get("action") or cand.get("title"), "because": na.get("because") or "",
@@ -316,7 +316,7 @@ def _inbox_render(queue, aud):
         lines.append("    " + h("черновик — станет работой по твоему решению (./ai-ops candidates accept)"))
     precedents = findings.get("precedents") or []
     if precedents:
-        
+
         lines.append("")
         lines.append(h("• Уроки из прогонов (прецеденты, не правила):"))
         for p in precedents[:3]:
@@ -359,7 +359,7 @@ def _intent_inbox(task, child_root, signals, a):
         print(json.dumps(queue, ensure_ascii=False, indent=2, default=str))
     else:
         print(_inbox_render(queue, presenter.audience_from_config(root)))
-    
-    
+
+
     return 0 if queue.get("registry_ok", True) else 1
 

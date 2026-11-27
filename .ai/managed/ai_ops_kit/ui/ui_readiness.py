@@ -87,7 +87,7 @@ def assess(child_root):
     build_script = _build_script(pkg)
     static_build = _static_build(root)
 
-    
+
     per_status = {"story_index": "absent", "interaction": "not_run", "a11y": "not_run", "visual": "not_run"}
     evidence_present = False
     try:
@@ -101,10 +101,10 @@ def assess(child_root):
             "visual": (bundle.get("visual") or {}).get("status", "not_run"),
         }
         evidence_present = any(per_status[k] in ("pass", "fail") for k in ("interaction", "a11y", "visual"))
-    
-    
-    
-    
+
+
+
+
     except Exception:   # noqa: BLE001,S110 — адаптер недоступен -> объявленное absent/not_run, не тишина
         pass
 
@@ -127,10 +127,10 @@ def assess(child_root):
             "signals": {"config_dir": config_dir, "storybook_dep": dep, "build_script": build_script,
                         "static_build": static_build, "evidence_present": evidence_present},
             "evidence_status": per_status, "recommendation": rec,
-            
+
             "constitution_coverage": _constitution_coverage(),
-            
-            
+
+
             "preview_workflow": (root / ".github" / "workflows" / "ai-ops-storybook-preview.yml").is_file(),
             "installs_dependencies": False}   # кит НИКОГДА не ставит deps сам
 
@@ -190,9 +190,9 @@ def _fmt(a):
     L.append("  evidence (честно): story_index=%s interaction=%s a11y=%s visual=%s" %
              (es["story_index"], es["interaction"], es["a11y"], es["visual"]))
     L.append("  → " + a["recommendation"])
-    
-    
-    
+
+
+
     if a.get("preview_workflow"):
         L.append("  превью в PR: ВКЛЮЧЕНО (workflow ai-ops-storybook-preview доставлен) — на PR с "
                  "UI-изменениями CI соберёт Storybook и выложит артефакт `storybook-static`.")

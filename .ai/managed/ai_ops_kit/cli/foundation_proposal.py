@@ -329,12 +329,12 @@ def to_message(briefing: dict):
     technical.update(_foundation_freshness_technical(ff))
 
     kit_line = _kit_setup_line(verdict)
-    
-    
+
+
     fresh_line = _foundation_freshness_line(ff)
 
-    
-    
+
+
     if precs:
         lead = precs[0]
         needs = "; ".join(p.get("need", "") for p in precs)
@@ -352,7 +352,7 @@ def to_message(briefing: dict):
             why_it_matters=lead.get("why"),
             decision=decision, next_steps=next_steps, technical=technical)
 
-    
+
     if not enough:
         return presenter.message(
             status="degraded", headline="Пока не могу советовать по продукту",
@@ -397,9 +397,9 @@ def run_intent(task, child_root, signals, a):
     if js:
         print(json.dumps(briefing, ensure_ascii=False, indent=2, default=str))
         return 0
-    
+
     print(presenter.render(to_message(briefing),
                            audience=presenter.audience_from_config(child_root)))
-    
-    
+
+
     return 0 if briefing["verdict"]["verdict"] == "valid" else 1

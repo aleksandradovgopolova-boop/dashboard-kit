@@ -44,11 +44,11 @@ def read_answers(child_root) -> dict:
     try:
         data = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError as e:
-        
-        
-        
-        
-        
+
+
+
+
+
         raise AnswersCorrupt(f"{p}: файл ответов не разбирается ({e}) — починить, а не отвечать "
                              f"заново; иначе ответы будут перезаписаны пустыми") from e
     ans = (data.get("answers") or {}) if isinstance(data, dict) else {}
@@ -180,8 +180,8 @@ def write_question_file(child_root, ask: dict, overrides=None, notes=None):
     она создаёт, и создаёт ровно потому, что вопросам нужно место для ответа.
     """
     p = answers_path(child_root)
-    
-    
+
+
     existing = read_answers(child_root)
     # #612: `model --answer` подаёт значение сюда, а не человек в редакторе. Сливаем поверх уже
     # прочитанного; None (значение не задано) не затирает существующий ответ.
@@ -199,8 +199,8 @@ def write_question_file(child_root, ask: dict, overrides=None, notes=None):
         "#",
         "# После заполнения запустите снова:  ./ai-ops model",
     ]
-    
-    
+
+
     kit_comments, kit_lines = {}, set(header)
     for q in ask.get("questions") or []:
         qid = q.get("id")
@@ -219,7 +219,7 @@ def write_question_file(child_root, ask: dict, overrides=None, notes=None):
             own = _owner_comments(p.read_text(encoding="utf-8"), kit_lines)
         except OSError:
             pass                               # прочитать не смогли — комментариев не будет, но
-            
+
 
     def _value_line(qid, val):
         """Строка значения вместе с хвостовым комментарием владельца/основанием (#612), если был."""
@@ -241,31 +241,31 @@ def write_question_file(child_root, ask: dict, overrides=None, notes=None):
         lines.extend(kit_comments[qid])
         lines.extend(f"  {c}" for c in own["before"].get(qid, []))
         val = existing.get(qid)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         lines.append(_value_line(qid, val))
         lines.append("")
-    
+
     for qid, val in existing.items():
         if qid not in seen:
-            
-            
-            
-            
-            
+
+
+
+
+
             lines.extend(f"  {c}" for c in own["before"].get(qid, []))
             lines.append(_value_line(qid, val))
     lines.extend(own["tail"])

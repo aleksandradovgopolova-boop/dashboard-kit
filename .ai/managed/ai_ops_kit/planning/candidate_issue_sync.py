@@ -96,7 +96,7 @@ def candidate_body(c: dict) -> str:
     source = str(c.get("source") or "").strip()
     rationale = " ".join(str(c.get("rationale") or "").split())
     title = " ".join(str(c.get("title") or cid).split()).rstrip(".")
-    
+
     needs_goal = not str(c.get("source_goal") or "").strip()
     accept = f"    ./ai-ops candidates accept {cid}"
     if needs_goal:
@@ -153,13 +153,13 @@ def sync(candidates: list[dict], client: Client, apply: bool = False,
     for iss in existing:
         k = parse_key(iss)
         if k is not None:
-            
+
             if k not in by_key or iss.state == "open":
                 by_key[k] = iss
 
     plan = SyncPlan()
 
-    
+
     for c in desired:
         key = str(c["id"])
         title = candidate_title(c)
@@ -173,8 +173,8 @@ def sync(candidates: list[dict], client: Client, apply: bool = False,
                 client.edit(cur.number, body)
             plan.actions.append(Action("update", key, title, cur.number))
 
-    
-    
+
+
     for key, iss in by_key.items():
         if iss.state == "open" and key not in desired_keys:
             if apply:

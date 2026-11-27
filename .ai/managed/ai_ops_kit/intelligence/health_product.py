@@ -87,9 +87,9 @@ def _passport_signal(root: Path) -> hc.Signal:
 
 
 def _roadmap_signal(root: Path) -> hc.Signal:
-    
-    
-    
+
+
+
     from ai_ops_kit.planning import roadmap as _roadmap
     path = _roadmap.resolve_roadmap_path(root)
     rel = path.relative_to(root) if path.is_relative_to(root) else path

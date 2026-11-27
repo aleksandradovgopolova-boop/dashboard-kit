@@ -241,11 +241,11 @@ def resolve_provider(explicit=None, root=None, env=None, which=None):
     checked = []
 
     if explicit:
-        
-        
-        
-        
-        
+
+
+
+
+
         warning = None
         if explicit == "claude-cli" and not claude_binary(env=env, which=which):
             warning = ("выбран claude-cli, но исполняемый файл `claude` не найден — прогон дойдёт "
@@ -278,14 +278,14 @@ def resolve_provider(explicit=None, root=None, env=None, which=None):
         else:
             checked.append(f".ai-ops.yaml providers.default={default}: {key_env} отсутствует в env")
 
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
     _look = claude_lookup(env=env, which=which)
     if _look["path"]:
         return {"provider": "claude-cli",
@@ -295,10 +295,10 @@ def resolve_provider(explicit=None, root=None, env=None, which=None):
     checked.append(f"{CLAUDE_BIN_ENV}={env.get(CLAUDE_BIN_ENV)} — файла нет или он не исполняемый"
                    if _look["where"] == "named" else "claude CLI не найден в PATH")
 
-    
-    
-    
-    
+
+
+
+
     warning = (f"назван {CLAUDE_BIN_ENV}={env.get(CLAUDE_BIN_ENV)}, но файла нет или он не "
                "исполняемый → правок не будет; поправьте путь или уберите переменную, чтобы "
                "искать claude в PATH") if _look["where"] == "named" else NO_LIVE_PROVIDER_WARNING
@@ -312,10 +312,10 @@ def print_provider_resolution(res, printer=print):
     if not isinstance(res, dict):
         return
     if res.get("warning"):
-        
-        
-        
-        
+
+
+
+
         printer(f"⚠ провайдер: {res.get('provider')} — {res['warning']}")
         for c in res.get("checked") or []:
             printer(f"  · {c}")

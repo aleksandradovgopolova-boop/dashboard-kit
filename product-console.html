@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru" class="dk-root" data-theme="dark" data-accent="blue">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Пульт продукта · Dashboard Kit</title>
+  <!-- dashboard-kit: base, page-header, widget, table, badge, segment, button, glass.
+       Собрано: python3 tools/kit.py head page-header widget table badge segment button glass -->
+  <script src="js/dk-theme.js"></script>
+  <link rel="stylesheet" href="css/tokens.primitives.css">
+  <link rel="stylesheet" href="css/tokens.semantic.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/glass.css">
+  <link rel="stylesheet" href="css/page.product-console.css">
+  <script src="js/dk-util.js"></script>
+  <script src="js/dk-icons.js" defer></script>
+  <script src="js/dk-table.js" defer></script>
+  <script src="product-console/snapshot.js" defer></script>
+  <script src="js/product-console.js" defer></script>
+</head>
+<body class="dk-page dk-glass pc-page">
+  <a class="pc-skip dk-btn" href="#console-main">К содержимому</a>
+  <div class="dk-wrap">
+    <header class="dk-head">
+      <div class="dk-head__titles">
+        <p class="dk-caption pc-eyebrow">Dashboard Kit</p>
+        <h1 class="dk-head__title">Пульт продукта</h1>
+        <p class="dk-head__subtitle" id="snapshot-time">Загрузка снимка</p>
+      </div>
+      <div class="dk-head__actions pc-actions">
+        <a class="dk-btn dk-btn--ghost" href="index.html">Компоненты</a>
+        <button class="dk-iconbtn" id="console-refresh" type="button" aria-label="Обновить локальный статус" title="Обновить локальный статус"><svg class="dk-i" aria-hidden="true"><use href="#ti-refresh"/></svg></button>
+        <div class="dk-seg dk-seg--icons" role="group" aria-label="Тема">
+          <button type="button" data-theme-set="dark" aria-pressed="true" aria-label="Тёмная тема" title="Тёмная тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-moon"/></svg></button>
+          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Светлая тема" title="Светлая тема"><svg class="dk-i" aria-hidden="true"><use href="#ti-sun"/></svg></button>
+        </div>
+      </div>
+    </header>
+    <p class="dk-caption" id="console-feedback" role="status" aria-live="polite"></p>
+    <main id="console-main" tabindex="-1">
+      <div class="dk-grid pc-summary" id="console-summary"></div>
+      <section class="dk-widget pc-next" aria-labelledby="next-title">
+        <header class="dk-widget__head"><h2 class="dk-widget__title" id="next-title">Следующий шаг</h2></header>
+        <div class="dk-widget__body" id="console-next"></div>
+      </section>
+      <div class="dk-grid pc-work">
+        <section class="dk-widget dk-col--two-thirds" aria-labelledby="work-title">
+          <header class="dk-widget__head">
+            <h2 class="dk-widget__title" id="work-title">Работы и решения</h2>
+            <span class="dk-caption" id="work-count"></span>
+          </header>
+          <div class="dk-widget__body">
+            <div class="dk-seg pc-filters" role="group" aria-label="Статус работ">
+              <button type="button" data-filter="all" aria-pressed="true">Все</button>
+              <button type="button" data-filter="plan" aria-pressed="false">План</button>
+              <button type="button" data-filter="github" aria-pressed="false">GitHub</button>
+              <button type="button" data-filter="deferred" aria-pressed="false">Отложенные</button>
+            </div>
+            <p class="dk-caption" id="github-status"></p>
+            <div class="pc-work-list" id="console-work"></div>
+            <p class="dk-caption" id="work-empty" hidden>В этом разделе нет работ</p>
+          </div>
+        </section>
+        <div class="dk-col--third pc-aside">
+          <section class="dk-widget" aria-labelledby="checks-title">
+            <header class="dk-widget__head"><h2 class="dk-widget__title" id="checks-title">Проверки</h2></header>
+            <div class="dk-widget__body" id="console-checks"></div>
+          </section>
+          <section class="dk-widget" aria-labelledby="effect-title">
+            <header class="dk-widget__head"><h2 class="dk-widget__title" id="effect-title">Эффект продукта</h2></header>
+            <div class="dk-widget__body" id="console-metrics"></div>
+          </section>
+        </div>
+      </div>
+      <section class="dk-widget" aria-labelledby="sources-title">
+        <header class="dk-widget__head"><h2 class="dk-widget__title" id="sources-title">Источники и изменения</h2></header>
+        <div class="dk-widget__body" id="console-sources"></div>
+      </section>
+    </main>
+    <noscript><p>Для просмотра пульта нужен JavaScript. Источники состояния: HANDOFF.md и planning/plan.yaml.</p></noscript>
+  </div>
+</body>
+</html>

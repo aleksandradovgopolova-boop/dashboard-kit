@@ -90,9 +90,9 @@ def _read_work_graph(child_root: Path, work_id: str) -> dict | None:
             continue
         pkg_ids = {str((p or {}).get("id") or "") for p in (data.get("packages") or [])}
         feature = str(data.get("feature") or "")
-        
-        
-        
+
+
+
         if (str(work_id) == feature or str(work_id) in pkg_ids
                 or str(work_id) in {str(x) for x in (data.get("integration_order") or [])}
                 or feature.endswith(f":{work_id}")):
@@ -131,7 +131,7 @@ def _read_related_decisions(child_root: Path, work_id: str, feature: str | None)
     for ep in episodes:
         if not isinstance(ep, dict):
             continue
-        
+
         explicit = {str(ep.get("feature") or ""), str(ep.get("work") or ""),
                     str(ep.get("work_id") or "")}
         hay = " ".join(str(ep.get(k) or "") for k in ("id", "question", "decision", "context"))
@@ -330,9 +330,9 @@ def _read_outcome(child_root: Path, work_id: str, plan_item: dict | None,
                 out["readout"] = {"target_met": data.get("target_met"),
                                   "path": str(p.relative_to(child_root))}
                 break
-    
-    
-    
+
+
+
     if not any(k in out for k in ("goal_outcome", "prr", "readout")):
         return None
     return out
@@ -420,14 +420,14 @@ def project_work(work_id, child_root) -> dict:
 
     wi, aw, pi = workitem or {}, active or {}, plan_item or {}
 
-    
+
     branch = aw.get("branch") or pi.get("branch")
-    
+
     title = pi.get("title") or wi.get("task") or aw.get("title") or wid
-    
+
     status = wi.get("status") or aw.get("status") or pi.get("status")
 
-    
+
     current_agent = aw.get("owner_session")
     # #639: роль-владелец Work на ЭТОМ этапе. Живой факт (active-work, меняется через handoff) сильнее
     # объявленного в плане — план называет стартовую роль, active-work отражает текущую после передач.
@@ -440,7 +440,7 @@ def project_work(work_id, child_root) -> dict:
     participants = _union([aw.get("owner_session")] if aw.get("owner_session") else [],
                           [owner_role] if owner_role else [], handoff_roles)
 
-    
+
     g_ws, g_dep, g_sc = _graph_scopes(work_graph, wid)
     write_scope = _union(g_ws, aw.get("affected_areas") or [], pi.get("write_scope") or [])
     depends_on = _union(g_dep, aw.get("depends_on") or [], pi.get("depends_on") or [])
@@ -495,7 +495,7 @@ def main(argv) -> int:
         return 2
     view = project_work(work_id, child_root)
     print(json.dumps(view, ensure_ascii=False, indent=2, default=str))
-    
+
     return 0 if view["sources"] else 2
 
 

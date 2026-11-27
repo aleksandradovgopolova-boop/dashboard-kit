@@ -49,3 +49,11 @@ def _on_run_completed(data: dict) -> None:
 
 
 subscribe("run_completed", _on_run_completed)
+
+
+def _on_adoption_completed(data):
+    from ai_ops_kit.engops import adoption
+    adoption.observe_completed(data)
+
+
+subscribe("run_completed", _on_adoption_completed)

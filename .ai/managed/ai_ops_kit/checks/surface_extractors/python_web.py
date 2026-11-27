@@ -55,8 +55,8 @@ def extract_python_web_routes(parsed: ParsedFile) -> list:
                 continue
             if dec.func.attr not in _HTTP_DECORATOR_ATTRS:
                 continue
-            
-            
+
+
             if not isinstance(dec.func.value, (ast.Name, ast.Attribute)):
                 continue
             if not (dec.args and _is_path_literal(dec.args[0])):

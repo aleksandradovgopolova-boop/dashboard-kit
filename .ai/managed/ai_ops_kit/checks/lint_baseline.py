@@ -393,8 +393,8 @@ def check(child_root, tools: list, measure, tighten: bool = False, files=None) -
         if files:
             frozen, found, supp = _only(files, frozen, found, supp)
         if native:
-            
-            
+
+
             current: dict = {}
             for (f, r), n in supp.items():
                 current.setdefault(f, {})[r] = n

@@ -43,13 +43,14 @@ from pathlib import Path
 import yaml
 
 from ai_ops_kit.shared import _bootstrap  # noqa: E402,F401 — кладёт validation/ в sys.path
-                                         
-                                         
+
+
 from ai_ops_kit.checks.plan_artifact import load_run_plan_gates  # noqa: E402
 from ai_ops_kit.gates import gate_executor          # noqa: E402
 from ai_ops_kit.lifecycle import run_report             # noqa: E402
 
 from ai_ops_kit.lifecycle import lifecycle_intent       # noqa: E402  v3.27.0 WP1
+from ai_ops_kit.shared.work_areas import artifact_path  # noqa: E402
 
 STATUS_ACTION = {
     "done": "готово — блокирующих гейтов нет, blueprint в порядке",
@@ -61,7 +62,7 @@ STATUS_ACTION = {
 
 
 def wi_path(features_dir, fid):
-    return Path(features_dir) / fid / "workitem.yaml"
+    return artifact_path(features_dir, fid, "workitem.yaml")
 
 
 def start(features_dir, fid, task, task_type=None, risk=None, *, signals=None):
@@ -98,10 +99,10 @@ def build(fid, task, task_type=None, risk=None, *, signals=None):
         },
         "status": "draft",
         "lifecycle_intent": "discovery",  # v3.27.0 WP1: начальная стадия
-        
-        
-        
-        
+
+
+
+
         "affects": {},
     }
     return wi
@@ -123,12 +124,12 @@ def derive_status(workflow, feature_dir, evidence, *, gate_ids=None):
     if bp.exists():
         try:
             verdict = run_report.build_report(Path(feature_dir), None)["verdict"]
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         except Exception as _be:  # noqa: BLE001 — любой сбой оценки здоровья -> fail-closed, а не «done»
             verdict, verdict_error = None, f"{type(_be).__name__}: {_be}"[:200]
 
@@ -141,7 +142,7 @@ def derive_status(workflow, feature_dir, evidence, *, gate_ids=None):
     else:
         status = "done"
 
-    
+
     has_evidence = bool(evidence) and not evidence_missing
     li = lifecycle_intent.derive(status, has_evidence=has_evidence)
 
@@ -152,8 +153,8 @@ def derive_status(workflow, feature_dir, evidence, *, gate_ids=None):
         "blocked": gates["blocked"], "unmet_gates": unmet,
         "real_fail": real_fail, "human_unmet": human_unmet,
         "evidence_missing": evidence_missing, "blueprint_verdict": verdict,
-        
-        
+
+
         **({"blueprint_verdict_error": verdict_error} if verdict_error else {}),
     }
 

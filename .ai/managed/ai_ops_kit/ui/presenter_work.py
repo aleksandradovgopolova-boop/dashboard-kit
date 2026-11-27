@@ -35,10 +35,10 @@ def from_next_work(rep: dict) -> dict:
                        next_steps=["собери план: ./ai-ops model (ответь на вопросы) → ./ai-ops bootstrap --apply"],
                        technical={"gap": rep.get("gap")})
 
-    
-    
-    
-    
+
+
+
+
     plan_errors = list(rep.get("plan_errors") or [])
     rm_errors = list((rep.get("roadmap") or {}).get("errors") or [])
     if plan_errors or rm_errors:
@@ -59,10 +59,10 @@ def from_next_work(rep: dict) -> dict:
     active = rep.get("in_progress") or []
     blocked = rep.get("blocked") or []
     if not nb:
-        
-        
-        
-        
+
+
+
+
         not_ready = rep.get("not_ready") or []
         _ADMISSION_RU = {
             "within_budget": "не укладывается в остаток бюджета",
@@ -91,11 +91,11 @@ def from_next_work(rep: dict) -> dict:
                            "держу я": ", ".join(h["id"] for h in (rep.get("held_by_me") or [])) or "—",
                            "досягаемость": (rep.get("holders_reach") or {})})
         elif held_owner:
-            
-            
-            
-            
-            
+
+
+
+
+
             k = len(held_owner)
             who = "; ".join(f"«{h.get('title') or h['id']}» — {h.get('waiting_on') or '?'}"
                             for h in held_owner[:3])
@@ -116,21 +116,21 @@ def from_next_work(rep: dict) -> dict:
         elif blocked:
             why = f"Это не значит, что всё сделано: {len(blocked)} задач ждут снятия блокировки."
         elif active:
-            
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
+
             n = len(active)
             titles = "; ".join(f"«{a.get('title') or a['id']}»" for a in active)
             return message(
                 status="ok", headline="Работа идёт",
                 summary=f"Свободной задачи сейчас нет: {n} "
                         f"{_q(n, 'работа', 'работы', 'работ')} уже в работе — {titles}.",
-                
-                
+
+
                 why_it_matters="Это не «всё сделано»: начатая работа не закончена. Взять "
                                "параллельно тоже нечего — ни готовых, ни заблокированных задач в "
                                "плане не осталось.",
@@ -161,10 +161,10 @@ def from_next_work(rep: dict) -> dict:
         status="ok", headline="Что взять следующим",
         summary=f"Следующей имеет смысл взять «{nb['title']}».",
         why_it_matters="Потому что " + "; ".join(nb["why"]) + "."
-                       
-                       
-                       
-                       
+
+
+
+
                        + (f" Ещё {len(frozen)} "
                           + _q(len(frozen), "работа", "работы", "работ")
                           + " не предлагаю: они помечены как расширение умений, а твоё решение "
@@ -255,9 +255,9 @@ def from_post_release_loop(result: dict) -> dict:
     if ps.get("label"):
         tech["продуктовый статус"] = ps["label"]
 
-    
-    
-    
+
+
+
     me = (result.get("outcome") or {}).get("measured_evaluation") or {}
     oro = result.get("outcome_readout")
     if outcome_verdict == "failed":
@@ -268,8 +268,8 @@ def from_post_release_loop(result: dict) -> dict:
         if done_green:
             parts.append("Доставка зелёная — изменение внедрено, тесты и проверки пройдены.")
         if oro:
-            
-            
+
+
             suffix = "" if oro.get("guardrail_breaches") else " — цель не взята"
             parts.append(_outcome_shift_sentence(oro) + suffix + ".")
         else:
@@ -300,15 +300,15 @@ def from_post_release_loop(result: dict) -> dict:
             next_steps=["зафиксировать исход достигнутым по правилу решения из контракта"],
             technical=_outcome_tech(tech, oro))
 
-    
-    
+
+
     gate_note = (f"Полную проверку аналитики после выпуска пока не закрыть: из четырёх её частей "
                  f"измеримую основу имеет только одна, у остальных ({_human_evidence(not_measured)}) "
                  f"ещё нет источника данных.")
 
-    
-    
-    
+
+
+
     if oro is not None and not oro.get("measured") and events != "not_verified":
         goal_ctx = f"По цели «{oro['goal']}»: " if oro.get("goal") else ""
         if oro.get("baseline") is not None and oro.get("target") is not None:
@@ -343,7 +343,7 @@ def from_post_release_loop(result: dict) -> dict:
             next_steps=["разобраться, почему объявленные события не доезжают, и перепроверить"],
             technical=tech)
 
-    
+
     return message(
         status="degraded", headline="События доходят, но проверка выпуска ещё неполная",
         summary="События в аналитику приходят — это подтверждено выгрузкой.",
@@ -380,20 +380,20 @@ def from_active_work(rep: dict, published: bool = False, reconciled: int = 0,
     # влитая работа считалась идущей и человеку советовали не трогать те же файлы.
     active = [a for a in (rep or {}).get("active") or []
               if (a.get("status") or "") not in ("done", "superseded")]
-    
+
     recon_note = (f"Снято сверкой с базой: {reconciled} "
                   f"{_q(reconciled, 'запись', 'записи', 'записей')} — изменения уже влиты."
                   if reconciled else None)
-    
-    
+
+
     reach_h = ("вижу, что идёт на всех машинах команды" if published
                else "вижу только ЭТУ машину — что идёт у других участников, сюда не попадает")
     reach_cap = reach_h[0].upper() + reach_h[1:]   # для начала предложения, без рассинхрона лица
-    
-    
-    
-    
-    
+
+
+
+
+
     stale = (crosscheck or {}).get("only_in_plan") or []
     stale_names = "; ".join((w.get("title") or w.get("id") or "работа") for w in stale[:3])
     if not active:
@@ -415,8 +415,8 @@ def from_active_work(rep: dict, published: bool = False, reconciled: int = 0,
         return message(
             status="ok", headline="Сейчас ничего не идёт",
             summary="Работа не начата." if not recon_note else recon_note,
-            
-            
+
+
             why_it_matters=("Сужу по двум вещам: начатых работ нет и в плане идущей работы не "
                             "объявлено. " + reach_cap + "." if not published else
                             "Сужу по двум вещам: начатых работ нет и в плане идущей работы не "
@@ -427,11 +427,11 @@ def from_active_work(rep: dict, published: bool = False, reconciled: int = 0,
                        "досягаемость": "команда" if published else "эта машина"})
 
     n = len(active)
-    
-    
-    
-    
-    
+
+
+
+
+
     product_titles = "; ".join(t for a in active[:3] if (t := a.get("title")))
     what = "; ".join(
         (a.get("title") or a.get("workitem") or a.get("id") or "работа")
@@ -446,8 +446,8 @@ def from_active_work(rep: dict, published: bool = False, reconciled: int = 0,
         why += (" Задачу, которая трогает те же файлы, лучше не вести одновременно с этими — "
                 "иначе они заденут одни и те же места.")
     if stale:
-        
-        
+
+
         why += (f" В плане объявлено идущими ещё {len(stale)} "
                 f"{_q(len(stale), 'работа', 'работы', 'работ')} без начатой работы: {stale_names} — "
                 "либо брошено, либо закончено и не отмечено.")
@@ -503,8 +503,8 @@ def from_work_view(view: dict) -> dict:
     title = view.get("title") or view.get("id") or "работа"
     sources = view.get("sources") or []
     if not sources:
-        
-        
+
+
         return message(
             status="degraded", headline="Такой работы я не вижу",
             summary=f"Ни в одном источнике нет работы с идентификатором «{view.get('id')}».",
@@ -515,12 +515,12 @@ def from_work_view(view: dict) -> dict:
 
     st = view.get("status")
     status = _WORK_VIEW_STATUS.get(st, "ok")
-    
+
     missing = [s for s in _WORK_VIEW_ALL_SOURCES if s not in sources]
     have_ru = ", ".join(_WORK_VIEW_SOURCE_RU[s] for s in sources)
     miss_ru = ", ".join(_WORK_VIEW_SOURCE_RU[s] for s in missing)
 
-    
+
     agent_line = ("Сейчас работу кто-то ведёт." if view.get("current_agent")
                   else "Активной сессии за работой сейчас нет.")
     dcount = len(view.get("decisions") or [])

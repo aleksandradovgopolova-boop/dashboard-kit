@@ -25,6 +25,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import yaml
+
 from ai_ops_kit.shared import _bootstrap  # noqa: E402
 from ai_ops_kit.gates import spec_levels   # noqa: E402
 from ai_ops_kit.gates import approvals     # noqa: E402
@@ -32,6 +34,34 @@ from ai_ops_kit.shared.contracts import PreflightResult  # noqa: E402
 
 
 _HEAVY = {"ENGINEERING", "PRODUCT", "CRITICAL", "AI_FEATURE", "RESEARCH"}
+
+
+def requires_spec(signals, plan=None):
+    """Та же обязательность Spec-First для подготовки входа и итогового preflight."""
+    return (signals.get("task_type") or (plan or {}).get("base_workflow") or "QUICK").upper() in _HEAVY
+
+
+def _context_checks(checks, block, child_root, bundle, payload, reevaluate_only):
+    # #1403: декларация контекста обязательна и для QUICK; ошибка политики не разрешение.
+    from ai_ops_kit.context import context_cost
+    try:
+        policy = context_cost.load_policy(child_root)
+        resource = (payload or {}).get("resource_check")
+        required_check = policy["configured"] or policy["run_tokens"] is not None
+        resource_ok = ((not required_check) if resource is None else
+                       isinstance(resource, dict) and resource.get("ok") is True)
+        resource_errors = list(resource.get("errors") or []) if isinstance(resource, dict) else []
+    except (ValueError, OSError, yaml.YAMLError) as e:
+        resource_ok, resource_errors = False, [str(e)]
+    checks["context_resource"] = {"ok": resource_ok, "errors": resource_errors}
+    if not resource_ok and not reevaluate_only:
+        block("context-resource: " + ("; ".join(resource_errors) or "нет проверки compiled payload"))
+
+
+    overflow = bool((bundle or {}).get("overflow"))
+    checks["context_budget"] = {"ok": (not overflow) or reevaluate_only, "overflow": overflow}
+    if overflow and not reevaluate_only:
+        block("context-budget: контекст задачи превышает бюджет — декомпозируй до исполнения")
 
 
 def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
@@ -44,30 +74,30 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
     signals = dict(signals or {})
     child_root = Path(child_root)
     tt = (signals.get("task_type") or (plan or {}).get("base_workflow") or "QUICK").upper()
-    heavy = tt in _HEAVY
+    heavy = requires_spec(signals, plan)
     lifecycle_errors = list(lifecycle_errors or [])
     checks, reasons = {}, []
 
     def block(reason):
         reasons.append(reason)
 
-    
+
     ok_class = bool(tt)
     checks["classification"] = {"ok": ok_class, "task_type": tt}
     if not ok_class:
         block("classification: не удалось определить тип задачи")
 
-    
+
     payload_ok = payload is not None and bool((payload or {}).get("text"))
     checks["context_payload"] = {"ok": payload_ok or (not heavy), "built": payload is not None}
     if heavy and not payload_ok:
         block("context_payload: compiled payload не собран для heavy-задачи (fail-closed)")
 
-    
-    
-    
-    
-    
+
+
+
+
+
     spec_artifact = bool((spec_cov or {}).get("spec_artifact"))
     spec_missing = list((spec_cov or {}).get("blocking_missing") or [])
     spec_incomplete = spec_artifact and bool(spec_missing)
@@ -84,13 +114,13 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
         block(f"spec-first: {tt} требует спеку ДО реализации — features/{wid}/spec.yaml отсутствует; "
               f"создай спеку (ai-ops specify/new) ИЛИ запусти с --author (движок авторизует её пре-стадией)")
 
-    
-    
-    
-    
+
+
+
+
     should_decompose = bool((work_pkg or {}).get("should_decompose"))
     selected = signals.get("work_package_id")
-    
+
     plan_ids = set(signals.get("_sequence_plan_ids") or [])
     plan_ids |= {p.get("id") for p in ((work_pkg or {}).get("work_packages") or [])}
     selected_valid = bool(selected) and selected in plan_ids
@@ -106,16 +136,12 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
             block(f"atomic-planning: задача не атомарна ({n} пакетов) — исполняй через sequential "
                   f"executor (ai-ops run … --sequential) ИЛИ выбери СУЩЕСТВУЮЩИЙ work_package_id из плана")
 
-    
-    overflow = bool((bundle or {}).get("overflow"))
-    checks["context_budget"] = {"ok": (not overflow) or reevaluate_only, "overflow": overflow}
-    if overflow and not reevaluate_only:
-        block("context-budget: контекст задачи превышает бюджет — декомпозируй до исполнения")
+    _context_checks(checks, block, child_root, bundle, payload, reevaluate_only)
 
-    
+
     appr = approvals.check(signals, child_root, wid, domains=domains)
     missing = list(appr["missing"])
-    
+
     if signals.get("destructive"):
         recs = approvals.load_approvals(child_root, wid)
         # v3.37: plan_hash передаём ЯВНО. Без него `_record_valid` не сверял привязку вовсе — то есть
@@ -132,7 +158,7 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
         block("human-approval: не хватает одобрений (ApprovalRecord): "
               + ", ".join(m["domain"] for m in missing))
 
-    
+
     lifecycle_ok = (not lifecycle_errors) or (not heavy)
     checks["lifecycle"] = {"ok": lifecycle_ok, "errors": lifecycle_errors}
     if heavy and lifecycle_errors:
@@ -171,7 +197,7 @@ def assess(signals, child_root, wid, plan=None, bundle=None, payload=None,
     ok = not reasons
     result = {"schema_version": 1, "kind": "PreflightTruth", "ok": ok, "blocked": not ok,
               "task_type": tt, "checks": checks, "reasons": reasons}
-    
+
     from ai_ops_kit.gates.invariants import check_invariant
     _inv_breaches = []
     for _inv_id, _kw in [

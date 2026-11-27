@@ -103,7 +103,7 @@ def docs_vs_code(root: Path) -> DriftResult:
         rel_doc = str(doc.relative_to(root))
         for m in _CODE_REF.finditer(text):
             ref = m.group(1)
-            
+
             if (ref in paths or (root / ref).exists()
                     or Path(ref).name in basenames):
                 continue
@@ -127,12 +127,12 @@ def _pending_pair(pair: str, sides: str) -> DriftResult:
 
 
 def roadmap_vs_backlog(root: Path) -> DriftResult:
-    
-    
+
+
     from ai_ops_kit.planning import roadmap as _roadmap
     if not _roadmap.resolve_roadmap_path(root).is_file():
         return _pending_pair("roadmap↔backlog", "roadmap — лента 2, backlog — лента 3")
-    
+
     return DriftResult("roadmap↔backlog", UNKNOWN,
                        "roadmap есть, но сверка с backlog (лента 3) ещё не реализована — не проверено")
 

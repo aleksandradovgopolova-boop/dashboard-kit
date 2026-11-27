@@ -163,7 +163,7 @@ def evidence_from_reviewer_result(gate: dict, rr: dict, source: str) -> dict:
         return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "fail",
                 "blockers": rr.get("blockers") or [f"reviewer FAIL @ {source}"],
                 "evidence": [source]}
-    
+
     prov = list(gate.get("required_evidence", []) or []) if classify(gate) == "ai-review" else []
     return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": rr["status"], "provided": prov,
             "checks": rr.get("checks", []), "evidence": [source]}
@@ -179,8 +179,8 @@ def evidence_from_markdown(gate: dict, text: str, source: str):
         return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "fail", "blockers": [f"reviewer verdict FAIL @ {source}"],
                 "evidence": [source]}
     if verdict == "warn":
-        
-        
+
+
         return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "warn", "warnings": [f"reviewer verdict NEEDS_WORK/WARN @ {source}"],
                 "evidence": [source]}
     # pass:
@@ -191,7 +191,7 @@ def evidence_from_markdown(gate: dict, text: str, source: str):
     if classify(gate) == "ai-review":
         return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "pass", "provided": list(gate.get("required_evidence", []) or []),
                 "evidence": [f"reviewer verdict @ {source}"]}
-    
+
     return {"source": "ai_judgment", "provenance": "JUDGMENT", "status": "pass", "evidence": [f"reviewer verdict @ {source}"]}
 
 
@@ -288,9 +288,9 @@ def collect_evidence(workflow_id: str, run_dir) -> dict:
                         None)
         if not stage_id:
             continue
-        
-        
-        
+
+
+
         rfl = run_dir / f"stage-{stage_id}.refusal.json"
         if rfl.exists():
             try:

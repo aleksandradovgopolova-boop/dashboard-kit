@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import contextlib
+from datetime import datetime, timezone
 import math
 import sys
 
@@ -48,14 +49,14 @@ def _commit_barrier(rep, child_root, features_dir, fid, lifecycle_errors):
         lifecycle_errors.append(f"run-handoff build/write: {type(_e).__name__}: {_e}")
     if lifecycle_errors:
         rep["lifecycle_errors"] = lifecycle_errors
-    
+
     _rw = _ls.durable_write_json(features_dir / fid / "run-report.json", rep, keep_backup=True)
     _report_ok = _rw.get("ok")
     if not _report_ok:
         rep.setdefault("lifecycle_errors", [])
         rep["lifecycle_errors"].append(f"run-report durable-write: {_rw.get('error')} "
                                        "(доставка НЕ выполняется)")
-    
+
     _plan = rep.get("delivery_plan")
     _ls.journal_append(_jname, {"kind": "ready_for_delivery", "run_id": fid, "workitem_id": fid,
                                 "ready_for_delivery": bool(_plan),
@@ -71,24 +72,24 @@ def _start_lifecycle(features_dir, fid, task_text, signals, plan, engine, base, 
     run_start + per-run снимок. K6: вынесено из run(). -> (attempt_id, error|None)."""
     workitem.start(str(features_dir), fid, task_text,
                    task_type=signals.get("task_type"), risk=signals.get("risk"), signals=signals)
-    
-    
+
+
     _pw = _ls.durable_write(features_dir / fid / "run-plan.yaml", plan, require_keys=("workitem_id",))
     if not _pw.get("ok"):
         return None, {"schema_version": 1, "kind": "execution-pipeline", "workitem_id": fid,
                 "status": "error", "ready_for_pr": False,
                 "error": f"lifecycle fail-closed: не удалось надёжно сохранить RunPlan ({_pw.get('error')}) "
                          "— прогон не начат (0 вызовов модели)"}
-    
-    
+
+
     _jp = features_dir / fid / "lifecycle-journal.jsonl"
     _att = len(list((features_dir / fid / "run-history").glob("run-*.yaml"))) + 1
     _attempt_id = f"{fid}#a{_att}"
     _ls.journal_append(_jp, {"kind": "run_start", "run_id": fid, "workitem_id": fid,
                              "attempt_id": _attempt_id, "task_type": signals.get("task_type"),
                              "engine": engine, "base": base, "resume": bool(resume)})
-    
-    
+
+
     if execute:
         _settings = {
             "schema_version": 1, "kind": "run-settings", "workitem_id": fid,
@@ -104,9 +105,9 @@ def _start_lifecycle(features_dir, fid, task_text, signals, plan, engine, base, 
                        "base": base,   # v3.0.2 (P0): резолвнутый base_ref (back-compat)
                        "base_binding": base_binding},   # v3.0.9 (P0.2): полный BaseBinding (ref+sha+mode+source)
         }
-        
-        
-        
+
+
+
         _ws = _ls.durable_write(features_dir / fid / "run-settings.yaml", _settings,
                                 require_keys=("kind", "policy", "signals"))
         if not _ws.get("ok"):
@@ -115,8 +116,8 @@ def _start_lifecycle(features_dir, fid, task_text, signals, plan, engine, base, 
                     "error": (f"lifecycle fail-closed: не удалось надёжно сохранить run-settings "
                               f"({_ws.get('error')}) — без durable policy resume небезопасен; прогон "
                               "не начат")}
-        
-        
+
+
         _hist = features_dir / fid / "run-history"
         _hist.mkdir(parents=True, exist_ok=True)
         _n = len(list(_hist.glob("run-*.yaml"))) + 1
@@ -178,7 +179,7 @@ def _resume_gate(child_root, fid, base, force_resume, resume):
                              "чтобы продолжить осознанно",
                     "resume": {"requested": True, "resumed": False, "revalidation_needed": True,
                                "reasons": pf["reasons"]}}
-        
+
         from ai_ops_kit.engine.ai_ops_run import _resume_context_from_handoff
         resume_ctx = _resume_context_from_handoff(child_root, fid)
     return pf, resume_ctx, None
@@ -204,16 +205,16 @@ def _finalize_run_cost(rep, orchestrator, model, jname, fid, attempt_id, signals
                        model_resolution, child_root):
     """Агрегат run_cost (tokens/latency/cost) из вызовов модели + usage-ledger + очистка
     call-context. K6: вынесено из run(); мутирует rep, без ранних выходов."""
-    
-    
+
+
     from ai_ops_kit.engine.ai_ops_run import _note_bookkeeping_error
-    
+
     _stats_error = None
     try:
         _stats = orchestrator.drain_call_stats()
     except Exception as _se:  # noqa: BLE001 — сбор статистики не должен ронять уже сделанный прогон
-        
-        
+
+
         _stats, _stats_error = [], f"{type(_se).__name__}: {_se}"[:200]
         rep["run_cost"] = {"status": "unavailable", "reason": _stats_error}
     if _stats:
@@ -222,18 +223,18 @@ def _finalize_run_cost(rep, orchestrator, model, jname, fid, attempt_id, signals
         _lat = _total_call_latency(_stats)
         from ai_ops_kit.providers import cost_account
         _costs = [s.get("cost_usd_est") for s in _stats]
-        
-        
+
+
         _cost = cost_account.total_call_cost(_costs)
         _cost_rep = {"calls": len(_stats), "input_tokens": _in, "output_tokens": _out,
                      "latency_s": _lat, "cost_usd_est": _cost, "model": model}
         rep["cost"] = _cost_rep
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         _roid = cost_account.cost_per_successful_change(
             {"calls_cost": _cost, "latency_s": _lat, "delivered_verified": rep.get("ready_for_pr")})
         rep["roid"] = {"cost_per_successful_change": _roid["cost_per_change"],
@@ -245,10 +246,10 @@ def _finalize_run_cost(rep, orchestrator, model, jname, fid, attempt_id, signals
             _cost, _lat, rep.get("manual_interventions"), rep.get("ready_for_pr"), child_root)
         _ls.journal_append(jname, {"kind": "run_cost", "run_id": fid, "workitem_id": fid,
                                     "attempt_id": attempt_id, **_cost_rep})
-        
-        
-        
-        
+
+
+
+
         try:
             from ai_ops_kit.shared import usage_ledger as _ul
             _extra = {
@@ -262,33 +263,34 @@ def _finalize_run_cost(rep, orchestrator, model, jname, fid, attempt_id, signals
             }
             _ul.append(child_root, fid, _stats, run_id=fid, extra_context={k: v for k, v in _extra.items() if v is not None})
         except Exception as _ue:  # noqa: BLE001 — учёт usage не должен ронять прогон...
-            
-            
+
+
             _note_bookkeeping_error(rep, "usage_ledger.append", _ue)
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     orchestrator.clear_call_context()
 
 
 def _finalize_run(rep, fid, child_root, jname, attempt_id, aw_path):
     """Финализация прогона: событие run_completed + журнал run_end + вывод статуса работы
     (done/blocked) + снятие active-work с учёта. K6: вынесено из run(); -> rep."""
-    
-    
-    
+
+
+
     from ai_ops_kit.engine.ai_ops_run_lifecycle import _run_start_audience
-    
-    
-    
-    
+
+
+
+
     from ai_ops_kit.shared.events import emit as _emit
     try:
         _emit("run_completed", {
             "event_type": "run_completed",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "workitem_id": fid,
             "child_root": str(child_root),
             "status": rep.get("overall_status") or ("ready" if rep.get("ready_for_pr") else "not-ready"),
@@ -297,22 +299,23 @@ def _finalize_run(rep, fid, child_root, jname, attempt_id, aw_path):
         })
     except Exception:  # noqa: BLE001,S110 — событие ADVISE-ONLY: его утрата не меняет вердикт
         pass
-    
+
     _ls.journal_append(jname, {"kind": "run_end", "run_id": fid, "workitem_id": fid,
                                 "attempt_id": attempt_id,
                                 "status": rep.get("overall_status") or ("ready" if rep.get("ready_for_pr")
                                                                         else "not-ready"),
                                 "ready_for_pr": bool(rep.get("ready_for_pr")),
+                                "at": datetime.now(timezone.utc).isoformat(),
                                 "commit": (rep.get("commit") or {}).get("sha")})
     # F-012: `done` только когда работа действительно доведена. NOT_READY -> blocked, иначе
     # `ai-ops status` показывает пустоту при незакрытых гейтах и ненаписанном коде.
     _ready = bool(rep.get("ready_for_pr"))
     _unmet = (rep.get("gates") or {}).get("unmet") or []
-    
-    
-    
-    
-    
+
+
+
+
+
     _wrote = work_produced(rep)
     if _ready:
         _st, _why = "done", None
@@ -320,9 +323,9 @@ def _finalize_run(rep, fid, child_root, jname, attempt_id, aw_path):
         _st, _why = "blocked", f"гейты не закрыты: {', '.join(_unmet) or 'см. отчёт'}"
     else:
         _st, _why = "blocked", "код не написан — правок 0 (нужен живой провайдер или внешний исполнитель)"
-    
-    
-    
+
+
+
     if _st == "blocked" and delivery_pending(rep):
         # #695: называем ОДНУ автономную команду доставки готового (printed-commands-are-runnable).
         print("  работа прошлого прогона на ветке, дописывать нечего — нужна ДОСТАВКА, а не "
@@ -360,8 +363,8 @@ def _deliver(ctx, rep, *, plan, handoff_ok, report_ok, jname, fid):
     observe). Мутирует `rep` на месте (delivery/overall_status/lifecycle_errors); -> None.
     """
     from ai_ops_kit.engine import execution_pipeline
-    
-    
+
+
     from ai_ops_kit.engine.ai_ops_run import _outbox_dir, _unresolved_intents
     child_root, features_dir = ctx.child_root, ctx.features_dir
     _gate = None
@@ -382,12 +385,12 @@ def _deliver(ctx, rep, *, plan, handoff_ok, report_ok, jname, fid):
         from ai_ops_kit.gates import concurrency_preflight as _cpp
         _branch = plan["work_branch"]
         _csha = plan["committed_sha"]
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         _reverify = execution_pipeline._reverify_against_current_target(
             plan["work_root"], plan["base_ref"], plan["base_sha"], _csha)
         if _reverify.get("stale"):
@@ -401,17 +404,17 @@ def _deliver(ctx, rep, *, plan, handoff_ok, report_ok, jname, fid):
             _delivery_write(ctx, "journal_append", jname, {"kind": "delivery_stale", "run_id": fid, "workitem_id": fid,
                                        "current_target": _reverify.get("current_target")})
             return
-        
+
         _ru = execution_pipeline._git(child_root, "remote", "get-url", "origin")
         _orn = _cpp._parse_owner_repo(_ru[1]) if _ru[0] == 0 else None
         _repo = f"{_orn[0]}/{_orn[1]}" if _orn else None
-        
+
         _did = _hl.sha256(f"{_repo}:{fid}:{_branch}:{_csha}".encode("utf-8")).hexdigest()[:16]
         _obx = _outbox_dir(features_dir, fid)
         _ip = _obx / f"{_did}.intent.yaml"
         _rp = _obx / f"{_did}.receipt.yaml"
-        
-        
+
+
         _blocking = [d for (d, _i) in _unresolved_intents(features_dir, fid, branch=_branch) if d != _did]
         if _blocking:
             rep["delivery"] = {"requested": True, "status": "blocked-unresolved-delivery",
@@ -420,7 +423,7 @@ def _deliver(ctx, rep, *, plan, handoff_ok, report_ok, jname, fid):
             rep["overall_status"] = "delivery-failed"
             _delivery_write(ctx, "durable_write_json", features_dir / fid / "run-report.json", rep)
         else:
-            
+
             _intent = {"schema_version": 1, "kind": "DeliveryIntent", "delivery_id": _did,
                        "workitem_id": fid, "repository": _repo, "branch": _branch,
                        "base_ref": plan["base_ref"], "base_sha": plan["base_sha"],
@@ -438,7 +441,7 @@ def _deliver(ctx, rep, *, plan, handoff_ok, report_ok, jname, fid):
                 _delivery_write(ctx, "journal_append", jname, {"kind": "delivery_intent", "run_id": fid, "workitem_id": fid,
                                            "delivery_id": _did, "branch": _branch, "commit": _csha,
                                            "repository": _repo})
-                
+
                 with getattr(ctx, "delivery_guard", nullcontext)():
                     pass  # admission immediately before the external boundary
                 _dv = execution_pipeline._deliver_pr(
@@ -447,7 +450,7 @@ def _deliver(ctx, rep, *, plan, handoff_ok, report_ok, jname, fid):
                 _st = _dv.get("status")
                 _pr = _dv.get("pr") or {}
                 if _st == "outcome_unknown":
-                    
+
                     _uw = _delivery_write(ctx, "durable_write", _ip, {**_intent, "status": "outcome_unknown",
                                                   "reconciliation_required": True},
                                             require_keys=("kind", "delivery_id", "status"))
@@ -466,7 +469,7 @@ def _deliver(ctx, rep, *, plan, handoff_ok, report_ok, jname, fid):
                                 "commit_sha": _csha, "base_ref": plan["base_ref"], "status": _st,
                                 "remote_sha": _remote_sha, "sha_verified": _sha_ok,
                                 "pr_url": _pr.get("url"), "pr_number": _pr.get("number")}
-                    
+
                     from ai_ops_kit.gates.invariants import check_invariant as _ci
                     _del_breaches = []
                     for _inv_id, _kw in [
@@ -499,8 +502,8 @@ def _deliver(ctx, rep, *, plan, handoff_ok, report_ok, jname, fid):
                             rep.setdefault("lifecycle_errors", [])
                             rep["lifecycle_errors"].append(f"delivery-report durable-write: {_dw.get('error')}")
                     else:
-                        
-                        
+
+
                         _uw = _delivery_write(ctx, "durable_write", _ip, {**_intent, "status": "outcome_unknown",
                                                       "reconciliation_required": True,
                                                       "observed": {"status": _st, "pr_url": _pr.get("url")}},
@@ -517,7 +520,7 @@ def _deliver(ctx, rep, *, plan, handoff_ok, report_ok, jname, fid):
                                                    "workitem_id": fid, "delivery_id": _did,
                                                    "cause": "receipt-write-failed"})
     elif plan and not (handoff_ok and report_ok):
-        
+
         rep["delivery"] = {"requested": True, "status": "blocked-lifecycle",
                            "reason": "durable RunHandoff/final report не зафиксированы — доставка "
                                      "запрещена до надёжной фиксации доказательств и состояния"}

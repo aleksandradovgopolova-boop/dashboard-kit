@@ -70,33 +70,33 @@ def derive(workitem_status: str, has_evidence: bool = False, has_pr: bool = Fals
     Returns:
         lifecycle_intent: одна из LIFECYCLE_STAGES или TERMINAL_STATES
     """
-    
+
     if terminal_state and terminal_state in TERMINAL_STATES:
         return terminal_state
 
-    
+
     if has_receipt:
         return "completed"
 
-    
+
     if pr_merged:
         return "delivery"
 
-    
+
     if has_pr:
         return "review"
 
-    
+
     if workitem_status == "needs_human_decision":
         return "review"
 
-    
-    
-    
+
+
+
     if has_evidence or workitem_status in ("done", "needs_more_evidence"):
         return "implementation"
 
-    
+
     return "discovery"
 
 
@@ -115,19 +115,19 @@ def validate_transition(from_stage: str, to_stage: str) -> bool:
     if from_stage not in ALL_STATES or to_stage not in ALL_STATES:
         return False
 
-    
+
     if from_stage in TERMINAL_STATES:
         return False
 
-    
+
     if to_stage == "completed":
         return from_stage in LIFECYCLE_STAGES
 
-    
+
     if to_stage in TERMINAL_STATES:
         return from_stage in LIFECYCLE_STAGES
 
-    
+
     valid_transitions = {
         "discovery": {"implementation", "cancelled", "abandoned"},
         "implementation": {"review", "delivery", "completed", "cancelled", "superseded", "abandoned"},
@@ -158,10 +158,10 @@ def intent_to_lifecycle(cli_intent: str) -> str | None:
 
 
 if __name__ == "__main__":
-    
-    
 
-    
+
+
+
     status = None
     has_evidence = False
     has_pr = False

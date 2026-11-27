@@ -1,0 +1,11 @@
+{
+  "version": "4.15.0",
+  "channel": "qualification",
+  "tag": "v4.15.0",
+  "sha": "dbbe2bdb5fda41ea2f955ba71e34ee89c58ceeeb",
+  "publishedAt": "2026-11-16T14:18:08Z",
+  "checkedAt": "2026-11-26T16:03:27Z",
+  "url": "https://github.com/aleksandradovgopolova-boop/ai-ops-kit/releases/tag/v4.15.0",
+  "channelSource": "https://github.com/aleksandradovgopolova-boop/ai-ops-kit/blob/v4.15.0/registry/release-claims.yaml",
+  "approval": "granted-2026-11-26"
+}

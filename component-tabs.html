@@ -62,11 +62,10 @@
   <section class="sc-sec" id="zhivoy-primer" data-group="Знакомство">
     <h2>В работе</h2>
     <p>Вкладка показывает текущий раздел, счётчик — сколько в нём объектов. Переход к другому разделу задаётся обычной ссылкой.</p><div class="sc-playground"><div class="sc-playground__canvas"><div class="dk-panel"><nav class="dk-tabs" aria-label="Разделы мониторинга">
-      <a class="dk-tab" href="#" aria-current="page">Инфраструктура</a>
-      <a class="dk-tab" href="#">Аварии <span class="dk-tab__n">23</span></a>
-      <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
-      <a class="dk-tab" href="#">Отчёты</a>
-      <a class="dk-tab" href="#">Отчёты</a>
+      <a class="dk-tab" href="dashboard.html" aria-current="page">Сводка</a>
+      <a class="dk-tab" href="accidents.html">Аварии <span class="dk-tab__n">23</span></a>
+      <a class="dk-tab" href="calendar.html">Календарь</a>
+      <a class="dk-tab" href="regions.html">Регионы</a>
     </nav></div></div><div class="sc-playground__footer"><a href="#kod">Код примера ↗</a></div></div>
   </section>
   <section class="sc-sec" id="kogda-ispolzovat">
@@ -83,14 +82,14 @@
   </section>
   <section class="sc-sec" id="varianty-i-razmery" data-group="Использование">
     <h2>Варианты и размеры</h2>
-    <p>Размер один: строка вкладок стоит под заголовком страницы и не бывает мельче текста. На узком экране строка листается вбок, вкладки не переносятся и не прячутся — спрятанная вкладка выглядит как отсутствующий раздел.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-tabs</code></td><td>Строка вкладок, <code>&lt;nav&gt;</code> с aria-label.</td><td>Всегда.</td></tr><tr><td><code>dk-tab</code></td><td>Вкладка-ссылка.</td><td>На каждый раздел.</td></tr><tr><td><code>aria-current=&quot;page&quot;</code></td><td>Текущий раздел.</td><td>Ровно у одной вкладки.</td></tr><tr><td><code>dk-tab__n</code></td><td>Счётчик в вкладке.</td><td>Когда в разделе есть что-то, требующее внимания.</td></tr></tbody></table></div>
+    <p>Минимальная высота 44 px, парные поля 12/16 px, текст 14/20 px. Выбор не меняет ширину подписи; текущая вкладка отмечена чертой. При увеличении текста высота растёт. На узком экране строка листается вбок, вкладки не переносятся и не прячутся — спрятанная вкладка выглядит как отсутствующий раздел.</p><div class="dk-tablewrap"><table class="dk-table sc-api"><thead><tr><th style="width:30%">Класс или параметр</th><th>Что делает</th><th style="width:30%">Когда</th></tr></thead><tbody><tr><td><code>dk-tabs</code></td><td>Строка вкладок, <code>&lt;nav&gt;</code> с aria-label.</td><td>Всегда.</td></tr><tr><td><code>dk-tab</code></td><td>Вкладка-ссылка.</td><td>На каждый раздел.</td></tr><tr><td><code>aria-current=&quot;page&quot;</code></td><td>Текущий раздел.</td><td>Ровно у одной вкладки.</td></tr><tr><td><code>dk-tab__n</code></td><td>Счётчик в вкладке.</td><td>Когда в разделе есть что-то, требующее внимания.</td></tr></tbody></table></div>
   </section>
   <section class="sc-sec" id="sostoyaniya">
     <h2>Состояния</h2>
     <div class="dk-panel"><nav class="dk-tabs" aria-label="Состояния">
       <a class="dk-tab" href="#" aria-current="page">Текущая</a>
       <a class="dk-tab" href="#">Обычная</a>
-      <a class="dk-tab" href="#" style="outline:var(--focus-width) solid var(--brand);outline-offset:var(--focus-offset)">Фокус</a>
+      <a class="dk-tab" href="#" style="background:var(--control-focus);color:var(--control-focus-ink);text-decoration:underline">Фокус</a>
       <a class="dk-tab" href="#">С счётчиком <span class="dk-tab__n">7</span></a>
     </nav></div>
     <div class="sc-note"><b>Недоступных вкладок не бывает.</b> Раздел, в который нельзя попасть, не показывают; если доступа нет — показывают страницу «Нет доступа» (<a href="component-empty.html">Состояния</a>), а не серую вкладку.</div>
@@ -101,7 +100,7 @@
   </section>
   <section class="sc-sec" id="dostupnost">
     <h2>Доступность</h2>
-    <ul class="sc-list sc-list--wide"><li><b>Роль.</b> <code>&lt;nav aria-label&gt;</code> со ссылками, а не <code>tablist</code>: это переходы между страницами, и скринридер должен ждать загрузку.</li><li><b>Текущая</b> — <code>aria-current="page"</code>, скринридер объявляет «текущая страница».</li><li><b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Кольцо фокуса — только при навигации табом.</li><li><b>Контраст.</b> Черта текущей вкладки — <code>--control-on</code>, тот же серый, что у выбранного управления: не ниже 3:1 к поверхности.</li></ul>
+    <ul class="sc-list sc-list--wide"><li><b>Роль.</b> <code>&lt;nav aria-label&gt;</code> со ссылками, а не <code>tablist</code>: это переходы между страницами, и скринридер должен ждать загрузку.</li><li><b>Текущая</b> — <code>aria-current="page"</code>, скринридер объявляет «текущая страница».</li><li><b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Фокус — контрастная заливка и подчёркивание; в forced-colors сохраняется системный контур.</li><li><b>Контраст.</b> Черта текущей вкладки — <code>currentColor</code>, цвет её подписи: не ниже 3:1 к поверхности.</li></ul>
   </section>
   <section class="sc-sec" id="svyazannoe">
     <h2>С чем сочетать</h2>

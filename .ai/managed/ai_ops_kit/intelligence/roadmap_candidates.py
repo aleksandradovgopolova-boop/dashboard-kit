@@ -86,9 +86,9 @@ def project_uncovered_directions(child_root) -> dict:
                 "candidates": [], "note": "плана нет — резать направления не из чего; это «не знаю», "
                                           "а не «всё покрыто»"}
 
-    
-    
-    
+
+
+
     try:
         history = _plan.load_history(root)
     except _plan.PlanCorrupt:
@@ -96,7 +96,7 @@ def project_uncovered_directions(child_root) -> dict:
 
     roadmap = _rm.build(plan, history)
     directions = list(roadmap.directions)
-    
+
     uncovered = [d for d in directions
                  if d.total and not d.work_ids and d.horizon != _rm.SHIPPED]
     candidates = [_candidate_from_direction(d, _rm.humanize_outcomes) for d in uncovered]

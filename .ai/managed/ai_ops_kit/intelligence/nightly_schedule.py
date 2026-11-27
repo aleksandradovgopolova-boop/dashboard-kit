@@ -73,7 +73,7 @@ def _cron_of_nightly_workflow(root: Path) -> str | None:
             continue
         if not isinstance(doc, dict):
             continue
-        
+
         on = doc.get("on", doc.get(True))
         sched = on.get("schedule") if isinstance(on, dict) else None
         if isinstance(sched, list):

@@ -40,8 +40,8 @@ _BRANCH_KEYS = ("enforce", "branch_prefix", "protected_refs", "base_drift_adviso
 
 def _load_tool_defaults():
     """DEFAULTS из обоих инструментов. -> (commit_defaults, branch_defaults)."""
-    
-    
+
+
     sys.path.insert(0, str(PKG))
     from ai_ops_kit.engops import branch_policy, commit_policy
     return dict(commit_policy.DEFAULTS), dict(branch_policy.DEFAULTS)
@@ -146,9 +146,9 @@ def _check_economics(eco):
     mh = eco.get("min_history_tasks")
     if mh is not None and (isinstance(mh, bool) or not isinstance(mh, int) or mh < 1):
         errs.append(f"economics.min_history_tasks={mh!r}: ожидалось целое ≥ 1")
-    
-    
-    
+
+
+
     if req is True and enf != "block":
         errs.append("economics.require_estimate=true при enforce != block: отсутствие истории будет "
                     "блокировать первый прогон, хотя политика заявлена как советующая — противоречие")

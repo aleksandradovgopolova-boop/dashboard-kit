@@ -49,7 +49,7 @@ _FALLBACK_TYPES = ("feat", "fix", "quality", "chore")
 
 
 def _git(root, *args):
-    
+
     return git(root, *args)
 
 
@@ -128,7 +128,7 @@ def assess(root, base=None, files=None) -> dict:
     docs_ok = bool(res["docs_changed"])
     res["checks"].append({"id": "docs_touched", "status": "pass" if docs_ok else "fail"})
     if frag_dir is None:
-        
+
         res["checks"].append({"id": "release_notes_dir_not_declared", "status": "warn"})
         notes = "unknown"
     else:
@@ -167,7 +167,7 @@ def gate_evidence(assessment, docs_not_needed=None):
                 "evidence": [f"документация: {', '.join(a['docs_changed'][:3])}",
                              f"запись истории: {', '.join(a['fragments'][:3])}"]}
     if st == "unverifiable":
-        
+
         return {"status": "warn", "checks": checks,
                 "warnings": [a.get("reason") or "проверить нечем"]}
     if st == "partly":

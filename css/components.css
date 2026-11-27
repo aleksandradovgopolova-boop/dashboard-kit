@@ -515,15 +515,21 @@
    Кнопка узнаётся заливкой, а не рамкой: своя поверхность на фоне виджета.  */
 
 .dk-btn {
+  --button-pad-block: var(--control-pad-sm);
+  --button-pad-inline: var(--button-pad-inline-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   /* Кнопкой бывает и ссылка (<a class="dk-btn">) — на витрине так оформлен
      переход на страницу компонента, и он рисовался подчёркнутым текстом. */
   text-decoration: none;
-  gap: var(--space-3);
+  gap: var(--space-4);
   min-height: var(--control-sm);
-  padding: var(--control-pad-sm);
+  min-width: var(--control-sm);
+  max-width: 100%;
+  padding: var(--button-pad-block) var(--button-pad-inline);
+  text-align: center;
+  overflow-wrap: anywhere;
   font: var(--type-body);
   font-weight: var(--weight-ui);
   color: var(--ink-2);
@@ -534,7 +540,7 @@
   transition: color var(--duration-fast), background var(--duration-fast);
 }
 @media (hover: hover) and (pointer: fine) {
-  .dk-btn:hover { color: var(--ink); background: var(--surface-3); }
+  .dk-btn:where(:not(:disabled):not([aria-disabled="true"])):hover { color: var(--ink); background: var(--surface-3); }
 }
 
 
@@ -559,14 +565,14 @@
 .dk-btn--sm .dk-i { width: var(--icon-size-compact); height: var(--icon-size-compact); }
 .dk-btn--lg .dk-i { width: 20px; height: 20px; }
 
-/* Ведомый значок — всегда последним и чуть отодвинут: он не часть подписи. */
-.dk-i--after { margin-left: var(--space-1); }
+/* Общий gap задаёт одинаковое расстояние до ведущего и ведомого значка. */
+.dk-i--after { margin-left: 0; }
 
 /* По умолчанию S; M выбирается явно для соседних контролов той же высоты.
    L для одиночного главного действия на странице. */
-.dk-btn--sm { min-height: var(--control-sm); padding: var(--control-pad-sm); font:var(--type-body); }
-.dk-btn--md { min-height: var(--control-md); padding: var(--control-pad-md); }
-.dk-btn--lg { min-height: var(--control-lg); padding: var(--control-pad-lg); font: var(--type-h3); }
+.dk-btn--sm { min-height: var(--control-sm); }
+.dk-btn--md { --button-pad-block: var(--control-pad-md); --button-pad-inline: var(--button-pad-inline-md); min-height: var(--control-md); }
+.dk-btn--lg { --button-pad-block: var(--control-pad-lg); --button-pad-inline: var(--button-pad-inline-lg); min-height: var(--control-lg); font-size: var(--text-title); }
 
 .dk-btn--primary {
   color: var(--brand-ink);
@@ -574,14 +580,14 @@
   font-weight: var(--weight-ui-strong);
 }
 @media (hover: hover) and (pointer: fine) {
-  .dk-btn--primary:hover { background: var(--brand-hover); color: var(--brand-ink); }
+  .dk-btn--primary:where(:not(:disabled):not([aria-disabled="true"])):hover { background: var(--brand-hover); color: var(--brand-ink); }
 }
 
 
 /* Тихая кнопка: без собственной поверхности, проявляется при наведении. */
 .dk-btn--ghost { background: transparent; }
 @media (hover: hover) and (pointer: fine) {
-  .dk-btn--ghost:hover { background: var(--surface-2); }
+  .dk-btn--ghost:where(:not(:disabled):not([aria-disabled="true"])):hover { background: var(--surface-2); }
 }
 
 
@@ -608,8 +614,11 @@
   transition: color var(--duration-fast), background var(--duration-fast);
 }
 @media (hover: hover) and (pointer: fine) {
-  .dk-iconbtn:hover { color: var(--ink); background: var(--surface-3); }
+  .dk-iconbtn:where(:not(:disabled):not([aria-disabled="true"])):hover { color: var(--ink); background: var(--surface-3); }
 }
+
+.dk-iconbtn:disabled,
+.dk-iconbtn[aria-disabled="true"] { color: var(--ink-3); cursor: not-allowed; opacity: .6; }
 
 .dk-iconbtn .dk-i { width: var(--icon-size-control); height: var(--icon-size-control); vertical-align: 0; }
 
@@ -647,7 +656,8 @@
 
 .dk-seg {
   --segment-size: var(--control-sm);
-  --segment-pad: var(--space-2);
+  --segment-pad: var(--space-1);
+  --segment-pad-inline: var(--segment-pad-inline-sm);
   display: inline-flex;
   gap: var(--space-1);
   background: var(--surface-2);
@@ -666,7 +676,7 @@
   justify-content: center;
   gap: var(--space-2);
   min-height: calc(var(--segment-size) - 2 * var(--track-pad));
-  padding: var(--segment-pad);
+  padding: var(--segment-pad) var(--segment-pad-inline);
   font: var(--type-body);
   color: var(--ink-2);
   background: transparent;
@@ -709,8 +719,8 @@
   .dk-seg button:focus-visible { outline-offset: calc(-1 * var(--focus-width)); }
 }
 
-.dk-seg--md { --segment-size: var(--control-md); --segment-pad: var(--space-3); }
-.dk-seg--lg { --segment-size: var(--control-lg); --segment-pad: var(--space-5); }
+.dk-seg--md { --segment-size: var(--control-md); --segment-pad: var(--space-2); --segment-pad-inline: var(--button-pad-inline-md); }
+.dk-seg--lg { --segment-size: var(--control-lg); --segment-pad: var(--space-4); --segment-pad-inline: var(--button-pad-inline-lg); }
 
 /* Сегмент значками. Стоит ПОСЛЕ модификаторов размера намеренно: у них та же
    специфичность, и правило, написанное выше, проигрывало им поля — кнопка
@@ -3387,6 +3397,7 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   gap: var(--space-2);
   overflow-x: auto;
   scrollbar-width: none;
+  border-bottom: var(--hairline) solid var(--rule);
 }
 
 .dk-tabs::-webkit-scrollbar { display: none; }
@@ -3395,12 +3406,13 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
-  height: var(--control-lg);
-  padding: var(--control-pad-md);
+  justify-content: center;
+  gap: var(--space-4);
+  min-height: var(--control-lg);
+  padding: var(--control-pad-lg) var(--button-pad-inline-md);
   flex: none;
-  font: inherit;
-  font-size: var(--text-body);
+  font: var(--type-body);
+  font-weight: var(--weight-ui);
   color: var(--ink-2);
   text-decoration: none;
   background: none;
@@ -3410,28 +3422,30 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
   transition: color var(--duration-fast), background var(--duration-fast);
 }
 @media (hover: hover) and (pointer: fine) {
-  .dk-tab:hover { color: var(--ink); background: var(--glass-hover, var(--surface-3)); }
+  .dk-tab:where(:not(:disabled):not([aria-disabled="true"])):hover { color: var(--ink); background: var(--control-soft); }
 }
 
-.dk-tab:focus-visible { outline: var(--focus-width) solid var(--brand); outline-offset: -2px; }
+.dk-root .dk-tab:focus-visible { outline: none; background: var(--control-focus); color: var(--control-focus-ink); text-decoration: underline; text-underline-offset: var(--space-1); }
+.dk-tab:focus-visible .dk-tab__n { color: inherit; }
+.dk-tab .dk-i { width: var(--icon-size-control); height: var(--icon-size-control); flex: none; }
+.dk-tab:disabled, .dk-tab[aria-disabled="true"] { color: var(--ink-3); cursor: not-allowed; opacity: .6; }
 
 /* Текущая вкладка отмечена подчёркиванием и цветом: одного цвета мало. */
 .dk-tab[aria-selected="true"],
-.dk-tab[aria-current] {
+.dk-tab[aria-current="page"] {
   color: var(--ink);
-  font-weight: var(--weight-ui-strong);
 }
 
 .dk-tab[aria-selected="true"]::after,
-.dk-tab[aria-current]::after {
+.dk-tab[aria-current="page"]::after {
   content: "";
   position: absolute;
-  left: var(--space-4);
-  right: var(--space-4);
+  left: var(--button-pad-inline-md);
+  right: var(--button-pad-inline-md);
   bottom: 0;
   height: 2px;
   border-radius: var(--radius-full);
-  background: var(--control-on);
+  background: currentColor;
 }
 
 .dk-tab__n {
@@ -4320,9 +4334,6 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 
 /* Наведения у нас теперь закрыты от тача — значит, пальцу нужна своя обратная
    связь. :active работает на любом устройстве. */
-.dk-btn:active,
-.dk-iconbtn:active,
-.dk-tab:active,
 .dk-seg button:active,
 .dk-side__item:active,
 .dk-list__row:active,
@@ -4330,6 +4341,17 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-menu__item:active,
 .dk-cal__day:active,
 .dk-map__tile:active { opacity: .7; }
+
+/* Нажатие меняет поверхность, не гасит подпись и не сдвигает соседей. */
+:is(.dk-btn,.dk-iconbtn):where(:not(:disabled):not([aria-disabled="true"])):active { background: var(--surface-3); color: var(--ink); }
+.dk-btn--primary:where(:not(:disabled):not([aria-disabled="true"])):active { background: var(--brand-hover); color: var(--brand-ink); }
+.dk-tab:where(:not(:disabled):not([aria-disabled="true"])):active { background: var(--control-soft); color: var(--ink); }
+@media (pointer: coarse) {
+  .dk-btn { --button-pad-block: var(--control-pad-lg); }
+}
+@media (forced-colors: active) {
+  .dk-root .dk-tab:focus-visible { outline: var(--focus-width) solid Highlight; outline-offset: calc(-1 * var(--focus-width)); }
+}
 
 /* Задержка в 300 мс, которую браузер держит на случай двойного касания.
    manipulation говорит «двойного не будет» — и касание срабатывает сразу. */
@@ -4568,13 +4590,8 @@ html:has(.dk-page .dk-modal[open]) { overflow: hidden; }
 .dk-scrollview--hidden-bar::-webkit-scrollbar{ display:none; }
 @media(prefers-reduced-motion:reduce){ .dk-scrollview--smooth{ scroll-behavior:auto; } }
 @media(forced-colors:active){ .dk-scrollview{ scrollbar-color:auto; } .dk-scrollview--hidden-bar{ scrollbar-width:auto; } .dk-scrollview--hidden-bar::-webkit-scrollbar{ display:block; } }
-/* Auto-size ordinary action icons; explicit sm/lg stay fixed. */
-.dk-btn > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:24px; height:24px; }
-.dk-btn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:20px; height:20px; }
-@media(hover:hover) and (pointer:fine){
- .dk-btn > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:20px; height:20px; }
- .dk-btn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn--sm > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:16px; height:16px; }
-}
+/* Один размер значка во всех состояниях и способах ввода. */
+.dk-btn > .dk-i:not(.dk-i--sm):not(.dk-i--lg),.dk-iconbtn > .dk-i:not(.dk-i--sm):not(.dk-i--lg){ width:var(--icon-size-control); height:var(--icon-size-control); flex:none; }
 .dk-scrollview{ --scrollview-height:320px; }
 
 /* Anchored onboarding dialog: native focus/inert, no shadow. */

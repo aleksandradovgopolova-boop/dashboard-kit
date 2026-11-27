@@ -80,8 +80,8 @@ def classify_changed(files):
 
 
 def _git(root, *args):
-    
-    
+
+
     return git(root, *args)
 
 
@@ -131,10 +131,10 @@ def prove(root, base_sha, head_sha, profile, changed_files=None, runner=None, ti
         result["reason"] = "нет base_sha/head_sha — не от чего отсчитывать «до правки»"
         return result
 
-    
-    
-    
-    
+
+
+
+
     if runner is None:
         try:
             argv, env_extra = argv_command.split(cmd)
@@ -152,8 +152,8 @@ def prove(root, base_sha, head_sha, profile, changed_files=None, runner=None, ti
             except subprocess.TimeoutExpired:
                 return "timeout"
 
-    
-    
+
+
     import tempfile
     wt = Path(tempfile.mkdtemp(prefix="ai-ops-regression-"))
     rc_add, _, err_add = _git(root, "worktree", "add", "--detach", str(wt), base_sha)
@@ -162,11 +162,11 @@ def prove(root, base_sha, head_sha, profile, changed_files=None, runner=None, ti
         result["reason"] = f"не удалось создать дерево на базовой ревизии: {err_add[:200]}"
         return result
     try:
-        
-        
-        
-        
-        
+
+
+
+
+
         rc_clean = runner(cmd, str(wt))
         result["checks"].append({"id": "suite_runs_on_base", "command": cmd,
                                  "returncode": rc_clean,

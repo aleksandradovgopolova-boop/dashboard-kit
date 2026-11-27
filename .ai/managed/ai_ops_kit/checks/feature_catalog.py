@@ -117,7 +117,7 @@ def _feature_block(feature: dict) -> list[str]:
     surfaces = [s for s in surfaces if isinstance(s, dict)] if isinstance(surfaces, list) else []
     if surfaces:
         lines += ["| Поверхность | Ссылка в коде | Уверенность | Экстрактор |", "|---|---|---|---|"]
-        
+
         for s in sorted(surfaces, key=lambda x: (_clean(x.get("kind")), _clean(x.get("ref")))):
             lines.append(
                 f"| {_clean(s.get('kind')) or '—'} | `{_clean(s.get('ref')) or '—'}` | "
@@ -147,7 +147,7 @@ def render_catalog(registry: dict | None, *, regen_cmd: str = _DEFAULT_REGEN) ->
         lines.append(f"| {label} | {summary['by_status'][status]} |")
     lines.append("")
 
-    
+
     grouped: dict[str, list[dict]] = {}
     for f in feats:
         grouped.setdefault(_status_of(f), []).append(f)

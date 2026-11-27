@@ -67,7 +67,7 @@ def _parse_owner_repo(remote_url):
     if not remote_url:
         return None
     u = remote_url.strip()
-    
+
     m = re.search(r"[:/]([^/:]+)/([^/]+?)(?:\.git)?$", u)
     if not m:
         return None
@@ -134,7 +134,7 @@ def _gh_api_get_all(path, token, per_page=100, max_items=None, max_pages=100):
             break  # неожиданная форма ответа — не притворяемся, что дочитали
         items.extend(chunk)
         if max_items is not None and len(items) >= max_items:
-            
+
             return items[:max_items], len(chunk) == per_page
         if len(chunk) < per_page:
             return items, False  # короткая страница => это был конец
@@ -177,7 +177,7 @@ def open_prs_via_rest(repo, paths, max_prs=30):
                            "«пересечений нет» здесь не факт, а неполная проверка")
         return out
     except (urllib.error.URLError, json.JSONDecodeError, OSError) as e:
-        
+
         return {"status": "unavailable", "note": f"GitHub API недоступен ({type(e).__name__})", "prs": []}
 
 
@@ -215,8 +215,8 @@ def open_prs_via_gh(repo, paths):
         records = [{"number": pr.get("number"), "title": pr.get("title"),
                     "files": [f.get("path") for f in (pr.get("files") or [])]}
                    for pr in raw]
-        
-        
+
+
         truncated = len(records) >= 100 or any(len(rec["files"]) >= 100 for rec in records)
         out = {"status": "partial" if truncated else "checked", "via": "gh",
                "prs": _prs_overlap(records, paths)}

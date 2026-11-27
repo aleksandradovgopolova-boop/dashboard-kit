@@ -59,7 +59,7 @@ SKIP_VERIFICATION_PATTERNS = ("README.md", "ROADMAP.md", "CHANGELOG.md", "CONTRI
 
 
 def _prose_only(path: str) -> bool:
-    
+
     return ((path.endswith(".md") or path == "LICENSE")
             and not _matches_any(path, ALWAYS_FULL_PATTERNS)
             and (_matches_any(path, SKIP_VERIFICATION_PATTERNS) or
@@ -98,7 +98,7 @@ def decide_tier(changed_files: list, force_tier: str = None, lifecycle_intent: s
     if lifecycle_intent is not None and (not isinstance(lifecycle_intent, str) or
             lifecycle_intent not in INTENT_TO_TIER and lifecycle_intent not in ("merge", "release")):
         raise ValueError(f"unknown verification intent: {lifecycle_intent!r}")
-    
+
     if lifecycle_intent in ("merge_candidate", "release_candidate", "merge", "release"):
         return "full"
     if any(_matches_any(f, ALWAYS_FULL_PATTERNS) for f in changed_files):
@@ -130,13 +130,13 @@ def _select_tests(changed_files: list, child_root: str, tier: str = None, lifecy
 
     tier = decide_tier(changed_files, tier, lifecycle_intent)
     child_root = Path(child_root)
-    
-    
+
+
     required = ((profile or {}).get("required_checks") or {}).get(lifecycle_intent, [])
     if tier == "skip" and required:
         tier = "full"
 
-    
+
     if tier == "skip":
         return {
             "tier": "skip",
@@ -171,8 +171,8 @@ def _select_tests(changed_files: list, child_root: str, tier: str = None, lifecy
         return fallback("deleted, missing or renamed source")
     if any(Path(f).suffix not in (".py", *repo_graph.JS_TS_EXTENSIONS) for f in sources):
         return fallback("non-source assets/configuration need the complete configured suite")
-    
-    
+
+
     graph = repo_graph.build_graph(child_root, subdirs=None, include_js=True)
     if any(f not in graph["files"] for f in sources):
         return fallback("non-source assets/configuration need the complete configured suite")
@@ -193,8 +193,8 @@ def _select_tests(changed_files: list, child_root: str, tier: str = None, lifecy
     if tier == "module":
         parents = {str(Path(f).parent) for f in sources}
         impacted = [f for f in graph["files"] if str(Path(f).parent) in parents]
-    
-    
+
+
     selection_roots = sorted(set(impacted) | set(uncertain))
     affected = repo_graph.affected_tests(graph, selection_roots)
     if uncertain and len(affected) >= len(graph["tests"]):
@@ -255,7 +255,7 @@ def risk_classes(changed_files, root):
         if any(s in p for s in ("api/", "backend/", "server/")) or p.endswith(".py"):
             classes.add("backend_api")
         if p.endswith((".ts", ".js", ".mjs", ".cjs")):
-            
+
             classes.update(("ui_state_navigation", "backend_api"))
         if not _matches_any(path, ALWAYS_FULL_PATTERNS) and not Path(root, path).is_file():
             unknown.append(path)
@@ -287,7 +287,7 @@ def select_tests(changed_files: list, child_root: str, tier: str = None,
     result["risk_scenarios"] = [{"class": c, "reason": reasons[c],
                                   "status": "NOT_RUN", "evidence_required": True}
                                  for c in classes if c in reasons]
-    
+
     return result
 
 
@@ -295,8 +295,8 @@ def _get_test_commands_from_profile(profile: dict, affected_tests: list, child_r
     """v3.27.3 WP4: Получить команды тестов из project_detector profile для затронутых тестов.
     Не угадываем pytest/jest — берём из child config."""
     commands = []
-    
-    
+
+
     for stack in profile.get("stacks", []):
         cmd = (stack.get("commands") or {}).get("test")
         if not cmd:
@@ -323,7 +323,7 @@ def _get_test_commands_from_profile(profile: dict, affected_tests: list, child_r
         paths = [t for t in affected_tests if t.endswith(".py")] if lang == "python" else [
             t for t in affected_tests if any(t.endswith(e) for e in (".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"))]
         if not paths:
-            
+
             return []
         if tokens and (tokens[0] == "pytest" or
                        (len(tokens) >= 3 and tokens[1:3] == ["-m", "pytest"] and
@@ -344,7 +344,7 @@ def _get_test_commands_from_profile(profile: dict, affected_tests: list, child_r
                     out.append(arg)
                 elif arg.startswith("-"):
                     return []
-                
+
                 i += 1
             commands.append(shlex.join(out + paths))
         elif tokens[:2] == ["vitest", "run"] and len(tokens) == 2:
@@ -355,10 +355,10 @@ def _get_test_commands_from_profile(profile: dict, affected_tests: list, child_r
 
 
 if __name__ == "__main__":
-    
-    
 
-    
+
+
+
     changed_files = []
     tier = None
     lifecycle_intent = None
@@ -385,7 +385,7 @@ if __name__ == "__main__":
         print("Usage: verification_tiers.py --changed file1 file2 [--tier skip|affected|module|full] [--intent explore|draft|ready_for_review|merge_candidate] [--json]")
         sys.exit(1)
 
-    
+
     child_root = str(Path.cwd())
     result = select_tests(changed_files, child_root, tier, lifecycle_intent)
 

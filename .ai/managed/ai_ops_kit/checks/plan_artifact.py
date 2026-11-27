@@ -32,7 +32,7 @@ def check(data):
         if not _wid:
             errors.append(f"work_package[{i}]: нет id")
         elif not isinstance(_wid, str):
-            
+
             errors.append(f"work_package[{i}]: id должен быть строкой, получено {type(_wid).__name__}")
         elif _wid in seen:
             errors.append(f"дублирующийся id work_package: {_wid}")
@@ -45,13 +45,13 @@ def check(data):
         dep = wp.get("depends_on")
         if not isinstance(dep, list):
             errors.append(f"{wid}: depends_on должен быть списком (может быть пустым)")
-    
+
     ids = {wp.get("id") for wp in wps if isinstance(wp, dict) and isinstance(wp.get("id"), str)}
     for wp in wps:
         if isinstance(wp, dict):
             for d in wp.get("depends_on", []) or []:
                 if not isinstance(d, str):
-                    
+
                     errors.append(f"{wp.get('id')}: элемент depends_on должен быть строкой-id, получено {type(d).__name__}")
                 elif d not in ids:
                     errors.append(f"{wp.get('id')}: depends_on ссылается на несуществующий work_package '{d}'")

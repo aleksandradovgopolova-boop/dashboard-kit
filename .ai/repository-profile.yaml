@@ -35,6 +35,10 @@ stacks:
   - tools/check-named-metrics.mjs
   - tools/check-popover.mjs
   - tools/check-controls.mjs
+  - tools/check-product-console.py
+  - tools/check-product-console.mjs
+  - tools/product-console.py
+  - product-console.html
   - tools/check-screen-policy.py
   - tools/check-kit-update.py
   - tools/check-component-contracts.py

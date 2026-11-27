@@ -139,9 +139,9 @@ def trace(graph: dict, feature: str) -> dict:
                 "built_by": [], "review": None, "verdict": "unknown",
                 "gaps": [f"узла «{fid}» нет в графе — цепочку строить не от чего"]}
 
-    
-    
-    
+
+
+
     goal, unresolved_goal = None, None
     declared = _text(nodes[fid].get("declared_goal")) or None
     if declared:
@@ -150,20 +150,20 @@ def trace(graph: dict, feature: str) -> dict:
             goal = declared
             chain_ids, path_found = _path_down(nodes, edges, declared, fid)
             if not path_found and not nodes[fid].get("broken_links"):
-                
-                
+
+
                 gaps.append(f"между целью «{declared}» и функцией в графе пути нет — показана "
                             f"прямая связь, промежуточные уровни связью не стали")
         else:
-            
-            
-            
-            
+
+
+
+
             unresolved_goal, chain_ids = declared, [fid]
             if declared in (nodes[fid].get("broken_links") or []):
-                
-                
-                
+
+
+
                 gaps.append(f"объявленная цель «{declared}» — имя другой сущности графа, а не цели "
                             f"плана: швартовать функцию не к чему")
             else:
@@ -173,19 +173,19 @@ def trace(graph: dict, feature: str) -> dict:
         goal, chain_ids, climb_gap = _climb_to_goal(nodes, edges, fid)
         if climb_gap:
             gaps.append(climb_gap)
-    
-    
-    
+
+
+
     for broken in (nodes[fid].get("broken_links") or []):
         if broken == unresolved_goal:
             continue                      # про это имя уже сказано выше, и сказано точнее
         gaps.append(f"объявленный уровень «{broken}» связью не стал: это имя в графе занято другой "
                     f"сущностью — звено истории потеряно")
-    
-    
+
+
     taken = nodes[fid].get("name_taken_in_plan")
-    
-    
+
+
     kind = "запись" if taken is True else _text(taken)
     if kind:
         dropped = nodes[fid].get("name_conflict_dropped") or 0
@@ -194,7 +194,7 @@ def trace(graph: dict, feature: str) -> dict:
         gaps.append(f"это же имя носит {kind} в плане (planning/plan.yaml) — в нить вошла функция, "
                     f"запись плана осталась за графом{cascade}; переименуй одну из них")
 
-    
+
     outcome_ids = [e["to"] for e in edges if e.get("type") == "targets"
                    and e.get("from") == fid and e.get("to") in nodes]
     outcome = None
@@ -211,8 +211,8 @@ def trace(graph: dict, feature: str) -> dict:
         gaps.append(f"у «{fid}» нет outcome (ребро targets) — зачем функция существует, "
                     f"не подтверждается измеримым результатом")
 
-    
-    
+
+
     decision_ids = [e["from"] for e in edges if e.get("type") == "motivates"
                     and e.get("to") == fid and e.get("from") in nodes]
     decision = None
@@ -220,8 +220,8 @@ def trace(graph: dict, feature: str) -> dict:
         dn = nodes[decision_ids[0]]
         decision = {"id": decision_ids[0], "title": _text(dn.get("title")) or decision_ids[0]}
 
-    
-    
+
+
     built_by = []
     for wid in [e["from"] for e in edges if e.get("type") == "builds"
                 and e.get("to") == fid and e.get("from") in nodes]:
@@ -229,8 +229,8 @@ def trace(graph: dict, feature: str) -> dict:
         built_by.append({"id": wid, "title": _text(wn.get("title")) or wid,
                          "pr": _text(wn.get("pr")) or None})
 
-    
-    
+
+
     review = None
     review_ids = [e["from"] for e in edges if e.get("type") == "reviewed"
                   and e.get("to") == fid and e.get("from") in nodes]
@@ -444,7 +444,7 @@ def _source_bound(c: dict, next_action: dict) -> dict:
     rationale = _text(src.get("solution_rationale"))
     if rationale:
         opt, did = _text(src.get("solution_chosen")), _text(src.get("solution_rationale_decision"))
-        
+
         why_ev = [did, f"{did} -motivates-> {fid}", "decisions/registry.yaml"] if did else ev
         out["solution_rationale"] = _qa("solution_rationale", _Q["solution_rationale"],
                                         answer=(f"выбрано «{opt}»: {rationale}" if opt else rationale),
@@ -515,7 +515,7 @@ def answer_ten_questions(graph: dict, feature: str, *,
     merged = {**_graph_bound(tr, fid), **_source_bound(c, next_action)}
     merged["after_release"] = _after_release(tr, fid, measured_outcome)
 
-    
+
     a = [merged[qid] for qid, _ in TEN_QUESTIONS]
     answered = sum(1 for q in a if q["answered"])
     return {"feature": fid, "questions": a, "answered_count": answered,

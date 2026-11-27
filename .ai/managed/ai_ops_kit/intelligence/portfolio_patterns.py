@@ -76,8 +76,8 @@ def anon_key(obs: dict) -> tuple[str, str]:
         if not val:
             continue
         if field == "anon_id":
-            
-            
+
+
             return (val, "anon-id") if _ANON_KEY_RE.match(val) else (_hash_key(val), "anon-id")
         return _hash_key(val), field
     return _UNKNOWN_KEY, "none"
@@ -140,8 +140,8 @@ def portfolio_patterns(kit_root) -> dict:
         key, basis = anon_key(obs)
         basis_counts[basis] = basis_counts.get(basis, 0) + 1
         all_children.add(key)
-        
-        
+
+
         raw_cls = _text(obs.get("observation_class"))
         cls = raw_cls if raw_cls in allowed else _FALLBACK_CLASS
         groups.setdefault(cls, []).append(key)
@@ -161,7 +161,7 @@ def portfolio_patterns(kit_root) -> dict:
             "confidence": conf,
             "frequency_label": precedent_ledger.FREQUENCY_LABEL_RU[conf],
         })
-    
+
     patterns.sort(key=lambda p: (-p["case_count"], p["observation_class"]))
 
     if not observations:
@@ -197,7 +197,7 @@ def _looks_like_path(s: str) -> bool:
     s = s.strip()
     if re.match(r"^[A-Za-z]:\\", s):                       # C:\...
         return True
-    
+
     return bool(re.search(r"(?:^|\s)(?:~|\.{1,2})?/[\w.\-]+(?:/[\w.\-]+)*", s))
 
 
@@ -247,13 +247,13 @@ def check_anonymized(view_or_patterns) -> list[str]:
         if not isinstance(rec, dict):
             out.append(f"{where}: запись не объект")
             continue
-        
+
         for j, key in enumerate(rec.get("children") or []):
             if not (isinstance(key, str) and _ANON_KEY_RE.match(key.strip())):
                 out.append(f"{where}.children[{j}]: не обезличенный ключ ({str(key)[:40]!r}) — "
                            "имя/путь/идентификатор дочки не должен попадать в портфель")
-        
-        
+
+
         oc = rec.get("observation_class")
         if oc is not None and oc not in allowed_cls:
             out.append(f"{where}.observation_class: класс вне допустимого набора ({str(oc)[:40]!r}) — "
@@ -261,10 +261,10 @@ def check_anonymized(view_or_patterns) -> list[str]:
         cl = rec.get("class_label")
         if cl is not None and cl not in allowed_lbl:
             out.append(f"{where}.class_label: метка вне допустимого набора ({str(cl)[:40]!r})")
-        
+
         _scan_value(where, rec, out)
-    
-    
+
+
     if is_view:
         top = {k: v for k, v in view_or_patterns.items() if k != "patterns"}
         _scan_value("view", top, out)

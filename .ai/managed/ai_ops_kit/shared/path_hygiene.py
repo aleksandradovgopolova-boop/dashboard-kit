@@ -155,13 +155,13 @@ def _env_site_dirs() -> list:
     if getter is not None:
         try:
             found.extend(str(x) for x in getter())
-        
-        
-        
-        
+
+
+
+
         except Exception:  # noqa: BLE001,S110 — есть равноценный путь ниже (добор из sys.path)
             pass
-    
+
     for entry in sys.path:
         if entry and os.path.basename(_norm(entry)) in ("site-packages", "dist-packages"):
             found.append(entry)
@@ -199,7 +199,7 @@ def _injected_kit_paths(text: str, site_dir: Path) -> list:
         if not line or line.startswith("#"):
             continue
         if line.startswith("import ") or line.startswith("import\t"):
-            
+
             if "sys.path" not in line:
                 continue
             quoted = re.findall(r"""['"]([^'"]+)['"]""", line)
@@ -207,13 +207,13 @@ def _injected_kit_paths(text: str, site_dir: Path) -> list:
             names = [q for q in quoted if q in _KIT_DIRS]
             if not names:
                 continue
-            
-            
+
+
             for root in roots:
                 hits.append(root)
                 hits.extend(os.path.join(root, n) for n in names)
             continue
-        
+
         p = Path(line) if os.path.isabs(line) else site_dir / line
         if _looks_like_kit_tree(p) or (p.name in _KIT_DIRS and _looks_like_kit_tree(p.parent)):
             hits.append(_norm(p))
@@ -337,10 +337,10 @@ def assess(user_site_dirs: list | None = None, env_site_dirs: list | None = None
         path = Path(d)
         if not path.is_dir():
             continue
-        
-        
-        
-        
+
+
+
+
         try:
             real = os.path.realpath(d)
         except OSError:
@@ -356,9 +356,9 @@ def assess(user_site_dirs: list | None = None, env_site_dirs: list | None = None
                 findings.append(found)
 
     blocking = [f for f in findings if f["severity"] == "blocking"]
-    
-    
-    
+
+
+
     if not scanned:
         status = "unknown"
     elif blocking:
@@ -373,7 +373,7 @@ def assess(user_site_dirs: list | None = None, env_site_dirs: list | None = None
         "findings": findings,
         "counts": {"scanned_dirs": len(scanned), "findings": len(findings),
                    "blocking": len(blocking)},
-        
+
         "scan_limits": ("просмотрены site-каталоги текущего интерпретатора и пользовательские "
                         "site-каталоги других версий Python в домашнем каталоге; venv'ы в "
                         "произвольных местах машины этой проверке не видны"),
@@ -390,8 +390,8 @@ def remove_belts(report: dict | None = None, dry_run: bool = False) -> list:
         if f["rule"] != "path_belt":
             continue
         p = Path(f["path"])
-        
-        
+
+
         if is_pip_owned(p, _pip_owned_pth(p.parent)):
             results.append({"path": str(p), "removed": False,
                             "error": "файл принадлежит установке (RECORD/editable) — снимает pip"})
@@ -403,7 +403,7 @@ def remove_belts(report: dict | None = None, dry_run: bool = False) -> list:
             p.unlink()
             results.append({"path": str(p), "removed": True, "error": None})
         except FileNotFoundError:
-            
+
             results.append({"path": str(p), "removed": True, "error": None})
         except OSError as e:
             results.append({"path": str(p), "removed": False, "error": str(e)})
@@ -461,8 +461,8 @@ def _fmt(rep: dict) -> str:
 
 def main(argv: list[str]) -> int:
     if "--help" in argv or "-h" in argv:
-        
-        
+
+
         print(__doc__.strip())
         return 0
     rep = assess()

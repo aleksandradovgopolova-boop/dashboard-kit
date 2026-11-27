@@ -133,8 +133,8 @@ def holder_is_gone(entry, machine=None) -> bool:
     claim_machine = entry.get("machine") or ""
     if claim_machine and claim_machine != (machine or _machine()):
         return False
-    
-    
+
+
     if _pid_is_dead(entry.get("owner_pid")):
         return True
     started = entry.get("started_at") or entry.get("since")
@@ -147,7 +147,7 @@ def _divergence(child_root, branch, base):
     ПОЛЕ 17.08.2026: в дочке нашлась ветка ВПЕРЕДИ base на 1 коммит и ПОЗАДИ на 241 — проверка
     «содержится в base» по ОДНОМУ направлению давала «не влито» на давно закрытой задаче. Поэтому
     оба числа считаются и оба показываются: одно из них без другого вводит в заблуждение."""
-    
+
     rc, out, _ = gitio.git(child_root, "rev-list", "--left-right", "--count", f"{base}...{branch}")
     if rc != 0:
         return None, None
@@ -163,7 +163,7 @@ def _divergence(child_root, branch, base):
 
 def _same_ref(child_root, a, b) -> bool:
     """Указывают ли два имени на ОДНУ И ТУ ЖЕ ветку. -> bool (не разобрали — False, не угадываем)."""
-    
+
     if not a or not b:
         return False
     if str(a) == str(b):
@@ -193,7 +193,7 @@ def reconcile_with_base(entries, child_root, base=None):
     расхождения; если коммиты ветки уже содержатся в базе (`merge-base --is-ancestor`), запись
     помечается `superseded` с названной причиной и ДАТОЙ замера. Не измерили — говорим `None` и
     называем почему; отсутствие сверки не выдаётся за «не влито»."""
-    
+
     out = []
     src = list(entries or [])
     if not src:
@@ -215,12 +215,12 @@ def reconcile_with_base(entries, child_root, base=None):
             out.append(e)
             continue
         e["base_ref"] = base_ref
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         if _same_ref(child_root, branch, base_ref):
             e["merged_into_base"] = None
             e["reconcile_note"] = (f"база совпадает с самой веткой '{branch}' (рабочая копия этой "
@@ -228,7 +228,7 @@ def reconcile_with_base(entries, child_root, base=None):
             out.append(e)
             continue
         if gitio.git(child_root, "rev-parse", "--verify", "--quiet", branch)[0] != 0:
-            
+
             e["merged_into_base"] = None
             e["reconcile_note"] = f"ветки '{branch}' нет в этом репозитории — сверка невозможна"
             out.append(e)

@@ -52,37 +52,37 @@ def from_graph_trace(result: dict) -> dict:
         summary = (f"Функция «{titles[-1]}» служит цели «{titles[0]}»: {chain_line}. "
                    f"{phrase.capitalize()}.")
     elif result.get("unresolved_goal"):
-        
-        
+
+
         summary = (f"Функция «{feature}» ссылается на цель «{result['unresolved_goal']}», которой "
                    f"нет в плане продукта, — до цели нить не доходит.")
     else:
         summary = f"Функция «{feature}»: {chain_line}. {phrase.capitalize()}."
-    
-    
+
+
     decision = result.get("decision")
     if decision:
         summary += f" Появилась из решения: «{decision.get('title')}»."
-    
-    
+
+
     built_by = result.get("built_by") or []
     if built_by:
         first = built_by[0]
         pr = f" (PR #{first['pr']})" if first.get("pr") else ""
         more = f" и ещё {len(built_by) - 1}" if len(built_by) > 1 else ""
         summary += f" Построена работой: «{first.get('title')}»{pr}{more}."
-    
-    
-    
+
+
+
     review = result.get("review")
     if review:
         title = review.get("title") or "проверено"
         title = title[:1].upper() + title[1:]
         note = "" if review.get("verified") else " (держится на суждении, без машинной опоры)"
         summary += f" {title}{note}."
-    
-    
-    
+
+
+
     mo = result.get("measured_outcome") or {}
     measured_verdict = None
     if mo.get("measured"):
@@ -98,14 +98,14 @@ def from_graph_trace(result: dict) -> dict:
         for br in (mo.get("guardrail_breaches") or []):
             summary += f" Защитная метрика просела: {br}."
     elif mo:
-        
+
         reason = mo.get("not_accumulated_reason") or "итог по релизу ещё не измерен"
         need = mo.get("needed_to_measure")
         summary += f" Результат ещё не накоплен: {reason}."
         if need:
             summary += f" Чтобы измерить: {need}."
-    
-    
+
+
     na = result.get("next_action") or {}
     if na.get("because"):
         summary += f" Дальше по этому уроку: {na.get('action')} — потому что {na.get('because')}."
@@ -133,6 +133,8 @@ def _scorecard_line(m: dict) -> str:
 
     Инвариант карты «честность превыше полноты»: неизмеренное печатается «не измерено — причина», а не
     нулём и не выдуманным числом. Един для пяти метрик и для показателя «ценность для дочки»."""
+    if m.get("measured") and m.get("unit") == "count":
+        return f"• {m.get('title')}: {m.get('value')} ({m.get('detail')})"
     if m.get("measured"):
         pct = round((m.get("value") or 0) * 100)
         return f"• {m.get('title')}: {pct}% ({m.get('numerator')}/{m.get('denominator')})"
@@ -151,20 +153,24 @@ def from_scorecard(scorecard: dict) -> dict:
     lines = [_scorecard_line(m) for m in metrics]
     summary = ("Мерю себя как продукт, а не числом возможностей — карта из 5 метрик:\n"
                + "\n".join(lines))
-    
-    
+
+
     cv = scorecard.get("child_value")
     if isinstance(cv, dict) and cv.get("title"):
         summary += ("\nСтрелка «работа кита → исход дочки» (доказана ли ценность для дочек):\n"
                     + _scorecard_line(cv))
+
+    pace = scorecard.get("verification_pace")
+    if isinstance(pace, dict) and pace.get("parts"):
+        summary += f"\n{pace.get('title')}:\n" + "\n".join(_scorecard_line(p) for p in pace["parts"])
     if scorecard.get("unmeasured_count"):
         status = "degraded"
         headline = f"Карта продукта: измерено честно {measured} из {total} метрик"
-        
-        
-        
-        
-        
+
+
+
+
+
         unmeasured = [m.get("title") for m in metrics if not m.get("measured")]
         сколько = "Одна мера" if len(unmeasured) == 1 else f"{len(unmeasured)} меры"
         why = (f"{сколько} честно стоит «не измерено», и рядом сказано почему: "
@@ -259,14 +265,14 @@ def from_kit_feedback_status(rep: dict) -> dict:
             summary="Ты ещё ничего мне не говорила о моей работе в этом проекте.",
             next_steps=['сказать так: ./ai-ops feedback "что было не так"'])
     if rep.get("errors"):
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
         bad = len(rep["errors"])
         fates = [f"«{d.get('statement') or d['id']}» — {d.get('state_name') or d['state']}"
                  for d in decided[:2]]

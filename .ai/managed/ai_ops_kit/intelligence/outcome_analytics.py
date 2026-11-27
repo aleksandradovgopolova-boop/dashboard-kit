@@ -43,15 +43,15 @@ def _load_effect_metrics(root: Path) -> dict:
     if not hist_dir.exists():
         return {"features": 0, "runs": 0}
 
-    
+
     try:
         from ai_ops_kit.intelligence import effect_metrics
         result = effect_metrics.build(hist_dir)
         return result
-    
-    
-    
-    
+
+
+
+
     except (ImportError, OSError, ValueError, KeyError, TypeError) as e:
         return {"features": 0, "runs": 0,
                 "error": f"метрики эффекта не собраны ({type(e).__name__}: {e})"}
@@ -62,7 +62,7 @@ def _filter_by_period(records: list[dict], period: str) -> list[dict]:
     if period == "all":
         return records
 
-    
+
     try:
         days = int(period.rstrip("d"))
         cutoff = datetime.now() - timedelta(days=days)
@@ -75,7 +75,7 @@ def _filter_by_period(records: list[dict], period: str) -> list[dict]:
         if not ts:
             continue
         try:
-            
+
             dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
             if dt.replace(tzinfo=None) >= cutoff:
                 filtered.append(r)
@@ -158,7 +158,7 @@ def collect_analytics(root: Path, period: str = "all") -> dict:
     providers = _provider_distribution(records)
     models = _model_distribution(records)
 
-    
+
     num_tasks = len(set(r.get("workitem_id") for r in records if r.get("workitem_id")))
     avg_cost = costs["total_cost_usd"] / num_tasks if num_tasks > 0 else 0
 
@@ -244,13 +244,13 @@ def main():
     args = ap.parse_args()
 
     if args.selftest:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         print(__doc__)
         print("Проверки модуля — в tests/unit/ (AGENTS.md: selftest не живёт в продакшн-модуле).")
         return 0

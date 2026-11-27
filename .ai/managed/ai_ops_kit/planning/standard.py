@@ -28,7 +28,8 @@ from pathlib import Path
 
 import yaml
 
-PKG = Path(__file__).resolve().parents[2]
+PKG = next((p for p in Path(__file__).resolve().parents if (p / "VERSION").is_file()),
+           Path(__file__).resolve().parents[2])
 STANDARD_FILE = "registry/standard.yaml"
 
 
@@ -54,7 +55,7 @@ def requirement_set(pkg_root: Path = PKG) -> dict:
     required_artifacts = set()
     required_sections = set()
 
-    
+
     for c in pom.get("contours") or []:
         for s in c.get("source_of_truth") or []:
             if s.get("required"):
@@ -62,7 +63,7 @@ def requirement_set(pkg_root: Path = PKG) -> dict:
             for sec in s.get("required_sections") or []:
                 required_sections.add(f"{s['path']}::{sec}")
 
-    
+
     for a in ar.get("artifacts") or []:
         if a.get("required"):
             required_artifacts.add(a.get("path", a.get("id")))
@@ -88,8 +89,8 @@ def requirement_set(pkg_root: Path = PKG) -> dict:
     for a in pom_man.get("required_repo_artifacts") or []:
         required_artifacts.add(a)
 
-    
-    
+
+
     gate_strength = {}
     gdict = gates.get("gates") or {}
     _iter = gdict.values() if isinstance(gdict, dict) else gdict

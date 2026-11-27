@@ -39,11 +39,11 @@ def record(memory_dir, wid, summary, areas=None, decisions=None, lessons=None,
         print("ОШИБКА: --summary обязателен (что изменилось за задачу).")
         return 1
     at = at or _today()
-    
-    
-    
-    
-    
+
+
+
+
+
     _entry = {"id": str(wid), "self_ingested": True, "human_confirmed": bool(human_confirmed),
               "provenance": {"origin": f"merge WorkItem {wid}", "source_type": "derived",
                              "upstream": [f"WorkItem:{wid}"]},

@@ -52,9 +52,9 @@ def _opportunities(child_root, plan) -> list[dict]:
             continue
         m = _GOAL_IN_WARNING.search(w)
         goal = m.group(1) if m else None
-        
-        
-        
+
+
+
         if goal and not _plan.is_placeholder_goal(goal):
             subject = f"направление «{goal}»"
         else:
@@ -95,7 +95,7 @@ def _gaps(child_root) -> tuple[list[dict], bool]:
     band = metrics.get("band")
     recs = []
     if not product_present:
-        
+
         return [], False
     if band == "unknown":
         recs.append({
@@ -163,8 +163,8 @@ def recommend(child_root) -> dict:
 
     recs = (opportunities + gaps + nxt)[:3]
 
-    
-    
+
+
     enough = bool(recs) or product_present or plan_present
     note = None
     if not enough:

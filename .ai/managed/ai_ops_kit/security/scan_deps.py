@@ -50,11 +50,11 @@ def _requirement_name(spec: str) -> str:
 def _is_dep_section(name: str, section: str) -> bool:
     """Секция таблицы, в которой КЛЮЧ — это имя зависимости."""
     if name == "Cargo.toml":
-        
+
         return section in _CARGO_SECTIONS or section.split(".")[-1] in _CARGO_SECTIONS
     if section in _PY_TABLE_SECTIONS:
         return True
-    
+
     return section.startswith("tool.poetry.group.") and section.endswith(".dependencies")
 
 
@@ -110,7 +110,7 @@ def _toml_dep_names_scanned(text: str, manifest_name: str) -> set:
         key, _, value = line.partition("=")
         key = key.strip().strip("\"'")
         if value.lstrip().startswith("["):
-            
+
             if (section, key) in _PY_ARRAY_KEYS or section == "project.optional-dependencies":
                 take_specs(value)
                 in_array = "]" not in value
@@ -135,12 +135,12 @@ def _dep_names(path, text):
         for ln in text.splitlines():
             ln = ln.strip()
             if ln and not ln.startswith("#"):
-                
-                
-                
+
+
+
                 deps.add(re.split(r"[<>=!~\[ ]", ln, maxsplit=1)[0].strip().lower())
     elif name == "go.mod":
-        
+
         for m in re.finditer(r"^\s*(?:require\s+)?([\w][\w./\-]+)\s+v\d", text, re.M):
             if m.group(1) != "require":
                 deps.add(m.group(1))

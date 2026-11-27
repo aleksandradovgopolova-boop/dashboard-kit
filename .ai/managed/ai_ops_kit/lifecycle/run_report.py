@@ -145,7 +145,7 @@ def build_report(feature_dir: Path, graph_path: Path | None):
     if graph_path and graph_path.exists():
         report["findings"] += graph_findings(feature_dir, graph_path, current)
 
-    
+
     ca_problems, ca_warns, _skip = vca.check_feature(feature_dir)
     report["findings"] += [("PROBLEM", p) for p in ca_problems]
     report["findings"] += [("WARN", w) for w in ca_warns]
@@ -195,11 +195,11 @@ def record_report(r, feature_dir: Path, hist_dir: Path | None):
     run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}-{token_hex(4)}"
     entry = {
         "schema_version": 1,
-        
-        
-        
-        
-        
+
+
+
+
+
         "run_id": run_id,
         "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "feature": fid,

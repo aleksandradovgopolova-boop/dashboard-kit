@@ -142,7 +142,7 @@ def _capture_inputs(root: str | Path, command: object, context: dict | None, *,
         if output_contract is not None:
             if output_contract != PYTEST_OUTPUTS:
                 raise ValueError("unknown output contract")
-            
+
             inputs["output_contract"] = digest(output_contract)
         return inputs, "содержимое входов, зависимостей, toolchain, среды и flags совпадает", files
     except (OSError, ValueError, subprocess.SubprocessError):
@@ -300,7 +300,7 @@ def python_context(root: str | Path | None = None, *, isolated_stdlib: bool = Fa
             exe = shutil.which(name)
             if exe:
                 tools.append((exe, file_digest(exe)))
-        
+
         for directory, dirs, names in os.walk(stdlib):
             dirs[:] = sorted(d for d in dirs if d not in {"site-packages", "__pycache__"})
             for name in sorted(names):

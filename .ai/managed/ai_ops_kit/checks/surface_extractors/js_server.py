@@ -99,7 +99,7 @@ def extract_nest_routes(parsed: ParsedFile) -> list:
     src = parsed.source
     if _NEST_INDICATOR not in src:
         return []
-    
+
     controllers = [(m.start(), (m.group(2) or "")) for m in _NEST_CONTROLLER_RE.finditer(src)]
     out: list = []
     for m in _NEST_METHOD_RE.finditer(src):

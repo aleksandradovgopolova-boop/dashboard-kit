@@ -48,9 +48,10 @@ def main():
     run(['python3', 'tools/check-screen-policy.py'])
     run(['python3', 'tools/check-component-contracts.py'])
     run(['python3', 'tools/check-screen-spec.py'])
+    run(['python3', 'tools/check-product-console.py'])
     run(['python3', 'tools/kit-release.py', '--check'])
     run(['python3', 'tools/check.py'], timeout=600)
-    for name in ['controls', 'screen-builder', 'popover', 'numeric-browser', 'docs', 'reference-dashboard', 'family-mortgage', 'select', 'chips', 'meaning', 'advanced', 'runtime', 'filter-context', 'dashboard-overview', 'composition', 'region-focus', 'example-shell', 'sdk-snippets']:
+    for name in ['controls', 'product-console', 'screen-builder', 'popover', 'numeric-browser', 'docs', 'reference-dashboard', 'family-mortgage', 'select', 'chips', 'meaning', 'advanced', 'runtime', 'filter-context', 'dashboard-overview', 'composition', 'region-focus', 'example-shell', 'sdk-snippets']:
         print('RUN: browser/' + name, flush=True)
         run([node, f'tools/check-{name}.mjs'], timeout=600 if name == 'docs' else 240)
     from tempfile import gettempdir

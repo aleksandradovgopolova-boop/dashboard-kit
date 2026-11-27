@@ -145,7 +145,7 @@ def detect(child_root) -> list:
     root = Path(child_root)
     out = []
     voices = _sources(root)
-    
+
     if len(voices) >= 2 and _disjoint_pair(voices):
         named = "; ".join(f"{v['source']}: {', '.join(v['values'])}" for v in voices)
         out.append({

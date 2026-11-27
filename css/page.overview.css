@@ -3,6 +3,10 @@
 .sc-guide .sc-hero--overview{ padding:var(--space-8) 0; }
 .sc-overview-intro{ display:grid; grid-template-columns:minmax(0,1.08fr) minmax(0,1fr); gap:var(--space-8); align-items:center; }
 .sc-overview-copy{ min-width:0; }
+/* Две L-кнопки с полными боковыми полями остаются рядом на узком desktop. */
+@media(min-width:860px) and (max-width:1023px){
+  .sc-overview-intro{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); }
+}
 .sc-guide .sc-hero--overview h1{ font:var(--type-display); letter-spacing:var(--type-display-track); margin:0 0 var(--space-6); }
 .sc-guide .sc-hero__o{ color:var(--ink-2); }
 .sc-guide .sc-hero__lead{ font:var(--type-body-lg); margin-bottom:var(--space-8); }

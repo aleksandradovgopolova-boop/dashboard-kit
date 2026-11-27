@@ -80,12 +80,12 @@ def _scrub_output(text):
         from ai_ops_kit.security import security_scan as _ss
         for _name, _pat in _ss.SECRET_PATTERNS:
             text = _pat.sub("«***REDACTED-SECRET***»", text)
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     except Exception as _e:  # noqa: BLE001 — сбой скраба не роняет брокер, но и не пропускает контент
         return (f"«***OUTPUT-WITHHELD: скраб секретов не выполнен "
                 f"({type(_e).__name__}: {_e}) — содержимое не показано, чтобы не унести секрет "
@@ -149,6 +149,33 @@ def _is_kit_self_host(root) -> bool:
             and (root / "manifest" / "ai-ops-manifest.yaml").exists())
 
 
+class PolicyLoadError(ValueError):
+    """An existing child protection source could not establish a valid policy."""
+
+
+def _child_protected_entries(path):
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        if not path.is_symlink():
+            return []  # Only a genuinely absent optional source permits defaults.
+        raise PolicyLoadError(f"invalid child policy: {path.name}") from None
+    except (OSError, UnicodeError, yaml.YAMLError):
+        raise PolicyLoadError(f"invalid child policy: {path.name}") from None
+    if not isinstance(data, dict) or not isinstance(data.get("protected_paths", []), list):
+        raise PolicyLoadError(f"invalid child policy: {path.name}")
+    entries = data.get("protected_paths", [])
+    for entry in entries:
+        if isinstance(entry, str) and entry.strip():
+            continue
+        if (isinstance(entry, dict) and isinstance(entry.get("path"), str)
+                and entry["path"].strip() and isinstance(entry.get("approval", "required"), str)
+                and entry.get("approval", "required").strip()):
+            continue
+        raise PolicyLoadError(f"invalid child policy: {path.name}")
+    return entries
+
+
 def _protected_prefixes(child_root=None):
     """Дефолт пакета + карта child'а (MERGE, не replace): child ДОБАВЛЯЕт к
     универсально-опасным путям, не отменяя их. Источники child'а:
@@ -169,21 +196,9 @@ def _protected_prefixes(child_root=None):
             add({"path": p, "approval": "owner_required"})
     if child_root:
         child_root = Path(child_root)
-        cfg = child_root / ".ai-ops.yaml"
-        if cfg.exists():
-            try:
-                data = yaml.safe_load(cfg.read_text(encoding="utf-8")) or {}
-                for e in data.get("protected_paths", []) or []:
-                    add(e)
-            except (OSError, yaml.YAMLError):
-                pass
-        cpp = child_root / "config" / "protected-paths.yaml"
-        if cpp.exists():
-            try:
-                for e in (yaml.safe_load(cpp.read_text(encoding="utf-8")) or {}).get("protected_paths", []) or []:
-                    add(e)
-            except (OSError, yaml.YAMLError):
-                pass
+        for source in (child_root / ".ai-ops.yaml", child_root / "config/protected-paths.yaml"):
+            for entry in _child_protected_entries(source):
+                add(entry)
     return out
 
 
@@ -267,7 +282,7 @@ class Policy:
         self.write_scope = [s.strip("/") for s in (write_scope or [])]
         self.confidentiality = confidentiality
         self.approvals = set(approvals or [])   # набор одобренных ярлыков (напр. {'destructive'})
-        
+
         self.protected = _protected_prefixes(child_root)
         # v2.81 Containment (shell — не полноценный jail; enforceable-подмножество границы):
         #   shell_mode: unrestricted (обратная совместимость) | allowlist (только бинарь из
@@ -341,11 +356,11 @@ class Policy:
             path = (action.get("path") or "").strip("/")
             if not path:
                 return {"allow": False, "reason": "write без path"}
-            
+
             if _escapes_root(action.get("path") or ""):
                 return {"allow": False, "reason": f"путь '{action.get('path')}' выходит за пределы репозитория (traversal)"}
-            
-            
+
+
             why = self.path_violation(path)
             if why:
                 return {"allow": False, "reason": why}
@@ -354,12 +369,12 @@ class Policy:
                 return {"allow": True, "reason": f"protected '{hit[0]}' + approval"}
             return {"allow": True, "reason": "запись в пределах write_scope"}
 
-        
-        
+
+
         cmd = action.get("command") or ""
         norm = _normalize(cmd)
-        
-        
+
+
         if self.block_push and GIT_PUSH_RE.search(norm):
             return {"allow": False,
                     "reason": "git push из tool-loop запрещён (block_push, best-effort): доставка только "
@@ -369,11 +384,11 @@ class Policy:
                 return {"allow": True, "reason": "destructive + approval"}
             return {"allow": False,
                     "reason": "необратимая/опасная команда — нужен уровень destructive + approval"}
-        
-        
-        
-        
-        
+
+
+
+
+
         if op in ("shell", "git"):
             if self.shell_mode == "off":
                 return {"allow": False, "reason": f"{op} запрещён политикой (shell_mode=off; git тоже "
@@ -383,7 +398,7 @@ class Policy:
                         "reason": "сетевая команда запрещена (allow_network=False); это не полный "
                                   "jail, а enforceable-денай частых векторов"}
             if self.shell_mode == "allowlist":
-                
+
                 if _SUBST_RE.search(cmd):
                     return {"allow": False,
                             "reason": "подстановка команд ($()/`…`/<()) запрещена в allowlist-режиме "
@@ -405,12 +420,12 @@ class Policy:
 # изоляция ФС/сети/ресурсов — контейнер. Сырые интерпретаторы shell (bash/sh) УБРАНЫ: `bash -c "…"`
 # — прямой обход без dev-обоснования на верхнем уровне.
 SANDBOX_SHELL_ALLOWLIST = {
-    
+
     "npm", "npx", "yarn", "pnpm", "node", "corepack",
     "python", "python3", "pip", "pip3", "poetry", "uv", "pytest", "tox",
     "go", "cargo", "rustc", "mvn", "gradle", "./gradlew", "./mvnw", "make",
     "ruff", "mypy", "flake8", "black", "isort", "eslint", "tsc", "vitest", "jest",
-    
+
     "ls", "cat", "head", "tail", "grep", "rg", "find", "wc", "pwd", "echo",
     "git", "sed", "awk", "test", "true", "false",
 }
@@ -439,10 +454,10 @@ def execute(action: dict, root, policy: Policy) -> dict:
         if _relp:
             _normalized_from = action.get("path")
             action = dict(action, path=_relp)
-    
-    
-    
-    
+
+
+
+
     if action.get("op") in ("shell", "git") and "\r" in (action.get("command") or ""):
         action = dict(action, command=_CR_AT_EOL_RE.sub("", action["command"]))
     d = policy.decide(action)
@@ -462,12 +477,12 @@ def execute(action: dict, root, policy: Policy) -> dict:
             ev["allowed"] = False
             ev["reason"] = "traversal-guard: путь вне корня"
             return ev
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         if op == "write":
             _resolved = (root / action["path"]).resolve()
             try:
@@ -517,20 +532,20 @@ def execute(action: dict, root, policy: Policy) -> dict:
             p.write_text(action.get("content", ""), encoding="utf-8")
             ev.update({"ok": True, "bytes": len(action.get("content", "").encode("utf-8"))})
         else:  # shell / git — env со скрабленными секретами (модель не получает токены)
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             timeout = action.get("timeout", SHELL_TIMEOUT_DEFAULT)
             # v3.36: снимок ДО команды — основа пост-фактум сторожа путей (см. _fs_snapshot)
             _pre = _fs_snapshot(root, policy)
@@ -552,13 +567,13 @@ def execute(action: dict, root, policy: Policy) -> dict:
                            "command": action["command"],
                            "output_tail": _scrub_output((r.stdout + r.stderr)[-SHELL_OUTPUT_TAIL:])})
             except subprocess.TimeoutExpired:
-                
+
                 ev.update({"ok": False, "exit_code": None, "command": action["command"],
                            "timed_out": True, "output_tail": f"timeout {timeout}s"})
-            
-            
-            
-            
+
+
+
+
             if _pre is not None:
                 _viol, _head_now = _shell_violations(root, policy, _pre)
                 if _viol:

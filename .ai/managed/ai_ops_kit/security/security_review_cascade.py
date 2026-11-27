@@ -68,7 +68,7 @@ def _corroborate(proof_type, code):
     Асимметрия: может ТОЛЬКО опровергнуть (→ human) или подтвердить, но не «придумать» дефект."""
     c = code or ""
     if proof_type == "parameterized_query":
-        
+
         if re.search(r"execute\(\s*f[\"']", c) or re.search(r"execute\(\s*[\"'][^\"']*[\"']\s*[%+]", c) \
                 or re.search(r"execute\(\s*[\"'].*\{.*\}.*[\"']\.format", c) \
                 or re.search(r"execute\(\s*[\"'][^\"']*[\"']\s*\.format", c):
@@ -77,7 +77,7 @@ def _corroborate(proof_type, code):
             return True
         return None
     if proof_type == "checksum_not_security":
-        
+
         if re.search(r"(md5|sha1)\s*\(", c, re.I) and re.search(
                 r"(password|passwd|\bpwd\b|secret|token|signature|\bsign\b|hmac)", c, re.I):
             return False
@@ -91,7 +91,7 @@ def _corroborate(proof_type, code):
             return True
         return None
     if proof_type == "restricted_deserialization":
-        
+
         if re.search(r"pickle\.loads?\(", c) and re.search(r"(user|request|payload|body|untrusted|input)", c, re.I):
             return False
         return None
@@ -116,7 +116,7 @@ def reduce_verdicts(findings, verifications, code, corroborator=_corroborate):
         if verdict == "confirmed":
             blockers.append(fid)
         elif verdict == "disproved":
-            
+
             if proof in RECOGNIZED_PROOFS and cites:
                 corr = corroborator(proof, code)
                 if corr is False:
@@ -144,7 +144,7 @@ def run_cascade(code, tested_sha, detector, verifier, *, corroborator=_corrobora
     schema_ok = True
     det = detector(code)
     if not isinstance(det, dict) or not isinstance(det.get("findings"), list):
-        
+
         return {"kind": "SecurityCascadeResult", "tested_sha": tested_sha,
                 "primary": {**(detector_meta or {}), "findings": []},
                 "verification": {**(verifier_meta or {}), "results": []},
@@ -193,7 +193,7 @@ def check(res):
         for k in ("blockers", "pending", "downgraded_findings"):
             if not isinstance(fin.get(k), list):
                 e.append(f"final.{k} должен быть списком")
-        
+
         if fin.get("status") == "fail" and not fin.get("blockers"):
             e.append("status=fail без blockers (не fail-closed)")
         if fin.get("status") == "pass" and (fin.get("blockers") or fin.get("pending")):

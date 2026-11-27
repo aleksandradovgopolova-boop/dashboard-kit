@@ -169,7 +169,7 @@ class Extractor:
     confidence: str                           # уверenность метода (verified | inferred)
     extract: Callable[[ParsedFile], list]     # (ParsedFile) -> list[Surface]
     needs_ast: bool = True                    # True — экстрактору нужен разобранный AST (.py);
-    
+
 
 
 

@@ -12,17 +12,17 @@ PAGES = [
     "live_intro": 'Основная кнопка выделяет главное действие, остальные поддерживают его. Здесь показан внешний вид: сохранение и удаление не выполняются.',
     "live": """<div class="dk-panel">
       <div class="sc-row"><span class="dk-caption" style="width:96px">S · 32</span>
-        <button class="dk-btn dk-btn--primary dk-btn--sm">Действие</button>
+        <button class="dk-btn dk-btn--primary dk-btn--sm"><svg class="dk-i" aria-hidden="true"><use href="#ti-plus"/></svg>Добавить</button>
         <button class="dk-btn dk-btn--sm">Обычная</button>
         <button class="dk-btn dk-btn--ghost dk-btn--sm">Тихая</button>
         <button class="dk-iconbtn dk-iconbtn--sm" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button></div>
       <div class="sc-row"><span class="dk-caption" style="width:96px">M · 36</span>
-        <button class="dk-btn dk-btn--primary dk-btn--md">Действие</button>
+        <button class="dk-btn dk-btn--primary dk-btn--md"><svg class="dk-i" aria-hidden="true"><use href="#ti-plus"/></svg>Добавить</button>
         <button class="dk-btn dk-btn--md">Обычная</button>
         <button class="dk-btn dk-btn--ghost dk-btn--md">Тихая</button>
         <button class="dk-iconbtn dk-iconbtn--md" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button></div>
       <div class="sc-row" style="margin-bottom:0"><span class="dk-caption" style="width:96px">L · 44</span>
-        <button class="dk-btn dk-btn--primary dk-btn--lg">Действие</button>
+        <button class="dk-btn dk-btn--primary dk-btn--lg"><svg class="dk-i" aria-hidden="true"><use href="#ti-plus"/></svg>Добавить</button>
         <button class="dk-btn dk-btn--lg">Обычная</button>
         <button class="dk-btn dk-btn--ghost dk-btn--lg">Тихая</button>
         <button class="dk-iconbtn dk-iconbtn--lg" title="Настройки" aria-label="Настройки"><svg class="dk-i"><use href="#ti-settings"/></svg></button></div>
@@ -47,7 +47,7 @@ PAGES = [
                 ("Недоступная", "приглушена, курсор «нельзя». Причину недоступности говорит подсказка или текст рядом, а не сама кнопка."),
                 ("Кнопка-значок", "квадрат под один значок; подпись обязательна в <code>aria-label</code> и в <code>title</code>."),
                 ("Значок в кнопке", "стоит слева от слова и берёт цвет текста; сам по себе значок кнопкой не бывает.")],
-    "sizes": 'Высота и отступы задаются токенами контролов. По умолчанию S — 32 px (--control-sm), явный M — 36 px (--control-md), CTA L — 44 px (--control-lg). Поля симметричны и берутся из --control-pad-sm/md/lg; текст 14 px, CTA 16 px. На таче цель не меньше 44 px, значок 18–20 px. Соседние кнопки и фильтры выбирайте одной высоты; приоритет задаётся оформлением, а не размером.',
+    "sizes": 'Высота и отступы задаются токенами контролов. По умолчанию S — 32 px (--control-sm), явный M — 36 px (--control-md), CTA L — 44 px (--control-lg). Парные поля S/M/L: 6/16, 8/16, 12/24 px (вертикаль/горизонталь), из --control-pad-sm/md/lg и --button-pad-inline-sm/md/lg. Кнопки-значки квадратные. Текст 14 px, CTA 16 px. На таче цель не меньше 44 px, значок 20 px. Соседние кнопки и фильтры выбирайте одной высоты; приоритет задаётся оформлением, а не размером.',
     "variants": [("dk-btn", "Обычная кнопка, размер S.", "По умолчанию."),
                  ("dk-btn--primary", "Основное действие, заливка акцентом.", "Одна на экран или на форму."),
                  ("dk-btn--ghost", "Тихая: без заливки до наведения.", "Второстепенное рядом с основным: «Отмена», «Снять выбор»."),
@@ -175,11 +175,10 @@ seg.addEventListener('click', function (e) {
     "files": ["css/components.css"], "scripts": [],
     "live_intro": 'Вкладка показывает текущий раздел, счётчик — сколько в нём объектов. Переход к другому разделу задаётся обычной ссылкой.',
     "live": """<div class="dk-panel"><nav class="dk-tabs" aria-label="Разделы мониторинга">
-      <a class="dk-tab" href="#" aria-current="page">Инфраструктура</a>
-      <a class="dk-tab" href="#">Аварии <span class="dk-tab__n">23</span></a>
-      <a class="dk-tab" href="#">Заявки <span class="dk-tab__n">7</span></a>
-      <a class="dk-tab" href="#">Отчёты</a>
-      <a class="dk-tab" href="#">Отчёты</a>
+      <a class="dk-tab" href="dashboard.html" aria-current="page">Сводка</a>
+      <a class="dk-tab" href="accidents.html">Аварии <span class="dk-tab__n">23</span></a>
+      <a class="dk-tab" href="calendar.html">Календарь</a>
+      <a class="dk-tab" href="regions.html">Регионы</a>
     </nav></div>""",
     "when_yes": ["Разделы одного уровня, у каждого свой адрес: «Обзор», «Записи», «Отчёты».",
                  "При переходе меняется вся страница или её основная часть.",
@@ -195,7 +194,7 @@ seg.addEventListener('click', function (e) {
     "anatomy": [("Текущая вкладка", "<code>aria-current=\"page\"</code>: цвет текста ink, жирность и черта снизу цветом <code>--control-on</code> — двумя признаками, не одним."),
                 ("Обычная вкладка", "ссылка <code>&lt;a&gt;</code> с адресом; при наведении подпись темнеет."),
                 ("Счётчик", "<code>dk-tab__n</code>: сколько объектов в разделе ждут внимания. Ноль не показывается.")],
-    "sizes": "Размер один: строка вкладок стоит под заголовком страницы и не бывает мельче текста. На узком экране "
+    "sizes": "Минимальная высота 44 px, парные поля 12/16 px, текст 14/20 px. Выбор не меняет ширину подписи; текущая вкладка отмечена чертой. При увеличении текста высота растёт. На узком экране "
              "строка листается вбок, вкладки не переносятся и не прячутся — спрятанная вкладка выглядит как "
              "отсутствующий раздел.",
     "variants": [("dk-tabs", "Строка вкладок, <code>&lt;nav&gt;</code> с aria-label.", "Всегда."),
@@ -205,7 +204,7 @@ seg.addEventListener('click', function (e) {
     "states": """<div class="dk-panel"><nav class="dk-tabs" aria-label="Состояния">
       <a class="dk-tab" href="#" aria-current="page">Текущая</a>
       <a class="dk-tab" href="#">Обычная</a>
-      <a class="dk-tab" href="#" style="outline:var(--focus-width) solid var(--brand);outline-offset:var(--focus-offset)">Фокус</a>
+      <a class="dk-tab" href="#" style="background:var(--control-focus);color:var(--control-focus-ink);text-decoration:underline">Фокус</a>
       <a class="dk-tab" href="#">С счётчиком <span class="dk-tab__n">7</span></a>
     </nav></div>
     <div class="sc-note"><b>Недоступных вкладок не бывает.</b> Раздел, в который нельзя попасть, не показывают; если доступа нет — показывают страницу «Нет доступа» (<a href="component-empty.html">Состояния</a>), а не серую вкладку.</div>""",
@@ -217,8 +216,8 @@ seg.addEventListener('click', function (e) {
                     "Вкладка «Ещё…» с выпадающим списком — значит, разделов слишком много для вкладок."],
     "a11y": ["<b>Роль.</b> <code>&lt;nav aria-label&gt;</code> со ссылками, а не <code>tablist</code>: это переходы между страницами, и скринридер должен ждать загрузку.",
              "<b>Текущая</b> — <code>aria-current=\"page\"</code>, скринридер объявляет «текущая страница».",
-             "<b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Кольцо фокуса — только при навигации табом.",
-             "<b>Контраст.</b> Черта текущей вкладки — <code>--control-on</code>, тот же серый, что у выбранного управления: не ниже 3:1 к поверхности."],
+             "<b>Клавиатура.</b> Обычные ссылки: Tab и Enter. Фокус — контрастная заливка и подчёркивание; в forced-colors сохраняется системный контур.",
+             "<b>Контраст.</b> Черта текущей вкладки — <code>currentColor</code>, цвет её подписи: не ниже 3:1 к поверхности."],
     "tokens": ["dk-tabs", "dk-tab"],
     "code_intro": "Вкладки — ссылки. Текущую отмечает сервер или страница, скрипта у компонента нет.",
     "code": """<nav class="dk-tabs" aria-label="Разделы мониторинга">

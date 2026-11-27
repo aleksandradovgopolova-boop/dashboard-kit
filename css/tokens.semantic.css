@@ -568,11 +568,15 @@
   --control-lg: var(--height-3);
   --rail-control: var(--size-40);
 
-  /* Одно значение spacing на четыре стороны. Размер задаёт вариант,
-     свободное место растянутой кнопки не становится padding. */
+  /* Вертикальные поля контролов и квадратных кнопок-значков. */
   --control-pad-sm: var(--step-3);
   --control-pad-md: var(--step-4);
   --control-pad-lg: var(--size-12);
+  /* Тексту нужно больше воздуха по бокам; высоты S/M/L сохраняются. */
+  --button-pad-inline-sm: var(--size-16);
+  --button-pad-inline-md: var(--size-16);
+  --button-pad-inline-lg: var(--size-24);
+  --segment-pad-inline-sm: var(--size-12);
   --control-focus: var(--ink);
   --control-focus-ink: var(--bg);
   --field-inset: var(--size-12);

@@ -94,8 +94,8 @@ def cost_per_successful_change(attempt: dict) -> dict:
     ручное вмешательство. attempt: {calls_cost, retry_cost, reviewer_cost, escalation_cost, latency_s,
     manual_interventions, delivered_verified: bool}. Не доставлено+проверено -> cost_per_change=None
     (стоимость без результата = чистые потери, не «дёшево»)."""
-    
-    
+
+
     components = [_money(attempt.get("calls_cost"))] + [
         _money(attempt.get(key, 0)) for key in ("retry_cost", "reviewer_cost", "escalation_cost")]
     total = total_call_cost(components)

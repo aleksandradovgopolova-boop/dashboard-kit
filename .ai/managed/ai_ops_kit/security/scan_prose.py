@@ -147,15 +147,15 @@ def blank_comments(text: str, path: str, неизвестный_как: str = No
     suffix, язык_угадан = _язык(text, path, неизвестный_как)
     line_markers = LINE_COMMENT_BY_SUFFIX.get(suffix)
     block = suffix in BLOCK_COMMENT_SUFFIXES
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
     регулярки = suffix in REGEXP_LITERAL_SUFFIXES and suffix not in MARKUP_SUFFIXES
     разметка = suffix in MARKUP_SUFFIXES
     if not line_markers and not block:
@@ -181,8 +181,8 @@ def blank_comments(text: str, path: str, неизвестный_как: str = No
         if регулярки and ch == "/" and _регулярка_здесь(text, i, предыдущий):
             конец = _конец_регулярки(text, i)
             if конец > i + 1:
-                
-                
+
+
                 угадывали = угадывали or разметка
                 _погасить(out, i + 1, конец - 1)   # содержимое образца — не код и не строка
                 предыдущий, i = "/", конец
@@ -275,12 +275,12 @@ _TOOL_CONFIGS = ("vite.config.", "vitest.config.", "jest.config.", "webpack.conf
 def area_of(path: str) -> str:
     """`product` — боевой путь, `harness` — тесты и конфиги, `vendor` — установленная копия кита."""
     rel = path.replace("\\", "/")
-    
-    
+
+
     if rel.startswith(VENDOR_PREFIX) or f"/{VENDOR_PREFIX}" in rel:
         return "vendor"
-    
-    
+
+
     name = rel.rsplit("/", 1)[-1].lower()
     if any(name.startswith(cfg) for cfg in _TOOL_CONFIGS):
         return "harness"
@@ -339,31 +339,31 @@ def blank_string_contents(text: str, шаблоны: bool = True) -> tuple:
             if сим == кавычка:
                 кавычка = None
             elif сим == "\n" and кавычка != "`":
-                
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
+
                 оборвана = True
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
                 кавычка = None
             elif сим != "\n":
                 out[i] = " "
             i += 1
             continue
         if сим in "'\"`":
-            
-            
-            
-            
-            
+
+
+
+
+
             if сим != "`" or шаблоны:
                 кавычка = сим
                 глубина_подстановки = 0

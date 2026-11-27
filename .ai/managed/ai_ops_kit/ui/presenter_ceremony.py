@@ -40,9 +40,9 @@ def risk_ceremony_line(level_name, level_reason=None, provisional=False) -> str:
     elif "измеримое пользовательское изменение" in reason:
         why = "изменение видит пользователь и его надо измерить"
     elif (level_name or "").startswith("L3"):
-        
-        
-        
+
+
+
         why = "изменение критическое или необратимое — риск максимальный"
     elif (level_name or "").startswith("L2"):
         why = "изменение продуктовое — его надо описать и измерить"

@@ -86,7 +86,7 @@ def _anthropic_call(prompt, model, contract=None):
     body = {"model": model, "max_tokens": _MAX_TOKENS,
             "messages": [{"role": "user", "content": prompt}]}
     if contract is not None:
-        
+
         body["output_config"] = {"format": {"type": "json_schema",
                                             "schema": contract.wire_schema}}
     _t0 = time.monotonic()
@@ -99,10 +99,10 @@ def _anthropic_call(prompt, model, contract=None):
     text = "\n".join(parts).strip()
     stop = data.get("stop_reason")
     if contract is not None:
-        
-        
-        
-        
+
+
+
+
         if stop == "max_tokens":
             raise ProviderRefusal("truncated", f"потолок {_MAX_TOKENS} токенов", "anthropic", model)
         if stop == "refusal":
@@ -145,9 +145,9 @@ def _openai_call(prompt, model, base_url="https://api.openai.com/v1/chat/complet
                          "Задайте ключ в окружении или используйте --provider mock (офлайн).")
     import time
     rf, _mode = _response_format_for(vendor, contract)
-    
-    
-    
+
+
+
     for attempt in range(3):
         _t0 = time.monotonic()
         # v3.0-rc7: reasoning-модели медленные (kimi-k3) — 120с не хватало -> 300с default.
@@ -165,8 +165,8 @@ def _openai_call(prompt, model, base_url="https://api.openai.com/v1/chat/complet
         if content:
             _u = data.get("usage") or {}   # v3.1 trace v0.2: OpenAI-совместимый usage
             _record_call(model, _u.get("prompt_tokens"), _u.get("completion_tokens"), time.monotonic() - _t0)
-            
-            
+
+
             if contract is not None and _choice.get("finish_reason") == "length":
                 raise ProviderRefusal("truncated", f"потолок {_MAX_TOKENS} токенов", vendor, model)
             return content
@@ -236,6 +236,9 @@ def make_provider(name: str, model: str = None, contract=None):
     """
     if name in (None, "mock"):
         return _tagged(mock_provider, "mock", model, contract)
+    if name == "codex-app-server":
+        from ai_ops_kit.providers import codex_native
+        return _tagged(lambda prompt: codex_native.call(prompt, model), name, model, contract)
     if name == "anthropic":
         m = model or DEFAULT_MODELS["anthropic"]
         return _tagged(lambda prompt: _anthropic_call(prompt, m, contract), name, m, contract)
@@ -244,7 +247,7 @@ def make_provider(name: str, model: str = None, contract=None):
         return _tagged(lambda prompt: _openai_call(prompt, m, contract=contract, vendor="openai"),
                        name, m, contract)
     if name == "openai-compatible":
-        
+
         base = os.environ.get("OPENAI_COMPATIBLE_BASE_URL")
         if not base:
             raise SystemExit("OPENAI_COMPATIBLE_BASE_URL не задан — для openai-совместимого "
@@ -257,12 +260,12 @@ def make_provider(name: str, model: str = None, contract=None):
                                                    contract=contract, vendor=name),
                        name, model, contract)
     if name in ("claude-cli", "claude-code-local"):
-        
-        
+
+
         return _tagged(make_claude_cli_provider(model), name, model, contract)
     if name in OPENAI_COMPATIBLE_VENDORS:
-        
-        
+
+
         v = OPENAI_COMPATIBLE_VENDORS[name]
         base = os.environ.get(v["base_url_env"]) or v["base_url"]
         m = model or v["default_model"]
@@ -307,8 +310,8 @@ def _human_error(text):
     import json as _json
     try:
         d = _json.loads(text)
-    
-    
+
+
     except (ValueError, TypeError):
         return (text or "").strip()[:2000]
     parts = []
@@ -323,13 +326,29 @@ def _human_error(text):
 
 def _transient(text):
     t = (text or "").lower()
-    
-    
-    
+
+
+
     return any(s in t for s in ("overloaded", "529", "429", "rate limit", "rate_limit",
                                 "500", "502", "503", "504", "internal server error",
                                 "temporarily", "transient", "server_error",
                                 "timeout", "timed out", "connection"))
+
+
+# #1476: профиль запуска «только чтение». Сам по себе НЕ разрешает live-путь: разрешает только
+# квалификация этого профиля на конкретном бинаре (ai_ops_kit/devtools/claude_readonly_qualification).
+#   --restricted          — без инструментов, исполняющих код, и без user/project/local settings;
+#   --safe-mode           — без плагинов, хуков, MCP, CLAUDE.md, skills и прочих настроек;
+#   --strict-mcp-config   — MCP только из --mcp-config, а его нет: ни одного сервера;
+#   --tools               — доступный встроенный набор; --allowedTools — их автоодобрение;
+#   --permission-mode dontAsk + --permission-prompts none — всё, что спросило бы разрешение, отклонено;
+#   --disable-slash-commands — без skills и команд.
+CLAUDE_READONLY_PROFILE = (
+    "--restricted", "--safe-mode", "--strict-mcp-config",
+    "--tools", "Read,Grep,Glob", "--allowedTools", "Read", "Grep", "Glob",
+    "--permission-mode", "dontAsk", "--permission-prompts", "none",
+    "--disable-slash-commands",
+)
 
 
 def _backoff(n):
@@ -342,20 +361,17 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
     """v3.9.0 First-class Claude Code Adapter — локальный `claude -p` как ТЕКСТ-провайдер (сильный writer),
     БЕЗ API-ключа (использует локальную аутентифицированную сессию claude CLI).
 
-    БЕЗОПАСНОСТЬ (executing-adapter контракт): `--allowedTools Read Grep Glob` — ТОЛЬКО read-only инструменты.
-    Claude ЧИТАЕТ репо (информированное предложение), но НЕ может писать/исполнять (нет Write/Edit/Bash/git) ->
-    НЕ трогает FS/git/сеть, НЕ пушит, НЕ создаёт PR, НЕ меняет checkout, НЕ владеет исполнением/lifecycle.
-    Модель ПРЕДЛАГАЕТ действия ТЕКСТОМ (JSON tool-loop); применяет их КИТ через свой sandbox/broker
-    (scope-enforced, exact-SHA, gates, delivery) — это policy enforcement, не security isolation:
-    брокер управляет операцией и областью записи, но сеть и ресурсы им не ограничены. AI Ops = control plane, Claude Code = сильный ЗАМЕНЯЕМЫЙ
-    исполнитель. (Полный tool-less `--tools ""` авторит вслепую -> невалидная спека; read-only даёт контекст
-    без права действия — доказано fs-rc3.)
+    БЕЗОПАСНОСТЬ (#1476): live subprocess пока BLOCKED до квалификации effective runtime.
+    `--allowedTools` задаёт autoapproval, `--tools` — builtin set; ни один из них не является
+    OS sandbox и не доказывает отсутствие MCP/plugins/hooks из наследуемой конфигурации.
+    Граница адаптера — policy enforcement, не security isolation; OS-изоляция не квалифицирована.
+    Наличие бинаря или совпадение версии не снимает отказ. См. docs/claude-readonly-contract.md.
 
     v3.10.0 Usage Truth: `--output-format json` -> claude usage (input/output_tokens) + total_cost_usd
     ИЗМЕРЯЮТСЯ и пишутся в _record_call (provider=claude-cli). Claude CLI usage больше НЕ исчезает.
 
-    runner инъектируется (офлайн-selftest без вызова CLI); заменяет subprocess.run, а не весь вызов —
-    production-path (time.monotonic, json parse, _record_call, retries) проходит полностью. Ключ не требуется.
+    runner — доверенная офлайн-инъекция для тестов; её callable НЕ изолирован этим адаптером.
+    Разбор ответа, usage и retries проверяются через неё, но это НЕ квалификация subprocess.
 
     Устойчивость к транзиентам (находка F-011, Real-Product Qualification): транзиентные сбои API
     (5xx/429/**529 Overloaded**, сетевые, subprocess-timeout) ретраятся с экспоненциальным backoff+jitter,
@@ -371,24 +387,34 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
     есть — поэтому `--review`/`--author`/`--reevaluate-only` были недоступны с провайдером claude-cli,
     а обычный прогон работал. Разделитель снимает класс целиком: после `--` любой текст — позиционный
     аргумент, чем бы он ни начинался."""
-    
-    
-    
-    
+
+
+
+
     from ai_ops_kit.providers.orchestrator_providers import claude_binary, claude_missing_message
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     binary = "claude"
     if runner is None:
         binary = claude_binary()
         if not binary:
             raise RuntimeError(claude_missing_message())
-    cmd = [binary, "-p", "--output-format", "json",
-           "--allowedTools", "Read", "Grep", "Glob"]
+
+
+
+        raise ProviderRefusal(
+            "readonly_runtime_unqualified",
+            "Read-only ограничения Claude runtime не подтверждены: builtin tools, MCP, "
+            "plugins и наследуемые settings/hooks. Отказ до запуска subprocess; "
+            "нужна отдельная квалификация runtime (docs/claude-readonly-contract.md). "
+            "Для офлайн-проверки используйте --provider mock; для живой работы явно выберите "
+            "настроенный API-провайдер (--provider anthropic|openai|qwen).",
+            "claude-cli", model or "")
+    cmd = [binary, "-p", "--output-format", "json", *CLAUDE_READONLY_PROFILE]
     if model:
         cmd += ["--model", model]
     cmd += ["--", prompt]
@@ -396,16 +422,16 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
     import json as _json
     import time
     import random
-    
+
     _run = runner if runner is not None else (lambda c: subprocess.run(c, capture_output=True, text=True, timeout=timeout))
 
     last = ""
     for _attempt in range(max_attempts):
         _t0 = time.monotonic()
         try:
-            
-            
-            
+
+
+
             if runner is None:
                 with _writer_serialization_lock(notify=lambda m: sys.stderr.write(m + "\n")):
                     r = _run(cmd)
@@ -416,9 +442,9 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
             if _attempt + 1 >= max_attempts:
                 break
             _backoff(_attempt); continue
-        
-        
-        
+
+
+
         except FileNotFoundError:
             raise RuntimeError(claude_missing_message(
                 extra=f"путь был проверен и исчез до запуска: {cmd[0]}")) from None
@@ -440,7 +466,7 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
                 # детерминированный: повтор его не лечит. Наружу — последствие и оба выхода фразой.
                 if _env_unavailable_envelope(d):
                     raise ProviderEnvUnavailableError("claude-cli", last)
-                
+
                 if _session_limit(last):
                     raise ProviderLimitError("claude-cli", last, _reset_hint(last))
                 if _transient(last) and _attempt + 1 < max_attempts:
@@ -450,10 +476,10 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
             _record_call(d.get("model") or model or "claude-code-local",
                          u.get("input_tokens"), u.get("output_tokens"), time.monotonic() - _t0,
                          provider="claude-cli", cost=d.get("total_cost_usd"))
-            
-            
-            
-            
+
+
+
+
             result = d.get("result") or ""
             if not result.strip():
                 raise ProviderRefusal("empty_answer", "claude -p вернул пустой result (rc=0)",
@@ -468,26 +494,26 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
             _env_d = None
         if _env_unavailable_envelope(_env_d):
             raise ProviderEnvUnavailableError("claude-cli", last)
-        
-        
-        
+
+
+
         if _session_limit(last):
             raise ProviderLimitError("claude-cli", last, _reset_hint(last))
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if not _transient(last):
             raise RuntimeError(
                 "claude -p отказал структурно (код %s), повтор не назначен — он не сделал бы "
@@ -499,8 +525,10 @@ def _claude_cli_call(prompt, model=None, runner=None, timeout=600, max_attempts=
 
 
 def make_claude_cli_provider(model=None, runner=None):
-    """callable(prompt)->text через локальный `claude -p` (tool-less). См. _claude_cli_call: executing-adapter
-    контракт — Claude предлагает, кит исполняет и блокирует по гейтам."""
+    """Текст-провайдер; live Claude BLOCKED до read-only квалификации (#1476).
+
+    runner — доверенная офлайн-инъекция; она не доказывает изоляцию реального CLI.
+    """
     return lambda prompt: _claude_cli_call(prompt, model=model, runner=runner)
 
 

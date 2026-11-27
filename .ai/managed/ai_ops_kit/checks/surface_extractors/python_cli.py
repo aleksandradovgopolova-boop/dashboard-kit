@@ -95,10 +95,10 @@ def _click_command_name(dec: ast.expr, func_name: str) -> str | None:
         return name_kw.value.value
     if explicit:
         return None  # явное имя задано, но не литерал — доказать нельзя, пропускаем (симметрия с argparse)
-    
-    
-    
-    
+
+
+
+
     name = func_name.lower().replace("_", "-")
     left, sep, suffix = name.rpartition("-")
     if sep and suffix in {"command", "cmd", "group", "grp"}:

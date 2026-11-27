@@ -301,7 +301,7 @@ def _finalize(stack: dict, root: Path, ci_for_lang: dict | None, make_targets: s
                     break
         if not cmds.get(slot) and (ci_for_lang or {}).get(slot):
             cmds[slot], ev[slot] = (ci_for_lang or {})[slot]
-        
+
         if cmds.get(slot) and not ev.get(slot):
             cmds[slot] = None
         cmds.setdefault(slot, None)
@@ -365,7 +365,7 @@ def _node_stack(d: Path, root: Path) -> dict:
     slots = _Slots()
 
     def cmd(slot: str, *names: str) -> str | None:
-        
+
         for n in names:
             if n in scripts:
                 slots.put(slot, f"{run} {n}", "package.json")
@@ -407,7 +407,7 @@ def _python_commands(d: Path, dep_src: Callable) -> "_Slots":
     hooks = _precommit_hooks(d)
     PRECOMMIT = ".pre-commit-config.yaml"
 
-    
+
     if _has_section(pyproject, "tool.pytest.ini_options"):
         s.put("test", "pytest", "pyproject.toml")
     if (d / "pytest.ini").is_file():
@@ -421,10 +421,10 @@ def _python_commands(d: Path, dep_src: Callable) -> "_Slots":
     if dep_src("pytest"):
         s.put("test", "pytest", dep_src("pytest"))
     if _has_py_tests(d):
-        
+
         s.put("test", "pytest", "tests/" if (d / "tests").is_dir() else "test_*.py")
 
-    
+
     if _has_section(pyproject, "tool.ruff") or _has_section(pyproject, "tool.ruff.lint"):
         s.put("lint", "ruff check .", "pyproject.toml")
     for name in (".ruff.toml", "ruff.toml"):
@@ -447,7 +447,7 @@ def _python_commands(d: Path, dep_src: Callable) -> "_Slots":
     if dep_src("flake8"):
         s.put("lint", "flake8", dep_src("flake8"))
 
-    
+
     if _has_section(pyproject, "tool.mypy"):
         s.put("typecheck", "mypy .", "pyproject.toml")
     for name in ("mypy.ini", ".mypy.ini"):
@@ -502,8 +502,8 @@ def _python_stack(d: Path) -> dict:
         if name in low:
             fw.append(name)
     pm = "poetry" if "[tool.poetry]" in deps_text else ("uv" if (d / "uv.lock").exists() else "pip")
-    
-    
+
+
     if pm == "poetry":
         install = "poetry install"
     elif pm == "uv":
@@ -514,7 +514,7 @@ def _python_stack(d: Path) -> dict:
         install = "pip install -e ."
     else:
         install = None
-    
+
     slots = _python_commands(d, dep_src)
     return {
         "language": "python",
@@ -548,7 +548,7 @@ def _detect_monorepo(root: Path) -> tuple:
             return True, marker
     sub = (list(root.glob("*/package.json")) + list(root.glob("packages/*/package.json"))
            + list(root.glob("apps/*/package.json")))
-    
+
     dirs = {p.parent.resolve() for p in sub}
     if len(dirs) > 1:
         return True, f"{len(dirs)} package.json в подкаталогах (apps/packages/*)"
@@ -558,10 +558,10 @@ def _detect_monorepo(root: Path) -> tuple:
 def detect(root: Path) -> dict:
     root = Path(root)
     stacks, undetermined = [], []
-    
+
     if (root / "package.json").exists():
         stacks.append(_node_stack(root, root))
-    
+
     if (root / "pyproject.toml").exists() or (root / "requirements.txt").exists():
         stacks.append(_python_stack(root))
     # go: lint — только при объявленном конфиге golangci-lint (иначе линтера в репо просто нет).
@@ -591,14 +591,14 @@ def detect(root: Path) -> dict:
         stacks.append(_simple_stack("java", src, root,
                                     {"build": f"{gradle} build", "lint": None,
                                      "typecheck": None, "test": f"{gradle} test"}))
-    
+
     if (root / "Cargo.toml").exists():
         stacks.append(_simple_stack("rust", ["Cargo.toml"], root,
                                     {"build": "cargo build", "lint": "cargo clippy",
                                      "typecheck": "cargo check", "test": "cargo test"}))
 
-    
-    
+
+
     ci_cmds = _ci_commands(root)
     make_targets, make_file = _make_targets(root)
     declared = _declared_commands(root, stacks)
@@ -606,7 +606,7 @@ def detect(root: Path) -> dict:
         _finalize(s, root, ci_cmds.get(s["language"]), make_targets, make_file,
                   declared.get(s["language"]))
 
-    
+
     monorepo, monorepo_reason = _detect_monorepo(root)
 
     ci = []
@@ -618,13 +618,13 @@ def detect(root: Path) -> dict:
     if not stacks:
         undetermined.append("стек не определён — нет известных манифестов (package.json/pyproject/go.mod/…)")
     for s in stacks:
-        
-        
+
+
         miss = [k for k, v in s["commands"].items() if v is None and k != "format"]
         if miss:
-            
-            
-            
+
+
+
             undetermined.append(
                 f"{s['language']}: не выведены команды {', '.join(miss)} — нет доказательства в репозитории "
                 "(конфиг инструмента / скрипт / Makefile-цель / шаг CI); задать вручную/подтвердить")
@@ -639,7 +639,7 @@ def detect(root: Path) -> dict:
         "schema_version": 1, "kind": "repository-profile", "status": "draft",
         "monorepo": monorepo, "monorepo_reason": monorepo_reason,
         "stacks": stacks, "ci": ci, "undetermined": undetermined,
-        
+
         "manifest_hash": manifest_fingerprint(root),
     }
 

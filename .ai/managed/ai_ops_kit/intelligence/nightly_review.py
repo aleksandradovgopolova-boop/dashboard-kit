@@ -268,8 +268,8 @@ def collect_delta(root: Path, since: str | None = None, *, focus: str | None = N
         "dimensions": nd.group_findings_by_axis(findings),
         "axis_counts": axis_counts,
         "false_positive_rate": false_positive_rate(root),
-        
-        
+
+
         "trends": compute_trends(read_history(root), findings),
         "axis_trends": compute_axis_trends(read_history(root), axis_counts),
         "timestamp": datetime.now().isoformat(),
@@ -298,7 +298,7 @@ def format_brief(delta: dict, root: Path) -> str:
 
     L = ["# Утренний обзор продукта", ""]
 
-    
+
     L += ["## Что изменилось", "", f"Точка отсчёта: {b.get('reason', 'не названа')}."]
     if b.get("kind") in ("fallback", "unreadable"):
         L.append("**Это не подтверждённая точка отсчёта** — часть изменений могла остаться за кадром "
@@ -308,7 +308,7 @@ def format_brief(delta: dict, root: Path) -> str:
     else:
         L.append("С тех пор изменений не зафиксировано.")
 
-    
+
     groups = delta.get("dimensions") or nd.group_findings_by_axis(findings)
     L += ["", "## Что я проверил — по осям", "", *nd.format_dimensions(groups, focus=delta.get("focus"))]
     if isinstance(plan.get("by_status"), dict):
@@ -316,22 +316,22 @@ def format_brief(delta: dict, root: Path) -> str:
     elif plan.get("error"):
         L.append(f"- план: {plan['error']}")
 
-    
-    
+
+
     trend = delta.get("trends") or compute_trends(read_history(root), findings)
     L += ["", "## Тренд за неделю", ""]
     L += [*format_trends(trend), "", *nd.format_axis_trends(delta.get("axis_trends") or {})]
 
-    
+
     L += format_hotspots_section(root)
 
-    
-    
-    
+
+
+
     fpr = delta.get("false_positive_rate") or false_positive_rate(root)
     L += ["", "## Насколько можно доверять моим флагам", "", format_false_positive_rate(fpr)]
 
-    
+
     L += ["", "## Чего я не стал делать и почему", ""]
     L.append("- **Ничего не правил**: v0 работает только на чтение. Это граница выпуска, а не "
              "недоделка: автофикс без измеренного false-positive rate — тот же ложный green, "
@@ -344,7 +344,7 @@ def format_brief(delta: dict, root: Path) -> str:
     if not unknown and open_prs is not None:
         L.append("- Остальное из объявленного объёма проверено.")
 
-    
+
     L += ["", "## Где нужно твоё решение", ""]
     asks = []
     if b.get("kind") == "unreadable":
@@ -359,7 +359,7 @@ def format_brief(delta: dict, root: Path) -> str:
     else:
         L.append("- Ничего не жду. Решений от тебя сейчас не требуется.")
 
-    
+
     L += ["", "## Что важнее всего сегодня", ""]
     if bad:
         L.append(f"Разобрать «{bad[0]['check']}»: {bad[0]['detail'][:160]}")
@@ -497,8 +497,8 @@ def run_autofix(root: Path, *, dry_run: bool = False, enabled=None, date: str | 
                 "reason": "класс A пуст — включённых фиксеров нет (открывается решением владельца)"}
 
     pol = policy if policy is not None else policy_engine.load_policy(root)
-    
-    
+
+
     if policy_engine.level_for("nightly_autofix", pol) == "suggest":
         return {**result, "status": "suggest-only",
                 "reason": "policy: nightly_autofix=suggest — только рекомендация, правку не готовлю"}
@@ -579,14 +579,14 @@ def run_nightly(root: Path, *, since: str | None = None, deliver: bool = True,
     -> {"brief", "receipt"|None, "baseline"}. Это ровно то, что зовёт сгенерированный CI-workflow.
     """
     root = Path(root)
-    
-    
+
+
     focus = nd.rotate_focus(root, advance=True)
     delta = collect_delta(root, since, focus=focus)
     brief = format_brief(delta, root)
-    
-    
-    
+
+
+
     record_history(root, delta.get("findings", []), axis_counts=delta.get("axis_counts"))
     receipt = deliver_brief(root, brief, date=date) if deliver else None
     return {"brief": brief, "receipt": receipt, "baseline": delta.get("baseline")}
@@ -619,13 +619,13 @@ def main():
     args = ap.parse_args()
 
     if args.selftest:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         print(__doc__)
         print("Проверки модуля — в tests/unit/ (AGENTS.md: selftest не живёт в продакшн-модуле).")
         return 0
@@ -636,9 +636,9 @@ def main():
         return 1
 
     if args.confirm:
-        
-        
-        
+
+
+
         rec = confirm_review(root, dismissed=args.dismiss)
         print(f"обзор подтверждён на {rec['commit_sha'] or 'неизвестном коммите'} "
               f"({rec['confirmed_at']}) — завтрашняя дельта пойдёт отсюда")
@@ -649,9 +649,9 @@ def main():
         return 0
 
     if args.autofix:
-        
-        
-        
+
+
+
         res = run_autofix(root, dry_run=args.dry_run)
         if args.json:
             print(json.dumps(res, indent=2, ensure_ascii=False))
@@ -675,7 +675,7 @@ def main():
         return 0
 
     if args.deliver:
-        
+
         out = run_nightly(root, since=args.since)
         if args.json:
             print(json.dumps(out, indent=2, ensure_ascii=False))

@@ -26,12 +26,12 @@ def profile(adrs: dict) -> dict:
 
 def fitness(adrs: dict):
     errors = []
-    
+
     for aid, d in adrs.items():
         for qa in d.get("quality_attributes", []) or []:
             if qa.get("effect") == "degrades" and not (qa.get("note") or "").strip():
                 errors.append(f"{aid}: degrades '{qa.get('attribute')}' без note (скрытая деградация)")
-    
+
     active = {aid: d for aid, d in adrs.items() if d.get("status") in ACTIVE}
     prof = profile(active)
     for attr, effs in prof.items():

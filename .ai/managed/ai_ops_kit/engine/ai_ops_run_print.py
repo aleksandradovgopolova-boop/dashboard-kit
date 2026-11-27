@@ -38,7 +38,7 @@ def _print_pipeline_product(r):
         tail = (f" Не закрыто: {', '.join(unmet)}." if unmet else "")
         print("Пока не готово к PR." + files + tail)
 
-    
+
     _ac = r.get("acceptance_criteria") or {}
     if not _ac.get("declared") and ready:
         print("  ⚠ критериев приёмки не было — «готово» значит «внесено и проверки закрыты», "
@@ -58,7 +58,7 @@ def _print_pipeline_product(r):
     for _c in (c for c in _caveats if c):
         print(f"  ⚠ {_c}")
 
-    
+
     pr = r.get("draft_pr") or {}
     if pr.get("url"):
         print(f"\nДальше: черновик PR открыт — {pr['url']}.")
@@ -112,9 +112,9 @@ def _print_pipeline(r, audience="technical"):
     print(f"  tool-loop: {loop.get('stopped')} · шагов {loop.get('steps')} · "
           f"правок через брокера {loop.get('applied_writes')} · "
           f"отклонено {loop.get('denied')}{_files_note}")
-    
-    
-    
+
+
+
     _by = {"broker": "через брокера", "shell": "напрямую в дереве (writer или shell)",
            "model-commit": "модель закоммитила сама"}.get(commit.get("produced_by"))
     if _changed and not (loop.get("applied_writes") or 0):
@@ -136,11 +136,11 @@ def _print_pipeline(r, audience="technical"):
     _iso = r.get("isolation") or {}
     iso = _iso.get("worktree")
     print(f"  изоляция: {iso or 'основное дерево (без worktree)'}")
-    
-    
-    
-    
-    
+
+
+
+
+
     if _iso.get("sandboxed") is False and work_produced(r):
         _net = ("сеть доступна модельному shell" if _iso.get("network") == "on"
                 else "сеть ограничена")
@@ -171,10 +171,10 @@ def _print_pipeline(r, audience="technical"):
     # выполненного было бы тем же смешением, что и «доставлено» = «выполнено»: сверка, нашедшая
     # невыполненный критерий, обязана назвать ЕГО, а не сообщить, что она состоялась.
     _ac = r.get("acceptance_criteria") or {}
-    
-    
-    
-    
+
+
+
+
     if not _ac.get("declared") and r.get("ready_for_pr"):
         print("  ⚠ критериев приёмки не было объявлено — проверять было нечего; «готово» здесь "
               "означает «изменение внесено и гейты закрыты», а не «результат сверен с ожиданием»")
@@ -189,8 +189,8 @@ def _print_pipeline(r, audience="technical"):
             if c.get("reason"):
                 print(f"        основание ревьюера: {str(c['reason'])[:140]}")
     elif _ac.get("declared"):
-        
-        
+
+
         _weak = _ac.get("judge_only") or []
         print(f"  критерии приёмки сверены с результатом: выполнены все {_ac.get('count')} "
               f"· подтверждено цитатой {_ac.get('quote_verified')} "
@@ -200,8 +200,8 @@ def _print_pipeline(r, audience="technical"):
                   f" — эти критерии проверь сам")
     print(f"  гейты: оценено {len(gates.get('evaluated') or [])} · "
           f"не закрыто {gates.get('unmet') or []} · блокирует: {gates.get('blocked')}")
-    
-    
+
+
     _cl = gates.get("closure") or {}
     if _cl:
         _op = _cl.get("judged_or_human") or []
@@ -260,8 +260,8 @@ def _print_contour_consistency(r):
     cc = r.get("contour_consistency") or {}
     rep = cc.get("report")
     if not rep:
-        
-        
+
+
         return
     try:
         from ai_ops_kit.ui import presenter
@@ -272,12 +272,12 @@ def _print_contour_consistency(r):
         print(presenter.render(msg, audience=presenter.audience_from_config(
             r.get("child_root") or ".")))
     except Exception as _e:  # noqa: BLE001 — вывод отчёта не роняет прогон...
-        
+
         print(f"  ⚠ находки связности контуров есть, показать не смог: {type(_e).__name__}: {_e}")
 
 
 def print_human(r):
-    
+
     if r.get("kind") == "execution-pipeline":
         # #702-work: на аудитории product человек видит СУТЬ результата (готово/нет + что изменилось
         # + честные оговорки + следующий шаг), тех-разбор — «по запросу» (communication-policy:
@@ -291,9 +291,9 @@ def print_human(r):
             except Exception:  # noqa: BLE001 — печать результата не роняет прогон
                 _aud = "technical"
         return _print_pipeline(r, audience=_aud)
-    
-    
-    
+
+
+
     if "base_workflow" not in r:
         print(f"ai-ops run → WorkItem {r.get('workitem_id', '?')} [{r.get('status', '?')}]")
         if r.get("blocked_by"):
@@ -301,7 +301,14 @@ def print_human(r):
         if r.get("error"):
             print(f"  {r['error']}")
         return
-    print(f"ai-ops run → WorkItem {r['workitem_id']} [{r['status']}]")
+    refusal = r.get("provider_refusal") or {}
+    blocked = ""
+    if (isinstance(refusal, dict)
+            and refusal.get("reason") == "readonly_runtime_unqualified"
+            and refusal.get("provider") == "claude-cli"):
+        blocked = (f"\n  {refusal['detail']}"
+                   f"\n  продолжение со стадии {r.get('next_action')}; состояние: {r.get('run_state')}")
+    print(f"ai-ops run → WorkItem {r['workitem_id']} [{r['status']}]{blocked}")
     print(f"  base_workflow: {r['base_workflow']} · execution: {r['execution']} ({r['runtime']})")
     if r["required_tracks"]:
         print(f"  треки (required): {', '.join(r['required_tracks'])}")

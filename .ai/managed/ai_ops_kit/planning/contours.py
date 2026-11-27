@@ -204,10 +204,10 @@ def sot_for(model: dict, cid: str, child_root=None) -> list:
     base = [dict(s) for s in ((contour(model, cid) or {}).get("source_of_truth") or [])]
     declared = (repo_sot(child_root) if child_root is not None else {}).get(cid) or []
     if declared:
-        
-        
-        
-        
+
+
+
+
         for s in base:
             s["required"] = False
             s["superseded_by"] = "repository"
@@ -258,8 +258,8 @@ def sot_state(child_root: Path, model: dict | None = None) -> dict:
     out = {}
     for c in model.get("contours") or []:
         req_missing, opt_missing, present = [], [], []
-        
-        
+
+
         for s in sot_for(model, c["id"], root):
             rel = s.get("path") or ""
             if _resolve(root, rel):
@@ -292,11 +292,11 @@ def derive_affects(child_root: Path, changed_files: list, model: dict | None = N
     rules = repo_signal_rules(root) if rules is None else rules
     files = [unquote_git_path(f).replace("\\", "/") for f in (changed_files or [])]
 
-    
-    
-    
-    
-    
+
+
+
+
+
     pats_by = {cid: signals_for(model, cid, overrides, rules) for cid in contour_ids(model)}
     exact_owner = {}
     for _cid, _pats in pats_by.items():
@@ -313,7 +313,7 @@ def derive_affects(child_root: Path, changed_files: list, model: dict | None = N
             if hit_exact:
                 matched.append(f)
                 continue
-            
+
             owners = exact_owner.get(f.lstrip("./") if f.startswith("./") else f, set())
             if owners and cid not in owners:
                 continue
@@ -321,8 +321,8 @@ def derive_affects(child_root: Path, changed_files: list, model: dict | None = N
                 matched.append(f)
         matched_by[cid] = matched
 
-    
-    
+
+
     present = signals_present(root, {cid: pats for cid, pats in pats_by.items()
                                      if pats and not matched_by[cid]})
 
@@ -395,10 +395,10 @@ def reconcile(child_root: Path, declared: dict, changed_files: list,
             decl[k] = UNKNOWN
     findings = []
 
-    
-    
-    
-    
+
+
+
+
     for k in sorted(set(decl) - known):
         findings.append({"id": "unknown_contour_declared", "contour": k, "severity": "major",
                          "detail": f"в affects заявлен контур '{k}', которого в модели нет "
@@ -413,12 +413,12 @@ def reconcile(child_root: Path, declared: dict, changed_files: list,
                              "detail": d["reason"]})
             continue
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         if d["state"] == CHANGED:
             touched = _sot_touched(child_root, cid, changed_files, model)
             if not touched:
@@ -428,9 +428,9 @@ def reconcile(child_root: Path, declared: dict, changed_files: list,
                     "detail": f"изменение трогает {', '.join(d['matched'][:4])}, а описание контура "
                               f"не обновлено (ожидался один из: {', '.join(sot)})"})
 
-        
-        
-        
+
+
+
         if d["state"] == CHANGED and want != CHANGED:
             findings.append({"id": "undeclared_change", "contour": cid, "severity": "info",
                              "detail": f"контур затронут, но не заявлен в affects "
@@ -490,8 +490,8 @@ def main(argv=None):
     files = [x.strip() for x in (ns.files or "").split(",") if x.strip()]
 
     if ns.cmd == "reconcile":
-        
-        
+
+
         declared = {}
         if ns.workitem:
             wp = Path(ns.workitem)
@@ -506,7 +506,7 @@ def main(argv=None):
         print(f"СВЯЗНОСТЬ КОНТУРОВ: {rep['verdict']} · сверяемо {rep['comparable']}")
         for f in rep["findings"]:
             print(f"  {f['severity']:6} {f['id']} / {f['contour']}: {f['detail']}")
-        
+
         return 0
 
     der = derive_affects(root, files, model)

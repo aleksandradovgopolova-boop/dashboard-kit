@@ -139,8 +139,7 @@
   padding: var(--glass-control-pad);
   border-radius: var(--radius-md);
 }
-/* One existing spacing token on all four sides, without optical offsets. */
-.dk-root .dk-glass .dk-btn,
+/* Поля и селекты сохраняют собственную геометрию. */
 .dk-root .dk-glass .dk-select > .dk-select__trigger,
 .dk-root .dk-glass .dk-pager__size select {
   padding: var(--glass-control-pad);
@@ -173,13 +172,14 @@
   background: var(--glass-control-sheen), var(--glass-hover-strong);
 }
 @media (hover: hover) and (pointer: fine) {
-  .dk-glass :is(.dk-field, .dk-search, .dk-select__trigger, .dk-iconbtn):hover,
-  .dk-glass .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost):hover {
+  .dk-glass :is(.dk-field, .dk-search, .dk-select__trigger):hover,
+  .dk-glass .dk-iconbtn:where(:not(:disabled):not([aria-disabled="true"])):hover,
+  .dk-glass .dk-btn:where(:not(.dk-btn--primary):not(.dk-btn--ghost):not(:disabled):not([aria-disabled="true"])):hover {
     background: var(--glass-control-sheen), var(--glass-hover);
     color: var(--ink);
   }
   .dk-glass .dk-seg button:not([aria-pressed="true"]):not(.is-on):hover,
-  .dk-glass .dk-btn--ghost:hover,
+  .dk-glass .dk-btn--ghost:where(:not(:disabled):not([aria-disabled="true"])):hover,
   .dk-glass .dk-menu__item:hover,
   .dk-glass .dk-fold__head:hover { background: var(--glass-hover); }
   .dk-glass .dk-seg button[aria-pressed="true"]:hover,
@@ -194,7 +194,6 @@
 
 /* Фокус виден отдельным контуром. Мягкий ореол дополняет, не заменяет его. */
 .dk-glass .dk-select__trigger:focus-visible,
-.dk-glass .dk-tab:focus-visible,
 .dk-glass .dk-field:focus-within,
 .dk-glass .dk-search:focus-within {
   outline: var(--focus-width) solid var(--brand);
@@ -424,8 +423,9 @@
 .dk-root .dk-glass :is(.dk-field,.dk-search) > svg.dk-i{ margin-inline-start:var(--field-inset); }
 .dk-root .dk-glass .dk-table :is(.dk-td-pick,.dk-th-pick){ padding:var(--space-1); }
 
-/* An inset edge preserves the size variant and even content gutters. */
+/* Внутренняя кромка не отнимает место у содержимого. */
 .dk-root .dk-glass .dk-btn{ border:0; }
+.dk-root .dk-glass .dk-iconbtn { border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
 .dk-root .dk-glass .dk-btn:not(.dk-btn--primary):not(.dk-btn--ghost){ border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
 
 
@@ -441,12 +441,15 @@
 .dk-root .dk-glass .dk-select > .dk-select__trigger,
 .dk-root .dk-glass .dk-pager__size select{ border:0; box-shadow:inset 0 0 0 var(--hairline) var(--glass-edge-soft); }
 .dk-root .dk-glass .dk-select > .dk-select__trigger { padding-inline-start:var(--field-inset); }
-.dk-root .dk-glass :is(.dk-btn,.dk-iconbtn,.dk-seg button):focus-visible {
+.dk-glass :is(.dk-btn,.dk-iconbtn):where(:not(.dk-btn--primary):not(:disabled):not([aria-disabled="true"])):active {
+ background:var(--glass-control-sheen),var(--glass-hover-strong); color:var(--ink);
+}
+.dk-root .dk-glass :is(.dk-btn,.dk-iconbtn,.dk-seg button,.dk-tab):focus-visible {
  outline:none; box-shadow:none; background:var(--control-focus); color:var(--control-focus-ink);
  text-decoration:underline; text-underline-offset:var(--space-1);
 }
 @media (forced-colors: active) {
- .dk-root .dk-glass :is(.dk-btn,.dk-iconbtn,.dk-seg button):focus-visible {
+ .dk-root .dk-glass :is(.dk-btn,.dk-iconbtn,.dk-seg button,.dk-tab):focus-visible {
   outline:var(--focus-width) solid Highlight;
  }
 }

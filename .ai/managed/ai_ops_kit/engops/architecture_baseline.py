@@ -31,7 +31,7 @@ _CODE_EXT = {".py", ".ts", ".tsx", ".js", ".jsx", ".vue", ".svelte", ".go", ".rs
 
 
 def _git_sha(root: Path):
-    
+
     try:
         rc, out, _ = git(root, "rev-parse", "HEAD")
         return out or None if rc == 0 else None
@@ -310,7 +310,7 @@ def diff_baselines(baseline_old, baseline_new):
         new_data = baseline_new.get(axis, {})
         if old_data == new_data:
             continue
-        
+
         old_keys = set(old_data.keys()) if isinstance(old_data, dict) else set()
         new_keys = set(new_data.keys()) if isinstance(new_data, dict) else set()
         added = new_keys - old_keys
@@ -331,29 +331,29 @@ def architecture_signals_from_diff(changed_files, baseline=None):
         return signals
     for f in changed_files:
         fp = str(f)
-        
+
         if any(p in fp for p in ("api/", "routes", "endpoints", "graphql", "proto/")):
             signals.add("breaking_api")
-        
+
         if any(p in fp for p in ("migrations/", "schema", "models/", "entities/")):
             signals.add("data_migration")
-        
+
         if any(p in fp for p in ("deploy", "docker", "k8s/", "terraform/", "infrastructure/",
                                   ".github/workflows", "Dockerfile", "docker-compose")):
             signals.add("deployment_change")
-        
+
         if any(p in fp for p in ("services/", "integrations/", "adapters/", "clients/")):
             signals.add("new_integration")
             signals.add("new_service")
-        
+
         if any(p in fp for p in ("shared/", "contracts/", "interfaces/", "boundary/")):
             signals.add("cross_boundary_change")
-        
+
         if any(p in fp for p in ("architecture/", "core/", "domain/", "kernel/")):
             signals.add("architecture_change")
-    
+
     if baseline and signals:
-        
+
         pass  # baseline comparison handled separately via diff_baselines()
     return signals
 

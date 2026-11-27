@@ -51,7 +51,7 @@ def check(data):
                 e.append(f"{nm}: ttl_days должен быть > 0 (дедлайн ротации)")
             if k.get("rotation_owner") not in ("human", "automated"):
                 e.append(f"{nm}: rotation_owner ∈ [human, automated]")
-            
+
             blob = " ".join(str(v) for v in k.values())
             if _SECRETISH.search(blob):
                 e.append(f"{nm}: похоже на ЗНАЧЕНИЕ секрета в политике — только env_ref, не сам ключ")

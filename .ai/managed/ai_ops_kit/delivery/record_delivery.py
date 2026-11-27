@@ -87,7 +87,7 @@ def record_delivery_for_pr(root, feature_id, pr_number):
         return {"status": "unavailable", "note": "не распознан номер PR"}
     token = _cp._github_token()
     if not token:
-        
+
         return {"status": "unavailable",
                 "note": "нет GITHUB_TOKEN/GH_TOKEN — сверить слияние с GitHub нечем"}
     rc, url, _ = _pr._git(root, "remote", "get-url", "origin")
@@ -95,8 +95,8 @@ def record_delivery_for_pr(root, feature_id, pr_number):
     if not owner_repo:
         return {"status": "unavailable", "note": "не удалось определить owner/repo из origin"}
     owner, name = owner_repo
-    
-    
+
+
     canonical = _pr._canonical_owner_repo(owner, name, token)
     if canonical:
         owner, name = canonical
@@ -107,7 +107,7 @@ def record_delivery_for_pr(root, feature_id, pr_number):
         return {"status": "unavailable", "repository": repository,
                 "note": f"GitHub не ответил про PR #{pr_number} ({err or 'PR не найден'})"}
 
-    
+
     merged = bool(pr.get("merged_at"))
     merge_sha = pr.get("merge_commit_sha")
     head_sha = (pr.get("head") or {}).get("sha")
@@ -128,7 +128,7 @@ def record_delivery_for_pr(root, feature_id, pr_number):
             "recorded_note": "PR влит человеком; расписка записана постфактум после сверки с GitHub"}
 
     if merged and merge_sha:
-        
+
         chk = _pr._checks_for_sha(owner, name, merge_sha, token)
         receipt = {**base, "status": "reconciled", "commit_sha": merge_sha,
                    "remote_sha": merge_sha, "merged": True, "sha_verified": True,
@@ -142,8 +142,8 @@ def record_delivery_for_pr(root, feature_id, pr_number):
                 "commit_sha": merge_sha, "pr_number": pr.get("number"), "pr_url": html_url,
                 "sha_verified": True, "checks_verified": _pr.checks_verified(chk), "path": str(rp)}
 
-    
-    
+
+
     status = "not-delivered" if state == "open" else "mismatch"
     receipt = {**base, "status": status, "commit_sha": head_sha, "remote_sha": head_sha,
                "merged": False, "sha_verified": False}
@@ -247,7 +247,7 @@ def access_preflight(operations, probe):
             observed = probe(surface, operation)
         except Exception:  # noqa: BLE001 — внешняя граница: неизвестный сбой блокирует доступ
             observed = {"status": "BLOCKED", "code": "probe_exception"}
-        
+
         results.append({"surface": surface, "operation": operation,
                         "status": observed.get("status", "BLOCKED"),
                         "code": observed.get("code"), "required": op.get("required", True)})
@@ -259,7 +259,7 @@ def _observe(callback):
         result = callback()
         if not isinstance(result, dict):
             return {"status": "BLOCKED"}
-        
+
         return {k: result[k] for k in ("status", "source", "version", "sha", "artifact_digest", "environment")
                 if k in result}
     except Exception:  # noqa: BLE001 — неизвестный ответ приёмки не становится успехом
@@ -276,7 +276,7 @@ def _preflight_checks(preflight, checks):
         checked = checks()
         if not isinstance(checked, list) or any(not isinstance(c, dict) for c in checked):
             raise ReleaseBlocked("результаты обязательных проверок недоступны")
-        
+
         return ([{k: p[k] for k in ("surface", "operation", "status", "code", "required") if k in p}
                  for p in access],
                 [{k: c[k] for k in ("name", "status", "source", "inputs_digest", "kind", "sha") if k in c}
@@ -312,7 +312,7 @@ def deliver(root, *, owner, expected, checks, recovery, preflight, deploy,
                   "preflight": access, "observed_at": now, "deploy_exit_code": None,
                   "required_ci": required_ci_contexts(root),
                   "status": "BLOCKED"})
-        
+
         trial_observation = {**expected, "status": "PASS", "source": "contract-preflight"}
         trial = {**record, "runtime": trial_observation, "public": trial_observation,
                  "deploy_exit_code": 0}
@@ -324,9 +324,9 @@ def deliver(root, *, owner, expected, checks, recovery, preflight, deploy,
             record["status"], record["reason"] = confirmation(record)
             record = _safe_metadata(record)
             receipts.atomic_json(path, record)
-            
+
             return {**record, "path": str(path), "action": "reconcile"}
-        
+
         receipts.atomic_json(path, record)
         try:
             record["deploy_exit_code"] = deploy()

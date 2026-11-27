@@ -80,7 +80,7 @@ def scope(root: Path, base: str | None, stage: str | None) -> dict:
     """Решение объёма проверки для текущего изменения. Всегда возвращает ответ (fail-closed)."""
     changed = changed_paths(root, base)
     if changed is None:
-        
+
         return {"tier": "full", "full_command": True,
                 "impact_status": verification_tiers.IMPACT_TARGETED_TESTS_NOT_FOUND,
                 "changed_files": [], "affected_tests": [], "targeted_command": None,
@@ -89,7 +89,7 @@ def scope(root: Path, base: str | None, stage: str | None) -> dict:
                 "degraded": True, "degrade_reason": "git-unavailable", "stacks": []}
     result = verification_tiers.select_tests(changed, str(root), lifecycle_intent=stage)
     result["stacks"] = _stacks(root)
-    
+
     non_python_sources = any(f.endswith(repo_graph.JS_TS_EXTENSIONS) for f in changed)
     result["degraded"] = (result["tier"] == "full"
                           and result["impact_status"] == verification_tiers.IMPACT_TARGETED_TESTS_NOT_FOUND)
@@ -162,7 +162,7 @@ def _present(root: Path, result: dict) -> None:
                                "деградация, а правильный объём для такого изменения.",
                 technical=technical))
         return
-    
+
     cmd = result.get("targeted_command")
     summary = (f"Для итерации достаточно {_TIER_HUMAN[tier]}: {len(affected)} тест-файл(ов). "
                "Полный набор остаётся обязателен на слиянии и выпуске.")

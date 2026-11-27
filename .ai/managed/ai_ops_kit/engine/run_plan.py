@@ -28,36 +28,16 @@ if _root is not None and str(_root) not in _sys.path:
 import argparse
 import hashlib
 import json
-import re
 import sys
 from pathlib import Path
 
 import yaml
 
 from ai_ops_kit.shared.budget import declared_limits
+from ai_ops_kit.shared.work_areas import WORKITEM_ID_RE, validate_workitem_id  # noqa: F401 — прежние импорты публичного валидатора сохранены
 
 PKG = next((_p for _p in Path(__file__).resolve().parents if (_p / "VERSION").is_file()),
             Path(__file__).resolve().parents[1])
-
-
-WORKITEM_ID_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,63}$")
-
-
-def validate_workitem_id(wid):
-    """Возвращает wid если он безопасный slug, иначе бросает ValueError.
-
-    Отвергаем всё, что может выйти за пределы каталога worktree: разделители пути,
-    `..`, абсолютные пути, пустое/слишком длинное. Точку-в-начале и '..' режем явно.
-    """
-    if not isinstance(wid, str) or not WORKITEM_ID_RE.match(wid):
-        raise ValueError(
-            f"недопустимый workitem_id {wid!r}: разрешён slug {WORKITEM_ID_RE.pattern} "
-            "(нижний регистр, [a-z0-9._-], без '/', '\\', '..', 1..64 символа)")
-    if wid.startswith(".") or ".." in wid:
-        raise ValueError(f"недопустимый workitem_id {wid!r}: '.' в начале или '..' запрещены")
-    return wid
-
-
 def load(rel):
     return yaml.safe_load((PKG / rel).read_text(encoding="utf-8"))
 
@@ -69,11 +49,11 @@ def _base_workflow(signals):
         from ai_ops_kit.shared import ai_route
         d = ai_route.route(signals)
         return d.get("workflow"), d.get("reasons", []), d.get("classification_confidence", "normal")
-    
-    
-    
-    
-    
+
+
+
+
+
     except Exception as e:  # noqa: BLE001 — отказ роутера становится ВИДИМОЙ причиной fallback, не тишиной
         tt = signals.get("task_type")
         wfs = load("registry/workflows.yaml")["workflows"]
@@ -106,8 +86,8 @@ def _escalation_disclosure(base_wf, current_gates, confidence, wfs):
         "escalation_workflow": esc_wf,
         "gates_if_escalated": esc_gates,
     }
-    
-    
+
+
     try:
         from ai_ops_kit.gates import spec_levels
         cur_lvl = spec_levels.TASK_TYPE_LEVEL.get(base_wf, 0)
@@ -143,7 +123,7 @@ def build_plan(signals, workitem_id=None):
 
     task_text = signals.get("task_text", "")
     task_hash = hashlib.sha256(task_text.encode("utf-8")).hexdigest()[:12] if task_text else None
-    
+
     wid = validate_workitem_id(workitem_id) if workitem_id else (f"wi-{task_hash}" if task_hash else "wi-unknown")
     provisional, disclosure = _escalation_disclosure(base_wf, gates, classification_confidence, wfs)
     return {
@@ -153,9 +133,9 @@ def build_plan(signals, workitem_id=None):
         "required_tracks": required, "conditional_tracks": conditional, "skipped_tracks": skipped,
         "gates": gates, "route_reasons": route_reasons,
         "classification_confidence": classification_confidence,
-        
-        
-        
+
+
+
         "classification_provisional": provisional,
         "escalation_disclosure": disclosure,
         "execution_budget": declared_limits(signals.get("execution_budget")),
@@ -194,8 +174,8 @@ def validate_plan(data):
         for e in data.get(key, []) or []:
             if not e.get("reason"):
                 errors.append(f"{key}: у трека '{e.get('track')}' нет reason")
-    
-    
+
+
     disc = data.get("escalation_disclosure")
     if data.get("classification_provisional"):
         if not disc:

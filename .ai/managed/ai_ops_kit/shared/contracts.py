@@ -14,14 +14,16 @@ IDE и mypy получают навигацию и проверку; стары�
   DeliveryIntent    — намерение доставки (PR)
   DeliveryReceipt   — подтверждение доставки (PR смержён/не смержён)
   ContextBundle     — пакет контекста для WorkItem
-  WorkItemState      — состояние WorkItem
+  WorkItemState     — состояние WorkItem
+  GuardedLoadResult — различимые состояния защищённого чтения
+  RouteResult       — статическая проекция фактического Python-вывода route()
 
 Только аннотации, без runtime-логики. Импортируется как:
   from ai_ops_kit.shared.contracts import UsageRecord, PreflightResult
 """
 from __future__ import annotations
 
-from typing import Any, Literal, Optional, TypedDict
+from typing import Any, Literal, Optional, TypeAlias, TypedDict
 
 
 
@@ -48,7 +50,7 @@ class UsageRecord(TypedDict, total=False):
     cost_status: Literal["measured", "estimated", "unavailable"]
     latency: Optional[float]            # секунды
     trigger: Literal["initial", "retry", "review", "escalation", "fallback", "reevaluate"]
-    
+
     task_type: Optional[str]
     workflow: Optional[str]
     risk: Optional[str]
@@ -66,7 +68,7 @@ class UsageRecord(TypedDict, total=False):
 class PreflightCheck(TypedDict):
     """Одна проверка preflight."""
     ok: bool
-    
+
 
 
 class PreflightResult(TypedDict):
@@ -119,7 +121,7 @@ class GateResultV2(TypedDict, total=False):
     review_mode: Literal["read-only", "writer"]
     created_at: Optional[str]
     expires_at: Optional[str]
-    override: Optional[dict]
+    override: Optional[dict[str, Any]]
     reviewer_outcome: Optional[Literal["pass", "warn", "fail", "abstain"]]
     resolution: Optional[Literal["resolved", "pending_human"]]
     delivery_allowed: bool
@@ -150,8 +152,8 @@ class RunReportGates(TypedDict, total=False):
     met: list[str]
     unmet: list[str]
     not_applicable: list[str]
-    
-    
+
+
     closure: dict[str, Any]
 
 
@@ -161,32 +163,32 @@ class RunReport(TypedDict, total=False):
     Основной контракт между pipeline и вызывающим (ai_ops_run, CLI).
     ready_for_pr=True -> можно открывать draft PR.
     """
-    
+
     workitem_id: str
     run_id: str
     task: str
 
-    
+
     overall_status: str                 # done|blocked|blocked-preflight|error
     ready_for_pr: bool
     error: Optional[str]
 
-    
+
     checks: dict[str, RunReportCheck]
     reviews: list[RunReportReview]
     gates: RunReportGates
 
-    
+
     security_scan: dict[str, Any]
     evidence: dict[str, Any]
     changed_files: list[str]
     committed_sha: Optional[str]
 
-    
+
     delivery: dict[str, Any]
     handoff: dict[str, Any]
 
-    
+
     total_cost_usd: Optional[float]
     total_tokens_in: Optional[int]
     total_tokens_out: Optional[int]
@@ -281,6 +283,52 @@ class WorkItemState(TypedDict, total=False):
 
 
 
+class GuardedLoadAbsent(TypedDict):
+    state: Literal["absent"]
+
+
+class GuardedLoadCorrupt(TypedDict):
+    state: Literal["corrupt"]
+    reason: str
+
+
+class GuardedLoadOk(TypedDict):
+    state: Literal["ok"]
+
+    data: dict[Any, Any]
+
+
+GuardedLoadResult: TypeAlias = GuardedLoadAbsent | GuardedLoadCorrupt | GuardedLoadOk
+
+
+
+
+
+
+class RouteResult(TypedDict):
+    """Фактический результат shared.ai_route.route(), включая отсутствие выбора.
+
+    Реестры задают допустимые решения; JSON Schema задаёт внешний формат.
+    Эта проекция не проверяет схему и не копирует её enum/const/ограничения.
+    """
+    schema_version: int
+    workflow: str
+    selected_provider: str | None
+    selected_runtime: str | None
+    selected_model_class: str
+    execution_mode: str
+    reasons: list[str]
+    classification_confidence: str
+    required_capabilities: list[str]
+    missing_capabilities: list[str]
+    fallbacks: list[dict[str, str | None]]
+    human_approval_required: bool
+
+
+
+
+
+
 class KernelEvent(TypedDict, total=False):
     """Событие ядра — контракт между ядром и спутниками.
 
@@ -301,14 +349,14 @@ class KernelEvent(TypedDict, total=False):
     event_type: str
     workitem_id: str
     timestamp: str
-    
+
     status: str
     report: dict[str, Any]
     child_root: str
-    
+
     gate_results: list[dict[str, Any]]
     tested_revision: str
-    
+
     receipt: dict[str, Any]
 
 

@@ -50,7 +50,7 @@ def _delivery_record(child_root, a):
         if not js:
             print(f"  · сверка прошла, но сохранить расписку не удалось ({res.get('note')}) — повтори")
         return 1
-    
+
     if not js:
         print("  · не смог спросить GitHub (нет токена/доступа) — попробуй позже; "
               "расписку без подтверждения не пишу")
@@ -60,14 +60,14 @@ def _delivery_record(child_root, a):
 def _intent_delivery(task, child_root, signals, a):
     import yaml
     js = a.json
-    
-    
-    
+
+
+
     if (task or "").strip().lower() == "record":
         return _delivery_record(child_root, a)
-    
-    
-    
+
+
+
     from ai_ops_kit.planning import roadmap_manager as _rm
     from ai_ops_kit.planning import roadmap_milestones as _ms
     from ai_ops_kit.planning import delivery_planning as _dpn

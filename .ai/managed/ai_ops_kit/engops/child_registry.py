@@ -298,7 +298,7 @@ def product_status_snapshot(sections):
     -> тоже `unknown` (а не пропуск): «не знаю» называется, а не замалчивается.
     """
     sections = sections or {}
-    
+
     lower = {str(k).strip().lower(): v for k, v in sections.items() if isinstance(v, dict)}
     out = {}
     for needle, field in _PASSPORT_SECTIONS:
@@ -306,7 +306,7 @@ def product_status_snapshot(sections):
         if data is None:
             out[field] = {"state": "unknown", "value": None}
             continue
-        
+
         out[field] = {"state": data.get("state", "unknown"), "value": data.get("value")}
     return out
 
@@ -351,7 +351,7 @@ def scan_usage(child_root):
         if counted == 0 and (fd / "run-report.json").is_file():
             counted = 1
         runs += counted
-        
+
         tt = None
         for rel, key in (("run-plan.yaml", "base_workflow"), ("workitem.yaml", "task_type")):
             p = fd / rel
@@ -380,7 +380,7 @@ def build_summary(child_root, product_status=None):
     reg, _err = read_registration(child_root)
     return {
         "schema_version": 1, "kind": "ChildUsageSummary", "at": _now(),
-        
+
         "id": (reg or {}).get("id") or project_anon_id(child_root),
         "project": _project_name(child_root),
         "kit_version": _kit_version(child_root),
@@ -419,12 +419,12 @@ def collect(kit_root, child_roots, *, dry_run=False):
             report["errors"].append(f"{cr.name}: {err}")
             continue
         if not reg:
-            
+
             report["skipped"].append({"child": cr.name, "reason": "не отмечена"})
             continue
         landed = dict(reg, state="collected",
                       collected_from={"project": reg.get("project"), "at": _now()})
-        
+
         summ, summ_err = _load(summary_path(cr))
         if summ_err:
             report["errors"].append(f"{cr.name}: {summ_err}")
@@ -494,8 +494,8 @@ def coverage(kit_root):
         ver = r.get("kit_version") or "неизвестна"
         by_version[ver] = by_version.get(ver, 0) + 1
         summ = summaries.get(r.get("id"))
-        
-        
+
+
         mat = None
         if summ:
             ps = summ.get("product_status") or {}
@@ -635,7 +635,7 @@ def main(argv=None):
         return 1 if rep["errors"] else 0
 
     if a.cmd == "summary":
-        
+
         p, rep = write_summary(a.root)
         if a.json:
             print(json.dumps(dict(rep, saved_to=str(p)), ensure_ascii=False, indent=2))

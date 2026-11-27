@@ -49,8 +49,8 @@ def build_handoff(report, work_root=None):
     if loop.get("applied_writes"):
         completed.append(f"применено правок через брокера: {loop['applied_writes']}")
     elif commit.get("sha") and commit.get("changed_files"):
-        
-        
+
+
         completed.append(f"изменено файлов: {len(commit['changed_files'])} "
                          f"({commit.get('produced_by') or 'не через брокера'})")
     if commit.get("sha"):
@@ -96,9 +96,9 @@ def build_handoff(report, work_root=None):
         "schema_version": 1, "kind": "RunHandoff",
         "run_id": f"{wid}@{sha[:12]}" if sha else wid,
         "workitem_id": wid,
-        
-        
-        
+
+
+
         "base_binding": rep.get("base_binding") or {},
         "completed": completed,
         "decisions": rep.get("decisions") or [],
@@ -149,12 +149,12 @@ def resume_preflight(child_root, wid, base="main"):
     child_root = Path(child_root)
     reasons, revalidation, base_rewritten, base_moved = [], False, False, False
     hp = child_root / "features" / wid / "run-handoff.yaml"
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     _g = _ls.load_guarded(hp, required_keys=("kind", "workitem_id"))
     if _g["state"] == "absent":
         return {"can_resume": False, "revalidation_needed": False, "base_rewritten": False,
@@ -166,13 +166,13 @@ def resume_preflight(child_root, wid, base="main"):
     handoff = _g["data"]
     sha = handoff.get("resume_from_revision")
     saved_base_sha = ((handoff.get("base_binding") or {}).get("base_sha")) or None
-    
-    
+
+
     if not base:
         base = saved_base_sha or "main"
     branch = f"ai-ops/{wid}"
 
-    
+
     rc_b, _, _ = _git(child_root, "rev-parse", "--verify", branch)
     branch_exists = rc_b == 0
     if not branch_exists:
@@ -182,7 +182,7 @@ def resume_preflight(child_root, wid, base="main"):
     if not wt.is_dir():
         reasons.append(f"worktree {wt.relative_to(child_root)} отсутствует — будет пересоздан")
 
-    
+
     rc_base, _, _ = _git(child_root, "rev-parse", "--verify", base)
     base_resolvable = rc_base == 0
     if not base_resolvable:
@@ -190,7 +190,7 @@ def resume_preflight(child_root, wid, base="main"):
                        f"проверено; укажи --base явно. Требуется ревалидация из осторожности")
         revalidation = True
 
-    
+
     if sha:
         rc_h, _, _ = _git(child_root, "rev-parse", "--verify", sha)
         if rc_h != 0:
@@ -226,11 +226,11 @@ def resume_preflight(child_root, wid, base="main"):
                 revalidation = True
                 base_rewritten = True
             else:
-                
-                
-                
-                
-                
+
+
+
+
+
                 reasons.append(f"base '{base}' ушёл вперёд (fast-forward) с {saved_base_sha[:12]} до "
                                f"{cur_base_sha[:12]}: работа построена от старой базы и НЕ интегрирована с "
                                "новой. resume против сдвинувшейся базы запрещён — нужен явный replan "
@@ -239,7 +239,7 @@ def resume_preflight(child_root, wid, base="main"):
                 revalidation = True
                 base_moved = True
 
-    
+
     for d in handoff.get("decisions") or []:
         if isinstance(d, dict) and d.get("stale"):
             reasons.append(f"решение {d.get('id')} помечено устаревшим — пересмотреть")

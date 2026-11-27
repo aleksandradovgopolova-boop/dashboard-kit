@@ -82,7 +82,7 @@ def score_issue(item, dependents: int = 0, blocked_by_open: int = 0) -> Priority
     raw = benefit * conf - cost_penalty + block_boost - blocked_penalty
     score = round(max(0.0, min(1.0, raw)), 3)
 
-    
+
     unknown_attrs = [k for k in ("impact", "urgency", "strategic_alignment")
                      if get(k) in ("unknown", "unset")]
     if len(unknown_attrs) >= 2:

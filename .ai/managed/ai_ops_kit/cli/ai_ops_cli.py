@@ -34,9 +34,9 @@ from ai_ops_kit.shared import _bootstrap  # noqa: E402
 from ai_ops_kit.cli import human_help  # noqa: E402 — человеческая «дверь» (#675 Human API)
 
 INTENTS = {
-    
-    
-    
+
+
+
     "new":     ("создать новую фичу/каркас", "scaffold", True),
     "onboard": ("определить стек и команды репозитория", "onboard", False),
     "discuss": ("обсудить идею до спецификации (discovery)", "discuss", True),
@@ -49,15 +49,15 @@ INTENTS = {
     "review":  ("независимый ревью произведённого", "review", True),
     "status":  ("статус активной работы", "status", False),
     "health":  ("здоровье продукта", "health", False),
-    
-    
+
+
     "session": ("снимок телеметрии сессии + рекомендация (continue/compact/clear/new_session)",
                 "session", False),
-    
-    
-    
+
+
+
     "doctor":  ("проверить установку изнутри репозитория (полная проверка — у кита)", "doctor", False),
-    
+
     "next":    ("что взять следующим: где мы, что идёт, что блокирует, что можно параллельно", "next", False),
     # #539: владельческая карточка одной задачи — что с ней прямо сейчас: стадия, что готово, что
     # мешает и ПОЧЕМУ (последствием, простыми словами), следующий шаг и оценка стоимости. Read-only.
@@ -74,30 +74,30 @@ INTENTS = {
     "work":    ("проекция одной работы по id: work show <id> — стадия, кто ведёт, области, "
                 "зависимости, артефакты, решения из четырёх источников", "work", True),
     "model":   ("модель продуктового репозитория: классификация, контуры, пробелы, вопросы", "model", False),
-    
-    
+
+
     "contract": ("единый контракт продукта: идентичность/стандарт/артефакты/контуры/здоровье + вердикт",
                  "contract", False),
-    
-    
-    
+
+
+
     "propose": ("что продукту нужно дальше: рекомендации человеческим языком (что важно, где ценность "
                 "и риск) + можно ли двигаться; настройка кита и детали — по запросу", "propose", False),
-    
-    
+
+
     "products": ("флот продуктов: (без арг.) сводный вердикт по всем | register — добавить текущий репозиторий",
                  "products", False),
-    
-    
+
+
     "inspect": ("карточка одного продукта флота по id: контракт, вердикт, здоровье, риски", "inspect", True),
-    
-    
+
+
     "team":    ("статус команды: здоровье, риски, блокеры, следующие задачи, milestone", "team", False),
-    
-    
+
+
     "governance": ("governance продукта: политика автономии, журнал решений AI, переопределения человека",
                    "governance", False),
-    
+
     "roadmap": ("roadmap Now/Next/Later из плана + отклонение от авторского ROADMAP.md", "roadmap", False),
     "delivery": ("delivery-план из backlog под milestone: порядок, прогноз-оценка, риски, блокеры; "
                  "record <feature-id> --pr <n> — подтверждённая расписка для вручную влитого PR",
@@ -121,25 +121,25 @@ INTENTS = {
     # словом: classify | dedup | prioritize | graph. Без доступа к GitHub отвечает «не проверено»
     # с причиной, а не пустотой. Форма ещё меняется — интент experimental.
     "backlog": ("backlog из GitHub Issues: classify | dedup | prioritize | graph", "backlog", True),
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     "graph":   ("knowledge graph: build | trace <feature> | gaps — зачем функция существует и "
                 "измерен ли её исход, из плана+обучения+blueprint одним графом", "graph", True),
-    
-    
-    
-    
-    
+
+
+
+
+
     "replan":  ("перепланирование: сам переприоритизирует план под реальность (--apply — записать), "
                 "структурные изменения — предложением", "replan", False),
-    
-    
-    
-    
+
+
+
+
     "readout": ("пост-релизная петля: доставили -> дошли ли события в аналитику -> исход -> один "
                 "вердикт (без выгрузки аналитики — честно «ещё нечем проверить»)", "readout", False),
     # kit-product-scorecard: ЕДИНАЯ карта продукта кита из 5 метрик — кит мерит СЕБЯ как продукт, а
@@ -155,19 +155,19 @@ INTENTS = {
     # только чтение; `accept <id..>`/`accept --all` — пишет plan.yaml (явное действие владельца).
     "candidates": ("задачи-кандидаты (непокрытые направления роадмапа + наблюдения дочек): без "
                    "аргумента — список; accept <id..>|--all — принять пачкой в план", "candidates", True),
-    
-    
-    
+
+
+
     "portfolio": ("портфель отказов дочек обезличенно: какие классы повторяются по всем дочкам "
                   "(только паттерны и числа, без кода и путей)", "portfolio", False),
     # #1183: стиль кода держит машина — профиль линтеров поверх конфига дочки + заморозка существующего.
     "lint-profile": ("единый стиль кода: имена латиницей и границы слоёв поверх ваших линтеров; "
                      "--apply — включить, check — новое расхождение краснеет", "lint-profile", False),
-    
-    
-    
-    
-    
+
+
+
+
+
     "verify-scope": ("какой объём проверки нужен текущему изменению: tier/стадия (docs-only / "
                      "затронутые / полный) + причина + точечные тесты, когда осмысленно", "verify-scope", True),
 }
@@ -197,7 +197,7 @@ from ai_ops_kit.cli.human_facade import (  # noqa: E402,F401 — ре-экспо
     _inject_task_type,
     _first_nondir,
     _child_root_from,
-    _is_dir_safe,
+    _is_dir_safe, _add_execution_arguments,
 )
 
 
@@ -281,8 +281,8 @@ def _build_signals(intent, task, child_root, a):
         signals["feature"] = a.feature
     if intent in _SIGNAL_CARRY_INTENTS:
         signals = _carry_stored_signals(task, child_root, signals, a.feature)
-    
-    
+
+
     from ai_ops_kit.gates import gate_executor as _ge
     _rc = _ge.risk_calibrated_config(child_root)
     if _rc is not None and "risk_calibrated_enforcement" not in (signals.get("gates") or {}):
@@ -312,7 +312,7 @@ def _intent(name):
 
 
 from ai_ops_kit.cli.ai_ops_cli_intents import (  # noqa: E402,F401 — ре-экспорт для вызывающих/тестов
-    build_preview, _print_preview,
+    build_preview, _print_preview, _show_preview,
     _run_backlog, _BACKLOG_SUBS,
     _product_health_report, _product_risks,
     _intent_products, _intent_model, _intent_contract, _intent_propose,
@@ -352,7 +352,7 @@ for _name, _fn in (("products", _intent_products), ("delivery", _intent_delivery
                    ("propose", _intent_propose),
                    ("inspect", _intent_inspect), ("plan", _intent_plan),
                    ("session", _intent_session),
-                   
+
                    ("roadmap", _intent_roadmap), ("replan", _intent_replan),
                    ("new", _intent_new), ("governance", _intent_governance),
                    ("bootstrap", _intent_bootstrap), ("discuss", _intent_discuss),
@@ -362,7 +362,7 @@ for _name, _fn in (("products", _intent_products), ("delivery", _intent_delivery
                    ("work", _intent_work), ("readout", _intent_readout),
                    ("graph", _intent_graph), ("reach", _intent_reach),
                    ("scorecard", _intent_scorecard),
-                   
+
                    ("backlog", _intent_backlog), ("feedback", _intent_feedback),
                    ("status", _intent_status), ("next", _intent_next),
                    ("review", _intent_review), ("advise", _intent_advise),
@@ -396,19 +396,19 @@ def _build_cli_arg_parser():
     ap.add_argument("--why", action="append", default=None,
                     help="model --answer: основание ответа (источник) — ляжет комментарием; "
                          "повторяем, по одному на ответ в том же порядке (лишние ответы — без основания)")
-    
-    
-    
+
+
+
     ap.add_argument("--answers", default=None,
                     help='specify: ответить на вопросы описания задачи словами, не открывая файл '
                          '— например --answers "зачем=нужно клиентам X; как-поймём=тест зелёный"')
-    
-    
-    
+
+
+
     ap.add_argument("--flow", action="store_true",
                     help="model: первый час одним нарративом (понял → знаю/не знаю → направление и "
                          "план → следующая работа); с --apply записывает направление и план")
-    ap.add_argument("--execute", action="store_true")
+    _add_execution_arguments(ap)
     ap.add_argument("--force", action="store_true",
                     help="resume: продолжить даже при нужной ревалидации (осознанно)")
     ap.add_argument("--takeover", action="store_true",
@@ -417,9 +417,9 @@ def _build_cli_arg_parser():
     ap.add_argument("--takeover-reason", default=None,
                     help="run --takeover: причина переятия (для атрибуции)")
     ap.add_argument("--base", default=None, help="resume/review: base-ветка (по умолчанию auto: upstream/remote-default/текущая)")
-    
-    
-    
+
+
+
     ap.add_argument("--provider", default=None,
                     help="провайдер (mock|anthropic|openai|claude-cli|qwen|deepseek|kimi). "
                          "run --execute без флага — авторезолв (AI_OPS_PROVIDER_AUTORESOLVE=0 выключает); "
@@ -468,7 +468,7 @@ def _build_cli_arg_parser():
     # такой кандидат не принимается (иначе work item без goal — ошибка валидатора).
     ap.add_argument("--goal", default=None,
                     help="candidates accept: id направления (goal) для кандидата без своего source_goal")
-    
+
     ap.add_argument("--prr", default=None,
                     help="readout: путь к PRR-файлу (PostReleaseReadout); без него — поиск в дочке")
     ap.add_argument("--outcome-contract", default=None, dest="outcome_contract",
@@ -478,16 +478,16 @@ def _build_cli_arg_parser():
     ap.add_argument("--apply", action="store_true",
                     help="bootstrap: РЕАЛЬНО создать отсутствующие направление и план "
                          "(без флага — сухой прогон: показать, что будет создано)")
-    
-    
+
+
     ap.add_argument("--full-process", action="store_true",
                     help="discuss/specify/plan: пройти полный путь даже на уже описанной работе "
                          "(короткий путь не применять)")
     ap.add_argument("--spend-ok", action="store_true",
                     help="discuss/specify/plan: продолжить разбор, зная что потолок траты на "
                          "описание до первой правки кода уже пробит")
-    
-    
+
+
     ap.add_argument("--evidence-file", action="append", metavar="ПУТЬ=ЦИТАТА",
                     help="feedback: файл и строка из него как основание наблюдения")
     ap.add_argument("--evidence-command", action="append", metavar="КОМАНДА=ВЫВОД",
@@ -548,62 +548,70 @@ def _parse_task_and_root(intent, rest):
 
 
 def main(argv):
-    
-    
+    # #675: короткий список команд владельца; `help --all` показывает полный.
     _door = human_help.handle(argv, INTENTS, HUMAN_ACTIONS)
     if _door is not None:
         return _door
-    
-    
-    
+
     _facade = _dispatch_human_action(argv, main)
     if _facade is not None:
         return _facade
+
+    if len(argv) >= 4 and argv[0] == "reach" and argv[2:4] == ["adoption", "report"]:
+        from ai_ops_kit.cli import adoption as adoption_cli
+        return adoption_cli.main(["report", argv[1], *argv[4:]])
     ap = _build_cli_arg_parser()
-    a = ap.parse_args(argv)
+    a = ap.parse_intermixed_args(argv)
 
     intent = a.intent
     rest = list(a.rest)
     preview_mode = intent == "preview"
     if preview_mode:
         intent = rest.pop(0) if rest else "run"
-    
-    
     task, child_root = _parse_task_and_root(intent, rest)
-    
-    
+
+    if a.feature is not None:
+        from ai_ops_kit.shared.work_areas import validate_feature_links
+        try:
+            validate_feature_links(Path(child_root) / "features", a.feature)
+        except ValueError as exc:
+            print(f"ОТКАЗ: {exc}", file=sys.stderr)
+            return 2
+
     signals = _build_signals(intent, task, child_root, a)
 
-    # ЗАДАЧА ИЗ СПЕКИ, когда `run`/`do` вызваны без текста (только `--feature`). Движок строит задачу
-    # писателю ТОЛЬКО из позиционного аргумента (`ctx = task + профиль`), а НЕ из spec.yaml — и вызов
-    # без текста давал писателю пустой блок «=== ЗАДАЧА ===» (живой прогон #587). Спека — источник
-    # истины: собираем задачу из её разделов. Fail-closed: нет спеки/разделов -> task пуст, как раньше.
     if intent in ("run", "do") and not (task or "").strip():
         from ai_ops_kit.gates import spec_levels as _sl
         _spec_task = _sl.task_from_spec(child_root, _wid_for(task, signals, a.feature))
         if _spec_task:
             task = _spec_task
 
-    # ПЕРЕД процессным шагом: уже описанная работа идёт коротким путём, залипший разбор
-    # останавливается вопросом владельцу. Место выбрано так, что ни один процессный шаг мимо не
-    # проходит: ниже команды расходятся по ветвям, и проверку пришлось бы повторять в каждой.
+
+
+    if preview_mode:
+        pv = build_preview(intent, task, Path(child_root), signals)
+        pv["will_execute_now"] = False
+        _show_preview(pv, child_root, a)
+        return 0
+
+
     _gate_rc = _process_gate(intent, task, child_root, signals, a, preview_mode)
     if _gate_rc is not None:
         return _gate_rc
 
     if intent == "resume":
         from ai_ops_kit.engine import ai_ops_run
-        
-        
-        
-        
+
+
+
+
         if task and rest and Path(task).is_dir():
             child_root, task = task, rest.pop(0)
-        
+
         argv2 = ["resume", child_root, a.feature or (task or ""), "--base", a.base]
         argv2 += ["--session", _session_identity(child_root)]   # #695: та же личность, что у `run`
-        
-        
+
+
         argv2 += ["--signals", a.signals]
         if a.provider:
             argv2 += ["--provider", a.provider]
@@ -630,8 +638,8 @@ def main(argv):
             argv2.append("--json")
         return ai_ops_run.main(argv2)
 
-    
-    
+
+
     if intent == "specify":
         from ai_ops_kit.cli.ai_ops_cli_lifecycle import _intent_specify
         _intent_specify(task, Path(child_root), signals, a)
@@ -644,16 +652,16 @@ def main(argv):
     # `session-command-reaches-the-child` довела команду до дочки и не довела до исполнения.
     # Расхождение этого списка с тем, что реально умеет `_run_intent`, теперь краснеет тестом
     # `test_direct_intents_match_the_handler` — рукой список больше не забудут.
-    if not preview_mode and intent in DIRECT_INTENTS:
+    if intent in DIRECT_INTENTS:
         rc = _run_intent(intent, task, Path(child_root), signals, a)
         if rc is not None:
             return rc
 
     pv = build_preview(intent, task, Path(child_root), signals)
-    
-    
-    
-    
+
+
+
+
     _understood_type = (pv.get("understood") or {}).get("task_type")
     if _understood_type and not signals.get("task_type"):
         signals["task_type"] = _understood_type
@@ -667,17 +675,9 @@ def main(argv):
         _blocked_on_intake = bool(_ph.missing_intake_signals(signals))
     # #708: немедленный старт (do/run --execute) -> превью говорит «запускаю сейчас», не «когда готов».
     pv["will_execute_now"] = _will_execute_now
-    if a.json:
-        print(json.dumps(pv, ensure_ascii=False, indent=2))
-    elif not _blocked_on_intake:
-        
-        
-        _say(Path(child_root), "from_execution_preview", pv)
-        if _audience(Path(child_root)) != "product":
-            print()
-            _print_preview(pv)
+    _show_preview(pv, child_root, a, _blocked_on_intake)
 
-    
+
     return _main_run_execute(intent, task, child_root, signals, a, pv)
 
 

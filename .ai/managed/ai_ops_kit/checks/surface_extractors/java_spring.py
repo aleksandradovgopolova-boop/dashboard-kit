@@ -137,8 +137,8 @@ def extract_spring_routes(parsed: ParsedFile) -> list:
     src = parsed.source
     if not _SPRING_INDICATOR_RE.search(src):
         return []
-    
-    
+
+
     class_levels = [(m.start(), _class_prefix(m.group(1)))
                     for m in _CLASS_LEVEL_MAPPING_RE.finditer(src)]
     class_starts = {pos for pos, _ in class_levels}
@@ -148,8 +148,8 @@ def extract_spring_routes(parsed: ParsedFile) -> list:
             continue   # это class-@RequestMapping (префикс), а не эндпоинт-метод
         kind, sub = _method_path(m.group(2))
         if kind == "skip":
-            
-            
+
+
             continue
         prefix = ""
         for pos, pfx in class_levels:

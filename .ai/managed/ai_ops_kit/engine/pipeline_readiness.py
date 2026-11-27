@@ -19,12 +19,12 @@ def _build_not_yet_list(commit, env_qualified, open_pr, spec_prestage_bad, spec_
                         spec_incomplete, spec_bad_status, context_overflow, approvals_cover_ok,
                         approval_recheck, acceptance_block_reason=None, checks=None):
     """Список «что ещё не сделано» — информирование вызывающего. v3.38 (K6): вынесено из run_pipeline."""
-    
-    
+
+
     from ai_ops_kit.gates import spec_levels as _sl
     not_yet = ["живой предложитель (swap провайдера)"]
     if acceptance_block_reason:
-        
+
         not_yet.insert(0, f"приёмка: {acceptance_block_reason}")
     if spec_prestage_bad:
         not_yet.insert(0, "spec-first (P0.1): author вернул невалидную спецификацию ["
@@ -56,8 +56,8 @@ def _build_not_yet_list(commit, env_qualified, open_pr, spec_prestage_bad, spec_
         not_yet.insert(0, "human-approval: scope одобрения не покрывает изменённые пути ("
                        + ", ".join(u["domain"] for u in approval_recheck.get("uncovered") or [])
                        + ") — переодобри под фактический дифф")
-    
-    
+
+
     from ai_ops_kit.engine.pipeline_failure import _env_degraded_note
     _env_note = _env_degraded_note(checks)
     if _env_note:
@@ -67,7 +67,7 @@ def _build_not_yet_list(commit, env_qualified, open_pr, spec_prestage_bad, spec_
 
 def _evaluate_security(work_root, child_root, wid, committed_sha, is_git, gate_ev, signals,
                        *, review, strict_judge_qualified, security_reviewer_proposer,
-                       reviewer_proposer, budget):
+                       reviewer_proposer, budget, base_revision=None):
     """Доменный security-вердикт (security/security-domains.yaml) -> gate_ev['security'].
     v3.38 (K6-глубина): вынесено из run_pipeline без изменения поведения.
 
@@ -78,19 +78,19 @@ def _evaluate_security(work_root, child_root, wid, committed_sha, is_git, gate_e
     -> (gate_ev, security_pack_result, effective_approval_signals)."""
     security_pack_result = None
     _security_scan_error = None
-    
-    
-    
-    
+
+
+
+
     if committed_sha and is_git and "security" not in gate_ev:
         from ai_ops_kit.security import security_pack
         try:
-            security_pack_result = security_pack.run_pack(work_root, base=f"{committed_sha}~1", signals=signals)
+            security_pack_result = security_pack.run_pack(work_root, base=base_revision or f"{committed_sha}~1", signals=signals)
         except Exception as _e:  # noqa: BLE001
             _security_scan_error = str(_e)
             security_pack_result = None
-    
-    
+
+
     effective_approval_signals = dict(signals)   # v3.0-rc2 (P0.5): signals намерения + findings-derived
     if _security_scan_error:
         gate_ev = dict(gate_ev)
@@ -99,20 +99,20 @@ def _evaluate_security(work_root, child_root, wid, committed_sha, is_git, gate_e
     elif security_pack_result:
         overall = security_pack_result["overall"]
         gate_ev = dict(gate_ev)
-        
-        
-        
-        
+
+
+
+
         from ai_ops_kit.gates import approvals as _appr
         _merged_sig = {**signals, **_appr.signals_from_findings(security_pack_result)}
         effective_approval_signals = _merged_sig   # v3.0-rc2 (P0.5): используется и в recheck ниже
         _appr_missing = list(_appr.check(_merged_sig, child_root, wid).get("missing") or [])
         if _merged_sig.get("destructive"):
             _recs = _appr.load_approvals(child_root, wid)
-            
-            
-            
-            
+
+
+
+
             _dnow = _appr._now_iso()
             _dph = _appr.plan_binding_hash(child_root, wid)
             if not any(r.get("approval") == "destructive"
@@ -122,17 +122,17 @@ def _evaluate_security(work_root, child_root, wid, committed_sha, is_git, gate_e
                                                 "действия (expiry/plan-binding/trusted source)"})
         human_ok = not _appr_missing
         if not human_ok:
-            
-            
+
+
             gate_ev["security"] = {"status": "fail",
                                    "blockers": [f"{m['domain']}: {m.get('reason', 'нужно человеко-одобрение (ApprovalRecord)')}"
                                                 for m in _appr_missing],
                                    "approvals_missing": _appr_missing,
                                    "pack": {"applicable": security_pack_result["applicable_domains"]}}
         elif overall in ("clear", "advisory"):
-            
-            
-            
+
+
+
             _adv = security_pack_result.get("advisory") or []
             gate_ev["security"] = {"status": "pass",
                                    "provided": ["no_secrets", "no_injection_surface", "deps_approved"],
@@ -147,11 +147,11 @@ def _evaluate_security(work_root, child_root, wid, committed_sha, is_git, gate_e
         elif (overall == "needs_review" and not security_pack_result["blocking"]
               and committed_sha and not (strict_judge_qualified and review)
               and not (signals or {}).get("_sequence_internal")):
-            
-            
-            
-            
-            
+
+
+
+
+
             from ai_ops_kit.gates import approvals as _appr_sec
             _sec_recs = _appr_sec.load_approvals(child_root, wid)
             _sec_now, _sec_ph = _appr_sec._now_iso(), _appr_sec.plan_binding_hash(child_root, wid)
@@ -187,9 +187,9 @@ def _evaluate_security(work_root, child_root, wid, committed_sha, is_git, gate_e
                                                 "needs_review": security_pack_result["needs_review"]}}
         elif (overall == "needs_review" and not security_pack_result["blocking"]
               and review and committed_sha and (security_reviewer_proposer or reviewer_proposer) is not None):
-            
-            
-            
+
+
+
             sec_status, sec_res = _review_security(security_reviewer_proposer or reviewer_proposer, work_root,
                                                    security_pack_result, committed_sha, budget)
             if sec_status == "pass":
@@ -200,9 +200,9 @@ def _evaluate_security(work_root, child_root, wid, committed_sha, is_git, gate_e
                                                 "note": "детерминированные домены чисты + независимый "
                                                         "security-reviewer вынес pass по needs_review"}}
             else:
-                
-                
-                
+
+
+
                 _inv = sec_res.get("invalid") if isinstance(sec_res, dict) else None
                 _raw = (sec_res.get("raw") if isinstance(sec_res, dict) and "raw" in sec_res else sec_res)
                 _diag = {}
@@ -228,19 +228,19 @@ def _evaluate_security(work_root, child_root, wid, committed_sha, is_git, gate_e
                                             "blocking": security_pack_result["blocking"],
                                             "needs_review": security_pack_result["needs_review"]}}
 
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
         try:
-            from ai_ops_kit.security import security_scan as _ss
-            _sec_changed = _ss._git_changed_files(work_root, committed_sha + "^") if committed_sha else []
+            _sec_changed = _security_diff_paths(work_root, committed_sha, base_revision)
         except Exception:  # noqa: BLE001
-            _sec_changed = []
+            gate_ev = dict(gate_ev, security={"status": "fail", "blockers": ["не удалось проверить пути security diff"]})
+            return gate_ev, security_pack_result, effective_approval_signals
         _hu = _human_approval_domains_uncovered(child_root, wid, _sec_changed, diff_root=work_root)
         if _hu and (gate_ev.get("security") or {}).get("status") != "fail":
             gate_ev["security"] = {"status": "fail",
@@ -249,6 +249,15 @@ def _evaluate_security(work_root, child_root, wid, committed_sha, is_git, gate_e
                                    "human_approval_uncovered": _hu,
                                    "pack": {"applicable": security_pack_result["applicable_domains"]}}
     return gate_ev, security_pack_result, effective_approval_signals
+
+
+def _security_diff_paths(root, revision, base):
+    """None означает ошибку Git, а не отсутствие изменений."""
+    from ai_ops_kit.security import security_scan
+    paths = security_scan._git_changed_files(root, base or revision + "^") if revision else []
+    if paths is None:
+        raise ValueError("security diff unavailable")
+    return paths
 
 
 def _assess_readiness(gates, coll, signals, plan, child_root, wid, work_root, *,
@@ -262,10 +271,10 @@ def _assess_readiness(gates, coll, signals, plan, child_root, wid, work_root, *,
     K6: вынесено из run_pipeline без изменения поведения. -> dict (spec_depth_missing/spec_depth_ok/
     spec_incomplete/spec_bad_status/spec_complete_ok/level/acceptance_criteria/context_overflow).
     """
-    
-    
-    
-    
+
+
+
+
     from ai_ops_kit.gates import spec_levels as _sl
     _SECTION_GATE = {
         "goal": "intake_completeness", "scope": "intake_completeness",
@@ -276,20 +285,20 @@ def _assess_readiness(gates, coll, signals, plan, child_root, wid, work_root, *,
         "value": "discovery_completeness", "success_metrics": "analytics_readiness",
     }
     _unmet = set(gates["unmet_gates"])
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     _iv_baseline_exempt = bool(baseline_diff) and not _diff_checks(baseline_checks, coll["checks"])[0]
     _unmet_for_spec = (_unmet - {"implementation_verification"}) if _iv_baseline_exempt else _unmet
-    
-    
-    
-    
-    
+
+
+
+
+
     _unstable_checks = _baseline_status_flips(baseline_checks, coll["checks"]) if baseline_diff else []
     _level = _sl.classify(signals)["level"]
     _req_sections = set(_sl.required_sections(_level))
@@ -297,10 +306,10 @@ def _assess_readiness(gates, coll, signals, plan, child_root, wid, work_root, *,
                                  if s in _req_sections and g in plan["gates"] and g in _unmet_for_spec})
     spec_depth_ok = not spec_depth_missing
 
-    
-    
-    
-    
+
+
+
+
     spec_incomplete, spec_bad_status = [], []
     try:
         _cov = _sl.assess_from_artifacts(signals, child_root, wid, work_root=work_root)
@@ -310,61 +319,61 @@ def _assess_readiness(gates, coll, signals, plan, child_root, wid, work_root, *,
         # Прежний вывод отправлял заполнять уже заполненное; настоящая правка — одно слово.
         spec_bad_status = list(_cov.get("invalid_status") or [])
     except Exception as _e:  # noqa: BLE001 — v3.0.11 (finding аудита P2): FAIL-CLOSED. Прежде исключение
-        
-        
+
+
         spec_incomplete = [f"<spec-assess-failed: {type(_e).__name__}>"]
     spec_complete_ok = not spec_incomplete
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     from ai_ops_kit.engine import acceptance_verify as _av
     _ac_text, _ac_items, _ac_problem = _av.criteria_from_spec(child_root, wid)
-    
-    
-    
-    
-    
+
+
+
+
+
     if _ac_items and reviewer_proposer is not None and committed_sha:
         try:
-            
-            
-            
-            
-            
+
+
+
+
+
             acceptance_criteria = _av.verify(
                 work_root, _ac_items, reviewer_proposer, revision=committed_sha,
                 change_context=_change_context_range(work_root, base_sha, committed_sha),
                 budget=budget)
         except Exception as _e:  # noqa: BLE001 — FAIL-CLOSED: сбой сверки = «не сверено» с названной
-            
-            
+
+
             acceptance_criteria = _av._unverified(
                 _ac_items, f"сверка не выполнена ({type(_e).__name__}: {_e})"[:300], attempted=True)
     elif _ac_problem:
-        
-        
+
+
         acceptance_criteria = _av._unverified(
             [], f"критерии приёмки НЕ прочитаны: {_ac_problem} — сверка невозможна, проверь вручную",
             declared=True)
     elif _ac_text and not _ac_items:
-        
+
         acceptance_criteria = _av._unverified(
             [], "раздел критериев заполнен, но ни одного проверяемого пункта в нём не найдено — "
                 "сверять нечего по существу (проверь формат: пункты списка или строки)",
@@ -378,10 +387,10 @@ def _assess_readiness(gates, coll, signals, plan, child_root, wid, work_root, *,
              if _ac_items else "критерии приёмки не объявлены — сверять нечего"),
             declared=bool(_ac_items))
 
-    
-    
-    
-    
+
+
+
+
     context_overflow = _context_budget_overflow(signals, work_root, plan)
     return {"spec_depth_missing": spec_depth_missing, "spec_depth_ok": spec_depth_ok,
             "spec_incomplete": spec_incomplete, "spec_bad_status": spec_bad_status,
@@ -400,6 +409,6 @@ def _context_budget_overflow(signals, work_root, plan):
         _bundle = _cc.compile_bundle(signals, work_root, plan=plan)
         context_overflow = bool(_bundle.get("overflow"))
     except Exception:  # noqa: BLE001 — v3.0.11 (P2): FAIL-CLOSED. Прежде исключение -> overflow=False ->
-        
+
         context_overflow = True
     return context_overflow

@@ -80,7 +80,7 @@ def _tree_clean_after_checks(root):
         if not ln.strip():
             continue
         code, path = ln[:2], ln[3:]
-        
+
         if code == "??" and _TOOL_CACHE_RE.search(path):
             continue
         return False

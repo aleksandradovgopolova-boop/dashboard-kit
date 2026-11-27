@@ -95,6 +95,11 @@ def load_domains():
     return data.get("domains", []), data.get("allowed_evidence_sources", [])
 
 
+def domain_path(path):
+    """Убрать только opaque namespace задачи, сохранив реальный путь продукта."""
+    return re.sub(r"^features/session-[0-9a-f]{32}/", "", str(path))
+
+
 def _applies(domain, signals, files_content):
     """Домен применим по сигналу, ИЛИ по пути изменённого файла, ИЛИ по его СОДЕРЖИМОМУ.
     v2.104 (finding самоаудита): раньше проверялся только ПУТЬ -> auth-логика в файле, чей путь
@@ -113,9 +118,12 @@ def _applies(domain, signals, files_content):
         rx = re.compile(pat)
         hit = None
         for f, content in files_content.items():
-            if rx.search(f):
+
+
+
+            if rx.search(domain_path(f)):
                 hit = f"файл {f}"; break
-            
+
             if content and not _is_prose(f) and rx.search(content):
                 hit = f"содержимое {f}"; break
         if hit:
@@ -131,8 +139,8 @@ def _root_commit_files(root, base):
     if not m:
         return None
     sha = m.group(1)
-    
-    
+
+
     if git(root, "rev-parse", "--verify", "--quiet", f"{sha}^")[0] == 0:
         return None
     rc, out, _ = git(root, "diff-tree", "--root", "--no-commit-id", "--name-only", "-r", sha)
@@ -165,12 +173,12 @@ def _scan_scope(child_root, base):
         return changed, {"mode": "diff", "base": str(base)}
     root_files = _root_commit_files(child_root, base)
     if root_files is not None:
-        
-        
+
+
         return root_files, {"mode": "initial-commit", "base": str(base)}
-    
-    
-    
+
+
+
     raise RuntimeError(
         f"база сравнения '{base}' не разрешается в {child_root}: диф не получен, и это не первый "
         f"коммит — файлы для security-скана определить нечем — fail-closed")
@@ -219,9 +227,9 @@ def _domain_findings(domain, secrets, injections, new_deps_detailed):
     if "injection_scan" in checks:
         findings += [{"type": "injection", "path": i["path"], "line": i["line"], "id": i["id"]} for i in injections]
     if "dependency_diff" in checks:
-        
-        
-        
+
+
+
         findings += [{"type": "new_dependency", "name": dd["name"], "version": dd.get("version"),
                       "manifest": dd.get("manifest"), "operation": dd.get("operation", "add")}
                      for dd in new_deps_detailed]
@@ -236,7 +244,7 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
     signals = dict(signals or {})
     domains, allowed = load_domains()
 
-    
+
     scan_scope = {"mode": "given", "base": None}
     if files_content is None:
         files_content = {}
@@ -245,14 +253,14 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
             changed, scan_scope = _scan_scope(child_root, base)
             files_content = security_scan._read_files(child_root, changed)
 
-    
+
     secrets = security_scan.scan_secrets(files_content)
     injections, vendor_injections = security_scan._vendor_split(   # см. комментарий над _domain_findings
         security_scan.scan_injection(files_content))
     mani = {p: c for p, c in files_content.items() if Path(p).name in security_scan.DEP_MANIFESTS}
     before = {p: (security_scan._git_show(child_root, base, p) if (child_root and base) else "") for p in mani}
-    
-    
+
+
     new_deps_detailed = security_scan.new_dependencies_detailed(before, mani)   # v3.0-rc5 (P1.2): fingerprint
 
     results, blocking, needs_review, advisory = [], [], [], []
@@ -263,9 +271,9 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
         findings = _domain_findings(d, secrets, injections, new_deps_detailed)
         req = set(d.get("required_evidence", []) or [])
         severity = (d.get("severity_policy", {}) or {}).get("default", "medium")
-        
-        
-        
+
+
+
         if findings:
             status = "fail"
             if severity in ("critical", "high"):
@@ -273,10 +281,10 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
             else:
                 needs_review.append(d["id"])
         elif req and req <= DETERMINISTIC:
-            
+
             status = "pass"
         elif _content_only(reasons):
-            
+
             status = "advisory"
             advisory.append(d["id"])
         else:
@@ -295,14 +303,14 @@ def run_pack(child_root=None, base=None, signals=None, files_content=None):
         "results": results,
         "blocking": sorted(set(blocking)),
         "needs_review": sorted(set(needs_review)),
-        
-        
+
+
         "advisory": sorted(set(advisory)),
         "overall": ("blocked" if blocking else
                     ("needs_review" if needs_review else
                      ("advisory" if advisory else "clear"))),
-        
-        
+
+
         "scan_scope": scan_scope,
         **_vendor_section(child_root, base, vendor_injections, files_content),
         "allowed_evidence_sources": allowed,
@@ -334,31 +342,31 @@ def for_report(result):
     секретов; с находками, основаниями применимости домена и охватом скана. None -> None."""
     if not result:
         return None
-    
-    
+
+
     return {
         "overall": result.get("overall"),
         "applicable_domains": result.get("applicable_domains") or [],
         "blocking": result.get("blocking") or [],
         "needs_review": result.get("needs_review") or [],
         "advisory": result.get("advisory") or [],
-        
-        
+
+
         "scan_scope": result.get("scan_scope"),
         # РАЗДЕЛ ПОСТАВКИ ДОХОДИТ ДО ОТЧЁТА (#1147). Он не влияет на `overall` — и именно поэтому
         # обязан быть виден: невидимое и непроверяемое «не судим» неотличимо от «прощаем». Тот же
         # класс, что заявка #139: гейт отправляет человека в отчёт, а находок в отчёте нет.
         "vendor_flags": [{k: f[k] for k in FINDING_REPORT_FIELDS if k in f}
                          for f in (result.get("vendor_flags") or [])],
-        
-        
+
+
         "vendor_note": result.get("vendor_note"),
         "vendor_compared": result.get("vendor_compared"),
         "domain_results": [{
             "domain": r["domain"],
             "status": r["status"],
             "severity": r["severity"],
-            
+
             "applies_because": r.get("applies_because") or [],
             "findings": [{k: f[k] for k in FINDING_REPORT_FIELDS if k in f}
                          for f in (r.get("findings") or [])],
@@ -374,7 +382,7 @@ def main(argv):
     ap.add_argument("--signals", default="{}")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args(argv)
-    
+
     try:
         res = run_pack(Path(a.child_root), base=a.base, signals=json.loads(a.signals))
     except RuntimeError as e:
